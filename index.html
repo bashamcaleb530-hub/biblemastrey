@@ -1031,18 +1031,16 @@
   padding: 2px 4px;
 <script>
   document.addEventListener("click", function (event) {
-    const verse = event.target.closest(".verse");
+   const verse = event.target.closest(".verse");
+if (!verse) return;
 
-    if (!verse) return;
+const verseId = verse.dataset.verseId || verse.id;
+const isHighlighted = verse.classList.toggle("highlighted");
 
-    verse.classList.toggle("highlighted");
-
-    const key = "highlighted-" + verse.id;
-
-    if (verse.classList.contains("highlighted")) {
-      localStorage.setItem(key, "true");
-    } else {
-      localStorage.removeItem(key);
+if (isHighlighted) {
+  localStorage.setItem("highlighted-" + verseId, "true");
+} else {
+  localStorage.removeItem("highlighted-" + verseId);
     }
   });
 </script>
