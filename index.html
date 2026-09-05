@@ -1030,7 +1030,7 @@ dictionaryInput.addEventListener(
 
     return [];
   }
-async function searchConcordance() {
+function searchConcordance() {
 
   const word =
     concordanceInput.value.trim().toLowerCase();
@@ -1041,71 +1041,103 @@ async function searchConcordance() {
     return;
   }
 
+  if (!books || !books.length) {
+    concordanceResult.textContent =
+      "Bible is still loading.";
+    return;
+  }
+
   concordanceResult.textContent =
     "Searching the Bible...";
 
-  try {
+  let results = [];
 
-    const response =
-      await fetch(
-        "https://bible-api.com/" +
-        encodeURIComponent(word)
-      );
+  books.forEach(function(book) {
 
-    if (!response.ok) {
-      throw new Error("Concordance unavailable.");
-    }
+    const bookName =
+      getBookName(book);
 
-    const data =
-      await response.json();
+    const chapters =
+      getChapters(book);
 
-    if (!data.verses || !data.verses.length) {
+    chapters.forEach(function(chapter, chapterIndex) {
 
-      concordanceResult.textContent =
-        "No verses found.";
-      return;
+      const chapterNumber =
+        getChapterNumber(
+          chapter,
+          chapterIndex
+        );
 
-    }
+      const verses =
+        getVerses(chapter);
 
-    let html =
-      "<strong>Found " +
-      data.verses.length +
-      " verse(s):</strong>";
+      verses.forEach(function(verse, verseIndex) {
 
-    data.verses.forEach(function(verse) {
+        const verseNumber =
+          getVerseNumber(
+            verse,
+            verseIndex
+          );
 
-      html +=
-        "<p><strong>" +
-        verse.book_name +
-        " " +
-        verse.chapter +
-        ":" +
-        verse.verse +
-        "</strong> — " +
-        verse.text +
-        "</p>";
+        const verseText =
+          getVerseText(verse);
+
+        if (
+          String(verseText)
+            .toLowerCase()
+            .includes(word)
+        ) {
+
+          results.push({
+            book: bookName,
+            chapter: chapterNumber,
+            verse: verseNumber,
+            text: verseText
+          });
+
+        }
+
+      });
 
     });
 
-    concordanceResult.innerHTML =
-      html;
+  });
 
-  }
-
-  catch(error) {
-
-    console.error(
-      "Concordance error:",
-      error
-    );
+  if (!results.length) {
 
     concordanceResult.textContent =
-      "Unable to search the Concordance.";
+      'No verses found for "' +
+      word +
+      '".';
 
+    return;
   }
 
-}
+  let html =
+    "<strong>Found " +
+    results.length +
+    " verse(s):</strong>";
 
+  results.forEach(function(result) {
+
+    html +=
+      "<p>" +
+      "<strong>" +
+      result.book +
+      " " +
+      result.chapter +
+      ":" +
+      result.verse +
+      "</strong> — " +
+      result.text +
+      "</p>";
+
+  });
+
+  concordanceResult.innerHTML =
+    html;
+}
+  
 
 concordanceButton.addEventListener(
   "click",
