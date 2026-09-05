@@ -1266,16 +1266,7 @@ function findCommentaryForVerse(
 
     }
 
-        const bookId =
-      getApiBookId(bookName);
-
-    if (!bookId) {
-      throw new Error(
-        "Commentary book ID not found."
-      );
-    }
-
-        return loadHelloAOCommentary(
+            return loadHelloAOCommentary(
       "matthew-henry",
       bookName,
       chapterNumber
