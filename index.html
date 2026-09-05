@@ -364,7 +364,6 @@
     }
 
     @media (max-width: 800px) {
-
       .controls-grid {
         grid-template-columns: 1fr 1fr;
       }
@@ -383,7 +382,6 @@
     }
 
     @media (max-width: 500px) {
-
       .container {
         padding: 10px;
       }
@@ -438,17 +436,9 @@
         <label for="translation">Translation</label>
 
         <select id="translation">
-          <option value="kjv">
-            King James Version (KJV)
-          </option>
-
-          <option value="WEB">
-            World English Bible
-          </option>
-
-          <option value="ASV">
-            American Standard Version
-          </option>
+          <option value="kjv">King James Version (KJV)</option>
+          <option value="WEB">World English Bible</option>
+          <option value="ASV">American Standard Version</option>
         </select>
       </div>
 
@@ -456,9 +446,7 @@
         <label for="book">Book</label>
 
         <select id="book">
-          <option value="">
-            Choose a book
-          </option>
+          <option value="">Choose a book</option>
         </select>
       </div>
 
@@ -466,9 +454,7 @@
         <label for="chapter">Chapter</label>
 
         <select id="chapter">
-          <option value="">
-            Choose a chapter
-          </option>
+          <option value="">Choose a chapter</option>
         </select>
       </div>
 
@@ -476,9 +462,7 @@
         <label for="verse">Verse</label>
 
         <select id="verse">
-          <option value="">
-            Choose a verse
-          </option>
+          <option value="">Choose a verse</option>
         </select>
       </div>
 
@@ -490,10 +474,7 @@
         📖 Bible Commentary
       </button>
 
-      <div
-        id="commentarySelector"
-        class="commentary-selector"
-      >
+      <div id="commentarySelector" class="commentary-selector">
 
         <select id="commentarySelect">
 
@@ -535,9 +516,7 @@
 
   <div id="chapterContent">
 
-    <h2 id="chapterTitle">
-      Bible
-    </h2>
+    <h2 id="chapterTitle">Bible</h2>
 
     <p>
       Choose a book and chapter to begin reading.
@@ -559,9 +538,7 @@
 
   <div class="search-box">
 
-    <h3>
-      Search This Chapter
-    </h3>
+    <h3>Search This Chapter</h3>
 
     <input
       type="text"
@@ -569,84 +546,44 @@
       placeholder="Search for a word..."
     >
 
-    <div
-      id="searchResults"
-      class="search-results"
-    ></div>
+    <div id="searchResults" class="search-results"></div>
 
   </div>
 
   <section class="study-tools">
 
-    <h2>
-      Bible Study Tools
-    </h2>
+    <h2>Bible Study Tools</h2>
 
     <div class="tools-grid">
 
       <div class="tool-card">
-        <h3>
-          🔖 Bookmarks & Highlights
-        </h3>
-
-        <p>
-          Save important verses and passages
-          for later.
-        </p>
+        <h3>🔖 Bookmarks & Highlights</h3>
+        <p>Save important verses and passages for later.</p>
       </div>
 
       <div class="tool-card">
-        <h3>
-          🎙️ Sermon Builder
-        </h3>
-
-        <p>
-          Build and organize sermons from
-          Scripture.
-        </p>
+        <h3>🎙️ Sermon Builder</h3>
+        <p>Build and organize sermons from Scripture.</p>
       </div>
 
       <div class="tool-card">
-        <h3>
-          📚 Bible Study Builder
-        </h3>
-
-        <p>
-          Create structured Bible studies.
-        </p>
+        <h3>📚 Bible Study Builder</h3>
+        <p>Create structured Bible studies.</p>
       </div>
 
       <div class="tool-card">
-        <h3>
-          🇬🇷 Hebrew & Greek
-        </h3>
-
-        <p>
-          Explore original-language words
-          and meanings.
-        </p>
+        <h3>🇬🇷 Hebrew & Greek</h3>
+        <p>Explore original-language words and meanings.</p>
       </div>
 
       <div class="tool-card">
-        <h3>
-          📖 Bible Dictionary
-        </h3>
-
-        <p>
-          Look up important Bible terms
-          and concepts.
-        </p>
+        <h3>📖 Bible Dictionary</h3>
+        <p>Look up important Bible terms and concepts.</p>
       </div>
 
       <div class="tool-card">
-        <h3>
-          🔎 Concordance
-        </h3>
-
-        <p>
-          Find where words appear throughout
-          Scripture.
-        </p>
+        <h3>🔎 Concordance</h3>
+        <p>Find where words appear throughout Scripture.</p>
       </div>
 
     </div>
@@ -655,10 +592,7 @@
 
 </div>
 
-<div
-  id="verseMenu"
-  class="verse-menu"
->
+<div id="verseMenu" class="verse-menu">
 
   <button id="highlightVerse">
     🟨 Highlight
@@ -687,15 +621,10 @@
   ========================= */
 
   let bibleData = null;
-
   let books = [];
-
   let currentBookIndex = -1;
-
   let currentChapterIndex = -1;
-
   let selectedVerseNumber = null;
-
   let commentaryVisible = false;
 
   const commentaryCache = {};
@@ -712,12 +641,12 @@
     "https://www.scripture.how/en/commentaries/";
 
   const LYTEWORD_RAW =
-    "https://raw.githubusercontent.com/lyteword/mhenry-concise/main/";
+    "https://raw.githubusercontent.com/lyteword/mhenry-concise/";
 
 
-  /*
-    HelloAO IDs
-  */
+  /* =========================
+     COMMENTARY IDS
+  ========================= */
 
   const commentaryApiIds = {
 
@@ -737,7 +666,7 @@
 
 
   /* =========================
-     BOOK IDs
+     BOOK IDS
   ========================= */
 
   const bookApiIds = {
@@ -899,10 +828,7 @@
   }
 
 
-  function getChapterNumber(
-    chapter,
-    index
-  ) {
+  function getChapterNumber(chapter, index) {
 
     return (
       chapter.chapter ||
@@ -928,10 +854,7 @@
   }
 
 
-  function getVerseNumber(
-    verse,
-    index
-  ) {
+  function getVerseNumber(verse, index) {
 
     return (
       verse.verse ||
@@ -962,18 +885,14 @@
       data.bible &&
       Array.isArray(data.bible.books)
     ) {
-
       return data.bible.books;
-
     }
 
     if (
       data &&
       Array.isArray(data.books)
     ) {
-
       return data.books;
-
     }
 
     return [];
@@ -1056,13 +975,11 @@
 
     if (statusElement) {
 
-      statusElement.textContent =
-        "Saved";
+      statusElement.textContent = "Saved";
 
       setTimeout(function() {
 
-        statusElement.textContent =
-          "";
+        statusElement.textContent = "";
 
       }, 1200);
 
@@ -1101,57 +1018,30 @@
 
   function getCommentaryName() {
 
-    const value =
-      commentarySelect.value;
+    const value = commentarySelect.value;
 
-    if (
-      value ===
-      "matthew-henry-concise"
-    ) {
-
+    if (value === "matthew-henry-concise") {
       return "Matthew Henry — Concise";
-
     }
 
-    if (
-      value ===
-      "matthew-henry-complete"
-    ) {
-
+    if (value === "matthew-henry-complete") {
       return "Matthew Henry — Complete";
-
     }
 
-    if (
-      value === "john-gill"
-    ) {
-
+    if (value === "john-gill") {
       return "John Gill — Exposition";
-
     }
 
-    if (
-      value === "jfb"
-    ) {
-
+    if (value === "jfb") {
       return "Jamieson-Fausset-Brown";
-
     }
 
-    if (
-      value === "adam-clarke"
-    ) {
-
+    if (value === "adam-clarke") {
       return "Adam Clarke";
-
     }
 
-    if (
-      value === "barnes"
-    ) {
-
+    if (value === "barnes") {
       return "Barnes' Notes";
-
     }
 
     return "Bible Commentary";
@@ -1170,37 +1060,27 @@
     }
 
     const normalized =
-      bookName
+      String(bookName)
         .replace(/^The /i, "")
         .trim();
 
-    return (
-      bookApiIds[normalized] ||
-      null
-    );
+    return bookApiIds[normalized] || null;
 
   }
 
 
   /* =========================
-     SLUG FOR CONCISE
+     CONCISE SLUG
   ========================= */
 
   function getConciseBookSlug(bookName) {
 
     const aliases = {
 
-      "Psalms":
-        "psalms",
-
-      "Psalm":
-        "psalms",
-
-      "Song of Solomon":
-        "song-of-solomon",
-
-      "Song of Songs":
-        "song-of-solomon"
+      "Psalms": "psalms",
+      "Psalm": "psalms",
+      "Song of Solomon": "song-of-solomon",
+      "Song of Songs": "song-of-solomon"
 
     };
 
@@ -1208,7 +1088,7 @@
       return aliases[bookName];
     }
 
-    return bookName
+    return String(bookName)
       .toLowerCase()
       .replace(/\s+/g, "-");
 
@@ -1216,7 +1096,7 @@
 
 
   /* =========================
-     LOAD HELLOAO COMMENTARY
+     HELLOAO COMMENTARY LOADER
   ========================= */
 
   async function loadHelloAOCommentary(
@@ -1229,11 +1109,10 @@
       getApiBookId(bookName);
 
     if (!bookId) {
-
       throw new Error(
-        "Bible book ID not found."
+        "Bible book ID not found for " +
+        bookName
       );
-
     }
 
     const cacheKey =
@@ -1244,116 +1123,209 @@
       "-" +
       chapterNumber;
 
-    if (
-      commentaryCache[cacheKey]
-    ) {
-
-      return commentaryCache[
-        cacheKey
-      ];
-
+    if (commentaryCache[cacheKey]) {
+      return commentaryCache[cacheKey];
     }
 
-    const url =
+    const baseUrl =
       COMMENTARY_API +
       commentaryId +
       "/" +
       bookId +
       "/" +
-      chapterNumber +
-      ".json";
+      chapterNumber;
 
+    const urls = [
+      baseUrl + ".json",
+      baseUrl + ".simple.json"
+    ];
 
-    const response =
-      await fetch(url);
+    let lastError = null;
 
+    for (let i = 0; i < urls.length; i++) {
 
-    if (!response.ok) {
+      try {
 
-      throw new Error(
-        "Commentary request failed: " +
-        response.status
-      );
+        const response =
+          await fetch(
+            urls[i],
+            {
+              method: "GET",
+              headers: {
+                "Accept": "application/json"
+              }
+            }
+          );
+
+        if (!response.ok) {
+
+          lastError =
+            new Error(
+              "HTTP " +
+              response.status +
+              " from commentary API."
+            );
+
+          continue;
+
+        }
+
+        const data =
+          await response.json();
+
+        if (!data) {
+
+          lastError =
+            new Error(
+              "Commentary API returned no data."
+            );
+
+          continue;
+
+        }
+
+        const normalized =
+          normalizeHelloAOCommentary(data);
+
+        if (!normalized.entries.length) {
+
+          lastError =
+            new Error(
+              "Commentary was received, but no verse entries were found."
+            );
+
+          continue;
+
+        }
+
+        commentaryCache[cacheKey] =
+          normalized;
+
+        return normalized;
+
+      }
+
+      catch (error) {
+
+        lastError = error;
+
+      }
 
     }
 
-
-    const data =
-      await response.json();
-
-
-    commentaryCache[
-      cacheKey
-    ] = data;
-
-
-    return data;
+    throw (
+      lastError ||
+      new Error(
+        "Unable to load this commentary."
+      )
+    );
 
   }
 
 
   /* =========================
-     EXTRACT HELLOAO CONTENT
+     NORMALIZE HELLOAO DATA
   ========================= */
 
-  function getCommentaryContent(
-  data
-) {
+  function normalizeHelloAOCommentary(data) {
 
-  if (!data) {
-    return [];
-  }
+    let content = [];
 
-  if (
-    data.chapter &&
-    Array.isArray(data.chapter.content)
-  ) {
-    return data.chapter.content;
-  }
+    if (
+      data &&
+      data.chapter &&
+      Array.isArray(data.chapter.content)
+    ) {
 
-  if (Array.isArray(data.content)) {
-    return data.content;
-  }
+      content =
+        data.chapter.content;
 
-  if (Array.isArray(data.verses)) {
-    return data.verses;
-  }
-
-  return [];
-}
-
-  function getItemNumber(item) {
-
-    if (!item) {
-      return null;
     }
 
-    return (
-      item.number ??
-      item.verse ??
-      item.startVerse ??
-      null
-    );
+    else if (
+      data &&
+      Array.isArray(data.content)
+    ) {
 
-  }
+      content =
+        data.content;
 
-
-  function getItemEndNumber(item) {
-
-    if (!item) {
-      return null;
     }
 
-    return (
-      item.endVerse ??
-      item.verse ??
-      item.number ??
-      item.startVerse ??
-      null
-    );
+    else if (
+      data &&
+      Array.isArray(data.verses)
+    ) {
+
+      content =
+        data.verses;
+
+    }
+
+
+    const entries = [];
+
+    content.forEach(function(item) {
+
+      if (!item) {
+        return;
+      }
+
+      const startValue =
+        item.number ??
+        item.verse ??
+        item.startVerse ??
+        null;
+
+      const endValue =
+        item.endVerse ??
+        item.number ??
+        item.verse ??
+        item.startVerse ??
+        null;
+
+      const start =
+        Number(startValue);
+
+      const end =
+        Number(endValue);
+
+      const text =
+        extractCommentaryText(item)
+          .trim();
+
+      if (
+        Number.isFinite(start) &&
+        text
+      ) {
+
+        entries.push({
+
+          start: start,
+
+          end:
+            Number.isFinite(end)
+              ? end
+              : start,
+
+          text: text
+
+        });
+
+      }
+
+    });
+
+    return {
+      entries: entries
+    };
 
   }
 
+
+  /* =========================
+     COMMENTARY TEXT EXTRACTOR
+  ========================= */
 
   function extractCommentaryText(item) {
 
@@ -1361,28 +1333,18 @@
       return "";
     }
 
-    if (
-      typeof item === "string"
-    ) {
-
+    if (typeof item === "string") {
       return item;
-
     }
 
-    if (
-      typeof item.text === "string"
-    ) {
-
+    if (typeof item.text === "string") {
       return item.text;
-
     }
 
     if (
       typeof item.content === "string"
     ) {
-
       return item.content;
-
     }
 
     if (
@@ -1392,18 +1354,8 @@
       return item.content
         .map(function(part) {
 
-          if (
-            typeof part === "string"
-          ) {
-
-            return part;
-
-          }
-
-          return (
-            part.text ||
-            part.content ||
-            ""
+          return extractCommentaryText(
+            part
           );
 
         })
@@ -1411,63 +1363,17 @@
 
     }
 
-    return "";
-
-  }
-
-
-  function findCommentaryForVerse(
-    data,
-    verseNumber
-  ) {
-
-    const content =
-      getCommentaryContent(data);
-
-    const target =
-      Number(verseNumber);
-
-
-    for (
-      let i = 0;
-      i < content.length;
-      i++
+    if (
+      typeof item.body === "string"
     ) {
-
-      const item =
-        content[i];
-
-      const start =
-        Number(
-          getItemNumber(item)
-        );
-
-      const end =
-        Number(
-          getItemEndNumber(item)
-        );
-
-
-      if (
-        !isNaN(start) &&
-        !isNaN(end) &&
-        target >= start &&
-        target <= end
-      ) {
-
-        const text =
-          extractCommentaryText(
-            item
-          );
-
-        if (text) {
-          return text;
-        }
-
-      }
-
+      return item.body;
     }
 
+    if (
+      typeof item.description === "string"
+    ) {
+      return item.description;
+    }
 
     return "";
 
@@ -1475,7 +1381,53 @@
 
 
   /* =========================
-     LOAD MATTHEW HENRY CONCISE
+     FIND COMMENTARY VERSE
+  ========================= */
+
+  function findCommentaryForVerse(
+    data,
+    verseNumber
+  ) {
+
+    if (
+      !data ||
+      !Array.isArray(data.entries)
+    ) {
+
+      return "";
+
+    }
+
+    const target =
+      Number(verseNumber);
+
+    for (
+      let i = 0;
+      i < data.entries.length;
+      i++
+    ) {
+
+      const entry =
+        data.entries[i];
+
+      if (
+        target >= Number(entry.start) &&
+        target <= Number(entry.end)
+      ) {
+
+        return entry.text || "";
+
+      }
+
+    }
+
+    return "";
+
+  }
+
+
+  /* =========================
+     MATTHEW HENRY CONCISE
   ========================= */
 
   async function loadMatthewHenryConcise(
@@ -1484,9 +1436,7 @@
   ) {
 
     const slug =
-      getConciseBookSlug(
-        bookName
-      );
+      getConciseBookSlug(bookName);
 
     const cacheKey =
       "concise-" +
@@ -1494,59 +1444,97 @@
       "-" +
       chapterNumber;
 
-    if (
-      commentaryCache[cacheKey]
-    ) {
-
-      return commentaryCache[
-        cacheKey
-      ];
-
+    if (commentaryCache[cacheKey]) {
+      return commentaryCache[cacheKey];
     }
 
+    const urls = [
 
-    const url =
       LYTEWORD_RAW +
+      "main/" +
       slug +
       "/chapter-" +
       chapterNumber +
-      ".md";
+      ".md",
 
+      LYTEWORD_RAW +
+      "master/" +
+      slug +
+      "/chapter-" +
+      chapterNumber +
+      ".md"
 
-    const response =
-      await fetch(url);
+    ];
 
+    let lastError = null;
 
-    if (!response.ok) {
+    for (
+      let i = 0;
+      i < urls.length;
+      i++
+    ) {
 
-      throw new Error(
-        "Matthew Henry Concise could not be loaded."
-      );
+      try {
+
+        const response =
+          await fetch(urls[i]);
+
+        if (!response.ok) {
+
+          lastError =
+            new Error(
+              "Matthew Henry Concise returned HTTP " +
+              response.status
+            );
+
+          continue;
+
+        }
+
+        const markdown =
+          await response.text();
+
+        const entries =
+          parseConciseMarkdown(
+            markdown
+          );
+
+        if (!entries.length) {
+
+          lastError =
+            new Error(
+              "Matthew Henry Concise returned no verse entries."
+            );
+
+          continue;
+
+        }
+
+        const result = {
+          entries: entries
+        };
+
+        commentaryCache[cacheKey] =
+          result;
+
+        return result;
+
+      }
+
+      catch (error) {
+
+        lastError = error;
+
+      }
 
     }
 
-
-    const markdown =
-      await response.text();
-
-
-    const entries =
-      parseConciseMarkdown(
-        markdown
-      );
-
-
-    const result = {
-      entries: entries
-    };
-
-
-    commentaryCache[
-      cacheKey
-    ] = result;
-
-
-    return result;
+    throw (
+      lastError ||
+      new Error(
+        "Matthew Henry Concise could not be loaded."
+      )
+    );
 
   }
 
@@ -1564,9 +1552,7 @@
 
     const entries = [];
 
-    let currentRange =
-      null;
-
+    let currentRange = null;
     let currentText = [];
 
 
@@ -1577,20 +1563,28 @@
         currentText.length
       ) {
 
-        entries.push({
+        const text =
+          currentText
+            .join(" ")
+            .replace(/\s+/g, " ")
+            .trim();
 
-          start:
-            currentRange.start,
+        if (text) {
 
-          end:
-            currentRange.end,
+          entries.push({
 
-          text:
-            currentText
-              .join(" ")
-              .trim()
+            start:
+              currentRange.start,
 
-        });
+            end:
+              currentRange.end,
+
+            text:
+              text
+
+          });
+
+        }
 
       }
 
@@ -1601,50 +1595,39 @@
 
       const match =
         line.match(
-          /^##\s+Verse(?:s)?\s+(.+?)\s*$/
+          /^#{1,3}\s+Verse(?:s)?\s+(.+?)\s*$/i
         );
-
 
       if (match) {
 
         saveCurrent();
 
-
         currentText = [];
-
 
         const rangeText =
           match[1]
             .replace(/[–—]/g, "-")
             .trim();
 
-
-        const parts =
-          rangeText.split(",");
-
-
-        const first =
-          parts[0]
+        const firstPart =
+          rangeText
+            .split(",")[0]
             .trim();
-
 
         let start =
           parseInt(
-            first,
+            firstPart,
             10
           );
 
-
-        let end =
-          start;
-
+        let end = start;
 
         if (
-          first.includes("-")
+          firstPart.includes("-")
         ) {
 
           const rangeParts =
-            first.split("-");
+            firstPart.split("-");
 
           start =
             parseInt(
@@ -1660,16 +1643,17 @@
 
         }
 
-
-        if (
-          !isNaN(start)
-        ) {
+        if (!isNaN(start)) {
 
           currentRange = {
+
             start: start,
-            end: isNaN(end)
-              ? start
-              : end
+
+            end:
+              isNaN(end)
+                ? start
+                : end
+
           };
 
         }
@@ -1678,13 +1662,11 @@
 
       }
 
-
       if (
         currentRange &&
         line.trim() &&
         !line.startsWith("#") &&
-        !line.startsWith("---") &&
-        !line.startsWith("- ")
+        !line.startsWith("---")
       ) {
 
         currentText.push(
@@ -1695,9 +1677,7 @@
 
     });
 
-
     saveCurrent();
-
 
     return entries;
 
@@ -1718,23 +1698,20 @@
 
     }
 
-
     const target =
       Number(verseNumber);
-
 
     const match =
       data.entries.find(
         function(entry) {
 
           return (
-            target >= entry.start &&
-            target <= entry.end
+            target >= Number(entry.start) &&
+            target <= Number(entry.end)
           );
 
         }
       );
-
 
     return match
       ? match.text
@@ -1744,7 +1721,7 @@
 
 
   /* =========================
-     LOAD BARNES
+     BARNES
   ========================= */
 
   async function loadBarnes(
@@ -1763,24 +1740,15 @@
 
     }
 
-
     const cacheKey =
       "barnes-" +
       bookId +
       "-" +
       chapterNumber;
 
-
-    if (
-      commentaryCache[cacheKey]
-    ) {
-
-      return commentaryCache[
-        cacheKey
-      ];
-
+    if (commentaryCache[cacheKey]) {
+      return commentaryCache[cacheKey];
     }
-
 
     const url =
       SCRIPTURE_HOW_API +
@@ -1790,49 +1758,60 @@
       chapterNumber +
       "?view=original";
 
+    try {
 
-    const response =
-      await fetch(url);
+      const response =
+        await fetch(url);
 
+      if (!response.ok) {
 
-    if (!response.ok) {
+        throw new Error(
+          "Barnes' Notes returned HTTP " +
+          response.status
+        );
 
-      throw new Error(
-        "Barnes' Notes could not be loaded."
-      );
+      }
+
+      const html =
+        await response.text();
+
+      const entries =
+        parseBarnesHTML(
+          html,
+          bookName,
+          chapterNumber
+        );
+
+      if (!entries.length) {
+
+        throw new Error(
+          "Barnes' Notes loaded, but no verse entries were found."
+        );
+
+      }
+
+      const result = {
+        entries: entries
+      };
+
+      commentaryCache[cacheKey] =
+        result;
+
+      return result;
 
     }
 
+    catch (error) {
 
-    const html =
-      await response.text();
+      throw error;
 
-
-    const entries =
-      parseBarnesHTML(
-        html,
-        bookName,
-        chapterNumber
-      );
-
-
-    const result = {
-      entries: entries
-    };
-
-
-    commentaryCache[
-      cacheKey
-    ] = result;
-
-
-    return result;
+    }
 
   }
 
 
   /* =========================
-     PARSE BARNES HTML
+     PARSE BARNES
   ========================= */
 
   function parseBarnesHTML(
@@ -1850,101 +1829,85 @@
         "text/html"
       );
 
-
     const headings =
       Array.from(
         documentHTML.querySelectorAll(
-          "h3"
+          "h3, h2, h4"
         )
       );
 
-
     const entries = [];
 
+    const escapedBook =
+      escapeRegExp(bookName);
 
-    headings.forEach(function(
-      heading
-    ) {
+    const pattern =
+      new RegExp(
+        "^" +
+        escapedBook +
+        "\\s+" +
+        chapterNumber +
+        ":(\\d+)$",
+        "i"
+      );
+
+    headings.forEach(function(heading) {
 
       const headingText =
         heading.textContent
           .replace(/\s+/g, " ")
           .trim();
 
-
-      const pattern =
-        new RegExp(
-          "^" +
-          escapeRegExp(bookName) +
-          "\\s+" +
-          chapterNumber +
-          ":(\\d+)$",
-          "i"
-        );
-
-
       const match =
-        headingText.match(
-          pattern
-        );
-
+        headingText.match(pattern);
 
       if (!match) {
         return;
       }
 
-
       const verseNumber =
-        Number(
-          match[1]
-        );
+        Number(match[1]);
 
-
-      let textParts = [];
+      const textParts = [];
 
       let node =
         heading.nextElementSibling;
 
-
       while (node) {
 
+        const tag =
+          node.tagName
+            ? node.tagName.toLowerCase()
+            : "";
+
         if (
-          node.tagName &&
-          node.tagName.toLowerCase() ===
-          "h3"
+          tag === "h2" ||
+          tag === "h3" ||
+          tag === "h4"
         ) {
 
           break;
 
         }
 
-
         const text =
           node.textContent
             .replace(/\s+/g, " ")
             .trim();
 
-
         if (text) {
-
-          textParts.push(
-            text
-          );
-
+          textParts.push(text);
         }
-
 
         node =
           node.nextElementSibling;
 
       }
 
-
       const text =
         textParts
           .join("\n\n")
           .trim();
-
 
       if (text) {
 
@@ -1962,7 +1925,6 @@
 
     });
 
-
     return entries;
 
   }
@@ -1970,7 +1932,7 @@
 
   function escapeRegExp(text) {
 
-    return text.replace(
+    return String(text).replace(
       /[.*+?^${}()|[\]\\]/g,
       "\\$&"
     );
@@ -1992,10 +1954,8 @@
 
     }
 
-
     const target =
       Number(verseNumber);
-
 
     const match =
       data.entries.find(
@@ -2008,7 +1968,6 @@
 
         }
       );
-
 
     return match
       ? match.text
@@ -2027,9 +1986,7 @@
   ) {
 
     document
-      .querySelectorAll(
-        ".verse-text"
-      )
+      .querySelectorAll(".verse-text")
       .forEach(function(element) {
 
         element.classList.remove(
@@ -2038,15 +1995,12 @@
 
       });
 
-
     verseElement.classList.add(
       "selected"
     );
 
-
     selectedVerseNumber =
       verseNumber;
-
 
     verseSelect.value =
       verseNumber;
@@ -2055,7 +2009,7 @@
 
 
   /* =========================
-     COMMENTARY PANELS
+     LOAD COMMENTARY
   ========================= */
 
   async function populateCommentaryPanels(
@@ -2067,29 +2021,22 @@
       return;
     }
 
-
     const selectedCommentary =
       commentarySelect.value;
-
 
     const panels =
       document.querySelectorAll(
         ".commentary-panel"
       );
 
-
     panels.forEach(function(panel) {
 
-      panel.classList.add(
-        "show"
-      );
-
+      panel.classList.add("show");
 
       const title =
         panel.querySelector(
           ".commentary-title"
         );
-
 
       if (title) {
 
@@ -2098,12 +2045,10 @@
 
       }
 
-
       const text =
         panel.querySelector(
           ".commentary-text"
         );
-
 
       if (text) {
 
@@ -2119,8 +2064,7 @@
 
     try {
 
-      let data =
-        null;
+      let data = null;
 
 
       if (
@@ -2156,15 +2100,13 @@
             selectedCommentary
           ];
 
-
         if (!apiId) {
 
           throw new Error(
-            "Commentary source not configured."
+            "Commentary source is not configured."
           );
 
         }
-
 
         data =
           await loadHelloAOCommentary(
@@ -2181,9 +2123,7 @@
         const verseNumber =
           panel.dataset.verseNumber;
 
-
-        let commentaryText =
-          "";
+        let commentaryText = "";
 
 
         if (
@@ -2228,7 +2168,6 @@
             ".commentary-text"
           );
 
-
         if (!textElement) {
           return;
         }
@@ -2252,6 +2191,12 @@
 
       });
 
+
+      status.textContent =
+        getCommentaryName() +
+        " loaded.";
+
+
     }
 
     catch (error) {
@@ -2261,6 +2206,12 @@
         error
       );
 
+      const errorMessage =
+        error &&
+        error.message
+          ? error.message
+          : "Unknown commentary error.";
+
 
       panels.forEach(function(panel) {
 
@@ -2269,13 +2220,12 @@
             ".commentary-text"
           );
 
-
         if (textElement) {
 
           textElement.innerHTML =
             '<span class="commentary-error">' +
-            "The commentary could not be loaded right now. " +
-            "Please try again." +
+            "Commentary error: " +
+            escapeHTML(errorMessage) +
             "</span>";
 
         }
@@ -2283,6 +2233,22 @@
       });
 
     }
+
+  }
+
+
+  /* =========================
+     SAFE HTML
+  ========================= */
+
+  function escapeHTML(text) {
+
+    return String(text)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
 
   }
 
@@ -2313,7 +2279,6 @@
     const book =
       books[currentBookIndex];
 
-
     if (!book) {
       return;
     }
@@ -2322,10 +2287,8 @@
     const chapters =
       getChapters(book);
 
-
     const chapter =
       chapters[currentChapterIndex];
-
 
     if (!chapter) {
       return;
@@ -2335,20 +2298,17 @@
     const bookName =
       getBookName(book);
 
-
     const chapterNumber =
       getChapterNumber(
         chapter,
         currentChapterIndex
       );
 
-
     const verses =
       getVerses(chapter);
 
 
-    chapterContent.innerHTML =
-      "";
+    chapterContent.innerHTML = "";
 
 
     const title =
@@ -2361,7 +2321,6 @@
       bookName +
       " " +
       chapterNumber;
-
 
     chapterContent.appendChild(
       title
@@ -2396,7 +2355,6 @@
           index
         );
 
-
       const verseText =
         getVerseText(verse);
 
@@ -2423,9 +2381,7 @@
 
 
       if (
-        isHighlighted(
-          verseNumber
-        )
+        isHighlighted(verseNumber)
       ) {
 
         verseElement.classList.add(
@@ -2470,7 +2426,6 @@
             verseNumber,
             verseElement
           );
-
 
           showVerseMenu(
             event.pageX,
@@ -2677,19 +2632,15 @@
           index
         );
 
-
       const option =
         document.createElement("option");
-
 
       option.value =
         verseNumber;
 
-
       option.textContent =
         "Verse " +
         verseNumber;
-
 
       verseSelect.appendChild(
         option
@@ -2756,17 +2707,14 @@
       const option =
         document.createElement("option");
 
-
       option.value =
         index;
-
 
       option.textContent =
         getChapterNumber(
           chapter,
           index
         );
-
 
       chapterSelect.appendChild(
         option
@@ -2788,10 +2736,8 @@
       const selectedTranslation =
         translationSelect.value;
 
-
       const oldBookIndex =
         currentBookIndex;
-
 
       const oldChapterIndex =
         currentChapterIndex;
@@ -2850,14 +2796,11 @@
         const option =
           document.createElement("option");
 
-
         option.value =
           index;
 
-
         option.textContent =
           getBookName(book);
-
 
         bookSelect.appendChild(
           option
@@ -2873,7 +2816,6 @@
 
         bookSelect.value =
           oldBookIndex;
-
 
         loadChapters();
 
@@ -2891,7 +2833,6 @@
 
           chapterSelect.value =
             oldChapterIndex;
-
 
           loadChapter();
 
@@ -3059,10 +3000,8 @@
       currentChapterIndex =
         Number(chapterSelect.value);
 
-
       selectedVerseNumber =
         null;
-
 
       loadChapter();
 
@@ -3080,7 +3019,6 @@
 
       const verseNumber =
         verseSelect.value;
-
 
       if (!verseNumber) {
         return;
@@ -3143,18 +3081,14 @@
     selectedVerseNumber =
       verseNumber;
 
-
     verseMenu.style.display =
       "block";
-
 
     verseMenu.style.left =
       x + "px";
 
-
     verseMenu.style.top =
       y + "px";
-
 
     verseMenu.dataset.verseText =
       verseText;
@@ -3304,15 +3238,18 @@
         "";
 
 
-      if (
-        navigator.share
-      ) {
+      if (navigator.share) {
 
         try {
 
           await navigator.share({
-            title: "BibleMastrey",
-            text: text
+
+            title:
+              "BibleMastrey",
+
+            text:
+              text
+
           });
 
         }
@@ -3446,8 +3383,11 @@
 
 
       window.scrollTo({
+
         top: 0,
+
         behavior: "smooth"
+
       });
 
     }
@@ -3496,8 +3436,11 @@
 
 
       window.scrollTo({
+
         top: 0,
+
         behavior: "smooth"
+
       });
 
     }
@@ -3537,8 +3480,7 @@
       );
 
 
-    let found =
-      0;
+    let found = 0;
 
 
     verseElements.forEach(
@@ -3581,18 +3523,26 @@
             function() {
 
               element.scrollIntoView({
-                behavior: "smooth",
-                block: "center"
+
+                behavior:
+                  "smooth",
+
+                block:
+                  "center"
+
               });
 
 
               selectVerse(
+
                 element
                   .querySelector(
                     ".verse-number"
                   )
                   .textContent,
+
                 element
+
               );
 
             }
@@ -3620,7 +3570,7 @@
 
 
   /* =========================
-     START
+     TRANSLATION CHANGE
   ========================= */
 
   translationSelect.addEventListener(
@@ -3628,6 +3578,10 @@
     startBible
   );
 
+
+  /* =========================
+     START
+  ========================= */
 
   startBible();
 
