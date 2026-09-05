@@ -722,56 +722,85 @@
     background: #172554;
     color: white;
   }
+  <style>
+  .bookmark-button {
+    display: inline-block;
+    margin-left: 8px;
+    padding: 4px 8px;
+    font-size: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background: white;
+    color: #172554;
+    cursor: pointer;
+  }
+
+  .bookmark-button.bookmarked {
+    background: #172554;
+    color: white;
+  }
 </style>
 
 <script>
+  document.addEventListener("click", function (event) {
+    const button = event.target.closest(".bookmark-button");
+
+    if (!button) return;
+
+    event.stopPropagation();
+
+    const verse = button.closest(".verse");
+
+    if (!verse) return;
+
+    const key = "bookmark-" + verse.id;
+
+    if (localStorage.getItem(key) === "true") {
+      localStorage.removeItem(key);
+      button.classList.remove("bookmarked");
+      button.textContent = "🔖 Bookmark";
+    } else {
+      localStorage.setItem(key, "true");
+      button.classList.add("bookmarked");
+      button.textContent = "🔖 Bookmarked";
+    }
+  });
+
   function addBookmarkButtons() {
     document.querySelectorAll(".verse").forEach(function (verse) {
       if (verse.querySelector(".bookmark-button")) return;
 
       const button = document.createElement("button");
+
       button.className = "bookmark-button";
       button.textContent = "🔖 Bookmark";
 
-      const bookmarkKey = "bookmark-" + verse.id;
+      const key = "bookmark-" + verse.id;
 
-      if (localStorage.getItem(bookmarkKey) === "true") {
+      if (localStorage.getItem(key) === "true") {
         button.classList.add("bookmarked");
         button.textContent = "🔖 Bookmarked";
       }
-
-      button.addEventListener("click", function (event) {
-        event.stopPropagation();
-
-        if (localStorage.getItem(bookmarkKey) === "true") {
-          localStorage.removeItem(bookmarkKey);
-          button.classList.remove("bookmarked");
-          button.textContent = "🔖 Bookmark";
-        } else {
-          localStorage.setItem(bookmarkKey, "true");
-          button.classList.add("bookmarked");
-          button.textContent = "🔖 Bookmarked";
-        }
-      });
 
       verse.appendChild(button);
     });
   }
 
-  const originalLoadChapter = window.loadChapter;
-
-  window.loadChapter = function () {
-    if (typeof originalLoadChapter === "function") {
-      originalLoadChapter();
-    }
-
-    setTimeout(addBookmarkButtons, 100);
-  };
-
-  document.addEventListener("DOMContentLoaded", function () {
-    setTimeout(addBookmarkButtons, 500);
+  const observer = new MutationObserver(function () {
+    addBookmarkButtons();
   });
+
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true
+  });
+
+  addBookmarkButtons();
 </script>
+
+</style>
+
+
 <script>
   document.addEventListener("click", function (event) {
     const verse = event.target.closest(".verse");
