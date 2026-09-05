@@ -12,7 +12,7 @@ async function getKJV() {
 
   if (!response.ok) {
 
-    throw new Error("Unable to load the KJV Bible.");
+    throw new Error(`WEB failed: ${response.status} ${response.statusText}`);
 
   }
 async function getWEB() {
