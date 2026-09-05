@@ -449,7 +449,6 @@
   function getChapters(book) {
     return Array.isArray(book.chapters) ? book.chapters : [];
   }
-
   function getChapterNumber(chapter, index) {
     return chapter.chapter || chapter.number || (index + 1);
   }
@@ -569,6 +568,73 @@
       );
 
       scripture.appendChild(paragraph);
+      paragraph.addEventListener("click", function (event) {
+  if (event.target !== paragraph && !event.target.classList.contains("verse-number")) {
+    return;
+  }
+
+  document.querySelectorAll(".verse-actions").forEach(function (menu) {
+    menu.remove();
+  });
+
+  const menu = document.createElement("div");
+  menu.className = "verse-actions";
+
+  menu.innerHTML = `
+    <button type="button" data-action="highlight">Highlight</button>
+    <button type="button" data-action="bookmark">🔖 Bookmark</button>
+    <button type="button" data-action="copy">📋 Copy</button>
+    <button type="button" data-action="share">↗ Share</button>
+  `;
+
+  paragraph.appendChild(menu);
+
+  menu.querySelector('[data-action="highlight"]').addEventListener("click", function (e) {
+    e.stopPropagation();
+    paragraph.classList.toggle("highlighted");
+  });
+
+  menu.querySelector('[data-action="bookmark"]').addEventListener("click", function (e) {
+    e.stopPropagation();
+    paragraph.dataset.bookmarked =
+      paragraph.dataset.bookmarked === "true" ? "false" : "true";
+    this.textContent =
+      paragraph.dataset.bookmarked === "true"
+        ? "🔖 Bookmarked"
+        : "🔖 Bookmark";
+  });
+
+  menu.querySelector('[data-action="copy"]').addEventListener("click", function (e) {
+    e.stopPropagation();
+    navigator.clipboard.writeText(
+      getBookName(book) + " " +
+      getChapterNumber(chapter, currentChapterIndex) + ":" +
+      getVerseNumber(verse, index) + " " +
+      getVerseText(verse)
+    );
+    this.textContent = "✓ Copied";
+  });
+
+  menu.querySelector('[data-action="share"]').addEventListener("click", function (e) {
+    e.stopPropagation();
+
+    const shareText =
+      getBookName(book) + " " +
+      getChapterNumber(chapter, currentChapterIndex) + ":" +
+      getVerseNumber(verse, index) + " " +
+      getVerseText(verse);
+
+    if (navigator.share) {
+      navigator.share({
+        title: "BibleMastrey",
+        text: shareText
+      });
+    } else {
+      navigator.clipboard.writeText(shareText);
+      this.textContent = "✓ Copied";
+    }
+  });
+});
     });
 
     verseSelect.disabled = verses.length === 0;
