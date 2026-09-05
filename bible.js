@@ -1,8 +1,16 @@
 const KJV_SOURCE =
 
-  "https://raw.githubusercontent.com/renniemaharaj/kjv-bible/main/kjv.json";
+  "https://raw.githubusercontent.com/midvash/bible-data/main/versions/en/kjv/kjv.json";
+
+let kjvBible = null;
 
 async function getKJV() {
+
+  if (kjvBible) {
+
+    return kjvBible;
+
+  }
 
   const response = await fetch(KJV_SOURCE);
 
@@ -12,7 +20,6 @@ async function getKJV() {
 
   }
 
-  return await response.json();
+  kjvBible = await response.json();
 
-}
-
+  return kjvBible;
