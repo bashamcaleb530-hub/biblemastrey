@@ -1007,14 +1007,14 @@
     const data =
       await response.json();
 
-    const normalized =
+    
+const normalized =
   normalizeHelloAOCommentary(data);
 
-if (!normalized.entries.length) {
-  throw new Error(
-    "Commentary loaded, but no verse entries were found."
-  );
-}
+commentaryCache[cacheKey] =
+  normalized;
+
+return normalized;
 
 commentaryCache[cacheKey] =
   normalized;
