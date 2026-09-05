@@ -286,6 +286,7 @@
           <label for="translation"><strong>Translation</strong></label>
           <select id="translation">
             <option value="kjv">King James Version (KJV)</option>
+            <option value="WEB">World English Bible</option>
           </select>
         </div>
 
@@ -998,52 +999,3 @@
       const button = document.createElement("button");
 
       button.className = "bookmark-button";
-      button.textContent = "🔖 Bookmark";
-
-      const key = "bookmark-" + verse.id;
-
-      if (localStorage.getItem(key) === "true") {
-        button.classList.add("bookmarked");
-        button.textContent = "🔖 Bookmarked";
-      }
-
-      verse.appendChild(button);
-    });
-  }
-
-  const observer = new MutationObserver(function () {
-    addBookmarkButtons();
-  });
-
-  observer.observe(document.body, {
-    childList: true,
-    subtree: true
-  });
-
-  addBookmarkButtons();
-</script>
-
-</style>
-.highlighted {
-
-  background-color: yellow !important;
-
-  border-radius: 4px;
-
-  padding: 2px 4px;
-<script>
-  document.addEventListener("click", function (event) {
-   const verse = event.target.closest(".verse");
-if (!verse) return;
-
-const verseId = verse.dataset.verseId || verse.id;
-const isHighlighted = verse.classList.toggle("highlighted");
-
-if (isHighlighted) {
-  localStorage.setItem("highlighted-" + verseId, "true");
-} else {
-  localStorage.removeItem("highlighted-" + verseId);
-    }
-  });
-</script>
-</html>
