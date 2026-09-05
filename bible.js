@@ -68,4 +68,5 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 });
 window.getWEB = getWEB;
+window.getASV = getASV;
 
