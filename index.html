@@ -819,6 +819,29 @@ const concordanceButton =
 
 const concordanceResult =
     document.getElementById("concordanceResult");
+  <div class="original-word-search">
+
+  <label for="originalWordInput">
+    🔤 Hebrew / Greek Word Lookup
+  </label>
+
+  <div class="original-word-search-row">
+
+    <input
+      type="text"
+      id="originalWordInput"
+      placeholder="Enter Strong's number (e.g. G25 or H157)"
+    >
+
+    <button id="originalWordButton">
+      Search
+    </button>
+
+  </div>
+
+  <div id="originalWordResult"></div>
+
+</div>
   async function searchDictionary() {
 
   const word =
