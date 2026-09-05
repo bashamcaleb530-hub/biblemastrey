@@ -691,4 +691,38 @@
 </script>
 
 </body>
+  <style>
+  .verse {
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 6px;
+    transition: background 0.2s;
+  }
+
+  .verse:hover {
+    background: #f1f5f9;
+  }
+
+  .verse.highlighted {
+    background: #fff3a3;
+  }
+</style>
+
+<script>
+  document.addEventListener("click", function (event) {
+    const verse = event.target.closest(".verse");
+
+    if (!verse) return;
+
+    verse.classList.toggle("highlighted");
+
+    const key = "highlighted-" + verse.id;
+
+    if (verse.classList.contains("highlighted")) {
+      localStorage.setItem(key, "true");
+    } else {
+      localStorage.removeItem(key);
+    }
+  });
+</script>
 </html>
