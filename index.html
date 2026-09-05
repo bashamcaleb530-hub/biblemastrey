@@ -1027,6 +1027,119 @@ function normalizeHelloAOCommentary(data) {
     !data.chapter ||
     !Array.isArray(data.chapter.content)
   ) {
+    return {
+      entries: []
+    };
+  }
+
+  data.chapter.content.forEach(function(item) {
+
+    if (
+      !item ||
+      item.type !== "verse" ||
+      item.number === undefined
+    ) {
+      return;
+    }
+
+    const verseNumber =
+      Number(item.number);
+
+    let text = "";
+
+    if (Array.isArray(item.content)) {
+
+      text =
+        item.content
+          .map(function(part) {
+
+            if (typeof part === "string") {
+              return part;
+            }
+
+            if (
+              part &&
+              typeof part.text === "string"
+            ) {
+              return part.text;
+            }
+
+            return "";
+
+          })
+          .join("");
+
+    }
+
+    else if (typeof item.text === "string") {
+
+      text = item.text;
+
+    }
+
+    else if (
+      typeof item.content === "string"
+    ) {
+
+      text = item.content;
+
+    }
+
+    text =
+      text
+        .replace(/\s+/g, " ")
+        .trim();
+
+    if (text) {
+
+      entries.push({
+        start: verseNumber,
+        end: verseNumber,
+        text: text
+      });
+
+    }
+
+  });
+
+  return {
+    entries: entries
+  };
+
+}
+
+
+function findCommentaryForVerse(
+  data,
+  verseNumber
+) {
+
+  if (
+    !data ||
+    !Array.isArray(data.entries)
+  ) {
+    return "";
+  }
+
+  const target =
+    Number(verseNumber);
+
+  const match =
+    data.entries.find(function(entry) {
+
+      return (
+        target >= Number(entry.start) &&
+        target <= Number(
+          entry.end || entry.start
+        )
+      );
+
+    });
+
+  return match
+    ? match.text
+    : "";
+}
     /* =========================
      MATTHEW HENRY CONCISE
   ========================= */
