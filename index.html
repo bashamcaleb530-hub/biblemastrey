@@ -707,6 +707,107 @@
     background: #fff3a3;
   }
 </style>
+  .note-button {
+    display: inline-block;
+    margin-left: 8px;
+    padding: 4px 8px;
+    font-size: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background: white;
+    color: #172554;
+    cursor: pointer;
+  }
+
+  .note-button.has-note {
+    background: #e8ecf7;
+  }
+
+  .note-box {
+    display: none;
+    margin-top: 10px;
+    width: 100%;
+    min-height: 80px;
+    padding: 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    resize: vertical;
+  }
+
+  .note-box.visible {
+    display: block;
+  }
+</style>
+
+<script>
+  function addNoteButtons() {
+    document.querySelectorAll(".verse").forEach(function (verse) {
+      if (verse.querySelector(".note-button")) return;
+
+      const button = document.createElement("button");
+
+      button.className = "note-button";
+      button.textContent = "📝 Note";
+
+      const noteBox = document.createElement("textarea");
+      noteBox.className = "note-box";
+      noteBox.placeholder = "Write your note about this verse...";
+
+      const key = "note-" + verse.id;
+
+      const savedNote = localStorage.getItem(key);
+
+      if (savedNote) {
+        noteBox.value = savedNote;
+        button.classList.add("has-note");
+        button.textContent = "📝 Note Saved";
+      }
+
+      button.addEventListener("click", function (event) {
+        event.stopPropagation();
+
+        noteBox.classList.toggle("visible");
+
+        if (noteBox.classList.contains("visible")) {
+          noteBox.focus();
+        }
+      });
+
+      noteBox.addEventListener("click", function (event) {
+        event.stopPropagation();
+      });
+
+      noteBox.addEventListener("input", function () {
+        localStorage.setItem(key, noteBox.value);
+
+        if (noteBox.value.trim()) {
+          button.classList.add("has-note");
+          button.textContent = "📝 Note Saved";
+        } else {
+          localStorage.removeItem(key);
+          button.classList.remove("has-note");
+          button.textContent = "📝 Note";
+        }
+      });
+
+      verse.appendChild(button);
+      verse.appendChild(noteBox);
+    });
+  }
+
+  const noteObserver = new MutationObserver(function () {
+    addNoteButtons();
+  });
+
+  noteObserver.observe(document.body, {
+    childList: true,
+    subtree: true
+  });
+
+  addNoteButtons();
+</script>
 <style>
   .bookmark-button {
     margin-left: 8px;
