@@ -952,8 +952,31 @@
     return bookApiIds[normalized];
   }
 
-  const lowerName =
+    const lowerName =
     normalized.toLowerCase();
+
+  const aliases = {
+    "gen": "Genesis",
+    "ex": "Exodus",
+    "lev": "Leviticus",
+    "num": "Numbers",
+    "deut": "Deuteronomy",
+    "ps": "Psalms",
+    "psa": "Psalms",
+    "prov": "Proverbs",
+    "matt": "Matthew",
+    "mk": "Mark",
+    "mrk": "Mark",
+    "lk": "Luke",
+    "jn": "John",
+    "jhn": "John",
+    "rom": "Romans",
+    "rev": "Revelation"
+  };
+
+  if (aliases[lowerName]) {
+    return bookApiIds[aliases[lowerName]];
+  }
 
   const match =
     Object.keys(bookApiIds).find(function(key) {
