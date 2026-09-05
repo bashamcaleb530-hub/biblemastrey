@@ -976,14 +976,18 @@
     chapterNumber
   ) {
 
-    const bookId =
-      getApiBookId(bookName);
+    console.log("Commentary bookName:", bookName);
 
-    if (!bookId) {
-      throw new Error(
-        "Commentary book ID not found."
-      );
-    }
+const bookId =
+  getApiBookId(bookName);
+
+console.log("Commentary bookId:", bookId);
+
+if (!bookId) {
+  throw new Error(
+    "Commentary book ID not found."
+  );
+}
 
     const cacheKey =
       "helloao-" +
