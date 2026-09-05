@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>BibleMastrey — Read. Study. Understand. Teach.</title>
+
+  <style>
+
+    * {
+
+      box-sizing: border-box;
+
+      margin: 0;
+
+      padding: 0;
+
+    }
+
+    body {
+
+      font-family: Arial, sans-serif;
+
+      background: #f6f7f9;
+
+      color: #172033;
+
+      line-height: 1.6;
+
+    }
+
+    header {
+
+      background: #172033;
+
+      color: white;
+
+      padding: 18px 6%;
+
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: center;
+
+      gap: 20px;
+
+    }
+
+    .logo {
+
+      font-size: 25px;
+
+      font-weight: bold;
+
+    }
+
+    nav {
+
+      display: flex;
+
+      gap: 18px;
+
+      flex-wrap: wrap;
+
+    }
+
+    nav a {
+
+      color: white;
+
+      text-decoration: none;
+
+      font-size: 14px;
+
+    }
+
+    .hero {
+
+      background: white;
+
+      text-align: center;
+
+      padding: 75px 20px;
+
+    }
+
+    .hero h1 {
+
+      font-size: 48px;
+
+      margin-bottom: 15px;
+
+    }
+
+    .hero p {
+
+      max-width: 650px;
+
+      margin: 0 auto 28px;
+
+      color: #596579;
+
+      font-size: 19px;
+
+    }
+
+    .buttons {
+
+      display: flex;
+
+      justify-content: center;
+
+      gap: 12px;
+
+      flex-wrap: wrap;
+
+    }
+
+    .button {
+
+      display: inline-block;
+
+      padding: 13px 22px;
+
+      border-radius: 8px;
+
+      text-decoration: none;
+
+      font-weight: bold;
+
+    }
+
+    .primary {
+
+      background: #172033;
+
+      color: white;
+
+    }
+
+    .secondary {
+
+      border: 1px solid #ccd2dc;
+
+      color: #172033;
+
+      background: white;
+
+    }
+
+    .section {
+
+      max-width: 1100px;
+
+      margin: auto;
+
+      padding: 55px 20px;
+
+    }
+
+    .section h2 {
+
+      text-align: center;
+
+      font-size: 32px;
+
+      margin-bottom: 10px;
+
+    }
+
+    .section-intro {
+
+      text-align: center;
+
+      color: #687386;
+
+      margin-bottom: 30px;
+
+    }
+
+    .tools {
+
+      display: grid;
+
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+
+      gap: 18px;
+
+    }
+
+    .card {
+
+      background: white;
+
+      padding: 25px;
+
+      border-radius: 12px;
+
+      border: 1px solid #e1e5eb;
+
+    }
+
+    .card h3 {
+
+      margin-bottom: 8px;
+
+      font-size: 20px;
+
+    }
+
+    .card p {
+
+      color: #687386;
+
+      font-size: 15px;
+
+    }
+
+    .account {
+
+      background: #172033;
+
+      color: white;
+
+      text-align: center;
+
+      padding: 55px 20px;
+
+    }
+
+    .account p {
+
+      max-width: 600px;
+
+      margin: 12px auto 25px;
+
+      color: #d5dbe5;
+
+    }
+
+    footer {
+
+      background: #0e1420;
+
+      color: #aeb7c7;
+
+      text-align: center;
+
+      padding: 25px;
+
+      font-size: 14px;
+
+    }
+
+    @media (max-width: 700px) {
+
+      .hero h1 {
+
+        font-size: 36px;
+
+      }
+
+      header {
+
+        flex-direction: column;
+
+      }
+
+      nav {
+
+        justify-content: center;
+
+      }
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  <header>
+
+    <div class="logo">BibleMastrey</div>
+
+    <nav>
+
+      <a href="#reader">Bible</a>
+
+      <a href="#tools">Study Tools</a>
+
+      <a href="#account">Sign In</a>
+
+    </nav>
+
+  </header>
+
+  <section class="hero">
+
+    <h1>Read. Study. Understand. Teach.</h1>
+
+    <p>
+
+      A simple, powerful place to read the Bible, study Scripture,
+
+      organize your thoughts, and prepare to teach.
+
+    </p>
+
+    <div class="buttons">
+
+      <a class="button primary" href="#reader">Read the Bible</a>
+
+      <a class="button secondary" href="#tools">Explore Study Tools</a>
+
+    </div>
+
+  </section>
+
+  <section class="section" id="reader">
+
+    <h2>Bible Reader</h2>
+
+    <p class="section-intro">
+
+      Your Bible reading and study will live here.
+
+    </p>
+
+    <div class="card">
+
+      <h3>📖 Bible Reader</h3>
+
+      <p>
+
+        Read Scripture, search passages, choose translations,
+
+        and move through books and chapters.
+
+      </p>
+
+    </div>
+
+  </section>
+
+  <section class="section" id="tools">
+
+    <h2>Study Tools</h2>
+
+    <p class="section-intro">
+
+      Everything you need for deeper Bible study in one place.
+
+    </p>
+
+    <div class="tools">
+
+      <div class="card">
+
+        <h3>📝 Notes</h3>
+
+        <p>Write and organize your personal Bible study notes.</p>
+
+      </div>
+
+      <div class="card">
+
+        <h3>🔖 Bookmarks & Highlights</h3>
+
+        <p>Save important passages so you can find them again.</p>
+
+      </div>
+
+      <div class="card">
+
+        <h3>📚 Commentaries</h3>
+
+        <p>Explore helpful commentary resources alongside Scripture.</p>
+
+      </div>
+
+      <div class="card">
+
+        <h3>✍️ Sermon Builder</h3>
+
+        <p>Organize Scripture, points, notes, illustrations, and applications.</p>
+
+      </div>
+
+      <div class="card">
+
+        <h3>📖 Bible Study Builder</h3>
+
+        <p>Create structured Bible studies that are easy to save and teach.</p>
+
+      </div>
+
+      <div class="card">
+
+        <h3>🇮🇱 Hebrew & Greek</h3>
+
+        <p>Look up original-language words and explore their meanings.</p>
+
+      </div>
+
+      <div class="card">
+
+        <h3>📕 Bible Dictionary</h3>
+
+        <p>Explore people, places, objects, concepts, and biblical terms.</p>
+
+      </div>
+
+      <div class="card">
+
+        <h3>🔎 Concordance</h3>
+
+        <p>Search Scripture by words and find where they appear.</p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <section class="account" id="account">
+
+    <h2>Study Without an Account</h2>
+
+    <p>
+
+      You can explore BibleMastrey without signing up.
+
+      Create a free account when you want to save notes,
+
+      bookmarks, sermons, and Bible studies.
+
+    </p>
+
+    <div class="buttons">
+
+      <a class="button secondary" href="#">Create Free Account</a>
+
+      <a class="button secondary" href="#">Sign In</a>
+
+    </div>
+
+  </section>
+
+  <footer>
+
+    © 2026 BibleMastrey.net — Read. Study. Understand. Teach.
+
+  </footer>
+
+</body>
+
+</html>
+
