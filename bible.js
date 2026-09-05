@@ -1,354 +1,186 @@
+
+Those **cannot be inside JavaScript**. They cause the entire `bible.js` file to fail before KJV can load.
+
+So let's fix **only `bible.js` first**. Don't change your `index.html`.
+
+### Replace your entire `bible.js` with this:
+
+```javascript
 const KJV_SOURCE =
-"https://raw.githubusercontent.com/midvash/bible-data/main/versions/en/kjv/kjv.json";
+  "https://raw.githubusercontent.com/midvash/bible-data/main/versions/en/kjv/kjv.json";
 
 const WEB_SOURCE =
-"https://api.midvash.com/v1/web";
+  "https://api.midvash.com/v1/web";
 
 const ASV_SOURCE =
-"https://api.getbible.net/v2/asv.json";
+  "https://api.getbible.net/v2/asv.json";
 
 let kjvBible = null;
 let webBible = null;
 let asvBible = null;
 
+
 /* =========================
-KJV
+   KJV
 ========================= */
 
 async function getKJV() {
+  if (kjvBible) {
+    return kjvBible;
+  }
 
-if (kjvBible) {
-return kjvBible;
+  const response = await fetch(KJV_SOURCE);
+
+  if (!response.ok) {
+    throw new Error("Failed to load the King James Version");
+  }
+
+  const data = await response.json();
+
+  kjvBible = normalizeBibleData(data);
+
+  return kjvBible;
 }
 
-const response =
-await fetch(KJV_SOURCE);
-
-if (!response.ok) {
-throw new Error(
-"Failed to load the King James Version"
-);
-}
-
-const data =
-await response.json();
-
-kjvBible =
-normalizeBibleData(data);
-
-return kjvBible;
-}
 
 /* =========================
-WEB
+   WEB
 ========================= */
 
 async function getWEB() {
+  if (webBible) {
+    return webBible;
+  }
 
-if (webBible) {
-return webBible;
+  const response = await fetch(WEB_SOURCE);
+
+  if (!response.ok) {
+    throw new Error("Failed to load the World English Bible");
+  }
+
+  const data = await response.json();
+
+  console.log("WEB original data:", data);
+
+  webBible = normalizeBibleData(data);
+
+  return webBible;
 }
 
-const response =
-await fetch(WEB_SOURCE);
-
-if (!response.ok) {
-throw new Error(
-"Failed to load the World English Bible"
-);
-}
-
-const data =
-await response.json();
-
-console.log("WEB original data:", data);
-
-webBible =
-normalizeBibleData(data);
-
-return webBible;
-}
 
 /* =========================
-ASV
+   ASV
 ========================= */
 
 async function getASV() {
+  if (asvBible) {
+    return asvBible;
+  }
 
-if (asvBible) {
-return asvBible;
+  const response = await fetch(ASV_SOURCE);
+
+  if (!response.ok) {
+    throw new Error("Failed to load the American Standard Version");
+  }
+
+  const data = await response.json();
+
+  console.log("ASV original data:", data);
+
+  asvBible = normalizeBibleData(data);
+
+  return asvBible;
 }
 
-const response =
-await fetch(ASV_SOURCE);
-
-if (!response.ok) {
-throw new Error(
-"Failed to load the American Standard Version"
-);
-}
-
-const data =
-await response.json();
-
-console.log("ASV original data:", data);
-
-asvBible =
-normalizeBibleData(data);
-
-return asvBible;
-}
 
 /* =========================
-NORMALIZE BIBLE DATA
+   NORMALIZE BIBLE DATA
 ========================= */
 
 function normalizeBibleData(data) {
 
-/*
-Already in our reader format
-*/
+  /* Already in reader format */
 
-if (
-data &&
-data.bible &&
-Array.isArray(data.bible.books)
-) {
-
-```
-return {
-  bible: {
-    books: data.bible.books
+  if (
+    data &&
+    data.bible &&
+    Array.isArray(data.bible.books)
+  ) {
+    return {
+      bible: {
+        books: data.bible.books
+      }
+    };
   }
-};
-```
-
-}
-
-if (
-data &&
-Array.isArray(data.books)
-) {
-
-```
-return {
-  bible: {
-    books: data.books
-  }
-};
-```
-
-}
-
-/*
-getBible.net format
-
-```
-{
-  translation: {...},
-  books: [
-    {
-      book: "...",
-      chapters: [
-        {
-          chapter: "...",
-          verses: [...]
-        }
-      ]
-    }
-  ]
-}
-```
-
-*/
-
-if (
-data &&
-Array.isArray(data.books)
-) {
-
-```
-return {
-  bible: {
-    books: data.books.map(function(book) {
-
-      return {
-        book:
-          book.book ||
-          book.name ||
-          book.title ||
-          "Unknown Book",
-
-        chapters:
-          Array.isArray(book.chapters)
-            ? book.chapters.map(function(chapter) {
-
-                return {
-                  chapter:
-                    chapter.chapter ||
-                    chapter.number,
-
-                  verses:
-                    Array.isArray(chapter.verses)
-                      ? chapter.verses.map(function(verse) {
-
-                          return {
-                            verse:
-                              verse.verse ||
-                              verse.number,
-
-                            text:
-                              verse.text ||
-                              verse.content ||
-                              ""
-                          };
-
-                        })
-                      : []
-                };
-
-              })
-            : []
-      };
-
-    })
-  }
-};
-```
-
-}
-
-/*
-Some APIs return the Bible
-directly as an object keyed by
-book names.
-
-```
-If that happens, convert it.
-```
-
-*/
-
-if (
-data &&
-typeof data === "object"
-) {
-
-```
-const possibleBooks =
-  Object.keys(data)
-    .filter(function(key) {
-
-      return (
-        typeof data[key] === "object" &&
-        data[key] !== null
-      );
-
-    });
 
 
-if (possibleBooks.length > 0) {
+  /* Data with books array */
 
-  const books = [];
+  if (
+    data &&
+    Array.isArray(data.books)
+  ) {
+    return {
+      bible: {
+        books: data.books.map(function(book) {
 
+          return {
+            book:
+              book.book ||
+              book.name ||
+              book.title ||
+              "Unknown Book",
 
-  possibleBooks.forEach(function(bookName) {
-
-    const bookData =
-      data[bookName];
-
-
-    if (
-      Array.isArray(bookData)
-    ) {
-
-      books.push({
-
-        book: bookName,
-
-        chapters:
-          bookData.map(function(chapter, chapterIndex) {
-
-            if (
-              Array.isArray(chapter)
-            ) {
-
-              return {
-
-                chapter:
-                  chapterIndex + 1,
-
-                verses:
-                  chapter.map(function(text, verseIndex) {
+            chapters:
+              Array.isArray(book.chapters)
+                ? book.chapters.map(function(chapter) {
 
                     return {
+                      chapter:
+                        chapter.chapter ||
+                        chapter.number,
 
-                      verse:
-                        verseIndex + 1,
+                      verses:
+                        Array.isArray(chapter.verses)
+                          ? chapter.verses.map(function(verse) {
 
-                      text:
-                        String(text)
+                              return {
+                                verse:
+                                  verse.verse ||
+                                  verse.number,
 
+                                text:
+                                  verse.text ||
+                                  verse.content ||
+                                  ""
+                              };
+
+                            })
+                          : []
                     };
 
                   })
+                : []
+          };
 
-              };
-
-            }
-
-
-            return {
-
-              chapter:
-                chapterIndex + 1,
-
-              verses: []
-
-            };
-
-          })
-
-      });
-
-    }
-
-  });
-
-
-  if (books.length > 0) {
-
-    return {
-      bible: {
-        books: books
+        })
       }
     };
-
   }
 
+
+  /* Unknown format */
+
+  console.error("Unrecognized Bible data:", data);
+
+  throw new Error(
+    "Bible data format was not recognized."
+  );
 }
-```
 
-}
-
-/*
-If we reach this point,
-the API format isn't recognized.
-*/
-
-console.error(
-"Unrecognized Bible data:",
-data
-);
-
-throw new Error(
-"Bible data format was not recognized."
-);
-
-}
 
 /* =========================
-MAKE FUNCTIONS AVAILABLE
+   MAKE FUNCTIONS AVAILABLE
 ========================= */
 
 window.getKJV = getKJV;
