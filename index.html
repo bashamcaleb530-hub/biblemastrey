@@ -137,25 +137,21 @@
     }
 
     /* =========================
-       BIBLE READER
+       SCRIPTURE
     ========================= */
 
-    .reader {
+    #chapterContent {
       background: white;
       padding: 25px;
       border-radius: 10px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
 
-    .reader-header {
+    #chapterTitle {
+      margin-top: 0;
       margin-bottom: 20px;
-      border-bottom: 1px solid #ddd;
-      padding-bottom: 15px;
-    }
-
-    .reader-header h2 {
-      margin: 0;
       font-size: 26px;
+      color: #1f3c88;
     }
 
     /* =========================
@@ -186,10 +182,6 @@
     .verse-text:hover {
       background: #f1f4fa;
     }
-
-    /*
-      Automatically selected verse
-    */
 
     .verse-text.selected {
       background: #fff3a6;
@@ -281,7 +273,7 @@
     }
 
     /* =========================
-       READER NAVIGATION
+       NAVIGATION
     ========================= */
 
     .navigation {
@@ -432,7 +424,7 @@
         grid-template-columns: 1fr;
       }
 
-      .reader {
+      #chapterContent {
         padding: 15px;
       }
 
@@ -479,7 +471,9 @@
     <div class="controls-grid">
 
       <div class="control-group">
-        <label for="translation">Translation</label>
+        <label for="translation">
+          Translation
+        </label>
 
         <select id="translation">
           <option value="kjv">
@@ -498,7 +492,9 @@
 
 
       <div class="control-group">
-        <label for="book">Book</label>
+        <label for="book">
+          Book
+        </label>
 
         <select id="book">
           <option value="">
@@ -509,7 +505,9 @@
 
 
       <div class="control-group">
-        <label for="chapter">Chapter</label>
+        <label for="chapter">
+          Chapter
+        </label>
 
         <select id="chapter">
           <option value="">
@@ -520,7 +518,9 @@
 
 
       <div class="control-group">
-        <label for="verse">Verse</label>
+        <label for="verse">
+          Verse
+        </label>
 
         <select id="verse">
           <option value="">
@@ -532,7 +532,9 @@
     </div>
 
 
-    <!-- STUDY CONTROLS -->
+    <!-- =========================
+         COMMENTARY BUTTON
+    ========================= -->
 
     <div class="study-controls">
 
@@ -572,7 +574,9 @@
   </div>
 
 
-  <!-- STATUS -->
+  <!-- =========================
+       STATUS
+  ========================= -->
 
   <div id="status">
     Loading Bible...
@@ -580,60 +584,60 @@
 
 
   <!-- =========================
-       BIBLE READER
+       SCRIPTURE APPEARS HERE
+       AUTOMATICALLY
   ========================= -->
 
-  <div class="reader">
+  <div id="chapterContent">
 
-    <div class="reader-header">
+    <h2 id="chapterTitle">
+      Bible
+    </h2>
 
-      <h2 id="chapterTitle">
-        Bible Reader
-      </h2>
-
-    </div>
-
-
-    <div id="chapterContent">
+    <p>
       Choose a book and chapter to begin reading.
-    </div>
+    </p>
+
+  </div>
 
 
-    <!-- NAVIGATION -->
+  <!-- =========================
+       NAVIGATION
+  ========================= -->
 
-    <div class="navigation">
+  <div class="navigation">
 
-      <button id="previousChapter">
-        ← Previous Chapter
-      </button>
+    <button id="previousChapter">
+      ← Previous Chapter
+    </button>
 
-      <button id="nextChapter">
-        Next Chapter →
-      </button>
+    <button id="nextChapter">
+      Next Chapter →
+    </button>
 
-    </div>
+  </div>
 
 
-    <!-- SEARCH -->
+  <!-- =========================
+       SEARCH
+  ========================= -->
 
-    <div class="search-box">
+  <div class="search-box">
 
-      <h3>
-        Search This Chapter
-      </h3>
+    <h3>
+      Search This Chapter
+    </h3>
 
-      <input
-        type="text"
-        id="searchInput"
-        placeholder="Search for a word..."
-      >
+    <input
+      type="text"
+      id="searchInput"
+      placeholder="Search for a word..."
+    >
 
-      <div
-        id="searchResults"
-        class="search-results"
-      ></div>
-
-    </div>
+    <div
+      id="searchResults"
+      class="search-results"
+    ></div>
 
   </div>
 
@@ -856,7 +860,7 @@
 
 
   /* =========================
-     GET BOOK NAME
+     BOOK NAME
   ========================= */
 
   function getBookName(book) {
@@ -872,7 +876,7 @@
 
 
   /* =========================
-     GET CHAPTERS
+     CHAPTERS
   ========================= */
 
   function getChapters(book) {
@@ -885,7 +889,7 @@
 
 
   /* =========================
-     GET CHAPTER NUMBER
+     CHAPTER NUMBER
   ========================= */
 
   function getChapterNumber(
@@ -903,7 +907,7 @@
 
 
   /* =========================
-     GET VERSES
+     VERSES
   ========================= */
 
   function getVerses(chapter) {
@@ -922,7 +926,7 @@
 
 
   /* =========================
-     GET VERSE NUMBER
+     VERSE NUMBER
   ========================= */
 
   function getVerseNumber(
@@ -941,7 +945,7 @@
 
 
   /* =========================
-     GET VERSE TEXT
+     VERSE TEXT
   ========================= */
 
   function getVerseText(verse) {
@@ -957,7 +961,7 @@
 
 
   /* =========================
-     GET BOOKS
+     BOOKS
   ========================= */
 
   function getBooks(data) {
@@ -1005,7 +1009,7 @@
 
 
   /* =========================
-     NOTE STORAGE KEY
+     NOTE KEY
   ========================= */
 
   function getNoteKey(verseNumber) {
@@ -1020,7 +1024,7 @@
 
 
   /* =========================
-     HIGHLIGHT STORAGE KEY
+     HIGHLIGHT KEY
   ========================= */
 
   function getHighlightKey(verseNumber) {
@@ -1035,7 +1039,7 @@
 
 
   /* =========================
-     BOOKMARK STORAGE KEY
+     BOOKMARK KEY
   ========================= */
 
   function getBookmarkKey(verseNumber) {
@@ -1095,7 +1099,7 @@
 
 
   /* =========================
-     CHECK HIGHLIGHT
+     HIGHLIGHT
   ========================= */
 
   function isHighlighted(verseNumber) {
@@ -1108,10 +1112,6 @@
 
   }
 
-
-  /* =========================
-     SET HIGHLIGHT
-  ========================= */
 
   function setHighlight(
     verseNumber,
@@ -1127,7 +1127,7 @@
 
 
   /* =========================
-     AUTO SELECT VERSE
+     SELECT VERSE
   ========================= */
 
   function selectVerse(
@@ -1161,7 +1161,7 @@
 
     /*
       Automatically highlight
-      the selected verse.
+      clicked verse.
     */
 
     setHighlight(
@@ -1238,10 +1238,37 @@
       "";
 
 
+    /*
+      Put chapter title back
+    */
+
+    const title =
+      document.createElement("h2");
+
+    title.id =
+      "chapterTitle";
+
+    title.textContent =
+      bookName +
+      " " +
+      chapterNumber;
+
+    chapterContent.appendChild(
+      title
+    );
+
+
     if (!verses.length) {
 
-      chapterContent.innerHTML =
-        "<p>No verses found.</p>";
+      const message =
+        document.createElement("p");
+
+      message.textContent =
+        "No verses found.";
+
+      chapterContent.appendChild(
+        message
+      );
 
       return;
 
@@ -1265,7 +1292,7 @@
 
 
       /*
-        MAIN VERSE ROW
+        VERSE ROW
       */
 
       const verseRow =
@@ -1287,7 +1314,7 @@
 
 
       /*
-        VERSE TEXT
+        VERSE
       */
 
       const verseElement =
@@ -1331,10 +1358,6 @@
           );
 
 
-          /*
-            Show verse menu.
-          */
-
           showVerseMenu(
             event.pageX,
             event.pageY,
@@ -1352,7 +1375,7 @@
 
 
       /*
-        NOTES AREA
+        NOTES
       */
 
       const notesArea =
@@ -1392,10 +1415,6 @@
         "note-status";
 
 
-      /*
-        SAVE NOTE WHEN USER TYPES
-      */
-
       note.addEventListener(
         "input",
         function() {
@@ -1429,7 +1448,7 @@
 
 
       /*
-        RIGHT SIDE COMMENTARY
+        COMMENTARY
       */
 
       const commentaryPanel =
@@ -1479,16 +1498,9 @@
         "commentary-text";
 
 
-      /*
-        Temporary commentary area.
-        We will connect real commentary
-        text next.
-      */
-
       commentaryText.innerHTML =
         '<span class="commentary-placeholder">' +
-        "Commentary for this verse will appear here. " +
-        "The commentary system will be connected next." +
+        "Commentary for this verse will appear here." +
         "</span>";
 
 
@@ -1504,10 +1516,6 @@
         commentaryText
       );
 
-
-      /*
-        ADD BOTH SIDES
-      */
 
       verseRow.appendChild(
         verseLeft
@@ -1526,7 +1534,7 @@
 
 
     /*
-      BUILD VERSE SELECTOR
+      VERSE SELECTOR
     */
 
     verseSelect.innerHTML =
@@ -1724,7 +1732,8 @@
 
 
       /*
-        Restore current book/chapter.
+        Restore current book
+        and chapter.
       */
 
       if (
@@ -1801,7 +1810,6 @@
 
       console.error(error);
 
-
       status.textContent =
         error.message ||
         "Unable to load the Bible.";
@@ -1845,7 +1853,7 @@
 
 
   /* =========================
-     TOGGLE COMMENTARY
+     COMMENTARY BUTTON
   ========================= */
 
   commentaryButton.addEventListener(
@@ -1879,14 +1887,21 @@
       }
 
 
-      loadChapter();
+      if (
+        currentBookIndex >= 0 &&
+        currentChapterIndex >= 0
+      ) {
+
+        loadChapter();
+
+      }
 
     }
   );
 
 
   /* =========================
-     CHANGE COMMENTARY
+     COMMENTARY CHANGE
   ========================= */
 
   commentarySelect.addEventListener(
@@ -1925,7 +1940,8 @@
 
 
       chapterContent.innerHTML =
-        "Choose a chapter to begin reading.";
+        '<h2 id="chapterTitle">Bible</h2>' +
+        '<p>Choose a chapter to begin reading.</p>';
 
 
       verseSelect.innerHTML =
@@ -2017,7 +2033,7 @@
 
 
   /* =========================
-     SHOW VERSE MENU
+     VERSE MENU
   ========================= */
 
   function showVerseMenu(
@@ -2050,7 +2066,7 @@
 
 
   /* =========================
-     HIGHLIGHT BUTTON
+     HIGHLIGHT
   ========================= */
 
   highlightVerseButton.addEventListener(
@@ -2080,6 +2096,7 @@
 
       loadChapter();
 
+
       verseMenu.style.display =
         "none";
 
@@ -2088,7 +2105,7 @@
 
 
   /* =========================
-     BOOKMARK BUTTON
+     BOOKMARK
   ========================= */
 
   bookmarkVerseButton.addEventListener(
@@ -2140,7 +2157,7 @@
 
 
   /* =========================
-     COPY VERSE
+     COPY
   ========================= */
 
   copyVerseButton.addEventListener(
@@ -2178,7 +2195,7 @@
 
 
   /* =========================
-     SHARE VERSE
+     SHARE
   ========================= */
 
   shareVerseButton.addEventListener(
@@ -2241,7 +2258,7 @@
 
 
   /* =========================
-     CLOSE VERSE MENU
+     CLOSE MENU
   ========================= */
 
   document.addEventListener(
