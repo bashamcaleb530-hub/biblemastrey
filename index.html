@@ -498,7 +498,7 @@ if (selectedTranslation === "WEB") {
       console.error(error);
 
       status.textContent =
-        "The Bible could not be loaded. Please refresh the page and try again.";
+       status.textContent = error.message;
     }
   }
 
