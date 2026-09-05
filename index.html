@@ -1296,31 +1296,31 @@
      EXTRACT HELLOAO CONTENT
   ========================= */
 
-  function getCommentaryContent(data) {
+  function getCommentaryContent(
+  data
+) {
 
-    if (
-      !data ||
-      !data.chapter
-    ) {
-
-      return [];
-
-    }
-
-    if (
-      Array.isArray(
-        data.chapter.content
-      )
-    ) {
-
-      return data.chapter.content;
-
-    }
-
+  if (!data) {
     return [];
-
   }
 
+  if (
+    data.chapter &&
+    Array.isArray(data.chapter.content)
+  ) {
+    return data.chapter.content;
+  }
+
+  if (Array.isArray(data.content)) {
+    return data.content;
+  }
+
+  if (Array.isArray(data.verses)) {
+    return data.verses;
+  }
+
+  return [];
+}
 
   function getItemNumber(item) {
 
