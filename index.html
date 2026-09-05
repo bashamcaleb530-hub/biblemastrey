@@ -707,7 +707,71 @@
     background: #fff3a3;
   }
 </style>
+<style>
+  .bookmark-button {
+    margin-left: 8px;
+    padding: 4px 8px;
+    font-size: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background: white;
+    cursor: pointer;
+  }
 
+  .bookmark-button.bookmarked {
+    background: #172554;
+    color: white;
+  }
+</style>
+
+<script>
+  function addBookmarkButtons() {
+    document.querySelectorAll(".verse").forEach(function (verse) {
+      if (verse.querySelector(".bookmark-button")) return;
+
+      const button = document.createElement("button");
+      button.className = "bookmark-button";
+      button.textContent = "🔖 Bookmark";
+
+      const bookmarkKey = "bookmark-" + verse.id;
+
+      if (localStorage.getItem(bookmarkKey) === "true") {
+        button.classList.add("bookmarked");
+        button.textContent = "🔖 Bookmarked";
+      }
+
+      button.addEventListener("click", function (event) {
+        event.stopPropagation();
+
+        if (localStorage.getItem(bookmarkKey) === "true") {
+          localStorage.removeItem(bookmarkKey);
+          button.classList.remove("bookmarked");
+          button.textContent = "🔖 Bookmark";
+        } else {
+          localStorage.setItem(bookmarkKey, "true");
+          button.classList.add("bookmarked");
+          button.textContent = "🔖 Bookmarked";
+        }
+      });
+
+      verse.appendChild(button);
+    });
+  }
+
+  const originalLoadChapter = window.loadChapter;
+
+  window.loadChapter = function () {
+    if (typeof originalLoadChapter === "function") {
+      originalLoadChapter();
+    }
+
+    setTimeout(addBookmarkButtons, 100);
+  };
+
+  document.addEventListener("DOMContentLoaded", function () {
+    setTimeout(addBookmarkButtons, 500);
+  });
+</script>
 <script>
   document.addEventListener("click", function (event) {
     const verse = event.target.closest(".verse");
