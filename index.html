@@ -1,548 +1,694 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
-
   <meta charset="UTF-8">
-
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>BibleMastrey — Read. Study. Understand. Teach.</title>
 
   <style>
-
     * {
-
       box-sizing: border-box;
-
-      margin: 0;
-
-      padding: 0;
-
     }
 
     body {
-
-      font-family: Arial, sans-serif;
-
-      background: #f6f7f9;
-
-      color: #172033;
-
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f5f7fb;
+      color: #182033;
       line-height: 1.6;
-
     }
 
     header {
-
-      background: #172033;
-
-      color: white;
-
+      background: #ffffff;
+      border-bottom: 1px solid #e5e7eb;
       padding: 18px 6%;
-
       display: flex;
-
-      justify-content: space-between;
-
       align-items: center;
-
+      justify-content: space-between;
       gap: 20px;
-
+      position: sticky;
+      top: 0;
+      z-index: 10;
     }
 
     .logo {
-
       font-size: 25px;
-
-      font-weight: bold;
-
-    }
-
-    nav {
-
-      display: flex;
-
-      gap: 18px;
-
-      flex-wrap: wrap;
-
+      font-weight: 800;
+      color: #172554;
     }
 
     nav a {
-
-      color: white;
-
       text-decoration: none;
-
-      font-size: 14px;
-
+      color: #374151;
+      margin-left: 22px;
+      font-weight: 600;
     }
 
     .hero {
-
-      background: white;
-
       text-align: center;
-
       padding: 75px 20px;
-
+      background: linear-gradient(135deg, #eef2ff, #ffffff);
     }
 
     .hero h1 {
-
-      font-size: 48px;
-
-      margin-bottom: 15px;
-
+      font-size: clamp(38px, 7vw, 64px);
+      margin: 0 0 15px;
+      color: #172554;
     }
 
     .hero p {
-
-      max-width: 650px;
-
-      margin: 0 auto 28px;
-
-      color: #596579;
-
-      font-size: 19px;
-
-    }
-
-    .buttons {
-
-      display: flex;
-
-      justify-content: center;
-
-      gap: 12px;
-
-      flex-wrap: wrap;
-
-    }
-
-    .button {
-
-      display: inline-block;
-
-      padding: 13px 22px;
-
-      border-radius: 8px;
-
-      text-decoration: none;
-
-      font-weight: bold;
-
-    }
-
-    .primary {
-
-      background: #172033;
-
-      color: white;
-
-    }
-
-    .secondary {
-
-      border: 1px solid #ccd2dc;
-
-      color: #172033;
-
-      background: white;
-
-    }
-
-    .section {
-
-      max-width: 1100px;
-
+      max-width: 700px;
       margin: auto;
-
-      padding: 55px 20px;
-
+      font-size: 19px;
+      color: #4b5563;
     }
 
-    .section h2 {
+    .container {
+      width: 92%;
+      max-width: 1100px;
+      margin: auto;
+    }
 
+    section {
+      padding: 65px 0;
+    }
+
+    .section-title {
       text-align: center;
-
-      font-size: 32px;
-
+      font-size: 34px;
       margin-bottom: 10px;
-
+      color: #172554;
     }
 
     .section-intro {
-
       text-align: center;
+      max-width: 700px;
+      margin: 0 auto 35px;
+      color: #6b7280;
+    }
 
-      color: #687386;
+    .reader {
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 28px;
+      box-shadow: 0 10px 35px rgba(0,0,0,.08);
+    }
 
-      margin-bottom: 30px;
+    .reader-controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 25px;
+    }
 
+    select,
+    input {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
+      background: #fff;
+      font-size: 16px;
+    }
+
+    .search-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 25px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 13px 18px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .primary {
+      background: #172554;
+      color: white;
+    }
+
+    .secondary {
+      background: #e8ecf7;
+      color: #172554;
+    }
+
+    .chapter-heading {
+      text-align: center;
+      color: #172554;
+      margin: 15px 0 25px;
+      font-size: 28px;
+    }
+
+    .scripture {
+      max-width: 820px;
+      margin: auto;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 19px;
+      line-height: 1.9;
+    }
+
+    .verse {
+      margin-bottom: 13px;
+    }
+
+    .verse-number {
+      font-weight: 800;
+      color: #172554;
+      margin-right: 6px;
+      font-size: 14px;
+      vertical-align: super;
+    }
+
+    .navigation {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .message {
+      text-align: center;
+      padding: 25px;
+      color: #6b7280;
     }
 
     .tools {
-
       display: grid;
-
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-
+      grid-template-columns: repeat(4, 1fr);
       gap: 18px;
-
     }
 
-    .card {
-
+    .tool-card {
       background: white;
-
       padding: 25px;
-
-      border-radius: 12px;
-
-      border: 1px solid #e1e5eb;
-
+      border-radius: 15px;
+      box-shadow: 0 5px 20px rgba(0,0,0,.06);
     }
 
-    .card h3 {
-
-      margin-bottom: 8px;
-
-      font-size: 20px;
-
-    }
-
-    .card p {
-
-      color: #687386;
-
-      font-size: 15px;
-
+    .tool-card h3 {
+      margin-top: 0;
+      color: #172554;
     }
 
     .account {
-
-      background: #172033;
-
+      background: #172554;
       color: white;
-
       text-align: center;
-
-      padding: 55px 20px;
-
+      padding: 60px 20px;
     }
 
-    .account p {
-
-      max-width: 600px;
-
-      margin: 12px auto 25px;
-
-      color: #d5dbe5;
-
+    .account h2 {
+      font-size: 32px;
     }
 
     footer {
-
-      background: #0e1420;
-
-      color: #aeb7c7;
-
+      background: #0f172a;
+      color: #cbd5e1;
       text-align: center;
-
-      padding: 25px;
-
-      font-size: 14px;
-
+      padding: 30px 20px;
     }
 
-    @media (max-width: 700px) {
-
-      .hero h1 {
-
-        font-size: 36px;
-
+    @media (max-width: 800px) {
+      .tools {
+        grid-template-columns: 1fr 1fr;
       }
 
+      .reader-controls {
+        grid-template-columns: 1fr;
+      }
+
+      nav a {
+        margin-left: 10px;
+      }
+    }
+
+    @media (max-width: 500px) {
       header {
-
         flex-direction: column;
-
       }
 
-      nav {
-
-        justify-content: center;
-
+      nav a {
+        margin: 0 7px;
       }
 
+      .tools {
+        grid-template-columns: 1fr;
+      }
+
+      .search-row {
+        flex-direction: column;
+      }
     }
-
   </style>
-
 </head>
 
 <body>
 
-  <header>
+<header>
+  <div class="logo">BibleMastrey</div>
 
-    <div class="logo">BibleMastrey</div>
+  <nav>
+    <a href="#reader">Bible</a>
+    <a href="#tools">Study Tools</a>
+    <a href="#account">Sign In</a>
+  </nav>
+</header>
 
-    <nav>
-
-      <a href="#reader">Bible</a>
-
-      <a href="#tools">Study Tools</a>
-
-      <a href="#account">Sign In</a>
-
-    </nav>
-
-  </header>
-
-  <section class="hero">
-
+<section class="hero">
+  <div class="container">
     <h1>Read. Study. Understand. Teach.</h1>
-
     <p>
-
-      A simple, powerful place to read the Bible, study Scripture,
-
-      organize your thoughts, and prepare to teach.
-
+      A simple Bible study platform designed to help you read Scripture,
+      study deeply, and prepare to teach what you learn.
     </p>
+  </div>
+</section>
 
-    <div class="buttons">
+<section id="reader">
+  <div class="container">
 
-      <a class="button primary" href="#reader">Read the Bible</a>
-
-      <a class="button secondary" href="#tools">Explore Study Tools</a>
-
-    </div>
-
-  </section>
-
-  <section class="section" id="reader">
-
-    <h2>Bible Reader</h2>
+    <h2 class="section-title">Bible Reader</h2>
 
     <p class="section-intro">
-
-      Your Bible reading and study will live here.
-
+      Read Scripture, search passages, choose a translation,
+      and move through books and chapters.
     </p>
 
-    <div class="card">
+    <div class="reader">
 
-      <h3>📖 Bible Reader</h3>
+      <div class="reader-controls">
 
-      <p>
+        <div>
+          <label for="translation"><strong>Translation</strong></label>
+          <select id="translation">
+            <option value="kjv">King James Version (KJV)</option>
+          </select>
+        </div>
 
-        Read Scripture, search passages, choose translations,
+        <div>
+          <label for="book"><strong>Book</strong></label>
+          <select id="book">
+            <option value="">Loading books...</option>
+          </select>
+        </div>
 
-        and move through books and chapters.
+        <div>
+          <label for="chapter"><strong>Chapter</strong></label>
+          <select id="chapter" disabled>
+            <option value="">Choose a chapter</option>
+          </select>
+        </div>
 
-      </p>
+        <div>
+          <label for="verse"><strong>Verse</strong></label>
+          <select id="verse" disabled>
+            <option value="">Choose a verse</option>
+          </select>
+        </div>
+
+      </div>
+
+      <div class="search-row">
+        <input
+          id="search"
+          type="text"
+          placeholder="Search the current chapter..."
+        >
+        <button class="primary" id="searchButton">Search</button>
+      </div>
+
+      <div id="status" class="message">
+        Loading the King James Version...
+      </div>
+
+      <h2 id="chapterHeading" class="chapter-heading"></h2>
+
+      <div id="scripture" class="scripture"></div>
+
+      <div class="navigation">
+        <button class="secondary" id="previousButton" disabled>
+          ← Previous Chapter
+        </button>
+
+        <button class="secondary" id="nextButton" disabled>
+          Next Chapter →
+        </button>
+      </div>
 
     </div>
+  </div>
+</section>
 
-  </section>
+<section id="tools">
+  <div class="container">
 
-  <section class="section" id="tools">
-
-    <h2>Study Tools</h2>
+    <h2 class="section-title">Study Tools</h2>
 
     <p class="section-intro">
-
-      Everything you need for deeper Bible study in one place.
-
+      Tools to help you understand Scripture and organize your study.
     </p>
 
     <div class="tools">
 
-      <div class="card">
-
-        <h3>📝 Notes</h3>
-
+      <div class="tool-card">
+        <h3>Notes</h3>
         <p>Write and organize your personal Bible study notes.</p>
-
       </div>
 
-      <div class="card">
-
-        <h3>🔖 Bookmarks & Highlights</h3>
-
-        <p>Save important passages so you can find them again.</p>
-
+      <div class="tool-card">
+        <h3>Bookmarks & Highlights</h3>
+        <p>Save important verses and passages for later.</p>
       </div>
 
-      <div class="card">
-
-        <h3>📚 Commentaries</h3>
-
-        <p>Explore helpful commentary resources alongside Scripture.</p>
-
+      <div class="tool-card">
+        <h3>Commentaries</h3>
+        <p>Explore helpful Bible study resources.</p>
       </div>
 
-      <div class="card">
-
-        <h3>✍️ Sermon Builder</h3>
-
-        <p>Organize Scripture, points, notes, illustrations, and applications.</p>
-
+      <div class="tool-card">
+        <h3>Sermon Builder</h3>
+        <p>Build and organize sermons from Scripture.</p>
       </div>
 
-      <div class="card">
-
-        <h3>📖 Bible Study Builder</h3>
-
-        <p>Create structured Bible studies that are easy to save and teach.</p>
-
+      <div class="tool-card">
+        <h3>Bible Study Builder</h3>
+        <p>Create structured Bible studies.</p>
       </div>
 
-      <div class="card">
-
-        <h3>🇮🇱 Hebrew & Greek</h3>
-
-        <p>Look up original-language words and explore their meanings.</p>
-
+      <div class="tool-card">
+        <h3>Hebrew & Greek</h3>
+        <p>Explore original-language words and meanings.</p>
       </div>
 
-      <div class="card">
-
-        <h3>📕 Bible Dictionary</h3>
-
-        <p>Explore people, places, objects, concepts, and biblical terms.</p>
-
+      <div class="tool-card">
+        <h3>Bible Dictionary</h3>
+        <p>Look up important Bible terms and concepts.</p>
       </div>
 
-      <div class="card">
-
-        <h3>🔎 Concordance</h3>
-
-        <p>Search Scripture by words and find where they appear.</p>
-
+      <div class="tool-card">
+        <h3>Concordance</h3>
+        <p>Find where words appear throughout Scripture.</p>
       </div>
 
     </div>
-
-  </section>
-
-  <section class="account" id="account">
-
-    <h2>Study Without an Account</h2>
-
-    <p>
-
-      You can explore BibleMastrey without signing up.
-
-      Create a free account when you want to save notes,
-
-      bookmarks, sermons, and Bible studies.
-
-    </p>
-
-    <div class="buttons">
-
-      <a class="button secondary" href="#">Create Free Account</a>
-
-      <a class="button secondary" href="#">Sign In</a>
-
-    </div>
-
-  </section>
-
-  <footer>
-
-    © 2026 BibleMastrey.net — Read. Study. Understand. Teach.
-
-  </footer>
-  <div id="kjv-reader" style="max-width:900px;margin:40px auto;padding:25px;background:#fff;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.08);">
-  <h2 style="margin-top:0;">King James Version Bible</h2>
-
-  <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px;">
-    <select id="kjv-book" style="padding:12px;border-radius:8px;border:1px solid #ccc;">
-      <option value="">Choose a book</option>
-    </select>
-
-    <select id="kjv-chapter" style="padding:12px;border-radius:8px;border:1px solid #ccc;" disabled>
-      <option value="">Choose a chapter</option>
-    </select>
   </div>
+</section>
 
-  <div id="kjv-text">
-    <p>Choose a book and chapter to begin reading.</p>
-  </div>
-</div>
+<section id="account" class="account">
+  <h2>Study Without an Account</h2>
+  <p>
+    You can read the Bible and use public study tools without signing in.
+    Create an account later to save your notes, bookmarks, studies, and sermons.
+  </p>
+</section>
+
+<footer>
+  © 2026 BibleMastrey.net
+</footer>
+
+<!-- Load the Bible data first -->
+<script src="bible.js"></script>
 
 <script>
-document.addEventListener("DOMContentLoaded", async function () {
-  const bookSelect = document.getElementById("kjv-book");
-  const chapterSelect = document.getElementById("kjv-chapter");
-  const textArea = document.getElementById("kjv-text");
+  let bibleData = null;
+  let books = [];
+  let currentBookIndex = -1;
+  let currentChapterIndex = -1;
 
-  try {
-    const bible = await getKJV();
+  const bookSelect = document.getElementById("book");
+  const chapterSelect = document.getElementById("chapter");
+  const verseSelect = document.getElementById("verse");
+  const scripture = document.getElementById("scripture");
+  const heading = document.getElementById("chapterHeading");
+  const status = document.getElementById("status");
+  const previousButton = document.getElementById("previousButton");
+  const nextButton = document.getElementById("nextButton");
+  const searchInput = document.getElementById("search");
+  const searchButton = document.getElementById("searchButton");
 
-    const books = bible.bible ? bible.bible.books : bible.books;
+  function getBooks(data) {
+    if (data && data.bible && Array.isArray(data.bible.books)) {
+      return data.bible.books;
+    }
 
-    books.forEach((book, index) => {
-      const option = document.createElement("option");
-      option.value = index;
-      option.textContent = book.book || book.name;
-      bookSelect.appendChild(option);
-    });
+    if (data && Array.isArray(data.books)) {
+      return data.books;
+    }
 
-    bookSelect.addEventListener("change", function () {
-      chapterSelect.innerHTML = '<option value="">Choose a chapter</option>';
-      chapterSelect.disabled = true;
-      textArea.innerHTML = "<p>Choose a chapter.</p>";
+    return [];
+  }
 
-      if (this.value === "") return;
+  function getBookName(book) {
+    return book.book || book.name || book.title || "Unknown Book";
+  }
 
-      const book = books[Number(this.value)];
-      const chapters = book.chapters;
+  function getChapters(book) {
+    return Array.isArray(book.chapters) ? book.chapters : [];
+  }
 
-      chapters.forEach((chapter, index) => {
+  function getChapterNumber(chapter, index) {
+    return chapter.chapter || chapter.number || (index + 1);
+  }
+
+  function getVerses(chapter) {
+    return Array.isArray(chapter.verses) ? chapter.verses : [];
+  }
+
+  function getVerseNumber(verse, index) {
+    return verse.verse || verse.number || (index + 1);
+  }
+
+  function getVerseText(verse) {
+    return verse.text || verse.content || "";
+  }
+
+  async function startBible() {
+    try {
+      bibleData = await getKJV();
+      books = getBooks(bibleData);
+
+      if (!books.length) {
+        throw new Error("No Bible books were found.");
+      }
+
+      bookSelect.innerHTML =
+        '<option value="">Choose a book</option>';
+
+      books.forEach((book, index) => {
         const option = document.createElement("option");
         option.value = index;
-        option.textContent = "Chapter " + (chapter.chapter || index + 1);
-        chapterSelect.appendChild(option);
+        option.textContent = getBookName(book);
+        bookSelect.appendChild(option);
       });
 
-      chapterSelect.disabled = false;
-    });
+      status.textContent =
+        "Choose a book, then choose a chapter to begin reading.";
 
-    chapterSelect.addEventListener("change", function () {
-      if (this.value === "") return;
+    } catch (error) {
+      console.error(error);
 
-      const book = books[Number(bookSelect.value)];
-      const chapter = book.chapters[Number(this.value)];
-
-      textArea.innerHTML = "";
-
-      chapter.verses.forEach(verse => {
-        const verseNumber = verse.verse || "";
-        const verseText = verse.text || "";
-
-        const p = document.createElement("p");
-        p.style.lineHeight = "1.8";
-        p.innerHTML = "<strong>" + verseNumber + "</strong> " + verseText;
-
-        textArea.appendChild(p);
-      });
-    });
-
-  } catch (error) {
-    console.error(error);
-    textArea.innerHTML =
-      "<p>Sorry, the Bible could not be loaded. Please refresh the page and try again.</p>";
+      status.textContent =
+        "The Bible could not be loaded. Please refresh the page and try again.";
+    }
   }
-});
+
+  function loadChapters() {
+    currentBookIndex = Number(bookSelect.value);
+
+    const book = books[currentBookIndex];
+    const chapters = getChapters(book);
+
+    chapterSelect.innerHTML =
+      '<option value="">Choose a chapter</option>';
+
+    verseSelect.innerHTML =
+      '<option value="">Choose a verse</option>';
+
+    verseSelect.disabled = true;
+    scripture.innerHTML = "";
+    heading.textContent = "";
+
+    chapters.forEach((chapter, index) => {
+      const option = document.createElement("option");
+      option.value = index;
+      option.textContent =
+        "Chapter " + getChapterNumber(chapter, index);
+
+      chapterSelect.appendChild(option);
+    });
+
+    chapterSelect.disabled = false;
+  }
+
+  function loadChapter() {
+    if (bookSelect.value === "" || chapterSelect.value === "") {
+      return;
+    }
+
+    currentBookIndex = Number(bookSelect.value);
+    currentChapterIndex = Number(chapterSelect.value);
+
+    const book = books[currentBookIndex];
+    const chapters = getChapters(book);
+    const chapter = chapters[currentChapterIndex];
+    const verses = getVerses(chapter);
+
+    heading.textContent =
+      getBookName(book) +
+      " " +
+      getChapterNumber(chapter, currentChapterIndex);
+
+    scripture.innerHTML = "";
+
+    verseSelect.innerHTML =
+      '<option value="">Jump to verse</option>';
+
+    verses.forEach((verse, index) => {
+      const verseNumber = getVerseNumber(verse, index);
+
+      const option = document.createElement("option");
+      option.value = index;
+      option.textContent = "Verse " + verseNumber;
+      verseSelect.appendChild(option);
+
+      const paragraph = document.createElement("p");
+      paragraph.className = "verse";
+      paragraph.id = "verse-" + index;
+
+      const number = document.createElement("span");
+      number.className = "verse-number";
+      number.textContent = verseNumber;
+
+      paragraph.appendChild(number);
+      paragraph.appendChild(
+        document.createTextNode(" " + getVerseText(verse))
+      );
+
+      scripture.appendChild(paragraph);
+    });
+
+    verseSelect.disabled = verses.length === 0;
+
+    status.textContent =
+      getBookName(book) +
+      " " +
+      getChapterNumber(chapter, currentChapterIndex);
+
+    previousButton.disabled =
+      currentBookIndex === 0 && currentChapterIndex === 0;
+
+    const lastBookIndex = books.length - 1;
+    const lastBook = books[lastBookIndex];
+    const lastChapterIndex = getChapters(lastBook).length - 1;
+
+    nextButton.disabled =
+      currentBookIndex === lastBookIndex &&
+      currentChapterIndex === lastChapterIndex;
+  }
+
+  function goPrevious() {
+    if (currentBookIndex < 0 || currentChapterIndex < 0) return;
+
+    if (currentChapterIndex > 0) {
+      chapterSelect.value = currentChapterIndex - 1;
+      loadChapter();
+      return;
+    }
+
+    if (currentBookIndex > 0) {
+      bookSelect.value = currentBookIndex - 1;
+      loadChapters();
+
+      const chapters = getChapters(
+        books[currentBookIndex - 1]
+      );
+
+      chapterSelect.value = chapters.length - 1;
+      loadChapter();
+    }
+  }
+
+  function goNext() {
+    if (currentBookIndex < 0 || currentChapterIndex < 0) return;
+
+    const chapters = getChapters(books[currentBookIndex]);
+
+    if (currentChapterIndex < chapters.length - 1) {
+      chapterSelect.value = currentChapterIndex + 1;
+      loadChapter();
+      return;
+    }
+
+    if (currentBookIndex < books.length - 1) {
+      bookSelect.value = currentBookIndex + 1;
+      loadChapters();
+      chapterSelect.value = 0;
+      loadChapter();
+    }
+  }
+
+  function jumpToVerse() {
+    if (verseSelect.value === "") return;
+
+    const verse = document.getElementById(
+      "verse-" + verseSelect.value
+    );
+
+    if (verse) {
+      verse.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
+    }
+  }
+
+  function searchChapter() {
+    const query = searchInput.value.trim().toLowerCase();
+
+    if (!query) {
+      loadChapter();
+      return;
+    }
+
+    const verses = document.querySelectorAll(".verse");
+    let found = false;
+
+    verses.forEach(verse => {
+      if (verse.textContent.toLowerCase().includes(query)) {
+        verse.style.fontWeight = "700";
+        verse.scrollIntoView({
+          behavior: "smooth",
+          block: "center"
+        });
+
+        found = true;
+      } else {
+        verse.style.fontWeight = "normal";
+      }
+    });
+
+    if (!found) {
+      status.textContent =
+        "No matching verse found in this chapter.";
+    } else {
+      status.textContent =
+        "Search results for: " + query;
+    }
+  }
+
+  bookSelect.addEventListener("change", loadChapters);
+  chapterSelect.addEventListener("change", loadChapter);
+  verseSelect.addEventListener("change", jumpToVerse);
+  previousButton.addEventListener("click", goPrevious);
+  nextButton.addEventListener("click", goNext);
+  searchButton.addEventListener("click", searchChapter);
+
+  startBible();
 </script>
-<script src="bible.js"></script>
+
 </body>
 </html>
-
