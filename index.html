@@ -459,6 +459,89 @@
     © 2026 BibleMastrey.net — Read. Study. Understand. Teach.
 
   </footer>
+  <div id="kjv-reader" style="max-width:900px;margin:40px auto;padding:25px;background:#fff;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.08);">
+  <h2 style="margin-top:0;">King James Version Bible</h2>
+
+  <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px;">
+    <select id="kjv-book" style="padding:12px;border-radius:8px;border:1px solid #ccc;">
+      <option value="">Choose a book</option>
+    </select>
+
+    <select id="kjv-chapter" style="padding:12px;border-radius:8px;border:1px solid #ccc;" disabled>
+      <option value="">Choose a chapter</option>
+    </select>
+  </div>
+
+  <div id="kjv-text">
+    <p>Choose a book and chapter to begin reading.</p>
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", async function () {
+  const bookSelect = document.getElementById("kjv-book");
+  const chapterSelect = document.getElementById("kjv-chapter");
+  const textArea = document.getElementById("kjv-text");
+
+  try {
+    const bible = await getKJV();
+
+    const books = bible.bible ? bible.bible.books : bible.books;
+
+    books.forEach((book, index) => {
+      const option = document.createElement("option");
+      option.value = index;
+      option.textContent = book.book || book.name;
+      bookSelect.appendChild(option);
+    });
+
+    bookSelect.addEventListener("change", function () {
+      chapterSelect.innerHTML = '<option value="">Choose a chapter</option>';
+      chapterSelect.disabled = true;
+      textArea.innerHTML = "<p>Choose a chapter.</p>";
+
+      if (this.value === "") return;
+
+      const book = books[Number(this.value)];
+      const chapters = book.chapters;
+
+      chapters.forEach((chapter, index) => {
+        const option = document.createElement("option");
+        option.value = index;
+        option.textContent = "Chapter " + (chapter.chapter || index + 1);
+        chapterSelect.appendChild(option);
+      });
+
+      chapterSelect.disabled = false;
+    });
+
+    chapterSelect.addEventListener("change", function () {
+      if (this.value === "") return;
+
+      const book = books[Number(bookSelect.value)];
+      const chapter = book.chapters[Number(this.value)];
+
+      textArea.innerHTML = "";
+
+      chapter.verses.forEach(verse => {
+        const verseNumber = verse.verse || "";
+        const verseText = verse.text || "";
+
+        const p = document.createElement("p");
+        p.style.lineHeight = "1.8";
+        p.innerHTML = "<strong>" + verseNumber + "</strong> " + verseText;
+
+        textArea.appendChild(p);
+      });
+    });
+
+  } catch (error) {
+    console.error(error);
+    textArea.innerHTML =
+      "<p>Sorry, the Bible could not be loaded. Please refresh the page and try again.</p>";
+  }
+});
+</script>
 <script src="bible.js"></script>
 </body>
 </html>
