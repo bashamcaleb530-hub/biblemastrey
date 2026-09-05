@@ -790,6 +790,152 @@ const dictionaryButton =
 
 const dictionaryResult =
     document.getElementById("dictionaryResult");
+  async function searchDictionary() {
+
+  const word =
+    dictionaryInput.value.trim();
+
+  if (!word) {
+    dictionaryResult.textContent =
+      "Enter a Bible word.";
+    return;
+  }
+
+  dictionaryResult.textContent =
+    "Searching...";
+
+  try {
+
+    const letter =
+      word.charAt(0).toLowerCase();
+
+    const url =
+      "https://raw.githubusercontent.com/neuu-org/bible-dictionary-dataset/main/data/01_parsed/" +
+      letter + ".json";
+
+    const response =
+      await fetch(url);
+
+    if (!response.ok) {
+      throw new Error("Dictionary unavailable.");
+    }
+
+    const data =
+      await response.json();
+
+    const entries =
+      Object.values(data);
+
+    const searchWord =
+      word.toLowerCase();
+
+    let matches =
+      entries.filter(function(entry) {
+        return String(entry.name || "")
+          .toLowerCase() === searchWord;
+      });
+
+    if (!matches.length) {
+
+      matches =
+        entries.filter(function(entry) {
+          return String(entry.name || "")
+            .toLowerCase()
+            .includes(searchWord);
+        });
+
+    }
+
+    if (!matches.length) {
+
+      dictionaryResult.textContent =
+        "No Bible Dictionary entry found.";
+
+      return;
+    }
+
+    const entry =
+      matches[0];
+
+    let html =
+      '<div class="dictionary-entry">' +
+      '<div class="dictionary-word">' +
+      entry.name +
+      "</div>";
+
+    if (Array.isArray(entry.definitions)) {
+
+      entry.definitions.forEach(function(definition) {
+
+        if (definition.text) {
+
+          html +=
+            "<p>" +
+            definition.text +
+            "</p>";
+
+        }
+
+      });
+
+    }
+
+    if (
+      Array.isArray(entry.scripture_refs) &&
+      entry.scripture_refs.length
+    ) {
+
+      html +=
+        "<strong>Scripture References:</strong><br>" +
+        entry.scripture_refs
+          .map(function(ref) {
+            return ref.reference || "";
+          })
+          .filter(Boolean)
+          .join(", ");
+
+    }
+
+    html +=
+      '<div class="dictionary-source">' +
+      "Easton's and Smith's Bible Dictionaries" +
+      "</div></div>";
+
+    dictionaryResult.innerHTML =
+      html;
+
+  }
+
+  catch(error) {
+
+    console.error(
+      "Dictionary error:",
+      error
+    );
+
+    dictionaryResult.textContent =
+      "Unable to load the Bible Dictionary.";
+
+  }
+}
+
+
+dictionaryButton.addEventListener(
+  "click",
+  searchDictionary
+);
+
+
+dictionaryInput.addEventListener(
+  "keydown",
+  function(event) {
+
+    if (event.key === "Enter") {
+      searchDictionary();
+    }
+
+  }
+);
   const highlightVerseButton =
     document.getElementById("highlightVerse");
 
