@@ -17,6 +17,16 @@ async function getKJV() {
 
   }
 async function getWEB() {
+  async function getASV() {
+  const response = await fetch(ASV_SOURCE);
+
+  if (!response.ok) {
+    throw new Error("Failed to load the American Standard Version");
+  }
+
+  const data = await response.json();
+  return data;
+}
   const response = await fetch(WEB_SOURCE);
 
   if (!response.ok) {
