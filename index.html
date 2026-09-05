@@ -1243,55 +1243,34 @@
 
   function getCommentaryName() {
 
-    const value =
-      commentarySelect.value;
+  const value = commentarySelect.value;
 
-    if (
-      value ===
-      "matthew-henry-concise"
-    ) {
-      return "Matthew Henry — Concise";
-    }
-
-    if (
-      value ===
-      "matthew-henry"
-    ) {
-      return "Matthew Henry — Complete";
-    }
-
-    if (
-      value ===
-      "john-gill"
-    ) {
-      return "John Gill — Exposition";
-    }
-
-    if (
-      value ===
-      "jamieson-fausset-brown"
-    ) {
-      return "Jamieson-Fausset-Brown";
-    }
-
-    if (
-      value ===
-      "adam-clarke"
-    ) {
-      return "Adam Clarke";
-    }
-
-    if (
-      value ===
-      "barnes"
-    ) {
-      return "Barnes' Notes";
-    }
-
-    return "Bible Commentary";
-
+  if (value === "matthew-henry-concise") {
+    return "Matthew Henry — Concise";
   }
 
+  if (value === "matthew-henry-complete") {
+    return "Matthew Henry — Complete";
+  }
+
+  if (value === "john-gill") {
+    return "John Gill — Exposition";
+  }
+
+  if (value === "jfb") {
+    return "Jamieson-Fausset-Brown";
+  }
+
+  if (value === "adam-clarke") {
+    return "Adam Clarke";
+  }
+
+  if (value === "barnes") {
+    return "Barnes' Notes";
+  }
+
+  return "Bible Commentary";
+}
 
   /* =========================
      API BOOK ID
