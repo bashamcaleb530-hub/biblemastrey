@@ -1016,148 +1016,104 @@
     return normalized;
   }
 
+function normalizeHelloAOCommentary(data) {
 
-  function normalizeHelloAOCommentary(data) {
+  const entries = [];
 
-    let content = [];
-
-    if (
-      data &&
-      data.chapter &&
-      Array.isArray(data.chapter.content)
-    ) {
-      content = data.chapter.content;
-    }
-
-    else if (
-      data &&
-      Array.isArray(data.content)
-    ) {
-      content = data.content;
-    }
-
-    else if (
-      data &&
-      Array.isArray(data.verses)
-    ) {
-      content = data.verses;
-    }
-
-    const entries = [];
-
-    content.forEach(function(item) {
-
-      if (!item) {
-        return;
-      }
-
-      const start =
-        Number(
-          item.number ??
-          item.verse ??
-          item.startVerse
-        );
-
-      const end =
-        Number(
-          item.endVerse ??
-          item.number ??
-          item.verse ??
-          item.startVerse
-        );
-
-      const text =
-        extractCommentaryText(item)
-          .trim();
-
-      if (
-        Number.isFinite(start) &&
-        text
-      ) {
-
-        entries.push({
-          start:start,
-          end:Number.isFinite(end) ? end : start,
-          text:text
-        });
-
-      }
-
-    });
-
+  if (
+    !data ||
+    !data.chapter ||
+    !Array.isArray(data.chapter.content)
+  ) {
     return {
-      entries:entries
+      entries: []
     };
   }
 
+  data.chapter.content.forEach(function(item) {
 
-  function extractCommentaryText(item) {
-
-    if (!item) {
-      return "";
+    if (
+      !item ||
+      item.type !== "verse" ||
+      item.number === undefined
+    ) {
+      return;
     }
 
-    if (typeof item === "string") {
-      return item;
-    }
+    const verseNumber =
+      Number(item.number);
 
-    if (typeof item.text === "string") {
-      return item.text;
-    }
-
-    if (typeof item.content === "string") {
-      return item.content;
-    }
+    let text = "";
 
     if (Array.isArray(item.content)) {
 
-      return item.content
-        .map(function(part) {
-          return extractCommentaryText(part);
-        })
-        .join("");
+      text =
+        item.content
+          .map(function(part) {
+
+            if (
+              typeof part === "string"
+            ) {
+              return part;
+            }
+
+            if (
+              part &&
+              typeof part.text === "string"
+            ) {
+              return part.text;
+            }
+
+            return "";
+
+          })
+          .join("");
 
     }
 
-    if (typeof item.body === "string") {
-      return item.body;
-    }
-
-    if (typeof item.description === "string") {
-      return item.description;
-    }
-
-    return "";
-  }
-
-
-  function findCommentaryForVerse(data,verseNumber) {
-
-    if (
-      !data ||
-      !Array.isArray(data.entries)
+    else if (
+      typeof item.text === "string"
     ) {
-      return "";
+
+      text = item.text;
+
     }
 
-    const target =
-      Number(verseNumber);
+    else if (
+      typeof item.content === "string"
+    ) {
 
-    const match =
-      data.entries.find(function(entry) {
+      text = item.content;
 
-        return (
-          target >= Number(entry.start) &&
-          target <= Number(entry.end)
-        );
+    }
+
+    text =
+      text
+        .replace(/\s+/g, " ")
+        .trim();
+
+    if (text) {
+
+      entries.push({
+
+        start: verseNumber,
+
+        end: verseNumber,
+
+        text: text
 
       });
 
-    return match ? match.text : "";
-  }
+    }
 
+  });
 
-  /* =========================
+  return {
+    entries: entries
+  };
+
+}
+    /* =========================
      MATTHEW HENRY CONCISE
   ========================= */
 
