@@ -15,7 +15,16 @@ async function getKJV() {
     throw new Error("Unable to load the KJV Bible.");
 
   }
+async function getWEB() {
+  const response = await fetch(WEB_SOURCE);
 
+  if (!response.ok) {
+    throw new Error("Failed to load World English Bible");
+  }
+
+  const data = await response.json();
+  return data;
+}
   kjvBible = await response.json();
 
   return kjvBible;
