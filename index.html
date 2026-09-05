@@ -468,9 +468,13 @@
 
   async function startBible() {
     try {
-      bibleData = document.getElementById("translation").value === "WEB"
-  ? await getWEB()
-  : await getKJV();
+      const selectedTranslation = document.getElementById("translation").value;
+
+if (selectedTranslation === "WEB") {
+  bibleData = await getWEB();
+} else {
+  bibleData = await getKJV();
+}
       books = getBooks(bibleData);
 
       if (!books.length) {
