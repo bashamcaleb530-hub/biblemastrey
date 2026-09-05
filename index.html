@@ -124,7 +124,7 @@
 
     .commentary-selector select {
       width: auto;
-      min-width: 220px;
+      min-width: 300px;
     }
 
     /* =========================
@@ -270,6 +270,16 @@
     .commentary-placeholder {
       color: #777;
       font-style: italic;
+    }
+
+    .commentary-loading {
+      color: #666;
+      font-style: italic;
+    }
+
+    .commentary-error {
+      color: #a33;
+      line-height: 1.5;
     }
 
     /* =========================
@@ -490,7 +500,6 @@
         </select>
       </div>
 
-
       <div class="control-group">
         <label for="book">
           Book
@@ -503,7 +512,6 @@
         </select>
       </div>
 
-
       <div class="control-group">
         <label for="chapter">
           Chapter
@@ -515,7 +523,6 @@
           </option>
         </select>
       </div>
-
 
       <div class="control-group">
         <label for="verse">
@@ -530,7 +537,6 @@
       </div>
 
     </div>
-
 
     <!-- =========================
          COMMENTARY BUTTON
@@ -553,16 +559,28 @@
 
         <select id="commentarySelect">
 
+          <option value="matthew-henry-concise">
+            Matthew Henry — Concise
+          </option>
+
           <option value="matthew-henry">
-            Matthew Henry
+            Matthew Henry — Complete
           </option>
 
           <option value="john-gill">
-            John Gill
+            John Gill — Exposition
           </option>
 
-          <option value="jfb">
+          <option value="jamieson-fausset-brown">
             Jamieson-Fausset-Brown
+          </option>
+
+          <option value="adam-clarke">
+            Adam Clarke
+          </option>
+
+          <option value="barnes">
+            Barnes' Notes
           </option>
 
         </select>
@@ -573,7 +591,6 @@
 
   </div>
 
-
   <!-- =========================
        STATUS
   ========================= -->
@@ -582,10 +599,8 @@
     Loading Bible...
   </div>
 
-
   <!-- =========================
-       SCRIPTURE APPEARS HERE
-       AUTOMATICALLY
+       SCRIPTURE
   ========================= -->
 
   <div id="chapterContent">
@@ -599,7 +614,6 @@
     </p>
 
   </div>
-
 
   <!-- =========================
        NAVIGATION
@@ -616,7 +630,6 @@
     </button>
 
   </div>
-
 
   <!-- =========================
        SEARCH
@@ -641,7 +654,6 @@
 
   </div>
 
-
   <!-- =========================
        STUDY TOOLS
   ========================= -->
@@ -655,7 +667,6 @@
     <div class="tools-grid">
 
       <div class="tool-card">
-
         <h3>
           🔖 Bookmarks & Highlights
         </h3>
@@ -664,12 +675,9 @@
           Save important verses and passages
           for later.
         </p>
-
       </div>
 
-
       <div class="tool-card">
-
         <h3>
           🎙️ Sermon Builder
         </h3>
@@ -678,12 +686,9 @@
           Build and organize sermons from
           Scripture.
         </p>
-
       </div>
 
-
       <div class="tool-card">
-
         <h3>
           📚 Bible Study Builder
         </h3>
@@ -691,12 +696,9 @@
         <p>
           Create structured Bible studies.
         </p>
-
       </div>
 
-
       <div class="tool-card">
-
         <h3>
           🇬🇷 Hebrew & Greek
         </h3>
@@ -705,12 +707,9 @@
           Explore original-language words
           and meanings.
         </p>
-
       </div>
 
-
       <div class="tool-card">
-
         <h3>
           📖 Bible Dictionary
         </h3>
@@ -719,12 +718,9 @@
           Look up important Bible terms
           and concepts.
         </p>
-
       </div>
 
-
       <div class="tool-card">
-
         <h3>
           🔎 Concordance
         </h3>
@@ -733,7 +729,6 @@
           Find where words appear throughout
           Scripture.
         </p>
-
       </div>
 
     </div>
@@ -741,7 +736,6 @@
   </section>
 
 </div>
-
 
 <!-- =========================
      VERSE MENU
@@ -770,13 +764,11 @@
 
 </div>
 
-
 <!-- =========================
      BIBLE DATA
 ========================= -->
 
 <script src="bible.js"></script>
-
 
 <script>
 
@@ -795,6 +787,136 @@
   let selectedVerseNumber = null;
 
   let commentaryVisible = false;
+
+  /*
+    Cache commentary chapters so
+    changing verses does not repeatedly
+    download the same chapter.
+  */
+
+  const commentaryCache = {};
+
+
+  /* =========================
+     COMMENTARY API
+  ========================= */
+
+  const COMMENTARY_API =
+    "https://bible.helloao.org/api/c/";
+
+
+  /*
+    These four IDs are confirmed
+    by the commentary API.
+
+    Matthew Henry:
+    The API provides one Matthew Henry
+    dataset. It is used here as the
+    Complete option.
+
+    John Gill:
+    john-gill
+
+    JFB:
+    jamieson-fausset-brown
+
+    Adam Clarke:
+    adam-clarke
+  */
+
+  const commentaryApiIds = {
+
+    "matthew-henry": "matthew-henry",
+
+    "john-gill": "john-gill",
+
+    "jamieson-fausset-brown":
+      "jamieson-fausset-brown",
+
+    "adam-clarke":
+      "adam-clarke"
+
+  };
+
+
+  /*
+    Book names from the Bible files
+    need to be converted to the API's
+    three-letter book IDs.
+  */
+
+  const bookApiIds = {
+
+    "Genesis": "GEN",
+    "Exodus": "EXO",
+    "Leviticus": "LEV",
+    "Numbers": "NUM",
+    "Deuteronomy": "DEU",
+    "Joshua": "JOS",
+    "Judges": "JDG",
+    "Ruth": "RUT",
+    "1 Samuel": "1SA",
+    "2 Samuel": "2SA",
+    "1 Kings": "1KI",
+    "2 Kings": "2KI",
+    "1 Chronicles": "1CH",
+    "2 Chronicles": "2CH",
+    "Ezra": "EZR",
+    "Nehemiah": "NEH",
+    "Esther": "EST",
+    "Job": "JOB",
+    "Psalms": "PSA",
+    "Psalm": "PSA",
+    "Proverbs": "PRO",
+    "Ecclesiastes": "ECC",
+    "Song of Solomon": "SNG",
+    "Song of Songs": "SNG",
+    "Isaiah": "ISA",
+    "Jeremiah": "JER",
+    "Lamentations": "LAM",
+    "Ezekiel": "EZK",
+    "Daniel": "DAN",
+    "Hosea": "HOS",
+    "Joel": "JOL",
+    "Amos": "AMO",
+    "Obadiah": "OBA",
+    "Jonah": "JON",
+    "Micah": "MIC",
+    "Nahum": "NAM",
+    "Habakkuk": "HAB",
+    "Zephaniah": "ZEP",
+    "Haggai": "HAG",
+    "Zechariah": "ZEC",
+    "Malachi": "MAL",
+
+    "Matthew": "MAT",
+    "Mark": "MRK",
+    "Luke": "LUK",
+    "John": "JHN",
+    "Acts": "ACT",
+    "Romans": "ROM",
+    "1 Corinthians": "1CO",
+    "2 Corinthians": "2CO",
+    "Galatians": "GAL",
+    "Ephesians": "EPH",
+    "Philippians": "PHP",
+    "Colossians": "COL",
+    "1 Thessalonians": "1TH",
+    "2 Thessalonians": "2TH",
+    "1 Timothy": "1TI",
+    "2 Timothy": "2TI",
+    "Titus": "TIT",
+    "Philemon": "PHM",
+    "Hebrews": "HEB",
+    "James": "JAS",
+    "1 Peter": "1PE",
+    "2 Peter": "2PE",
+    "1 John": "1JN",
+    "2 John": "2JN",
+    "3 John": "3JN",
+    "Jude": "JUD",
+    "Revelation": "REV"
+  };
 
 
   /* =========================
@@ -1008,10 +1130,6 @@
   }
 
 
-  /* =========================
-     NOTE KEY
-  ========================= */
-
   function getNoteKey(verseNumber) {
 
     return (
@@ -1022,10 +1140,6 @@
 
   }
 
-
-  /* =========================
-     HIGHLIGHT KEY
-  ========================= */
 
   function getHighlightKey(verseNumber) {
 
@@ -1038,10 +1152,6 @@
   }
 
 
-  /* =========================
-     BOOKMARK KEY
-  ========================= */
-
   function getBookmarkKey(verseNumber) {
 
     return (
@@ -1053,10 +1163,6 @@
   }
 
 
-  /* =========================
-     LOAD NOTE
-  ========================= */
-
   function loadNote(verseNumber) {
 
     return localStorage.getItem(
@@ -1065,10 +1171,6 @@
 
   }
 
-
-  /* =========================
-     SAVE NOTE
-  ========================= */
 
   function saveNote(
     verseNumber,
@@ -1097,10 +1199,6 @@
 
   }
 
-
-  /* =========================
-     HIGHLIGHT
-  ========================= */
 
   function isHighlighted(verseNumber) {
 
@@ -1145,29 +1243,551 @@
 
       });
 
-
     verseElement.classList.add(
       "selected"
     );
 
-
     selectedVerseNumber =
       verseNumber;
 
-
     verseSelect.value =
       verseNumber;
-
-
-    /*
-      Automatically highlight
-      clicked verse.
-    */
 
     setHighlight(
       verseNumber,
       true
     );
+
+  }
+
+
+  /* =========================
+     COMMENTARY NAME
+  ========================= */
+
+  function getCommentaryName() {
+
+    const value =
+      commentarySelect.value;
+
+    if (
+      value ===
+      "matthew-henry-concise"
+    ) {
+      return "Matthew Henry — Concise";
+    }
+
+    if (
+      value ===
+      "matthew-henry"
+    ) {
+      return "Matthew Henry — Complete";
+    }
+
+    if (
+      value ===
+      "john-gill"
+    ) {
+      return "John Gill — Exposition";
+    }
+
+    if (
+      value ===
+      "jamieson-fausset-brown"
+    ) {
+      return "Jamieson-Fausset-Brown";
+    }
+
+    if (
+      value ===
+      "adam-clarke"
+    ) {
+      return "Adam Clarke";
+    }
+
+    if (
+      value ===
+      "barnes"
+    ) {
+      return "Barnes' Notes";
+    }
+
+    return "Bible Commentary";
+
+  }
+
+
+  /* =========================
+     API BOOK ID
+  ========================= */
+
+  function getApiBookId(bookName) {
+
+    if (bookApiIds[bookName]) {
+      return bookApiIds[bookName];
+    }
+
+    /*
+      Try to normalize names in case
+      the Bible data uses small differences.
+    */
+
+    const normalized =
+      bookName
+        .replace(/^The /i, "")
+        .trim();
+
+    if (bookApiIds[normalized]) {
+      return bookApiIds[normalized];
+    }
+
+    return null;
+
+  }
+
+
+  /* =========================
+     EXTRACT COMMENTARY TEXT
+  ========================= */
+
+  function extractCommentaryText(
+    item
+  ) {
+
+    if (!item) {
+      return "";
+    }
+
+    if (
+      typeof item === "string"
+    ) {
+      return item;
+    }
+
+    if (
+      typeof item.text === "string"
+    ) {
+      return item.text;
+    }
+
+    if (
+      typeof item.content === "string"
+    ) {
+      return item.content;
+    }
+
+    if (
+      Array.isArray(item.content)
+    ) {
+
+      return item.content
+        .map(function(part) {
+
+          if (
+            typeof part === "string"
+          ) {
+            return part;
+          }
+
+          return (
+            part.text ||
+            part.content ||
+            ""
+          );
+
+        })
+        .join("");
+
+    }
+
+    return "";
+
+  }
+
+
+  /* =========================
+     GET COMMENTARY VERSES
+  ========================= */
+
+  function getCommentaryContent(
+    data
+  ) {
+
+    if (
+      !data ||
+      !data.chapter
+    ) {
+
+      return [];
+
+    }
+
+    if (
+      Array.isArray(
+        data.chapter.content
+      )
+    ) {
+
+      return data.chapter.content;
+
+    }
+
+    return [];
+
+  }
+
+
+  /* =========================
+     LOAD ACTUAL COMMENTARY
+  ========================= */
+
+  async function loadCommentaryChapter(
+    commentaryId,
+    bookName,
+    chapterNumber
+  ) {
+
+    const bookId =
+      getApiBookId(bookName);
+
+    if (!bookId) {
+
+      throw new Error(
+        "Bible book ID not found for " +
+        bookName
+      );
+
+    }
+
+    const cacheKey =
+      commentaryId +
+      "-" +
+      bookId +
+      "-" +
+      chapterNumber;
+
+    if (
+      commentaryCache[cacheKey]
+    ) {
+
+      return commentaryCache[
+        cacheKey
+      ];
+
+    }
+
+    const url =
+      COMMENTARY_API +
+      commentaryId +
+      "/" +
+      bookId +
+      "/" +
+      chapterNumber +
+      ".json";
+
+
+    const response =
+      await fetch(url);
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        "Commentary could not be loaded."
+      );
+
+    }
+
+
+    const data =
+      await response.json();
+
+
+    commentaryCache[
+      cacheKey
+    ] = data;
+
+
+    return data;
+
+  }
+
+
+  /* =========================
+     FIND COMMENTARY FOR VERSE
+  ========================= */
+
+  function findCommentaryForVerse(
+    data,
+    verseNumber
+  ) {
+
+    const content =
+      getCommentaryContent(data);
+
+
+    /*
+      Most commentary API entries
+      have a number property.
+    */
+
+    const exact =
+      content.find(
+        function(item) {
+
+          return (
+            Number(item.number) ===
+            Number(verseNumber)
+          );
+
+        }
+      );
+
+
+    if (exact) {
+
+      return extractCommentaryText(
+        exact
+      );
+
+    }
+
+
+    /*
+      Some commentary works group
+      several verses together.
+
+      Check startVerse/endVerse
+      when those fields exist.
+    */
+
+    const range =
+      content.find(
+        function(item) {
+
+          const start =
+            Number(
+              item.startVerse ??
+              item.verse ??
+              item.number
+            );
+
+          const end =
+            Number(
+              item.endVerse ??
+              item.verse ??
+              item.number
+            );
+
+          return (
+            Number(verseNumber) >= start &&
+            Number(verseNumber) <= end
+          );
+
+        }
+      );
+
+
+    if (range) {
+
+      return extractCommentaryText(
+        range
+      );
+
+    }
+
+
+    return "";
+
+  }
+
+
+  /* =========================
+     LOAD COMMENTARY INTO PANELS
+  ========================= */
+
+  async function populateCommentaryPanels(
+    bookName,
+    chapterNumber
+  ) {
+
+    if (!commentaryVisible) {
+      return;
+    }
+
+
+    const selectedCommentary =
+      commentarySelect.value;
+
+
+    /*
+      Matthew Henry Concise and
+      Barnes are intentionally not
+      connected to a wrong dataset.
+    */
+
+    if (
+      selectedCommentary ===
+      "matthew-henry-concise"
+    ) {
+
+      document
+        .querySelectorAll(
+          ".commentary-text"
+        )
+        .forEach(function(element) {
+
+          element.innerHTML =
+            '<span class="commentary-placeholder">' +
+            "Matthew Henry Concise data will be connected here." +
+            "</span>";
+
+        });
+
+      return;
+
+    }
+
+
+    if (
+      selectedCommentary ===
+      "barnes"
+    ) {
+
+      document
+        .querySelectorAll(
+          ".commentary-text"
+        )
+        .forEach(function(element) {
+
+          element.innerHTML =
+            '<span class="commentary-placeholder">' +
+            "Barnes' Notes data will be connected here." +
+            "</span>";
+
+        });
+
+      return;
+
+    }
+
+
+    const apiId =
+      commentaryApiIds[
+        selectedCommentary
+      ];
+
+
+    if (!apiId) {
+      return;
+    }
+
+
+    const panels =
+      document.querySelectorAll(
+        ".commentary-panel"
+      );
+
+
+    panels.forEach(function(panel) {
+
+      const textElement =
+        panel.querySelector(
+          ".commentary-text"
+        );
+
+
+      textElement.innerHTML =
+        '<span class="commentary-loading">' +
+        "Loading commentary..." +
+        "</span>";
+
+    });
+
+
+    try {
+
+      const data =
+        await loadCommentaryChapter(
+          apiId,
+          bookName,
+          chapterNumber
+        );
+
+
+      panels.forEach(function(panel) {
+
+        const verseNumber =
+          panel.dataset.verseNumber;
+
+
+        const textElement =
+          panel.querySelector(
+            ".commentary-text"
+          );
+
+
+        const commentaryText =
+          findCommentaryForVerse(
+            data,
+            verseNumber
+          );
+
+
+        if (commentaryText) {
+
+          /*
+            The commentary comes from
+            historical source data.
+
+            Use textContent rather than
+            innerHTML so commentary data
+            cannot inject HTML into the page.
+          */
+
+          textElement.textContent =
+            commentaryText;
+
+        }
+
+        else {
+
+          textElement.innerHTML =
+            '<span class="commentary-placeholder">' +
+            "No commentary entry was found for this verse." +
+            "</span>";
+
+        }
+
+      });
+
+    }
+
+    catch (error) {
+
+      console.error(
+        "Commentary error:",
+        error
+      );
+
+
+      panels.forEach(function(panel) {
+
+        const textElement =
+          panel.querySelector(
+            ".commentary-text"
+          );
+
+
+        textElement.innerHTML =
+          '<span class="commentary-error">' +
+          "The commentary could not be loaded right now. " +
+          "Please try again." +
+          "</span>";
+
+      });
+
+    }
 
   }
 
@@ -1198,6 +1818,7 @@
     const book =
       books[currentBookIndex];
 
+
     if (!book) {
       return;
     }
@@ -1206,8 +1827,10 @@
     const chapters =
       getChapters(book);
 
+
     const chapter =
       chapters[currentChapterIndex];
+
 
     if (!chapter) {
       return;
@@ -1216,6 +1839,7 @@
 
     const bookName =
       getBookName(book);
+
 
     const chapterNumber =
       getChapterNumber(
@@ -1237,10 +1861,6 @@
     chapterContent.innerHTML =
       "";
 
-
-    /*
-      Put chapter title back
-    */
 
     const title =
       document.createElement("h2");
@@ -1291,10 +1911,6 @@
         getVerseText(verse);
 
 
-      /*
-        VERSE ROW
-      */
-
       const verseRow =
         document.createElement("div");
 
@@ -1302,20 +1918,12 @@
         "verse-row";
 
 
-      /*
-        LEFT SIDE
-      */
-
       const verseLeft =
         document.createElement("div");
 
       verseLeft.className =
         "verse-left";
 
-
-      /*
-        VERSE
-      */
 
       const verseElement =
         document.createElement("div");
@@ -1337,16 +1945,38 @@
       }
 
 
-      verseElement.innerHTML =
-        '<span class="verse-number">' +
-        verseNumber +
-        '</span>' +
+      /*
+        Use textContent for the
+        actual verse so raw data
+        is displayed safely.
+      */
+
+      const numberSpan =
+        document.createElement("span");
+
+      numberSpan.className =
+        "verse-number";
+
+      numberSpan.textContent =
+        verseNumber;
+
+
+      verseElement.appendChild(
+        numberSpan
+      );
+
+
+      const textSpan =
+        document.createElement("span");
+
+      textSpan.textContent =
         verseText;
 
 
-      /*
-        CLICK VERSE
-      */
+      verseElement.appendChild(
+        textSpan
+      );
+
 
       verseElement.addEventListener(
         "click",
@@ -1374,9 +2004,9 @@
       );
 
 
-      /*
-        NOTES
-      */
+      /* =========================
+         NOTES
+      ========================= */
 
       const notesArea =
         document.createElement("div");
@@ -1447,15 +2077,19 @@
       );
 
 
-      /*
-        COMMENTARY
-      */
+      /* =========================
+         COMMENTARY
+      ========================= */
 
       const commentaryPanel =
         document.createElement("div");
 
       commentaryPanel.className =
         "commentary-panel";
+
+
+      commentaryPanel.dataset.verseNumber =
+        verseNumber;
 
 
       if (commentaryVisible) {
@@ -1498,10 +2132,23 @@
         "commentary-text";
 
 
-      commentaryText.innerHTML =
-        '<span class="commentary-placeholder">' +
-        "Commentary for this verse will appear here." +
-        "</span>";
+      if (commentaryVisible) {
+
+        commentaryText.innerHTML =
+          '<span class="commentary-loading">' +
+          "Loading commentary..." +
+          "</span>";
+
+      }
+
+      else {
+
+        commentaryText.innerHTML =
+          '<span class="commentary-placeholder">' +
+          "Turn on Bible Commentary to view this." +
+          "</span>";
+
+      }
 
 
       commentaryPanel.appendChild(
@@ -1533,9 +2180,9 @@
     });
 
 
-    /*
-      VERSE SELECTOR
-    */
+    /* =========================
+       VERSE SELECTOR
+    ========================= */
 
     verseSelect.innerHTML =
       '<option value="">Choose a verse</option>';
@@ -1576,6 +2223,21 @@
     updateNavigation();
 
     runSearch();
+
+
+    /*
+      Load the actual commentary
+      after the verse panels exist.
+    */
+
+    if (commentaryVisible) {
+
+      populateCommentaryPanels(
+        bookName,
+        chapterNumber
+      );
+
+    }
 
   }
 
@@ -1731,11 +2393,6 @@
       });
 
 
-      /*
-        Restore current book
-        and chapter.
-      */
-
       if (
         oldBookIndex >= 0 &&
         oldBookIndex < books.length
@@ -1815,39 +2472,6 @@
         "Unable to load the Bible.";
 
     }
-
-  }
-
-
-  /* =========================
-     COMMENTARY NAME
-  ========================= */
-
-  function getCommentaryName() {
-
-    const value =
-      commentarySelect.value;
-
-
-    if (
-      value === "john-gill"
-    ) {
-
-      return "John Gill";
-
-    }
-
-
-    if (
-      value === "jfb"
-    ) {
-
-      return "Jamieson-Fausset-Brown";
-
-    }
-
-
-    return "Matthew Henry";
 
   }
 
