@@ -692,21 +692,6 @@
 
 </body>
   <style>
-  .verse {
-    cursor: pointer;
-    padding: 8px;
-    border-radius: 6px;
-    transition: background 0.2s;
-  }
-
-  .verse:hover {
-    background: #f1f5f9;
-  }
-
-  .verse.highlighted {
-    background: #fff3a3;
-  }
-</style>
   .note-button {
     display: inline-block;
     margin-left: 8px;
@@ -739,6 +724,77 @@
   .note-box.visible {
     display: block;
   }
+</style>
+
+<script>
+  function addNoteButtons() {
+    document.querySelectorAll(".verse").forEach(function (verse) {
+      if (verse.querySelector(".note-button")) return;
+
+      const button = document.createElement("button");
+
+      button.className = "note-button";
+      button.textContent = "📝 Note";
+
+      const noteBox = document.createElement("textarea");
+      noteBox.className = "note-box";
+      noteBox.placeholder = "Write your note about this verse...";
+
+      const key = "note-" + verse.id;
+
+      const savedNote = localStorage.getItem(key);
+
+      if (savedNote) {
+        noteBox.value = savedNote;
+        button.classList.add("has-note");
+        button.textContent = "📝 Note Saved";
+      }
+
+      button.addEventListener("click", function (event) {
+        event.stopPropagation();
+
+        noteBox.classList.toggle("visible");
+
+        if (noteBox.classList.contains("visible")) {
+          noteBox.focus();
+        }
+      });
+
+      noteBox.addEventListener("click", function (event) {
+        event.stopPropagation();
+      });
+
+      noteBox.addEventListener("input", function () {
+        localStorage.setItem(key, noteBox.value);
+
+        if (noteBox.value.trim()) {
+          button.classList.add("has-note");
+          button.textContent = "📝 Note Saved";
+        } else {
+          localStorage.removeItem(key);
+          button.classList.remove("has-note");
+          button.textContent = "📝 Note";
+        }
+      });
+
+      verse.appendChild(button);
+      verse.appendChild(noteBox);
+    });
+  }
+
+  const noteObserver = new MutationObserver(function () {
+    addNoteButtons();
+  });
+
+  noteObserver.observe(document.body, {
+    childList: true,
+    subtree: true
+  });
+
+  addNoteButtons();
+</script>
+</style>
+  
 </style>
 
 <script>
