@@ -6,11 +6,7 @@ let kjvBible = null;
 
 async function getKJV() {
 
-  if (kjvBible) {
-
-    return kjvBible;
-
-  }
+  if (kjvBible) return kjvBible;
 
   const response = await fetch(KJV_SOURCE);
 
@@ -23,3 +19,32 @@ async function getKJV() {
   kjvBible = await response.json();
 
   return kjvBible;
+
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+  try {
+
+    const bible = await getKJV();
+
+    const reader = document.querySelector("#bible-reader");
+
+    if (!reader) return;
+
+    reader.innerHTML = `
+
+      <h2>King James Version</h2>
+
+      <p>The KJV Bible is loaded and ready.</p>
+
+    `;
+
+  } catch (error) {
+
+    console.error(error);
+
+  }
+
+});
+
