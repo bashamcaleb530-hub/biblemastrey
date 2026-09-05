@@ -1071,7 +1071,9 @@ function normalizeHelloAOCommentary(data) {
 
     }
 
-    else if (typeof item.text === "string") {
+    else if (
+      typeof item.text === "string"
+    ) {
 
       text = item.text;
 
@@ -1093,9 +1095,13 @@ function normalizeHelloAOCommentary(data) {
     if (text) {
 
       entries.push({
+
         start: verseNumber,
+
         end: verseNumber,
+
         text: text
+
       });
 
     }
