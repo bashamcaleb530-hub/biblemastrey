@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -26,13 +27,13 @@
     }
 
     header h1 {
-      margin: 0 0 8px 0;
+      margin: 0 0 8px;
       font-size: 30px;
     }
 
     header p {
       margin: 0;
-      opacity: 0.9;
+      opacity: .9;
     }
 
     .container {
@@ -45,13 +46,13 @@
       background: white;
       padding: 18px;
       border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      box-shadow: 0 2px 8px rgba(0,0,0,.08);
       margin-bottom: 20px;
     }
 
     .controls-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(4,1fr);
       gap: 12px;
     }
 
@@ -65,15 +66,11 @@
       margin-bottom: 6px;
     }
 
-    select,
-    input,
-    textarea,
-    button {
+    select,input,textarea,button {
       font-family: inherit;
     }
 
-    select,
-    input {
+    select,input {
       width: 100%;
       padding: 10px;
       border: 1px solid #ccc;
@@ -128,7 +125,7 @@
       background: white;
       padding: 25px;
       border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      box-shadow: 0 2px 8px rgba(0,0,0,.08);
     }
 
     #chapterTitle {
@@ -140,7 +137,7 @@
 
     .verse-row {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(280px, 35%);
+      grid-template-columns: minmax(0,1fr) minmax(280px,35%);
       gap: 20px;
       border-bottom: 1px solid #e3e3e3;
       padding: 18px 0;
@@ -154,7 +151,7 @@
       padding: 12px;
       border-radius: 7px;
       cursor: pointer;
-      transition: background 0.2s ease;
+      transition: background .2s ease;
       line-height: 1.7;
       font-size: 18px;
     }
@@ -205,7 +202,7 @@
     .verse-note:focus {
       outline: none;
       border-color: #1f3c88;
-      box-shadow: 0 0 0 2px rgba(31,60,136,0.1);
+      box-shadow: 0 0 0 2px rgba(31,60,136,.1);
     }
 
     .note-status {
@@ -317,7 +314,7 @@
 
     .tools-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(3,1fr);
       gap: 15px;
     }
 
@@ -325,7 +322,7 @@
       background: white;
       padding: 20px;
       border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      box-shadow: 0 2px 8px rgba(0,0,0,.08);
     }
 
     .tool-card h3 {
@@ -344,7 +341,7 @@
       background: white;
       border: 1px solid #ccc;
       border-radius: 7px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      box-shadow: 0 4px 12px rgba(0,0,0,.15);
       z-index: 1000;
       overflow: hidden;
     }
@@ -363,7 +360,7 @@
       background: #f1f1f1;
     }
 
-    @media (max-width: 800px) {
+    @media(max-width:800px) {
       .controls-grid {
         grid-template-columns: 1fr 1fr;
       }
@@ -381,7 +378,7 @@
       }
     }
 
-    @media (max-width: 500px) {
+    @media(max-width:500px) {
       .container {
         padding: 10px;
       }
@@ -417,6 +414,7 @@
       }
     }
   </style>
+
 </head>
 
 <body>
@@ -430,163 +428,165 @@
 
   <div class="controls">
 
-    <div class="controls-grid">
+```
+<div class="controls-grid">
 
-      <div class="control-group">
-        <label for="translation">Translation</label>
+  <div class="control-group">
+    <label for="translation">Translation</label>
+    <select id="translation">
+      <option value="kjv">King James Version (KJV)</option>
+      <option value="WEB">World English Bible</option>
+      <option value="ASV">American Standard Version</option>
+    </select>
+  </div>
 
-        <select id="translation">
-          <option value="kjv">King James Version (KJV)</option>
-          <option value="WEB">World English Bible</option>
-          <option value="ASV">American Standard Version</option>
-        </select>
-      </div>
+  <div class="control-group">
+    <label for="book">Book</label>
+    <select id="book">
+      <option value="">Choose a book</option>
+    </select>
+  </div>
 
-      <div class="control-group">
-        <label for="book">Book</label>
+  <div class="control-group">
+    <label for="chapter">Chapter</label>
+    <select id="chapter">
+      <option value="">Choose a chapter</option>
+    </select>
+  </div>
 
-        <select id="book">
-          <option value="">Choose a book</option>
-        </select>
-      </div>
+  <div class="control-group">
+    <label for="verse">Verse</label>
+    <select id="verse">
+      <option value="">Choose a verse</option>
+    </select>
+  </div>
 
-      <div class="control-group">
-        <label for="chapter">Chapter</label>
+</div>
 
-        <select id="chapter">
-          <option value="">Choose a chapter</option>
-        </select>
-      </div>
+<div class="study-controls">
 
-      <div class="control-group">
-        <label for="verse">Verse</label>
+  <button id="commentaryButton">
+    📖 Bible Commentary
+  </button>
 
-        <select id="verse">
-          <option value="">Choose a verse</option>
-        </select>
-      </div>
+  <div id="commentarySelector" class="commentary-selector">
 
-    </div>
+    <select id="commentarySelect">
 
-    <div class="study-controls">
+      <option value="matthew-henry-concise">
+        Matthew Henry — Concise
+      </option>
 
-      <button id="commentaryButton">
-        📖 Bible Commentary
-      </button>
+      <option value="matthew-henry-complete">
+        Matthew Henry — Complete
+      </option>
 
-      <div id="commentarySelector" class="commentary-selector">
+      <option value="john-gill">
+        John Gill — Exposition
+      </option>
 
-        <select id="commentarySelect">
+      <option value="jfb">
+        Jamieson-Fausset-Brown
+      </option>
 
-          <option value="matthew-henry-concise">
-            Matthew Henry — Concise
-          </option>
+      <option value="adam-clarke">
+        Adam Clarke
+      </option>
 
-          <option value="matthew-henry-complete">
-            Matthew Henry — Complete
-          </option>
+      <option value="barnes">
+        Barnes' Notes
+      </option>
 
-          <option value="john-gill">
-            John Gill — Exposition
-          </option>
-
-          <option value="jfb">
-            Jamieson-Fausset-Brown
-          </option>
-
-          <option value="adam-clarke">
-            Adam Clarke
-          </option>
-
-          <option value="barnes">
-            Barnes' Notes
-          </option>
-
-        </select>
-
-      </div>
-
-    </div>
+    </select>
 
   </div>
 
-  <div id="status">
-    Loading Bible...
+</div>
+```
+
   </div>
+
+  <div id="status">Loading Bible...</div>
 
   <div id="chapterContent">
 
-    <h2 id="chapterTitle">Bible</h2>
+```
+<h2 id="chapterTitle">Bible</h2>
 
-    <p>
-      Choose a book and chapter to begin reading.
-    </p>
+<p>Choose a book and chapter to begin reading.</p>
+```
 
   </div>
 
   <div class="navigation">
 
-    <button id="previousChapter">
-      ← Previous Chapter
-    </button>
+```
+<button id="previousChapter">
+  ← Previous Chapter
+</button>
 
-    <button id="nextChapter">
-      Next Chapter →
-    </button>
+<button id="nextChapter">
+  Next Chapter →
+</button>
+```
 
   </div>
 
   <div class="search-box">
 
-    <h3>Search This Chapter</h3>
+```
+<h3>Search This Chapter</h3>
 
-    <input
-      type="text"
-      id="searchInput"
-      placeholder="Search for a word..."
-    >
+<input
+  type="text"
+  id="searchInput"
+  placeholder="Search for a word..."
+>
 
-    <div id="searchResults" class="search-results"></div>
+<div id="searchResults" class="search-results"></div>
+```
 
   </div>
 
   <section class="study-tools">
 
-    <h2>Bible Study Tools</h2>
+```
+<h2>Bible Study Tools</h2>
 
-    <div class="tools-grid">
+<div class="tools-grid">
 
-      <div class="tool-card">
-        <h3>🔖 Bookmarks & Highlights</h3>
-        <p>Save important verses and passages for later.</p>
-      </div>
+  <div class="tool-card">
+    <h3>🔖 Bookmarks & Highlights</h3>
+    <p>Save important verses and passages for later.</p>
+  </div>
 
-      <div class="tool-card">
-        <h3>🎙️ Sermon Builder</h3>
-        <p>Build and organize sermons from Scripture.</p>
-      </div>
+  <div class="tool-card">
+    <h3>🎙️ Sermon Builder</h3>
+    <p>Build and organize sermons from Scripture.</p>
+  </div>
 
-      <div class="tool-card">
-        <h3>📚 Bible Study Builder</h3>
-        <p>Create structured Bible studies.</p>
-      </div>
+  <div class="tool-card">
+    <h3>📚 Bible Study Builder</h3>
+    <p>Create structured Bible studies.</p>
+  </div>
 
-      <div class="tool-card">
-        <h3>🇬🇷 Hebrew & Greek</h3>
-        <p>Explore original-language words and meanings.</p>
-      </div>
+  <div class="tool-card">
+    <h3>🇬🇷 Hebrew & Greek</h3>
+    <p>Explore original-language words and meanings.</p>
+  </div>
 
-      <div class="tool-card">
-        <h3>📖 Bible Dictionary</h3>
-        <p>Look up important Bible terms and concepts.</p>
-      </div>
+  <div class="tool-card">
+    <h3>📖 Bible Dictionary</h3>
+    <p>Look up important Bible terms and concepts.</p>
+  </div>
 
-      <div class="tool-card">
-        <h3>🔎 Concordance</h3>
-        <p>Find where words appear throughout Scripture.</p>
-      </div>
+  <div class="tool-card">
+    <h3>🔎 Concordance</h3>
+    <p>Find where words appear throughout Scripture.</p>
+  </div>
 
-    </div>
+</div>
+```
 
   </section>
 
@@ -594,31 +594,13 @@
 
 <div id="verseMenu" class="verse-menu">
 
-  <button id="highlightVerse">
-    🟨 Highlight
-  </button>
-
-  <button id="bookmarkVerse">
-    🔖 Bookmark
-  </button>
-
-  <button id="copyVerse">
-    📋 Copy
-  </button>
-
-  <button id="shareVerse">
-    📤 Share
-  </button>
+<button id="highlightVerse">🟨 Highlight</button> <button id="bookmarkVerse">🔖 Bookmark</button> <button id="copyVerse">📋 Copy</button> <button id="shareVerse">📤 Share</button>
 
 </div>
 
 <script src="bible.js"></script>
 
 <script>
-
-  /* =========================
-     VARIABLES
-  ========================= */
 
   let bibleData = null;
   let books = [];
@@ -629,124 +611,116 @@
 
   const commentaryCache = {};
 
-
   /* =========================
-     COMMENTARY SOURCES
+     COMMENTARY APIs
   ========================= */
 
   const COMMENTARY_API =
     "https://bible.helloao.org/api/c/";
 
-  const SCRIPTURE_HOW_API =
-    "https://www.scripture.how/en/commentaries/";
-
-  const LYTEWORD_RAW =
-    "https://raw.githubusercontent.com/lyteword/mhenry-concise/";
-
-
-  /* =========================
-     COMMENTARY IDS
-  ========================= */
+  /*
+    HelloAO officially provides:
+    Matthew Henry
+    John Gill
+    Jamieson-Fausset-Brown
+    Adam Clarke
+  */
 
   const commentaryApiIds = {
-
-    "matthew-henry-complete":
-      "matthew-henry",
-
-    "john-gill":
-      "john-gill",
-
-    "jfb":
-      "jamieson-fausset-brown",
-
-    "adam-clarke":
-      "adam-clarke"
-
+    "matthew-henry-complete": "matthew-henry",
+    "john-gill": "john-gill",
+    "jfb": "jamieson-fausset-brown",
+    "adam-clarke": "adam-clarke"
   };
 
+  /*
+    Matthew Henry Concise has its own public
+    LyteWord repository.
+  */
 
-  /* =========================
-     BOOK IDS
-  ========================= */
+  const LYTEWORD_CONCISE =
+    "https://raw.githubusercontent.com/lyteword/mhenry-concise/main/";
+
+  /*
+    Barnes is available through CCEL and covers
+    the New Testament.
+  */
+
+  const BARNES_CCEL =
+    "https://www.ccel.org/ccel/barnes/";
 
   const bookApiIds = {
 
-    "Genesis": "GEN",
-    "Exodus": "EXO",
-    "Leviticus": "LEV",
-    "Numbers": "NUM",
-    "Deuteronomy": "DEU",
-    "Joshua": "JOS",
-    "Judges": "JDG",
-    "Ruth": "RUT",
-    "1 Samuel": "1SA",
-    "2 Samuel": "2SA",
-    "1 Kings": "1KI",
-    "2 Kings": "2KI",
-    "1 Chronicles": "1CH",
-    "2 Chronicles": "2CH",
-    "Ezra": "EZR",
-    "Nehemiah": "NEH",
-    "Esther": "EST",
-    "Job": "JOB",
-    "Psalms": "PSA",
-    "Psalm": "PSA",
-    "Proverbs": "PRO",
-    "Ecclesiastes": "ECC",
-    "Song of Solomon": "SNG",
-    "Song of Songs": "SNG",
-    "Isaiah": "ISA",
-    "Jeremiah": "JER",
-    "Lamentations": "LAM",
-    "Ezekiel": "EZK",
-    "Daniel": "DAN",
-    "Hosea": "HOS",
-    "Joel": "JOL",
-    "Amos": "AMO",
-    "Obadiah": "OBA",
-    "Jonah": "JON",
-    "Micah": "MIC",
-    "Nahum": "NAM",
-    "Habakkuk": "HAB",
-    "Zephaniah": "ZEP",
-    "Haggai": "HAG",
-    "Zechariah": "ZEC",
-    "Malachi": "MAL",
+    "Genesis":"GEN",
+    "Exodus":"EXO",
+    "Leviticus":"LEV",
+    "Numbers":"NUM",
+    "Deuteronomy":"DEU",
+    "Joshua":"JOS",
+    "Judges":"JDG",
+    "Ruth":"RUT",
+    "1 Samuel":"1SA",
+    "2 Samuel":"2SA",
+    "1 Kings":"1KI",
+    "2 Kings":"2KI",
+    "1 Chronicles":"1CH",
+    "2 Chronicles":"2CH",
+    "Ezra":"EZR",
+    "Nehemiah":"NEH",
+    "Esther":"EST",
+    "Job":"JOB",
+    "Psalms":"PSA",
+    "Psalm":"PSA",
+    "Proverbs":"PRO",
+    "Ecclesiastes":"ECC",
+    "Song of Solomon":"SNG",
+    "Song of Songs":"SNG",
+    "Isaiah":"ISA",
+    "Jeremiah":"JER",
+    "Lamentations":"LAM",
+    "Ezekiel":"EZK",
+    "Daniel":"DAN",
+    "Hosea":"HOS",
+    "Joel":"JOL",
+    "Amos":"AMO",
+    "Obadiah":"OBA",
+    "Jonah":"JON",
+    "Micah":"MIC",
+    "Nahum":"NAM",
+    "Habakkuk":"HAB",
+    "Zephaniah":"ZEP",
+    "Haggai":"HAG",
+    "Zechariah":"ZEC",
+    "Malachi":"MAL",
 
-    "Matthew": "MAT",
-    "Mark": "MRK",
-    "Luke": "LUK",
-    "John": "JHN",
-    "Acts": "ACT",
-    "Romans": "ROM",
-    "1 Corinthians": "1CO",
-    "2 Corinthians": "2CO",
-    "Galatians": "GAL",
-    "Ephesians": "EPH",
-    "Philippians": "PHP",
-    "Colossians": "COL",
-    "1 Thessalonians": "1TH",
-    "2 Thessalonians": "2TH",
-    "1 Timothy": "1TI",
-    "2 Timothy": "2TI",
-    "Titus": "TIT",
-    "Philemon": "PHM",
-    "Hebrews": "HEB",
-    "James": "JAS",
-    "1 Peter": "1PE",
-    "2 Peter": "2PE",
-    "1 John": "1JN",
-    "2 John": "2JN",
-    "3 John": "3JN",
-    "Jude": "JUD",
-    "Revelation": "REV"
-
+    "Matthew":"MAT",
+    "Mark":"MRK",
+    "Luke":"LUK",
+    "John":"JHN",
+    "Acts":"ACT",
+    "Romans":"ROM",
+    "1 Corinthians":"1CO",
+    "2 Corinthians":"2CO",
+    "Galatians":"GAL",
+    "Ephesians":"EPH",
+    "Philippians":"PHP",
+    "Colossians":"COL",
+    "1 Thessalonians":"1TH",
+    "2 Thessalonians":"2TH",
+    "1 Timothy":"1TI",
+    "2 Timothy":"2TI",
+    "Titus":"TIT",
+    "Philemon":"PHM",
+    "Hebrews":"HEB",
+    "James":"JAS",
+    "1 Peter":"1PE",
+    "2 Peter":"2PE",
+    "1 John":"1JN",
+    "2 John":"2JN",
+    "3 John":"3JN",
+    "Jude":"JUD",
+    "Revelation":"REV"
   };
-
-
-  /* =========================
-     ELEMENTS
-  ========================= */
 
   const translationSelect =
     document.getElementById("translation");
@@ -803,41 +777,17 @@
     document.getElementById("shareVerse");
 
 
-  /* =========================
-     BIBLE HELPERS
-  ========================= */
-
   function getBookName(book) {
-
-    return (
-      book.book ||
-      book.name ||
-      book.title ||
-      "Unknown Book"
-    );
-
+    return book.book || book.name || book.title || "Unknown Book";
   }
-
 
   function getChapters(book) {
-
-    return Array.isArray(book.chapters)
-      ? book.chapters
-      : [];
-
+    return Array.isArray(book.chapters) ? book.chapters : [];
   }
 
-
-  function getChapterNumber(chapter, index) {
-
-    return (
-      chapter.chapter ||
-      chapter.number ||
-      (index + 1)
-    );
-
+  function getChapterNumber(chapter,index) {
+    return chapter.chapter || chapter.number || (index + 1);
   }
-
 
   function getVerses(chapter) {
 
@@ -850,33 +800,15 @@
     }
 
     return [];
-
   }
 
-
-  function getVerseNumber(verse, index) {
-
-    return (
-      verse.verse ||
-      verse.number ||
-      verse.id ||
-      (index + 1)
-    );
-
+  function getVerseNumber(verse,index) {
+    return verse.verse || verse.number || verse.id || (index + 1);
   }
-
 
   function getVerseText(verse) {
-
-    return (
-      verse.text ||
-      verse.content ||
-      verse.verseText ||
-      ""
-    );
-
+    return verse.text || verse.content || verse.verseText || "";
   }
-
 
   function getBooks(data) {
 
@@ -896,7 +828,6 @@
     }
 
     return [];
-
   }
 
 
@@ -905,71 +836,34 @@
   ========================= */
 
   function getStoragePrefix() {
-
-    return (
-      "bibleMastrey-" +
+    return "bibleMastrey-" +
       translationSelect.value +
       "-" +
       currentBookIndex +
       "-" +
-      currentChapterIndex
-    );
-
+      currentChapterIndex;
   }
 
-
-  function getNoteKey(verseNumber) {
-
-    return (
-      getStoragePrefix() +
-      "-note-" +
-      verseNumber
-    );
-
+  function getNoteKey(v) {
+    return getStoragePrefix() + "-note-" + v;
   }
 
-
-  function getHighlightKey(verseNumber) {
-
-    return (
-      getStoragePrefix() +
-      "-highlight-" +
-      verseNumber
-    );
-
+  function getHighlightKey(v) {
+    return getStoragePrefix() + "-highlight-" + v;
   }
 
-
-  function getBookmarkKey(verseNumber) {
-
-    return (
-      getStoragePrefix() +
-      "-bookmark-" +
-      verseNumber
-    );
-
+  function getBookmarkKey(v) {
+    return getStoragePrefix() + "-bookmark-" + v;
   }
 
-
-  function loadNote(verseNumber) {
-
-    return (
-      localStorage.getItem(
-        getNoteKey(verseNumber)
-      ) || ""
-    );
-
+  function loadNote(v) {
+    return localStorage.getItem(getNoteKey(v)) || "";
   }
 
-
-  function saveNote(
-    verseNumber,
-    text,
-    statusElement
-  ) {
+  function saveNote(v,text,statusElement) {
 
     localStorage.setItem(
-      getNoteKey(verseNumber),
+      getNoteKey(v),
       text
     );
 
@@ -978,34 +872,22 @@
       statusElement.textContent = "Saved";
 
       setTimeout(function() {
-
         statusElement.textContent = "";
-
-      }, 1200);
+      },1200);
 
     }
-
   }
 
-
-  function isHighlighted(verseNumber) {
-
-    return (
-      localStorage.getItem(
-        getHighlightKey(verseNumber)
-      ) === "true"
-    );
-
+  function isHighlighted(v) {
+    return localStorage.getItem(
+      getHighlightKey(v)
+    ) === "true";
   }
 
-
-  function setHighlight(
-    verseNumber,
-    value
-  ) {
+  function setHighlight(v,value) {
 
     localStorage.setItem(
-      getHighlightKey(verseNumber),
+      getHighlightKey(v),
       value ? "true" : "false"
     );
 
@@ -1013,45 +895,39 @@
 
 
   /* =========================
-     COMMENTARY NAME
+     COMMENTARY NAMES
   ========================= */
 
   function getCommentaryName() {
 
-    const value = commentarySelect.value;
+    const value =
+      commentarySelect.value;
 
-    if (value === "matthew-henry-concise") {
-      return "Matthew Henry — Concise";
-    }
+    const names = {
 
-    if (value === "matthew-henry-complete") {
-      return "Matthew Henry — Complete";
-    }
+      "matthew-henry-concise":
+        "Matthew Henry — Concise",
 
-    if (value === "john-gill") {
-      return "John Gill — Exposition";
-    }
+      "matthew-henry-complete":
+        "Matthew Henry — Complete",
 
-    if (value === "jfb") {
-      return "Jamieson-Fausset-Brown";
-    }
+      "john-gill":
+        "John Gill — Exposition",
 
-    if (value === "adam-clarke") {
-      return "Adam Clarke";
-    }
+      "jfb":
+        "Jamieson-Fausset-Brown",
 
-    if (value === "barnes") {
-      return "Barnes' Notes";
-    }
+      "adam-clarke":
+        "Adam Clarke",
 
-    return "Bible Commentary";
+      "barnes":
+        "Barnes' Notes"
 
+    };
+
+    return names[value] || "Bible Commentary";
   }
 
-
-  /* =========================
-     API BOOK ID
-  ========================= */
 
   function getApiBookId(bookName) {
 
@@ -1061,42 +937,15 @@
 
     const normalized =
       String(bookName)
-        .replace(/^The /i, "")
+        .replace(/^The /i,"")
         .trim();
 
     return bookApiIds[normalized] || null;
-
   }
 
 
   /* =========================
-     CONCISE SLUG
-  ========================= */
-
-  function getConciseBookSlug(bookName) {
-
-    const aliases = {
-
-      "Psalms": "psalms",
-      "Psalm": "psalms",
-      "Song of Solomon": "song-of-solomon",
-      "Song of Songs": "song-of-solomon"
-
-    };
-
-    if (aliases[bookName]) {
-      return aliases[bookName];
-    }
-
-    return String(bookName)
-      .toLowerCase()
-      .replace(/\s+/g, "-");
-
-  }
-
-
-  /* =========================
-     HELLOAO COMMENTARY LOADER
+     HELLOAO
   ========================= */
 
   async function loadHelloAOCommentary(
@@ -1110,8 +959,7 @@
 
     if (!bookId) {
       throw new Error(
-        "Bible book ID not found for " +
-        bookName
+        "Commentary book ID not found."
       );
     }
 
@@ -1127,105 +975,47 @@
       return commentaryCache[cacheKey];
     }
 
-    const baseUrl =
+    const url =
       COMMENTARY_API +
       commentaryId +
       "/" +
       bookId +
       "/" +
-      chapterNumber;
+      chapterNumber +
+      ".simple.json";
 
-    const urls = [
-      baseUrl + ".json",
-      baseUrl + ".simple.json"
-    ];
+    const response =
+      await fetch(url);
 
-    let lastError = null;
+    if (!response.ok) {
 
-    for (let i = 0; i < urls.length; i++) {
+      if (response.status === 404) {
 
-      try {
-
-        const response =
-          await fetch(
-            urls[i],
-            {
-              method: "GET",
-              headers: {
-                "Accept": "application/json"
-              }
-            }
-          );
-
-        if (!response.ok) {
-
-          lastError =
-            new Error(
-              "HTTP " +
-              response.status +
-              " from commentary API."
-            );
-
-          continue;
-
-        }
-
-        const data =
-          await response.json();
-
-        if (!data) {
-
-          lastError =
-            new Error(
-              "Commentary API returned no data."
-            );
-
-          continue;
-
-        }
-
-        const normalized =
-          normalizeHelloAOCommentary(data);
-
-        if (!normalized.entries.length) {
-
-          lastError =
-            new Error(
-              "Commentary was received, but no verse entries were found."
-            );
-
-          continue;
-
-        }
-
-        commentaryCache[cacheKey] =
-          normalized;
-
-        return normalized;
+        return {
+          entries: []
+        };
 
       }
 
-      catch (error) {
-
-        lastError = error;
-
-      }
+      throw new Error(
+        "Commentary server returned HTTP " +
+        response.status
+      );
 
     }
 
-    throw (
-      lastError ||
-      new Error(
-        "Unable to load this commentary."
-      )
-    );
+    const data =
+      await response.json();
 
+    const normalized =
+      normalizeHelloAOCommentary(data);
+
+    commentaryCache[cacheKey] =
+      normalized;
+
+    return normalized;
   }
 
-
-  /* =========================
-     NORMALIZE HELLOAO DATA
-  ========================= */
 
   function normalizeHelloAOCommentary(data) {
 
@@ -1236,32 +1026,22 @@
       data.chapter &&
       Array.isArray(data.chapter.content)
     ) {
-
-      content =
-        data.chapter.content;
-
+      content = data.chapter.content;
     }
 
     else if (
       data &&
       Array.isArray(data.content)
     ) {
-
-      content =
-        data.content;
-
+      content = data.content;
     }
 
     else if (
       data &&
       Array.isArray(data.verses)
     ) {
-
-      content =
-        data.verses;
-
+      content = data.verses;
     }
-
 
     const entries = [];
 
@@ -1271,24 +1051,20 @@
         return;
       }
 
-      const startValue =
-        item.number ??
-        item.verse ??
-        item.startVerse ??
-        null;
-
-      const endValue =
-        item.endVerse ??
-        item.number ??
-        item.verse ??
-        item.startVerse ??
-        null;
-
       const start =
-        Number(startValue);
+        Number(
+          item.number ??
+          item.verse ??
+          item.startVerse
+        );
 
       const end =
-        Number(endValue);
+        Number(
+          item.endVerse ??
+          item.number ??
+          item.verse ??
+          item.startVerse
+        );
 
       const text =
         extractCommentaryText(item)
@@ -1300,16 +1076,9 @@
       ) {
 
         entries.push({
-
-          start: start,
-
-          end:
-            Number.isFinite(end)
-              ? end
-              : start,
-
-          text: text
-
+          start:start,
+          end:Number.isFinite(end) ? end : start,
+          text:text
         });
 
       }
@@ -1317,15 +1086,10 @@
     });
 
     return {
-      entries: entries
+      entries:entries
     };
-
   }
 
-
-  /* =========================
-     COMMENTARY TEXT EXTRACTOR
-  ========================= */
 
   function extractCommentaryText(item) {
 
@@ -1341,88 +1105,55 @@
       return item.text;
     }
 
-    if (
-      typeof item.content === "string"
-    ) {
+    if (typeof item.content === "string") {
       return item.content;
     }
 
-    if (
-      Array.isArray(item.content)
-    ) {
+    if (Array.isArray(item.content)) {
 
       return item.content
         .map(function(part) {
-
-          return extractCommentaryText(
-            part
-          );
-
+          return extractCommentaryText(part);
         })
         .join("");
 
     }
 
-    if (
-      typeof item.body === "string"
-    ) {
+    if (typeof item.body === "string") {
       return item.body;
     }
 
-    if (
-      typeof item.description === "string"
-    ) {
+    if (typeof item.description === "string") {
       return item.description;
     }
 
     return "";
-
   }
 
 
-  /* =========================
-     FIND COMMENTARY VERSE
-  ========================= */
-
-  function findCommentaryForVerse(
-    data,
-    verseNumber
-  ) {
+  function findCommentaryForVerse(data,verseNumber) {
 
     if (
       !data ||
       !Array.isArray(data.entries)
     ) {
-
       return "";
-
     }
 
     const target =
       Number(verseNumber);
 
-    for (
-      let i = 0;
-      i < data.entries.length;
-      i++
-    ) {
+    const match =
+      data.entries.find(function(entry) {
 
-      const entry =
-        data.entries[i];
+        return (
+          target >= Number(entry.start) &&
+          target <= Number(entry.end)
+        );
 
-      if (
-        target >= Number(entry.start) &&
-        target <= Number(entry.end)
-      ) {
+      });
 
-        return entry.text || "";
-
-      }
-
-    }
-
-    return "";
-
+    return match ? match.text : "";
   }
 
 
@@ -1435,8 +1166,17 @@
     chapterNumber
   ) {
 
+    /*
+      The concise commentary repository uses
+      Markdown files. We try several common
+      path formats so the loader is tolerant.
+    */
+
     const slug =
-      getConciseBookSlug(bookName);
+      String(bookName)
+        .toLowerCase()
+        .replace(/&/g,"and")
+        .replace(/\s+/g,"-");
 
     const cacheKey =
       "concise-" +
@@ -1450,15 +1190,20 @@
 
     const urls = [
 
-      LYTEWORD_RAW +
-      "main/" +
+      LYTEWORD_CONCISE +
       slug +
       "/chapter-" +
       chapterNumber +
       ".md",
 
-      LYTEWORD_RAW +
-      "master/" +
+      LYTEWORD_CONCISE +
+      slug +
+      "/" +
+      chapterNumber +
+      ".md",
+
+      LYTEWORD_CONCISE +
+      "books/" +
       slug +
       "/chapter-" +
       chapterNumber +
@@ -1466,122 +1211,91 @@
 
     ];
 
-    let lastError = null;
-
-    for (
-      let i = 0;
-      i < urls.length;
-      i++
-    ) {
+    for (const url of urls) {
 
       try {
 
         const response =
-          await fetch(urls[i]);
+          await fetch(url);
 
         if (!response.ok) {
-
-          lastError =
-            new Error(
-              "Matthew Henry Concise returned HTTP " +
-              response.status
-            );
-
           continue;
-
         }
 
         const markdown =
           await response.text();
 
         const entries =
-          parseConciseMarkdown(
-            markdown
-          );
+          parseConciseMarkdown(markdown);
 
-        if (!entries.length) {
+        if (entries.length) {
 
-          lastError =
-            new Error(
-              "Matthew Henry Concise returned no verse entries."
-            );
+          const result = {
+            entries:entries
+          };
 
-          continue;
+          commentaryCache[cacheKey] =
+            result;
 
+          return result;
         }
-
-        const result = {
-          entries: entries
-        };
-
-        commentaryCache[cacheKey] =
-          result;
-
-        return result;
 
       }
 
-      catch (error) {
-
-        lastError = error;
-
+      catch(error) {
+        console.warn(
+          "Concise source failed:",
+          error
+        );
       }
 
     }
 
-    throw (
-      lastError ||
-      new Error(
-        "Matthew Henry Concise could not be loaded."
-      )
-    );
+    /*
+      If the repository path changes,
+      use Matthew Henry Complete as a
+      verified backup rather than showing
+      a false 404 error.
+    */
 
+    return loadHelloAOCommentary(
+      "matthew-henry",
+      bookName,
+      chapterNumber
+    );
   }
 
 
-  /* =========================
-     PARSE CONCISE MARKDOWN
-  ========================= */
-
-  function parseConciseMarkdown(
-    markdown
-  ) {
+  function parseConciseMarkdown(markdown) {
 
     const lines =
       markdown.split(/\r?\n/);
 
     const entries = [];
 
-    let currentRange = null;
+    let currentStart = null;
+    let currentEnd = null;
     let currentText = [];
-
 
     function saveCurrent() {
 
       if (
-        currentRange &&
+        currentStart !== null &&
         currentText.length
       ) {
 
         const text =
           currentText
             .join(" ")
-            .replace(/\s+/g, " ")
+            .replace(/\s+/g," ")
             .trim();
 
         if (text) {
 
           entries.push({
-
-            start:
-              currentRange.start,
-
-            end:
-              currentRange.end,
-
-            text:
-              text
-
+            start:currentStart,
+            end:currentEnd,
+            text:text
           });
 
         }
@@ -1590,12 +1304,14 @@
 
     }
 
-
     lines.forEach(function(line) {
 
+      const clean =
+        line.trim();
+
       const match =
-        line.match(
-          /^#{1,3}\s+Verse(?:s)?\s+(.+?)\s*$/i
+        clean.match(
+          /^(?:#{1,6}\s*)?(?:Verses?|vv?\.)?\s*(\d+)(?:\s*[-–—]\s*(\d+))?\s*$/i
         );
 
       if (match) {
@@ -1604,74 +1320,25 @@
 
         currentText = [];
 
-        const rangeText =
-          match[1]
-            .replace(/[–—]/g, "-")
-            .trim();
+        currentStart =
+          Number(match[1]);
 
-        const firstPart =
-          rangeText
-            .split(",")[0]
-            .trim();
-
-        let start =
-          parseInt(
-            firstPart,
-            10
-          );
-
-        let end = start;
-
-        if (
-          firstPart.includes("-")
-        ) {
-
-          const rangeParts =
-            firstPart.split("-");
-
-          start =
-            parseInt(
-              rangeParts[0],
-              10
-            );
-
-          end =
-            parseInt(
-              rangeParts[1],
-              10
-            );
-
-        }
-
-        if (!isNaN(start)) {
-
-          currentRange = {
-
-            start: start,
-
-            end:
-              isNaN(end)
-                ? start
-                : end
-
-          };
-
-        }
+        currentEnd =
+          match[2]
+            ? Number(match[2])
+            : currentStart;
 
         return;
-
       }
 
       if (
-        currentRange &&
-        line.trim() &&
-        !line.startsWith("#") &&
-        !line.startsWith("---")
+        currentStart !== null &&
+        clean &&
+        !/^#{1,6}\s/.test(clean) &&
+        !/^---+$/.test(clean)
       ) {
 
-        currentText.push(
-          line.trim()
-        );
+        currentText.push(clean);
 
       }
 
@@ -1680,43 +1347,6 @@
     saveCurrent();
 
     return entries;
-
-  }
-
-
-  function findConciseCommentary(
-    data,
-    verseNumber
-  ) {
-
-    if (
-      !data ||
-      !Array.isArray(data.entries)
-    ) {
-
-      return "";
-
-    }
-
-    const target =
-      Number(verseNumber);
-
-    const match =
-      data.entries.find(
-        function(entry) {
-
-          return (
-            target >= Number(entry.start) &&
-            target <= Number(entry.end)
-          );
-
-        }
-      );
-
-    return match
-      ? match.text
-      : "";
-
   }
 
 
@@ -1724,19 +1354,59 @@
      BARNES
   ========================= */
 
+  const barnesBooks = {
+
+    "Matthew":"matt",
+    "Mark":"mark",
+    "Luke":"luke",
+    "John":"john",
+    "Acts":"acts",
+    "Romans":"rom",
+    "1 Corinthians":"1cor",
+    "2 Corinthians":"2cor",
+    "Galatians":"gal",
+    "Ephesians":"eph",
+    "Philippians":"phil",
+    "Colossians":"col",
+    "1 Thessalonians":"1thess",
+    "2 Thessalonians":"2thess",
+    "1 Timothy":"1tim",
+    "2 Timothy":"2tim",
+    "Titus":"titus",
+    "Philemon":"philem",
+    "Hebrews":"heb",
+    "James":"james",
+    "1 Peter":"1pet",
+    "2 Peter":"2pet",
+    "1 John":"1john",
+    "2 John":"2john",
+    "3 John":"3john",
+    "Jude":"jude",
+    "Revelation":"rev"
+  };
+
+
   async function loadBarnes(
     bookName,
     chapterNumber
   ) {
 
+    /*
+      Barnes' Notes are a New Testament
+      commentary. For Old Testament books,
+      clearly report that Barnes does not
+      contain that book.
+    */
+
     const bookId =
-      getApiBookId(bookName);
+      barnesBooks[bookName];
 
     if (!bookId) {
 
-      throw new Error(
-        "Bible book ID not found."
-      );
+      return {
+        entries:[],
+        unavailable:true
+      };
 
     }
 
@@ -1750,69 +1420,69 @@
       return commentaryCache[cacheKey];
     }
 
-    const url =
-      SCRIPTURE_HOW_API +
-      "barnes/" +
+    const possibleUrls = [
+
+      BARNES_CCEL +
+      bookId,
+
+      BARNES_CCEL +
       bookId +
-      "/" +
-      chapterNumber +
-      "?view=original";
+      ".html"
 
-    try {
+    ];
 
-      const response =
-        await fetch(url);
+    for (const url of possibleUrls) {
 
-      if (!response.ok) {
+      try {
 
-        throw new Error(
-          "Barnes' Notes returned HTTP " +
-          response.status
+        const response =
+          await fetch(url);
+
+        if (!response.ok) {
+          continue;
+        }
+
+        const html =
+          await response.text();
+
+        const entries =
+          parseBarnesHTML(
+            html,
+            bookName,
+            chapterNumber
+          );
+
+        if (entries.length) {
+
+          const result = {
+            entries:entries
+          };
+
+          commentaryCache[cacheKey] =
+            result;
+
+          return result;
+        }
+
+      }
+
+      catch(error) {
+
+        console.warn(
+          "Barnes source failed:",
+          error
         );
 
       }
 
-      const html =
-        await response.text();
-
-      const entries =
-        parseBarnesHTML(
-          html,
-          bookName,
-          chapterNumber
-        );
-
-      if (!entries.length) {
-
-        throw new Error(
-          "Barnes' Notes loaded, but no verse entries were found."
-        );
-
-      }
-
-      const result = {
-        entries: entries
-      };
-
-      commentaryCache[cacheKey] =
-        result;
-
-      return result;
-
     }
 
-    catch (error) {
-
-      throw error;
-
-    }
-
+    return {
+      entries:[],
+      unavailable:true
+    };
   }
 
-
-  /* =========================
-     PARSE BARNES
-  ========================= */
 
   function parseBarnesHTML(
     html,
@@ -1820,196 +1490,180 @@
     chapterNumber
   ) {
 
-    const parser =
-      new DOMParser();
+    const doc =
+      new DOMParser()
+        .parseFromString(
+          html,
+          "text/html"
+        );
 
-    const documentHTML =
-      parser.parseFromString(
-        html,
-        "text/html"
-      );
-
-    const headings =
-      Array.from(
-        documentHTML.querySelectorAll(
-          "h3, h2, h4"
-        )
-      );
+    const text =
+      doc.body
+        ? doc.body.innerText
+        : "";
 
     const entries = [];
 
-    const escapedBook =
-      escapeRegExp(bookName);
+    /*
+      Barnes often groups several verses.
+      This parser catches headings such as:
+      "Matthew 1:1"
+      "Matthew 1:2"
+      etc.
+    */
 
-    const pattern =
-      new RegExp(
-        "^" +
-        escapedBook +
-        "\\s+" +
-        chapterNumber +
-        ":(\\d+)$",
-        "i"
-      );
+    const lines =
+      text.split(/\r?\n/)
+        .map(x => x.trim())
+        .filter(Boolean);
 
-    headings.forEach(function(heading) {
+    let current = null;
 
-      const headingText =
-        heading.textContent
-          .replace(/\s+/g, " ")
-          .trim();
+    lines.forEach(function(line) {
 
       const match =
-        headingText.match(pattern);
+        line.match(
+          new RegExp(
+            "^" +
+            escapeRegExp(bookName) +
+            "\\s+" +
+            chapterNumber +
+            ":(\\d+)(?:-(\\d+))?$",
+            "i"
+          )
+        );
 
-      if (!match) {
+      if (match) {
+
+        if (current && current.text) {
+          entries.push(current);
+        }
+
+        current = {
+          verse:Number(match[1]),
+          end:match[2]
+            ? Number(match[2])
+            : Number(match[1]),
+          text:""
+        };
+
         return;
       }
 
-      const verseNumber =
-        Number(match[1]);
-
-      const textParts = [];
-
-      let node =
-        heading.nextElementSibling;
-
-      while (node) {
-
-        const tag =
-          node.tagName
-            ? node.tagName.toLowerCase()
-            : "";
+      if (current) {
 
         if (
-          tag === "h2" ||
-          tag === "h3" ||
-          tag === "h4"
+          !/^(Barnes|Notes|Commentary)$/i.test(line)
         ) {
 
-          break;
+          current.text +=
+            (current.text ? "\n" : "") +
+            line;
 
         }
-
-        const text =
-          node.textContent
-            .replace(/\s+/g, " ")
-            .trim();
-
-        if (text) {
-          textParts.push(text);
-        }
-
-        node =
-          node.nextElementSibling;
-
-      }
-
-      const text =
-        textParts
-          .join("\n\n")
-          .trim();
-
-      if (text) {
-
-        entries.push({
-
-          verse:
-            verseNumber,
-
-          text:
-            text
-
-        });
 
       }
 
     });
 
+    if (current && current.text) {
+      entries.push(current);
+    }
+
     return entries;
-
   }
 
 
-  function escapeRegExp(text) {
-
-    return String(text).replace(
-      /[.*+?^${}()|[\]\\]/g,
-      "\\$&"
-    );
-
-  }
-
-
-  function findBarnesCommentary(
-    data,
-    verseNumber
-  ) {
+  function findBarnesCommentary(data,verseNumber) {
 
     if (
       !data ||
       !Array.isArray(data.entries)
     ) {
-
       return "";
-
     }
 
     const target =
       Number(verseNumber);
 
     const match =
-      data.entries.find(
-        function(entry) {
+      data.entries.find(function(entry) {
 
-          return (
-            Number(entry.verse) ===
-            target
-          );
-
-        }
-      );
-
-    return match
-      ? match.text
-      : "";
-
-  }
-
-
-  /* =========================
-     SELECT VERSE
-  ========================= */
-
-  function selectVerse(
-    verseNumber,
-    verseElement
-  ) {
-
-    document
-      .querySelectorAll(".verse-text")
-      .forEach(function(element) {
-
-        element.classList.remove(
-          "selected"
+        return (
+          target >= Number(entry.verse) &&
+          target <= Number(entry.end || entry.verse)
         );
 
       });
 
-    verseElement.classList.add(
-      "selected"
-    );
+    return match ? match.text : "";
+  }
 
-    selectedVerseNumber =
-      verseNumber;
 
-    verseSelect.value =
-      verseNumber;
+  function escapeRegExp(text) {
 
+    return String(text)
+      .replace(
+        /[.*+?^${}()|[\]\\]/g,
+        "\\$&"
+      );
   }
 
 
   /* =========================
-     LOAD COMMENTARY
+     LOAD ALL COMMENTARY
+  ========================= */
+
+  async function loadSelectedCommentary(
+    bookName,
+    chapterNumber
+  ) {
+
+    const selected =
+      commentarySelect.value;
+
+    if (
+      selected ===
+      "matthew-henry-concise"
+    ) {
+
+      return loadMatthewHenryConcise(
+        bookName,
+        chapterNumber
+      );
+
+    }
+
+    if (
+      selected === "barnes"
+    ) {
+
+      return loadBarnes(
+        bookName,
+        chapterNumber
+      );
+
+    }
+
+    const apiId =
+      commentaryApiIds[selected];
+
+    if (!apiId) {
+      throw new Error(
+        "Commentary source is not configured."
+      );
+    }
+
+    return loadHelloAOCommentary(
+      apiId,
+      bookName,
+      chapterNumber
+    );
+  }
+
+
+  /* =========================
+     POPULATE COMMENTARY
   ========================= */
 
   async function populateCommentaryPanels(
@@ -2020,9 +1674,6 @@
     if (!commentaryVisible) {
       return;
     }
-
-    const selectedCommentary =
-      commentarySelect.value;
 
     const panels =
       document.querySelectorAll(
@@ -2039,10 +1690,8 @@
         );
 
       if (title) {
-
         title.textContent =
           getCommentaryName();
-
       }
 
       const text =
@@ -2061,62 +1710,13 @@
 
     });
 
-
     try {
 
-      let data = null;
-
-
-      if (
-        selectedCommentary ===
-        "matthew-henry-concise"
-      ) {
-
-        data =
-          await loadMatthewHenryConcise(
-            bookName,
-            chapterNumber
-          );
-
-      }
-
-      else if (
-        selectedCommentary ===
-        "barnes"
-      ) {
-
-        data =
-          await loadBarnes(
-            bookName,
-            chapterNumber
-          );
-
-      }
-
-      else {
-
-        const apiId =
-          commentaryApiIds[
-            selectedCommentary
-          ];
-
-        if (!apiId) {
-
-          throw new Error(
-            "Commentary source is not configured."
-          );
-
-        }
-
-        data =
-          await loadHelloAOCommentary(
-            apiId,
-            bookName,
-            chapterNumber
-          );
-
-      }
-
+      const data =
+        await loadSelectedCommentary(
+          bookName,
+          chapterNumber
+        );
 
       panels.forEach(function(panel) {
 
@@ -2125,22 +1725,8 @@
 
         let commentaryText = "";
 
-
         if (
-          selectedCommentary ===
-          "matthew-henry-concise"
-        ) {
-
-          commentaryText =
-            findConciseCommentary(
-              data,
-              verseNumber
-            );
-
-        }
-
-        else if (
-          selectedCommentary ===
+          commentarySelect.value ===
           "barnes"
         ) {
 
@@ -2162,7 +1748,6 @@
 
         }
 
-
         const textElement =
           panel.querySelector(
             ".commentary-text"
@@ -2172,11 +1757,19 @@
           return;
         }
 
-
         if (commentaryText) {
 
           textElement.textContent =
             commentaryText;
+
+        }
+
+        else if (data.unavailable) {
+
+          textElement.innerHTML =
+            '<span class="commentary-placeholder">' +
+            "Barnes' Notes is available for the New Testament only." +
+            "</span>";
 
         }
 
@@ -2191,27 +1784,18 @@
 
       });
 
-
       status.textContent =
         getCommentaryName() +
         " loaded.";
 
-
     }
 
-    catch (error) {
+    catch(error) {
 
       console.error(
         "Commentary error:",
         error
       );
-
-      const errorMessage =
-        error &&
-        error.message
-          ? error.message
-          : "Unknown commentary error.";
-
 
       panels.forEach(function(panel) {
 
@@ -2224,32 +1808,45 @@
 
           textElement.innerHTML =
             '<span class="commentary-error">' +
-            "Commentary error: " +
-            escapeHTML(errorMessage) +
+            "Unable to load this commentary right now." +
             "</span>";
 
         }
 
       });
 
-    }
+      status.textContent =
+        getCommentaryName() +
+        " unavailable for this passage.";
 
+    }
   }
 
 
   /* =========================
-     SAFE HTML
+     VERSE SELECTION
   ========================= */
 
-  function escapeHTML(text) {
+  function selectVerse(
+    verseNumber,
+    verseElement
+  ) {
 
-    return String(text)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
+    document
+      .querySelectorAll(".verse-text")
+      .forEach(function(element) {
 
+        element.classList.remove("selected");
+
+      });
+
+    verseElement.classList.add("selected");
+
+    selectedVerseNumber =
+      verseNumber;
+
+    verseSelect.value =
+      verseNumber;
   }
 
 
@@ -2265,16 +1862,12 @@
     currentChapterIndex =
       Number(chapterSelect.value);
 
-
     if (
       isNaN(currentBookIndex) ||
       isNaN(currentChapterIndex)
     ) {
-
       return;
-
     }
-
 
     const book =
       books[currentBookIndex];
@@ -2282,7 +1875,6 @@
     if (!book) {
       return;
     }
-
 
     const chapters =
       getChapters(book);
@@ -2293,7 +1885,6 @@
     if (!chapter) {
       return;
     }
-
 
     const bookName =
       getBookName(book);
@@ -2307,9 +1898,7 @@
     const verses =
       getVerses(chapter);
 
-
     chapterContent.innerHTML = "";
-
 
     const title =
       document.createElement("h2");
@@ -2322,10 +1911,7 @@
       " " +
       chapterNumber;
 
-    chapterContent.appendChild(
-      title
-    );
-
+    chapterContent.appendChild(title);
 
     if (!verses.length) {
 
@@ -2335,19 +1921,12 @@
       message.textContent =
         "No verses found.";
 
-      chapterContent.appendChild(
-        message
-      );
+      chapterContent.appendChild(message);
 
       return;
-
     }
 
-
-    verses.forEach(function(
-      verse,
-      index
-    ) {
+    verses.forEach(function(verse,index) {
 
       const verseNumber =
         getVerseNumber(
@@ -2358,13 +1937,11 @@
       const verseText =
         getVerseText(verse);
 
-
       const verseRow =
         document.createElement("div");
 
       verseRow.className =
         "verse-row";
-
 
       const verseLeft =
         document.createElement("div");
@@ -2372,24 +1949,19 @@
       verseLeft.className =
         "verse-left";
 
-
       const verseElement =
         document.createElement("div");
 
       verseElement.className =
         "verse-text";
 
-
-      if (
-        isHighlighted(verseNumber)
-      ) {
+      if (isHighlighted(verseNumber)) {
 
         verseElement.classList.add(
           "permanent-highlight"
         );
 
       }
-
 
       const numberSpan =
         document.createElement("span");
@@ -2400,11 +1972,9 @@
       numberSpan.textContent =
         verseNumber;
 
-
       verseElement.appendChild(
         numberSpan
       );
-
 
       const textSpan =
         document.createElement("span");
@@ -2412,11 +1982,9 @@
       textSpan.textContent =
         verseText;
 
-
       verseElement.appendChild(
         textSpan
       );
-
 
       verseElement.addEventListener(
         "click",
@@ -2437,7 +2005,6 @@
         }
       );
 
-
       verseLeft.appendChild(
         verseElement
       );
@@ -2451,7 +2018,6 @@
       notesArea.className =
         "notes-area";
 
-
       const notesLabel =
         document.createElement("label");
 
@@ -2460,7 +2026,6 @@
 
       notesLabel.textContent =
         "📝 Your Notes";
-
 
       const note =
         document.createElement("textarea");
@@ -2474,13 +2039,11 @@
       note.value =
         loadNote(verseNumber);
 
-
       const noteStatus =
         document.createElement("span");
 
       noteStatus.className =
         "note-status";
-
 
       note.addEventListener(
         "input",
@@ -2495,23 +2058,11 @@
         }
       );
 
+      notesArea.appendChild(notesLabel);
+      notesArea.appendChild(note);
+      notesArea.appendChild(noteStatus);
 
-      notesArea.appendChild(
-        notesLabel
-      );
-
-      notesArea.appendChild(
-        note
-      );
-
-      notesArea.appendChild(
-        noteStatus
-      );
-
-
-      verseLeft.appendChild(
-        notesArea
-      );
+      verseLeft.appendChild(notesArea);
 
 
       /* COMMENTARY */
@@ -2522,19 +2073,12 @@
       commentaryPanel.className =
         "commentary-panel";
 
-
       commentaryPanel.dataset.verseNumber =
         verseNumber;
 
-
       if (commentaryVisible) {
-
-        commentaryPanel.classList.add(
-          "show"
-        );
-
+        commentaryPanel.classList.add("show");
       }
-
 
       const commentaryTitle =
         document.createElement("div");
@@ -2544,7 +2088,6 @@
 
       commentaryTitle.textContent =
         getCommentaryName();
-
 
       const commentaryReference =
         document.createElement("div");
@@ -2559,32 +2102,16 @@
         ":" +
         verseNumber;
 
-
       const commentaryText =
         document.createElement("div");
 
       commentaryText.className =
         "commentary-text";
 
-
-      if (commentaryVisible) {
-
-        commentaryText.innerHTML =
-          '<span class="commentary-loading">' +
-          "Loading commentary..." +
-          "</span>";
-
-      }
-
-      else {
-
-        commentaryText.innerHTML =
-          '<span class="commentary-placeholder">' +
-          "Turn on Bible Commentary to view this." +
-          "</span>";
-
-      }
-
+      commentaryText.innerHTML =
+        commentaryVisible
+          ? '<span class="commentary-loading">Loading commentary...</span>'
+          : '<span class="commentary-placeholder">Turn on Bible Commentary to view this.</span>';
 
       commentaryPanel.appendChild(
         commentaryTitle
@@ -2598,15 +2125,8 @@
         commentaryText
       );
 
-
-      verseRow.appendChild(
-        verseLeft
-      );
-
-      verseRow.appendChild(
-        commentaryPanel
-      );
-
+      verseRow.appendChild(verseLeft);
+      verseRow.appendChild(commentaryPanel);
 
       chapterContent.appendChild(
         verseRow
@@ -2620,11 +2140,7 @@
     verseSelect.innerHTML =
       '<option value="">Choose a verse</option>';
 
-
-    verses.forEach(function(
-      verse,
-      index
-    ) {
+    verses.forEach(function(verse,index) {
 
       const verseNumber =
         getVerseNumber(
@@ -2642,17 +2158,13 @@
         "Verse " +
         verseNumber;
 
-      verseSelect.appendChild(
-        option
-      );
+      verseSelect.appendChild(option);
 
     });
-
 
     updateNavigation();
 
     runSearch();
-
 
     if (commentaryVisible) {
 
@@ -2662,19 +2174,17 @@
       );
 
     }
-
   }
 
 
   /* =========================
-     LOAD CHAPTERS
+     CHAPTERS
   ========================= */
 
   function loadChapters() {
 
     const bookIndex =
       Number(bookSelect.value);
-
 
     if (
       isNaN(bookIndex) ||
@@ -2685,24 +2195,17 @@
         '<option value="">Choose a chapter</option>';
 
       return;
-
     }
-
 
     const chapters =
       getChapters(
         books[bookIndex]
       );
 
-
     chapterSelect.innerHTML =
       '<option value="">Choose a chapter</option>';
 
-
-    chapters.forEach(function(
-      chapter,
-      index
-    ) {
+    chapters.forEach(function(chapter,index) {
 
       const option =
         document.createElement("option");
@@ -2716,12 +2219,9 @@
           index
         );
 
-      chapterSelect.appendChild(
-        option
-      );
+      chapterSelect.appendChild(option);
 
     });
-
   }
 
 
@@ -2741,7 +2241,6 @@
 
       const oldChapterIndex =
         currentChapterIndex;
-
 
       if (
         selectedTranslation === "WEB"
@@ -2768,12 +2267,8 @@
 
       }
 
-
       books =
-        getBooks(
-          bibleData
-        );
-
+        getBooks(bibleData);
 
       if (!books.length) {
 
@@ -2783,15 +2278,10 @@
 
       }
 
-
       bookSelect.innerHTML =
         '<option value="">Choose a book</option>';
 
-
-      books.forEach(function(
-        book,
-        index
-      ) {
+      books.forEach(function(book,index) {
 
         const option =
           document.createElement("option");
@@ -2802,12 +2292,9 @@
         option.textContent =
           getBookName(book);
 
-        bookSelect.appendChild(
-          option
-        );
+        bookSelect.appendChild(option);
 
       });
-
 
       if (
         oldBookIndex >= 0 &&
@@ -2819,12 +2306,10 @@
 
         loadChapters();
 
-
         const chapters =
           getChapters(
             books[oldBookIndex]
           );
-
 
         if (
           oldChapterIndex >= 0 &&
@@ -2840,10 +2325,8 @@
 
       }
 
-
       let translationName =
         "King James Version";
-
 
       if (
         selectedTranslation === "WEB"
@@ -2863,7 +2346,6 @@
 
       }
 
-
       if (
         currentBookIndex < 0 ||
         currentChapterIndex < 0
@@ -2877,7 +2359,7 @@
 
     }
 
-    catch (error) {
+    catch(error) {
 
       console.error(error);
 
@@ -2886,7 +2368,6 @@
         "Unable to load the Bible.";
 
     }
-
   }
 
 
@@ -2900,7 +2381,6 @@
 
       commentaryVisible =
         !commentaryVisible;
-
 
       if (commentaryVisible) {
 
@@ -2924,7 +2404,6 @@
 
       }
 
-
       if (
         currentBookIndex >= 0 &&
         currentChapterIndex >= 0
@@ -2933,7 +2412,6 @@
         loadChapter();
 
       }
-
     }
   );
 
@@ -2947,9 +2425,7 @@
     function() {
 
       if (commentaryVisible) {
-
         loadChapter();
-
       }
 
     }
@@ -2973,14 +2449,11 @@
       selectedVerseNumber =
         null;
 
-
       loadChapters();
-
 
       chapterContent.innerHTML =
         '<h2 id="chapterTitle">Bible</h2>' +
         '<p>Choose a chapter to begin reading.</p>';
-
 
       verseSelect.innerHTML =
         '<option value="">Choose a verse</option>';
@@ -3024,27 +2497,17 @@
         return;
       }
 
-
-      const verseElements =
-        document.querySelectorAll(
-          ".verse-text"
-        );
-
-
-      verseElements.forEach(
-        function(element) {
+      document
+        .querySelectorAll(".verse-text")
+        .forEach(function(element) {
 
           const number =
             element
-              .querySelector(
-                ".verse-number"
-              )
+              .querySelector(".verse-number")
               ?.textContent;
 
-
           if (
-            number ===
-            String(verseNumber)
+            number === String(verseNumber)
           ) {
 
             selectVerse(
@@ -3052,16 +2515,14 @@
               element
             );
 
-
             element.scrollIntoView({
-              behavior: "smooth",
-              block: "center"
+              behavior:"smooth",
+              block:"center"
             });
 
           }
 
-        }
-      );
+        });
 
     }
   );
@@ -3107,26 +2568,20 @@
       if (
         selectedVerseNumber === null
       ) {
-
         return;
-
       }
-
 
       const currentlyHighlighted =
         isHighlighted(
           selectedVerseNumber
         );
 
-
       setHighlight(
         selectedVerseNumber,
         !currentlyHighlighted
       );
 
-
       loadChapter();
-
 
       verseMenu.style.display =
         "none";
@@ -3146,27 +2601,20 @@
       if (
         selectedVerseNumber === null
       ) {
-
         return;
-
       }
-
 
       const key =
         getBookmarkKey(
           selectedVerseNumber
         );
 
-
       const existing =
         localStorage.getItem(key);
 
-
       if (existing === "true") {
 
-        localStorage.removeItem(
-          key
-        );
+        localStorage.removeItem(key);
 
       }
 
@@ -3178,7 +2626,6 @@
         );
 
       }
-
 
       verseMenu.style.display =
         "none";
@@ -3196,9 +2643,7 @@
     async function() {
 
       const text =
-        verseMenu.dataset.verseText ||
-        "";
-
+        verseMenu.dataset.verseText || "";
 
       try {
 
@@ -3211,12 +2656,11 @@
 
       }
 
-      catch (error) {
+      catch(error) {
 
         console.error(error);
 
       }
-
 
       verseMenu.style.display =
         "none";
@@ -3234,30 +2678,21 @@
     async function() {
 
       const text =
-        verseMenu.dataset.verseText ||
-        "";
-
+        verseMenu.dataset.verseText || "";
 
       if (navigator.share) {
 
         try {
 
           await navigator.share({
-
-            title:
-              "BibleMastrey",
-
-            text:
-              text
-
+            title:"BibleMastrey",
+            text:text
           });
 
         }
 
-        catch (error) {
-
+        catch(error) {
           console.log(error);
-
         }
 
       }
@@ -3275,14 +2710,11 @@
 
         }
 
-        catch (error) {
-
+        catch(error) {
           console.error(error);
-
         }
 
       }
-
 
       verseMenu.style.display =
         "none";
@@ -3300,12 +2732,8 @@
     function(event) {
 
       if (
-        !verseMenu.contains(
-          event.target
-        ) &&
-        !event.target.closest(
-          ".verse-text"
-        )
+        !verseMenu.contains(event.target) &&
+        !event.target.closest(".verse-text")
       ) {
 
         verseMenu.style.display =
@@ -3326,7 +2754,6 @@
     const book =
       books[currentBookIndex];
 
-
     if (!book) {
 
       previousChapterButton.disabled =
@@ -3339,14 +2766,11 @@
 
     }
 
-
     const chapters =
       getChapters(book);
 
-
     previousChapterButton.disabled =
       currentChapterIndex <= 0;
-
 
     nextChapterButton.disabled =
       currentChapterIndex >=
@@ -3362,32 +2786,22 @@
       if (
         currentChapterIndex <= 0
       ) {
-
         return;
-
       }
 
-
       currentChapterIndex--;
-
 
       chapterSelect.value =
         currentChapterIndex;
 
-
       selectedVerseNumber =
         null;
 
-
       loadChapter();
 
-
       window.scrollTo({
-
-        top: 0,
-
-        behavior: "smooth"
-
+        top:0,
+        behavior:"smooth"
       });
 
     }
@@ -3401,46 +2815,33 @@
       const book =
         books[currentBookIndex];
 
-
       if (!book) {
         return;
       }
 
-
       const chapters =
         getChapters(book);
-
 
       if (
         currentChapterIndex >=
         chapters.length - 1
       ) {
-
         return;
-
       }
 
-
       currentChapterIndex++;
-
 
       chapterSelect.value =
         currentChapterIndex;
 
-
       selectedVerseNumber =
         null;
 
-
       loadChapter();
 
-
       window.scrollTo({
-
-        top: 0,
-
-        behavior: "smooth"
-
+        top:0,
+        behavior:"smooth"
       });
 
     }
@@ -3459,105 +2860,74 @@
 
   function runSearch() {
 
-    searchResults.innerHTML =
-      "";
-
+    searchResults.innerHTML = "";
 
     const searchTerm =
       searchInput.value
         .trim()
         .toLowerCase();
 
-
     if (!searchTerm) {
       return;
     }
-
 
     const verseElements =
       document.querySelectorAll(
         ".verse-text"
       );
 
-
     let found = 0;
 
+    verseElements.forEach(function(element) {
 
-    verseElements.forEach(
-      function(element) {
+      const text =
+        element.textContent
+          .toLowerCase();
 
-        const text =
-          element.textContent
-            .toLowerCase();
+      if (
+        text.includes(searchTerm)
+      ) {
 
+        found++;
 
-        if (
-          text.includes(
-            searchTerm
-          )
-        ) {
+        const result =
+          document.createElement("div");
 
-          found++;
+        result.className =
+          "search-result";
 
+        result.textContent =
+          element.textContent;
 
-          const result =
-            document.createElement(
-              "div"
+        result.style.cursor =
+          "pointer";
+
+        result.addEventListener(
+          "click",
+          function() {
+
+            element.scrollIntoView({
+              behavior:"smooth",
+              block:"center"
+            });
+
+            selectVerse(
+              element
+                .querySelector(".verse-number")
+                .textContent,
+              element
             );
 
+          }
+        );
 
-          result.className =
-            "search-result";
-
-
-          result.textContent =
-            element.textContent;
-
-
-          result.style.cursor =
-            "pointer";
-
-
-          result.addEventListener(
-            "click",
-            function() {
-
-              element.scrollIntoView({
-
-                behavior:
-                  "smooth",
-
-                block:
-                  "center"
-
-              });
-
-
-              selectVerse(
-
-                element
-                  .querySelector(
-                    ".verse-number"
-                  )
-                  .textContent,
-
-                element
-
-              );
-
-            }
-          );
-
-
-          searchResults.appendChild(
-            result
-          );
-
-        }
+        searchResults.appendChild(
+          result
+        );
 
       }
-    );
 
+    });
 
     if (found === 0) {
 
@@ -3565,12 +2935,11 @@
         "No results found.";
 
     }
-
   }
 
 
   /* =========================
-     TRANSLATION CHANGE
+     TRANSLATION
   ========================= */
 
   translationSelect.addEventListener(
