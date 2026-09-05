@@ -931,17 +931,39 @@
 
   function getApiBookId(bookName) {
 
-    if (bookApiIds[bookName]) {
-      return bookApiIds[bookName];
-    }
-
-    const normalized =
-      String(bookName)
-        .replace(/^The /i,"")
-        .trim();
-
-    return bookApiIds[normalized] || null;
+  if (!bookName) {
+    return null;
   }
+
+  const name =
+    String(bookName)
+      .trim();
+
+  if (bookApiIds[name]) {
+    return bookApiIds[name];
+  }
+
+  const normalized =
+    name
+      .replace(/^The\s+/i, "")
+      .trim();
+
+  if (bookApiIds[normalized]) {
+    return bookApiIds[normalized];
+  }
+
+  const lowerName =
+    normalized.toLowerCase();
+
+  const match =
+    Object.keys(bookApiIds).find(function(key) {
+      return key.toLowerCase() === lowerName;
+    });
+
+  return match
+    ? bookApiIds[match]
+    : null;
+}
 
 
   /* =========================
