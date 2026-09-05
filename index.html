@@ -3000,9 +3000,36 @@ function findCommentaryForVerse(
   ========================= */
 
   translationSelect.addEventListener(
-    "change",
-    startBible
-  );
+  "change",
+  async function() {
+
+    status.textContent =
+      "Loading " +
+      translationSelect.options[
+        translationSelect.selectedIndex
+      ].text +
+      "...";
+
+    try {
+
+      await startBible();
+
+    }
+
+    catch(error) {
+
+      console.error(
+        "Translation error:",
+        error
+      );
+
+      status.textContent =
+        "Unable to load this translation.";
+
+    }
+
+  }
+);
 
 
   /* =========================
