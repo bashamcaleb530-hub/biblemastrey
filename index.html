@@ -153,6 +153,17 @@
 
     .verse {
       margin-bottom: 13px;
+      padding: 8px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .verse:hover {
+      background: #f8fafc;
+    }
+
+    .verse.highlighted {
+      background: #fff3a6;
     }
 
     .verse-number {
@@ -161,6 +172,82 @@
       margin-right: 6px;
       font-size: 14px;
       vertical-align: super;
+    }
+
+    .verse-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+      padding: 8px;
+      background: #f8fafc;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .verse-actions button {
+      padding: 7px 10px;
+      font-size: 12px;
+      background: white;
+      color: #172554;
+      border: 1px solid #d1d5db;
+    }
+
+    .verse-actions button:hover {
+      background: #e8ecf7;
+    }
+
+    .note-button {
+      display: inline-block;
+      margin-left: 8px;
+      padding: 4px 8px;
+      font-size: 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      background: white;
+      color: #172554;
+      cursor: pointer;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .note-button.has-note {
+      background: #e8ecf7;
+    }
+
+    .note-box {
+      display: none;
+      margin-top: 10px;
+      width: 100%;
+      min-height: 80px;
+      padding: 10px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 14px;
+      resize: vertical;
+    }
+
+    .note-box.visible {
+      display: block;
+    }
+
+    .bookmark-button {
+      display: inline-block;
+      margin-left: 8px;
+      padding: 4px 8px;
+      font-size: 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      background: white;
+      color: #172554;
+      cursor: pointer;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .bookmark-button.bookmarked {
+      background: #172554;
+      color: white;
     }
 
     .navigation {
@@ -242,6 +329,10 @@
       .search-row {
         flex-direction: column;
       }
+
+      .navigation {
+        flex-direction: column;
+      }
     }
   </style>
 </head>
@@ -258,15 +349,18 @@
   </nav>
 </header>
 
+
 <section class="hero">
   <div class="container">
     <h1>Read. Study. Understand. Teach.</h1>
+
     <p>
       A simple Bible study platform designed to help you read Scripture,
       study deeply, and prepare to teach what you learn.
     </p>
   </div>
 </section>
+
 
 <section id="reader">
   <div class="container">
@@ -283,728 +377,1526 @@
       <div class="reader-controls">
 
         <div>
-          <label for="translation"><strong>Translation</strong></label>
+          <label for="translation">
+            <strong>Translation</strong>
+          </label>
+
           <select id="translation">
-            <option value="kjv">King James Version (KJV)</option>
-            <option value="WEB">World English Bible</option>
-            <option value="ASV">American Standard Version</option>
+            <option value="kjv">
+              King James Version (KJV)
+            </option>
+
+            <option value="WEB">
+              World English Bible
+            </option>
+
+            <option value="ASV">
+              American Standard Version
+            </option>
           </select>
         </div>
 
+
         <div>
-          <label for="book"><strong>Book</strong></label>
+          <label for="book">
+            <strong>Book</strong>
+          </label>
+
           <select id="book">
-            <option value="">Loading books...</option>
+            <option value="">
+              Loading books...
+            </option>
           </select>
         </div>
 
+
         <div>
-          <label for="chapter"><strong>Chapter</strong></label>
+          <label for="chapter">
+            <strong>Chapter</strong>
+          </label>
+
           <select id="chapter" disabled>
-            <option value="">Choose a chapter</option>
+            <option value="">
+              Choose a chapter
+            </option>
           </select>
         </div>
 
+
         <div>
-          <label for="verse"><strong>Verse</strong></label>
+          <label for="verse">
+            <strong>Verse</strong>
+          </label>
+
           <select id="verse" disabled>
-            <option value="">Choose a verse</option>
+            <option value="">
+              Choose a verse
+            </option>
           </select>
         </div>
 
       </div>
 
+
       <div class="search-row">
+
         <input
           id="search"
           type="text"
           placeholder="Search the current chapter..."
         >
-        <button class="primary" id="searchButton">Search</button>
+
+        <button class="primary" id="searchButton">
+          Search
+        </button>
+
       </div>
+
 
       <div id="status" class="message">
         Loading the King James Version...
       </div>
 
+
       <h2 id="chapterHeading" class="chapter-heading"></h2>
+
 
       <div id="scripture" class="scripture"></div>
 
+
       <div class="navigation">
-        <button class="secondary" id="previousButton" disabled>
+
+        <button
+          class="secondary"
+          id="previousButton"
+          disabled
+        >
           ← Previous Chapter
         </button>
 
-        <button class="secondary" id="nextButton" disabled>
+        <button
+          class="secondary"
+          id="nextButton"
+          disabled
+        >
           Next Chapter →
         </button>
+
       </div>
 
     </div>
   </div>
 </section>
 
+
 <section id="tools">
+
   <div class="container">
 
-    <h2 class="section-title">Study Tools</h2>
+    <h2 class="section-title">
+      Study Tools
+    </h2>
 
     <p class="section-intro">
       Tools to help you understand Scripture and organize your study.
     </p>
 
+
     <div class="tools">
 
       <div class="tool-card">
         <h3>Notes</h3>
-        <p>Write and organize your personal Bible study notes.</p>
+        <p>
+          Write and organize your personal Bible study notes.
+        </p>
       </div>
 
       <div class="tool-card">
         <h3>Bookmarks & Highlights</h3>
-        <p>Save important verses and passages for later.</p>
+        <p>
+          Save important verses and passages for later.
+        </p>
       </div>
 
       <div class="tool-card">
         <h3>Commentaries</h3>
-        <p>Explore helpful Bible study resources.</p>
+        <p>
+          Explore helpful Bible study resources.
+        </p>
       </div>
 
       <div class="tool-card">
         <h3>Sermon Builder</h3>
-        <p>Build and organize sermons from Scripture.</p>
+        <p>
+          Build and organize sermons from Scripture.
+        </p>
       </div>
 
       <div class="tool-card">
         <h3>Bible Study Builder</h3>
-        <p>Create structured Bible studies.</p>
+        <p>
+          Create structured Bible studies.
+        </p>
       </div>
 
       <div class="tool-card">
         <h3>Hebrew & Greek</h3>
-        <p>Explore original-language words and meanings.</p>
+        <p>
+          Explore original-language words and meanings.
+        </p>
       </div>
 
       <div class="tool-card">
         <h3>Bible Dictionary</h3>
-        <p>Look up important Bible terms and concepts.</p>
+        <p>
+          Look up important Bible terms and concepts.
+        </p>
       </div>
 
       <div class="tool-card">
         <h3>Concordance</h3>
-        <p>Find where words appear throughout Scripture.</p>
+        <p>
+          Find where words appear throughout Scripture.
+        </p>
       </div>
 
     </div>
   </div>
 </section>
 
+
 <section id="account" class="account">
-  <h2>Study Without an Account</h2>
+
+  <h2>
+    Study Without an Account
+  </h2>
+
   <p>
     You can read the Bible and use public study tools without signing in.
     Create an account later to save your notes, bookmarks, studies, and sermons.
   </p>
+
 </section>
+
 
 <footer>
   © 2026 BibleMastrey.net
 </footer>
 
-<!-- Load the Bible data first -->
+
+<!-- Bible data file -->
 <script src="bible.js"></script>
 
+
 <script>
+
   let bibleData = null;
+
   let books = [];
+
   let currentBookIndex = -1;
+
   let currentChapterIndex = -1;
 
-  const bookSelect = document.getElementById("book");
-  const chapterSelect = document.getElementById("chapter");
-  const verseSelect = document.getElementById("verse");
-  const scripture = document.getElementById("scripture");
-  const heading = document.getElementById("chapterHeading");
-  const status = document.getElementById("status");
-  const previousButton = document.getElementById("previousButton");
-  const nextButton = document.getElementById("nextButton");
-  const searchInput = document.getElementById("search");
-  const searchButton = document.getElementById("searchButton");
+
+  const translationSelect =
+    document.getElementById("translation");
+
+  const bookSelect =
+    document.getElementById("book");
+
+  const chapterSelect =
+    document.getElementById("chapter");
+
+  const verseSelect =
+    document.getElementById("verse");
+
+  const scripture =
+    document.getElementById("scripture");
+
+  const heading =
+    document.getElementById("chapterHeading");
+
+  const status =
+    document.getElementById("status");
+
+  const previousButton =
+    document.getElementById("previousButton");
+
+  const nextButton =
+    document.getElementById("nextButton");
+
+  const searchInput =
+    document.getElementById("search");
+
+  const searchButton =
+    document.getElementById("searchButton");
+
+
+  /* =========================
+     BIBLE DATA HELPERS
+  ========================= */
 
   function getBooks(data) {
-    if (data && data.bible && Array.isArray(data.bible.books)) {
+
+    if (
+      data &&
+      data.bible &&
+      Array.isArray(data.bible.books)
+    ) {
       return data.bible.books;
     }
 
-    if (data && Array.isArray(data.books)) {
+    if (
+      data &&
+      Array.isArray(data.books)
+    ) {
       return data.books;
     }
 
     return [];
   }
 
+
   function getBookName(book) {
-    return book.book || book.name || book.title || "Unknown Book";
+
+    return (
+      book.book ||
+      book.name ||
+      book.title ||
+      "Unknown Book"
+    );
   }
+
 
   function getChapters(book) {
-    return Array.isArray(book.chapters) ? book.chapters : [];
+
+    return Array.isArray(book.chapters)
+      ? book.chapters
+      : [];
   }
+
+
   function getChapterNumber(chapter, index) {
-    return chapter.chapter || chapter.number || (index + 1);
+
+    return (
+      chapter.chapter ||
+      chapter.number ||
+      (index + 1)
+    );
   }
+
 
   function getVerses(chapter) {
-    return Array.isArray(chapter.verses) ? chapter.verses : [];
+
+    return Array.isArray(chapter.verses)
+      ? chapter.verses
+      : [];
   }
+
 
   function getVerseNumber(verse, index) {
-    return verse.verse || verse.number || (index + 1);
+
+    return (
+      verse.verse ||
+      verse.number ||
+      (index + 1)
+    );
   }
+
 
   function getVerseText(verse) {
-    return verse.text || verse.content || "";
+
+    return (
+      verse.text ||
+      verse.content ||
+      ""
+    );
   }
 
-  async function startBible() {
-    try {
-      const selectedTranslation = document.getElementById("translation").value;
 
-if (selectedTranslation === "WEB") {
-  bibleData = await getWEB();
-} else if (selectedTranslation === "ASV") {
-  bibleData = await getASV();
-} else {
-  bibleData = await getKJV();
-}
+  /* =========================
+     LOAD TRANSLATION
+  ========================= */
+
+  async function startBible() {
+
+    try {
+
+      const selectedTranslation =
+        translationSelect.value;
+
+
+      /*
+        Remember where the reader currently is.
+      */
+
+      const oldBookIndex =
+        currentBookIndex;
+
+      const oldChapterIndex =
+        currentChapterIndex;
+
+
+      /*
+        Load the selected translation.
+      */
+
+      if (selectedTranslation === "WEB") {
+
+        bibleData = await getWEB();
+
+      } else if (selectedTranslation === "ASV") {
+
+        bibleData = await getASV();
+
+      } else {
+
+        bibleData = await getKJV();
+
+      }
+
+
       books = getBooks(bibleData);
 
+
       if (!books.length) {
-        throw new Error("No Bible books were found.");
+
+        throw new Error(
+          "No Bible books were found."
+        );
+
       }
+
+
+      /*
+        Rebuild book dropdown.
+      */
 
       bookSelect.innerHTML =
         '<option value="">Choose a book</option>';
 
-      books.forEach((book, index) => {
-        const option = document.createElement("option");
+
+      books.forEach(function(book, index) {
+
+        const option =
+          document.createElement("option");
+
         option.value = index;
-        option.textContent = getBookName(book);
+
+        option.textContent =
+          getBookName(book);
+
         bookSelect.appendChild(option);
+
       });
 
-      status.textContent =
-        "Choose a book, then choose a chapter to begin reading.";
+
+      /*
+        Keep the same book when
+        changing translations.
+      */
+
+      if (
+        oldBookIndex >= 0 &&
+        oldBookIndex < books.length
+      ) {
+
+        bookSelect.value =
+          oldBookIndex;
+
+        loadChapters();
+
+
+        /*
+          Keep the same chapter too.
+        */
+
+        const chapters =
+          getChapters(
+            books[oldBookIndex]
+          );
+
+
+        if (
+          oldChapterIndex >= 0 &&
+          oldChapterIndex < chapters.length
+        ) {
+
+          chapterSelect.value =
+            oldChapterIndex;
+
+          loadChapter();
+
+        }
+
+      }
+
+
+      /*
+        Show current translation.
+      */
+
+      let translationName =
+        "King James Version";
+
+      if (selectedTranslation === "WEB") {
+
+        translationName =
+          "World English Bible";
+
+      } else if (selectedTranslation === "ASV") {
+
+        translationName =
+          "American Standard Version";
+
+      }
+
+
+      if (
+        currentBookIndex < 0 ||
+        currentChapterIndex < 0
+      ) {
+
+        status.textContent =
+          translationName +
+          " loaded. Choose a book and chapter.";
+
+      }
 
     } catch (error) {
+
       console.error(error);
 
       status.textContent =
-       status.textContent = error.message;
+        error.message ||
+        "Unable to load the Bible.";
+
     }
+
   }
 
-  function loadChapters() {
-    currentBookIndex = Number(bookSelect.value);
 
-    const book = books[currentBookIndex];
-    const chapters = getChapters(book);
+  /* =========================
+     LOAD CHAPTERS
+  ========================= */
+
+  function loadChapters() {
+
+    if (bookSelect.value === "") {
+
+      chapterSelect.innerHTML =
+        '<option value="">Choose a chapter</option>';
+
+      chapterSelect.disabled = true;
+
+      verseSelect.innerHTML =
+        '<option value="">Choose a verse</option>';
+
+      verseSelect.disabled = true;
+
+      return;
+
+    }
+
+
+    currentBookIndex =
+      Number(bookSelect.value);
+
+
+    const book =
+      books[currentBookIndex];
+
+
+    const chapters =
+      getChapters(book);
+
 
     chapterSelect.innerHTML =
       '<option value="">Choose a chapter</option>';
 
+
     verseSelect.innerHTML =
       '<option value="">Choose a verse</option>';
 
+
     verseSelect.disabled = true;
+
     scripture.innerHTML = "";
+
     heading.textContent = "";
 
-    chapters.forEach((chapter, index) => {
-      const option = document.createElement("option");
+
+    chapters.forEach(function(chapter, index) {
+
+      const option =
+        document.createElement("option");
+
       option.value = index;
+
       option.textContent =
-        "Chapter " + getChapterNumber(chapter, index);
+        "Chapter " +
+        getChapterNumber(
+          chapter,
+          index
+        );
 
       chapterSelect.appendChild(option);
+
     });
 
-    chapterSelect.disabled = false;
+
+    chapterSelect.disabled =
+      chapters.length === 0;
+
   }
 
+
+  /* =========================
+     LOAD CHAPTER
+  ========================= */
+
   function loadChapter() {
-    if (bookSelect.value === "" || chapterSelect.value === "") {
+
+    if (
+      bookSelect.value === "" ||
+      chapterSelect.value === ""
+    ) {
+
       return;
+
     }
 
-    currentBookIndex = Number(bookSelect.value);
-    currentChapterIndex = Number(chapterSelect.value);
 
-    const book = books[currentBookIndex];
-    const chapters = getChapters(book);
-    const chapter = chapters[currentChapterIndex];
-    const verses = getVerses(chapter);
+    currentBookIndex =
+      Number(bookSelect.value);
+
+    currentChapterIndex =
+      Number(chapterSelect.value);
+
+
+    const book =
+      books[currentBookIndex];
+
+
+    const chapters =
+      getChapters(book);
+
+
+    const chapter =
+      chapters[currentChapterIndex];
+
+
+    const verses =
+      getVerses(chapter);
+
 
     heading.textContent =
       getBookName(book) +
       " " +
-      getChapterNumber(chapter, currentChapterIndex);
+      getChapterNumber(
+        chapter,
+        currentChapterIndex
+      );
+
 
     scripture.innerHTML = "";
+
 
     verseSelect.innerHTML =
       '<option value="">Jump to verse</option>';
 
-    verses.forEach((verse, index) => {
-      const verseNumber = getVerseNumber(verse, index);
 
-      const option = document.createElement("option");
+    verses.forEach(function(verse, index) {
+
+      const verseNumber =
+        getVerseNumber(
+          verse,
+          index
+        );
+
+
+      /*
+        Verse dropdown.
+      */
+
+      const option =
+        document.createElement("option");
+
       option.value = index;
-      option.textContent = "Verse " + verseNumber;
+
+      option.textContent =
+        "Verse " + verseNumber;
+
       verseSelect.appendChild(option);
 
-      const paragraph = document.createElement("p");
-      paragraph.className = "verse";
-      paragraph.id = "verse-" + index;
 
-      const number = document.createElement("span");
-      number.className = "verse-number";
-      number.textContent = verseNumber;
+      /*
+        Verse paragraph.
+      */
+
+      const paragraph =
+        document.createElement("p");
+
+      paragraph.className =
+        "verse";
+
+      paragraph.id =
+        "verse-" + index;
+
+
+      /*
+        Restore highlight.
+      */
+
+      const highlightKey =
+        "highlight-" +
+        translationSelect.value +
+        "-" +
+        currentBookIndex +
+        "-" +
+        currentChapterIndex +
+        "-" +
+        index;
+
+
+      if (
+        localStorage.getItem(highlightKey) === "true"
+      ) {
+
+        paragraph.classList.add(
+          "highlighted"
+        );
+
+      }
+
+
+      /*
+        Verse number.
+      */
+
+      const number =
+        document.createElement("span");
+
+      number.className =
+        "verse-number";
+
+      number.textContent =
+        verseNumber;
+
 
       paragraph.appendChild(number);
+
+
       paragraph.appendChild(
-        document.createTextNode(" " + getVerseText(verse))
+        document.createTextNode(
+          " " +
+          getVerseText(verse)
+        )
       );
 
-      scripture.appendChild(paragraph);
-      paragraph.addEventListener("click", function (event) {
-  if (event.target !== paragraph && !event.target.classList.contains("verse-number")) {
-    return;
-  }
 
-  document.querySelectorAll(".verse-actions").forEach(function (menu) {
-    menu.remove();
-  });
+      scripture.appendChild(
+        paragraph
+      );
 
-  const menu = document.createElement("div");
-  menu.className = "verse-actions";
 
-  menu.innerHTML = `
-    <button type="button" data-action="highlight">Highlight</button>
-    <button type="button" data-action="bookmark">🔖 Bookmark</button>
-    <button type="button" data-action="copy">📋 Copy</button>
-    <button type="button" data-action="share">↗ Share</button>
-  `;
+      /*
+        Clicking a verse opens the menu.
+      */
 
-  paragraph.appendChild(menu);
+      paragraph.addEventListener(
+        "click",
+        function(event) {
 
-  menu.querySelector('[data-action="highlight"]').addEventListener("click", function (e) {
-    e.stopPropagation();
-    paragraph.classList.toggle("highlighted");
-  });
+          if (
+            event.target !== paragraph &&
+            !event.target.classList.contains(
+              "verse-number"
+            )
+          ) {
 
-  menu.querySelector('[data-action="bookmark"]').addEventListener("click", function (e) {
-    e.stopPropagation();
-    paragraph.dataset.bookmarked =
-      paragraph.dataset.bookmarked === "true" ? "false" : "true";
-    this.textContent =
-      paragraph.dataset.bookmarked === "true"
-        ? "🔖 Bookmarked"
-        : "🔖 Bookmark";
-  });
+            return;
 
-  menu.querySelector('[data-action="copy"]').addEventListener("click", function (e) {
-    e.stopPropagation();
-    navigator.clipboard.writeText(
-      getBookName(book) + " " +
-      getChapterNumber(chapter, currentChapterIndex) + ":" +
-      getVerseNumber(verse, index) + " " +
-      getVerseText(verse)
-    );
-    this.textContent = "✓ Copied";
-  });
+          }
 
-  menu.querySelector('[data-action="share"]').addEventListener("click", function (e) {
-    e.stopPropagation();
 
-    const shareText =
-      getBookName(book) + " " +
-      getChapterNumber(chapter, currentChapterIndex) + ":" +
-      getVerseNumber(verse, index) + " " +
-      getVerseText(verse);
+          document
+            .querySelectorAll(".verse-actions")
+            .forEach(function(menu) {
 
-    if (navigator.share) {
-      navigator.share({
-        title: "BibleMastrey",
-        text: shareText
-      });
-    } else {
-      navigator.clipboard.writeText(shareText);
-      this.textContent = "✓ Copied";
-    }
-  });
-});
+              menu.remove();
+
+            });
+
+
+          const menu =
+            document.createElement("div");
+
+          menu.className =
+            "verse-actions";
+
+
+          menu.innerHTML = `
+            <button type="button" data-action="highlight">
+              Highlight
+            </button>
+
+            <button type="button" data-action="bookmark">
+              🔖 Bookmark
+            </button>
+
+            <button type="button" data-action="copy">
+              📋 Copy
+            </button>
+
+            <button type="button" data-action="share">
+              ↗ Share
+            </button>
+          `;
+
+
+          paragraph.appendChild(menu);
+
+
+          /*
+            Highlight
+          */
+
+          menu
+            .querySelector(
+              '[data-action="highlight"]'
+            )
+            .addEventListener(
+              "click",
+              function(e) {
+
+                e.stopPropagation();
+
+                paragraph.classList.toggle(
+                  "highlighted"
+                );
+
+
+                const isHighlighted =
+                  paragraph.classList.contains(
+                    "highlighted"
+                  );
+
+
+                localStorage.setItem(
+                  highlightKey,
+                  isHighlighted
+                );
+
+              }
+            );
+
+
+          /*
+            Bookmark
+          */
+
+          const bookmarkKey =
+            "bookmark-" +
+            translationSelect.value +
+            "-" +
+            currentBookIndex +
+            "-" +
+            currentChapterIndex +
+            "-" +
+            index;
+
+
+          const bookmarkButton =
+            menu.querySelector(
+              '[data-action="bookmark"]'
+            );
+
+
+          if (
+            localStorage.getItem(
+              bookmarkKey
+            ) === "true"
+          ) {
+
+            bookmarkButton.textContent =
+              "🔖 Bookmarked";
+
+          }
+
+
+          bookmarkButton.addEventListener(
+            "click",
+            function(e) {
+
+              e.stopPropagation();
+
+
+              if (
+                localStorage.getItem(
+                  bookmarkKey
+                ) === "true"
+              ) {
+
+                localStorage.removeItem(
+                  bookmarkKey
+                );
+
+                this.textContent =
+                  "🔖 Bookmark";
+
+              } else {
+
+                localStorage.setItem(
+                  bookmarkKey,
+                  "true"
+                );
+
+                this.textContent =
+                  "🔖 Bookmarked";
+
+              }
+
+            }
+          );
+
+
+          /*
+            Copy
+          */
+
+          menu
+            .querySelector(
+              '[data-action="copy"]'
+            )
+            .addEventListener(
+              "click",
+              function(e) {
+
+                e.stopPropagation();
+
+
+                const copyText =
+                  getBookName(book) +
+                  " " +
+                  getChapterNumber(
+                    chapter,
+                    currentChapterIndex
+                  ) +
+                  ":" +
+                  getVerseNumber(
+                    verse,
+                    index
+                  ) +
+                  " " +
+                  getVerseText(verse);
+
+
+                navigator.clipboard.writeText(
+                  copyText
+                );
+
+
+                this.textContent =
+                  "✓ Copied";
+
+              }
+            );
+
+
+          /*
+            Share
+          */
+
+          menu
+            .querySelector(
+              '[data-action="share"]'
+            )
+            .addEventListener(
+              "click",
+              function(e) {
+
+                e.stopPropagation();
+
+
+                const shareText =
+                  getBookName(book) +
+                  " " +
+                  getChapterNumber(
+                    chapter,
+                    currentChapterIndex
+                  ) +
+                  ":" +
+                  getVerseNumber(
+                    verse,
+                    index
+                  ) +
+                  " " +
+                  getVerseText(verse);
+
+
+                if (
+                  navigator.share
+                ) {
+
+                  navigator.share({
+                    title: "BibleMastrey",
+                    text: shareText
+                  });
+
+                } else {
+
+                  navigator.clipboard.writeText(
+                    shareText
+                  );
+
+                  this.textContent =
+                    "✓ Copied";
+
+                }
+
+              }
+            );
+
+        }
+      );
+
     });
 
-    verseSelect.disabled = verses.length === 0;
+
+    verseSelect.disabled =
+      verses.length === 0;
+
+
+    /*
+      Update status.
+    */
+
+    let translationName =
+      "KJV";
+
+    if (
+      translationSelect.value === "WEB"
+    ) {
+
+      translationName =
+        "WEB";
+
+    } else if (
+      translationSelect.value === "ASV"
+    ) {
+
+      translationName =
+        "ASV";
+
+    }
+
 
     status.textContent =
+      translationName +
+      " — " +
       getBookName(book) +
       " " +
-      getChapterNumber(chapter, currentChapterIndex);
+      getChapterNumber(
+        chapter,
+        currentChapterIndex
+      );
+
+
+    /*
+      Previous button.
+    */
 
     previousButton.disabled =
-      currentBookIndex === 0 && currentChapterIndex === 0;
+      currentBookIndex === 0 &&
+      currentChapterIndex === 0;
 
-    const lastBookIndex = books.length - 1;
-    const lastBook = books[lastBookIndex];
-    const lastChapterIndex = getChapters(lastBook).length - 1;
+
+    /*
+      Next button.
+    */
+
+    const lastBookIndex =
+      books.length - 1;
+
+    const lastBook =
+      books[lastBookIndex];
+
+    const lastChapterIndex =
+      getChapters(lastBook).length - 1;
+
 
     nextButton.disabled =
       currentBookIndex === lastBookIndex &&
       currentChapterIndex === lastChapterIndex;
+
+
+    /*
+      Add notes.
+    */
+
+    addNoteButtons();
+
   }
+
+
+  /* =========================
+     PREVIOUS CHAPTER
+  ========================= */
 
   function goPrevious() {
-    if (currentBookIndex < 0 || currentChapterIndex < 0) return;
 
-    if (currentChapterIndex > 0) {
-      chapterSelect.value = currentChapterIndex - 1;
-      loadChapter();
+    if (
+      currentBookIndex < 0 ||
+      currentChapterIndex < 0
+    ) {
+
       return;
+
     }
 
-    if (currentBookIndex > 0) {
-      bookSelect.value = currentBookIndex - 1;
+
+    if (
+      currentChapterIndex > 0
+    ) {
+
+      chapterSelect.value =
+        currentChapterIndex - 1;
+
+      loadChapter();
+
+      return;
+
+    }
+
+
+    if (
+      currentBookIndex > 0
+    ) {
+
+      bookSelect.value =
+        currentBookIndex - 1;
+
       loadChapters();
 
-      const chapters = getChapters(
-        books[currentBookIndex - 1]
-      );
 
-      chapterSelect.value = chapters.length - 1;
+      const chapters =
+        getChapters(
+          books[currentBookIndex - 1]
+        );
+
+
+      chapterSelect.value =
+        chapters.length - 1;
+
       loadChapter();
+
     }
+
   }
+
+
+  /* =========================
+     NEXT CHAPTER
+  ========================= */
 
   function goNext() {
-    if (currentBookIndex < 0 || currentChapterIndex < 0) return;
 
-    const chapters = getChapters(books[currentBookIndex]);
+    if (
+      currentBookIndex < 0 ||
+      currentChapterIndex < 0
+    ) {
 
-    if (currentChapterIndex < chapters.length - 1) {
-      chapterSelect.value = currentChapterIndex + 1;
-      loadChapter();
       return;
+
     }
 
-    if (currentBookIndex < books.length - 1) {
-      bookSelect.value = currentBookIndex + 1;
-      loadChapters();
-      chapterSelect.value = 0;
+
+    const chapters =
+      getChapters(
+        books[currentBookIndex]
+      );
+
+
+    if (
+      currentChapterIndex <
+      chapters.length - 1
+    ) {
+
+      chapterSelect.value =
+        currentChapterIndex + 1;
+
       loadChapter();
+
+      return;
+
     }
+
+
+    if (
+      currentBookIndex <
+      books.length - 1
+    ) {
+
+      bookSelect.value =
+        currentBookIndex + 1;
+
+      loadChapters();
+
+      chapterSelect.value = 0;
+
+      loadChapter();
+
+    }
+
   }
 
-  function jumpToVerse() {
-    if (verseSelect.value === "") return;
 
-    const verse = document.getElementById(
-      "verse-" + verseSelect.value
-    );
+  /* =========================
+     JUMP TO VERSE
+  ========================= */
+
+  function jumpToVerse() {
+
+    if (
+      verseSelect.value === ""
+    ) {
+
+      return;
+
+    }
+
+
+    const verse =
+      document.getElementById(
+        "verse-" +
+        verseSelect.value
+      );
+
 
     if (verse) {
+
       verse.scrollIntoView({
         behavior: "smooth",
         block: "center"
       });
+
     }
+
   }
 
+
+  /* =========================
+     SEARCH
+  ========================= */
+
   function searchChapter() {
-    const query = searchInput.value.trim().toLowerCase();
+
+    const query =
+      searchInput.value
+        .trim()
+        .toLowerCase();
+
 
     if (!query) {
+
       loadChapter();
+
       return;
+
     }
 
-    const verses = document.querySelectorAll(".verse");
+
+    const verses =
+      document.querySelectorAll(
+        ".verse"
+      );
+
+
     let found = false;
 
-    verses.forEach(verse => {
-      if (verse.textContent.toLowerCase().includes(query)) {
-        verse.style.fontWeight = "700";
+
+    verses.forEach(function(verse) {
+
+      if (
+        verse.textContent
+          .toLowerCase()
+          .includes(query)
+      ) {
+
+        verse.style.fontWeight =
+          "700";
+
         verse.scrollIntoView({
           behavior: "smooth",
           block: "center"
         });
 
         found = true;
+
       } else {
-        verse.style.fontWeight = "normal";
+
+        verse.style.fontWeight =
+          "normal";
+
       }
+
     });
 
+
     if (!found) {
+
       status.textContent =
         "No matching verse found in this chapter.";
+
     } else {
+
       status.textContent =
-        "Search results for: " + query;
+        "Search results for: " +
+        query;
+
     }
+
   }
-document.getElementById("translation").addEventListener("change", async () => {
-  await startBible();
-});
-  bookSelect.addEventListener("change", loadChapters);
-  chapterSelect.addEventListener("change", loadChapter);
-  verseSelect.addEventListener("change", jumpToVerse);
-  previousButton.addEventListener("click", goPrevious);
-  nextButton.addEventListener("click", goNext);
-  searchButton.addEventListener("click", searchChapter);
+
+
+  /* =========================
+     NOTES
+  ========================= */
+
+  function addNoteButtons() {
+
+    document
+      .querySelectorAll(".verse")
+      .forEach(function(verse) {
+
+        if (
+          verse.querySelector(
+            ".note-button"
+          )
+        ) {
+
+          return;
+
+        }
+
+
+        const button =
+          document.createElement("button");
+
+        button.className =
+          "note-button";
+
+        button.textContent =
+          "📝 Note";
+
+
+        const noteBox =
+          document.createElement("textarea");
+
+        noteBox.className =
+          "note-box";
+
+        noteBox.placeholder =
+          "Write your note about this verse...";
+
+
+        const key =
+          "note-" +
+          translationSelect.value +
+          "-" +
+          currentBookIndex +
+          "-" +
+          currentChapterIndex +
+          "-" +
+          verse.id;
+
+
+        const savedNote =
+          localStorage.getItem(key);
+
+
+        if (savedNote) {
+
+          noteBox.value =
+            savedNote;
+
+          button.classList.add(
+            "has-note"
+          );
+
+          button.textContent =
+            "📝 Note Saved";
+
+        }
+
+
+        button.addEventListener(
+          "click",
+          function(event) {
+
+            event.stopPropagation();
+
+            noteBox.classList.toggle(
+              "visible"
+            );
+
+
+            if (
+              noteBox.classList.contains(
+                "visible"
+              )
+            ) {
+
+              noteBox.focus();
+
+            }
+
+          }
+        );
+
+
+        noteBox.addEventListener(
+          "click",
+          function(event) {
+
+            event.stopPropagation();
+
+          }
+        );
+
+
+        noteBox.addEventListener(
+          "input",
+          function() {
+
+            localStorage.setItem(
+              key,
+              noteBox.value
+            );
+
+
+            if (
+              noteBox.value.trim()
+            ) {
+
+              button.classList.add(
+                "has-note"
+              );
+
+              button.textContent =
+                "📝 Note Saved";
+
+            } else {
+
+              localStorage.removeItem(
+                key
+              );
+
+              button.classList.remove(
+                "has-note"
+              );
+
+              button.textContent =
+                "📝 Note";
+
+            }
+
+          }
+        );
+
+
+        verse.appendChild(button);
+
+        verse.appendChild(noteBox);
+
+      });
+
+  }
+
+
+  /* =========================
+     EVENTS
+  ========================= */
+
+  translationSelect.addEventListener(
+    "change",
+    async function() {
+
+      await startBible();
+
+    }
+  );
+
+
+  bookSelect.addEventListener(
+    "change",
+    function() {
+
+      loadChapters();
+
+    }
+  );
+
+
+  chapterSelect.addEventListener(
+    "change",
+    function() {
+
+      loadChapter();
+
+    }
+  );
+
+
+  verseSelect.addEventListener(
+    "change",
+    function() {
+
+      jumpToVerse();
+
+    }
+  );
+
+
+  previousButton.addEventListener(
+    "click",
+    function() {
+
+      goPrevious();
+
+    }
+  );
+
+
+  nextButton.addEventListener(
+    "click",
+    function() {
+
+      goNext();
+
+    }
+  );
+
+
+  searchButton.addEventListener(
+    "click",
+    function() {
+
+      searchChapter();
+
+    }
+  );
+
+
+  /* =========================
+     START BIBLE
+  ========================= */
 
   startBible();
+
 </script>
 
 </body>
-  <style>
-  .note-button {
-    display: inline-block;
-    margin-left: 8px;
-    padding: 4px 8px;
-    font-size: 12px;
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-    background: white;
-    color: #172554;
-    cursor: pointer;
-  }
-
-  .note-button.has-note {
-    background: #e8ecf7;
-  }
-
-  .note-box {
-    display: none;
-    margin-top: 10px;
-    width: 100%;
-    min-height: 80px;
-    padding: 10px;
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 14px;
-    resize: vertical;
-  }
-
-  .note-box.visible {
-    display: block;
-  }
-</style>
-
-<script>
-  function addNoteButtons() {
-    document.querySelectorAll(".verse").forEach(function (verse) {
-      if (verse.querySelector(".note-button")) return;
-
-      const button = document.createElement("button");
-
-      button.className = "note-button";
-      button.textContent = "📝 Note";
-
-      const noteBox = document.createElement("textarea");
-      noteBox.className = "note-box";
-      noteBox.placeholder = "Write your note about this verse...";
-
-      const key = "note-" + verse.id;
-
-      const savedNote = localStorage.getItem(key);
-
-      if (savedNote) {
-        noteBox.value = savedNote;
-        button.classList.add("has-note");
-        button.textContent = "📝 Note Saved";
-      }
-
-      button.addEventListener("click", function (event) {
-        event.stopPropagation();
-
-        noteBox.classList.toggle("visible");
-
-        if (noteBox.classList.contains("visible")) {
-          noteBox.focus();
-        }
-      });
-
-      noteBox.addEventListener("click", function (event) {
-        event.stopPropagation();
-      });
-
-      noteBox.addEventListener("input", function () {
-        localStorage.setItem(key, noteBox.value);
-
-        if (noteBox.value.trim()) {
-          button.classList.add("has-note");
-          button.textContent = "📝 Note Saved";
-        } else {
-          localStorage.removeItem(key);
-          button.classList.remove("has-note");
-          button.textContent = "📝 Note";
-        }
-      });
-
-      verse.appendChild(button);
-      verse.appendChild(noteBox);
-    });
-  }
-
-  const noteObserver = new MutationObserver(function () {
-    addNoteButtons();
-  });
-
-  noteObserver.observe(document.body, {
-    childList: true,
-    subtree: true
-  });
-
-  addNoteButtons();
-</script>
-</style>
-  
-</style>
-
-<script>
-  function addNoteButtons() {
-    document.querySelectorAll(".verse").forEach(function (verse) {
-      if (verse.querySelector(".note-button")) return;
-
-      const button = document.createElement("button");
-
-      button.className = "note-button";
-      button.textContent = "📝 Note";
-
-      const noteBox = document.createElement("textarea");
-      noteBox.className = "note-box";
-      noteBox.placeholder = "Write your note about this verse...";
-
-      const key = "note-" + verse.id;
-
-      const savedNote = localStorage.getItem(key);
-
-      if (savedNote) {
-        noteBox.value = savedNote;
-        button.classList.add("has-note");
-        button.textContent = "📝 Note Saved";
-      }
-
-      button.addEventListener("click", function (event) {
-        event.stopPropagation();
-
-        noteBox.classList.toggle("visible");
-
-        if (noteBox.classList.contains("visible")) {
-          noteBox.focus();
-        }
-      });
-
-      noteBox.addEventListener("click", function (event) {
-        event.stopPropagation();
-      });
-
-      noteBox.addEventListener("input", function () {
-        localStorage.setItem(key, noteBox.value);
-
-        if (noteBox.value.trim()) {
-          button.classList.add("has-note");
-          button.textContent = "📝 Note Saved";
-        } else {
-          localStorage.removeItem(key);
-          button.classList.remove("has-note");
-          button.textContent = "📝 Note";
-        }
-      });
-
-      verse.appendChild(button);
-      verse.appendChild(noteBox);
-    });
-  }
-
-  const noteObserver = new MutationObserver(function () {
-    addNoteButtons();
-  });
-
-  noteObserver.observe(document.body, {
-    childList: true,
-    subtree: true
-  });
-
-  addNoteButtons();
-</script>
-<style>
-  .bookmark-button {
-    margin-left: 8px;
-    padding: 4px 8px;
-    font-size: 12px;
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-    background: white;
-    cursor: pointer;
-  }
-
-  .bookmark-button.bookmarked {
-    background: #172554;
-    color: white;
-  }
-  <style>
-  .bookmark-button {
-    display: inline-block;
-    margin-left: 8px;
-    padding: 4px 8px;
-    font-size: 12px;
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-    background: white;
-    color: #172554;
-    cursor: pointer;
-  }
-
-  .bookmark-button.bookmarked {
-    background: #172554;
-    color: white;
-  }
-</style>
-
-<script>
-  document.addEventListener("click", function (event) {
-    const button = event.target.closest(".bookmark-button");
-
-    if (!button) return;
-
-    event.stopPropagation();
-
-    const verse = button.closest(".verse");
-
-    if (!verse) return;
-
-    const key = "bookmark-" + verse.id;
-
-    if (localStorage.getItem(key) === "true") {
-      localStorage.removeItem(key);
-      button.classList.remove("bookmarked");
-      button.textContent = "🔖 Bookmark";
-    } else {
-      localStorage.setItem(key, "true");
-      button.classList.add("bookmarked");
-      button.textContent = "🔖 Bookmarked";
-    }
-  });
-
-  function addBookmarkButtons() {
-    document.querySelectorAll(".verse").forEach(function (verse) {
-      if (verse.querySelector(".bookmark-button")) return;
-
-      const button = document.createElement("button");
-
-      button.className = "bookmark-button";
+</html>
