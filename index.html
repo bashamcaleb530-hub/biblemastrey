@@ -467,7 +467,7 @@
 
   async function startBible() {
     try {
-      bibleData = translationSelect.value === "WEB"
+      bibleData = document.getElementById("translation").value === "WEB"
   ? await getWEB()
   : await getKJV();
       books = getBooks(bibleData);
