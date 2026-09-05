@@ -473,6 +473,8 @@
 
 if (selectedTranslation === "WEB") {
   bibleData = await getWEB();
+} else if (selectedTranslation === "ASV") {
+  bibleData = await getASV();
 } else {
   bibleData = await getKJV();
 }
