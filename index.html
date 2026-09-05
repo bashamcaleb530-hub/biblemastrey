@@ -748,7 +748,9 @@
         "Search results for: " + query;
     }
   }
-
+document.getElementById("translation").addEventListener("change", async () => {
+  await startBible();
+});
   bookSelect.addEventListener("change", loadChapters);
   chapterSelect.addEventListener("change", loadChapter);
   verseSelect.addEventListener("change", jumpToVerse);
