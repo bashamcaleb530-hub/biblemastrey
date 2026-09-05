@@ -19,16 +19,12 @@ async function getWEB() {
   const response = await fetch(WEB_SOURCE);
 
   if (!response.ok) {
-    throw new Error(`WEB failed: ${response.status}`);
+    throw new Error("Failed to load the World English Bible");
   }
 
   const data = await response.json();
-
-  return {
-    bible: {
-      books: data.books || data
-    }
-  };
+  return data;
+}
   kjvBible = await response.json();
 
   return kjvBible;
