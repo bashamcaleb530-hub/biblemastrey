@@ -1,7 +1,7 @@
 const KJV_SOURCE =
 
   "https://raw.githubusercontent.com/midvash/bible-data/main/versions/en/kjv/kjv.json";
-const WEB_SOURCE = "https://raw.githubusercontent.com/midvash/bible-data/main/versions/en/WEB/WEB.json"
+const WEB_SOURCE = "https://raw.githubusercontent.com/midvash/bible-data/main/versions/en/web/web.json";
 let kjvBible = null;
 
 async function getKJV() {
