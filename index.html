@@ -828,7 +828,150 @@ const originalWordButton =
 const originalWordResult =
     document.getElementById("originalWordResult");
   
-  
+  async function searchOriginalWord() {
+
+  const strongs =
+    originalWordInput.value.trim().toUpperCase();
+
+  if (!strongs) {
+    originalWordResult.textContent =
+      "Enter a Strong's number, such as G25 or H157.";
+    return;
+  }
+
+  if (!/^[GH]\d+$/.test(strongs)) {
+    originalWordResult.textContent =
+      "Use a Strong's number like G25 or H157.";
+    return;
+  }
+
+  originalWordResult.textContent =
+    "Searching...";
+
+  try {
+
+    const language =
+      strongs.charAt(0) === "G"
+        ? "greek"
+        : "hebrew";
+
+    const url =
+      "https://raw.githubusercontent.com/openscriptures/strongs/master/" +
+      language +
+      "/strongs-" +
+      language +
+      "-dictionary.js";
+
+    const response =
+      await fetch(url);
+
+    if (!response.ok) {
+      throw new Error("Strong's dictionary unavailable.");
+    }
+
+    const text =
+      await response.text();
+
+    const match =
+      text.match(
+        new RegExp(
+          '"' +
+          strongs +
+          '"\\s*:\\s*(\\{[\\s\\S]*?\\})\\s*(?:,|})'
+        )
+      );
+
+    if (!match) {
+      originalWordResult.textContent =
+        "Strong's number not found.";
+      return;
+    }
+
+    let entry;
+
+    try {
+      entry = JSON.parse(match[1]);
+    }
+    catch(error) {
+      originalWordResult.textContent =
+        "Unable to read this Strong's entry.";
+      return;
+    }
+
+    let html =
+      "<div class=\"original-word-entry\">" +
+      "<strong>Strong's " +
+      strongs +
+      "</strong>";
+
+    if (entry.lemma) {
+      html +=
+        "<p><strong>Word:</strong> " +
+        entry.lemma +
+        "</p>";
+    }
+
+    if (entry.translit) {
+      html +=
+        "<p><strong>Transliteration:</strong> " +
+        entry.translit +
+        "</p>";
+    }
+
+    if (entry.pronunciation) {
+      html +=
+        "<p><strong>Pronunciation:</strong> " +
+        entry.pronunciation +
+        "</p>";
+    }
+
+    if (entry.definition) {
+      html +=
+        "<p><strong>Definition:</strong><br>" +
+        entry.definition +
+        "</p>";
+    }
+
+    html +=
+      "<div class=\"original-word-source\">" +
+      "Strong's Dictionary — Open Scriptures" +
+      "</div></div>";
+
+    originalWordResult.innerHTML =
+      html;
+
+  }
+
+  catch(error) {
+
+    console.error(
+      "Strong's lookup error:",
+      error
+    );
+
+    originalWordResult.textContent =
+      "Unable to load the Strong's dictionary.";
+
+  }
+}
+
+
+originalWordButton.addEventListener(
+  "click",
+  searchOriginalWord
+);
+
+
+originalWordInput.addEventListener(
+  "keydown",
+  function(event) {
+
+    if (event.key === "Enter") {
+      searchOriginalWord();
+    }
+
+  }
+);
   async function searchDictionary() {
 
   const word =
