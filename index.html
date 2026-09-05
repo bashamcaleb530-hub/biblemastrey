@@ -1262,12 +1262,21 @@ function findCommentaryForVerse(
 
     }
 
-    /*
-      If the repository path changes,
-      use Matthew Henry Complete as a
-      verified backup rather than showing
-      a false 404 error.
-    */
+        const bookId =
+      getApiBookId(bookName);
+
+    if (!bookId) {
+      throw new Error(
+        "Commentary book ID not found."
+      );
+    }
+
+    return loadHelloAOCommentary(
+      "matthew-henry",
+      bookName,
+      chapterNumber
+    );
+  }
 
     return loadHelloAOCommentary(
       "matthew-henry",
