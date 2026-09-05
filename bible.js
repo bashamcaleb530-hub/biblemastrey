@@ -56,4 +56,5 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
 });
+window.getWEB = getWEB;
 
