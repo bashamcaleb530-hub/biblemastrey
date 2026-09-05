@@ -213,13 +213,16 @@
     }
 
     .commentary-panel {
-      display: none;
-      background: #f8f9fc;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 15px;
-      min-height: 150px;
-    }
+  display: none;
+  background: #f8f9fc;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  min-height: 150px;
+  max-height: 600px;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
 
     .commentary-panel.show {
       display: block;
