@@ -806,7 +806,46 @@ const accountMessage =
 
 const signupAccountButton =
   document.getElementById("signupAccountButton");
+const loginAccountButton =
+  document.getElementById("loginAccountButton");
 
+loginAccountButton.addEventListener(
+  "click",
+  async function() {
+
+    const email =
+      accountEmail.value.trim();
+
+    const password =
+      accountPassword.value;
+
+    if (!email || !password) {
+      accountMessage.textContent =
+        "Please enter your email and password.";
+      return;
+    }
+
+    const { data, error } =
+      await supabaseClient.auth.signInWithPassword({
+        email: email,
+        password: password
+      });
+
+    if (error) {
+      accountMessage.textContent =
+        error.message;
+      return;
+    }
+
+    accountMessage.textContent =
+      "Logged in successfully!";
+
+    console.log(
+      "BibleMastrey user logged in:",
+      data.user
+    );
+  }
+);
 signupAccountButton.addEventListener(
   "click",
   async function() {
