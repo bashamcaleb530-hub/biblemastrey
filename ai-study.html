@@ -267,10 +267,22 @@
   </div>
 
   <script>
+const studyTranslationSelect =
+  document.getElementById("studyTranslationSelect");
 
-    const studyType =
-      document.getElementById("studyType");
+const studyType =
+  document.getElementById("studyType");
 
+studyTranslationSelect.addEventListener(
+  "change",
+  function() {
+
+    studyTranslation =
+      studyTranslationSelect.value;
+
+    studyBible = null;
+  }
+);
     const topicSection =
       document.getElementById("topicSection");
 
