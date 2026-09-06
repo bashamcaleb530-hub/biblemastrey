@@ -360,22 +360,32 @@
 
         suggestions.innerHTML =
 
-          "<div class='suggestion'>" +
-          "<strong>Topic:</strong> " +
-          topic +
-          "</div>" +
+  "<div class='suggestion'>" +
+  "<strong>Study Topic:</strong> " +
+  topic +
+  "</div>" +
 
-          "<div class='suggestion'>" +
-          "Bible verses related to your topic will appear here." +
-          "</div>" +
+  "<div class='suggestion'>" +
+  "<strong>📖 Bible Verses</strong><br>" +
+  "Bible verses related to <strong>" +
+  topic +
+  "</strong> will appear here." +
+  "</div>" +
 
-          "<div class='suggestion'>" +
-          "Relevant dictionary terms will appear here." +
-          "</div>" +
+  "<div class='suggestion'>" +
+  "<strong>📘 Dictionary</strong><br>" +
+  "Relevant Bible dictionary terms will appear here." +
+  "</div>" +
 
-          "<div class='suggestion'>" +
-          "You will also be able to ask the AI Assistant questions about this topic." +
-          "</div>";
+  "<div class='suggestion'>" +
+  "<strong>📚 Commentaries</strong><br>" +
+  "Relevant commentary material will appear here." +
+  "</div>" +
+
+  "<div class='suggestion'>" +
+  "<strong>🤖 AI Assistant</strong><br>" +
+  "Ask questions about the Bible or Christian topics related to your study." +
+  "</div>";
 
         studyWorkspace.scrollIntoView({
           behavior: "smooth"
