@@ -439,7 +439,43 @@
     👤 Account
   </button>
 </header>
+<div id="accountModal" class="account-modal" style="display:none;">
+  <div class="account-box">
 
+    <button id="closeAccountModal" class="account-close">
+      ×
+    </button>
+
+    <h2>BibleMastrey Account</h2>
+
+    <p id="accountMessage">
+      Sign in or create your account.
+    </p>
+
+    <input
+      type="email"
+      id="accountEmail"
+      placeholder="Email address"
+      autocomplete="email"
+    >
+
+    <input
+      type="password"
+      id="accountPassword"
+      placeholder="Password"
+      autocomplete="current-password"
+    >
+
+    <button id="loginAccountButton">
+      Log In
+    </button>
+
+    <button id="signupAccountButton">
+      Create Account
+    </button>
+
+  </div>
+</div>
 <div class="container">
 
   <div class="controls">
