@@ -592,6 +592,8 @@
       ? data.books
       : [];
 
+  const allMatches = [];
+
   books.forEach(
     function(book) {
 
@@ -630,18 +632,13 @@
               const matches =
                 searchWords.some(
                   function(word) {
-
                     return lowerText.includes(word);
-
                   }
                 );
 
-              if (
-                matches &&
-                results.length < 8
-              ) {
+              if (matches) {
 
-                results.push({
+                allMatches.push({
 
                   book:
                     bookName,
@@ -668,8 +665,48 @@
     }
   );
 
-}
 
+  /* =========================
+     RANDOMIZE RESULTS
+  ========================= */
+
+  for (
+    let i = allMatches.length - 1;
+    i > 0;
+    i--
+  ) {
+
+    const j =
+      Math.floor(
+        Math.random() * (i + 1)
+      );
+
+    [
+      allMatches[i],
+      allMatches[j]
+    ] = [
+      allMatches[j],
+      allMatches[i]
+    ];
+
+  }
+
+
+  /* =========================
+     SELECT 8 VERSES
+  ========================= */
+
+  allMatches
+    .slice(0, 8)
+    .forEach(
+      function(result) {
+
+        results.push(result);
+
+      }
+    );
+
+}
           searchBible(bible);
 
 
