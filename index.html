@@ -425,6 +425,75 @@
         flex-direction: column;
       }
     }
+          }
+    }
+
+    .account-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    .account-box {
+      background: white;
+      width: min(90%, 400px);
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+      text-align: center;
+      position: relative;
+    }
+
+    .account-box h2 {
+      margin-top: 0;
+      color: #1f3c88;
+    }
+
+    .account-box input {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 15px;
+    }
+
+    .account-box button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    #loginAccountButton {
+      background: #1f3c88;
+      color: white;
+    }
+
+    #signupAccountButton {
+      background: #e8edf9;
+      color: #1f3c88;
+    }
+
+    .account-close {
+      position: absolute;
+      top: 8px;
+      right: 12px;
+      width: auto !important;
+      padding: 2px 8px !important;
+      background: transparent !important;
+      color: #555;
+      font-size: 28px !important;
+    }
+
+  </style>
   </style>
 
 </head>
