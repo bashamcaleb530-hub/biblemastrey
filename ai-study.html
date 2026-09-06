@@ -383,22 +383,19 @@ async function loadStudyBible() {
     );
 
 
-   startStudyButton.addEventListener(
+  
+        startStudyButton.addEventListener(
   "click",
   async function() {
 
-    const topic =
-      topicInput.value.trim();
+    const topic = topicInput.value.trim();
 
     if (!topic) {
-
       alert("Please enter a topic.");
-
       return;
     }
 
-    studyWorkspace.style.display =
-      "block";
+    studyWorkspace.style.display = "block";
 
     suggestions.innerHTML =
       "<div class='suggestion'>" +
@@ -409,14 +406,14 @@ async function loadStudyBible() {
 
     try {
 
-      const bible =
-        await getKJV();
+      const bible = await getKJV();
 
-      const searchWords =
-        topic
-          .toLowerCase()
-          .split(/\s+/)
-          .filter(word => word.length > 2);
+      const searchWords = topic
+        .toLowerCase()
+        .split(/\s+/)
+        .filter(function(word) {
+          return word.length > 2;
+        });
 
       const results = [];
 
@@ -426,7 +423,7 @@ async function loadStudyBible() {
           return;
         }
 
-        data.forEach(book => {
+        data.forEach(function(book) {
 
           const bookName =
             book.book ||
@@ -439,14 +436,14 @@ async function loadStudyBible() {
               ? book.chapters
               : [];
 
-          chapters.forEach((chapter, chapterIndex) => {
+          chapters.forEach(function(chapter, chapterIndex) {
 
             const verses =
               Array.isArray(chapter.verses)
                 ? chapter.verses
                 : [];
 
-            verses.forEach((verse, verseIndex) => {
+            verses.forEach(function(verse, verseIndex) {
 
               const text =
                 (
@@ -459,9 +456,9 @@ async function loadStudyBible() {
                 text.toLowerCase();
 
               const matches =
-                searchWords.some(word =>
-                  lowerText.includes(word)
-                );
+                searchWords.some(function(word) {
+                  return lowerText.includes(word);
+                });
 
               if (matches && results.length < 20) {
 
@@ -507,7 +504,7 @@ async function loadStudyBible() {
 
       } else {
 
-        results.forEach(result => {
+        results.forEach(function(result) {
 
           html +=
             "<div class='suggestion'>" +
@@ -526,7 +523,6 @@ async function loadStudyBible() {
       }
 
       html +=
-
         "<div class='suggestion'>" +
         "<strong>📘 Dictionary</strong><br>" +
         "Relevant Bible dictionary terms will appear here." +
@@ -544,9 +540,7 @@ async function loadStudyBible() {
 
       suggestions.innerHTML = html;
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
       console.error(
         "Bible topic search error:",
