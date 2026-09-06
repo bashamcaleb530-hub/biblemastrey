@@ -383,58 +383,190 @@ async function loadStudyBible() {
     );
 
 
-    startStudyButton.addEventListener(
-      "click",
-      function() {
+   startStudyButton.addEventListener(
+  "click",
+  async function() {
 
-        const topic =
-          topicInput.value.trim();
+    const topic =
+      topicInput.value.trim();
 
-        if (!topic) {
+    if (!topic) {
 
-          alert("Please enter a topic.");
+      alert("Please enter a topic.");
 
+      return;
+    }
+
+    studyWorkspace.style.display =
+      "block";
+
+    suggestions.innerHTML =
+      "<div class='suggestion'>" +
+      "🔎 Searching the KJV for verses related to <strong>" +
+      topic +
+      "</strong>..." +
+      "</div>";
+
+    try {
+
+      const bible =
+        await getKJV();
+
+      const searchWords =
+        topic
+          .toLowerCase()
+          .split(/\s+/)
+          .filter(word => word.length > 2);
+
+      const results = [];
+
+      function searchBible(data) {
+
+        if (!Array.isArray(data)) {
           return;
         }
 
-        studyWorkspace.style.display =
-          "block";
+        data.forEach(book => {
 
-        suggestions.innerHTML =
+          const bookName =
+            book.book ||
+            book.name ||
+            book.title ||
+            "Unknown Book";
 
-  "<div class='suggestion'>" +
-  "<strong>Study Topic:</strong> " +
-  topic +
-  "</div>" +
+          const chapters =
+            Array.isArray(book.chapters)
+              ? book.chapters
+              : [];
 
-  "<div class='suggestion'>" +
-  "<strong>📖 Bible Verses</strong><br>" +
-  "Bible verses related to <strong>" +
-  topic +
-  "</strong> will appear here." +
-  "</div>" +
+          chapters.forEach((chapter, chapterIndex) => {
 
-  "<div class='suggestion'>" +
-  "<strong>📘 Dictionary</strong><br>" +
-  "Relevant Bible dictionary terms will appear here." +
-  "</div>" +
+            const verses =
+              Array.isArray(chapter.verses)
+                ? chapter.verses
+                : [];
 
-  "<div class='suggestion'>" +
-  "<strong>📚 Commentaries</strong><br>" +
-  "Relevant commentary material will appear here." +
-  "</div>" +
+            verses.forEach((verse, verseIndex) => {
 
-  "<div class='suggestion'>" +
-  "<strong>🤖 AI Assistant</strong><br>" +
-  "Ask questions about the Bible or Christian topics related to your study." +
-  "</div>";
+              const text =
+                (
+                  verse.text ||
+                  verse.verse ||
+                  ""
+                ).toString();
 
-        studyWorkspace.scrollIntoView({
-          behavior: "smooth"
+              const lowerText =
+                text.toLowerCase();
+
+              const matches =
+                searchWords.some(word =>
+                  lowerText.includes(word)
+                );
+
+              if (matches && results.length < 20) {
+
+                const verseNumber =
+                  verse.verse ||
+                  verse.number ||
+                  (verseIndex + 1);
+
+                results.push({
+                  book: bookName,
+                  chapter: chapterIndex + 1,
+                  verse: verseNumber,
+                  text: text
+                });
+
+              }
+
+            });
+
+          });
+
+        }
+
+      }
+
+      searchBible(bible);
+
+      let html =
+        "<div class='suggestion'>" +
+        "<strong>📖 KJV Suggested Verses</strong><br>" +
+        "Starting points for studying <strong>" +
+        topic +
+        "</strong>:" +
+        "</div>";
+
+      if (results.length === 0) {
+
+        html +=
+          "<div class='suggestion'>" +
+          "No direct matches were found in the KJV. " +
+          "You can still search the full Bible manually." +
+          "</div>";
+
+      } else {
+
+        results.forEach(result => {
+
+          html +=
+            "<div class='suggestion'>" +
+            "<strong>" +
+            result.book +
+            " " +
+            result.chapter +
+            ":" +
+            result.verse +
+            "</strong><br>" +
+            result.text +
+            "</div>";
+
         });
 
       }
-    );
+
+      html +=
+
+        "<div class='suggestion'>" +
+        "<strong>📘 Dictionary</strong><br>" +
+        "Relevant Bible dictionary terms will appear here." +
+        "</div>" +
+
+        "<div class='suggestion'>" +
+        "<strong>📚 Commentaries</strong><br>" +
+        "Relevant commentary material will appear here." +
+        "</div>" +
+
+        "<div class='suggestion'>" +
+        "<strong>🤖 AI Assistant</strong><br>" +
+        "Ask questions about the Bible or Christian topics related to your study." +
+        "</div>";
+
+      suggestions.innerHTML = html;
+
+    }
+
+    catch (error) {
+
+      console.error(
+        "Bible topic search error:",
+        error
+      );
+
+      suggestions.innerHTML =
+        "<div class='suggestion'>" +
+        "Sorry, we couldn't search the Bible right now. " +
+        "Please try again." +
+        "</div>";
+
+    }
+
+    studyWorkspace.scrollIntoView({
+      behavior: "smooth"
+    });
+
+  }
+);
 <script src="bible.js"></script>
   </script>
 
