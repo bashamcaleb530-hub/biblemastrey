@@ -795,7 +795,51 @@ closeAccountModal.addEventListener(
     accountModal.style.display = "none";
   }
 );
+const accountEmail =
+  document.getElementById("accountEmail");
 
+const accountPassword =
+  document.getElementById("accountPassword");
+
+const accountMessage =
+  document.getElementById("accountMessage");
+
+const signupAccountButton =
+  document.getElementById("signupAccountButton");
+
+signupAccountButton.addEventListener(
+  "click",
+  async function() {
+
+    const email =
+      accountEmail.value.trim();
+
+    const password =
+      accountPassword.value;
+
+    if (!email || !password) {
+      accountMessage.textContent =
+        "Please enter your email and password.";
+      return;
+    }
+
+    const { data, error } =
+      await supabaseClient.auth.signUp({
+        email: email,
+        password: password
+      });
+
+    if (error) {
+      accountMessage.textContent =
+        error.message;
+      return;
+    }
+
+    accountMessage.textContent =
+      "Account created successfully!";
+
+  }
+);
   /* =========================
      COMMENTARY APIs
   ========================= */
