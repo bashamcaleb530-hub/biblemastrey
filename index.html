@@ -773,6 +773,28 @@ const supabaseClient =
 
   });
   const commentaryCache = {};
+  const accountModal =
+  document.getElementById("accountModal");
+
+const accountButton =
+  document.getElementById("accountButton");
+
+const closeAccountModal =
+  document.getElementById("closeAccountModal");
+
+accountButton.addEventListener(
+  "click",
+  function() {
+    accountModal.style.display = "flex";
+  }
+);
+
+closeAccountModal.addEventListener(
+  "click",
+  function() {
+    accountModal.style.display = "none";
+  }
+);
 
   /* =========================
      COMMENTARY APIs
