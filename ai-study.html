@@ -286,7 +286,18 @@
 
     const suggestions =
       document.getElementById("suggestions");
+let studyBible = null;
 
+async function loadStudyBible() {
+
+  if (studyBible) {
+    return studyBible;
+  }
+
+  studyBible = await getKJV();
+
+  return studyBible;
+}
 
     studyType.addEventListener(
       "change",
