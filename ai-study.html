@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>BibleMastrey AI Study Assistant</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f6fb;
+      color: #222;
+    }
+
+    header {
+      background: #1f3c88;
+      color: white;
+      padding: 25px 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0 0 8px;
+      font-size: 30px;
+    }
+
+    header p {
+      margin: 0;
+      opacity: .9;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+
+    .study-box {
+      background: white;
+      border-radius: 12px;
+      padding: 25px;
+      box-shadow: 0 3px 12px rgba(0,0,0,.08);
+      margin-bottom: 25px;
+    }
+
+    .study-box h2 {
+      margin-top: 0;
+      color: #1f3c88;
+    }
+
+    .topic-input {
+      width: 100%;
+      padding: 14px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin: 15px 0;
+    }
+
+    .start-button {
+      background: #1f3c88;
+      color: white;
+      border: none;
+      padding: 13px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .start-button:hover {
+      opacity: .9;
+    }
+
+    .tools {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .tool {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 18px;
+      background: #fafafa;
+    }
+
+    .tool h3 {
+      margin-top: 0;
+      color: #1f3c88;
+    }
+
+    .suggestions {
+      margin-top: 25px;
+    }
+
+    .suggestion {
+      background: #f7f9ff;
+      border-left: 4px solid #1f3c88;
+      padding: 12px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+    }
+
+    .writing-area {
+      width: 100%;
+      min-height: 250px;
+      padding: 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      resize: vertical;
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+    }
+
+    .back-button {
+      display: inline-block;
+      margin-bottom: 20px;
+      color: #1f3c88;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 25px;
+      }
+
+      .container {
+        padding: 0 12px;
+      }
+
+      .study-box {
+        padding: 18px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>BibleMastrey AI Study Assistant</h1>
+    <p>Your Bible study helper</p>
+  </header>
+
+  <div class="container">
+
+    <a href="index.html" class="back-button">
+      ← Back to BibleMastrey
+    </a>
+
+    <div class="study-box">
+
+      <h2>What do you want to do?</h2>
+
+      <select id="studyType" class="topic-input">
+        <option value="">Choose an option</option>
+        <option value="personal">Personal Bible Study</option>
+        <option value="sermon">Write a Sermon</option>
+        <option value="group">Bible Group Study</option>
+        <option value="ministry">Desert Springs Ministries Sermons</option>
+      </select>
+
+      <div id="topicSection" style="display:none;">
+
+        <h2 id="topicQuestion"></h2>
+
+        <input
+          type="text"
+          id="topicInput"
+          class="topic-input"
+          placeholder="Enter your topic..."
+        >
+
+        <button
+          id="startStudyButton"
+          class="start-button"
+        >
+          Start Study
+        </button>
+
+      </div>
+
+    </div>
+
+    <div id="studyWorkspace" style="display:none;">
+
+      <div class="study-box">
+
+        <h2>Study Tools</h2>
+
+        <div class="tools">
+
+          <div class="tool">
+            <h3>📖 Bible</h3>
+            <p>Find and study Bible verses.</p>
+          </div>
+
+          <div class="tool">
+            <h3>📚 Commentaries</h3>
+            <p>Study Matthew Henry, Gill, JFB, Clarke, Barnes and more.</p>
+          </div>
+
+          <div class="tool">
+            <h3>📘 Dictionary</h3>
+            <p>Look up important Bible words and meanings.</p>
+          </div>
+
+          <div class="tool">
+            <h3>🔎 Concordance</h3>
+            <p>Search for words and Bible references.</p>
+          </div>
+
+          <div class="tool">
+            <h3>🇬🇷 Greek & Hebrew</h3>
+            <p>Explore original-language words.</p>
+          </div>
+
+          <div class="tool">
+            <h3>🤖 AI Assistant</h3>
+            <p>Ask questions about the Bible and Christian topics.</p>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="study-box">
+
+        <h2>Suggested Starting Points</h2>
+
+        <div id="suggestions">
+          Enter a topic to see Bible study suggestions.
+        </div>
+
+      </div>
+
+      <div class="study-box">
+
+        <h2 id="writingTitle">Your Notes</h2>
+
+        <textarea
+          id="writingArea"
+          class="writing-area"
+          placeholder="Write your notes here..."
+        ></textarea>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+
+    const studyType =
+      document.getElementById("studyType");
+
+    const topicSection =
+      document.getElementById("topicSection");
+
+    const topicQuestion =
+      document.getElementById("topicQuestion");
+
+    const topicInput =
+      document.getElementById("topicInput");
+
+    const startStudyButton =
+      document.getElementById("startStudyButton");
+
+    const studyWorkspace =
+      document.getElementById("studyWorkspace");
+
+    const writingTitle =
+      document.getElementById("writingTitle");
+
+    const writingArea =
+      document.getElementById("writingArea");
+
+    const suggestions =
+      document.getElementById("suggestions");
+
+
+    studyType.addEventListener(
+      "change",
+      function() {
+
+        const type = studyType.value;
+
+        topicSection.style.display =
+          type ? "block" : "none";
+
+        if (type === "personal") {
+
+          topicQuestion.textContent =
+            "What are you doing a personal Bible study on?";
+
+          writingTitle.textContent =
+            "Your Personal Study Notes";
+
+        }
+
+        else if (type === "sermon") {
+
+          topicQuestion.textContent =
+            "What will your sermon be about?";
+
+          writingTitle.textContent =
+            "Your Sermon";
+
+        }
+
+        else if (type === "group") {
+
+          topicQuestion.textContent =
+            "What are you doing a group study on?";
+
+          writingTitle.textContent =
+            "Your Bible Group Study";
+
+        }
+
+        else if (type === "ministry") {
+
+          topicQuestion.textContent =
+            "What sermon are you working on?";
+
+          writingTitle.textContent =
+            "Desert Springs Ministries Sermon";
+
+        }
+
+      }
+    );
+
+
+    startStudyButton.addEventListener(
+      "click",
+      function() {
+
+        const topic =
+          topicInput.value.trim();
+
+        if (!topic) {
+
+          alert("Please enter a topic.");
+
+          return;
+        }
+
+        studyWorkspace.style.display =
+          "block";
+
+        suggestions.innerHTML =
+
+          "<div class='suggestion'>" +
+          "<strong>Topic:</strong> " +
+          topic +
+          "</div>" +
+
+          "<div class='suggestion'>" +
+          "Bible verses related to your topic will appear here." +
+          "</div>" +
+
+          "<div class='suggestion'>" +
+          "Relevant dictionary terms will appear here." +
+          "</div>" +
+
+          "<div class='suggestion'>" +
+          "You will also be able to ask the AI Assistant questions about this topic." +
+          "</div>";
+
+        studyWorkspace.scrollIntoView({
+          behavior: "smooth"
+        });
+
+      }
+    );
+
+  </script>
+
+</body>
+</html>
