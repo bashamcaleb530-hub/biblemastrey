@@ -3102,23 +3102,25 @@ function findCommentaryForVerse(
         return;
       }
 
-      const currentlyHighlighted =
-        isHighlighted(
-          selectedVerseNumber
-        );
+    verseElement.addEventListener(
+  "click",
+  function(event) {
 
-      setHighlight(
-        selectedVerseNumber,
-        !currentlyHighlighted
-      );
+    selectVerse(
+      verseNumber,
+      verseElement
+    );
 
-      loadChapter();
+    showVerseMenu(
+      event.pageX,
+      event.pageY,
+      verseNumber,
+      verseText
+    );
 
-      verseMenu.style.display =
-        "none";
-
-    }
-  );
+  }
+);  
+  
 
 
   /* =========================
