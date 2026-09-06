@@ -159,24 +159,57 @@
     <div class="study-box">
 
       <h2>What do you want to do?</h2>
-<label for="studyTranslationSelect">
-  Bible Translation:
-</label>
 
-<select id="studyTranslationSelect" class="topic-input">
-  <option value="KJV">King James Version (KJV)</option>
-  <option value="WEB">World English Bible (WEB)</option>
-  <option value="ASV">American Standard Version (ASV)</option>
-</select>
-      <select id="studyType" class="topic-input">
-        <option value="">Choose an option</option>
-        <option value="personal">Personal Bible Study</option>
-        <option value="sermon">Write a Sermon</option>
-        <option value="group">Bible Group Study</option>
-        <option value="ministry">Desert Springs Ministries Sermons</option>
+      <label for="studyTranslationSelect">
+        Bible Translation:
+      </label>
+
+      <select
+        id="studyTranslationSelect"
+        class="topic-input"
+      >
+        <option value="KJV">
+          King James Version (KJV)
+        </option>
+
+        <option value="WEB">
+          World English Bible (WEB)
+        </option>
+
+        <option value="ASV">
+          American Standard Version (ASV)
+        </option>
       </select>
 
-      <div id="topicSection" style="display:none;">
+      <select
+        id="studyType"
+        class="topic-input"
+      >
+        <option value="">
+          Choose an option
+        </option>
+
+        <option value="personal">
+          Personal Bible Study
+        </option>
+
+        <option value="sermon">
+          Write a Sermon
+        </option>
+
+        <option value="group">
+          Bible Group Study
+        </option>
+
+        <option value="ministry">
+          Desert Springs Ministries Sermons
+        </option>
+      </select>
+
+      <div
+        id="topicSection"
+        style="display:none;"
+      >
 
         <h2 id="topicQuestion"></h2>
 
@@ -198,7 +231,11 @@
 
     </div>
 
-    <div id="studyWorkspace" style="display:none;">
+
+    <div
+      id="studyWorkspace"
+      style="display:none;"
+    >
 
       <div class="study-box">
 
@@ -208,51 +245,71 @@
 
           <div class="tool">
             <h3>📖 Bible</h3>
-            <p>Find and study Bible verses.</p>
+            <p>
+              Find and study Bible verses.
+            </p>
           </div>
 
           <div class="tool">
             <h3>📚 Commentaries</h3>
-            <p>Study Matthew Henry, Gill, JFB, Clarke, Barnes and more.</p>
+            <p>
+              Study Matthew Henry, Gill, JFB,
+              Clarke, Barnes and more.
+            </p>
           </div>
 
           <div class="tool">
             <h3>📘 Dictionary</h3>
-            <p>Look up important Bible words and meanings.</p>
+            <p>
+              Look up important Bible words
+              and meanings.
+            </p>
           </div>
 
           <div class="tool">
             <h3>🔎 Concordance</h3>
-            <p>Search for words and Bible references.</p>
+            <p>
+              Search for words and Bible references.
+            </p>
           </div>
 
           <div class="tool">
             <h3>🇬🇷 Greek & Hebrew</h3>
-            <p>Explore original-language words.</p>
+            <p>
+              Explore original-language words.
+            </p>
           </div>
 
           <div class="tool">
             <h3>🤖 AI Assistant</h3>
-            <p>Ask questions about the Bible and Christian topics.</p>
+            <p>
+              Ask questions about the Bible
+              and Christian topics.
+            </p>
           </div>
 
         </div>
 
       </div>
+
 
       <div class="study-box">
 
         <h2>Suggested Starting Points</h2>
 
         <div id="suggestions">
-          Enter a topic to see Bible study suggestions.
+          Enter a topic to see Bible study
+          suggestions.
         </div>
 
       </div>
 
+
       <div class="study-box">
 
-        <h2 id="writingTitle">Your Notes</h2>
+        <h2 id="writingTitle">
+          Your Notes
+        </h2>
 
         <textarea
           id="writingArea"
@@ -266,78 +323,137 @@
 
   </div>
 
+
+  <!-- Bible data functions MUST load first -->
+  <script src="bible.js"></script>
+
+
+  <!-- AI Study Assistant JavaScript -->
   <script>
-const studyTranslationSelect =
-  document.getElementById("studyTranslationSelect");
 
-const studyType =
-  document.getElementById("studyType");
+    let studyBible = null;
 
-studyTranslationSelect.addEventListener(
-  "change",
-  function() {
+    let studyTranslation = "KJV";
 
-    studyTranslation =
-      studyTranslationSelect.value;
 
-    studyBible = null;
-  }
-);
+    const studyTranslationSelect =
+      document.getElementById(
+        "studyTranslationSelect"
+      );
+
+    const studyType =
+      document.getElementById(
+        "studyType"
+      );
+
     const topicSection =
-      document.getElementById("topicSection");
+      document.getElementById(
+        "topicSection"
+      );
 
     const topicQuestion =
-      document.getElementById("topicQuestion");
+      document.getElementById(
+        "topicQuestion"
+      );
 
     const topicInput =
-      document.getElementById("topicInput");
+      document.getElementById(
+        "topicInput"
+      );
 
     const startStudyButton =
-      document.getElementById("startStudyButton");
+      document.getElementById(
+        "startStudyButton"
+      );
 
     const studyWorkspace =
-      document.getElementById("studyWorkspace");
+      document.getElementById(
+        "studyWorkspace"
+      );
 
     const writingTitle =
-      document.getElementById("writingTitle");
+      document.getElementById(
+        "writingTitle"
+      );
 
     const writingArea =
-      document.getElementById("writingArea");
+      document.getElementById(
+        "writingArea"
+      );
 
     const suggestions =
-      document.getElementById("suggestions");
-let studyBible = null;
-let studyTranslation = "KJV";
+      document.getElementById(
+        "suggestions"
+      );
 
-async function loadStudyBible() {
 
-  if (studyBible) {
-    return studyBible;
-  }
+    /* =========================
+       TRANSLATION
+    ========================= */
 
-  if (studyTranslation === "WEB") {
-    studyBible = await getWEB();
-  }
+    studyTranslationSelect.addEventListener(
+      "change",
+      function() {
 
-  else if (studyTranslation === "ASV") {
-    studyBible = await getASV();
-  }
+        studyTranslation =
+          studyTranslationSelect.value;
 
-  else {
-    studyBible = await getKJV();
-  }
+        studyBible = null;
 
-  return studyBible;
-}
+      }
+    );
+
+
+    /* =========================
+       LOAD SELECTED BIBLE
+    ========================= */
+
+    async function loadStudyBible() {
+
+      if (studyBible) {
+        return studyBible;
+      }
+
+      if (studyTranslation === "WEB") {
+
+        studyBible =
+          await getWEB();
+
+      }
+
+      else if (studyTranslation === "ASV") {
+
+        studyBible =
+          await getASV();
+
+      }
+
+      else {
+
+        studyBible =
+          await getKJV();
+
+      }
+
+      return studyBible;
+
+    }
+
+
+    /* =========================
+       STUDY TYPE
+    ========================= */
 
     studyType.addEventListener(
       "change",
       function() {
 
-        const type = studyType.value;
+        const type =
+          studyType.value;
 
         topicSection.style.display =
           type ? "block" : "none";
+
 
         if (type === "personal") {
 
@@ -347,7 +463,11 @@ async function loadStudyBible() {
           writingTitle.textContent =
             "Your Personal Study Notes";
 
+          writingArea.placeholder =
+            "Write your personal Bible study notes here...";
+
         }
+
 
         else if (type === "sermon") {
 
@@ -357,7 +477,11 @@ async function loadStudyBible() {
           writingTitle.textContent =
             "Your Sermon";
 
+          writingArea.placeholder =
+            "Write your sermon here...";
+
         }
+
 
         else if (type === "group") {
 
@@ -367,7 +491,11 @@ async function loadStudyBible() {
           writingTitle.textContent =
             "Your Bible Group Study";
 
+          writingArea.placeholder =
+            "Write your Bible group study here...";
+
         }
+
 
         else if (type === "ministry") {
 
@@ -377,195 +505,344 @@ async function loadStudyBible() {
           writingTitle.textContent =
             "Desert Springs Ministries Sermon";
 
+          writingArea.placeholder =
+            "Write your Desert Springs Ministries sermon here...";
+
         }
 
       }
     );
 
 
-  
-        startStudyButton.addEventListener(
-  "click",
-  async function() {
+    /* =========================
+       START STUDY
+    ========================= */
 
-    const topic = topicInput.value.trim();
+    startStudyButton.addEventListener(
+      "click",
+      async function() {
 
-    if (!topic) {
-      alert("Please enter a topic.");
-      return;
-    }
+        const topic =
+          topicInput.value.trim();
 
-    studyWorkspace.style.display = "block";
 
-    suggestions.innerHTML =
-      "<div class='suggestion'>" +
-      "🔎 Searching the KJV for verses related to <strong>" +
-      topic +
-      "</strong>..." +
-      "</div>";
+        if (!topic) {
 
-    try {
+          alert(
+            "Please enter a topic."
+          );
 
-      const bible = await getKJV();
-
-      const searchWords = topic
-        .toLowerCase()
-        .split(/\s+/)
-        .filter(function(word) {
-          return word.length > 2;
-        });
-
-      const results = [];
-
-      function searchBible(data) {
-
-        if (!Array.isArray(data)) {
           return;
-        }
-
-        data.forEach(function(book) {
-
-          const bookName =
-            book.book ||
-            book.name ||
-            book.title ||
-            "Unknown Book";
-
-          const chapters =
-            Array.isArray(book.chapters)
-              ? book.chapters
-              : [];
-
-          chapters.forEach(function(chapter, chapterIndex) {
-
-            const verses =
-              Array.isArray(chapter.verses)
-                ? chapter.verses
-                : [];
-
-            verses.forEach(function(verse, verseIndex) {
-
-              const text =
-                (
-                  verse.text ||
-                  verse.verse ||
-                  ""
-                ).toString();
-
-              const lowerText =
-                text.toLowerCase();
-
-              const matches =
-                searchWords.some(function(word) {
-                  return lowerText.includes(word);
-                });
-
-              if (matches && results.length < 20) {
-
-                const verseNumber =
-                  verse.verse ||
-                  verse.number ||
-                  (verseIndex + 1);
-
-                results.push({
-                  book: bookName,
-                  chapter: chapterIndex + 1,
-                  verse: verseNumber,
-                  text: text
-                });
-
-              }
-
-            });
-
-          });
 
         }
 
-      }
 
-      searchBible(bible);
+        studyWorkspace.style.display =
+          "block";
 
-      let html =
-        "<div class='suggestion'>" +
-        "<strong>📖 KJV Suggested Verses</strong><br>" +
-        "Starting points for studying <strong>" +
-        topic +
-        "</strong>:" +
-        "</div>";
 
-      if (results.length === 0) {
-
-        html +=
+        suggestions.innerHTML =
           "<div class='suggestion'>" +
-          "No direct matches were found in the KJV. " +
-          "You can still search the full Bible manually." +
+
+          "🔎 Searching the KJV for verses related to <strong>" +
+
+          topic +
+
+          "</strong>..." +
+
           "</div>";
 
-      } else {
 
-        results.forEach(function(result) {
+        try {
 
-          html +=
+          /*
+            Topic suggestions ALWAYS use KJV.
+            The translation selector will be used
+            for the study Bible itself.
+          */
+
+          const bible =
+            await getKJV();
+
+
+          const searchWords =
+            topic
+              .toLowerCase()
+              .split(/\s+/)
+              .filter(
+                function(word) {
+
+                  return word.length > 2;
+
+                }
+              );
+
+
+          const results = [];
+
+
+          /* =========================
+             SEARCH BIBLE
+          ========================= */
+
+          function searchBible(data) {
+
+            if (!Array.isArray(data)) {
+
+              return;
+
+            }
+
+
+            data.forEach(
+              function(book) {
+
+                const bookName =
+                  book.book ||
+                  book.name ||
+                  book.title ||
+                  "Unknown Book";
+
+
+                const chapters =
+                  Array.isArray(
+                    book.chapters
+                  )
+                    ? book.chapters
+                    : [];
+
+
+                chapters.forEach(
+                  function(
+                    chapter,
+                    chapterIndex
+                  ) {
+
+                    const verses =
+                      Array.isArray(
+                        chapter.verses
+                      )
+                        ? chapter.verses
+                        : [];
+
+
+                    verses.forEach(
+                      function(
+                        verse,
+                        verseIndex
+                      ) {
+
+                        const text =
+                          (
+                            verse.text ||
+                            verse.verse ||
+                            ""
+                          ).toString();
+
+
+                        const lowerText =
+                          text.toLowerCase();
+
+
+                        const matches =
+                          searchWords.some(
+                            function(word) {
+
+                              return lowerText.includes(
+                                word
+                              );
+
+                            }
+                          );
+
+
+                        if (
+                          matches &&
+                          results.length < 20
+                        ) {
+
+                          const verseNumber =
+                            verse.verse ||
+                            verse.number ||
+                            (verseIndex + 1);
+
+
+                          results.push({
+
+                            book:
+                              bookName,
+
+                            chapter:
+                              chapterIndex + 1,
+
+                            verse:
+                              verseNumber,
+
+                            text:
+                              text
+
+                          });
+
+                        }
+
+                      }
+                    );
+
+                  }
+                );
+
+              }
+            );
+
+          }
+
+
+          searchBible(bible);
+
+
+          /* =========================
+             DISPLAY KJV RESULTS
+          ========================= */
+
+          let html =
             "<div class='suggestion'>" +
-            "<strong>" +
-            result.book +
-            " " +
-            result.chapter +
-            ":" +
-            result.verse +
-            "</strong><br>" +
-            result.text +
+
+            "<strong>📖 KJV Suggested Verses</strong><br>" +
+
+            "Starting points for studying <strong>" +
+
+            topic +
+
+            "</strong>:" +
+
             "</div>";
 
+
+          if (results.length === 0) {
+
+            html +=
+              "<div class='suggestion'>" +
+
+              "No direct matches were found in the KJV. " +
+
+              "You can still search the full Bible manually." +
+
+              "</div>";
+
+          }
+
+
+          else {
+
+            results.forEach(
+              function(result) {
+
+                html +=
+                  "<div class='suggestion'>" +
+
+                  "<strong>" +
+
+                  result.book +
+
+                  " " +
+
+                  result.chapter +
+
+                  ":" +
+
+                  result.verse +
+
+                  "</strong><br>" +
+
+                  result.text +
+
+                  "</div>";
+
+              }
+            );
+
+          }
+
+
+          /* =========================
+             DICTIONARY
+          ========================= */
+
+          html +=
+
+            "<div class='suggestion'>" +
+
+            "<strong>📘 Dictionary</strong><br>" +
+
+            "Relevant Bible dictionary terms will appear here." +
+
+            "</div>";
+
+
+          /* =========================
+             COMMENTARIES
+          ========================= */
+
+          html +=
+
+            "<div class='suggestion'>" +
+
+            "<strong>📚 Commentaries</strong><br>" +
+
+            "Relevant commentary material will appear here." +
+
+            "</div>";
+
+
+          /* =========================
+             AI ASSISTANT
+          ========================= */
+
+          html +=
+
+            "<div class='suggestion'>" +
+
+            "<strong>🤖 AI Assistant</strong><br>" +
+
+            "Ask questions about the Bible or Christian topics related to your study." +
+
+            "</div>";
+
+
+          suggestions.innerHTML =
+            html;
+
+        }
+
+
+        catch (error) {
+
+          console.error(
+            "Bible topic search error:",
+            error
+          );
+
+
+          suggestions.innerHTML =
+            "<div class='suggestion'>" +
+
+            "Sorry, we couldn't search the Bible right now. " +
+
+            "Please try again." +
+
+            "</div>";
+
+        }
+
+
+        studyWorkspace.scrollIntoView({
+          behavior: "smooth"
         });
 
       }
+    );
 
-      html +=
-        "<div class='suggestion'>" +
-        "<strong>📘 Dictionary</strong><br>" +
-        "Relevant Bible dictionary terms will appear here." +
-        "</div>" +
-
-        "<div class='suggestion'>" +
-        "<strong>📚 Commentaries</strong><br>" +
-        "Relevant commentary material will appear here." +
-        "</div>" +
-
-        "<div class='suggestion'>" +
-        "<strong>🤖 AI Assistant</strong><br>" +
-        "Ask questions about the Bible or Christian topics related to your study." +
-        "</div>";
-
-      suggestions.innerHTML = html;
-
-    } catch (error) {
-
-      console.error(
-        "Bible topic search error:",
-        error
-      );
-
-      suggestions.innerHTML =
-        "<div class='suggestion'>" +
-        "Sorry, we couldn't search the Bible right now. " +
-        "Please try again." +
-        "</div>";
-
-    }
-
-    studyWorkspace.scrollIntoView({
-  behavior: "smooth"
-});
-
-  }
-);
   </script>
-  <script src="bible.js"></script>
-
-  <script>
-const studyTranslationSelect =
 
 </body>
 </html>
