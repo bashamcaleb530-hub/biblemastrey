@@ -3092,36 +3092,37 @@ function findCommentaryForVerse(
      HIGHLIGHT
   ========================= */
 
-  highlightVerseButton.addEventListener(
-    "click",
-    function() {
+  /* =========================
+   HIGHLIGHT
+========================= */
 
-      if (
-        selectedVerseNumber === null
-      ) {
-        return;
-      }
-
-    verseElement.addEventListener(
+highlightVerseButton.addEventListener(
   "click",
-  function(event) {
+  function() {
 
-    selectVerse(
-      verseNumber,
-      verseElement
+    if (
+      selectedVerseNumber === null
+    ) {
+      return;
+    }
+
+    const currentlyHighlighted =
+      isHighlighted(
+        selectedVerseNumber
+      );
+
+    setHighlight(
+      selectedVerseNumber,
+      !currentlyHighlighted
     );
 
-    showVerseMenu(
-      event.pageX,
-      event.pageY,
-      verseNumber,
-      verseText
-    );
+    loadChapter();
+
+    verseMenu.style.display =
+      "none";
 
   }
-);  
-  
-
+);
 
   /* =========================
      BOOKMARK
