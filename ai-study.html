@@ -287,6 +287,7 @@
     const suggestions =
       document.getElementById("suggestions");
 let studyBible = null;
+let studyTranslation = "KJV";
 
 async function loadStudyBible() {
 
@@ -294,7 +295,17 @@ async function loadStudyBible() {
     return studyBible;
   }
 
-  studyBible = await getKJV();
+  if (studyTranslation === "WEB") {
+    studyBible = await getWEB();
+  }
+
+  else if (studyTranslation === "ASV") {
+    studyBible = await getASV();
+  }
+
+  else {
+    studyBible = await getKJV();
+  }
 
   return studyBible;
 }
