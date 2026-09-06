@@ -587,115 +587,88 @@
 
           function searchBible(data) {
 
-            if (!Array.isArray(data)) {
+  const books =
+    Array.isArray(data.books)
+      ? data.books
+      : [];
 
-              return;
+  books.forEach(
+    function(book) {
 
-            }
+      const bookName =
+        book.englishName ||
+        book.book ||
+        book.name ||
+        book.title ||
+        "Unknown Book";
 
+      const chapters =
+        Array.isArray(book.chapters)
+          ? book.chapters
+          : [];
 
-            data.forEach(
-              function(book) {
+      chapters.forEach(
+        function(chapter) {
 
-                const bookName =
-                  book.book ||
-                  book.name ||
-                  book.title ||
-                  "Unknown Book";
+          const verses =
+            Array.isArray(chapter.verses)
+              ? chapter.verses
+              : [];
 
+          verses.forEach(
+            function(verse) {
 
-                const chapters =
-                  Array.isArray(
-                    book.chapters
-                  )
-                    ? book.chapters
-                    : [];
+              const text =
+                (
+                  verse.text ||
+                  ""
+                ).toString();
 
+              const lowerText =
+                text.toLowerCase();
 
-                chapters.forEach(
-                  function(
-                    chapter,
-                    chapterIndex
-                  ) {
+              const matches =
+                searchWords.some(
+                  function(word) {
 
-                    const verses =
-                      Array.isArray(
-                        chapter.verses
-                      )
-                        ? chapter.verses
-                        : [];
-
-
-                    verses.forEach(
-                      function(
-                        verse,
-                        verseIndex
-                      ) {
-
-                        const text =
-                          (
-                            verse.text ||
-                            verse.verse ||
-                            ""
-                          ).toString();
-
-
-                        const lowerText =
-                          text.toLowerCase();
-
-
-                        const matches =
-                          searchWords.some(
-                            function(word) {
-
-                              return lowerText.includes(
-                                word
-                              );
-
-                            }
-                          );
-
-
-                        if (
-                          matches &&
-                          results.length < 8
-                        ) {
-
-                          const verseNumber =
-                            verse.verse ||
-                            verse.number ||
-                            (verseIndex + 1);
-
-
-                          results.push({
-
-                            book:
-                              bookName,
-
-                            chapter:
-                              chapterIndex + 1,
-
-                            verse:
-                              verseNumber,
-
-                            text:
-                              text
-
-                          });
-
-                        }
-
-                      }
-                    );
+                    return lowerText.includes(word);
 
                   }
                 );
 
+              if (
+                matches &&
+                results.length < 8
+              ) {
+
+                results.push({
+
+                  book:
+                    bookName,
+
+                  chapter:
+                    chapter.chapter,
+
+                  verse:
+                    verse.number,
+
+                  text:
+                    text
+
+                });
+
               }
-            );
 
-          }
+            }
+          );
 
+        }
+      );
+
+    }
+  );
+
+}
 
           searchBible(bible);
 
