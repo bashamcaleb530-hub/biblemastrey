@@ -585,7 +585,7 @@
              SEARCH BIBLE
           ========================= */
 
-          function searchBible(data) {
+         function searchBible(data) {
 
   const books =
     Array.isArray(data.books)
@@ -594,84 +594,94 @@
 
   const allMatches = [];
 
-  books.forEach(
-    function(book) {
+  books.forEach(function(book) {
 
-      const bookName =
-        book.englishName ||
-        book.book ||
-        book.name ||
-        book.title ||
-        "Unknown Book";
+    const bookName =
+      book.englishName ||
+      book.book ||
+      book.name ||
+      book.title ||
+      "Unknown Book";
 
-      const chapters =
-        Array.isArray(book.chapters)
-          ? book.chapters
+    const chapters =
+      Array.isArray(book.chapters)
+        ? book.chapters
+        : [];
+
+    chapters.forEach(function(chapter) {
+
+      const verses =
+        Array.isArray(chapter.verses)
+          ? chapter.verses
           : [];
 
-      chapters.forEach(
-        function(chapter) {
+      verses.forEach(function(verse) {
 
-          const verses =
-            Array.isArray(chapter.verses)
-              ? chapter.verses
-              : [];
+        const text =
+          (verse.text || "").toString();
 
-          verses.forEach(
-            function(verse) {
+        const lowerText =
+          text.toLowerCase();
 
-              const text =
-                (
-                  verse.text ||
-                  ""
-                ).toString();
+        const matches =
+          searchWords.some(function(word) {
+            return lowerText.includes(word);
+          });
 
-              const lowerText =
-                text.toLowerCase();
+        if (matches) {
 
-              const matches =
-                searchWords.some(
-                  function(word) {
-                    return lowerText.includes(word);
-                  }
-                );
-
-              if (matches) {
-
-                allMatches.push({
-
-                  book:
-                    bookName,
-
-                  chapter:
-                    chapter.chapter,
-
-                  verse:
-                    verse.number,
-
-                  text:
-                    text
-
-                });
-
-              }
-
-            }
-          );
+          allMatches.push({
+            book: bookName,
+            chapter: chapter.chapter,
+            verse: verse.number,
+            text: text
+          });
 
         }
-      );
 
-    }
-  );
+      });
+
+    });
+
+  });
 
 
   /* =========================
-     RANDOMIZE RESULTS
+     PICK VERSES FROM DIFFERENT
+     PARTS OF THE BIBLE
+  ========================= */
+
+  const selected = [];
+
+  if (allMatches.length === 0) {
+    return;
+  }
+
+  const step =
+    Math.max(
+      1,
+      Math.floor(allMatches.length / 8)
+    );
+
+
+  for (
+    let i = 0;
+    i < allMatches.length && selected.length < 8;
+    i += step
+  ) {
+
+    selected.push(allMatches[i]);
+
+  }
+
+
+  /* =========================
+     RANDOMIZE THE SELECTED
+     VERSES
   ========================= */
 
   for (
-    let i = allMatches.length - 1;
+    let i = selected.length - 1;
     i > 0;
     i--
   ) {
@@ -682,29 +692,21 @@
       );
 
     [
-      allMatches[i],
-      allMatches[j]
+      selected[i],
+      selected[j]
     ] = [
-      allMatches[j],
-      allMatches[i]
+      selected[j],
+      selected[i]
     ];
 
   }
 
 
-  /* =========================
-     SELECT 8 VERSES
-  ========================= */
+  selected.forEach(function(result) {
 
-  allMatches
-    .slice(0, 8)
-    .forEach(
-      function(result) {
+    results.push(result);
 
-        results.push(result);
-
-      }
-    );
+  });
 
 }
           searchBible(bible);
