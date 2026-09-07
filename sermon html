@@ -1,1104 +1,1236 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>Write a Sermon - BibleMastrey</title>
-
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f5f7fa;
-      color: #222;
-    }
-
-    header {
-      background: #1f2937;
-      color: white;
-      padding: 18px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 15px;
-      flex-wrap: wrap;
-    }
-
-    header h1 {
-      margin: 0;
-      font-size: 24px;
-    }
-
-    header p {
-      margin: 5px 0 0;
-      color: #d1d5db;
-      font-size: 14px;
-    }
-
-    .back-btn {
-      color: white;
-      text-decoration: none;
-      background: #374151;
-      padding: 10px 15px;
-      border-radius: 8px;
-      font-size: 14px;
-    }
-
-    .back-btn:hover {
-      background: #4b5563;
-    }
-
-    .page {
-      max-width: 1200px;
-      margin: auto;
-      padding: 20px;
-    }
-
-    .hero {
-      background: white;
-      border-radius: 14px;
-      padding: 25px;
-      margin-bottom: 20px;
-      box-shadow: 0 2px 8px rgba(0,0,0,.08);
-    }
-
-    .hero h2 {
-      margin-top: 0;
-      color: #1f2937;
-    }
-
-    .hero p {
-      line-height: 1.6;
-      color: #4b5563;
-    }
-
-    .course-intro {
-      background: #eef6ff;
-      border-left: 5px solid #2563eb;
-      padding: 15px;
-      border-radius: 8px;
-      margin-top: 15px;
-      line-height: 1.6;
-    }
-
-    .step {
-      background: white;
-      border-radius: 14px;
-      margin-bottom: 20px;
-      box-shadow: 0 2px 8px rgba(0,0,0,.07);
-      overflow: hidden;
-    }
-
-    .step-header {
-      background: #f8fafc;
-      padding: 18px 20px;
-      border-bottom: 1px solid #e5e7eb;
-    }
-
-    .step-number {
-      display: inline-block;
-      background: #2563eb;
-      color: white;
-      border-radius: 50%;
-      width: 34px;
-      height: 34px;
-      text-align: center;
-      line-height: 34px;
-      font-weight: bold;
-      margin-right: 8px;
-    }
-
-    .step-header h3 {
-      display: inline;
-      font-size: 20px;
-      color: #1f2937;
-    }
-
-    .step-body {
-      padding: 20px;
-    }
-
-    .lesson {
-      background: #f9fafb;
-      border-radius: 8px;
-      padding: 14px;
-      margin-bottom: 18px;
-      line-height: 1.6;
-    }
-
-    .lesson strong {
-      color: #1f2937;
-    }
-
-    label {
-      display: block;
-      font-weight: bold;
-      margin: 12px 0 6px;
-    }
-
-    input,
-    textarea,
-    select {
-      width: 100%;
-      padding: 11px;
-      border: 1px solid #d1d5db;
-      border-radius: 8px;
-      font-family: inherit;
-      font-size: 15px;
-      background: white;
-    }
-
-    textarea {
-      min-height: 110px;
-      resize: vertical;
-      line-height: 1.5;
-    }
-
-    .small-textarea {
-      min-height: 80px;
-    }
-
-    button {
-      border: none;
-      border-radius: 8px;
-      padding: 11px 16px;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: bold;
-      margin-top: 10px;
-    }
-
-    .primary {
-      background: #2563eb;
-      color: white;
-    }
-
-    .primary:hover {
-      background: #1d4ed8;
-    }
-
-    .secondary {
-      background: #e5e7eb;
-      color: #1f2937;
-    }
-
-    .success {
-      background: #15803d;
-      color: white;
-    }
-
-    .danger {
-      background: #b91c1c;
-      color: white;
-    }
-
-    .tool-row {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 10px;
-    }
-
-    .tool-row button {
-      margin-top: 0;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    .message {
-      margin-top: 12px;
-      padding: 10px;
-      border-radius: 8px;
-      background: #f3f4f6;
-      color: #374151;
-      display: none;
-    }
-
-    .message.show {
-      display: block;
-    }
-
-    .verse-results {
-      margin-top: 15px;
-    }
-
-    .verse-card {
-      border: 1px solid #e5e7eb;
-      border-radius: 10px;
-      margin-bottom: 12px;
-      overflow: hidden;
-      background: white;
-    }
-
-    .verse-card-main {
-      padding: 14px;
-      cursor: pointer;
-    }
-
-    .verse-card-main:hover {
-      background: #f9fafb;
-    }
-
-    .verse-reference {
-      font-weight: bold;
-      color: #2563eb;
-      margin-bottom: 7px;
-    }
-
-    .verse-text {
-      line-height: 1.6;
-    }
-
-    .verse-toolbar {
-      display: none;
-      padding: 10px;
-      border-top: 1px solid #e5e7eb;
-      background: #f9fafb;
-      gap: 7px;
-      flex-wrap: wrap;
-    }
-
-    .verse-toolbar.show {
-      display: flex;
-    }
-
-    .verse-toolbar button {
-      margin: 0;
-      padding: 7px 10px;
-      font-size: 12px;
-    }
-
-    .note-box {
-      display: none;
-      padding: 12px;
-      border-top: 1px solid #e5e7eb;
-      background: #fff;
-    }
-
-    .note-box.show {
-      display: block;
-    }
-
-    .note-box textarea {
-      min-height: 75px;
-    }
-
-    .study-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 15px;
-    }
-
-    .point-box {
-      border: 1px solid #e5e7eb;
-      border-radius: 10px;
-      padding: 15px;
-      margin-bottom: 12px;
-    }
-
-    .point-box h4 {
-      margin-top: 0;
-    }
-
-    .dictionary-result,
-    .word-result,
-    .commentary-result {
-      margin-top: 15px;
-      padding: 15px;
-      border-radius: 10px;
-      background: #f9fafb;
-      line-height: 1.6;
-    }
-
-    .commentary-layout {
-      display: grid;
-      grid-template-columns: 1fr 360px;
-      gap: 15px;
-      margin-top: 15px;
-    }
-
-    .commentary-verses {
-      min-width: 0;
-    }
-
-    .commentary-side {
-      background: #f9fafb;
-      border: 1px solid #e5e7eb;
-      border-radius: 10px;
-      padding: 15px;
-      position: sticky;
-      top: 15px;
-      max-height: 600px;
-      overflow-y: auto;
-    }
-
-    .commentary-side h4 {
-      margin-top: 0;
-    }
-
-    .commentary-entry {
-      border-bottom: 1px solid #ddd;
-      padding: 12px 0;
-      line-height: 1.55;
-    }
-
-    .commentary-entry:last-child {
-      border-bottom: none;
-    }
-
-    .commentary-ref {
-      font-weight: bold;
-      color: #2563eb;
-      margin-bottom: 5px;
-    }
-
-    .outline-box {
-      border: 2px dashed #d1d5db;
-      border-radius: 10px;
-      padding: 15px;
-      margin-top: 12px;
-    }
-
-    .final-sermon {
-      background: #fff;
-      border: 1px solid #d1d5db;
-      border-radius: 10px;
-      padding: 25px;
-      line-height: 1.7;
-    }
-
-    .final-sermon h2,
-    .final-sermon h3 {
-      color: #1f2937;
-    }
-
-    .status {
-      padding: 10px;
-      background: #ecfdf5;
-      color: #166534;
-      border-radius: 8px;
-      margin-top: 10px;
-      display: none;
-    }
-
-    .status.show {
-      display: block;
-    }
-
-    .ai-box {
-      background: #f5f3ff;
-      border-left: 5px solid #7c3aed;
-      padding: 15px;
-      border-radius: 8px;
-      line-height: 1.6;
-    }
-
-    footer {
-      text-align: center;
-      color: #6b7280;
-      padding: 30px 20px;
-      font-size: 13px;
-    }
-
-    @media (max-width: 850px) {
-      .study-grid,
-      .commentary-layout {
-        grid-template-columns: 1fr;
-      }
-
-      .commentary-side {
-        position: static;
-        max-height: none;
-      }
-    }
-
-    @media print {
-      header,
-      .hero,
-      .step-header,
-      .lesson,
-      .tool-row,
-      button,
-      .back-btn,
-      footer {
-        display: none !important;
-      }
-
-      body {
-        background: white;
-      }
-
-      .page {
-        max-width: none;
-        padding: 0;
-      }
-
-      .step {
-        box-shadow: none;
-        margin-bottom: 0;
-      }
-
-      .step:not(#finalStep) {
-        display: none;
-      }
-
-      #finalStep {
-        display: block !important;
-      }
-
-      .final-sermon {
-        border: none;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>BibleMastrey - Write a Sermon</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f5f5f5;
+  color: #222;
+}
+
+header {
+  background: #222;
+  color: white;
+  padding: 18px 20px;
+}
+
+.header-inner {
+  max-width: 1200px;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.back-button {
+  color: white;
+  text-decoration: none;
+  background: #444;
+  padding: 10px 15px;
+  border-radius: 6px;
+}
+
+.back-button:hover {
+  background: #555;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 25px auto;
+  padding: 0 15px 50px;
+}
+
+.intro {
+  background: white;
+  padding: 25px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+
+.intro h2 {
+  margin-top: 0;
+}
+
+.notice {
+  background: #fff8dc;
+  border-left: 5px solid #d6a900;
+  padding: 15px;
+  margin: 15px 0;
+  border-radius: 5px;
+}
+
+.course {
+  margin-bottom: 25px;
+}
+
+.course h2 {
+  margin-bottom: 10px;
+}
+
+.lesson {
+  background: white;
+  border-radius: 10px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 7px rgba(0,0,0,.07);
+  overflow: hidden;
+}
+
+.lesson-header {
+  padding: 18px;
+  cursor: pointer;
+  background: #fafafa;
+  border-bottom: 1px solid #eee;
+}
+
+.lesson-header:hover {
+  background: #f0f0f0;
+}
+
+.lesson-header h3 {
+  margin: 0;
+  color: #333;
+}
+
+.lesson-content {
+  display: none;
+  padding: 20px;
+  line-height: 1.65;
+}
+
+.lesson.open .lesson-content {
+  display: block;
+}
+
+.lesson-content h4 {
+  margin-bottom: 5px;
+}
+
+.lesson-content ul {
+  padding-left: 22px;
+}
+
+.tip {
+  background: #eef6ff;
+  border-left: 4px solid #3973ac;
+  padding: 12px;
+  margin: 15px 0;
+  border-radius: 4px;
+}
+
+.warning {
+  background: #fff0f0;
+  border-left: 4px solid #b33;
+  padding: 12px;
+  margin: 15px 0;
+  border-radius: 4px;
+}
+
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+
+.card h2 {
+  margin-top: 0;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-top: 12px;
+  margin-bottom: 5px;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  padding: 11px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 15px;
+}
+
+textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+button {
+  border: none;
+  background: #333;
+  color: white;
+  padding: 11px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+button:hover {
+  background: #555;
+}
+
+.secondary {
+  background: #777;
+}
+
+.green {
+  background: #386641;
+}
+
+.blue {
+  background: #315c8a;
+}
+
+.red {
+  background: #8b3a3a;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.verse-card {
+  background: #fafafa;
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 7px;
+  margin-top: 10px;
+}
+
+.verse-reference {
+  font-weight: bold;
+  margin-bottom: 7px;
+}
+
+.verse-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.verse-actions button {
+  margin: 0;
+  padding: 7px 10px;
+  font-size: 13px;
+}
+
+.search-results {
+  margin-top: 15px;
+}
+
+.commentary-box {
+  background: #fafafa;
+  border: 1px solid #ddd;
+  padding: 18px;
+  border-radius: 8px;
+  line-height: 1.6;
+  min-height: 100px;
+}
+
+.point-box {
+  background: #fafafa;
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 15px;
+}
+
+.saved-message {
+  color: #386641;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+#sermonOutput {
+  white-space: pre-wrap;
+  line-height: 1.7;
+}
+
+footer {
+  text-align: center;
+  padding: 25px;
+  color: #777;
+}
+
+@media (max-width: 800px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .header-inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media print {
+  header,
+  .course,
+  button,
+  .back-button,
+  .intro,
+  footer {
+    display: none !important;
+  }
+
+  body {
+    background: white;
+  }
+
+  .card {
+    box-shadow: none;
+    border: none;
+  }
+}
+</style>
 </head>
 
 <body>
 
 <header>
-  <div>
+  <div class="header-inner">
     <h1>🎤 Write a Sermon</h1>
-    <p>BibleMastrey Sermon Preparation & Study Helper</p>
+    <a href="index.html" class="back-button">← Back to BibleMastrey</a>
   </div>
-
-  <a href="index.html" class="back-btn">← Back to BibleMastrey</a>
 </header>
 
-<div class="page">
+<div class="container">
 
-  <section class="hero">
+<section class="intro">
+  <h2>Prepare, Study, and Write a Biblical Sermon</h2>
 
-    <h2>Learn How to Prepare and Write a Biblical Sermon</h2>
+  <p>
+    This section is designed to teach you how to prepare a sermon from Scripture.
+    It is not simply a sermon generator.
+  </p>
+
+  <p>
+    The goal is to help you learn how to study the Bible carefully,
+    understand the passage, organize what you discover, and communicate
+    the truth of Scripture clearly.
+  </p>
+
+  <div class="notice">
+    <strong>Important:</strong>
+    AI and study tools can assist your preparation, but they should never
+    replace Scripture, prayer, careful study, or your responsibility to
+    handle God's Word accurately.
+  </div>
+</section>
+
+
+<!-- ============================= -->
+<!-- HOW TO PREPARE A SERMON COURSE -->
+<!-- ============================= -->
+
+<section class="course">
+
+<h2>📖 How to Prepare, Study, and Write a Sermon</h2>
+
+<p>
+Click each lesson to learn the process step by step.
+</p>
+
+
+<div class="lesson">
+  <div class="lesson-header">
+    <h3>1. Pray and Begin With the Right Purpose</h3>
+  </div>
+
+  <div class="lesson-content">
 
     <p>
-      This is more than a sermon generator. It is designed to help you
-      study Scripture, understand what you are studying, develop biblical
-      points, and learn how to organize those discoveries into a sermon.
+      Sermon preparation should begin with prayer and a desire to faithfully
+      communicate God's Word.
     </p>
 
-    <div class="course-intro">
-      <strong>The goal:</strong>
-      You do the studying. BibleMastrey helps you organize, research,
-      understand, and prepare.
-      AI can eventually assist you, but it should never replace your own
-      study of God's Word.
+    <h4>Ask yourself:</h4>
+
+    <ul>
+      <li>What does Scripture say?</li>
+      <li>What is the main truth I need to understand?</li>
+      <li>What does this passage teach about God?</li>
+      <li>What does this passage teach about people?</li>
+      <li>How should this truth affect the listener?</li>
+    </ul>
+
+    <div class="tip">
+      <strong>Remember:</strong>
+      Start with Scripture, not with the sermon idea you already want to prove.
     </div>
 
-  </section>
+  </div>
+</div>
 
 
-  <!-- STEP 1 -->
+<div class="lesson">
+  <div class="lesson-header">
+    <h3>2. Choose Your Sermon Topic or Passage</h3>
+  </div>
 
-  <section class="step">
+  <div class="lesson-content">
 
-    <div class="step-header">
-      <span class="step-number">1</span>
-      <h3>Choose Your Sermon Topic</h3>
+    <p>
+      Choose either a biblical topic or a specific passage of Scripture.
+    </p>
+
+    <p>
+      Examples include faith, forgiveness, salvation, prayer, obedience,
+      temptation, love, hope, suffering, or a particular chapter of the Bible.
+    </p>
+
+    <h4>Write down:</h4>
+
+    <ul>
+      <li>Working sermon title</li>
+      <li>Main topic</li>
+      <li>Purpose of the sermon</li>
+    </ul>
+
+    <div class="tip">
+      Your title can change later. At this stage you are establishing
+      the direction of your study.
     </div>
 
-    <div class="step-body">
+  </div>
+</div>
 
-      <div class="lesson">
-        <strong>What you are learning:</strong><br>
-        A sermon normally begins with a biblical burden, question, passage,
-        or subject. Start by clearly identifying what you want people to
-        understand from Scripture.
-      </div>
 
-      <label for="sermonTitle">Sermon Title</label>
-      <input
-        id="sermonTitle"
-        placeholder="Example: Learning to Forgive"
-      >
+<div class="lesson">
+  <div class="lesson-header">
+    <h3>3. Read the Passage Carefully</h3>
+  </div>
 
-      <label for="sermonTopic">What is the sermon about?</label>
-      <textarea
-        id="sermonTopic"
-        class="small-textarea"
-        placeholder="Describe the topic in your own words..."
-      ></textarea>
+  <div class="lesson-content">
 
-      <label for="sermonPurpose">What do you want people to learn or understand?</label>
-      <textarea
-        id="sermonPurpose"
-        placeholder="Example: I want people to understand what biblical forgiveness really means."
-      ></textarea>
+    <p>
+      Read the passage several times before beginning to build your sermon.
+    </p>
 
-      <button class="primary" onclick="saveSermonBasics()">
-        Save Sermon Topic
-      </button>
+    <h4>Look for:</h4>
 
-      <div id="topicStatus" class="status">
-        Sermon topic saved.
-      </div>
+    <ul>
+      <li>Repeated words</li>
+      <li>Commands</li>
+      <li>Promises</li>
+      <li>Warnings</li>
+      <li>Questions</li>
+      <li>Contrasts</li>
+      <li>People</li>
+      <li>Events</li>
+      <li>Causes and effects</li>
+      <li>The main message of the passage</li>
+    </ul>
 
+    <div class="warning">
+      Do not immediately jump to commentary or other people's explanations.
+      First spend time observing the biblical text yourself.
     </div>
 
-  </section>
+  </div>
+</div>
 
 
-  <!-- STEP 2 -->
+<div class="lesson">
+  <div class="lesson-header">
+    <h3>4. Study the Context</h3>
+  </div>
 
-  <section class="step">
+  <div class="lesson-content">
 
-    <div class="step-header">
-      <span class="step-number">2</span>
-      <h3>Find Your Main Scripture</h3>
+    <p>
+      A verse should be understood in the context of the surrounding passage.
+    </p>
+
+    <h4>Ask:</h4>
+
+    <ul>
+      <li>Who wrote the passage?</li>
+      <li>Who was it written to?</li>
+      <li>What was happening?</li>
+      <li>What comes before this passage?</li>
+      <li>What comes after it?</li>
+      <li>What problem or question is being addressed?</li>
+      <li>What is the author's main point?</li>
+    </ul>
+
+    <div class="tip">
+      Context protects you from taking a verse out of its intended meaning.
     </div>
 
-    <div class="step-body">
+  </div>
+</div>
 
-      <div class="lesson">
-        <strong>What you are learning:</strong><br>
-        A sermon should be rooted in Scripture. Look for a passage that
-        directly teaches the biblical truth you want to explain.
-      </div>
 
-      <div class="study-grid">
+<div class="lesson">
+  <div class="lesson-header">
+    <h3>5. Find the Main Biblical Truth</h3>
+  </div>
 
-        <div>
-          <label>Translation</label>
-          <select id="translation">
-            <option value="KJV">KJV</option>
-            <option value="WEB">WEB</option>
-            <option value="ASV">ASV</option>
-          </select>
-        </div>
+  <div class="lesson-content">
 
-        <div>
-          <label>Search the Bible</label>
-          <input
-            id="bibleSearch"
-            placeholder="Example: forgive"
-            onkeydown="if(event.key==='Enter') searchBible()"
-          >
-        </div>
+    <p>
+      After studying the passage, summarize what it is teaching in one clear
+      sentence.
+    </p>
 
-      </div>
+    <h4>Example:</h4>
 
-      <button class="primary" onclick="searchBible()">
-        🔎 Search Scripture
-      </button>
+    <p>
+      Instead of having five different ideas, identify the central biblical
+      truth that holds the sermon together.
+    </p>
 
-      <div id="bibleSearchStatus" class="message"></div>
-
-      <div id="bibleResults" class="verse-results"></div>
-
-      <label>Main Scripture Reference</label>
-      <input
-        id="mainScripture"
-        placeholder="Example: Ephesians 4:32"
-      >
-
-      <label>Why did you choose this passage?</label>
-      <textarea
-        id="scriptureReason"
-        placeholder="Write your own observations..."
-      ></textarea>
-
+    <div class="tip">
+      If you cannot explain the main point in a simple sentence,
+      you probably need to study the passage more.
     </div>
 
-  </section>
+  </div>
+</div>
 
 
-  <!-- STEP 3 -->
+<div class="lesson">
+  <div class="lesson-header">
+    <h3>6. Study Important Hebrew and Greek Words</h3>
+  </div>
 
-  <section class="step">
+  <div class="lesson-content">
 
-    <div class="step-header">
-      <span class="step-number">3</span>
-      <h3>Study the Passage</h3>
+    <p>
+      Sometimes an important biblical word deserves deeper study.
+    </p>
+
+    <p>
+      Use Hebrew and Greek resources to investigate the original word,
+      its meaning, and how it is used.
+    </p>
+
+    <h4>Study:</h4>
+
+    <ul>
+      <li>Strong's number</li>
+      <li>Original word</li>
+      <li>Transliteration</li>
+      <li>Basic meaning</li>
+      <li>How the word is used in Scripture</li>
+      <li>How the word functions in your passage</li>
+    </ul>
+
+    <div class="warning">
+      Do not build an entire doctrine from one dictionary definition.
+      The context of Scripture remains important.
     </div>
 
-    <div class="step-body">
+  </div>
+</div>
 
-      <div class="lesson">
-        <strong>Before writing your sermon, slow down.</strong><br><br>
 
-        Ask:
-        <br>• Who wrote this?
-        <br>• Who was it written to?
-        <br>• What is happening?
-        <br>• What comes before and after the passage?
-        <br>• What is the main idea?
-        <br>• What does the passage actually say?
-        <br>• What does it mean?
-        <br>• How should it affect our lives?
-      </div>
+<div class="lesson">
+  <div class="lesson-header">
+    <h3>7. Use a Bible Dictionary</h3>
+  </div>
 
-      <label>What does the passage say?</label>
-      <textarea
-        id="observation"
-        placeholder="Write what you observe in the actual text..."
-      ></textarea>
+  <div class="lesson-content">
 
-      <label>What is the context?</label>
-      <textarea
-        id="context"
-        placeholder="Write what you learn about the surrounding passage, chapter, book, author, audience, etc."
-      ></textarea>
+    <p>
+      A Bible dictionary can help explain people, places, objects,
+      customs, subjects, and biblical concepts.
+    </p>
 
-      <label>What is the main biblical truth?</label>
-      <textarea
-        id="mainTruth"
-        placeholder="Write the main truth you believe this passage teaches."
-      ></textarea>
+    <p>
+      Use the dictionary to understand the background of what you are studying,
+      not to replace the Bible itself.
+    </p>
 
+  </div>
+</div>
+
+
+<div class="lesson">
+  <div class="lesson-header">
+    <h3>8. Use a Concordance and Cross-References</h3>
+  </div>
+
+  <div class="lesson-content">
+
+    <p>
+      A concordance helps you find where important words and subjects appear
+      elsewhere in Scripture.
+    </p>
+
+    <h4>Look for:</h4>
+
+    <ul>
+      <li>Related verses</li>
+      <li>Parallel passages</li>
+      <li>Repeated biblical themes</li>
+      <li>Other passages that explain the subject</li>
+    </ul>
+
+    <div class="tip">
+      Let Scripture help explain Scripture.
     </div>
 
-  </section>
+  </div>
+</div>
 
 
-  <!-- STEP 4 -->
+<div class="lesson">
+  <div class="lesson-header">
+    <h3>9. Compare Bible Translations</h3>
+  </div>
 
-  <section class="step">
+  <div class="lesson-content">
 
-    <div class="step-header">
-      <span class="step-number">4</span>
-      <h3>Study Important Words</h3>
+    <p>
+      Comparing translations can help you see wording differences and
+      clarify difficult passages.
+    </p>
+
+    <p>
+      BibleMastrey can provide multiple translations such as KJV, WEB,
+      and ASV.
+    </p>
+
+    <div class="warning">
+      Different wording does not automatically mean different meaning.
+      Always return to the biblical context.
     </div>
 
-    <div class="step-body">
+  </div>
+</div>
 
-      <div class="lesson">
-        <strong>What you are learning:</strong><br>
-        Sometimes one important word can help you understand a passage more
-        clearly. Use the tools below as study aids. Always consider the word
-        in its biblical context.
-      </div>
 
-      <label>Dictionary Search</label>
+<div class="lesson">
+  <div class="lesson-header">
+    <h3>10. Read Bible Commentaries</h3>
+  </div>
 
-      <div class="tool-row">
-        <input id="dictionaryInput" placeholder="Example: forgiveness">
-        <button class="primary" onclick="lookupDictionary()">
-          Search Dictionary
-        </button>
-      </div>
+  <div class="lesson-content">
 
-      <div id="dictionaryResult" class="dictionary-result hidden"></div>
+    <p>
+      Commentaries allow you to compare your observations with the work
+      of experienced Bible teachers and commentators.
+    </p>
 
-      <label>Concordance Search</label>
+    <h4>Use commentaries to:</h4>
 
-      <div class="tool-row">
-        <input id="concordanceInput" placeholder="Search a word in Scripture">
-        <button class="primary" onclick="searchConcordance()">
-          Search Concordance
-        </button>
-      </div>
+    <ul>
+      <li>Discover historical background</li>
+      <li>Consider different interpretations</li>
+      <li>Identify difficult passages</li>
+      <li>Check your understanding</li>
+      <li>Find additional observations</li>
+    </ul>
 
-      <div id="concordanceResult" class="verse-results"></div>
-
-      <label>Hebrew & Greek / Strong's Lookup</label>
-
-      <div class="tool-row">
-        <input id="strongInput" placeholder="Example: G26 or H3068">
-        <button class="primary" onclick="lookupStrong()">
-          Look Up Word
-        </button>
-      </div>
-
-      <div id="strongResult" class="word-result hidden"></div>
-
+    <div class="tip">
+      Commentary should help you study Scripture, not become a substitute
+      for studying Scripture.
     </div>
 
-  </section>
+  </div>
+</div>
 
 
-  <!-- STEP 5 -->
+<div class="lesson">
+  <div class="lesson-header">
+    <h3>11. Develop the Main Sermon Point</h3>
+  </div>
 
-  <section class="step">
+  <div class="lesson-content">
 
-    <div class="step-header">
-      <span class="step-number">5</span>
-      <h3>Study Bible Commentaries</h3>
+    <p>
+      Now turn your study into one clear sermon statement.
+    </p>
+
+    <p>
+      The listener should be able to understand what the sermon is ultimately
+      trying to communicate.
+    </p>
+
+    <h4>A strong main point should be:</h4>
+
+    <ul>
+      <li>Biblical</li>
+      <li>Clear</li>
+      <li>Simple</li>
+      <li>Memorable</li>
+      <li>Connected to the main passage</li>
+    </ul>
+
+  </div>
+</div>
+
+
+<div class="lesson">
+  <div class="lesson-header">
+    <h3>12. Build Your Supporting Points</h3>
+  </div>
+
+  <div class="lesson-content">
+
+    <p>
+      Divide the main truth into a few supporting points.
+    </p>
+
+    <p>
+      Three points are often useful, but you do not have to force every sermon
+      into exactly three points.
+    </p>
+
+    <h4>Each point should answer:</h4>
+
+    <ul>
+      <li>What does Scripture say?</li>
+      <li>What does it mean?</li>
+      <li>Why does it matter?</li>
+      <li>How should we respond?</li>
+    </ul>
+
+  </div>
+</div>
+
+
+<div class="lesson">
+  <div class="lesson-header">
+    <h3>13. Explain the Scripture</h3>
+  </div>
+
+  <div class="lesson-content">
+
+    <p>
+      Do not simply quote a verse and move on.
+      Explain what the passage means.
+    </p>
+
+    <p>
+      The listener should understand how the Scripture supports the point
+      you are making.
+    </p>
+
+    <div class="tip">
+      Scripture should be the foundation of the sermon, not decoration added
+      to a message that was already written.
     </div>
 
-    <div class="step-body">
+  </div>
+</div>
 
-      <div class="lesson">
-        <strong>What you are learning:</strong><br>
-        Commentaries can give historical and theological observations that
-        may help you think more deeply about a passage. They are study aids,
-        not replacements for Scripture.
-      </div>
 
-      <div class="study-grid">
+<div class="lesson">
+  <div class="lesson-header">
+    <h3>14. Apply the Biblical Truth</h3>
+  </div>
 
-        <div>
-          <label>Commentary</label>
+  <div class="lesson-content">
 
-          <select id="commentarySelect">
-            <option value="matthew-henry-concise">
-              Matthew Henry Concise
-            </option>
+    <p>
+      Ask how the truth of Scripture should affect everyday life.
+    </p>
 
-            <option value="matthew-henry-complete">
-              Matthew Henry Complete
-            </option>
+    <h4>Application may involve:</h4>
 
-            <option value="john-gill">
-              John Gill
-            </option>
+    <ul>
+      <li>Something to believe</li>
+      <li>Something to change</li>
+      <li>Something to stop</li>
+      <li>Something to start</li>
+      <li>Something to remember</li>
+      <li>Someone to forgive</li>
+      <li>Someone to serve</li>
+      <li>A biblical command to obey</li>
+    </ul>
 
-            <option value="jfb">
-              Jamieson-Fausset-Brown
-            </option>
+  </div>
+</div>
 
-            <option value="adam-clarke">
-              Adam Clarke
-            </option>
 
-            <option value="barnes">
-              Barnes' Notes
-            </option>
-          </select>
-        </div>
+<div class="lesson">
+  <div class="lesson-header">
+    <h3>15. Write the Introduction</h3>
+  </div>
 
-        <div>
-          <label>Book</label>
+  <div class="lesson-content">
 
-          <input
-            id="commentaryBook"
-            placeholder="Example: John"
-          >
-        </div>
+    <p>
+      The introduction should help the listener understand why the sermon
+      matters.
+    </p>
 
-      </div>
+    <h4>A simple structure:</h4>
 
-      <div class="study-grid">
+    <ol>
+      <li>Introduce the subject.</li>
+      <li>Identify the question or problem.</li>
+      <li>Introduce the Scripture.</li>
+      <li>Lead into the main truth.</li>
+    </ol>
 
-        <div>
-          <label>Chapter</label>
-          <input
-            id="commentaryChapter"
-            type="number"
-            min="1"
-            placeholder="Example: 3"
-          >
-        </div>
+    <p>
+      Do not make the introduction longer than the sermon needs.
+    </p>
 
-        <div>
-          <label>Verse (optional)</label>
-          <input
-            id="commentaryVerse"
-            type="number"
-            min="1"
-            placeholder="Example: 16"
-          >
-        </div>
+  </div>
+</div>
 
-      </div>
 
-      <button class="primary" onclick="loadCommentary()">
-        📖 Load Commentary
-      </button>
+<div class="lesson">
+  <div class="lesson-header">
+    <h3>16. Write the Conclusion</h3>
+  </div>
 
-      <div id="commentaryStatus" class="message"></div>
+  <div class="lesson-content">
 
-      <div class="commentary-layout">
+    <p>
+      The conclusion brings the sermon back to its main truth.
+    </p>
 
-        <div class="commentary-verses">
-          <div id="commentaryVerseArea"></div>
-        </div>
+    <h4>A good conclusion can:</h4>
 
-        <aside class="commentary-side">
-          <h4>Commentary</h4>
-          <div id="commentarySideContent">
-            Select a book and chapter to study commentary.
-          </div>
-        </aside>
+    <ul>
+      <li>Review the main point</li>
+      <li>Summarize the supporting points</li>
+      <li>Call for biblical application</li>
+      <li>Leave the listener with a clear takeaway</li>
+    </ul>
 
-      </div>
+  </div>
+</div>
 
+
+<div class="lesson">
+  <div class="lesson-header">
+    <h3>17. Put the Sermon Together</h3>
+  </div>
+
+  <div class="lesson-content">
+
+    <p>A simple sermon structure might look like this:</p>
+
+    <ol>
+      <li>Title</li>
+      <li>Introduction</li>
+      <li>Main Scripture</li>
+      <li>Context</li>
+      <li>Main biblical truth</li>
+      <li>Point 1</li>
+      <li>Point 2</li>
+      <li>Point 3</li>
+      <li>Supporting Scriptures</li>
+      <li>Explanation</li>
+      <li>Application</li>
+      <li>Conclusion</li>
+    </ol>
+
+    <div class="tip">
+      The exact structure can change depending on the passage and purpose.
     </div>
 
-  </section>
+  </div>
+</div>
 
 
-  <!-- STEP 6 -->
+<div class="lesson">
+  <div class="lesson-header">
+    <h3>18. Review the Sermon for Biblical Accuracy</h3>
+  </div>
 
-  <section class="step">
+  <div class="lesson-content">
 
-    <div class="step-header">
-      <span class="step-number">6</span>
-      <h3>Develop Your Sermon Point</h3>
+    <h4>Before teaching, ask:</h4>
+
+    <ul>
+      <li>Is my main point actually supported by Scripture?</li>
+      <li>Did I take any verses out of context?</li>
+      <li>Did I explain the passage accurately?</li>
+      <li>Did I separate my opinion from what Scripture actually says?</li>
+      <li>Are my supporting verses relevant?</li>
+      <li>Is the sermon understandable?</li>
+      <li>Is the application biblical and practical?</li>
+      <li>Does the conclusion return to the main truth?</li>
+    </ul>
+
+    <div class="warning">
+      A good sermon is not simply one that sounds powerful.
+      It must also faithfully communicate Scripture.
     </div>
 
-    <div class="step-body">
+  </div>
+</div>
 
-      <div class="lesson">
-        <strong>What you are learning:</strong><br>
-        A sermon should have a clear central message. Your points should
-        support that message rather than becoming unrelated ideas.
-      </div>
+</section>
 
-      <label>Main Sermon Statement</label>
 
-      <textarea
-        id="sermonStatement"
-        placeholder="In one clear sentence, what are you trying to teach?"
-      ></textarea>
+<!-- ============================= -->
+<!-- SERMON WORKSPACE -->
+<!-- ============================= -->
 
-      <div class="point-box">
+<section class="card">
 
-        <h4>Point 1</h4>
+<h2>📝 Step 1 — Choose Your Sermon Topic</h2>
 
-        <label>Point title</label>
-        <input id="point1Title" placeholder="Example: Forgiveness reflects God's character">
+<label>Sermon Title</label>
+<input id="sermonTitle" placeholder="Enter your sermon title">
 
-        <label>Supporting Scripture</label>
-        <input id="point1Scripture" placeholder="Example: Ephesians 4:32">
+<label>Topic</label>
+<input id="sermonTopic" placeholder="Example: Faith, Prayer, Forgiveness">
 
-        <label>Explanation</label>
-        <textarea id="point1Explanation"></textarea>
+<label>Purpose</label>
+<textarea id="sermonPurpose"
+placeholder="What do you want people to understand or do after hearing this sermon?"></textarea>
 
-        <label>Application</label>
-        <textarea id="point1Application"></textarea>
+<button onclick="saveBasicInfo()">Save Topic</button>
 
-      </div>
+<div id="basicSaved"></div>
 
+</section>
 
-      <div class="point-box">
 
-        <h4>Point 2</h4>
+<section class="card">
 
-        <label>Point title</label>
-        <input id="point2Title">
+<h2>📖 Step 2 — Find Your Main Scripture</h2>
 
-        <label>Supporting Scripture</label>
-        <input id="point2Scripture">
+<label>Bible Translation</label>
 
-        <label>Explanation</label>
-        <textarea id="point2Explanation"></textarea>
+<select id="translation">
+  <option value="kjv">KJV</option>
+  <option value="web">WEB</option>
+  <option value="asv">ASV</option>
+</select>
 
-        <label>Application</label>
-        <textarea id="point2Application"></textarea>
+<label>Search the Bible</label>
 
-      </div>
+<input
+  id="bibleSearch"
+  placeholder="Search for a word or phrase">
 
+<button onclick="searchBible()">Search Bible</button>
 
-      <div class="point-box">
+<div id="bibleResults" class="search-results"></div>
 
-        <h4>Point 3</h4>
+<label>Main Scripture Reference</label>
 
-        <label>Point title</label>
-        <input id="point3Title">
+<input
+  id="mainScripture"
+  placeholder="Example: John 3:16">
 
-        <label>Supporting Scripture</label>
-        <input id="point3Scripture">
+<label>Why did you choose this passage?</label>
 
-        <label>Explanation</label>
-        <textarea id="point3Explanation"></textarea>
+<textarea
+  id="scriptureReason"
+  placeholder="Explain why this passage is important to your sermon."></textarea>
 
-        <label>Application</label>
-        <textarea id="point3Application"></textarea>
+</section>
 
-      </div>
 
-    </div>
+<section class="card">
 
-  </section>
+<h2>🔎 Step 3 — Study the Passage</h2>
 
+<div class="grid">
 
-  <!-- STEP 7 -->
+<div>
+<label>Observation</label>
 
-  <section class="step">
+<textarea
+id="observation"
+placeholder="What do you see in the passage?"></textarea>
+</div>
 
-    <div class="step-header">
-      <span class="step-number">7</span>
-      <h3>Write the Introduction</h3>
-    </div>
+<div>
+<label>Context</label>
 
-    <div class="step-body">
+<textarea
+id="context"
+placeholder="Who wrote it? Who received it? What is happening?"></textarea>
+</div>
 
-      <div class="lesson">
-        <strong>What you are learning:</strong><br>
-        A good introduction helps people understand why the subject matters
-        and prepares them to listen to the biblical truth that follows.
-      </div>
+</div>
 
-      <label>Introduction</label>
+<label>Main Biblical Truth</label>
 
-      <textarea
-        id="introduction"
-        style="min-height:180px"
-        placeholder="How will you introduce the subject and lead people into the Scripture?"
-      ></textarea>
+<textarea
+id="biblicalTruth"
+placeholder="Write the main biblical truth you believe the passage teaches."></textarea>
 
-    </div>
+</section>
 
-  </section>
 
+<section class="card">
 
-  <!-- STEP 8 -->
+<h2>🔤 Step 4 — Study Important Words</h2>
 
-  <section class="step">
+<div class="grid">
 
-    <div class="step-header">
-      <span class="step-number">8</span>
-      <h3>Application</h3>
-    </div>
+<div>
 
-    <div class="step-body">
+<h3>📚 Bible Dictionary</h3>
 
-      <div class="lesson">
-        <strong>What you are learning:</strong><br>
-        Biblical preaching should help people understand how God's Word
-        applies to their lives. Application should come from the truth of
-        Scripture rather than simply personal opinion.
-      </div>
+<input
+id="dictionaryWord"
+placeholder="Enter a word">
 
-      <label>What should the listener do with this truth?</label>
+<button onclick="dictionarySearch()">Search Dictionary</button>
 
-      <textarea
-        id="overallApplication"
-        style="min-height:180px"
-        placeholder="What should change, what should they believe, or what should they do?"
-      ></textarea>
+<div id="dictionaryResult" class="commentary-box"></div>
 
-      <label>What warning or encouragement should they remember?</label>
+</div>
 
-      <textarea
-        id="encouragement"
-        class="small-textarea"
-      ></textarea>
+<div>
 
-    </div>
+<h3>📖 Concordance</h3>
 
-  </section>
+<input
+id="concordanceWord"
+placeholder="Enter a word">
 
+<button onclick="concordanceSearch()">Search Bible</button>
 
-  <!-- STEP 9 -->
+<div id="concordanceResult" class="search-results"></div>
 
-  <section class="step">
+</div>
 
-    <div class="step-header">
-      <span class="step-number">9</span>
-      <h3>Write the Conclusion</h3>
-    </div>
+</div>
 
-    <div class="step-body">
 
-      <div class="lesson">
-        <strong>What you are learning:</strong><br>
-        The conclusion should bring the sermon back to its central truth
-        and leave the listener with a clear biblical response.
-      </div>
+<h3>🔤 Hebrew & Greek / Strong's Lookup</h3>
 
-      <label>Conclusion</label>
+<input
+id="strongsInput"
+placeholder="Example: G26 or H2617">
 
-      <textarea
-        id="conclusion"
-        style="min-height:180px"
-        placeholder="Bring the sermon back to the main truth and call the listener to respond."
-      ></textarea>
+<button onclick="strongsLookup()">Look Up Word</button>
 
-    </div>
+<div id="strongsResult" class="commentary-box"></div>
 
-  </section>
+</section>
 
 
-  <!-- STEP 10 -->
+<section class="card">
 
-  <section class="step">
+<h2>📚 Step 5 — Study Bible Commentaries</h2>
 
-    <div class="step-header">
-      <span class="step-number">10</span>
-      <h3>AI Study Assistant</h3>
-    </div>
+<label>Commentary</label>
 
-    <div class="step-body">
+<select id="commentarySelect">
+  <option value="matthew-henry">Matthew Henry Concise</option>
+  <option value="matthew-henry-complete">Matthew Henry Complete</option>
+  <option value="john-gill">John Gill</option>
+  <option value="jfb">Jamieson-Fausset-Brown</option>
+  <option value="adam-clarke">Adam Clarke</option>
+  <option value="barnes">Barnes' Notes</option>
+</select>
 
-      <div class="ai-box">
+<div class="grid">
 
-        <strong>🤖 AI Assistant — Coming in a future update</strong>
+<div>
 
-        <p>
-          The AI assistant will be designed to help you study and prepare,
-          not simply write the sermon for you.
-        </p>
+<label>Book</label>
+<input id="commentaryBook" placeholder="Example: John">
 
-        <p>
-          It will be able to help you ask questions such as:
-        </p>
+</div>
 
-        <ul>
-          <li>What other Scriptures relate to this subject?</li>
-          <li>What should I investigate about this passage?</li>
-          <li>What questions should I ask about the context?</li>
-          <li>Are my sermon points supported by Scripture?</li>
-          <li>Can you help me understand this difficult passage?</li>
-        </ul>
+<div>
 
-        <p>
-          The goal is to keep Scripture at the center.
-        </p>
+<label>Chapter</label>
+<input id="commentaryChapter" placeholder="Example: 3">
 
-      </div>
+</div>
 
-    </div>
+</div>
 
-  </section>
+<label>Verse (optional)</label>
+<input id="commentaryVerse" placeholder="Example: 16">
 
+<button onclick="loadCommentary()">Load Commentary</button>
 
-  <!-- FINAL SERMON -->
+<div id="commentaryResult" class="commentary-box">
+  Choose a commentary and enter a passage.
+</div>
 
-  <section class="step" id="finalStep">
+</section>
 
-    <div class="step-header">
-      <span class="step-number">✓</span>
-      <h3>Your Sermon</h3>
-    </div>
 
-    <div class="step-body">
+<section class="card">
 
-      <div class="lesson">
-        Review your study before considering the sermon finished.
-        Make sure your main points actually come from the biblical text.
-      </div>
+<h2>🎯 Step 6 — Develop Your Sermon Point</h2>
 
-      <div class="tool-row">
-        <button class="success" onclick="buildFinalSermon()">
-          📝 Build Sermon
-        </button>
+<label>Main Sermon Statement</label>
 
-        <button class="secondary" onclick="saveSermon()">
-          💾 Save Sermon
-        </button>
+<textarea
+id="mainPoint"
+placeholder="Write the one main truth you want people to remember."></textarea>
 
-        <button class="secondary" onclick="loadSavedSermon()">
-          📂 Load Saved Sermon
-        </button>
 
-        <button class="secondary" onclick="window.print()">
-          🖨️ Print Sermon
-        </button>
-      </div>
+<div class="point-box">
 
-      <div id="saveStatus" class="status"></div>
+<h3>Point 1</h3>
 
-      <div id="finalSermon" class="final-sermon">
-        Your finished sermon will appear here after you click
-        <strong>Build Sermon</strong>.
-      </div>
+<input id="point1Title" placeholder="Point 1 title">
 
-    </div>
+<label>Supporting Scripture</label>
 
-  </section>
+<input id="point1Scripture" placeholder="Bible reference">
+
+<label>Explanation</label>
+
+<textarea id="point1Explanation"></textarea>
+
+<label>Application</label>
+
+<textarea id="point1Application"></textarea>
+
+</div>
+
+
+<div class="point-box">
+
+<h3>Point 2</h3>
+
+<input id="point2Title" placeholder="Point 2 title">
+
+<label>Supporting Scripture</label>
+
+<input id="point2Scripture" placeholder="Bible reference">
+
+<label>Explanation</label>
+
+<textarea id="point2Explanation"></textarea>
+
+<label>Application</label>
+
+<textarea id="point2Application"></textarea>
+
+</div>
+
+
+<div class="point-box">
+
+<h3>Point 3</h3>
+
+<input id="point3Title" placeholder="Point 3 title">
+
+<label>Supporting Scripture</label>
+
+<input id="point3Scripture" placeholder="Bible reference">
+
+<label>Explanation</label>
+
+<textarea id="point3Explanation"></textarea>
+
+<label>Application</label>
+
+<textarea id="point3Application"></textarea>
+
+</div>
+
+</section>
+
+
+<section class="card">
+
+<h2>✍️ Step 7 — Write Your Introduction</h2>
+
+<textarea
+id="introduction"
+placeholder="Write your sermon introduction here."></textarea>
+
+</section>
+
+
+<section class="card">
+
+<h2>❤️ Step 8 — Practical Application</h2>
+
+<textarea
+id="application"
+placeholder="How should people apply this biblical truth to their lives?"></textarea>
+
+</section>
+
+
+<section class="card">
+
+<h2>🏁 Step 9 — Conclusion</h2>
+
+<textarea
+id="conclusion"
+placeholder="Bring the sermon back to the main biblical truth."></textarea>
+
+</section>
+
+
+<section class="card">
+
+<h2>🤖 Step 10 — AI Study Assistant</h2>
+
+<p>
+The AI assistant will eventually help you ask Bible-study questions,
+organize your research, and check your sermon preparation.
+</p>
+
+<div class="notice">
+AI assistance will support your Bible study. It will not replace Scripture
+or your own study.
+</div>
+
+</section>
+
+
+<section class="card">
+
+<h2>📜 Final Sermon</h2>
+
+<button class="green" onclick="buildSermon()">
+Build Sermon
+</button>
+
+<button onclick="saveSermon()">
+Save Sermon
+</button>
+
+<button class="secondary" onclick="loadSermon()">
+Load Saved Sermon
+</button>
+
+<button class="blue" onclick="window.print()">
+Print Sermon
+</button>
+
+<div id="sermonOutput"></div>
+
+</section>
 
 </div>
 
 
 <footer>
-  BibleMastrey — Study God's Word. Learn. Prepare. Teach.
+BibleMastrey — Study Scripture. Learn. Prepare. Teach.
 </footer>
 
 
@@ -1106,178 +1238,107 @@
 
 <script>
 
-  let currentBible = null;
-  let currentTranslation = "KJV";
+/* =========================================
+   COURSE LESSONS
+========================================= */
+
+document.querySelectorAll(".lesson-header").forEach(function(header) {
+
+  header.addEventListener("click", function() {
+
+    const lesson = header.parentElement;
+
+    lesson.classList.toggle("open");
+
+  });
+
+});
 
 
-  /*
-   * ----------------------------------------------------
-   * BIBLE LOADING
-   * ----------------------------------------------------
-   */
+/* =========================================
+   BASIC SERMON INFORMATION
+========================================= */
 
-  async function loadBible() {
+function saveBasicInfo() {
 
-    try {
+  localStorage.setItem(
+    "sermonBasicInfo",
+    JSON.stringify({
+      title: document.getElementById("sermonTitle").value,
+      topic: document.getElementById("sermonTopic").value,
+      purpose: document.getElementById("sermonPurpose").value
+    })
+  );
 
-      currentTranslation =
-        document.getElementById("translation").value;
+  document.getElementById("basicSaved").innerHTML =
+    '<div class="saved-message">✓ Topic saved.</div>';
+}
 
-      if (currentTranslation === "WEB") {
-        currentBible = await getWEB();
-      }
 
-      else if (currentTranslation === "ASV") {
-        currentBible = await getASV();
-      }
+/* =========================================
+   BIBLE DATA
+========================================= */
 
-      else {
-        currentBible = await getKJV();
-      }
+async function getSelectedBible() {
 
-      return currentBible;
+  const translation =
+    document.getElementById("translation").value;
 
-    } catch (error) {
-
-      console.error(error);
-
-      showMessage(
-        "bibleSearchStatus",
-        "The Bible could not be loaded right now."
-      );
-
-      return null;
-    }
+  if (translation === "web") {
+    return await getWEB();
   }
 
-
-  /*
-   * ----------------------------------------------------
-   * NORMALIZE BIBLE DATA
-   * ----------------------------------------------------
-   */
-
-  function getBooks(bible) {
-
-    if (!bible) return [];
-
-    if (Array.isArray(bible.books)) {
-      return bible.books;
-    }
-
-    return [];
+  if (translation === "asv") {
+    return await getASV();
   }
 
+  return await getKJV();
+}
 
-  function getBookName(book) {
 
-    return (
-      book.book ||
-      book.name ||
-      book.title ||
-      book.englishName ||
-      "Unknown"
-    );
+/* =========================================
+   BIBLE SEARCH
+========================================= */
+
+async function searchBible() {
+
+  const query =
+    document.getElementById("bibleSearch").value
+      .trim()
+      .toLowerCase();
+
+  const output =
+    document.getElementById("bibleResults");
+
+  if (!query) {
+    output.innerHTML = "Enter a search term.";
+    return;
   }
 
+  output.innerHTML = "Searching...";
 
-  function getChapters(book) {
+  try {
 
-    return Array.isArray(book.chapters)
-      ? book.chapters
-      : [];
-  }
-
-
-  function getChapterNumber(chapter, index) {
-
-    return (
-      chapter.chapter ||
-      chapter.number ||
-      (index + 1)
-    );
-  }
-
-
-  function getVerses(chapter) {
-
-    return Array.isArray(chapter.verses)
-      ? chapter.verses
-      : [];
-  }
-
-
-  function getVerseNumber(verse, index) {
-
-    return (
-      verse.number ||
-      verse.verse ||
-      (index + 1)
-    );
-  }
-
-
-  function getVerseText(verse) {
-
-    return (
-      verse.text ||
-      verse.content ||
-      ""
-    );
-  }
-
-
-  /*
-   * ----------------------------------------------------
-   * BIBLE SEARCH
-   * ----------------------------------------------------
-   */
-
-  async function searchBible() {
-
-    const query =
-      document.getElementById("bibleSearch")
-        .value
-        .trim()
-        .toLowerCase();
-
-    if (!query) {
-      showMessage(
-        "bibleSearchStatus",
-        "Enter a word or phrase to search."
-      );
-      return;
-    }
-
-    const bible = await loadBible();
-
-    if (!bible) return;
+    const bible = await getSelectedBible();
 
     const results = [];
 
-    getBooks(bible).forEach(book => {
+    bible.books.forEach(function(book) {
 
-      const bookName = getBookName(book);
+      book.chapters.forEach(function(chapter) {
 
-      getChapters(book).forEach((chapter, chapterIndex) => {
-
-        const chapterNumber =
-          getChapterNumber(chapter, chapterIndex);
-
-        getVerses(chapter).forEach((verse, verseIndex) => {
-
-          const text = getVerseText(verse);
+        chapter.verses.forEach(function(verse) {
 
           if (
-            text &&
-            text.toLowerCase().includes(query)
+            verse.text &&
+            verse.text.toLowerCase().includes(query)
           ) {
 
             results.push({
-              book: bookName,
-              chapter: chapterNumber,
-              verse: getVerseNumber(verse, verseIndex),
-              text: text
+              book: book.book || book.name || book.title,
+              chapter: chapter.chapter,
+              verse: verse.number,
+              text: verse.text
             });
 
           }
@@ -1288,425 +1349,209 @@
 
     });
 
-
-    const limited = results.slice(0, 30);
-
-    const container =
-      document.getElementById("bibleResults");
-
-    if (!limited.length) {
-
-      container.innerHTML =
-        "<div class='message show'>No matching verses were found.</div>";
-
+    if (!results.length) {
+      output.innerHTML = "No results found.";
       return;
     }
 
+    output.innerHTML = "";
 
-    container.innerHTML = limited
-      .map(item => createVerseCard(item))
-      .join("");
+    results.slice(0, 50).forEach(function(result) {
 
-  }
+      const div = document.createElement("div");
 
+      div.className = "verse-card";
 
-  /*
-   * ----------------------------------------------------
-   * VERSE CARD
-   * ----------------------------------------------------
-   */
-
-  function createVerseCard(item) {
-
-    const id =
-      "verse_" +
-      Math.random()
-        .toString(36)
-        .substring(2, 10);
-
-    const reference =
-      `${item.book} ${item.chapter}:${item.verse}`;
-
-    const escapedText =
-      escapeHTML(item.text);
-
-    return `
-      <div class="verse-card">
-
-        <div
-          class="verse-card-main"
-          onclick="toggleVerseToolbar('${id}')"
-        >
-
-          <div class="verse-reference">
-            ${escapeHTML(reference)}
-          </div>
-
-          <div class="verse-text">
-            ${escapedText}
-          </div>
-
+      div.innerHTML = `
+        <div class="verse-reference">
+          ${result.book} ${result.chapter}:${result.verse}
         </div>
 
-        <div
-          id="${id}_toolbar"
-          class="verse-toolbar"
-        >
+        <div>${result.text}</div>
 
-          <button
-            class="secondary"
-            onclick="highlightVerse('${id}')"
-          >
-            Highlight
-          </button>
+        <div class="verse-actions">
 
-          <button
-            class="secondary"
-            onclick="addVerseNote('${id}', '${escapeAttribute(reference)}')"
-          >
-            Notes
-          </button>
-
-          <button
-            class="secondary"
-            onclick="bookmarkVerse('${id}', '${escapeAttribute(reference)}')"
-          >
-            Bookmark
-          </button>
-
-          <button
-            class="secondary"
-            onclick="copyVerse('${escapeAttribute(reference)}', '${escapeAttribute(item.text)}')"
-          >
+          <button onclick="copyText('${escapeQuotes(
+            result.text
+          )}')">
             Copy
           </button>
 
-          <button
-            class="secondary"
-            onclick="shareVerse('${escapeAttribute(reference)}', '${escapeAttribute(item.text)}')"
-          >
-            Share
+          <button onclick="useMainScripture(
+            '${escapeQuotes(
+              result.book + " " +
+              result.chapter + ":" +
+              result.verse
+            )}'
+          )">
+            Use as Main Scripture
           </button>
 
         </div>
+      `;
 
-        <div
-          id="${id}_note"
-          class="note-box"
-        >
+      output.appendChild(div);
 
-          <textarea
-            id="${id}_note_text"
-            placeholder="Write your note about this verse..."
-          ></textarea>
+    });
 
-          <button
-            class="success"
-            onclick="saveVerseNote('${id}', '${escapeAttribute(reference)}')"
-          >
-            Save Note
-          </button>
+  } catch (error) {
 
-        </div>
+    console.error(error);
 
-      </div>
-    `;
+    output.innerHTML =
+      "The Bible could not be loaded right now.";
+
   }
 
+}
 
-  function toggleVerseToolbar(id) {
 
-    const toolbar =
-      document.getElementById(id + "_toolbar");
+function useMainScripture(reference) {
 
-    if (toolbar) {
-      toolbar.classList.toggle("show");
-    }
+  document.getElementById("mainScripture").value =
+    reference;
+
+  window.scrollTo({
+    top:
+      document.getElementById("mainScripture").offsetTop - 100,
+    behavior: "smooth"
+  });
+
+}
+
+
+/* =========================================
+   DICTIONARY
+========================================= */
+
+async function dictionarySearch() {
+
+  const word =
+    document.getElementById("dictionaryWord")
+      .value
+      .trim();
+
+  const output =
+    document.getElementById("dictionaryResult");
+
+  if (!word) {
+    output.innerHTML = "Enter a word.";
+    return;
   }
 
+  output.innerHTML = "Searching dictionary...";
 
-  function highlightVerse(id) {
+  try {
 
-    const card =
-      document.getElementById(id + "_toolbar")
-        .parentElement;
-
-    const main =
-      card.querySelector(".verse-card-main");
-
-    main.style.background =
-      main.style.background === "rgb(254, 249, 195)"
-        ? ""
-        : "#fef9c3";
-  }
-
-
-  function addVerseNote(id, reference) {
-
-    const note =
-      document.getElementById(id + "_note");
-
-    if (note) {
-      note.classList.toggle("show");
-    }
-  }
-
-
-  function saveVerseNote(id, reference) {
-
-    const textarea =
-      document.getElementById(id + "_note_text");
-
-    const notes =
-      JSON.parse(
-        localStorage.getItem("bibleMastreySermonVerseNotes") ||
-        "{}"
+    const response =
+      await fetch(
+        "https://api.dictionaryapi.dev/api/v2/entries/en/" +
+        encodeURIComponent(word)
       );
 
-    notes[reference] =
-      textarea.value;
-
-    localStorage.setItem(
-      "bibleMastreySermonVerseNotes",
-      JSON.stringify(notes)
-    );
-
-    alert("Verse note saved.");
-  }
-
-
-  function bookmarkVerse(id, reference) {
-
-    const bookmarks =
-      JSON.parse(
-        localStorage.getItem("bibleMastreySermonBookmarks") ||
-        "[]"
-      );
-
-    if (!bookmarks.includes(reference)) {
-      bookmarks.push(reference);
+    if (!response.ok) {
+      throw new Error("Dictionary unavailable");
     }
 
-    localStorage.setItem(
-      "bibleMastreySermonBookmarks",
-      JSON.stringify(bookmarks)
-    );
+    const data = await response.json();
 
-    alert("Verse bookmarked.");
-  }
+    let html =
+      "<strong>" +
+      word +
+      "</strong><br><br>";
 
+    data.forEach(function(entry) {
 
-  function copyVerse(reference, text) {
+      if (!entry.meanings) return;
 
-    navigator.clipboard.writeText(
-      reference + "\n" + text
-    )
-    .then(() => alert("Verse copied."))
-    .catch(() => alert("Copy failed."));
-  }
+      entry.meanings.forEach(function(meaning) {
 
+        html +=
+          "<strong>" +
+          (meaning.partOfSpeech || "") +
+          "</strong><br>";
 
-  function shareVerse(reference, text) {
+        if (meaning.definitions) {
 
-    const shareText =
-      reference + "\n" + text;
+          meaning.definitions
+            .slice(0, 5)
+            .forEach(function(definition) {
 
-    if (navigator.share) {
+              html +=
+                "• " +
+                definition.definition +
+                "<br>";
 
-      navigator.share({
-        title: reference,
-        text: shareText
-      });
+            });
 
-    } else {
+        }
 
-      navigator.clipboard.writeText(shareText);
-
-      alert("Verse copied for sharing.");
-    }
-  }
-
-
-  /*
-   * ----------------------------------------------------
-   * DICTIONARY
-   * ----------------------------------------------------
-   */
-
-  const dictionaryDefinitions = {
-
-    forgiveness:
-      "The act of releasing a person from a debt, offense, or wrong. Biblical forgiveness is connected with God's mercy and the believer's responsibility to forgive others.",
-
-    faith:
-      "Trust, confidence, or reliance upon God and His promises.",
-
-    grace:
-      "God's undeserved favor and kindness toward people.",
-
-    salvation:
-      "Deliverance from sin and its consequences, ultimately found through God's saving work.",
-
-    repentance:
-      "A turning away from sin and a turning toward God.",
-
-    love:
-      "A strong biblical expression of self-giving concern, affection, goodwill, and devotion."
-  };
-
-
-  async function lookupDictionary() {
-
-    const input =
-      document.getElementById("dictionaryInput")
-        .value
-        .trim()
-        .toLowerCase();
-
-    const output =
-      document.getElementById("dictionaryResult");
-
-    if (!input) {
-
-      output.classList.remove("hidden");
-
-      output.innerHTML =
-        "Enter a word to search.";
-
-      return;
-    }
-
-
-    if (dictionaryDefinitions[input]) {
-
-      output.classList.remove("hidden");
-
-      output.innerHTML =
-        `<strong>${escapeHTML(input)}</strong><br><br>
-         ${escapeHTML(dictionaryDefinitions[input])}`;
-
-      return;
-    }
-
-
-    try {
-
-      const response =
-        await fetch(
-          "https://api.dictionaryapi.dev/api/v2/entries/en/" +
-          encodeURIComponent(input)
-        );
-
-      if (!response.ok) {
-        throw new Error("Dictionary request failed.");
-      }
-
-      const data =
-        await response.json();
-
-      const meanings =
-        data[0]?.meanings || [];
-
-      const definitions = [];
-
-      meanings.forEach(meaning => {
-
-        (meaning.definitions || [])
-          .slice(0, 3)
-          .forEach(def => {
-
-            if (def.definition) {
-              definitions.push(def.definition);
-            }
-
-          });
+        html += "<br>";
 
       });
 
-      output.classList.remove("hidden");
+    });
 
-      if (!definitions.length) {
+    output.innerHTML = html;
 
-        output.innerHTML =
-          "No dictionary definition was found.";
+  } catch (error) {
 
-      } else {
-
-        output.innerHTML =
-          `<strong>${escapeHTML(input)}</strong><br><br>` +
-          definitions
-            .map(def => "• " + escapeHTML(def))
-            .join("<br><br>");
-      }
-
-    } catch (error) {
-
-      output.classList.remove("hidden");
-
-      output.innerHTML =
-        "No definition could be loaded right now.";
-
-    }
+    output.innerHTML =
+      "Dictionary results could not be loaded.";
 
   }
 
+}
 
-  /*
-   * ----------------------------------------------------
-   * CONCORDANCE
-   * ----------------------------------------------------
-   */
 
-  async function searchConcordance() {
+/* =========================================
+   CONCORDANCE
+========================================= */
 
-    const input =
-      document.getElementById("concordanceInput")
-        .value
-        .trim()
-        .toLowerCase();
+async function concordanceSearch() {
 
-    const output =
-      document.getElementById("concordanceResult");
+  const query =
+    document.getElementById("concordanceWord")
+      .value
+      .trim()
+      .toLowerCase();
 
-    if (!input) {
+  const output =
+    document.getElementById("concordanceResult");
 
-      output.innerHTML =
-        "<div class='message show'>Enter a word to search.</div>";
+  if (!query) {
+    output.innerHTML = "Enter a word.";
+    return;
+  }
 
-      return;
-    }
+  output.innerHTML = "Searching Scripture...";
 
-    const bible = await loadBible();
+  try {
 
-    if (!bible) return;
+    const bible = await getSelectedBible();
 
-    const results = [];
+    let matches = [];
 
-    getBooks(bible).forEach(book => {
+    bible.books.forEach(function(book) {
 
-      const bookName =
-        getBookName(book);
+      book.chapters.forEach(function(chapter) {
 
-      getChapters(book).forEach((chapter, chapterIndex) => {
-
-        const chapterNumber =
-          getChapterNumber(chapter, chapterIndex);
-
-        getVerses(chapter).forEach((verse, verseIndex) => {
-
-          const text =
-            getVerseText(verse);
+        chapter.verses.forEach(function(verse) {
 
           if (
-            text.toLowerCase().includes(input)
+            verse.text &&
+            verse.text.toLowerCase().includes(query)
           ) {
 
-            results.push({
-              book: bookName,
-              chapter: chapterNumber,
-              verse: getVerseNumber(verse, verseIndex),
-              text: text
-            });
+            matches.push(
+              (book.book || book.name || book.title) +
+              " " +
+              chapter.chapter +
+              ":" +
+              verse.number +
+              " — " +
+              verse.text
+            );
 
           }
 
@@ -1716,563 +1561,556 @@
 
     });
 
+    if (!matches.length) {
+
+      output.innerHTML =
+        "No matching verses found.";
+
+      return;
+
+    }
 
     output.innerHTML =
-      results.length
-        ? results
-            .slice(0, 40)
-            .map(item => createVerseCard(item))
-            .join("")
-        : "<div class='message show'>No matching verses found.</div>";
+      "<div class='commentary-box'>" +
+      matches.slice(0, 50).map(function(item) {
+        return "<div style='margin-bottom:12px'>" +
+          item +
+          "</div>";
+      }).join("") +
+      "</div>";
+
+  } catch (error) {
+
+    output.innerHTML =
+      "Concordance search could not be completed.";
+
+  }
+
+}
+
+
+/* =========================================
+   STRONG'S LOOKUP
+========================================= */
+
+const STRONGS = {
+
+  G1: {
+    word: "ἄλφα",
+    transliteration: "alpha",
+    meaning: "alpha, first"
+  },
+
+  G25: {
+    word: "ἀγαπάω",
+    transliteration: "agapaō",
+    meaning: "to love, cherish, have regard for"
+  },
+
+  G26: {
+    word: "ἀγάπη",
+    transliteration: "agapē",
+    meaning: "love, goodwill, benevolence"
+  },
+
+  G27: {
+    word: "ἀγαπητός",
+    transliteration: "agapētos",
+    meaning: "beloved, dearly loved"
+  },
+
+  G40: {
+    word: "ἅγιος",
+    transliteration: "hagios",
+    meaning: "holy, sacred"
+  },
+
+  G932: {
+    word: "βασιλεία",
+    transliteration: "basileia",
+    meaning: "kingdom, reign"
+  },
+
+  G1343: {
+    word: "δικαιοσύνη",
+    transliteration: "dikaiosynē",
+    meaning: "righteousness, justice"
+  },
+
+  G1577: {
+    word: "ἐκκλησία",
+    transliteration: "ekklesia",
+    meaning: "assembly, church"
+  },
+
+  G1680: {
+    word: "ἐλπίς",
+    transliteration: "elpis",
+    meaning: "hope, expectation"
+  },
+
+  G2316: {
+    word: "θεός",
+    transliteration: "theos",
+    meaning: "God, deity"
+  },
+
+  G2424: {
+    word: "Ἰησοῦς",
+    transliteration: "Iēsous",
+    meaning: "Jesus"
+  },
+
+  G266: {
+    word: "ἁμαρτία",
+    transliteration: "hamartia",
+    meaning: "sin"
+  },
+
+  G2962: {
+    word: "κύριος",
+    transliteration: "kyrios",
+    meaning: "Lord, master"
+  },
+
+  G3056: {
+    word: "λόγος",
+    transliteration: "logos",
+    meaning: "word, message, statement"
+  },
+
+  G3340: {
+    word: "μετανοέω",
+    transliteration: "metanoeō",
+    meaning: "to repent, change one's mind"
+  },
+
+  G4100: {
+    word: "πιστεύω",
+    transliteration: "pisteuō",
+    meaning: "to believe, trust"
+  },
+
+  G4102: {
+    word: "πίστις",
+    transliteration: "pistis",
+    meaning: "faith, belief, trust"
+  },
+
+  G4151: {
+    word: "πνεῦμα",
+    transliteration: "pneuma",
+    meaning: "spirit, breath, wind"
+  },
+
+  G4678: {
+    word: "σοφία",
+    transliteration: "sophia",
+    meaning: "wisdom"
+  },
+
+  G4991: {
+    word: "σωτηρία",
+    transliteration: "sōtēria",
+    meaning: "salvation, deliverance"
+  },
+
+  G5485: {
+    word: "χάρις",
+    transliteration: "charis",
+    meaning: "grace, favor, kindness"
+  },
+
+  H1: {
+    word: "אָב",
+    transliteration: "ab",
+    meaning: "father"
+  },
+
+  H430: {
+    word: "אֱלֹהִים",
+    transliteration: "Elohim",
+    meaning: "God, Godhead"
+  },
+
+  H2617: {
+    word: "חֶסֶד",
+    transliteration: "chesed",
+    meaning: "lovingkindness, mercy, steadfast love"
+  },
+
+  H3068: {
+    word: "יְהֹוָה",
+    transliteration: "YHWH",
+    meaning: "LORD"
+  },
+
+  H3467: {
+    word: "יָשַׁע",
+    transliteration: "yasha",
+    meaning: "to save, deliver"
+  },
+
+  H3820: {
+    word: "לֵב",
+    transliteration: "leb",
+    meaning: "heart, inner person"
+  },
+
+  H530: {
+    word: "אֱמוּנָה",
+    transliteration: "emunah",
+    meaning: "faithfulness, faith"
+  },
+
+  H539: {
+    word: "אָמַן",
+    transliteration: "aman",
+    meaning: "to believe, support, trust"
+  },
+
+  H7225: {
+    word: "רֵאשִׁית",
+    transliteration: "reshith",
+    meaning: "beginning, first"
+  },
+
+  H7307: {
+    word: "רוּחַ",
+    transliteration: "ruach",
+    meaning: "spirit, wind, breath"
+  },
+
+  H7965: {
+    word: "שָׁלוֹם",
+    transliteration: "shalom",
+    meaning: "peace, completeness, wholeness"
+  },
+
+  H8451: {
+    word: "תּוֹרָה",
+    transliteration: "torah",
+    meaning: "law, instruction, teaching"
+  }
+
+};
+
+
+function strongsLookup() {
+
+  let input =
+    document.getElementById("strongsInput")
+      .value
+      .trim()
+      .toUpperCase();
+
+  const output =
+    document.getElementById("strongsResult");
+
+  if (!input) {
+
+    output.innerHTML =
+      "Enter a Strong's number such as G26.";
+
+    return;
+
+  }
+
+  if (!STRONGS[input]) {
+
+    output.innerHTML =
+      "No Strong's entry is currently available for " +
+      input +
+      ".";
+
+    return;
+
+  }
+
+  const item = STRONGS[input];
+
+  output.innerHTML = `
+    <strong>${input}</strong><br><br>
+
+    <strong>Original Word:</strong>
+    ${item.word}<br><br>
+
+    <strong>Transliteration:</strong>
+    ${item.transliteration}<br><br>
+
+    <strong>Basic Meaning:</strong>
+    ${item.meaning}
+  `;
+
+}
+
+
+/* =========================================
+   COMMENTARIES
+========================================= */
+
+const COMMENTARY_API =
+  "https://bible.helloao.org/api/c/";
+
+const commentaryApiIds = {
+
+  "john-gill":
+    "john-gill",
+
+  "jfb":
+    "jamieson-fausset-brown",
+
+  "adam-clarke":
+    "adam-clarke",
+
+  "matthew-henry-complete":
+    "matthew-henry"
+
+};
+
+
+/*
+  Matthew Henry Complete is handled separately below
+  so its working source can be improved without affecting
+  the other commentary connections.
+*/
+
+
+async function loadCommentary() {
+
+  const selected =
+    document.getElementById("commentarySelect")
+      .value;
+
+  const book =
+    document.getElementById("commentaryBook")
+      .value
+      .trim();
+
+  const chapter =
+    document.getElementById("commentaryChapter")
+      .value
+      .trim();
+
+  const verse =
+    document.getElementById("commentaryVerse")
+      .value
+      .trim();
+
+  const output =
+    document.getElementById("commentaryResult");
+
+  if (!book || !chapter) {
+
+    output.innerHTML =
+      "Enter a book and chapter.";
+
+    return;
+
   }
 
 
-  /*
-   * ----------------------------------------------------
-   * STRONG'S LOOKUP
-   * ----------------------------------------------------
-   */
+  /* Barnes */
 
-  const strongs = {
-
-    G1: {
-      language: "Greek",
-      word: "ἄλφα",
-      transliteration: "alpha",
-      meaning: "alpha; the first letter"
-    },
-
-    G25: {
-      language: "Greek",
-      word: "ἀγαπάω",
-      transliteration: "agapaō",
-      meaning: "to love; to value; to show love"
-    },
-
-    G26: {
-      language: "Greek",
-      word: "ἀγάπη",
-      transliteration: "agapē",
-      meaning: "love, goodwill, benevolence; especially love of God and the love Christians are to have toward one another"
-    },
-
-    G27: {
-      language: "Greek",
-      word: "ἀγαπητός",
-      transliteration: "agapētos",
-      meaning: "beloved; dearly loved"
-    },
-
-    G40: {
-      language: "Greek",
-      word: "ἅγιος",
-      transliteration: "hagios",
-      meaning: "holy; sacred; set apart"
-    },
-
-    G932: {
-      language: "Greek",
-      word: "βασιλεία",
-      transliteration: "basileia",
-      meaning: "kingdom; reign; royal rule"
-    },
-
-    G1343: {
-      language: "Greek",
-      word: "δικαιοσύνη",
-      transliteration: "dikaiosynē",
-      meaning: "righteousness; justice; uprightness"
-    },
-
-    G1577: {
-      language: "Greek",
-      word: "ἐκκλησία",
-      transliteration: "ekklēsia",
-      meaning: "assembly; congregation; church"
-    },
-
-    G1680: {
-      language: "Greek",
-      word: "ἐλπίς",
-      transliteration: "elpis",
-      meaning: "hope; expectation; confidence"
-    },
-
-    G2316: {
-      language: "Greek",
-      word: "θεός",
-      transliteration: "theos",
-      meaning: "God; deity"
-    },
-
-    G2424: {
-      language: "Greek",
-      word: "Ἰησοῦς",
-      transliteration: "Iēsous",
-      meaning: "Jesus"
-    },
-
-    G266: {
-      language: "Greek",
-      word: "ἁμαρτία",
-      transliteration: "hamartia",
-      meaning: "sin; missing the mark; offense"
-    },
-
-    G2962: {
-      language: "Greek",
-      word: "κύριος",
-      transliteration: "kyrios",
-      meaning: "Lord; master"
-    },
-
-    G2983: {
-      language: "Greek",
-      word: "λαμβάνω",
-      transliteration: "lambanō",
-      meaning: "to take; receive; obtain"
-    },
-
-    G3056: {
-      language: "Greek",
-      word: "λόγος",
-      transliteration: "logos",
-      meaning: "word; message; statement; account"
-    },
-
-    G3340: {
-      language: "Greek",
-      word: "μετανοέω",
-      transliteration: "metanoeō",
-      meaning: "to repent; to change one's mind or turn"
-    },
-
-    G4100: {
-      language: "Greek",
-      word: "πιστεύω",
-      transliteration: "pisteuō",
-      meaning: "to believe; trust; have faith"
-    },
-
-    G4102: {
-      language: "Greek",
-      word: "πίστις",
-      transliteration: "pistis",
-      meaning: "faith; belief; trust; faithfulness"
-    },
-
-    G4151: {
-      language: "Greek",
-      word: "πνεῦμα",
-      transliteration: "pneuma",
-      meaning: "spirit; breath; wind"
-    },
-
-    G4678: {
-      language: "Greek",
-      word: "σοφία",
-      transliteration: "sophia",
-      meaning: "wisdom"
-    },
-
-    G4991: {
-      language: "Greek",
-      word: "σωτηρία",
-      transliteration: "sōtēria",
-      meaning: "salvation; deliverance"
-    },
-
-    G5485: {
-      language: "Greek",
-      word: "χάρις",
-      transliteration: "charis",
-      meaning: "grace; favor; kindness"
-    },
-
-    H1: {
-      language: "Hebrew",
-      word: "אָב",
-      transliteration: "ab",
-      meaning: "father"
-    },
-
-    H430: {
-      language: "Hebrew",
-      word: "אֱלֹהִים",
-      transliteration: "Elohim",
-      meaning: "God; gods"
-    },
-
-    H2617: {
-      language: "Hebrew",
-      word: "חֶסֶד",
-      transliteration: "chesed",
-      meaning: "lovingkindness; mercy; steadfast love"
-    },
-
-    H3068: {
-      language: "Hebrew",
-      word: "יהוה",
-      transliteration: "YHWH",
-      meaning: "the personal name of the LORD"
-    },
-
-    H3467: {
-      language: "Hebrew",
-      word: "יָשַׁע",
-      transliteration: "yasha",
-      meaning: "to save; deliver"
-    },
-
-    H3820: {
-      language: "Hebrew",
-      word: "לֵב",
-      transliteration: "lev",
-      meaning: "heart; inner person; mind"
-    },
-
-    H530: {
-      language: "Hebrew",
-      word: "אֱמוּנָה",
-      transliteration: "emunah",
-      meaning: "faithfulness; firmness; faith"
-    },
-
-    H539: {
-      language: "Hebrew",
-      word: "אָמַן",
-      transliteration: "aman",
-      meaning: "to support; believe; be faithful"
-    },
-
-    H7225: {
-      language: "Hebrew",
-      word: "רֵאשִׁית",
-      transliteration: "reshith",
-      meaning: "beginning; first; firstfruits"
-    },
-
-    H7307: {
-      language: "Hebrew",
-      word: "רוּחַ",
-      transliteration: "ruach",
-      meaning: "spirit; wind; breath"
-    },
-
-    H7965: {
-      language: "Hebrew",
-      word: "שָׁלוֹם",
-      transliteration: "shalom",
-      meaning: "peace; completeness; wholeness"
-    },
-
-    H8451: {
-      language: "Hebrew",
-      word: "תּוֹרָה",
-      transliteration: "torah",
-      meaning: "instruction; law; teaching"
-    }
-  };
-
-
-  async function lookupStrong() {
-
-    let input =
-      document.getElementById("strongInput")
-        .value
-        .trim()
-        .toUpperCase();
-
-    const output =
-      document.getElementById("strongResult");
-
-    if (!input) {
-
-      output.classList.remove("hidden");
-
-      output.innerHTML =
-        "Enter a Strong's number such as G26 or H3068.";
-
-      return;
-    }
-
-
-    if (/^[GH]\d+$/.test(input) === false) {
-
-      output.classList.remove("hidden");
-
-      output.innerHTML =
-        "Please enter a Strong's number in the format G26 or H3068.";
-
-      return;
-    }
-
-
-    const result =
-      strongs[input];
-
-
-    if (result) {
-
-      output.classList.remove("hidden");
-
-      output.innerHTML = `
-
-        <strong>Strong's:</strong> ${input}<br><br>
-
-        <strong>Language:</strong>
-        ${escapeHTML(result.language)}<br><br>
-
-        <strong>Original Word:</strong>
-        ${escapeHTML(result.word)}<br><br>
-
-        <strong>Transliteration:</strong>
-        ${escapeHTML(result.transliteration)}<br><br>
-
-        <strong>Meaning:</strong>
-        ${escapeHTML(result.meaning)}
-
-      `;
-
-      return;
-    }
-
-
-    /*
-     * Try Sefaria as a secondary lookup.
-     */
-
-    try {
-
-      const response =
-        await fetch(
-          "https://www.sefaria.org/api/words/" +
-          encodeURIComponent(input)
-        );
-
-      if (!response.ok) {
-        throw new Error("No result");
-      }
-
-      const data =
-        await response.json();
-
-      if (
-        data &&
-        Object.keys(data).length
-      ) {
-
-        output.classList.remove("hidden");
-
-        output.innerHTML =
-          "<strong>Strong's:</strong> " +
-          escapeHTML(input) +
-          "<br><br>" +
-          escapeHTML(
-            JSON.stringify(data, null, 2)
-          );
-
-        return;
-      }
-
-    } catch (error) {
-
-      console.log(
-        "Secondary word lookup unavailable."
-      );
-
-    }
-
-
-    output.classList.remove("hidden");
+  if (selected === "barnes") {
 
     output.innerHTML =
-      `No result was found for <strong>${escapeHTML(input)}</strong> in the built-in lookup yet.`;
+      "<strong>Barnes' Notes</strong><br><br>" +
+      "Barnes' Notes is a New Testament commentary. " +
+      "The connection for this source is still being developed.";
+
+    return;
+
   }
 
 
+  /* Matthew Henry Complete */
+
+  if (selected === "matthew-henry-complete") {
+
+    await loadMatthewHenryComplete(
+      book,
+      chapter,
+      verse,
+      output
+    );
+
+    return;
+
+  }
+
+
+  const apiId =
+    commentaryApiIds[selected];
+
+  if (!apiId) {
+
+    output.innerHTML =
+      "This commentary is not currently connected.";
+
+    return;
+
+  }
+
+
+  const bookId =
+    convertBookForCommentary(book);
+
+  const url =
+    COMMENTARY_API +
+    apiId +
+    "/" +
+    bookId +
+    "/" +
+    chapter +
+    ".simple.json";
+
+
+  output.innerHTML =
+    "Loading commentary...";
+
+
+  try {
+
+    const response =
+      await fetch(url);
+
+    if (!response.ok) {
+
+      throw new Error(
+        "Commentary request failed"
+      );
+
+    }
+
+    const data =
+      await response.json();
+
+    let html =
+      "<h3>" +
+      selected +
+      "</h3>";
+
+
+    if (
+      data.chapter &&
+      Array.isArray(data.chapter.content)
+    ) {
+
+      const verseItems =
+        data.chapter.content.filter(function(item) {
+
+          return item.type === "verse";
+
+        });
+
+
+      if (verse) {
+
+        const selectedVerse =
+          verseItems.find(function(item) {
+
+            return String(item.number) ===
+              String(verse);
+
+          });
+
+        if (selectedVerse) {
+
+          html +=
+            "<strong>Verse " +
+            selectedVerse.number +
+            "</strong><br><br>" +
+            formatText(selectedVerse.text);
+
+        } else {
+
+          html +=
+            "No commentary was found for verse " +
+            verse +
+            ".";
+
+        }
+
+      } else {
+
+        verseItems.forEach(function(item) {
+
+          html +=
+            "<div style='margin-bottom:18px'>" +
+            "<strong>Verse " +
+            item.number +
+            "</strong><br>" +
+            formatText(item.text) +
+            "</div>";
+
+        });
+
+      }
+
+    } else {
+
+      html +=
+        "Commentary data was not available.";
+
+    }
+
+    output.innerHTML = html;
+
+  } catch (error) {
+
+    console.error(error);
+
+    output.innerHTML =
+      "This commentary could not be loaded right now.";
+
+  }
+
+}
+
+
+/* =========================================
+   MATTHEW HENRY COMPLETE
+========================================= */
+
+async function loadMatthewHenryComplete(
+  book,
+  chapter,
+  verse,
+  output
+) {
+
   /*
-   * ----------------------------------------------------
-   * COMMENTARY
-   * ----------------------------------------------------
-   */
+    The complete Matthew Henry source is kept separate
+    so this working integration can be carried over to
+    Personal Bible Study.
+  */
 
-  const commentaryIds = {
+  const bookId =
+    convertBookForCommentary(book);
 
-    "matthew-henry-concise":
-      "matthew-henry",
+  const possibleUrls = [
 
-    "matthew-henry-complete":
-      "matthew-henry",
+    "https://bible.helloao.org/api/c/matthew-henry/" +
+      bookId +
+      "/" +
+      chapter +
+      ".simple.json",
 
-    "john-gill":
-      "john-gill",
+    "https://bible.helloao.org/api/c/matthew-henry/" +
+      bookId +
+      "/" +
+      chapter +
+      ".json"
 
-    "jfb":
-      "jamieson-fausset-brown",
-
-    "adam-clarke":
-      "adam-clarke"
-
-  };
-
-
-  const bookMap = {
-
-    genesis: "gen",
-    exodus: "exo",
-    leviticus: "lev",
-    numbers: "num",
-    deuteronomy: "deu",
-    joshua: "jos",
-    judges: "jdg",
-    ruth: "rut",
-    "1 samuel": "1sa",
-    "2 samuel": "2sa",
-    "1 kings": "1ki",
-    "2 kings": "2ki",
-    "1 chronicles": "1ch",
-    "2 chronicles": "2ch",
-    ezra: "ezr",
-    nehemiah: "neh",
-    esther: "est",
-    job: "job",
-    psalms: "psa",
-    proverbs: "pro",
-    ecclesiastes: "ecc",
-    song: "sng",
-    "song of solomon": "sng",
-    isaiah: "isa",
-    jeremiah: "jer",
-    lamentations: "lam",
-    ezekiel: "ezk",
-    daniel: "dan",
-    hosea: "hos",
-    joel: "jol",
-    amos: "amo",
-    obadiah: "oba",
-    jonah: "jon",
-    micah: "mic",
-    nahum: "nam",
-    habakkuk: "hab",
-    zephaniah: "zep",
-    haggai: "hag",
-    zechariah: "zec",
-    malachi: "mal",
-
-    matthew: "mat",
-    mark: "mrk",
-    luke: "luk",
-    john: "jhn",
-    acts: "act",
-    romans: "rom",
-    "1 corinthians": "1co",
-    "2 corinthians": "2co",
-    galatians: "gal",
-    ephesians: "eph",
-    philippians: "php",
-    colossians: "col",
-    "1 thessalonians": "1th",
-    "2 thessalonians": "2th",
-    "1 timothy": "1ti",
-    "2 timothy": "2ti",
-    titus: "tit",
-    philemon: "phm",
-    hebrews: "heb",
-    james: "jas",
-    "1 peter": "1pe",
-    "2 peter": "2pe",
-    "1 john": "1jn",
-    "2 john": "2jn",
-    "3 john": "3jn",
-    jude: "jud",
-    revelation: "rev"
-  };
+  ];
 
 
-  async function loadCommentary() {
-
-    const commentary =
-      document.getElementById("commentarySelect")
-        .value;
-
-    const bookInput =
-      document.getElementById("commentaryBook")
-        .value
-        .trim()
-        .toLowerCase();
-
-    const chapter =
-      document.getElementById("commentaryChapter")
-        .value
-        .trim();
-
-    const verse =
-      document.getElementById("commentaryVerse")
-        .value
-        .trim();
+  output.innerHTML =
+    "Loading Matthew Henry Complete...";
 
 
-    const status =
-      document.getElementById("commentaryStatus");
-
-    const side =
-      document.getElementById("commentarySideContent");
-
-    const area =
-      document.getElementById("commentaryVerseArea");
-
-
-    if (!bookInput || !chapter) {
-
-      showMessage(
-        "commentaryStatus",
-        "Enter a book and chapter first."
-      );
-
-      return;
-    }
-
-
-    if (commentary === "barnes") {
-
-      side.innerHTML = `
-        <strong>Barnes' Notes</strong><br><br>
-        Barnes' Notes is currently available as a study option,
-        but its external source is not connected to this page yet.
-        We will work on this connection later.
-      `;
-
-      area.innerHTML = "";
-
-      showMessage(
-        "commentaryStatus",
-        "Barnes' Notes connection is still being developed."
-      );
-
-      return;
-    }
-
-
-    const book =
-      bookMap[bookInput] ||
-      bookInput;
-
-
-    const commentaryId =
-      commentaryIds[commentary];
-
-
-    const url =
-      `https://bible.helloao.org/api/c/${commentaryId}/${book}/${chapter}.simple.json`;
-
-
-    side.innerHTML =
-      "Loading commentary...";
-
-    area.innerHTML =
-      "Loading...";
-
+  for (const url of possibleUrls) {
 
     try {
 
@@ -2280,115 +2118,87 @@
         await fetch(url);
 
       if (!response.ok) {
-        throw new Error("Commentary request failed.");
+        continue;
       }
 
       const data =
         await response.json();
 
+      let html =
+        "<h3>Matthew Henry Complete</h3>";
 
-      const content =
-        data?.chapter?.content || [];
+      if (
+        data.chapter &&
+        Array.isArray(data.chapter.content)
+      ) {
+
+        const items =
+          data.chapter.content.filter(function(item) {
+
+            return item.type === "verse";
+
+          });
 
 
-      const entries =
-        content.filter(
-          item => item.type === "verse"
-        );
+        if (verse) {
 
+          const selected =
+            items.find(function(item) {
 
-      if (!entries.length) {
+              return String(item.number) ===
+                String(verse);
 
-        area.innerHTML =
-          "<div class='message show'>No commentary entries were found for this passage.</div>";
+            });
 
-        side.innerHTML =
-          "No commentary entries found.";
+          if (selected) {
 
-        return;
+            html +=
+              "<strong>Verse " +
+              selected.number +
+              "</strong><br><br>" +
+              formatText(selected.text);
+
+          } else {
+
+            html +=
+              "No commentary was found for verse " +
+              verse +
+              ".";
+
+          }
+
+        } else {
+
+          items.forEach(function(item) {
+
+            html +=
+              "<div style='margin-bottom:18px'>" +
+              "<strong>Verse " +
+              item.number +
+              "</strong><br>" +
+              formatText(item.text) +
+              "</div>";
+
+          });
+
+        }
+
+      } else {
+
+        html +=
+          "Matthew Henry Complete data was not available.";
+
       }
 
+      output.innerHTML = html;
 
-      const selected =
-        verse
-          ? entries.filter(
-              item =>
-                String(item.number) === String(verse)
-            )
-          : entries;
-
-
-      const usable =
-        selected.length
-          ? selected
-          : entries;
-
-
-      area.innerHTML =
-        usable
-          .map(item => `
-
-            <div class="verse-card">
-
-              <div class="verse-card-main">
-
-                <div class="verse-reference">
-                  ${escapeHTML(bookInput)}
-                  ${chapter}:${escapeHTML(String(item.number))}
-                </div>
-
-                <div class="verse-text">
-                  ${escapeHTML(item.text || "")}
-                </div>
-
-              </div>
-
-            </div>
-
-          `)
-          .join("");
-
-
-      side.innerHTML =
-        usable
-          .map(item => `
-
-            <div class="commentary-entry">
-
-              <div class="commentary-ref">
-                ${escapeHTML(bookInput)}
-                ${chapter}:${escapeHTML(String(item.number))}
-              </div>
-
-              <div>
-                ${escapeHTML(item.text || "")}
-              </div>
-
-            </div>
-
-          `)
-          .join("");
-
-
-      showMessage(
-        "commentaryStatus",
-        "Commentary loaded."
-      );
-
+      return;
 
     } catch (error) {
 
-      console.error(error);
-
-      area.innerHTML =
-        "<div class='message show'>The commentary could not be loaded right now.</div>";
-
-      side.innerHTML =
-        "Commentary could not be loaded.";
-
-      showMessage(
-        "commentaryStatus",
-        "The commentary source could not be reached."
+      console.log(
+        "Matthew Henry source attempt failed:",
+        error
       );
 
     }
@@ -2396,526 +2206,481 @@
   }
 
 
-  /*
-   * ----------------------------------------------------
-   * SAVE BASIC INFORMATION
-   * ----------------------------------------------------
-   */
+  output.innerHTML =
+    "Matthew Henry Complete could not be loaded right now.";
 
-  function saveSermonBasics() {
-
-    const data = {
-
-      title:
-        document.getElementById("sermonTitle").value,
-
-      topic:
-        document.getElementById("sermonTopic").value,
-
-      purpose:
-        document.getElementById("sermonPurpose").value
-
-    };
-
-    localStorage.setItem(
-      "bibleMastreyCurrentSermonBasics",
-      JSON.stringify(data)
-    );
-
-    const status =
-      document.getElementById("topicStatus");
-
-    status.classList.add("show");
-
-    setTimeout(
-      () => status.classList.remove("show"),
-      2500
-    );
-
-  }
+}
 
 
-  /*
-   * ----------------------------------------------------
-   * BUILD FINAL SERMON
-   * ----------------------------------------------------
-   */
+/* =========================================
+   BOOK CONVERSION
+========================================= */
 
-  function buildFinalSermon() {
+function convertBookForCommentary(book) {
 
-    const title =
-      value("sermonTitle") ||
-      "Untitled Sermon";
+  const map = {
 
-    const topic =
-      value("sermonTopic");
+    genesis: "genesis",
+    gen: "genesis",
 
-    const purpose =
-      value("sermonPurpose");
+    exodus: "exodus",
+    ex: "exodus",
 
-    const mainScripture =
-      value("mainScripture");
+    leviticus: "leviticus",
+    lev: "leviticus",
 
-    const scriptureReason =
-      value("scriptureReason");
+    numbers: "numbers",
+    num: "numbers",
 
-    const observation =
-      value("observation");
+    deuteronomy: "deuteronomy",
+    deut: "deuteronomy",
 
-    const context =
-      value("context");
+    joshua: "joshua",
+    josh: "joshua",
 
-    const mainTruth =
-      value("mainTruth");
+    judges: "judges",
+    judg: "judges",
 
-    const sermonStatement =
-      value("sermonStatement");
+    ruth: "ruth",
 
-    const introduction =
-      value("introduction");
+    "1 samuel": "1-samuel",
+    "2 samuel": "2-samuel",
 
-    const overallApplication =
-      value("overallApplication");
+    "1 kings": "1-kings",
+    "2 kings": "2-kings",
 
-    const encouragement =
-      value("encouragement");
+    "1 chronicles": "1-chronicles",
+    "2 chronicles": "2-chronicles",
 
-    const conclusion =
-      value("conclusion");
+    ezra: "ezra",
+    nehemiah: "nehemiah",
+    esther: "esther",
+
+    job: "job",
+    psalms: "psalms",
+    psalm: "psalms",
+
+    proverbs: "proverbs",
+    ecclesiastes: "ecclesiastes",
+    song: "song-of-solomon",
+    "song of solomon": "song-of-solomon",
+
+    isaiah: "isaiah",
+    jeremiah: "jeremiah",
+    lamentations: "lamentations",
+    ezekiel: "ezekiel",
+    daniel: "daniel",
+
+    hosea: "hosea",
+    joel: "joel",
+    amos: "amos",
+    obadiah: "obadiah",
+    jonah: "jonah",
+    micah: "micah",
+    nahum: "nahum",
+    habakkuk: "habakkuk",
+    zephaniah: "zephaniah",
+    haggai: "haggai",
+    zechariah: "zechariah",
+    malachi: "malachi",
+
+    matthew: "matthew",
+    mat: "matthew",
+
+    mark: "mark",
+    mar: "mark",
+
+    luke: "luke",
+    luk: "luke",
+
+    john: "john",
+    joh: "john",
+
+    acts: "acts",
+
+    romans: "romans",
+    rom: "romans",
+
+    "1 corinthians": "1-corinthians",
+    "2 corinthians": "2-corinthians",
+
+    galatians: "galatians",
+    ephesians: "ephesians",
+    philippians: "philippians",
+    colossians: "colossians",
+
+    "1 thessalonians": "1-thessalonians",
+    "2 thessalonians": "2-thessalonians",
+
+    "1 timothy": "1-timothy",
+    "2 timothy": "2-timothy",
+
+    titus: "titus",
+    philemon: "philemon",
+    hebrews: "hebrews",
+    james: "james",
+
+    "1 peter": "1-peter",
+    "2 peter": "2-peter",
+
+    "1 john": "1-john",
+    "2 john": "2-john",
+    "3 john": "3-john",
+
+    jude: "jude",
+    revelation: "revelation",
+    rev: "revelation"
+
+  };
+
+  const normalized =
+    book.toLowerCase().trim();
+
+  return map[normalized] ||
+    normalized.replace(/\s+/g, "-");
+
+}
 
 
-    const points = [1, 2, 3]
-      .map(number => ({
+/* =========================================
+   TEXT HELPERS
+========================================= */
 
-        title:
-          value("point" + number + "Title"),
+function formatText(text) {
 
-        scripture:
-          value("point" + number + "Scripture"),
+  if (!text) return "";
 
-        explanation:
-          value("point" + number + "Explanation"),
+  return String(text)
+    .replace(/\n/g, "<br>");
 
-        application:
-          value("point" + number + "Application")
-
-      }))
-      .filter(point =>
-        point.title ||
-        point.scripture ||
-        point.explanation ||
-        point.application
-      );
+}
 
 
-    let html = `
+function escapeQuotes(text) {
 
-      <article>
+  return String(text)
+    .replace(/\\/g, "\\\\")
+    .replace(/'/g, "\\'")
+    .replace(/"/g, "&quot;");
 
-        <h2>
-          ${escapeHTML(title)}
-        </h2>
-
-        ${topic ? `
-          <h3>Topic</h3>
-          <p>${formatText(topic)}</p>
-        ` : ""}
-
-        ${purpose ? `
-          <h3>Purpose</h3>
-          <p>${formatText(purpose)}</p>
-        ` : ""}
-
-        ${mainScripture ? `
-          <h3>Main Scripture</h3>
-          <p><strong>${escapeHTML(mainScripture)}</strong></p>
-        ` : ""}
-
-        ${scriptureReason ? `
-          <h3>Why This Passage?</h3>
-          <p>${formatText(scriptureReason)}</p>
-        ` : ""}
-
-        ${observation ? `
-          <h3>Observations</h3>
-          <p>${formatText(observation)}</p>
-        ` : ""}
-
-        ${context ? `
-          <h3>Context</h3>
-          <p>${formatText(context)}</p>
-        ` : ""}
-
-        ${mainTruth ? `
-          <h3>Main Biblical Truth</h3>
-          <p>${formatText(mainTruth)}</p>
-        ` : ""}
-
-        ${sermonStatement ? `
-          <h3>Main Sermon Statement</h3>
-          <p><strong>${formatText(sermonStatement)}</strong></p>
-        ` : ""}
-
-        ${introduction ? `
-          <h3>Introduction</h3>
-          <p>${formatText(introduction)}</p>
-        ` : ""}
-
-    `;
+}
 
 
-    points.forEach((point, index) => {
+function copyText(text) {
 
-      html += `
+  navigator.clipboard.writeText(text)
+    .then(function() {
 
-        <section>
-
-          <h3>
-            Point ${index + 1}
-            ${point.title
-              ? ": " + escapeHTML(point.title)
-              : ""}
-          </h3>
-
-          ${point.scripture ? `
-            <p>
-              <strong>Supporting Scripture:</strong>
-              ${escapeHTML(point.scripture)}
-            </p>
-          ` : ""}
-
-          ${point.explanation ? `
-            <p>
-              <strong>Explanation:</strong><br>
-              ${formatText(point.explanation)}
-            </p>
-          ` : ""}
-
-          ${point.application ? `
-            <p>
-              <strong>Application:</strong><br>
-              ${formatText(point.application)}
-            </p>
-          ` : ""}
-
-        </section>
-
-      `;
+      alert("Copied.");
 
     });
 
-
-    if (overallApplication || encouragement) {
-
-      html += `<h3>Application</h3>`;
-
-      if (overallApplication) {
-        html += `<p>${formatText(overallApplication)}</p>`;
-      }
-
-      if (encouragement) {
-        html += `
-          <p>
-            <strong>Encouragement / Warning:</strong><br>
-            ${formatText(encouragement)}
-          </p>
-        `;
-      }
-
-    }
+}
 
 
-    if (conclusion) {
+/* =========================================
+   BUILD FINAL SERMON
+========================================= */
 
-      html += `
+function buildSermon() {
 
-        <h3>Conclusion</h3>
+  const title =
+    document.getElementById("sermonTitle").value;
 
-        <p>
-          ${formatText(conclusion)}
-        </p>
+  const topic =
+    document.getElementById("sermonTopic").value;
 
-      `;
+  const purpose =
+    document.getElementById("sermonPurpose").value;
 
-    }
+  const scripture =
+    document.getElementById("mainScripture").value;
+
+  const reason =
+    document.getElementById("scriptureReason").value;
+
+  const observation =
+    document.getElementById("observation").value;
+
+  const context =
+    document.getElementById("context").value;
+
+  const biblicalTruth =
+    document.getElementById("biblicalTruth").value;
+
+  const mainPoint =
+    document.getElementById("mainPoint").value;
+
+  const introduction =
+    document.getElementById("introduction").value;
+
+  const application =
+    document.getElementById("application").value;
+
+  const conclusion =
+    document.getElementById("conclusion").value;
 
 
-    html += `</article>`;
-
-
-    document.getElementById(
-      "finalSermon"
-    ).innerHTML = html;
-
-  }
-
-
-  /*
-   * ----------------------------------------------------
-   * SAVE COMPLETE SERMON
-   * ----------------------------------------------------
-   */
-
-  function saveSermon() {
-
-    const fields = [
-
-      "sermonTitle",
-      "sermonTopic",
-      "sermonPurpose",
-      "mainScripture",
-      "scriptureReason",
-      "observation",
-      "context",
-      "mainTruth",
-      "sermonStatement",
-
+  const point1 =
+    buildPoint(
+      1,
       "point1Title",
       "point1Scripture",
       "point1Explanation",
-      "point1Application",
+      "point1Application"
+    );
 
+  const point2 =
+    buildPoint(
+      2,
       "point2Title",
       "point2Scripture",
       "point2Explanation",
-      "point2Application",
+      "point2Application"
+    );
 
+  const point3 =
+    buildPoint(
+      3,
       "point3Title",
       "point3Scripture",
       "point3Explanation",
-      "point3Application",
-
-      "introduction",
-      "overallApplication",
-      "encouragement",
-      "conclusion"
-
-    ];
-
-
-    const data = {};
-
-    fields.forEach(id => {
-
-      const element =
-        document.getElementById(id);
-
-      if (element) {
-        data[id] =
-          element.value;
-      }
-
-    });
-
-
-    localStorage.setItem(
-      "bibleMastreySavedSermon",
-      JSON.stringify(data)
+      "point3Application"
     );
 
 
-    const status =
-      document.getElementById("saveStatus");
+  let sermon = "";
 
-    status.textContent =
-      "Sermon saved on this device.";
+  sermon +=
+    "<h1>" +
+    escapeHtml(title || "Sermon") +
+    "</h1>";
 
-    status.classList.add("show");
+  sermon +=
+    "<h3>Topic</h3>" +
+    formatOutput(topic);
 
-    setTimeout(
-      () => status.classList.remove("show"),
-      2500
-    );
+  sermon +=
+    "<h3>Purpose</h3>" +
+    formatOutput(purpose);
 
-  }
+  sermon +=
+    "<h3>Main Scripture</h3>" +
+    formatOutput(scripture);
 
+  sermon +=
+    "<h3>Why This Passage?</h3>" +
+    formatOutput(reason);
 
-  /*
-   * ----------------------------------------------------
-   * LOAD SAVED SERMON
-   * ----------------------------------------------------
-   */
+  sermon +=
+    "<h3>Observation</h3>" +
+    formatOutput(observation);
 
-  function loadSavedSermon() {
+  sermon +=
+    "<h3>Context</h3>" +
+    formatOutput(context);
 
-    const raw =
-      localStorage.getItem(
-        "bibleMastreySavedSermon"
-      );
+  sermon +=
+    "<h3>Main Biblical Truth</h3>" +
+    formatOutput(biblicalTruth);
 
-    if (!raw) {
+  sermon +=
+    "<h3>Main Sermon Statement</h3>" +
+    formatOutput(mainPoint);
 
-      alert(
-        "No saved sermon was found on this device."
-      );
+  sermon +=
+    "<h2>Introduction</h2>" +
+    formatOutput(introduction);
 
-      return;
-    }
+  sermon += point1;
+  sermon += point2;
+  sermon += point3;
 
+  sermon +=
+    "<h2>Practical Application</h2>" +
+    formatOutput(application);
 
-    try {
-
-      const data =
-        JSON.parse(raw);
-
-
-      Object.keys(data).forEach(id => {
-
-        const element =
-          document.getElementById(id);
-
-        if (element) {
-          element.value =
-            data[id];
-        }
-
-      });
+  sermon +=
+    "<h2>Conclusion</h2>" +
+    formatOutput(conclusion);
 
 
-      alert("Saved sermon loaded.");
+  document.getElementById("sermonOutput").innerHTML =
+    sermon;
 
-    } catch (error) {
-
-      alert(
-        "The saved sermon could not be loaded."
-      );
-
-    }
-
-  }
+}
 
 
-  /*
-   * ----------------------------------------------------
-   * HELPERS
-   * ----------------------------------------------------
-   */
+function buildPoint(
+  number,
+  titleId,
+  scriptureId,
+  explanationId,
+  applicationId
+) {
 
-  function value(id) {
+  const title =
+    document.getElementById(titleId).value;
+
+  const scripture =
+    document.getElementById(scriptureId).value;
+
+  const explanation =
+    document.getElementById(explanationId).value;
+
+  const application =
+    document.getElementById(applicationId).value;
+
+  return `
+    <h2>Point ${number}: ${escapeHtml(title)}</h2>
+
+    <p>
+      <strong>Supporting Scripture:</strong><br>
+      ${formatOutput(scripture)}
+    </p>
+
+    <p>
+      <strong>Explanation:</strong><br>
+      ${formatOutput(explanation)}
+    </p>
+
+    <p>
+      <strong>Application:</strong><br>
+      ${formatOutput(application)}
+    </p>
+  `;
+
+}
+
+
+function formatOutput(text) {
+
+  return escapeHtml(text || "")
+    .replace(/\n/g, "<br>");
+
+}
+
+
+function escapeHtml(text) {
+
+  return String(text)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
+}
+
+
+/* =========================================
+   SAVE SERMON
+========================================= */
+
+function saveSermon() {
+
+  const fields = [
+
+    "sermonTitle",
+    "sermonTopic",
+    "sermonPurpose",
+    "mainScripture",
+    "scriptureReason",
+    "observation",
+    "context",
+    "biblicalTruth",
+    "dictionaryWord",
+    "concordanceWord",
+    "strongsInput",
+    "commentaryBook",
+    "commentaryChapter",
+    "commentaryVerse",
+    "mainPoint",
+    "point1Title",
+    "point1Scripture",
+    "point1Explanation",
+    "point1Application",
+    "point2Title",
+    "point2Scripture",
+    "point2Explanation",
+    "point2Application",
+    "point3Title",
+    "point3Scripture",
+    "point3Explanation",
+    "point3Application",
+    "introduction",
+    "application",
+    "conclusion"
+
+  ];
+
+  const data = {};
+
+  fields.forEach(function(id) {
 
     const element =
       document.getElementById(id);
 
-    return element
-      ? element.value.trim()
-      : "";
+    if (element) {
+      data[id] = element.value;
+    }
+
+  });
+
+
+  localStorage.setItem(
+    "bibleMastreySermon",
+    JSON.stringify(data)
+  );
+
+
+  alert("Sermon saved.");
+
+}
+
+
+/* =========================================
+   LOAD SERMON
+========================================= */
+
+function loadSermon() {
+
+  const saved =
+    localStorage.getItem(
+      "bibleMastreySermon"
+    );
+
+  if (!saved) {
+
+    alert("No saved sermon found.");
+
+    return;
 
   }
 
 
-  function showMessage(id, text) {
+  const data =
+    JSON.parse(saved);
+
+
+  Object.keys(data).forEach(function(id) {
 
     const element =
       document.getElementById(id);
 
-    if (!element) return;
+    if (element) {
 
-    element.textContent =
-      text;
-
-    element.classList.add("show");
-
-  }
-
-
-  function formatText(text) {
-
-    return escapeHTML(text)
-      .replace(/\n/g, "<br>");
-  }
-
-
-  function escapeHTML(text) {
-
-    return String(text || "")
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
-
-  }
-
-
-  function escapeAttribute(text) {
-
-    return String(text || "")
-      .replace(/\\/g, "\\\\")
-      .replace(/'/g, "\\'")
-      .replace(/"/g, "&quot;");
-
-  }
-
-
-  /*
-   * ----------------------------------------------------
-   * LOAD SAVED BASICS ON START
-   * ----------------------------------------------------
-   */
-
-  document.addEventListener(
-    "DOMContentLoaded",
-    function() {
-
-      try {
-
-        const raw =
-          localStorage.getItem(
-            "bibleMastreyCurrentSermonBasics"
-          );
-
-        if (!raw) return;
-
-        const data =
-          JSON.parse(raw);
-
-        if (data.title) {
-          document.getElementById(
-            "sermonTitle"
-          ).value = data.title;
-        }
-
-        if (data.topic) {
-          document.getElementById(
-            "sermonTopic"
-          ).value = data.topic;
-        }
-
-        if (data.purpose) {
-          document.getElementById(
-            "sermonPurpose"
-          ).value = data.purpose;
-        }
-
-      } catch (error) {
-
-        console.log(
-          "No previous sermon information loaded."
-        );
-
-      }
+      element.value =
+        data[id];
 
     }
 
-  );
+  });
 
 
-  /*
-   * Translation changes reload the Bible
-   */
+  alert("Saved sermon loaded.");
 
-  document.getElementById(
-    "translation"
-  ).addEventListener(
-    "change",
-    async function() {
-
-      currentBible = null;
-
-      await loadBible();
-
-    }
-  );
+}
 
 </script>
 
