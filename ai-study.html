@@ -1595,8 +1595,183 @@
     currentVerses =
       selected;
 
+    renderCurrentVerses();
+
+  }
+
+
+  /* =========================================
+     PRESERVE VERSE REFERENCES
+     WHEN TRANSLATION CHANGES
+  ========================================= */
+
+  function refreshCurrentVersesForTranslation() {
+
     if (
-      !selected.length
+      !studyBible ||
+      !Array.isArray(
+        currentVerses
+      ) ||
+      !currentVerses.length
+    ) {
+
+      return;
+
+    }
+
+    const updatedVerses = [];
+
+    currentVerses.forEach(
+      function(oldVerse) {
+
+        const book =
+          studyBible.books.find(
+            function(item) {
+
+              const name =
+                getBookName(
+                  item
+                );
+
+              const id =
+                normalizeBookId(
+                  name,
+                  item
+                );
+
+              return (
+                id ===
+                  oldVerse.bookId ||
+                name.toLowerCase() ===
+                  String(
+                    oldVerse.book ||
+                    ""
+                  ).toLowerCase()
+              );
+
+            }
+          );
+
+        if (
+          !book
+        ) {
+
+          return;
+
+        }
+
+        const chapters =
+          Array.isArray(
+            book.chapters
+          )
+            ? book.chapters
+            : [];
+
+        const chapter =
+          chapters.find(
+            function(item) {
+
+              return (
+                String(
+                  item.chapter
+                ) ===
+                String(
+                  oldVerse.chapter
+                )
+              );
+
+            }
+          );
+
+        if (
+          !chapter
+        ) {
+
+          return;
+
+        }
+
+        const verses =
+          Array.isArray(
+            chapter.verses
+          )
+            ? chapter.verses
+            : [];
+
+        const verse =
+          verses.find(
+            function(item) {
+
+              return (
+                String(
+                  item.number
+                ) ===
+                String(
+                  oldVerse.verse
+                )
+              );
+
+            }
+          );
+
+        if (
+          !verse
+        ) {
+
+          return;
+
+        }
+
+        updatedVerses.push({
+
+          book:
+            getBookName(
+              book
+            ),
+
+          bookId:
+            normalizeBookId(
+              getBookName(book),
+              book
+            ),
+
+          chapter:
+            chapter.chapter,
+
+          verse:
+            verse.number,
+
+          text:
+            String(
+              verse.text ||
+              ""
+            ),
+
+          score:
+            oldVerse.score || 0
+
+        });
+
+      }
+    );
+
+    currentVerses =
+      updatedVerses;
+
+  }
+
+
+  /* =========================================
+     RENDER CURRENT VERSES
+  ========================================= */
+
+  function renderCurrentVerses() {
+
+    verseResults.innerHTML =
+      "";
+
+    if (
+      !currentVerses.length
     ) {
 
       verseResults.innerHTML =
@@ -1608,10 +1783,7 @@
 
     }
 
-    verseResults.innerHTML =
-      "";
-
-    selected.forEach(
+    currentVerses.forEach(
       function(result, index) {
 
         createVerseCard(
@@ -2161,17 +2333,22 @@
 
   /* =========================================
      TRANSLATION CHANGE
+     FIXED TO PRESERVE REFERENCES
   ========================================= */
 
   translationSelect.addEventListener(
     "change",
     async function() {
 
+      const previousTranslation =
+        studyTranslation;
+
       studyTranslation =
         translationSelect.value;
 
       if (
-        !currentTopic
+        !currentTopic ||
+        !currentVerses.length
       ) {
 
         return;
@@ -2187,14 +2364,35 @@
 
         await loadStudyBible();
 
-        displayTopicVerses();
+        /*
+          IMPORTANT:
+          Do NOT search the topic again.
+
+          Keep the existing book,
+          chapter, and verse references
+          and only replace their Bible text
+          with the selected translation.
+        */
+
+        refreshCurrentVersesForTranslation();
+
+        renderCurrentVerses();
 
         await loadSelectedCommentary();
 
       }
       catch (error) {
 
-        console.error(error);
+        console.error(
+          "Translation change error:",
+          error
+        );
+
+        studyTranslation =
+          previousTranslation;
+
+        translationSelect.value =
+          previousTranslation;
 
         verseResults.innerHTML =
           "<div class='error-message'>" +
@@ -2801,7 +2999,6 @@
                 item.text ||
                 item.content ||
                 item
-
               )
 
           };
@@ -3436,14 +3633,6 @@
       "Loading Barnes' Notes..." +
       "</div>";
 
-
-    /*
-      Barnes' Notes is a New Testament commentary.
-      The browser may block direct retrieval from
-      external Barnes pages because of CORS.
-
-      We attempt the public SermonIndex source.
-    */
 
     const entries = [];
 
@@ -4455,11 +4644,6 @@
 
         }
 
-
-        /*
-          Check Strong's numbers first.
-          This is what fixes G26.
-        */
 
         const strongEntry =
           findStrongEntry(
