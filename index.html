@@ -2317,7 +2317,231 @@ async function populateCommentaryPanels(
   /* =========================
      CHAPTERS
   ========================= */
+async function loadChapter() {
 
+  if (
+    !bibleData ||
+    currentBookIndex < 0 ||
+    currentChapterIndex < 0 ||
+    !books[currentBookIndex]
+  ) {
+    verseContainer.innerHTML = "";
+    chapterTitle.textContent = "Bible";
+    chapterIntro.textContent =
+      "Choose a book and chapter to begin reading.";
+    verseSelect.innerHTML =
+      '<option value="">Choose a verse</option>';
+
+    updateNavigation();
+
+    return;
+  }
+
+  const book =
+    books[currentBookIndex];
+
+  const chapters =
+    getChapters(book);
+
+  const chapter =
+    chapters[currentChapterIndex];
+
+  if (!chapter) {
+    verseContainer.innerHTML = "";
+    chapterTitle.textContent = "Bible";
+    chapterIntro.textContent =
+      "Chapter could not be loaded.";
+
+    verseSelect.innerHTML =
+      '<option value="">Choose a verse</option>';
+
+    updateNavigation();
+
+    return;
+  }
+
+  const bookName =
+    getBookName(book);
+
+  const chapterNumber =
+    getChapterNumber(
+      chapter,
+      currentChapterIndex
+    );
+
+  const verses =
+    getVerses(chapter);
+
+  chapterTitle.textContent =
+    bookName +
+    " " +
+    chapterNumber;
+
+  chapterIntro.textContent =
+    "Read, study, highlight, bookmark, and search this chapter.";
+
+  verseContainer.innerHTML = "";
+
+  verseSelect.innerHTML =
+    '<option value="">Choose a verse</option>';
+
+  if (!verses.length) {
+
+    verseContainer.innerHTML =
+      '<p class="empty-state">' +
+      "No verses were found for this chapter." +
+      "</p>";
+
+    updateNavigation();
+
+    return;
+  }
+
+  verses.forEach(
+    function(verse, index) {
+
+      const verseNumber =
+        Number(
+          getVerseNumber(
+            verse,
+            index
+          )
+        );
+
+      const verseText =
+        getVerseText(verse);
+
+      const verseWrapper =
+        document.createElement("div");
+
+      verseWrapper.className =
+        "verse-text";
+
+      verseWrapper.dataset.verse =
+        verseNumber;
+
+      if (
+        isHighlighted(verseNumber)
+      ) {
+        verseWrapper.classList.add(
+          "highlighted"
+        );
+      }
+
+      const verseNumberSpan =
+        document.createElement("span");
+
+      verseNumberSpan.className =
+        "verse-number";
+
+      verseNumberSpan.textContent =
+        verseNumber;
+
+      const textSpan =
+        document.createElement("span");
+
+      textSpan.className =
+        "verse-content";
+
+      textSpan.textContent =
+        " " + verseText;
+
+      verseWrapper.appendChild(
+        verseNumberSpan
+      );
+
+      verseWrapper.appendChild(
+        textSpan
+      );
+
+      verseWrapper.addEventListener(
+        "click",
+        function(event) {
+
+          event.stopPropagation();
+
+          selectVerse(
+            verseNumber,
+            verseWrapper
+          );
+
+          showVerseMenu(
+            event.clientX,
+            event.clientY,
+            verseNumber,
+            verseText
+          );
+        }
+      );
+
+      verseContainer.appendChild(
+        verseWrapper
+      );
+
+
+      const option =
+        document.createElement(
+          "option"
+        );
+
+      option.value =
+        verseNumber;
+
+      option.textContent =
+        "Verse " + verseNumber;
+
+      verseSelect.appendChild(
+        option
+      );
+    }
+  );
+
+
+  if (
+    selectedVerseNumber !== null
+  ) {
+
+    const selectedElement =
+      verseContainer.querySelector(
+        '[data-verse="' +
+        selectedVerseNumber +
+        '"]'
+      );
+
+    if (selectedElement) {
+
+      selectVerse(
+        selectedVerseNumber,
+        selectedElement
+      );
+    } else {
+
+      selectedVerseNumber =
+        null;
+
+      verseSelect.value = "";
+    }
+
+  } else {
+
+    verseSelect.value = "";
+  }
+
+
+  updateNavigation();
+
+
+  if (
+    typeof populateCommentaryPanels ===
+    "function"
+  ) {
+
+    await populateCommentaryPanels(
+      bookName,
+      chapterNumber
+    );
+  }
+}
   function loadChapters() {
 
     const bookIndex =
