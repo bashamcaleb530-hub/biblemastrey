@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>BibleMastrey - Write Bible Study</title>
+  <title>BibleMastrey — Bible Study</title>
 
   <style>
     * {
@@ -13,215 +13,313 @@
 
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f5f7fa;
-      color: #222;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f5f7fb;
+      color: #182033;
       line-height: 1.6;
     }
 
     header {
-      background: #1f3c88;
-      color: white;
-      padding: 18px 20px;
+      background: #ffffff;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 18px 6%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .logo {
+      font-size: 25px;
+      font-weight: 800;
+      color: #172554;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #374151;
+      margin-left: 20px;
+      font-weight: 600;
+    }
+
+    .hero {
       text-align: center;
+      padding: 65px 20px;
+      background: linear-gradient(135deg, #eef2ff, #ffffff);
     }
 
-    header h1 {
-      margin: 0;
-      font-size: 28px;
+    .hero h1 {
+      font-size: clamp(36px, 7vw, 60px);
+      margin: 0 0 15px;
+      color: #172554;
     }
 
-    header p {
-      margin: 6px 0 0;
-      opacity: 0.95;
+    .hero p {
+      max-width: 720px;
+      margin: auto;
+      font-size: 19px;
+      color: #4b5563;
     }
 
-    .page-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 25px 18px 50px;
+    .container {
+      width: 92%;
+      max-width: 1100px;
+      margin: auto;
     }
 
-    .intro {
+    section {
+      padding: 60px 0;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 34px;
+      margin: 0 0 10px;
+      color: #172554;
+    }
+
+    .section-intro {
+      text-align: center;
+      max-width: 720px;
+      margin: 0 auto 35px;
+      color: #6b7280;
+    }
+
+    .study-box {
       background: white;
-      border-radius: 10px;
-      padding: 22px;
-      margin-bottom: 22px;
-      box-shadow: 0 2px 8px rgba(0,0,0,.08);
-    }
-
-    .intro h2 {
-      margin-top: 0;
-      color: #1f3c88;
-    }
-
-    .section {
-      background: white;
-      border-radius: 10px;
-      padding: 22px;
-      margin-bottom: 22px;
-      box-shadow: 0 2px 8px rgba(0,0,0,.08);
-    }
-
-    .section h2 {
-      margin-top: 0;
-      color: #1f3c88;
-      border-bottom: 2px solid #e5e9f2;
-      padding-bottom: 10px;
-    }
-
-    .section h3 {
-      color: #2d4f9e;
-      margin-top: 24px;
+      border-radius: 18px;
+      padding: 30px;
+      box-shadow: 0 10px 35px rgba(0,0,0,.08);
     }
 
     label {
       display: block;
-      font-weight: bold;
-      margin-top: 15px;
-      margin-bottom: 6px;
+      font-weight: 700;
+      margin-bottom: 8px;
     }
 
     input,
     textarea,
     select {
       width: 100%;
-      padding: 11px;
-      border: 1px solid #cfd5df;
-      border-radius: 6px;
+      padding: 14px;
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
+      font-size: 16px;
       font-family: inherit;
-      font-size: 15px;
       background: white;
     }
 
     textarea {
-      min-height: 120px;
+      min-height: 130px;
       resize: vertical;
     }
 
-    .large-writing-area {
-      min-height: 220px;
-    }
-
-    .button-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 18px;
-    }
-
     button {
-      border: none;
-      border-radius: 6px;
-      padding: 11px 17px;
+      border: 0;
+      border-radius: 10px;
+      padding: 13px 18px;
       font-size: 15px;
+      font-weight: 700;
       cursor: pointer;
-      background: #1f3c88;
+    }
+
+    .primary {
+      background: #172554;
       color: white;
     }
 
-    button:hover {
-      opacity: 0.9;
+    .secondary {
+      background: #e8ecf7;
+      color: #172554;
     }
 
-    button.secondary {
-      background: #687386;
+    .topic-search {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
     }
 
-    button.success {
-      background: #2e7d32;
+    .topic-search input {
+      flex: 1;
     }
 
-    .tools-grid {
+    .tools {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 14px;
-      margin-top: 15px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
     }
 
     .tool-card {
-      border: 1px solid #dce1ea;
-      border-radius: 8px;
-      padding: 16px;
-      background: #fafbfd;
+      background: white;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 5px 20px rgba(0,0,0,.06);
     }
 
     .tool-card h3 {
       margin-top: 0;
-      color: #1f3c88;
+      color: #172554;
+    }
+
+    .tool-card p {
+      color: #6b7280;
     }
 
     .tool-card button {
-      width: 100%;
       margin-top: 8px;
     }
 
-    .template-section {
-      border: 1px solid #dce1ea;
-      border-radius: 8px;
-      padding: 18px;
-      margin-top: 15px;
-      background: #fafbfd;
+    .verse-results {
+      margin-top: 30px;
     }
 
-    .guide-item {
-      border-left: 4px solid #1f3c88;
-      background: #f8faff;
-      padding: 15px 17px;
-      margin: 14px 0;
-      border-radius: 5px;
+    .verse-results.empty {
+      display: none;
     }
 
-    .guide-item h3 {
-      margin-top: 0;
+    .verse-card {
+      background: white;
+      border-left: 5px solid #172554;
+      padding: 20px;
+      margin-bottom: 14px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,.05);
+    }
+
+    .verse-reference {
+      font-size: 19px;
+      font-weight: 800;
+      color: #172554;
       margin-bottom: 7px;
     }
 
-    .questions {
-      padding-left: 22px;
+    .verse-text {
+      color: #374151;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 17px;
     }
 
-    .questions li {
-      margin-bottom: 10px;
+    .verse-note {
+      margin-top: 8px;
+      color: #6b7280;
+      font-size: 14px;
+    }
+
+    .guide-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+    }
+
+    .guide-item {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,.05);
+    }
+
+    .guide-item strong {
+      color: #172554;
+    }
+
+    .questions {
+      background: #eef2ff;
+    }
+
+    .question-list {
+      max-width: 850px;
+      margin: auto;
+    }
+
+    .question {
+      background: white;
+      padding: 18px 20px;
+      border-radius: 10px;
+      margin-bottom: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,.04);
+    }
+
+    .template-list {
+      display: grid;
+      gap: 20px;
+    }
+
+    .template-section {
+      background: white;
+      padding: 22px;
+      border-radius: 14px;
+      box-shadow: 0 4px 15px rgba(0,0,0,.05);
+    }
+
+    .template-section h3 {
+      margin-top: 0;
+      color: #172554;
+    }
+
+    .write-grid {
+      display: grid;
+      gap: 20px;
+    }
+
+    .save-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 25px;
     }
 
     .ai-box {
-      background: #f1f5ff;
-      border: 1px solid #cbd6f2;
-      border-radius: 8px;
-      padding: 20px;
+      background: #172554;
+      color: white;
+      border-radius: 18px;
+      padding: 35px;
+      text-align: center;
     }
 
-    .status {
-      margin-top: 10px;
-      font-size: 14px;
-      color: #2e7d32;
-      min-height: 20px;
+    .ai-box h2 {
+      margin-top: 0;
+    }
+
+    .ai-box p {
+      color: #dbeafe;
+      max-width: 700px;
+      margin: 10px auto 20px;
     }
 
     footer {
+      background: #0f172a;
+      color: #cbd5e1;
       text-align: center;
-      padding: 25px;
-      color: #687386;
-      font-size: 14px;
+      padding: 30px 20px;
     }
 
-    @media (max-width: 700px) {
-      header h1 {
-        font-size: 23px;
+    @media (max-width: 800px) {
+      .tools,
+      .guide-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 550px) {
+      header {
+        flex-direction: column;
       }
 
-      .page-container {
-        padding: 15px 10px 35px;
+      nav a {
+        margin: 0 7px;
       }
 
-      .section,
-      .intro {
-        padding: 17px;
+      .tools,
+      .guide-grid {
+        grid-template-columns: 1fr;
       }
 
-      button {
-        width: 100%;
+      .topic-search {
+        flex-direction: column;
       }
     }
   </style>
@@ -229,1145 +327,1419 @@
 
 <body>
 
-  <header>
-    <h1>📖 BibleMastrey</h1>
-    <p>Write and Prepare a Bible Study</p>
-  </header>
+<header>
+  <div class="logo">BibleMastrey</div>
 
-  <main class="page-container">
-
-    <!-- INTRO -->
-    <section class="intro">
-
-      <h2>Build Your Bible Study Step by Step</h2>
-
-      <p>
-        BibleMastrey helps you move from studying Scripture to preparing
-        a clear, biblical, practical Bible study.
-      </p>
-
-      <p>
-        Use the Bible study tools to research Scripture first, then use
-        the template and preparation guide to organize what you have learned
-        into a Bible study you can teach.
-      </p>
-
-    </section>
+  <nav>
+    <a href="/">Bible</a>
+    <a href="#tools">Study Tools</a>
+    <a href="#write">Write</a>
+  </nav>
+</header>
 
 
-    <!-- BIBLE STUDY WRITING AREA -->
-    <section class="section">
+<section class="hero">
+  <div class="container">
 
-      <h2>✍️ Write Your Bible Study</h2>
+    <h1>Write and Prepare a Bible Study</h1>
 
-      <label for="studyTitle">
-        Bible Study Title
-      </label>
+    <p>
+      Choose a topic, find Scripture, study the Word,
+      prepare your teaching, and write your Bible study.
+    </p>
 
-      <input
-        type="text"
-        id="studyTitle"
-        placeholder="Enter your Bible study title"
-      >
+  </div>
+</section>
 
-      <label for="studyPassage">
-        Main Scripture
-      </label>
 
-      <input
-        type="text"
-        id="studyPassage"
-        placeholder="Example: John 3:16"
-      >
+<!-- =========================
+     TOPIC
+========================= -->
 
-      <label for="studyTopic">
+<section id="topic">
+
+  <div class="container">
+
+    <h2 class="section-title">What's Your Bible Study Topic?</h2>
+
+    <p class="section-intro">
+      Enter a Bible study topic and BibleMastrey will give you
+      Scripture references to begin your study.
+    </p>
+
+    <div class="study-box">
+
+      <label for="topicInput">
         Bible Study Topic
       </label>
 
-      <input
-        type="text"
-        id="studyTopic"
-        placeholder="What is this Bible study about?"
-      >
+      <div class="topic-search">
 
-      <label for="studyPurpose">
-        Purpose of the Bible Study
-      </label>
-
-      <textarea
-        id="studyPurpose"
-        placeholder="What do you want people to understand, learn, or apply?"
-      ></textarea>
-
-      <label for="mainTruth">
-        Main Biblical Truth
-      </label>
-
-      <textarea
-        id="mainTruth"
-        placeholder="What is the main biblical truth you want to teach?"
-      ></textarea>
-
-      <label for="studyIntroduction">
-        Introduction
-      </label>
-
-      <textarea
-        id="studyIntroduction"
-        placeholder="Introduce the topic and explain why this Scripture matters."
-      ></textarea>
-
-      <label for="scriptureReading">
-        Scripture Reading
-      </label>
-
-      <textarea
-        id="scriptureReading"
-        placeholder="Write or paste the Scripture passage you will study."
-      ></textarea>
-
-      <label for="context">
-        Biblical Context
-      </label>
-
-      <textarea
-        id="context"
-        placeholder="Who wrote it? Who received it? What was happening? What comes before and after?"
-      ></textarea>
-
-      <label for="observation">
-        What Does the Scripture Say?
-      </label>
-
-      <textarea
-        id="observation"
-        class="large-writing-area"
-        placeholder="Write your observations from the passage."
-      ></textarea>
-
-      <label for="meaning">
-        What Does the Scripture Mean?
-      </label>
-
-      <textarea
-        id="meaning"
-        class="large-writing-area"
-        placeholder="Explain the meaning of the passage in its biblical context."
-      ></textarea>
-
-      <label for="point1">
-        Bible Study Point 1
-      </label>
-
-      <textarea
-        id="point1"
-        placeholder="Explain the first major truth from the Scripture."
-      ></textarea>
-
-      <label for="point2">
-        Bible Study Point 2
-      </label>
-
-      <textarea
-        id="point2"
-        placeholder="Explain the second major truth from the Scripture."
-      ></textarea>
-
-      <label for="point3">
-        Bible Study Point 3
-      </label>
-
-      <textarea
-        id="point3"
-        placeholder="Explain the third major truth from the Scripture."
-      ></textarea>
-
-      <label for="additionalScriptures">
-        Additional Scriptures
-      </label>
-
-      <textarea
-        id="additionalScriptures"
-        placeholder="List other Scriptures that support this Bible study."
-      ></textarea>
-
-      <label for="illustrations">
-        Examples and Illustrations
-      </label>
-
-      <textarea
-        id="illustrations"
-        placeholder="Add helpful examples that make the biblical truth easier to understand."
-      ></textarea>
-
-      <label for="application">
-        Practical Application
-      </label>
-
-      <textarea
-        id="application"
-        class="large-writing-area"
-        placeholder="How should this biblical truth affect the lives of those studying it?"
-      ></textarea>
-
-      <label for="discussion">
-        Discussion Questions
-      </label>
-
-      <textarea
-        id="discussion"
-        placeholder="Write questions that will help people think about and discuss the Scripture."
-      ></textarea>
-
-      <label for="conclusion">
-        Conclusion
-      </label>
-
-      <textarea
-        id="conclusion"
-        placeholder="Summarize the main biblical truth and what should be remembered."
-      ></textarea>
-
-      <label for="response">
-        Response / Next Step
-      </label>
-
-      <textarea
-        id="response"
-        placeholder="What should the student or group do with what they have learned?"
-      ></textarea>
-
-      <label for="closingPrayer">
-        Closing Prayer
-      </label>
-
-      <textarea
-        id="closingPrayer"
-        placeholder="Write a prayer related to the Bible study."
-      ></textarea>
-
-      <div class="button-row">
+        <input
+          id="topicInput"
+          type="text"
+          placeholder="Example: faith, prayer, forgiveness, hope..."
+        >
 
         <button
-          class="success"
-          id="saveStudyButton"
+          class="primary"
+          id="topicButton"
         >
-          💾 Save Bible Study
+          Find Scriptures
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+     BIBLE STUDY TOOLS
+========================= -->
+
+<section id="tools">
+
+  <div class="container">
+
+    <h2 class="section-title">
+      Bible Study Tools
+    </h2>
+
+    <p class="section-intro">
+      Use these tools to study Scripture more deeply.
+    </p>
+
+    <div class="tools">
+
+      <div class="tool-card">
+        <h3>📖 Bible</h3>
+        <p>
+          Read Scripture and look up different books,
+          chapters, and verses.
+        </p>
+
+        <button
+          class="secondary"
+          onclick="openBible()"
+        >
+          Open Bible
+        </button>
+      </div>
+
+
+      <div class="tool-card">
+        <h3>📚 Bible Dictionary</h3>
+
+        <p>
+          Look up Bible words, people, places,
+          and important concepts.
+        </p>
+
+        <button
+          class="secondary"
+          onclick="openTool('dictionary')"
+        >
+          Open Dictionary
+        </button>
+      </div>
+
+
+      <div class="tool-card">
+        <h3>🔎 Concordance</h3>
+
+        <p>
+          Find where important words appear
+          throughout Scripture.
+        </p>
+
+        <button
+          class="secondary"
+          onclick="openTool('concordance')"
+        >
+          Open Concordance
+        </button>
+      </div>
+
+
+      <div class="tool-card">
+        <h3>🇮🇱 Hebrew Word Lookup</h3>
+
+        <p>
+          Explore Hebrew words and their meanings
+          from the Old Testament.
+        </p>
+
+        <button
+          class="secondary"
+          onclick="openTool('hebrew')"
+        >
+          Hebrew Lookup
+        </button>
+      </div>
+
+
+      <div class="tool-card">
+        <h3>🇬🇷 Greek Word Lookup</h3>
+
+        <p>
+          Explore Greek words and their meanings
+          from the New Testament.
+        </p>
+
+        <button
+          class="secondary"
+          onclick="openTool('greek')"
+        >
+          Greek Lookup
+        </button>
+      </div>
+
+
+      <div class="tool-card">
+        <h3>📖 Commentaries</h3>
+
+        <p>
+          Compare Bible commentaries to help
+          understand the passage.
+        </p>
+
+        <button
+          class="secondary"
+          onclick="openTool('commentaries')"
+        >
+          Open Commentaries
+        </button>
+      </div>
+
+
+      <div class="tool-card">
+        <h3>🌐 Bible Translations</h3>
+
+        <p>
+          Compare different Bible translations
+          while studying Scripture.
+        </p>
+
+        <button
+          class="secondary"
+          onclick="openTool('translations')"
+        >
+          Compare Translations
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+     VERSES
+     IMPORTANT: AFTER TOOLS
+========================= -->
+
+<section id="verses">
+
+  <div class="container">
+
+    <h2 class="section-title">
+      Bible Verses for Your Topic
+    </h2>
+
+    <p class="section-intro">
+      Use these Scriptures as a starting point for your study.
+      Study each passage carefully in context.
+    </p>
+
+    <div
+      id="verseResults"
+      class="verse-results empty"
+    ></div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+     PREPARATION GUIDE
+========================= -->
+
+<section id="guide">
+
+  <div class="container">
+
+    <h2 class="section-title">
+      Bible Study Preparation & Teaching Guide
+    </h2>
+
+    <p class="section-intro">
+      Follow these steps as you prepare your Bible study.
+    </p>
+
+    <div class="guide-grid">
+
+      <div class="guide-item">
+        <strong>1. Pray and Begin With the Right Purpose</strong>
+        <p>Ask God for wisdom and seek to faithfully understand His Word.</p>
+      </div>
+
+      <div class="guide-item">
+        <strong>2. Choose Your Topic or Passage</strong>
+        <p>Clearly identify what you are going to study.</p>
+      </div>
+
+      <div class="guide-item">
+        <strong>3. Read the Scripture Carefully</strong>
+        <p>Read the passage several times before drawing conclusions.</p>
+      </div>
+
+      <div class="guide-item">
+        <strong>4. Study the Context</strong>
+        <p>Consider the surrounding verses, chapter, book, and biblical setting.</p>
+      </div>
+
+      <div class="guide-item">
+        <strong>5. Find the Main Biblical Truth</strong>
+        <p>Identify what the passage is actually teaching.</p>
+      </div>
+
+      <div class="guide-item">
+        <strong>6. Study Important Hebrew or Greek Words</strong>
+        <p>Use original-language tools when they help clarify meaning.</p>
+      </div>
+
+      <div class="guide-item">
+        <strong>7. Use the Bible Dictionary</strong>
+        <p>Research important people, places, words, and concepts.</p>
+      </div>
+
+      <div class="guide-item">
+        <strong>8. Use the Concordance</strong>
+        <p>Find other passages that use important biblical words.</p>
+      </div>
+
+      <div class="guide-item">
+        <strong>9. Compare Bible Translations</strong>
+        <p>Compare translations while keeping the original context in view.</p>
+      </div>
+
+      <div class="guide-item">
+        <strong>10. Read the Commentaries</strong>
+        <p>Use commentaries as study helps, not replacements for Scripture.</p>
+      </div>
+
+      <div class="guide-item">
+        <strong>11. Develop the Main Teaching Point</strong>
+        <p>State the central truth of your Bible study clearly.</p>
+      </div>
+
+      <div class="guide-item">
+        <strong>12. Build Supporting Points</strong>
+        <p>Organize supporting truths directly from Scripture.</p>
+      </div>
+
+      <div class="guide-item">
+        <strong>13. Explain the Scripture</strong>
+        <p>Explain what the passage says and means in context.</p>
+      </div>
+
+      <div class="guide-item">
+        <strong>14. Give Practical Application</strong>
+        <p>Show how the biblical truth should affect everyday life.</p>
+      </div>
+
+      <div class="guide-item">
+        <strong>15. Write the Introduction</strong>
+        <p>Help the learner understand why the study matters.</p>
+      </div>
+
+      <div class="guide-item">
+        <strong>16. Write the Conclusion</strong>
+        <p>Bring the main biblical truth together clearly.</p>
+      </div>
+
+      <div class="guide-item">
+        <strong>17. Put the Bible Study Together</strong>
+        <p>Organize your material into a clear teaching flow.</p>
+      </div>
+
+      <div class="guide-item">
+        <strong>18. Review for Biblical Accuracy and Clarity</strong>
+        <p>Make sure your teaching is faithful to Scripture and easy to understand.</p>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+     QUESTIONS
+========================= -->
+
+<section
+  id="questions"
+  class="questions"
+>
+
+  <div class="container">
+
+    <h2 class="section-title">
+      Questions to Keep Beside You
+    </h2>
+
+    <p class="section-intro">
+      Use these questions throughout your Bible study preparation.
+    </p>
+
+    <div class="question-list">
+
+      <div class="question">
+        <strong>1.</strong>
+        What does Scripture say?
+      </div>
+
+      <div class="question">
+        <strong>2.</strong>
+        What does Scripture mean in context?
+      </div>
+
+      <div class="question">
+        <strong>3.</strong>
+        What biblical truth should people understand?
+      </div>
+
+      <div class="question">
+        <strong>4.</strong>
+        How should this truth change our lives?
+      </div>
+
+      <div class="question">
+        <strong>5.</strong>
+        Can I support my teaching with Scripture?
+      </div>
+
+      <div class="question">
+        <strong>6.</strong>
+        Am I explaining Scripture or merely giving my opinion?
+      </div>
+
+      <div class="question">
+        <strong>7.</strong>
+        Is the message clear enough for someone studying this passage for the first time?
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+     TEMPLATE
+========================= -->
+
+<section id="template">
+
+  <div class="container">
+
+    <h2 class="section-title">
+      Bible Study Template
+    </h2>
+
+    <p class="section-intro">
+      Use this structure to organize your Bible study before writing it.
+    </p>
+
+    <div class="template-list">
+
+      <div class="template-section">
+        <h3>1. Bible Study Title</h3>
+        <p>What is the title of your study?</p>
+      </div>
+
+      <div class="template-section">
+        <h3>2. Main Scripture</h3>
+        <p>What is the primary passage you will study?</p>
+      </div>
+
+      <div class="template-section">
+        <h3>3. Bible Study Topic</h3>
+        <p>What biblical topic are you teaching?</p>
+      </div>
+
+      <div class="template-section">
+        <h3>4. Study Purpose</h3>
+        <p>What do you want the learner to understand?</p>
+      </div>
+
+      <div class="template-section">
+        <h3>5. Main Biblical Truth</h3>
+        <p>What is the central truth of the study?</p>
+      </div>
+
+      <div class="template-section">
+        <h3>6. Introduction</h3>
+        <p>Introduce the topic and explain why it matters.</p>
+      </div>
+
+      <div class="template-section">
+        <h3>7. Scripture Reading</h3>
+        <p>Read and present the main biblical passage.</p>
+      </div>
+
+      <div class="template-section">
+        <h3>8. Context</h3>
+        <p>Explain the historical and biblical context.</p>
+      </div>
+
+      <div class="template-section">
+        <h3>9. Observation</h3>
+        <p>What do you observe in the passage?</p>
+      </div>
+
+      <div class="template-section">
+        <h3>10. Meaning</h3>
+        <p>What does the passage mean?</p>
+      </div>
+
+      <div class="template-section">
+        <h3>11. Teaching Point 1</h3>
+        <p>Explain the first major truth from Scripture.</p>
+      </div>
+
+      <div class="template-section">
+        <h3>12. Teaching Point 2</h3>
+        <p>Explain the second major truth from Scripture.</p>
+      </div>
+
+      <div class="template-section">
+        <h3>13. Teaching Point 3</h3>
+        <p>Explain the third major truth from Scripture.</p>
+      </div>
+
+      <div class="template-section">
+        <h3>14. Additional Scriptures</h3>
+        <p>List other passages that support the main teaching.</p>
+      </div>
+
+      <div class="template-section">
+        <h3>15. Illustrations and Examples</h3>
+        <p>Give helpful examples that clarify the biblical truth.</p>
+      </div>
+
+      <div class="template-section">
+        <h3>16. Practical Application</h3>
+        <p>How should this truth be applied?</p>
+      </div>
+
+      <div class="template-section">
+        <h3>17. Discussion Questions</h3>
+        <p>What questions can help people think through the Scripture?</p>
+      </div>
+
+      <div class="template-section">
+        <h3>18. Conclusion and Closing Prayer</h3>
+        <p>Summarize the truth and close the study in prayer.</p>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+     WRITE BIBLE STUDY
+========================= -->
+
+<section id="write">
+
+  <div class="container">
+
+    <h2 class="section-title">
+      Write Your Bible Study
+    </h2>
+
+    <p class="section-intro">
+      After studying Scripture and preparing your teaching,
+      write your Bible study below.
+    </p>
+
+    <div class="study-box">
+
+      <div class="write-grid">
+
+        <div>
+          <label for="studyTitle">
+            Bible Study Title
+          </label>
+
+          <input
+            id="studyTitle"
+            type="text"
+            placeholder="Enter your Bible study title"
+          >
+        </div>
+
+
+        <div>
+          <label for="studyPassage">
+            Main Scripture
+          </label>
+
+          <input
+            id="studyPassage"
+            type="text"
+            placeholder="Example: John 3:16"
+          >
+        </div>
+
+
+        <div>
+          <label for="studyTopic">
+            Bible Study Topic
+          </label>
+
+          <input
+            id="studyTopic"
+            type="text"
+            placeholder="Enter your topic"
+          >
+        </div>
+
+
+        <div>
+          <label for="studyPurpose">
+            Study Purpose
+          </label>
+
+          <textarea
+            id="studyPurpose"
+            placeholder="What do you want people to understand?"
+          ></textarea>
+        </div>
+
+
+        <div>
+          <label for="mainTruth">
+            Main Biblical Truth
+          </label>
+
+          <textarea
+            id="mainTruth"
+            placeholder="What is the main truth from Scripture?"
+          ></textarea>
+        </div>
+
+
+        <div>
+          <label for="studyIntroduction">
+            Introduction
+          </label>
+
+          <textarea
+            id="studyIntroduction"
+            placeholder="Write your introduction..."
+          ></textarea>
+        </div>
+
+
+        <div>
+          <label for="scriptureReading">
+            Scripture Reading
+          </label>
+
+          <textarea
+            id="scriptureReading"
+            placeholder="Write the Scripture passage or references..."
+          ></textarea>
+        </div>
+
+
+        <div>
+          <label for="context">
+            Context
+          </label>
+
+          <textarea
+            id="context"
+            placeholder="Explain the context..."
+          ></textarea>
+        </div>
+
+
+        <div>
+          <label for="observation">
+            Observation
+          </label>
+
+          <textarea
+            id="observation"
+            placeholder="What do you observe in the passage?"
+          ></textarea>
+        </div>
+
+
+        <div>
+          <label for="meaning">
+            Meaning
+          </label>
+
+          <textarea
+            id="meaning"
+            placeholder="What does the passage mean?"
+          ></textarea>
+        </div>
+
+
+        <div>
+          <label for="point1">
+            Teaching Point 1
+          </label>
+
+          <textarea
+            id="point1"
+            placeholder="Explain your first teaching point..."
+          ></textarea>
+        </div>
+
+
+        <div>
+          <label for="point2">
+            Teaching Point 2
+          </label>
+
+          <textarea
+            id="point2"
+            placeholder="Explain your second teaching point..."
+          ></textarea>
+        </div>
+
+
+        <div>
+          <label for="point3">
+            Teaching Point 3
+          </label>
+
+          <textarea
+            id="point3"
+            placeholder="Explain your third teaching point..."
+          ></textarea>
+        </div>
+
+
+        <div>
+          <label for="additionalScriptures">
+            Additional Scriptures
+          </label>
+
+          <textarea
+            id="additionalScriptures"
+            placeholder="List supporting Scriptures..."
+          ></textarea>
+        </div>
+
+
+        <div>
+          <label for="illustrations">
+            Illustrations and Examples
+          </label>
+
+          <textarea
+            id="illustrations"
+            placeholder="Add examples or illustrations..."
+          ></textarea>
+        </div>
+
+
+        <div>
+          <label for="application">
+            Practical Application
+          </label>
+
+          <textarea
+            id="application"
+            placeholder="How should this truth be applied?"
+          ></textarea>
+        </div>
+
+
+        <div>
+          <label for="discussion">
+            Discussion Questions
+          </label>
+
+          <textarea
+            id="discussion"
+            placeholder="Write questions for discussion..."
+          ></textarea>
+        </div>
+
+
+        <div>
+          <label for="conclusion">
+            Conclusion
+          </label>
+
+          <textarea
+            id="conclusion"
+            placeholder="Write your conclusion..."
+          ></textarea>
+        </div>
+
+
+        <div>
+          <label for="response">
+            Response / Call to Action
+          </label>
+
+          <textarea
+            id="response"
+            placeholder="How should people respond?"
+          ></textarea>
+        </div>
+
+
+        <div>
+          <label for="closingPrayer">
+            Closing Prayer
+          </label>
+
+          <textarea
+            id="closingPrayer"
+            placeholder="Write your closing prayer..."
+          ></textarea>
+        </div>
+
+      </div>
+
+
+      <div class="save-controls">
+
+        <button
+          class="primary"
+          onclick="saveBibleStudy()"
+        >
+          Save Bible Study
         </button>
 
         <button
           class="secondary"
-          id="clearStudyButton"
+          onclick="loadBibleStudy()"
         >
-          🗑️ Clear Study
+          Load Saved Study
         </button>
-
-      </div>
-
-      <div
-        class="status"
-        id="studyStatus"
-      ></div>
-
-    </section>
-
-
-    <!-- BIBLE STUDY TOOLS -->
-    <section class="section">
-
-      <h2>📚 Bible Study Tools</h2>
-
-      <p>
-        Use BibleMastrey's study tools while preparing your Bible study.
-      </p>
-
-      <div class="tools-grid">
-
-        <div class="tool-card">
-
-          <h3>📖 Bible Verses</h3>
-
-          <p>
-            Read and examine the Scripture passage you are studying.
-          </p>
-
-          <button
-            onclick="openTool('Bible Verses')"
-          >
-            Open Bible
-          </button>
-
-        </div>
-
-
-        <div class="tool-card">
-
-          <h3>📘 Bible Dictionary</h3>
-
-          <p>
-            Look up biblical words, people, places, and subjects.
-          </p>
-
-          <button
-            onclick="openTool('Bible Dictionary')"
-          >
-            Open Dictionary
-          </button>
-
-        </div>
-
-
-        <div class="tool-card">
-
-          <h3>🔎 Concordance</h3>
-
-          <p>
-            Search Scripture for words and passages.
-          </p>
-
-          <button
-            onclick="openTool('Concordance')"
-          >
-            Open Concordance
-          </button>
-
-        </div>
-
-
-        <div class="tool-card">
-
-          <h3>💪 Strong's</h3>
-
-          <p>
-            Examine important Hebrew and Greek words.
-          </p>
-
-          <button
-            onclick="openTool('Strong')"
-          >
-            Open Strong's
-          </button>
-
-        </div>
-
-
-        <div class="tool-card">
-
-          <h3>📚 Verses on Topic</h3>
-
-          <p>
-            Find additional Scriptures related to your subject.
-          </p>
-
-          <button
-            onclick="openTool('Verses on Topic')"
-          >
-            Find Verses
-          </button>
-
-        </div>
-
-
-        <div class="tool-card">
-
-          <h3>📜 Commentaries</h3>
-
-          <p>
-            Compare trusted biblical commentary while studying.
-          </p>
-
-          <button
-            onclick="openTool('Commentaries')"
-          >
-            Open Commentaries
-          </button>
-
-        </div>
-
-
-        <div class="tool-card">
-
-          <h3>🌐 Bible Translations</h3>
-
-          <p>
-            Compare the passage in different Bible translations.
-          </p>
-
-          <button
-            onclick="openTool('Translations')"
-          >
-            Compare Translations
-          </button>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- BIBLE STUDY TEMPLATE -->
-    <section class="section">
-
-      <h2>📝 Bible Study Template</h2>
-
-      <p>
-        Use this template as a simple framework for preparing and teaching
-        a Bible study.
-      </p>
-
-
-      <div class="template-section">
-
-        <h3>1. Bible Study Title</h3>
-
-        <p>
-          Give your study a clear title that tells people what they will learn.
-        </p>
-
-      </div>
-
-
-      <div class="template-section">
-
-        <h3>2. Main Scripture</h3>
-
-        <p>
-          Choose the primary passage of Scripture that your study will focus on.
-        </p>
-
-      </div>
-
-
-      <div class="template-section">
-
-        <h3>3. Bible Study Purpose</h3>
-
-        <p>
-          Explain why you are teaching this study and what you want people
-          to understand.
-        </p>
-
-      </div>
-
-
-      <div class="template-section">
-
-        <h3>4. Main Biblical Truth</h3>
-
-        <p>
-          State the central truth that comes from the Scripture.
-        </p>
-
-      </div>
-
-
-      <div class="template-section">
-
-        <h3>5. Introduction</h3>
-
-        <p>
-          Introduce the subject and connect it to the lives of the people
-          studying God's Word.
-        </p>
-
-      </div>
-
-
-      <div class="template-section">
-
-        <h3>6. Read the Scripture</h3>
-
-        <p>
-          Read the main passage carefully before explaining it.
-        </p>
-
-      </div>
-
-
-      <div class="template-section">
-
-        <h3>7. Context</h3>
-
-        <p>
-          Explain the historical, cultural, literary, and biblical context
-          of the passage.
-        </p>
-
-      </div>
-
-
-      <div class="template-section">
-
-        <h3>8. What Does Scripture Say?</h3>
-
-        <p>
-          Observe what is actually written in the passage before deciding
-          what it means.
-        </p>
-
-      </div>
-
-
-      <div class="template-section">
-
-        <h3>9. What Does Scripture Mean?</h3>
-
-        <p>
-          Explain the meaning of the passage using Scripture and its context.
-        </p>
-
-      </div>
-
-
-      <div class="template-section">
-
-        <h3>10. Bible Study Point 1</h3>
-
-        <p>
-          Explain the first major truth from the passage.
-        </p>
-
-      </div>
-
-
-      <div class="template-section">
-
-        <h3>11. Bible Study Point 2</h3>
-
-        <p>
-          Explain the second major truth from the passage.
-        </p>
-
-      </div>
-
-
-      <div class="template-section">
-
-        <h3>12. Bible Study Point 3</h3>
-
-        <p>
-          Explain the third major truth from the passage.
-        </p>
-
-      </div>
-
-
-      <div class="template-section">
-
-        <h3>13. Supporting Scriptures</h3>
-
-        <p>
-          Add other Bible passages that support the biblical truth being taught.
-        </p>
-
-      </div>
-
-
-      <div class="template-section">
-
-        <h3>14. Discussion Questions</h3>
-
-        <p>
-          Create questions that encourage people to examine and understand
-          Scripture for themselves.
-        </p>
-
-      </div>
-
-
-      <div class="template-section">
-
-        <h3>15. Practical Application</h3>
-
-        <p>
-          Explain how the biblical truth should affect everyday life.
-        </p>
-
-      </div>
-
-
-      <div class="template-section">
-
-        <h3>16. Conclusion</h3>
-
-        <p>
-          Bring the study back to the main biblical truth.
-        </p>
-
-      </div>
-
-
-      <div class="template-section">
-
-        <h3>17. Response / Next Step</h3>
-
-        <p>
-          Give people a clear way to respond to what they have learned.
-        </p>
-
-      </div>
-
-
-      <div class="template-section">
-
-        <h3>18. Closing Prayer</h3>
-
-        <p>
-          Close by praying about the truth that was studied.
-        </p>
-
-      </div>
-
-    </section>
-
-
-    <!-- BIBLE STUDY PREPARATION GUIDE -->
-    <section class="section">
-
-      <h2>📘 Bible Study Preparation & Teaching Guide</h2>
-
-      <p>
-        Follow these steps to prepare a Bible study that explains Scripture
-        clearly and helps people understand and apply God's Word.
-      </p>
-
-
-      <div class="guide-item">
-
-        <h3>1. Pray and Begin With the Right Purpose</h3>
-
-        <p>
-          Begin by praying and asking God for wisdom and understanding.
-          The goal is to faithfully understand and teach Scripture,
-          not simply to express personal opinions.
-        </p>
-
-      </div>
-
-
-      <div class="guide-item">
-
-        <h3>2. Choose the Bible Study Topic or Passage</h3>
-
-        <p>
-          Choose a biblical topic or passage that you want to study.
-          Make sure the subject is clear enough to develop into a complete study.
-        </p>
-
-      </div>
-
-
-      <div class="guide-item">
-
-        <h3>3. Read the Passage Carefully</h3>
-
-        <p>
-          Read the passage several times. Look for repeated words,
-          commands, promises, warnings, contrasts, people, events,
-          and important ideas.
-        </p>
-
-      </div>
-
-
-      <div class="guide-item">
-
-        <h3>4. Study the Context</h3>
-
-        <p>
-          Examine what comes before and after the passage.
-          Consider the author, audience, historical setting,
-          purpose of the book, and surrounding chapters.
-        </p>
-
-      </div>
-
-
-      <div class="guide-item">
-
-        <h3>5. Find the Main Biblical Truth</h3>
-
-        <p>
-          Ask yourself: What is the main truth this passage teaches?
-          Build the entire Bible study around what Scripture actually says.
-        </p>
-
-      </div>
-
-
-      <div class="guide-item">
-
-        <h3>6. Study Important Hebrew or Greek Words</h3>
-
-        <p>
-          When an important word needs additional study, use Strong's
-          and other language tools to understand the original word and
-          how it is used in Scripture.
-        </p>
-
-      </div>
-
-
-      <div class="guide-item">
-
-        <h3>7. Use the Bible Dictionary</h3>
-
-        <p>
-          Look up important people, places, subjects, customs,
-          and biblical terms that help explain the passage.
-        </p>
-
-      </div>
-
-
-      <div class="guide-item">
-
-        <h3>8. Use the Concordance</h3>
-
-        <p>
-          Search important words throughout Scripture.
-          This can help you see how the Bible uses the same word or idea
-          in other passages.
-        </p>
-
-      </div>
-
-
-      <div class="guide-item">
-
-        <h3>9. Compare Bible Translations</h3>
-
-        <p>
-          Compare several translations to help identify wording differences
-          and gain a clearer understanding of the passage.
-        </p>
-
-      </div>
-
-
-      <div class="guide-item">
-
-        <h3>10. Read the Commentaries</h3>
-
-        <p>
-          Use commentaries as study aids. Compare what trusted commentators
-          say while keeping Scripture as the foundation of the study.
-        </p>
-
-      </div>
-
-
-      <div class="guide-item">
-
-        <h3>11. Develop the Main Bible Study Point</h3>
-
-        <p>
-          Reduce the central biblical truth to a clear statement that people
-          can understand and remember.
-        </p>
-
-      </div>
-
-
-      <div class="guide-item">
-
-        <h3>12. Build Supporting Points</h3>
-
-        <p>
-          Divide the study into logical sections that help explain the
-          main truth without losing focus.
-        </p>
-
-      </div>
-
-
-      <div class="guide-item">
-
-        <h3>13. Explain the Scripture</h3>
-
-        <p>
-          Spend most of the study explaining what the Bible says and means.
-          Let Scripture provide the foundation for your teaching.
-        </p>
-
-      </div>
-
-
-      <div class="guide-item">
-
-        <h3>14. Ask Good Discussion Questions</h3>
-
-        <p>
-          Create questions that help people observe the passage,
-          understand its meaning, and think about what it teaches.
-        </p>
-
-      </div>
-
-
-      <div class="guide-item">
-
-        <h3>15. Give Practical Application</h3>
-
-        <p>
-          Explain how the biblical truth should affect the believer's
-          thoughts, choices, relationships, faith, and daily life.
-        </p>
-
-      </div>
-
-
-      <div class="guide-item">
-
-        <h3>16. Write the Conclusion</h3>
-
-        <p>
-          Summarize the most important truths from the study.
-          Bring the teaching back to the main Scripture and main truth.
-        </p>
-
-      </div>
-
-
-      <div class="guide-item">
-
-        <h3>17. Give a Clear Next Step</h3>
-
-        <p>
-          Ask what the people studying the Bible should do with what
-          they have learned. Encourage a biblical response.
-        </p>
-
-      </div>
-
-
-      <div class="guide-item">
-
-        <h3>18. Review for Biblical Accuracy and Clarity</h3>
-
-        <p>
-          Before teaching, review the entire study. Make sure your points
-          are supported by Scripture, your explanations fit the context,
-          and the study is understandable.
-        </p>
-
-      </div>
-
-    </section>
-
-
-    <!-- QUESTIONS -->
-    <section class="section">
-
-      <h2>🔎 Keep These Questions Beside You</h2>
-
-      <p>
-        These questions can help keep your Bible study focused on Scripture.
-      </p>
-
-      <ol class="questions">
-
-        <li>
-          What does Scripture actually say?
-        </li>
-
-        <li>
-          What does this passage mean in its context?
-        </li>
-
-        <li>
-          What is the main biblical truth?
-        </li>
-
-        <li>
-          What other Scriptures support this truth?
-        </li>
-
-        <li>
-          What should people understand from this passage?
-        </li>
-
-        <li>
-          How should this truth change our lives?
-        </li>
-
-        <li>
-          Am I explaining Scripture or merely giving my opinion?
-        </li>
-
-        <li>
-          Can I support what I am teaching with Scripture?
-        </li>
-
-        <li>
-          Are my discussion questions helping people examine the Bible?
-        </li>
-
-        <li>
-          Is the study clear enough for someone hearing it for the first time?
-        </li>
-
-      </ol>
-
-    </section>
-
-
-    <!-- AI ASSISTANT -->
-    <section class="section">
-
-      <h2>🤖 Bible Study Assistant</h2>
-
-      <div class="ai-box">
-
-        <p>
-          AI assistance can be added here later to help with Bible study
-          research, organization, questions, outlines, and review.
-        </p>
-
-        <p>
-          AI should assist your study rather than replace your study
-          of Scripture.
-        </p>
 
         <button
-          id="openAiButton"
+          class="secondary"
+          onclick="clearBibleStudy()"
         >
-          Open AI Assistant
+          Clear Study
         </button>
 
       </div>
 
-    </section>
+    </div>
 
-  </main>
+  </div>
 
-
-  <footer>
-    BibleMastrey © 2026
-  </footer>
+</section>
 
 
-  <script>
+<!-- =========================
+     AI ASSISTANT
+========================= -->
 
-    /* =========================
-       SAVE / LOAD BIBLE STUDY
-    ========================= */
+<section>
 
-    const studyFields = [
-      "studyTitle",
-      "studyPassage",
-      "studyTopic",
-      "studyPurpose",
-      "mainTruth",
-      "studyIntroduction",
-      "scriptureReading",
-      "context",
-      "observation",
-      "meaning",
-      "point1",
-      "point2",
-      "point3",
-      "additionalScriptures",
-      "illustrations",
-      "application",
-      "discussion",
-      "conclusion",
-      "response",
-      "closingPrayer"
+  <div class="container">
+
+    <div class="ai-box">
+
+      <h2>
+        🤖 Bible Study Assistant
+      </h2>
+
+      <p>
+        AI assistance can be added here later to help with
+        research, organization, questions, outlines, and review.
+      </p>
+
+      <p>
+        AI should assist your study rather than replace
+        your study of Scripture.
+      </p>
+
+      <button
+        class="secondary"
+        onclick="openAIAssistant()"
+      >
+        Open AI Assistant
+      </button>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<footer>
+  © 2026 BibleMastrey.net
+</footer>
+
+
+<script>
+
+/* =========================
+   TOPIC VERSES
+========================= */
+
+const topicVersePools = {
+
+  faith: [
+    ["Hebrews 11:1", "Study this passage on the biblical meaning of faith."],
+    ["Romans 10:17", "Study how faith is connected with hearing the Word of God."],
+    ["2 Corinthians 5:7", "Study the biblical principle of walking by faith."],
+    ["Mark 11:24", "Study what Jesus teaches about believing when praying."],
+    ["Proverbs 3:5-6", "Study trusting God rather than relying only on our own understanding."]
+  ],
+
+  prayer: [
+    ["Matthew 6:9-13", "Study Jesus' teaching about prayer."],
+    ["Philippians 4:6-7", "Study prayer, thanksgiving, and the peace of God."],
+    ["1 Thessalonians 5:17", "Study the call to pray continually."],
+    ["James 5:16", "Study the importance and effectiveness of prayer."],
+    ["Jeremiah 33:3", "Study God's invitation to call upon Him."]
+  ],
+
+  love: [
+    ["1 Corinthians 13:4-7", "Study the biblical description of love."],
+    ["John 13:34-35", "Study Jesus' command to love one another."],
+    ["1 John 4:7-8", "Study the connection between love and knowing God."],
+    ["John 3:16", "Study God's love demonstrated through His Son."],
+    ["Romans 5:8", "Study how God demonstrated His love toward sinners."]
+  ],
+
+  forgiveness: [
+    ["Ephesians 4:32", "Study the command to forgive as God has forgiven us."],
+    ["Colossians 3:13", "Study biblical forgiveness and patience."],
+    ["Matthew 6:14-15", "Study Jesus' teaching about forgiving others."],
+    ["1 John 1:9", "Study God's faithfulness to forgive confessed sin."],
+    ["Psalm 103:12", "Study the picture of God's forgiveness."]
+  ],
+
+  salvation: [
+    ["John 3:16", "Study God's provision of salvation through His Son."],
+    ["Romans 3:23-24", "Study sin, grace, and redemption."],
+    ["Romans 6:23", "Study the contrast between sin and God's gift."],
+    ["Ephesians 2:8-9", "Study salvation by grace through faith."],
+    ["Acts 4:12", "Study the biblical teaching concerning salvation."]
+  ],
+
+  peace: [
+    ["Philippians 4:6-7", "Study God's peace in the midst of anxiety and prayer."],
+    ["John 14:27", "Study Jesus' promise of peace."],
+    ["Isaiah 26:3", "Study trusting God and perfect peace."],
+    ["Romans 5:1", "Study peace with God through faith."],
+    ["Psalm 23:1-4", "Study God's presence and care during difficult circumstances."]
+  ],
+
+  wisdom: [
+    ["James 1:5", "Study God's invitation to ask for wisdom."],
+    ["Proverbs 2:6", "Study where wisdom comes from."],
+    ["Proverbs 3:13-18", "Study the value of biblical wisdom."],
+    ["Proverbs 9:10", "Study the relationship between fearing God and wisdom."],
+    ["Colossians 3:16", "Study how God's Word shapes wisdom."]
+  ],
+
+  strength: [
+    ["Philippians 4:13", "Study strength through Christ."],
+    ["Isaiah 40:31", "Study waiting on the Lord and renewed strength."],
+    ["Psalm 46:1", "Study God as a source of strength and refuge."],
+    ["2 Corinthians 12:9", "Study God's strength in human weakness."],
+    ["Ephesians 6:10", "Study being strong in the Lord."]
+  ],
+
+  hope: [
+    ["Romans 15:13", "Study hope through faith and the power of the Holy Spirit."],
+    ["Jeremiah 29:11", "Study God's purposes and hope."],
+    ["Psalm 42:11", "Study placing hope in God during discouragement."],
+    ["Romans 5:3-5", "Study how trials can produce hope."],
+    ["1 Peter 1:3", "Study the living hope believers have through Christ."]
+  ],
+
+  temptation: [
+    ["1 Corinthians 10:13", "Study God's faithfulness during temptation."],
+    ["James 1:12-15", "Study the process and nature of temptation."],
+    ["Matthew 4:1-11", "Study Jesus' response to temptation."],
+    ["James 4:7", "Study resisting the devil and submitting to God."],
+    ["Psalm 119:11", "Study the role of God's Word in resisting sin."]
+  ]
+
+};
+
+
+/* =========================
+   SHUFFLE
+========================= */
+
+function shuffleArray(array) {
+
+  const shuffled = [...array];
+
+  for (
+    let i = shuffled.length - 1;
+    i > 0;
+    i--
+  ) {
+
+    const j =
+      Math.floor(Math.random() * (i + 1));
+
+    [
+      shuffled[i],
+      shuffled[j]
+    ] =
+    [
+      shuffled[j],
+      shuffled[i]
     ];
+  }
+
+  return shuffled;
+}
 
 
-    function saveBibleStudy() {
+/* =========================
+   FIND TOPIC VERSES
+========================= */
 
-      const study = {};
+function findTopicVerses() {
 
-      studyFields.forEach(
-        function(fieldId) {
+  const input =
+    document
+      .getElementById("topicInput")
+      .value
+      .trim()
+      .toLowerCase();
 
-          const field =
-            document.getElementById(
-              fieldId
-            );
+  const results =
+    document.getElementById("verseResults");
 
-          if (field) {
+  if (!input) {
 
-            study[fieldId] =
-              field.value;
+    results.innerHTML =
+      '<div class="verse-card">' +
+      '<div class="verse-reference">Enter a topic first.</div>' +
+      '<div class="verse-text">Try a topic such as faith, prayer, love, forgiveness, salvation, peace, wisdom, strength, hope, or temptation.</div>' +
+      '</div>';
 
-          }
+    results.classList.remove("empty");
 
-        }
-      );
+    return;
+  }
 
-      localStorage.setItem(
-        "bibleMastreyBibleStudy",
-        JSON.stringify(study)
-      );
 
-      const status =
-        document.getElementById(
-          "studyStatus"
+  let matches = [];
+
+
+  Object.keys(topicVersePools).forEach(function(topic) {
+
+    if (
+      topic.includes(input) ||
+      input.includes(topic)
+    ) {
+
+      matches =
+        matches.concat(
+          topicVersePools[topic]
         );
-
-      status.textContent =
-        "Bible study saved.";
 
     }
 
+  });
 
-    function loadBibleStudy() {
 
-      const saved =
-        localStorage.getItem(
-          "bibleMastreyBibleStudy"
+  if (!matches.length) {
+
+    const allVerses =
+      Object.values(topicVersePools)
+        .flat();
+
+    matches =
+      shuffleArray(allVerses);
+
+  } else {
+
+    matches =
+      shuffleArray(matches);
+
+  }
+
+
+  matches =
+    matches.slice(0, 5);
+
+
+  results.innerHTML = "";
+
+
+  matches.forEach(function(item) {
+
+    const card =
+      document.createElement("div");
+
+    card.className =
+      "verse-card";
+
+
+    const reference =
+      document.createElement("div");
+
+    reference.className =
+      "verse-reference";
+
+    reference.textContent =
+      item[0];
+
+
+    const text =
+      document.createElement("div");
+
+    text.className =
+      "verse-text";
+
+    text.textContent =
+      "Open this reference in the Bible to study the passage.";
+
+
+    const note =
+      document.createElement("div");
+
+    note.className =
+      "verse-note";
+
+    note.textContent =
+      item[1];
+
+
+    const button =
+      document.createElement("button");
+
+    button.className =
+      "secondary";
+
+    button.textContent =
+      "Open in Bible";
+
+
+    button.style.marginTop =
+      "12px";
+
+
+    button.onclick =
+      function() {
+
+        openBibleReference(
+          item[0]
         );
 
-      if (!saved) {
-        return;
+      };
+
+
+    card.appendChild(reference);
+    card.appendChild(text);
+    card.appendChild(note);
+    card.appendChild(button);
+
+    results.appendChild(card);
+
+  });
+
+
+  results.classList.remove("empty");
+
+  document
+    .getElementById("verses")
+    .scrollIntoView({
+      behavior: "smooth"
+    });
+
+}
+
+
+/* =========================
+   TOPIC BUTTON
+========================= */
+
+document
+  .getElementById("topicButton")
+  .addEventListener(
+    "click",
+    findTopicVerses
+  );
+
+
+/* =========================
+   ENTER KEY
+========================= */
+
+document
+  .getElementById("topicInput")
+  .addEventListener(
+    "keydown",
+    function(event) {
+
+      if (event.key === "Enter") {
+
+        findTopicVerses();
+
       }
 
-      try {
+    }
+  );
 
-        const study =
-          JSON.parse(saved);
 
-        studyFields.forEach(
-          function(fieldId) {
+/* =========================
+   OPEN BIBLE
+========================= */
 
-            const field =
-              document.getElementById(
-                fieldId
-              );
+function openBible() {
 
-            if (
-              field &&
-              study[fieldId] !== undefined
-            ) {
+  window.location.href = "/";
 
-              field.value =
-                study[fieldId];
+}
 
-            }
 
-          }
-        );
+/* =========================
+   OPEN BIBLE REFERENCE
+========================= */
 
-      } catch (error) {
+function openBibleReference(reference) {
 
-        console.error(
-          "Could not load Bible study:",
-          error
-        );
+  localStorage.setItem(
+    "bibleMastreyStudyReference",
+    reference
+  );
 
-      }
+  window.location.href = "/";
+
+}
+
+
+/* =========================
+   OPEN STUDY TOOL
+========================= */
+
+function openTool(tool) {
+
+  localStorage.setItem(
+    "bibleMastreyOpenTool",
+    tool
+  );
+
+  window.location.href = "/";
+
+}
+
+
+/* =========================
+   SAVE BIBLE STUDY
+========================= */
+
+function saveBibleStudy() {
+
+  const fields = [
+
+    "studyTitle",
+    "studyPassage",
+    "studyTopic",
+    "studyPurpose",
+    "mainTruth",
+    "studyIntroduction",
+    "scriptureReading",
+    "context",
+    "observation",
+    "meaning",
+    "point1",
+    "point2",
+    "point3",
+    "additionalScriptures",
+    "illustrations",
+    "application",
+    "discussion",
+    "conclusion",
+    "response",
+    "closingPrayer"
+
+  ];
+
+
+  const study = {};
+
+
+  fields.forEach(function(id) {
+
+    const element =
+      document.getElementById(id);
+
+    if (element) {
+
+      study[id] =
+        element.value;
 
     }
 
+  });
 
-    /* =========================
-       CLEAR STUDY
-    ========================= */
 
-    function clearBibleStudy() {
+  localStorage.setItem(
+    "bibleMastreyBibleStudy",
+    JSON.stringify(study)
+  );
 
-      const confirmed =
-        confirm(
-          "Clear the current Bible study?"
-        );
 
-      if (!confirmed) {
-        return;
-      }
+  alert(
+    "Bible study saved successfully."
+  );
 
-      studyFields.forEach(
-        function(fieldId) {
+}
 
-          const field =
-            document.getElementById(
-              fieldId
-            );
 
-          if (field) {
-            field.value = "";
-          }
+/* =========================
+   LOAD BIBLE STUDY
+========================= */
 
-        }
-      );
+function loadBibleStudy() {
 
-      localStorage.removeItem(
-        "bibleMastreyBibleStudy"
-      );
+  const saved =
+    localStorage.getItem(
+      "bibleMastreyBibleStudy"
+    );
 
-      document.getElementById(
-        "studyStatus"
-      ).textContent =
-        "Bible study cleared.";
+
+  if (!saved) {
+
+    alert(
+      "No saved Bible study was found."
+    );
+
+    return;
+
+  }
+
+
+  const study =
+    JSON.parse(saved);
+
+
+  Object.keys(study).forEach(function(id) {
+
+    const element =
+      document.getElementById(id);
+
+    if (element) {
+
+      element.value =
+        study[id];
 
     }
 
+  });
 
-    /* =========================
-       TOOL BUTTONS
-    ========================= */
 
-    function openTool(toolName) {
+  alert(
+    "Saved Bible study loaded."
+  );
 
-      alert(
-        toolName +
-        " will connect to the BibleMastrey study tools."
-      );
+}
+
+
+/* =========================
+   CLEAR BIBLE STUDY
+========================= */
+
+function clearBibleStudy() {
+
+  if (
+    !confirm(
+      "Clear the Bible study fields?"
+    )
+  ) {
+
+    return;
+
+  }
+
+
+  const fields = [
+
+    "studyTitle",
+    "studyPassage",
+    "studyTopic",
+    "studyPurpose",
+    "mainTruth",
+    "studyIntroduction",
+    "scriptureReading",
+    "context",
+    "observation",
+    "meaning",
+    "point1",
+    "point2",
+    "point3",
+    "additionalScriptures",
+    "illustrations",
+    "application",
+    "discussion",
+    "conclusion",
+    "response",
+    "closingPrayer"
+
+  ];
+
+
+  fields.forEach(function(id) {
+
+    const element =
+      document.getElementById(id);
+
+    if (element) {
+
+      element.value = "";
 
     }
 
+  });
 
-    /* =========================
-       BUTTON EVENTS
-    ========================= */
-
-    document
-      .getElementById(
-        "saveStudyButton"
-      )
-      .addEventListener(
-        "click",
-        saveBibleStudy
-      );
+}
 
 
-    document
-      .getElementById(
-        "clearStudyButton"
-      )
-      .addEventListener(
-        "click",
-        clearBibleStudy
-      );
+/* =========================
+   AI ASSISTANT
+========================= */
 
+function openAIAssistant() {
 
-    document
-      .getElementById(
-        "openAiButton"
-      )
-      .addEventListener(
-        "click",
-        function() {
+  alert(
+    "The Bible Study AI Assistant will be added here later."
+  );
 
-          alert(
-            "The BibleMastrey AI Study Assistant can be connected here later."
-          );
+}
 
-        }
-      );
-
-
-    /* =========================
-       LOAD SAVED STUDY
-    ========================= */
-
-    loadBibleStudy();
-
-  </script>
+</script>
 
 </body>
 </html>
