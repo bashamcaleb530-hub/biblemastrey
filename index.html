@@ -2287,197 +2287,53 @@
 
 
   /* =========================
-     LOAD SELECTED COMMENTARY
-  ========================= */
+   LOAD SELECTED COMMENTARY
+========================= */
 
-  async function loadSelectedCommentary(
-    bookName,
-    chapterNumber
-  ) {
-
-    const selected =
-      commentarySelect.value;
-
-    if (
-      selected ===
-      "matthew-henry-concise"
-    ) {
-
-      return loadMatthewHenryConcise(
-        bookName,
-        chapterNumber
-      );
-    }
-
-    if (
-      selected === "barnes"
-    ) {
-
-      return loadBarnes(
-        bookName,
-        chapterNumber
-      );
-    }
-
-    const apiId =
-      commentaryApiIds[selected];
-
-    if (!apiId) {
-      throw new Error(
-        "Commentary source is not configured."
-      );
-    }
-
-   async function loadHelloAOCommentary(
-  commentaryId,
+async function loadSelectedCommentary(
   bookName,
   chapterNumber
 ) {
 
-  const bookId =
-    getCommentaryBookId(
-      bookName
-    );
-
-  if (!bookId) {
-    return {
-      verses: [],
-      unavailable: true
-    };
-  }
-
-  const cacheKey =
-    "helloao-" +
-    commentaryId +
-    "-" +
-    bookId +
-    "-" +
-    chapterNumber;
+  const selected =
+    commentarySelect.value;
 
   if (
-    commentaryCache[cacheKey]
+    selected ===
+    "matthew-henry-concise"
   ) {
-    return commentaryCache[
-      cacheKey
-    ];
-  }
 
-  const url =
-    COMMENTARY_API +
-    commentaryId +
-    "/" +
-    bookId +
-    "/" +
-    chapterNumber +
-    ".json";
-
-  const response =
-    await fetch(url);
-
-  if (!response.ok) {
-    throw new Error(
-      "Commentary request failed."
+    return loadMatthewHenryConcise(
+      bookName,
+      chapterNumber
     );
   }
 
-  const data =
-    await response.json();
+  if (
+    selected === "barnes"
+  ) {
 
-  const content =
-    data &&
-    data.chapter &&
-    Array.isArray(
-      data.chapter.content
-    )
-      ? data.chapter.content
-      : [];
+    return loadBarnes(
+      bookName,
+      chapterNumber
+    );
+  }
 
-  const verses =
-    content
-      .filter(
-        function(item) {
-          return (
-            item &&
-            item.type ===
-              "verse"
-          );
-        }
-      )
-      .map(
-        function(item) {
+  const apiId =
+    commentaryApiIds[selected];
 
-          let text = "";
+  if (!apiId) {
+    throw new Error(
+      "Commentary source is not configured."
+    );
+  }
 
-          if (
-            Array.isArray(
-              item.content
-            )
-          ) {
-
-            text =
-              item.content
-                .map(
-                  function(part) {
-
-                    if (
-                      typeof part ===
-                      "string"
-                    ) {
-                      return part;
-                    }
-
-                    if (
-                      part &&
-                      typeof part.text ===
-                      "string"
-                    ) {
-                      return part.text;
-                    }
-
-                    return "";
-                  }
-                )
-                .join("");
-
-          } else if (
-            typeof item.text ===
-            "string"
-          ) {
-
-            text =
-              item.text;
-
-          } else if (
-            typeof item.content ===
-            "string"
-          ) {
-
-            text =
-              item.content;
-          }
-
-          return {
-            number:
-              item.number,
-
-            text:
-              text
-          };
-        }
-      );
-
-  const result = {
-    verses:
-      verses
-  };
-
-  commentaryCache[
-    cacheKey
-  ] = result;
-
-  return result;
+  return loadHelloAOCommentary(
+    apiId,
+    bookName,
+    chapterNumber
+  );
 }
-
 
   /* =========================
      COMMENTARY PANELS
