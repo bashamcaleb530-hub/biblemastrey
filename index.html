@@ -1629,6 +1629,228 @@
   const BARNES_CCEL =
     "https://www.ccel.org/ccel/barnes/";
 
+    /* =========================
+     BOOK API IDS
+  ========================= */
+
+  const bookApiIds = {
+
+    "Genesis": "GEN",
+    "Exodus": "EXO",
+    "Leviticus": "LEV",
+    "Numbers": "NUM",
+    "Deuteronomy": "DEU",
+    "Joshua": "JOS",
+    "Judges": "JDG",
+    "Ruth": "RUT",
+    "1 Samuel": "1SA",
+    "2 Samuel": "2SA",
+    "1 Kings": "1KI",
+    "2 Kings": "2KI",
+    "1 Chronicles": "1CH",
+    "2 Chronicles": "2CH",
+    "Ezra": "EZR",
+    "Nehemiah": "NEH",
+    "Esther": "EST",
+    "Job": "JOB",
+    "Psalms": "PSA",
+    "Proverbs": "PRO",
+    "Ecclesiastes": "ECC",
+    "Song of Solomon": "SNG",
+    "Isaiah": "ISA",
+    "Jeremiah": "JER",
+    "Lamentations": "LAM",
+    "Ezekiel": "EZK",
+    "Daniel": "DAN",
+    "Hosea": "HOS",
+    "Joel": "JOL",
+    "Amos": "AMO",
+    "Obadiah": "OBA",
+    "Jonah": "JON",
+    "Micah": "MIC",
+    "Nahum": "NAM",
+    "Habakkuk": "HAB",
+    "Zephaniah": "ZEP",
+    "Haggai": "HAG",
+    "Zechariah": "ZEC",
+    "Malachi": "MAL",
+
+    "Matthew": "MAT",
+    "Mark": "MRK",
+    "Luke": "LUK",
+    "John": "JHN",
+    "Acts": "ACT",
+    "Romans": "ROM",
+    "1 Corinthians": "1CO",
+    "2 Corinthians": "2CO",
+    "Galatians": "GAL",
+    "Ephesians": "EPH",
+    "Philippians": "PHP",
+    "Colossians": "COL",
+    "1 Thessalonians": "1TH",
+    "2 Thessalonians": "2TH",
+    "1 Timothy": "1TI",
+    "2 Timothy": "2TI",
+    "Titus": "TIT",
+    "Philemon": "PHM",
+    "Hebrews": "HEB",
+    "James": "JAS",
+    "1 Peter": "1PE",
+    "2 Peter": "2PE",
+    "1 John": "1JN",
+    "2 John": "2JN",
+    "3 John": "3JN",
+    "Jude": "JUD",
+    "Revelation": "REV"
+
+  };
+
+
+  /* =========================
+     DOM REFERENCES
+  ========================= */
+
+  const translationSelect =
+    document.getElementById(
+      "translationSelect"
+    );
+
+  const bookSelect =
+    document.getElementById(
+      "bookSelect"
+    );
+
+  const chapterSelect =
+    document.getElementById(
+      "chapterSelect"
+    );
+
+  const verseSelect =
+    document.getElementById(
+      "verseSelect"
+    );
+
+  const chapterContent =
+    document.getElementById(
+      "chapterContent"
+    );
+
+  const status =
+    document.getElementById(
+      "status"
+    );
+
+  const previousChapterButton =
+    document.getElementById(
+      "previousChapterButton"
+    );
+
+  const nextChapterButton =
+    document.getElementById(
+      "nextChapterButton"
+    );
+
+  const commentaryButton =
+    document.getElementById(
+      "commentaryButton"
+    );
+
+  const commentarySelector =
+    document.getElementById(
+      "commentarySelector"
+    );
+
+  const commentarySelect =
+    document.getElementById(
+      "commentarySelect"
+    );
+
+  const searchInput =
+    document.getElementById(
+      "searchInput"
+    );
+
+  const searchResults =
+    document.getElementById(
+      "searchResults"
+    );
+
+  const verseMenu =
+    document.getElementById(
+      "verseMenu"
+    );
+
+  const highlightVerseButton =
+    document.getElementById(
+      "highlightVerseButton"
+    );
+
+  const bookmarkVerseButton =
+    document.getElementById(
+      "bookmarkVerseButton"
+    );
+
+  const copyVerseButton =
+    document.getElementById(
+      "copyVerseButton"
+    );
+
+  const shareVerseButton =
+    document.getElementById(
+      "shareVerseButton"
+    );
+
+
+  /* =========================
+     DICTIONARY / CONCORDANCE
+  ========================= */
+
+  const dictionaryInput =
+    document.getElementById(
+      "dictionaryInput"
+    );
+
+  const dictionaryButton =
+    document.getElementById(
+      "dictionaryButton"
+    );
+
+  const dictionaryResult =
+    document.getElementById(
+      "dictionaryResult"
+    );
+
+  const concordanceInput =
+    document.getElementById(
+      "concordanceInput"
+    );
+
+  const concordanceButton =
+    document.getElementById(
+      "concordanceButton"
+    );
+
+  const concordanceResult =
+    document.getElementById(
+      "concordanceResult"
+    );
+
+  const originalWordInput =
+    document.getElementById(
+      "originalWordInput"
+    );
+
+  const originalWordButton =
+    document.getElementById(
+      "originalWordButton"
+    );
+
+  const originalWordResult =
+    document.getElementById(
+      "originalWordResult"
+    );
+
+
   /* =========================
      COMMENTARY NAMES
   ========================= */
@@ -1660,68 +1882,82 @@
 
     };
 
-    return names[value] || "Bible Commentary";
+    return names[value] ||
+      "Bible Commentary";
   }
 
+
+  /* =========================
+     COMMENTARY BOOK ID
+  ========================= */
 
   function getApiBookId(bookName) {
 
-  if (!bookName) {
-    return null;
-  }
+    if (!bookName) {
+      return null;
+    }
 
-  const name =
-    String(bookName)
-      .trim();
+    const name =
+      String(bookName).trim();
 
-  if (bookApiIds[name]) {
-    return bookApiIds[name];
-  }
+    if (bookApiIds[name]) {
+      return bookApiIds[name];
+    }
 
-  const normalized =
-    name
-      .replace(/^The\s+/i, "")
-      .trim();
+    const normalized =
+      name
+        .replace(/^The\s+/i, "")
+        .trim();
 
-  if (bookApiIds[normalized]) {
-    return bookApiIds[normalized];
-  }
+    if (bookApiIds[normalized]) {
+      return bookApiIds[normalized];
+    }
 
     const lowerName =
-    normalized.toLowerCase();
+      normalized.toLowerCase();
 
-  const aliases = {
-    "gen": "Genesis",
-    "ex": "Exodus",
-    "lev": "Leviticus",
-    "num": "Numbers",
-    "deut": "Deuteronomy",
-    "ps": "Psalms",
-    "psa": "Psalms",
-    "prov": "Proverbs",
-    "matt": "Matthew",
-    "mk": "Mark",
-    "mrk": "Mark",
-    "lk": "Luke",
-    "jn": "John",
-    "jhn": "John",
-    "rom": "Romans",
-    "rev": "Revelation"
-  };
+    const aliases = {
 
-  if (aliases[lowerName]) {
-    return bookApiIds[aliases[lowerName]];
+      "gen": "Genesis",
+      "ex": "Exodus",
+      "lev": "Leviticus",
+      "num": "Numbers",
+      "deut": "Deuteronomy",
+      "ps": "Psalms",
+      "psa": "Psalms",
+      "prov": "Proverbs",
+      "matt": "Matthew",
+      "mk": "Mark",
+      "mrk": "Mark",
+      "lk": "Luke",
+      "jn": "John",
+      "jhn": "John",
+      "rom": "Romans",
+      "rev": "Revelation"
+
+    };
+
+    if (aliases[lowerName]) {
+      return bookApiIds[
+        aliases[lowerName]
+      ];
+    }
+
+    const match =
+      Object.keys(bookApiIds)
+        .find(function(key) {
+
+          return (
+            key.toLowerCase() ===
+            lowerName
+          );
+
+        });
+
+    return match
+      ? bookApiIds[match]
+      : null;
   }
-
-  const match =
-    Object.keys(bookApiIds).find(function(key) {
-      return key.toLowerCase() === lowerName;
-    });
-
-  return match
-    ? bookApiIds[match]
-    : null;
-}
 
 
   /* =========================
@@ -1734,18 +1970,14 @@
     chapterNumber
   ) {
 
-    console.log("Commentary bookName:", bookName);
+    const bookId =
+      getApiBookId(bookName);
 
-const bookId =
-  getApiBookId(bookName);
-
-console.log("Commentary bookId:", bookId);
-
-if (!bookId) {
-  throw new Error(
-    "Commentary book ID not found."
-  );
-}
+    if (!bookId) {
+      throw new Error(
+        "Commentary book ID not found."
+      );
+    }
 
     const cacheKey =
       "helloao-" +
@@ -1760,13 +1992,13 @@ if (!bookId) {
     }
 
     const url =
-  COMMENTARY_API +
-  commentaryId +
-  "/" +
-  bookId +
-  "/" +
-  chapterNumber +
-  ".json";
+      COMMENTARY_API +
+      commentaryId +
+      "/" +
+      bookId +
+      "/" +
+      chapterNumber +
+      ".json";
 
     const response =
       await fetch(url);
@@ -1791,146 +2023,167 @@ if (!bookId) {
     const data =
       await response.json();
 
-    
-const normalized =
-  normalizeHelloAOCommentary(data);
+    const normalized =
+      normalizeHelloAOCommentary(data);
 
-commentaryCache[cacheKey] =
-  normalized;
+    commentaryCache[cacheKey] =
+      normalized;
 
-return normalized;
+    return normalized;
+  }
 
-}
 
-function normalizeHelloAOCommentary(data) {
+  function normalizeHelloAOCommentary(data) {
 
-  const entries = [];
+    const entries = [];
 
-  if (
-    !data ||
-    !data.chapter ||
-    !Array.isArray(data.chapter.content)
-  ) {
+    if (
+      !data ||
+      !data.chapter ||
+      !Array.isArray(
+        data.chapter.content
+      )
+    ) {
+
+      return {
+        entries: []
+      };
+
+    }
+
+    data.chapter.content.forEach(
+      function(item) {
+
+        if (
+          !item ||
+          item.type !== "verse" ||
+          item.number === undefined
+        ) {
+          return;
+        }
+
+        const verseNumber =
+          Number(item.number);
+
+        let text = "";
+
+        if (
+          Array.isArray(item.content)
+        ) {
+
+          text =
+            item.content
+              .map(function(part) {
+
+                if (
+                  typeof part ===
+                  "string"
+                ) {
+                  return part;
+                }
+
+                if (
+                  part &&
+                  typeof part.text ===
+                  "string"
+                ) {
+                  return part.text;
+                }
+
+                return "";
+
+              })
+              .join("");
+
+        }
+
+        else if (
+          typeof item.text ===
+          "string"
+        ) {
+
+          text = item.text;
+
+        }
+
+        else if (
+          typeof item.content ===
+          "string"
+        ) {
+
+          text = item.content;
+
+        }
+
+        text =
+          text
+            .replace(/\s+/g, " ")
+            .trim();
+
+        if (text) {
+
+          entries.push({
+
+            start: verseNumber,
+
+            end: verseNumber,
+
+            text: text
+
+          });
+
+        }
+
+      }
+    );
+
     return {
-      entries: []
+      entries: entries
     };
   }
 
-  data.chapter.content.forEach(function(item) {
+
+  function findCommentaryForVerse(
+    data,
+    verseNumber
+  ) {
 
     if (
-      !item ||
-      item.type !== "verse" ||
-      item.number === undefined
-    ) {
-      return;
-    }
-
-    const verseNumber =
-      Number(item.number);
-
-    let text = "";
-
-    if (Array.isArray(item.content)) {
-
-      text =
-        item.content
-          .map(function(part) {
-
-            if (typeof part === "string") {
-              return part;
-            }
-
-            if (
-              part &&
-              typeof part.text === "string"
-            ) {
-              return part.text;
-            }
-
-            return "";
-
-          })
-          .join("");
-
-    }
-
-    else if (
-      typeof item.text === "string"
+      !data ||
+      !Array.isArray(data.entries)
     ) {
 
-      text = item.text;
+      return "";
 
     }
 
-    else if (
-      typeof item.content === "string"
-    ) {
+    const target =
+      Number(verseNumber);
 
-      text = item.content;
+    const match =
+      data.entries.find(
+        function(entry) {
 
-    }
+          return (
+            target >=
+              Number(entry.start) &&
+            target <=
+              Number(
+                entry.end ||
+                entry.start
+              )
+          );
 
-    text =
-      text
-        .replace(/\s+/g, " ")
-        .trim();
-
-    if (text) {
-
-      entries.push({
-
-        start: verseNumber,
-
-        end: verseNumber,
-
-        text: text
-
-      });
-
-    }
-
-  });
-
-  return {
-    entries: entries
-  };
-
-}
-
-
-function findCommentaryForVerse(
-  data,
-  verseNumber
-) {
-
-  if (
-    !data ||
-    !Array.isArray(data.entries)
-  ) {
-    return "";
-  }
-
-  const target =
-    Number(verseNumber);
-
-  const match =
-    data.entries.find(function(entry) {
-
-      return (
-        target >= Number(entry.start) &&
-        target <= Number(
-          entry.end || entry.start
-        )
+        }
       );
 
-    });
+    return match
+      ? match.text
+      : "";
+  }
 
-  return match
-    ? match.text
-    : "";
-}
-    /* =========================
+
+  /* =========================
      MATTHEW HENRY CONCISE
   ========================= */
 
@@ -1939,17 +2192,11 @@ function findCommentaryForVerse(
     chapterNumber
   ) {
 
-    /*
-      The concise commentary repository uses
-      Markdown files. We try several common
-      path formats so the loader is tolerant.
-    */
-
     const slug =
       String(bookName)
         .toLowerCase()
-        .replace(/&/g,"and")
-        .replace(/\s+/g,"-");
+        .replace(/&/g, "and")
+        .replace(/\s+/g, "-");
 
     const cacheKey =
       "concise-" +
@@ -1999,12 +2246,14 @@ function findCommentaryForVerse(
           await response.text();
 
         const entries =
-          parseConciseMarkdown(markdown);
+          parseConciseMarkdown(
+            markdown
+          );
 
         if (entries.length) {
 
           const result = {
-            entries:entries
+            entries: entries
           };
 
           commentaryCache[cacheKey] =
@@ -2016,15 +2265,17 @@ function findCommentaryForVerse(
       }
 
       catch(error) {
+
         console.warn(
           "Concise source failed:",
           error
         );
+
       }
 
     }
 
-            return loadHelloAOCommentary(
+    return loadHelloAOCommentary(
       "matthew-henry",
       bookName,
       chapterNumber
@@ -2032,7 +2283,9 @@ function findCommentaryForVerse(
   }
 
 
-  function parseConciseMarkdown(markdown) {
+  function parseConciseMarkdown(
+    markdown
+  ) {
 
     const lines =
       markdown.split(/\r?\n/);
@@ -2053,21 +2306,24 @@ function findCommentaryForVerse(
         const text =
           currentText
             .join(" ")
-            .replace(/\s+/g," ")
+            .replace(/\s+/g, " ")
             .trim();
 
         if (text) {
 
           entries.push({
-            start:currentStart,
-            end:currentEnd,
-            text:text
+
+            start: currentStart,
+
+            end: currentEnd,
+
+            text: text
+
           });
 
         }
 
       }
-
     }
 
     lines.forEach(function(line) {
@@ -2122,33 +2378,34 @@ function findCommentaryForVerse(
 
   const barnesBooks = {
 
-    "Matthew":"matt",
-    "Mark":"mark",
-    "Luke":"luke",
-    "John":"john",
-    "Acts":"acts",
-    "Romans":"rom",
-    "1 Corinthians":"1cor",
-    "2 Corinthians":"2cor",
-    "Galatians":"gal",
-    "Ephesians":"eph",
-    "Philippians":"phil",
-    "Colossians":"col",
-    "1 Thessalonians":"1thess",
-    "2 Thessalonians":"2thess",
-    "1 Timothy":"1tim",
-    "2 Timothy":"2tim",
-    "Titus":"titus",
-    "Philemon":"philem",
-    "Hebrews":"heb",
-    "James":"james",
-    "1 Peter":"1pet",
-    "2 Peter":"2pet",
-    "1 John":"1john",
-    "2 John":"2john",
-    "3 John":"3john",
-    "Jude":"jude",
-    "Revelation":"rev"
+    "Matthew": "matt",
+    "Mark": "mark",
+    "Luke": "luke",
+    "John": "john",
+    "Acts": "acts",
+    "Romans": "rom",
+    "1 Corinthians": "1cor",
+    "2 Corinthians": "2cor",
+    "Galatians": "gal",
+    "Ephesians": "eph",
+    "Philippians": "phil",
+    "Colossians": "col",
+    "1 Thessalonians": "1thess",
+    "2 Thessalonians": "2thess",
+    "1 Timothy": "1tim",
+    "2 Timothy": "2tim",
+    "Titus": "titus",
+    "Philemon": "philem",
+    "Hebrews": "heb",
+    "James": "james",
+    "1 Peter": "1pet",
+    "2 Peter": "2pet",
+    "1 John": "1john",
+    "2 John": "2john",
+    "3 John": "3john",
+    "Jude": "jude",
+    "Revelation": "rev"
+
   };
 
 
@@ -2157,21 +2414,14 @@ function findCommentaryForVerse(
     chapterNumber
   ) {
 
-    /*
-      Barnes' Notes are a New Testament
-      commentary. For Old Testament books,
-      clearly report that Barnes does not
-      contain that book.
-    */
-
     const bookId =
       barnesBooks[bookName];
 
     if (!bookId) {
 
       return {
-        entries:[],
-        unavailable:true
+        entries: [],
+        unavailable: true
       };
 
     }
@@ -2221,7 +2471,7 @@ function findCommentaryForVerse(
         if (entries.length) {
 
           const result = {
-            entries:entries
+            entries: entries
           };
 
           commentaryCache[cacheKey] =
@@ -2244,8 +2494,8 @@ function findCommentaryForVerse(
     }
 
     return {
-      entries:[],
-      unavailable:true
+      entries: [],
+      unavailable: true
     };
   }
 
@@ -2270,17 +2520,12 @@ function findCommentaryForVerse(
 
     const entries = [];
 
-    /*
-      Barnes often groups several verses.
-      This parser catches headings such as:
-      "Matthew 1:1"
-      "Matthew 1:2"
-      etc.
-    */
-
     const lines =
-      text.split(/\r?\n/)
-        .map(x => x.trim())
+      text
+        .split(/\r?\n/)
+        .map(function(x) {
+          return x.trim();
+        })
         .filter(Boolean);
 
     let current = null;
@@ -2301,16 +2546,27 @@ function findCommentaryForVerse(
 
       if (match) {
 
-        if (current && current.text) {
+        if (
+          current &&
+          current.text
+        ) {
+
           entries.push(current);
+
         }
 
         current = {
-          verse:Number(match[1]),
-          end:match[2]
-            ? Number(match[2])
-            : Number(match[1]),
-          text:""
+
+          verse:
+            Number(match[1]),
+
+          end:
+            match[2]
+              ? Number(match[2])
+              : Number(match[1]),
+
+          text: ""
+
         };
 
         return;
@@ -2319,11 +2575,14 @@ function findCommentaryForVerse(
       if (current) {
 
         if (
-          !/^(Barnes|Notes|Commentary)$/i.test(line)
+          !/^(Barnes|Notes|Commentary)$/i
+            .test(line)
         ) {
 
           current.text +=
-            (current.text ? "\n" : "") +
+            (current.text
+              ? "\n"
+              : "") +
             line;
 
         }
@@ -2332,37 +2591,56 @@ function findCommentaryForVerse(
 
     });
 
-    if (current && current.text) {
+    if (
+      current &&
+      current.text
+    ) {
+
       entries.push(current);
+
     }
 
     return entries;
   }
 
 
-  function findBarnesCommentary(data,verseNumber) {
+  function findBarnesCommentary(
+    data,
+    verseNumber
+  ) {
 
     if (
       !data ||
       !Array.isArray(data.entries)
     ) {
+
       return "";
+
     }
 
     const target =
       Number(verseNumber);
 
     const match =
-      data.entries.find(function(entry) {
+      data.entries.find(
+        function(entry) {
 
-        return (
-          target >= Number(entry.verse) &&
-          target <= Number(entry.end || entry.verse)
-        );
+          return (
+            target >=
+              Number(entry.verse) &&
+            target <=
+              Number(
+                entry.end ||
+                entry.verse
+              )
+          );
 
-      });
+        }
+      );
 
-    return match ? match.text : "";
+    return match
+      ? match.text
+      : "";
   }
 
 
@@ -2377,7 +2655,7 @@ function findCommentaryForVerse(
 
 
   /* =========================
-     LOAD ALL COMMENTARY
+     LOAD SELECTED COMMENTARY
   ========================= */
 
   async function loadSelectedCommentary(
@@ -2415,9 +2693,11 @@ function findCommentaryForVerse(
       commentaryApiIds[selected];
 
     if (!apiId) {
+
       throw new Error(
         "Commentary source is not configured."
       );
+
     }
 
     return loadHelloAOCommentary(
@@ -2456,8 +2736,10 @@ function findCommentaryForVerse(
         );
 
       if (title) {
+
         title.textContent =
           getCommentaryName();
+
       }
 
       const text =
@@ -2530,7 +2812,9 @@ function findCommentaryForVerse(
 
         }
 
-        else if (data.unavailable) {
+        else if (
+          data.unavailable
+        ) {
 
           textElement.innerHTML =
             '<span class="commentary-placeholder">' +
@@ -2599,20 +2883,30 @@ function findCommentaryForVerse(
   ) {
 
     document
-      .querySelectorAll(".verse-text")
+      .querySelectorAll(
+        ".verse-text"
+      )
       .forEach(function(element) {
 
-        element.classList.remove("selected");
+        element.classList.remove(
+          "selected"
+        );
 
       });
 
-    verseElement.classList.add("selected");
+    if (verseElement) {
+
+      verseElement.classList.add(
+        "selected"
+      );
+
+    }
 
     selectedVerseNumber =
-      verseNumber;
+      Number(verseNumber);
 
     verseSelect.value =
-      verseNumber;
+      Number(verseNumber);
   }
 
 
@@ -2628,14 +2922,14 @@ function findCommentaryForVerse(
     currentChapterIndex =
       Number(chapterSelect.value);
 
-    await syncCloudChapter();
-
     if (
       isNaN(currentBookIndex) ||
       isNaN(currentChapterIndex)
     ) {
       return;
     }
+
+    await syncCloudChapter();
 
     const book =
       books[currentBookIndex];
@@ -2689,264 +2983,338 @@ function findCommentaryForVerse(
       message.textContent =
         "No verses found.";
 
-      chapterContent.appendChild(message);
+      chapterContent.appendChild(
+        message
+      );
 
       return;
     }
 
-    verses.forEach(function(verse,index) {
 
-      const verseNumber =
-        getVerseNumber(
-          verse,
-          index
-        );
+    /* =========================
+       RENDER VERSES
+    ========================= */
 
-      const verseText =
-        getVerseText(verse);
+    verses.forEach(
+      function(verse, index) {
 
-      const verseRow =
-        document.createElement("div");
-
-      verseRow.className =
-        "verse-row";
-
-      const verseLeft =
-        document.createElement("div");
-
-      verseLeft.className =
-        "verse-left";
-
-      const verseElement =
-        document.createElement("div");
-
-      verseElement.className =
-        "verse-text";
-
-      if (isHighlighted(verseNumber)) {
-
-        verseElement.classList.add(
-          "permanent-highlight"
-        );
-
-      }
-
-      const numberSpan =
-        document.createElement("span");
-
-      numberSpan.className =
-        "verse-number";
-
-      numberSpan.textContent =
-        verseNumber;
-
-      verseElement.appendChild(
-        numberSpan
-      );
-
-      const textSpan =
-        document.createElement("span");
-
-      textSpan.textContent =
-        verseText;
-
-      verseElement.appendChild(
-        textSpan
-      );
-
-      verseElement.addEventListener(
-        "click",
-        function(event) {
-
-          selectVerse(
-            verseNumber,
-            verseElement
+        const verseNumber =
+          getVerseNumber(
+            verse,
+            index
           );
 
-          showVerseMenu(
-            event.pageX,
-            event.pageY,
-            verseNumber,
-            verseText
+        const verseText =
+          getVerseText(verse);
+
+        const verseRow =
+          document.createElement("div");
+
+        verseRow.className =
+          "verse-row";
+
+        const verseLeft =
+          document.createElement("div");
+
+        verseLeft.className =
+          "verse-left";
+
+        const verseElement =
+          document.createElement("div");
+
+        verseElement.className =
+          "verse-text";
+
+        if (
+          isHighlighted(verseNumber)
+        ) {
+
+          verseElement.classList.add(
+            "permanent-highlight"
           );
 
         }
-      );
 
-      verseLeft.appendChild(
-        verseElement
-      );
+        const numberSpan =
+          document.createElement("span");
+
+        numberSpan.className =
+          "verse-number";
+
+        numberSpan.textContent =
+          verseNumber;
+
+        verseElement.appendChild(
+          numberSpan
+        );
+
+        const textSpan =
+          document.createElement("span");
+
+        textSpan.textContent =
+          verseText;
+
+        verseElement.appendChild(
+          textSpan
+        );
+
+        verseElement.addEventListener(
+          "click",
+          function(event) {
+
+            selectVerse(
+              verseNumber,
+              verseElement
+            );
+
+            showVerseMenu(
+              event.pageX,
+              event.pageY,
+              verseNumber,
+              verseText
+            );
+
+          }
+        );
+
+        verseLeft.appendChild(
+          verseElement
+        );
 
 
-      ```js
-      /* NOTES */
+        /* =========================
+           NOTES
+        ========================= */
 
-      const notesArea =
-        document.createElement("div");
+        const notesArea =
+          document.createElement("div");
 
-      notesArea.className =
-        "notes-area";
+        notesArea.className =
+          "notes-area";
 
-      const notesLabel =
-        document.createElement("label");
+        const notesLabel =
+          document.createElement("label");
 
-      notesLabel.className =
-        "notes-label";
+        notesLabel.className =
+          "notes-label";
 
-      notesLabel.textContent =
-        "📝 Your Notes";
+        notesLabel.textContent =
+          "📝 Your Notes";
 
-      const note =
-        document.createElement("textarea");
+        const note =
+          document.createElement("textarea");
 
-      note.className =
-        "verse-note";
+        note.className =
+          "verse-note";
 
-      note.placeholder =
-        "Write your notes about this verse...";
+        note.placeholder =
+          "Write your notes about this verse...";
 
-      note.value =
-        loadNote(verseNumber);
+        note.value =
+          loadNote(verseNumber);
 
-      const noteStatus =
-        document.createElement("span");
+        const noteStatus =
+          document.createElement("span");
 
-      noteStatus.className =
-        "note-status";
+        noteStatus.className =
+          "note-status";
 
-      note.addEventListener(
-        "input",
-        function() {
+        note.addEventListener(
+          "input",
+          function() {
 
-          saveNote(
-            verseNumber,
-            note.value,
-            noteStatus
+            saveNote(
+              verseNumber,
+              note.value,
+              noteStatus
+            );
+
+          }
+        );
+
+        notesArea.appendChild(
+          notesLabel
+        );
+
+        notesArea.appendChild(
+          note
+        );
+
+        notesArea.appendChild(
+          noteStatus
+        );
+
+        verseLeft.appendChild(
+          notesArea
+        );
+
+
+        /* =========================
+           COMMENTARY
+        ========================= */
+
+        const commentaryPanel =
+          document.createElement("div");
+
+        commentaryPanel.className =
+          "commentary-panel";
+
+        commentaryPanel.dataset.verseNumber =
+          verseNumber;
+
+        if (commentaryVisible) {
+
+          commentaryPanel.classList.add(
+            "show"
           );
 
         }
-      );
 
-      notesArea.appendChild(
-        notesLabel
-      );
+        const commentaryTitle =
+          document.createElement("div");
 
-      notesArea.appendChild(
-        note
-      );
+        commentaryTitle.className =
+          "commentary-title";
 
-      notesArea.appendChild(
-        noteStatus
-      );
+        commentaryTitle.textContent =
+          getCommentaryName();
 
-      verseLeft.appendChild(
-        notesArea
-      );
-```
+        const commentaryReference =
+          document.createElement("div");
 
-      notesArea.appendChild(notesLabel);
-      notesArea.appendChild(note);
-      notesArea.appendChild(noteStatus);
+        commentaryReference.className =
+          "commentary-reference";
 
-      verseLeft.appendChild(notesArea);
+        commentaryReference.textContent =
+          bookName +
+          " " +
+          chapterNumber +
+          ":" +
+          verseNumber;
 
+        const commentaryText =
+          document.createElement("div");
 
-      /* COMMENTARY */
+        commentaryText.className =
+          "commentary-text";
 
-      const commentaryPanel =
-        document.createElement("div");
+        commentaryText.innerHTML =
+          commentaryVisible
 
-      commentaryPanel.className =
-        "commentary-panel";
+            ? '<span class="commentary-loading">Loading commentary...</span>'
 
-      commentaryPanel.dataset.verseNumber =
-        verseNumber;
+            : '<span class="commentary-placeholder">Turn on Bible Commentary to view this.</span>';
 
-      if (commentaryVisible) {
-        commentaryPanel.classList.add("show");
+        commentaryPanel.appendChild(
+          commentaryTitle
+        );
+
+        commentaryPanel.appendChild(
+          commentaryReference
+        );
+
+        commentaryPanel.appendChild(
+          commentaryText
+        );
+
+        verseRow.appendChild(
+          verseLeft
+        );
+
+        verseRow.appendChild(
+          commentaryPanel
+        );
+
+        chapterContent.appendChild(
+          verseRow
+        );
+
       }
-
-      const commentaryTitle =
-        document.createElement("div");
-
-      commentaryTitle.className =
-        "commentary-title";
-
-      commentaryTitle.textContent =
-        getCommentaryName();
-
-      const commentaryReference =
-        document.createElement("div");
-
-      commentaryReference.className =
-        "commentary-reference";
-
-      commentaryReference.textContent =
-        bookName +
-        " " +
-        chapterNumber +
-        ":" +
-        verseNumber;
-
-      const commentaryText =
-        document.createElement("div");
-
-      commentaryText.className =
-        "commentary-text";
-
-      commentaryText.innerHTML =
-        commentaryVisible
-          ? '<span class="commentary-loading">Loading commentary...</span>'
-          : '<span class="commentary-placeholder">Turn on Bible Commentary to view this.</span>';
-
-      commentaryPanel.appendChild(
-        commentaryTitle
-      );
-
-      commentaryPanel.appendChild(
-        commentaryReference
-      );
-
-      commentaryPanel.appendChild(
-        commentaryText
-      );
-
-      verseRow.appendChild(verseLeft);
-      verseRow.appendChild(commentaryPanel);
-
-      chapterContent.appendChild(
-        verseRow
-      );
-
-    });
+    );
 
 
-    /* VERSE SELECTOR */
+    /* =========================
+       VERSE SELECTOR
+    ========================= */
 
     verseSelect.innerHTML =
       '<option value="">Choose a verse</option>';
 
-    verses.forEach(function(verse,index) {
+    verses.forEach(
+      function(verse, index) {
 
-      const verseNumber =
-        getVerseNumber(
-          verse,
-          index
+        const verseNumber =
+          getVerseNumber(
+            verse,
+            index
+          );
+
+        const option =
+          document.createElement("option");
+
+        option.value =
+          verseNumber;
+
+        option.textContent =
+          "Verse " +
+          verseNumber;
+
+        verseSelect.appendChild(
+          option
         );
 
-      const option =
-        document.createElement("option");
+      }
+    );
 
-      option.value =
-        verseNumber;
 
-      option.textContent =
-        "Verse " +
-        verseNumber;
+    /* =========================
+       RESTORE SELECTED VERSE
+    ========================= */
 
-      verseSelect.appendChild(option);
+    if (
+      selectedVerseNumber !== null
+    ) {
 
-    });
+      const selectedElement =
+        Array.from(
+          document.querySelectorAll(
+            ".verse-text"
+          )
+        ).find(function(element) {
+
+          const number =
+            element.querySelector(
+              ".verse-number"
+            );
+
+          return (
+            number &&
+            number.textContent ===
+            String(
+              selectedVerseNumber
+            )
+          );
+
+        });
+
+      if (selectedElement) {
+
+        selectVerse(
+          selectedVerseNumber,
+          selectedElement
+        );
+
+      }
+
+      else {
+
+        selectedVerseNumber =
+          null;
+
+      }
+
+    }
+
 
     updateNavigation();
 
@@ -2991,23 +3359,27 @@ function findCommentaryForVerse(
     chapterSelect.innerHTML =
       '<option value="">Choose a chapter</option>';
 
-    chapters.forEach(function(chapter,index) {
+    chapters.forEach(
+      function(chapter, index) {
 
-      const option =
-        document.createElement("option");
+        const option =
+          document.createElement("option");
 
-      option.value =
-        index;
+        option.value =
+          index;
 
-      option.textContent =
-        getChapterNumber(
-          chapter,
-          index
+        option.textContent =
+          getChapterNumber(
+            chapter,
+            index
+          );
+
+        chapterSelect.appendChild(
+          option
         );
 
-      chapterSelect.appendChild(option);
-
-    });
+      }
+    );
   }
 
 
@@ -3022,14 +3394,28 @@ function findCommentaryForVerse(
       const selectedTranslation =
         translationSelect.value;
 
+      /*
+        Save the current reference before
+        changing translation.
+      */
+
       const oldBookIndex =
         currentBookIndex;
 
       const oldChapterIndex =
         currentChapterIndex;
 
+      const oldVerseNumber =
+        selectedVerseNumber;
+
+
+      /* =========================
+         LOAD TRANSLATION
+      ========================= */
+
       if (
-        selectedTranslation === "WEB"
+        selectedTranslation ===
+        "WEB"
       ) {
 
         bibleData =
@@ -3038,7 +3424,8 @@ function findCommentaryForVerse(
       }
 
       else if (
-        selectedTranslation === "ASV"
+        selectedTranslation ===
+        "ASV"
       ) {
 
         bibleData =
@@ -3064,23 +3451,39 @@ function findCommentaryForVerse(
 
       }
 
+
+      /* =========================
+         BOOK SELECTOR
+      ========================= */
+
       bookSelect.innerHTML =
         '<option value="">Choose a book</option>';
 
-      books.forEach(function(book,index) {
+      books.forEach(
+        function(book, index) {
 
-        const option =
-          document.createElement("option");
+          const option =
+            document.createElement(
+              "option"
+            );
 
-        option.value =
-          index;
+          option.value =
+            index;
 
-        option.textContent =
-          getBookName(book);
+          option.textContent =
+            getBookName(book);
 
-        bookSelect.appendChild(option);
+          bookSelect.appendChild(
+            option
+          );
 
-      });
+        }
+      );
+
+
+      /* =========================
+         RESTORE BOOK / CHAPTER
+      ========================= */
 
       if (
         oldBookIndex >= 0 &&
@@ -3099,23 +3502,38 @@ function findCommentaryForVerse(
 
         if (
           oldChapterIndex >= 0 &&
-          oldChapterIndex < chapters.length
+          oldChapterIndex <
+          chapters.length
         ) {
 
           chapterSelect.value =
             oldChapterIndex;
 
-          loadChapter();
+          /*
+            Restore verse reference after
+            the new translation loads.
+          */
+
+          selectedVerseNumber =
+            oldVerseNumber;
+
+          await loadChapter();
 
         }
 
       }
 
+
+      /* =========================
+         TRANSLATION STATUS
+      ========================= */
+
       let translationName =
         "King James Version";
 
       if (
-        selectedTranslation === "WEB"
+        selectedTranslation ===
+        "WEB"
       ) {
 
         translationName =
@@ -3124,7 +3542,8 @@ function findCommentaryForVerse(
       }
 
       else if (
-        selectedTranslation === "ASV"
+        selectedTranslation ===
+        "ASV"
       ) {
 
         translationName =
@@ -3198,6 +3617,7 @@ function findCommentaryForVerse(
         loadChapter();
 
       }
+
     }
   );
 
@@ -3211,7 +3631,9 @@ function findCommentaryForVerse(
     function() {
 
       if (commentaryVisible) {
+
         loadChapter();
+
       }
 
     }
@@ -3257,7 +3679,9 @@ function findCommentaryForVerse(
     function() {
 
       currentChapterIndex =
-        Number(chapterSelect.value);
+        Number(
+          chapterSelect.value
+        );
 
       selectedVerseNumber =
         null;
@@ -3283,17 +3707,23 @@ function findCommentaryForVerse(
         return;
       }
 
-      document
-        .querySelectorAll(".verse-text")
-        .forEach(function(element) {
+      const elements =
+        document.querySelectorAll(
+          ".verse-text"
+        );
+
+      elements.forEach(
+        function(element) {
 
           const number =
-            element
-              .querySelector(".verse-number")
-              ?.textContent;
+            element.querySelector(
+              ".verse-number"
+            );
 
           if (
-            number === String(verseNumber)
+            number &&
+            number.textContent ===
+            String(verseNumber)
           ) {
 
             selectVerse(
@@ -3302,13 +3732,14 @@ function findCommentaryForVerse(
             );
 
             element.scrollIntoView({
-              behavior:"smooth",
-              block:"center"
+              behavior: "smooth",
+              block: "center"
             });
 
           }
 
-        });
+        }
+      );
 
     }
   );
@@ -3326,7 +3757,7 @@ function findCommentaryForVerse(
   ) {
 
     selectedVerseNumber =
-      verseNumber;
+      Number(verseNumber);
 
     verseMenu.style.display =
       "block";
@@ -3343,7 +3774,6 @@ function findCommentaryForVerse(
   }
 
 
- ```js
   /* =========================
      HIGHLIGHT
   ========================= */
@@ -3353,7 +3783,8 @@ function findCommentaryForVerse(
     function() {
 
       if (
-        selectedVerseNumber === null
+        selectedVerseNumber ===
+        null
       ) {
         return;
       }
@@ -3375,9 +3806,8 @@ function findCommentaryForVerse(
 
     }
   );
-```
 
-```js
+
   /* =========================
      BOOKMARK
   ========================= */
@@ -3387,7 +3817,8 @@ function findCommentaryForVerse(
     function() {
 
       if (
-        selectedVerseNumber === null
+        selectedVerseNumber ===
+        null
       ) {
         return;
       }
@@ -3402,7 +3833,9 @@ function findCommentaryForVerse(
 
       if (existing === "true") {
 
-        localStorage.removeItem(key);
+        localStorage.removeItem(
+          key
+        );
 
         saveCloudItem(
           "bookmark",
@@ -3413,7 +3846,9 @@ function findCommentaryForVerse(
           "false"
         );
 
-      } else {
+      }
+
+      else {
 
         localStorage.setItem(
           key,
@@ -3436,11 +3871,8 @@ function findCommentaryForVerse(
 
     }
   );
-```
 
 
-   
-      
   /* =========================
      COPY
   ========================= */
@@ -3450,7 +3882,8 @@ function findCommentaryForVerse(
     async function() {
 
       const text =
-        verseMenu.dataset.verseText || "";
+        verseMenu.dataset.verseText ||
+        "";
 
       try {
 
@@ -3485,21 +3918,29 @@ function findCommentaryForVerse(
     async function() {
 
       const text =
-        verseMenu.dataset.verseText || "";
+        verseMenu.dataset.verseText ||
+        "";
 
       if (navigator.share) {
 
         try {
 
           await navigator.share({
-            title:"BibleMastrey",
-            text:text
+
+            title:
+              "BibleMastrey",
+
+            text:
+              text
+
           });
 
         }
 
         catch(error) {
+
           console.log(error);
+
         }
 
       }
@@ -3518,7 +3959,9 @@ function findCommentaryForVerse(
         }
 
         catch(error) {
+
           console.error(error);
+
         }
 
       }
@@ -3539,8 +3982,12 @@ function findCommentaryForVerse(
     function(event) {
 
       if (
-        !verseMenu.contains(event.target) &&
-        !event.target.closest(".verse-text")
+        !verseMenu.contains(
+          event.target
+        ) &&
+        !event.target.closest(
+          ".verse-text"
+        )
       ) {
 
         verseMenu.style.display =
@@ -3570,7 +4017,6 @@ function findCommentaryForVerse(
         true;
 
       return;
-
     }
 
     const chapters =
@@ -3607,8 +4053,11 @@ function findCommentaryForVerse(
       loadChapter();
 
       window.scrollTo({
-        top:0,
-        behavior:"smooth"
+
+        top: 0,
+
+        behavior: "smooth"
+
       });
 
     }
@@ -3647,8 +4096,11 @@ function findCommentaryForVerse(
       loadChapter();
 
       window.scrollTo({
-        top:0,
-        behavior:"smooth"
+
+        top: 0,
+
+        behavior: "smooth"
+
       });
 
     }
@@ -3667,7 +4119,8 @@ function findCommentaryForVerse(
 
   function runSearch() {
 
-    searchResults.innerHTML = "";
+    searchResults.innerHTML =
+      "";
 
     const searchTerm =
       searchInput.value
@@ -3685,56 +4138,72 @@ function findCommentaryForVerse(
 
     let found = 0;
 
-    verseElements.forEach(function(element) {
+    verseElements.forEach(
+      function(element) {
 
-      const text =
-        element.textContent
-          .toLowerCase();
+        const text =
+          element.textContent
+            .toLowerCase();
 
-      if (
-        text.includes(searchTerm)
-      ) {
+        if (
+          text.includes(searchTerm)
+        ) {
 
-        found++;
+          found++;
 
-        const result =
-          document.createElement("div");
-
-        result.className =
-          "search-result";
-
-        result.textContent =
-          element.textContent;
-
-        result.style.cursor =
-          "pointer";
-
-        result.addEventListener(
-          "click",
-          function() {
-
-            element.scrollIntoView({
-              behavior:"smooth",
-              block:"center"
-            });
-
-            selectVerse(
-              element
-                .querySelector(".verse-number")
-                .textContent,
-              element
+          const result =
+            document.createElement(
+              "div"
             );
 
-          }
-        );
+          result.className =
+            "search-result";
 
-        searchResults.appendChild(
-          result
-        );
+          result.textContent =
+            element.textContent;
+
+          result.style.cursor =
+            "pointer";
+
+          result.addEventListener(
+            "click",
+            function() {
+
+              element.scrollIntoView({
+
+                behavior:
+                  "smooth",
+
+                block:
+                  "center"
+
+              });
+
+              const number =
+                element.querySelector(
+                  ".verse-number"
+                );
+
+              if (number) {
+
+                selectVerse(
+                  number.textContent,
+                  element
+                );
+
+              }
+
+            }
+          );
+
+          searchResults.appendChild(
+            result
+          );
+
+        }
 
       }
-
-    });
+    );
 
     if (found === 0) {
 
@@ -3750,36 +4219,36 @@ function findCommentaryForVerse(
   ========================= */
 
   translationSelect.addEventListener(
-  "change",
-  async function() {
-
-    status.textContent =
-      "Loading " +
-      translationSelect.options[
-        translationSelect.selectedIndex
-      ].text +
-      "...";
-
-    try {
-
-      await startBible();
-
-    }
-
-    catch(error) {
-
-      console.error(
-        "Translation error:",
-        error
-      );
+    "change",
+    async function() {
 
       status.textContent =
-        "Unable to load this translation.";
+        "Loading " +
+        translationSelect.options[
+          translationSelect.selectedIndex
+        ].text +
+        "...";
+
+      try {
+
+        await startBible();
+
+      }
+
+      catch(error) {
+
+        console.error(
+          "Translation error:",
+          error
+        );
+
+        status.textContent =
+          "Unable to load this translation.";
+
+      }
 
     }
-
-  }
-);
+  );
 
 
   /* =========================
