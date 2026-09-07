@@ -430,7 +430,89 @@
     }
           }
     }
+/* =========================
+   WHAT WOULD YOU LIKE TO DO?
+========================= */
 
+.ai-study-choice {
+  background: white;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.08);
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.ai-study-choice h2 {
+  margin-top: 0;
+  margin-bottom: 8px;
+  color: #1f3c88;
+  text-align: center;
+}
+
+.ai-study-intro {
+  text-align: center;
+  color: #555;
+  line-height: 1.6;
+  max-width: 800px;
+  margin: 0 auto 20px;
+}
+
+.ai-study-choice-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}
+
+.ai-study-choice-card {
+  display: block;
+  background: #f8f9fc;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 20px;
+  text-decoration: none;
+  color: #222;
+  transition: transform .15s ease,
+              box-shadow .15s ease,
+              border-color .15s ease;
+}
+
+.ai-study-choice-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,.12);
+  border-color: #1f3c88;
+}
+
+.ai-study-icon {
+  font-size: 30px;
+  margin-bottom: 8px;
+}
+
+.ai-study-choice-card h3 {
+  margin: 0 0 8px;
+  color: #1f3c88;
+}
+
+.ai-study-choice-card p {
+  margin: 0;
+  color: #555;
+  line-height: 1.5;
+}
+
+.admin-study-card {
+  border-style: dashed;
+}
+
+.admin-label {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 5px 9px;
+  border-radius: 5px;
+  background: #e8edf9;
+  color: #1f3c88;
+  font-size: 12px;
+  font-weight: bold;
+}
     .account-modal {
       position: fixed;
       inset: 0;
