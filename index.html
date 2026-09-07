@@ -924,7 +924,38 @@ const supabaseClient =
   );
   supabaseClient.auth.getSession()
   .then(function(result) {
+async function checkAdminStatus() {
+  const {
+    data: { user }
+  } = await supabaseClient.auth.getUser();
 
+  if (!user) {
+    console.log("No user is currently logged in.");
+    return false;
+  }
+
+  const { data, error } =
+    await supabaseClient
+      .from("admin_users")
+      .select("user_id")
+      .eq("user_id", user.id)
+      .maybeSingle();
+
+  if (error) {
+    console.error("Admin check error:", error);
+    return false;
+  }
+
+  if (data) {
+    console.log("BibleMastrey admin recognized:", user.email);
+    return true;
+  }
+
+  console.log("Regular user:", user.email);
+  return false;
+}
+
+checkAdminStatus();
     if (result.error) {
       console.error(
         "Supabase connection error:",
