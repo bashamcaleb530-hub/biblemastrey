@@ -967,7 +967,84 @@ checkAdminStatus();
       );
     }
 
-  });
+    });
+
+  /* =========================
+     CLOUD BIBLE DATA
+  ========================= */
+
+  let cloudBibleData = {};
+
+  function getCloudKey(
+    itemType,
+    translation,
+    bookIndex,
+    chapterIndex,
+    verseNumber
+  ) {
+    return (
+      itemType +
+      "|" +
+      translation +
+      "|" +
+      bookIndex +
+      "|" +
+      chapterIndex +
+      "|" +
+      verseNumber
+    );
+  }
+
+  async function getCurrentUser() {
+    const {
+      data: { user }
+    } = await supabaseClient.auth.getUser();
+
+    return user;
+  }
+
+  async function saveCloudItem(
+    itemType,
+    translation,
+    bookIndex,
+    chapterIndex,
+    verseNumber,
+    content
+  ) {
+    const user = await getCurrentUser();
+
+    if (!user) {
+      return;
+    }
+
+    const { error } =
+      await supabaseClient
+        .from("bible_user_data")
+        .upsert(
+          {
+            user_id: user.id,
+            item_type: itemType,
+            translation: translation,
+            book_index: bookIndex,
+            chapter_index: chapterIndex,
+            verse_number: verseNumber,
+            content: content,
+            updated_at: new Date().toISOString()
+          },
+          {
+            onConflict:
+              "user_id,item_type,translation,book_index,chapter_index,verse_number"
+          }
+        );
+
+    if (error) {
+      console.error(
+        "Cloud save error:",
+        error
+      );
+    }
+  }
+
   const commentaryCache = {};
   const accountModal =
   document.getElementById("accountModal");
