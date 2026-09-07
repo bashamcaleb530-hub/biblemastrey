@@ -2859,6 +2859,127 @@ async function loadChapter() {
   /* =========================
      COPY
   ========================= */
+  /* =========================
+     NOTE
+  ========================= */
+
+  noteVerseButton.addEventListener(
+    "click",
+    function(event) {
+
+      event.stopPropagation();
+
+      if (
+        selectedVerseNumber ===
+        null
+      ) {
+        return;
+      }
+
+      const verseElement =
+        verseContainer.querySelector(
+          '[data-verse="' +
+          selectedVerseNumber +
+          '"]'
+        );
+
+      if (!verseElement) {
+        return;
+      }
+
+      let notesArea =
+        verseElement.querySelector(
+          ".notes-area"
+        );
+
+      if (!notesArea) {
+
+        notesArea =
+          document.createElement(
+            "div"
+          );
+
+        notesArea.className =
+          "notes-area";
+
+        const label =
+          document.createElement(
+            "label"
+          );
+
+        label.className =
+          "notes-label";
+
+        label.textContent =
+          "My Note";
+
+        const textarea =
+          document.createElement(
+            "textarea"
+          );
+
+        textarea.className =
+          "verse-note";
+
+        textarea.placeholder =
+          "Write your note for this verse...";
+
+        textarea.value =
+          loadNote(
+            selectedVerseNumber
+          );
+
+        const noteStatus =
+          document.createElement(
+            "span"
+          );
+
+        noteStatus.className =
+          "note-status";
+
+        textarea.addEventListener(
+          "input",
+          function() {
+
+            saveNote(
+              selectedVerseNumber,
+              textarea.value,
+              noteStatus
+            );
+
+          }
+        );
+
+        notesArea.appendChild(
+          label
+        );
+
+        notesArea.appendChild(
+          textarea
+        );
+
+        notesArea.appendChild(
+          noteStatus
+        );
+
+        verseElement.appendChild(
+          notesArea
+        );
+      }
+
+      const textarea =
+        notesArea.querySelector(
+          ".verse-note"
+        );
+
+      if (textarea) {
+        textarea.focus();
+      }
+
+      verseMenu.style.display =
+        "none";
+    }
+  );
 
   copyVerseButton.addEventListener(
     "click",
