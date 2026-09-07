@@ -1,12 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>Personal Bible Study - BibleMastrey</title>
 
   <style>
+
     * {
       box-sizing: border-box;
     }
@@ -36,15 +43,25 @@
     }
 
     .container {
-      max-width: 800px;
-      margin: 40px auto;
+      max-width: 1100px;
+      margin: 30px auto;
       padding: 0 20px;
     }
 
-    .study-box {
+    .back-button {
+      display: inline-block;
+      margin-bottom: 20px;
+      color: #1f3c88;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .study-box,
+    .workspace-section {
       background: white;
       border-radius: 12px;
-      padding: 30px;
+      padding: 25px;
+      margin-bottom: 20px;
       box-shadow: 0 3px 12px rgba(0,0,0,.08);
     }
 
@@ -52,7 +69,6 @@
       margin-top: 0;
       color: #1f3c88;
       text-align: center;
-      font-size: 26px;
     }
 
     .study-description {
@@ -68,13 +84,15 @@
       margin-bottom: 8px;
     }
 
-    .topic-input {
+    .topic-input,
+    .search-input,
+    .translation-select,
+    .commentary-select {
       width: 100%;
-      padding: 14px;
+      padding: 13px;
       font-size: 16px;
       border: 1px solid #ccc;
       border-radius: 8px;
-      margin-bottom: 20px;
     }
 
     .start-button {
@@ -93,25 +111,234 @@
       opacity: .9;
     }
 
-    .back-button {
-      display: inline-block;
-      margin-bottom: 20px;
-      color: #1f3c88;
-      text-decoration: none;
-      font-weight: bold;
+    .workspace {
+      display: none;
     }
 
-    .example {
-      margin-top: 20px;
-      padding: 15px;
-      background: #f7f9ff;
-      border-left: 4px solid #1f3c88;
-      border-radius: 5px;
+    .workspace.visible {
+      display: block;
+    }
+
+    .topic-title {
+      color: #1f3c88;
+      margin-top: 0;
+      font-size: 28px;
+    }
+
+    .workspace-intro {
       color: #555;
+      line-height: 1.6;
+    }
+
+    .workspace-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .tool-box {
+      background: #f8f9fc;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 18px;
+    }
+
+    .tool-box h3 {
+      margin-top: 0;
+      color: #1f3c88;
+    }
+
+    .tool-box p {
+      color: #666;
       line-height: 1.5;
     }
 
-    @media (max-width: 600px) {
+    .search-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .search-row .search-input {
+      flex: 1;
+    }
+
+    .search-button,
+    .commentary-button {
+      background: #1f3c88;
+      color: white;
+      border: none;
+      padding: 12px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .search-button:hover,
+    .commentary-button:hover {
+      opacity: .9;
+    }
+
+    .bible-controls {
+      display: flex;
+      gap: 15px;
+      align-items: end;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .translation-control {
+      width: 220px;
+    }
+
+    .translation-control label {
+      margin-bottom: 6px;
+    }
+
+    .verse-card {
+      background: #fafafa;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 18px;
+      margin-bottom: 15px;
+      position: relative;
+    }
+
+    .verse-card.highlighted {
+      background: #fff3a6;
+    }
+
+    .verse-reference {
+      color: #1f3c88;
+      font-weight: bold;
+      font-size: 17px;
+      margin-bottom: 10px;
+    }
+
+    .verse-text {
+      line-height: 1.7;
+      font-size: 16px;
+    }
+
+    .verse-actions {
+      display: none;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 15px;
+      padding-top: 12px;
+      border-top: 1px solid #ddd;
+    }
+
+    .verse-card.selected .verse-actions {
+      display: flex;
+    }
+
+    .verse-action {
+      background: #eee;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 7px 10px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .verse-action:hover {
+      background: #ddd;
+    }
+
+    .verse-notes {
+      display: none;
+      margin-top: 12px;
+    }
+
+    .verse-card.notes-open .verse-notes {
+      display: block;
+    }
+
+    .verse-notes textarea {
+      width: 100%;
+      min-height: 100px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 7px;
+      resize: vertical;
+      font-family: Arial, sans-serif;
+    }
+
+    .save-note-button {
+      margin-top: 8px;
+      background: #1f3c88;
+      color: white;
+      border: none;
+      padding: 8px 13px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .commentary-panel {
+      display: none;
+      background: #f7f9ff;
+      border-left: 4px solid #1f3c88;
+      padding: 15px;
+      margin-top: 15px;
+      border-radius: 6px;
+      line-height: 1.6;
+    }
+
+    .commentary-panel.visible {
+      display: block;
+    }
+
+    .commentary-title {
+      font-weight: bold;
+      color: #1f3c88;
+      margin-bottom: 8px;
+    }
+
+    .status-message {
+      color: #666;
+      padding: 15px 0;
+    }
+
+    .definition-box {
+      line-height: 1.7;
+      color: #444;
+    }
+
+    .study-note {
+      background: #f7f9ff;
+      border-left: 4px solid #1f3c88;
+      padding: 15px;
+      border-radius: 6px;
+      line-height: 1.6;
+      color: #555;
+      margin-top: 15px;
+    }
+
+    .selected-verse-label {
+      margin-top: 12px;
+      font-weight: bold;
+      color: #1f3c88;
+    }
+
+    @media (max-width: 700px) {
+
+      .workspace-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .search-row {
+        flex-direction: column;
+      }
+
+      .search-button,
+      .commentary-button {
+        width: 100%;
+      }
+
+      .translation-control {
+        width: 100%;
+      }
 
       header h1 {
         font-size: 25px;
@@ -119,52 +346,64 @@
 
       .container {
         padding: 0 12px;
-        margin-top: 25px;
-      }
-
-      .study-box {
-        padding: 20px;
-      }
-
-      .study-box h2 {
-        font-size: 23px;
       }
 
     }
+
   </style>
+
 </head>
+
 
 <body>
 
+
   <header>
+
     <h1>Personal Bible Study</h1>
+
     <p>BibleMastrey</p>
+
   </header>
 
 
   <div class="container">
 
-    <a href="index.html" class="back-button">
+
+    <a
+      href="index.html"
+      class="back-button"
+    >
       ← Back to BibleMastrey
     </a>
 
 
-    <div class="study-box">
+    <!-- =========================
+         TOPIC SELECTION
+    ========================== -->
+
+    <div
+      class="study-box"
+      id="topicBox"
+    >
 
       <h2>
         What would you like to study?
       </h2>
 
       <p class="study-description">
+
         Enter a Bible topic you would like to study.
-        BibleMastrey will then bring together Scripture
+        BibleMastrey will bring together Scripture
         and study tools to help you explore that topic.
+
       </p>
 
 
       <label for="topicInput">
         Bible Study Topic
       </label>
+
 
       <input
         type="text"
@@ -175,6 +414,9 @@
       >
 
 
+      <br><br>
+
+
       <button
         id="startStudyButton"
         class="start-button"
@@ -182,26 +424,323 @@
         Start Study
       </button>
 
+    </div>
 
-      <div class="example">
-        <strong>Example:</strong><br>
-        Type <strong>How to Forgive</strong>, then click
-        <strong>Start Study</strong>. Your dedicated study
-        workspace will open with Bible verses and study
-        tools related to your topic.
+
+    <!-- =========================
+         STUDY WORKSPACE
+    ========================== -->
+
+    <div
+      id="studyWorkspace"
+      class="workspace"
+    >
+
+
+      <!-- =========================
+           TOPIC HEADER
+      ========================== -->
+
+      <div class="workspace-section">
+
+        <h2
+          id="topicTitle"
+          class="topic-title"
+        >
+          Personal Bible Study
+        </h2>
+
+        <p
+          id="topicIntro"
+          class="workspace-intro"
+        ></p>
+
       </div>
 
+
+      <!-- =========================
+           STUDY TOOLS
+      ========================== -->
+
+      <div class="workspace-section">
+
+        <h2>Study Tools</h2>
+
+
+        <div class="workspace-grid">
+
+
+          <!-- DICTIONARY -->
+
+          <div class="tool-box">
+
+            <h3>📘 Bible Dictionary</h3>
+
+            <p>
+              Search for a Bible word or topic.
+            </p>
+
+            <div class="search-row">
+
+              <input
+                type="text"
+                id="dictionarySearch"
+                class="search-input"
+                placeholder="Search Bible Dictionary"
+              >
+
+              <button
+                class="search-button"
+                id="dictionaryButton"
+              >
+                Search
+              </button>
+
+            </div>
+
+            <div
+              id="dictionaryResults"
+              class="definition-box"
+            ></div>
+
+          </div>
+
+
+          <!-- CONCORDANCE -->
+
+          <div class="tool-box">
+
+            <h3>🔎 Concordance</h3>
+
+            <p>
+              Search the Bible for a word or phrase.
+            </p>
+
+            <div class="search-row">
+
+              <input
+                type="text"
+                id="concordanceSearch"
+                class="search-input"
+                placeholder="Search Concordance"
+              >
+
+              <button
+                class="search-button"
+                id="concordanceButton"
+              >
+                Search
+              </button>
+
+            </div>
+
+            <div
+              id="concordanceResults"
+              class="definition-box"
+            ></div>
+
+          </div>
+
+
+          <!-- HEBREW / GREEK -->
+
+          <div class="tool-box">
+
+            <h3>🇬🇷 Hebrew & Greek Word Lookup</h3>
+
+            <p>
+              Search for a Hebrew or Greek Bible word.
+            </p>
+
+            <div class="search-row">
+
+              <input
+                type="text"
+                id="wordSearch"
+                class="search-input"
+                placeholder="Search Hebrew or Greek word"
+              >
+
+              <button
+                class="search-button"
+                id="wordButton"
+              >
+                Search
+              </button>
+
+            </div>
+
+            <div
+              id="wordResults"
+              class="definition-box"
+            ></div>
+
+          </div>
+
+
+          <!-- COMMENTARY -->
+
+          <div class="tool-box">
+
+            <h3>📖 Bible Commentary</h3>
+
+            <p>
+              Click a Bible verse first, choose a commentary,
+              then show the commentary for that verse.
+            </p>
+
+
+            <select
+              id="commentarySelect"
+              class="commentary-select"
+            >
+
+              <option value="matthew-henry-concise">
+                Matthew Henry Concise
+              </option>
+
+              <option value="matthew-henry-complete">
+                Matthew Henry Complete
+              </option>
+
+              <option value="john-gill">
+                John Gill
+              </option>
+
+              <option value="jfb">
+                Jamieson-Fausset-Brown
+              </option>
+
+              <option value="adam-clarke">
+                Adam Clarke
+              </option>
+
+              <option value="barnes">
+                Barnes' Notes
+              </option>
+
+            </select>
+
+
+            <br><br>
+
+
+            <button
+              id="commentaryButton"
+              class="commentary-button"
+            >
+              Show Commentary
+            </button>
+
+
+            <div
+              id="commentaryStatus"
+              class="definition-box"
+            ></div>
+
+          </div>
+
+
+        </div>
+
+      </div>
+
+
+      <!-- =========================
+           BIBLE VERSES
+      ========================== -->
+
+      <div class="workspace-section">
+
+        <h2>📖 Bible Verses</h2>
+
+
+        <div class="bible-controls">
+
+          <div class="translation-control">
+
+            <label for="translationSelect">
+              Translation
+            </label>
+
+            <select
+              id="translationSelect"
+              class="translation-select"
+            >
+
+              <option value="KJV">
+                KJV
+              </option>
+
+              <option value="WEB">
+                WEB
+              </option>
+
+              <option value="ASV">
+                ASV
+              </option>
+
+            </select>
+
+          </div>
+
+        </div>
+
+
+        <div
+          id="verseResults"
+        >
+
+          <div class="status-message">
+            Enter a topic above to begin your study.
+          </div>
+
+        </div>
+
+
+        <div class="study-note">
+
+          <strong>Remember:</strong>
+
+          These verses are a starting point for your study.
+          Read the surrounding passage and study the Scriptures
+          for yourself.
+
+        </div>
+
+      </div>
+
+
     </div>
+
 
   </div>
 
 
+  <!-- =========================
+       BIBLE DATA
+  ========================== -->
+
+  <script src="bible.js"></script>
+
+
   <script>
+
+
+    let studyBible = null;
+
+    let studyTranslation = "KJV";
+
+    let currentTopic = "";
+
+    let currentVerses = [];
+
 
     const topicInput =
       document.getElementById(
         "topicInput"
       );
+
 
     const startStudyButton =
       document.getElementById(
@@ -209,7 +748,41 @@
       );
 
 
-    function startPersonalStudy() {
+    const studyWorkspace =
+      document.getElementById(
+        "studyWorkspace"
+      );
+
+
+    const topicTitle =
+      document.getElementById(
+        "topicTitle"
+      );
+
+
+    const topicIntro =
+      document.getElementById(
+        "topicIntro"
+      );
+
+
+    const verseResults =
+      document.getElementById(
+        "verseResults"
+      );
+
+
+    const translationSelect =
+      document.getElementById(
+        "translationSelect"
+      );
+
+
+    // =========================
+    // START STUDY
+    // =========================
+
+    async function startPersonalStudy() {
 
       const topic =
         topicInput.value.trim();
@@ -224,31 +797,1486 @@
         topicInput.focus();
 
         return;
+
       }
 
 
-      const studyUrl =
-        "study-workspace.html?topic=" +
-        encodeURIComponent(topic);
+      currentTopic = topic;
 
 
-      window.location.href =
-        studyUrl;
+      topicTitle.textContent =
+        "Study: " + topic;
+
+
+      topicIntro.textContent =
+        "BibleMastrey is helping you begin your study of \"" +
+        topic +
+        "\". Start with the Scriptures below, then use the study tools to explore the topic further.";
+
+
+      studyWorkspace.classList.add(
+        "visible"
+      );
+
+
+      verseResults.innerHTML =
+        "<div class='status-message'>Loading Bible verses...</div>";
+
+
+      studyWorkspace.scrollIntoView({
+        behavior: "smooth"
+      });
+
+
+      await loadStudyBible();
+
+
+      displayTopicVerses();
 
     }
 
 
-    startStudyButton.addEventListener(
-      "click",
-      startPersonalStudy
+    // =========================
+    // LOAD BIBLE
+    // =========================
+
+    async function loadStudyBible() {
+
+      studyBible = null;
+
+
+      try {
+
+        if (
+          studyTranslation === "WEB"
+        ) {
+
+          studyBible =
+            await getWEB();
+
+        }
+        else if (
+          studyTranslation === "ASV"
+        ) {
+
+          studyBible =
+            await getASV();
+
+        }
+        else {
+
+          studyBible =
+            await getKJV();
+
+        }
+
+      }
+      catch (error) {
+
+        console.error(
+          "Bible loading error:",
+          error
+        );
+
+        verseResults.innerHTML =
+          "<div class='status-message'>" +
+          "Unable to load the Bible translation right now. Please try again." +
+          "</div>";
+
+      }
+
+    }
+
+
+    // =========================
+    // GET BOOK NAME
+    // =========================
+
+    function getBookName(book) {
+
+      return (
+        book.englishName ||
+        book.book ||
+        book.name ||
+        book.title ||
+        "Unknown Book"
+      );
+
+    }
+
+
+    // =========================
+    // SEARCH WHOLE BIBLE
+    // =========================
+
+    function searchBible(
+      data,
+      searchText
+    ) {
+
+      if (
+        !data ||
+        !Array.isArray(data.books)
+      ) {
+
+        return [];
+
+      }
+
+
+      const searchWords =
+        searchText
+          .toLowerCase()
+          .replace(
+            /[^a-z0-9\s]/g,
+            " "
+          )
+          .split(/\s+/)
+          .filter(
+            function(word) {
+
+              return word.length > 2;
+
+            }
+          );
+
+
+      if (!searchWords.length) {
+
+        return [];
+
+      }
+
+
+      const allMatches = [];
+
+
+      data.books.forEach(
+        function(book) {
+
+
+          const bookName =
+            getBookName(book);
+
+
+          const chapters =
+            Array.isArray(
+              book.chapters
+            )
+              ? book.chapters
+              : [];
+
+
+          chapters.forEach(
+            function(chapter) {
+
+
+              const verses =
+                Array.isArray(
+                  chapter.verses
+                )
+                  ? chapter.verses
+                  : [];
+
+
+              verses.forEach(
+                function(verse) {
+
+
+                  const text =
+                    (
+                      verse.text ||
+                      ""
+                    ).toString();
+
+
+                  const lowerText =
+                    text.toLowerCase();
+
+
+                  let score = 0;
+
+
+                  searchWords.forEach(
+                    function(word) {
+
+                      if (
+                        lowerText.includes(
+                          word
+                        )
+                      ) {
+
+                        score++;
+
+                      }
+
+                    }
+                  );
+
+
+                  if (score > 0) {
+
+                    allMatches.push({
+
+                      book:
+                        bookName,
+
+                      chapter:
+                        chapter.chapter,
+
+                      verse:
+                        verse.number,
+
+                      text:
+                        text,
+
+                      score:
+                        score
+
+                    });
+
+                  }
+
+                }
+              );
+
+            }
+          );
+
+        }
+      );
+
+
+      return allMatches;
+
+    }
+
+
+    // =========================
+    // SELECT VARIED VERSES
+    // =========================
+
+    function selectVariedVerses(
+      matches
+    ) {
+
+      if (!matches.length) {
+
+        return [];
+
+      }
+
+
+      /*
+       * Sort strongest matches first.
+       */
+
+      matches.sort(
+        function(a, b) {
+
+          return b.score - a.score;
+
+        }
+      );
+
+
+      /*
+       * Keep a larger pool so the
+       * final verses can vary.
+       */
+
+      const pool =
+        matches.slice(
+          0,
+          Math.min(
+            80,
+            matches.length
+          )
+        );
+
+
+      /*
+       * Shuffle the pool.
+       */
+
+      for (
+        let i = pool.length - 1;
+        i > 0;
+        i--
+      ) {
+
+        const j =
+          Math.floor(
+            Math.random() *
+            (i + 1)
+          );
+
+
+        [
+          pool[i],
+          pool[j]
+        ] = [
+          pool[j],
+          pool[i]
+        ];
+
+      }
+
+
+      /*
+       * Try to spread results
+       * across different books.
+       */
+
+      const selected = [];
+
+      const usedBooks =
+        new Set();
+
+
+      for (
+        let i = 0;
+        i < pool.length;
+        i++
+      ) {
+
+        if (
+          !usedBooks.has(
+            pool[i].book
+          )
+        ) {
+
+          selected.push(
+            pool[i]
+          );
+
+          usedBooks.add(
+            pool[i].book
+          );
+
+        }
+
+
+        if (
+          selected.length >= 8
+        ) {
+
+          break;
+
+        }
+
+      }
+
+
+      /*
+       * If there are not enough
+       * different books, fill the
+       * remaining spaces.
+       */
+
+      if (
+        selected.length < 8
+      ) {
+
+        for (
+          let i = 0;
+          i < pool.length;
+          i++
+        ) {
+
+          if (
+            !selected.includes(
+              pool[i]
+            )
+          ) {
+
+            selected.push(
+              pool[i]
+            );
+
+          }
+
+
+          if (
+            selected.length >= 8
+          ) {
+
+            break;
+
+          }
+
+        }
+
+      }
+
+
+      return selected;
+
+    }
+
+
+    // =========================
+    // DISPLAY TOPIC VERSES
+    // =========================
+
+    function displayTopicVerses() {
+
+      if (!studyBible) {
+
+        return;
+
+      }
+
+
+      const matches =
+        searchBible(
+          studyBible,
+          currentTopic
+        );
+
+
+      const selected =
+        selectVariedVerses(
+          matches
+        );
+
+
+      currentVerses =
+        selected;
+
+
+      if (!selected.length) {
+
+        verseResults.innerHTML =
+          "<div class='status-message'>" +
+          "No direct Bible verse matches were found for this topic. Try a different phrase such as \"forgiveness\", \"faith\", \"prayer\", or \"love\"." +
+          "</div>";
+
+        return;
+
+      }
+
+
+      verseResults.innerHTML = "";
+
+
+      selected.forEach(
+        function(result, index) {
+
+          createVerseCard(
+            result,
+            index
+          );
+
+        }
+      );
+
+    }
+
+
+    // =========================
+    // CREATE VERSE CARD
+    // =========================
+
+    function createVerseCard(
+      result,
+      index
+    ) {
+
+      const card =
+        document.createElement(
+          "div"
+        );
+
+
+      card.className =
+        "verse-card";
+
+
+      card.dataset.index =
+        index;
+
+
+      const reference =
+        document.createElement(
+          "div"
+        );
+
+
+      reference.className =
+        "verse-reference";
+
+
+      reference.textContent =
+        result.book +
+        " " +
+        result.chapter +
+        ":" +
+        result.verse +
+        " (" +
+        studyTranslation +
+        ")";
+
+
+      const text =
+        document.createElement(
+          "div"
+        );
+
+
+      text.className =
+        "verse-text";
+
+
+      text.textContent =
+        result.text;
+
+
+      // =========================
+      // ACTION BAR
+      // =========================
+
+      const actions =
+        document.createElement(
+          "div"
+        );
+
+
+      actions.className =
+        "verse-actions";
+
+
+      const highlightButton =
+        createVerseButton(
+          "Highlight"
+        );
+
+
+      const notesButton =
+        createVerseButton(
+          "Notes"
+        );
+
+
+      const bookmarkButton =
+        createVerseButton(
+          "Bookmark"
+        );
+
+
+      const copyButton =
+        createVerseButton(
+          "Copy"
+        );
+
+
+      const shareButton =
+        createVerseButton(
+          "Share"
+        );
+
+
+      actions.appendChild(
+        highlightButton
+      );
+
+      actions.appendChild(
+        notesButton
+      );
+
+      actions.appendChild(
+        bookmarkButton
+      );
+
+      actions.appendChild(
+        copyButton
+      );
+
+      actions.appendChild(
+        shareButton
+      );
+
+
+      // =========================
+      // NOTES
+      // =========================
+
+      const notesArea =
+        document.createElement(
+          "div"
+        );
+
+
+      notesArea.className =
+        "verse-notes";
+
+
+      const textarea =
+        document.createElement(
+          "textarea"
+        );
+
+
+      textarea.placeholder =
+        "Write your notes for this verse...";
+
+
+      const noteKey =
+        "biblemastrey_personal_note_" +
+        result.book +
+        "_" +
+        result.chapter +
+        "_" +
+        result.verse;
+
+
+      textarea.value =
+        localStorage.getItem(
+          noteKey
+        ) || "";
+
+
+      const saveNote =
+        document.createElement(
+          "button"
+        );
+
+
+      saveNote.className =
+        "save-note-button";
+
+
+      saveNote.textContent =
+        "Save Note";
+
+
+      saveNote.addEventListener(
+        "click",
+        function(event) {
+
+          event.stopPropagation();
+
+
+          localStorage.setItem(
+            noteKey,
+            textarea.value
+          );
+
+
+          saveNote.textContent =
+            "Saved";
+
+
+          setTimeout(
+            function() {
+
+              saveNote.textContent =
+                "Save Note";
+
+            },
+            1200
+          );
+
+        }
+      );
+
+
+      notesArea.appendChild(
+        textarea
+      );
+
+      notesArea.appendChild(
+        saveNote
+      );
+
+
+      // =========================
+      // COMMENTARY PANEL
+      // =========================
+
+      const commentaryPanel =
+        document.createElement(
+          "div"
+        );
+
+
+      commentaryPanel.className =
+        "commentary-panel";
+
+
+      commentaryPanel.dataset.book =
+        result.book;
+
+
+      commentaryPanel.dataset.chapter =
+        result.chapter;
+
+
+      commentaryPanel.dataset.verse =
+        result.verse;
+
+
+      // =========================
+      // HIGHLIGHT
+      // =========================
+
+      highlightButton.addEventListener(
+        "click",
+        function(event) {
+
+          event.stopPropagation();
+
+
+          card.classList.toggle(
+            "highlighted"
+          );
+
+
+          const highlightKey =
+            "biblemastrey_personal_highlight_" +
+            result.book +
+            "_" +
+            result.chapter +
+            "_" +
+            result.verse;
+
+
+          if (
+            card.classList.contains(
+              "highlighted"
+            )
+          ) {
+
+            localStorage.setItem(
+              highlightKey,
+              "true"
+            );
+
+          }
+          else {
+
+            localStorage.removeItem(
+              highlightKey
+            );
+
+          }
+
+        }
+      );
+
+
+      // Restore highlight
+
+      const savedHighlight =
+        localStorage.getItem(
+          "biblemastrey_personal_highlight_" +
+          result.book +
+          "_" +
+          result.chapter +
+          "_" +
+          result.verse
+        );
+
+
+      if (
+        savedHighlight === "true"
+      ) {
+
+        card.classList.add(
+          "highlighted"
+        );
+
+      }
+
+
+      // =========================
+      // NOTES BUTTON
+      // =========================
+
+      notesButton.addEventListener(
+        "click",
+        function(event) {
+
+          event.stopPropagation();
+
+
+          card.classList.toggle(
+            "notes-open"
+          );
+
+        }
+      );
+
+
+      // =========================
+      // BOOKMARK
+      // =========================
+
+      bookmarkButton.addEventListener(
+        "click",
+        function(event) {
+
+          event.stopPropagation();
+
+
+          const bookmarkKey =
+            "biblemastrey_personal_bookmark_" +
+            result.book +
+            "_" +
+            result.chapter +
+            "_" +
+            result.verse;
+
+
+          localStorage.setItem(
+            bookmarkKey,
+            JSON.stringify(
+              result
+            )
+          );
+
+
+          bookmarkButton.textContent =
+            "Bookmarked";
+
+        }
+      );
+
+
+      // =========================
+      // COPY
+      // =========================
+
+      copyButton.addEventListener(
+        "click",
+        async function(event) {
+
+          event.stopPropagation();
+
+
+          const copyText =
+            result.book +
+            " " +
+            result.chapter +
+            ":" +
+            result.verse +
+            " (" +
+            studyTranslation +
+            ") — " +
+            result.text;
+
+
+          try {
+
+            await navigator.clipboard.writeText(
+              copyText
+            );
+
+
+            copyButton.textContent =
+              "Copied";
+
+
+            setTimeout(
+              function() {
+
+                copyButton.textContent =
+                  "Copy";
+
+              },
+              1200
+            );
+
+          }
+          catch (error) {
+
+            alert(
+              "Copy was not available."
+            );
+
+          }
+
+        }
+      );
+
+
+      // =========================
+      // SHARE
+      // =========================
+
+      shareButton.addEventListener(
+        "click",
+        async function(event) {
+
+          event.stopPropagation();
+
+
+          const shareText =
+            result.book +
+            " " +
+            result.chapter +
+            ":" +
+            result.verse +
+            " (" +
+            studyTranslation +
+            ") — " +
+            result.text;
+
+
+          if (
+            navigator.share
+          ) {
+
+            try {
+
+              await navigator.share({
+
+                title:
+                  result.book +
+                  " " +
+                  result.chapter +
+                  ":" +
+                  result.verse,
+
+                text:
+                  shareText
+
+              });
+
+            }
+            catch (error) {
+
+            }
+
+          }
+          else {
+
+            try {
+
+              await navigator.clipboard.writeText(
+                shareText
+              );
+
+
+              shareButton.textContent =
+                "Copied";
+
+
+              setTimeout(
+                function() {
+
+                  shareButton.textContent =
+                    "Share";
+
+                },
+                1200
+              );
+
+            }
+            catch (error) {
+
+              alert(
+                shareText
+              );
+
+            }
+
+          }
+
+        }
+      );
+
+
+      // =========================
+      // CARD CLICK
+      // =========================
+
+      card.addEventListener(
+        "click",
+        function() {
+
+
+          document
+            .querySelectorAll(
+              ".verse-card"
+            )
+            .forEach(
+              function(otherCard) {
+
+                if (
+                  otherCard !== card
+                ) {
+
+                  otherCard.classList.remove(
+                    "selected"
+                  );
+
+                }
+
+              }
+            );
+
+
+          card.classList.toggle(
+            "selected"
+          );
+
+
+          const commentaryStatus =
+            document.getElementById(
+              "commentaryStatus"
+            );
+
+
+          commentaryStatus.textContent =
+            "Selected: " +
+            result.book +
+            " " +
+            result.chapter +
+            ":" +
+            result.verse;
+
+        }
+      );
+
+
+      card.appendChild(
+        reference
+      );
+
+      card.appendChild(
+        text
+      );
+
+      card.appendChild(
+        actions
+      );
+
+      card.appendChild(
+        notesArea
+      );
+
+      card.appendChild(
+        commentaryPanel
+      );
+
+
+      verseResults.appendChild(
+        card
+      );
+
+    }
+
+
+    // =========================
+    // CREATE BUTTON
+    // =========================
+
+    function createVerseButton(
+      text
+    ) {
+
+      const button =
+        document.createElement(
+          "button"
+        );
+
+
+      button.className =
+        "verse-action";
+
+
+      button.textContent =
+        text;
+
+
+      return button;
+
+    }
+
+
+    // =========================
+    // TRANSLATION CHANGE
+    // =========================
+
+    translationSelect.addEventListener(
+      "change",
+      async function() {
+
+        studyTranslation =
+          translationSelect.value;
+
+
+        if (
+          !currentTopic
+        ) {
+
+          return;
+
+        }
+
+
+        verseResults.innerHTML =
+          "<div class='status-message'>Loading " +
+          studyTranslation +
+          "...</div>";
+
+
+        await loadStudyBible();
+
+
+        displayTopicVerses();
+
+      }
     );
 
+
+    // =========================
+    // DICTIONARY SEARCH
+    // =========================
+
+    document
+      .getElementById(
+        "dictionaryButton"
+      )
+      .addEventListener(
+        "click",
+        function() {
+
+
+          const word =
+            document
+              .getElementById(
+                "dictionarySearch"
+              )
+              .value
+              .trim();
+
+
+          const results =
+            document.getElementById(
+              "dictionaryResults"
+            );
+
+
+          if (!word) {
+
+            results.innerHTML =
+              "<p>Enter a word to search.</p>";
+
+            return;
+
+          }
+
+
+          results.innerHTML =
+            "<p><strong>" +
+            word +
+            "</strong></p>" +
+
+            "<p>" +
+            "Bible Dictionary connection will be added here. " +
+            "The search bar is ready for the dictionary source." +
+            "</p>";
+
+        }
+      );
+
+
+    // =========================
+    // CONCORDANCE SEARCH
+    // =========================
+
+    document
+      .getElementById(
+        "concordanceButton"
+      )
+      .addEventListener(
+        "click",
+        async function() {
+
+
+          const word =
+            document
+              .getElementById(
+                "concordanceSearch"
+              )
+              .value
+              .trim();
+
+
+          const results =
+            document.getElementById(
+              "concordanceResults"
+            );
+
+
+          if (!word) {
+
+            results.innerHTML =
+              "<p>Enter a word or phrase to search.</p>";
+
+            return;
+
+          }
+
+
+          if (!studyBible) {
+
+            await loadStudyBible();
+
+          }
+
+
+          const matches =
+            searchBible(
+              studyBible,
+              word
+            );
+
+
+          if (!matches.length) {
+
+            results.innerHTML =
+              "<p>No Bible matches found.</p>";
+
+            return;
+
+          }
+
+
+          results.innerHTML =
+            "<p><strong>" +
+            matches.length +
+            "</strong> matching verses found.</p>" +
+
+            matches
+              .slice(
+                0,
+                10
+              )
+              .map(
+                function(item) {
+
+                  return (
+
+                    "<p>" +
+
+                    "<strong>" +
+
+                    item.book +
+                    " " +
+                    item.chapter +
+                    ":" +
+                    item.verse +
+
+                    "</strong><br>" +
+
+                    item.text +
+
+                    "</p>"
+
+                  );
+
+                }
+              )
+              .join("");
+
+        }
+      );
+
+
+    // =========================
+    // HEBREW / GREEK SEARCH
+    // =========================
+
+    document
+      .getElementById(
+        "wordButton"
+      )
+      .addEventListener(
+        "click",
+        function() {
+
+
+          const word =
+            document
+              .getElementById(
+                "wordSearch"
+              )
+              .value
+              .trim();
+
+
+          const results =
+            document.getElementById(
+              "wordResults"
+            );
+
+
+          if (!word) {
+
+            results.innerHTML =
+              "<p>Enter a Hebrew or Greek word.</p>";
+
+            return;
+
+          }
+
+
+          results.innerHTML =
+
+            "<p><strong>" +
+            word +
+            "</strong></p>" +
+
+            "<p>" +
+
+            "Hebrew and Greek word lookup will be connected to the original-language word source here." +
+
+            "</p>";
+
+        }
+      );
+
+
+    // =========================
+    // COMMENTARY BUTTON
+    // =========================
+
+    document
+      .getElementById(
+        "commentaryButton"
+      )
+      .addEventListener(
+        "click",
+        function() {
+
+
+          const selectedVerse =
+            document.querySelector(
+              ".verse-card.selected"
+            );
+
+
+          const status =
+            document.getElementById(
+              "commentaryStatus"
+            );
+
+
+          if (!selectedVerse) {
+
+            status.innerHTML =
+              "<p>Please click a Bible verse first.</p>";
+
+            return;
+
+          }
+
+
+          const commentary =
+            document
+              .getElementById(
+                "commentarySelect"
+              )
+              .value;
+
+
+          const commentaryName =
+            document
+              .getElementById(
+                "commentarySelect"
+              )
+              .selectedOptions[0]
+              .textContent;
+
+
+          const panel =
+            selectedVerse.querySelector(
+              ".commentary-panel"
+            );
+
+
+          const book =
+            panel.dataset.book;
+
+
+          const chapter =
+            panel.dataset.chapter;
+
+
+          const verse =
+            panel.dataset.verse;
+
+
+          panel.classList.add(
+            "visible"
+          );
+
+
+          /*
+           * Barnes' Notes is primarily
+           * New Testament. We will connect
+           * the actual commentary sources
+           * in the next step.
+           */
+
+          panel.innerHTML =
+
+            "<div class='commentary-title'>" +
+
+            commentaryName +
+
+            "</div>" +
+
+            "<p>" +
+
+            "<strong>" +
+
+            book +
+            " " +
+            chapter +
+            ":" +
+            verse +
+
+            "</strong>" +
+
+            "</p>" +
+
+            "<p>" +
+
+            "The " +
+            commentaryName +
+            " commentary will appear here once its source is connected." +
+
+            "</p>";
+
+
+          status.textContent =
+            commentaryName +
+            " selected for " +
+            book +
+            " " +
+            chapter +
+            ":" +
+            verse;
+
+        }
+      );
+
+
+    // =========================
+    // ENTER KEY
+    // =========================
 
     topicInput.addEventListener(
       "keydown",
       function(event) {
 
-        if (event.key === "Enter") {
+        if (
+          event.key === "Enter"
+        ) {
 
           startPersonalStudy();
 
@@ -257,7 +2285,46 @@
       }
     );
 
+
+    // =========================
+    // START BUTTON
+    // =========================
+
+    startStudyButton.addEventListener(
+      "click",
+      startPersonalStudy
+    );
+
+
+    // =========================
+    // URL TOPIC SUPPORT
+    // =========================
+
+    const urlParams =
+      new URLSearchParams(
+        window.location.search
+      );
+
+
+    const urlTopic =
+      urlParams.get(
+        "topic"
+      );
+
+
+    if (urlTopic) {
+
+      topicInput.value =
+        urlTopic;
+
+      startPersonalStudy();
+
+    }
+
+
   </script>
 
+
 </body>
+
 </html>
