@@ -1885,7 +1885,29 @@ concordanceInput.addEventListener(
   function getBookmarkKey(v) {
     return getStoragePrefix() + "-bookmark-" + v;
   }
+function isBookmarked(v) {
 
+  const cloudKey = getCloudKey(
+    "bookmark",
+    translationSelect.value,
+    currentBookIndex,
+    currentChapterIndex,
+    v
+  );
+
+  if (
+    Object.prototype.hasOwnProperty.call(
+      cloudBibleData,
+      cloudKey
+    )
+  ) {
+    return cloudBibleData[cloudKey] === "true";
+  }
+
+  return localStorage.getItem(
+    getBookmarkKey(v)
+  ) === "true";
+}
   function loadNote(v) {
     return localStorage.getItem(getNoteKey(v)) || "";
   }
