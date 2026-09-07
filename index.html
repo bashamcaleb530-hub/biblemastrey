@@ -1712,136 +1712,164 @@
 
 
   async function loadHelloAOCommentary(
-    commentaryId,
-    bookName,
-    chapterNumber
+  commentaryId,
+  bookName,
+  chapterNumber
+) {
+
+  const bookId =
+    getCommentaryBookId(
+      bookName
+    );
+
+  if (!bookId) {
+    return {
+      verses: [],
+      unavailable: true
+    };
+  }
+
+  const cacheKey =
+    "helloao-" +
+    commentaryId +
+    "-" +
+    bookId +
+    "-" +
+    chapterNumber;
+
+  if (
+    commentaryCache[cacheKey]
   ) {
+    return commentaryCache[
+      cacheKey
+    ];
+  }
 
-    const bookId =
-      getCommentaryBookId(
-        bookName
-      );
+  const url =
+    COMMENTARY_API +
+    commentaryId +
+    "/" +
+    bookId +
+    "/" +
+    chapterNumber +
+    ".json";
 
-    if (!bookId) {
-      return {
-        verses: [],
-        unavailable: true
-      };
-    }
+  const response =
+    await fetch(url);
 
-    const cacheKey =
-      "helloao-" +
-      commentaryId +
-      "-" +
-      bookId +
-      "-" +
-      chapterNumber;
+  if (!response.ok) {
+    throw new Error(
+      "Commentary request failed."
+    );
+  }
 
-    if (
-      commentaryCache[cacheKey]
-    ) {
-      return commentaryCache[
-        cacheKey
-      ];
-    }
+  const data =
+    await response.json();
 
-    const url =
-      COMMENTARY_API +
-      commentaryId +
-      "/" +
-      bookId +
-      "/" +
-      chapterNumber +
-      ".simple.json";
-
-    const response =
-      await fetch(url);
-
-    if (!response.ok) {
-      throw new Error(
-        "Commentary request failed."
-      );
-    }
-
-    const data =
-      await response.json();
-
-    const result = {
-  verses:
+  const content =
     data &&
     data.chapter &&
     Array.isArray(
       data.chapter.content
     )
       ? data.chapter.content
-          .filter(
-            function(item) {
-              return (
-                item.type ===
-                "verse"
-              );
-            }
-          )
-          .map(
-            function(item) {
+      : [];
 
-              let text = "";
+  const verses =
+    content
+      .filter(
+        function(item) {
 
-              if (
-                typeof item.text ===
-                "string"
-              ) {
+          return (
+            item &&
+            item.type ===
+              "verse"
+          );
 
-                text =
-                  item.text;
+        }
+      )
+      .map(
+        function(item) {
 
-              } else if (
-                typeof item.content ===
-                "string"
-              ) {
+          let text = "";
 
-                text =
-                  item.content;
+          if (
+            Array.isArray(
+              item.content
+            )
+          ) {
 
-              } else if (
-                Array.isArray(
-                  item.content
+            text =
+              item.content
+                .map(
+                  function(part) {
+
+                    if (
+                      typeof part ===
+                      "string"
+                    ) {
+                      return part;
+                    }
+
+                    if (
+                      part &&
+                      typeof part.text ===
+                      "string"
+                    ) {
+                      return part.text;
+                    }
+
+                    if (
+                      part &&
+                      typeof part.content ===
+                      "string"
+                    ) {
+                      return part.content;
+                    }
+
+                    return "";
+                  }
                 )
-              ) {
+                .join("");
 
-                text =
-                  item.content
-                    .map(
-                      function(part) {
-                        return (
-                          part.text ||
-                          part.content ||
-                          ""
-                        );
-                      }
-                    )
-                    .join("");
+          } else if (
+            typeof item.content ===
+            "string"
+          ) {
 
-              }
+            text =
+              item.content;
 
-              return {
-                number:
-                  item.number,
+          } else if (
+            typeof item.text ===
+            "string"
+          ) {
 
-                text:
-                  text
-              };
-            }
-          )
-      : []
-};
-    commentaryCache[
-      cacheKey
-    ] = result;
+            text =
+              item.text;
+          }
 
-    return result;
-  }
+          return {
+            number:
+              item.number,
 
+            text:
+              text
+          };
+        }
+      );
+
+  const result = {
+    verses:
+      verses
+  };
+
+  commentaryCache[
+    cacheKey
+  ] = result;
+
+  return result;
+}
 
   function getCommentaryBookId(
     bookName
