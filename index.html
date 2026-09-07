@@ -1918,80 +1918,80 @@ concordanceInput.addEventListener(
   }
 );
 
-  /* =========================
-     STORAGE
-  ========================= */
+  ```js
+/* =========================
+   STORAGE
+========================= */
 
-  function getStoragePrefix() {
-    return "bibleMastrey-" +
-      translationSelect.value +
-      "-" +
-      currentBookIndex +
-      "-" +
-      currentChapterIndex;
-  }
-
-  function getNoteKey(v) {
-    return getStoragePrefix() + "-note-" + v;
-  }
-
-  function getHighlightKey(v) {
-    return getStoragePrefix() + "-highlight-" + v;
-  }
-
-  function getBookmarkKey(v) {
-    return getStoragePrefix() + "-bookmark-" + v;
-  }
-function isBookmarked(v) {
-
-  const cloudKey = getCloudKey(
-    "bookmark",
-    translationSelect.value,
-    currentBookIndex,
-    currentChapterIndex,
-    v
-  );
-
-  if (
-    Object.prototype.hasOwnProperty.call(
-      cloudBibleData,
-      cloudKey
-    )
-  ) {
-    return cloudBibleData[cloudKey] === "true";
-  }
-
-  return localStorage.getItem(
-    getBookmarkKey(v)
-  ) === "true";
+function getStoragePrefix() {
+  return "bibleMastrey-" +
+    translationSelect.value +
+    "-" +
+    currentBookIndex +
+    "-" +
+    currentChapterIndex;
 }
-  function loadNote(v) {
-    return localStorage.getItem(getNoteKey(v)) || "";
-  }
 
-  function loadNote(v) {
+function getNoteKey(v) {
+  return getStoragePrefix() +
+    "-note-" +
+    v;
+}
 
-  const cloudKey = getCloudKey(
-    "note",
-    translationSelect.value,
-    currentBookIndex,
-    currentChapterIndex,
-    v
-  );
+function getHighlightKey(v) {
+  return getStoragePrefix() +
+    "-highlight-" +
+    v;
+}
+
+function getBookmarkKey(v) {
+  return getStoragePrefix() +
+    "-bookmark-" +
+    v;
+}
+
+function loadNote(v) {
+
+  const cloudKey =
+    getCloudKey(
+      "note",
+      translationSelect.value,
+      currentBookIndex,
+      currentChapterIndex,
+      v
+    );
 
   if (
-    Object.prototype.hasOwnProperty.call(
-      cloudBibleData,
-      cloudKey
-    )
+    cloudBibleData[cloudKey] !== undefined
   ) {
-    return cloudBibleData[cloudKey] || "";
+    return cloudBibleData[cloudKey];
   }
 
   return localStorage.getItem(
     getNoteKey(v)
   ) || "";
 }
+
+function saveNote(v, text, statusElement) {
+
+  localStorage.setItem(
+    getNoteKey(v),
+    text
+  );
+
+  if (statusElement) {
+
+    statusElement.textContent =
+      "Saved";
+
+    setTimeout(function() {
+
+      statusElement.textContent =
+        "";
+
+    }, 1200);
+
+  }
 
   saveCloudItem(
     "note",
@@ -2002,30 +2002,32 @@ function isBookmarked(v) {
     text
   );
 }
- function isHighlighted(v) {
 
-  const cloudKey = getCloudKey(
-    "highlight",
-    translationSelect.value,
-    currentBookIndex,
-    currentChapterIndex,
-    v
-  );
+function isHighlighted(v) {
+
+  const cloudKey =
+    getCloudKey(
+      "highlight",
+      translationSelect.value,
+      currentBookIndex,
+      currentChapterIndex,
+      v
+    );
 
   if (
-    Object.prototype.hasOwnProperty.call(
-      cloudBibleData,
-      cloudKey
-    )
+    cloudBibleData[cloudKey] !== undefined
   ) {
-    return cloudBibleData[cloudKey] === "true";
+    return (
+      cloudBibleData[cloudKey] === "true"
+    );
   }
 
   return localStorage.getItem(
     getHighlightKey(v)
   ) === "true";
 }
- function setHighlight(v,value) {
+
+function setHighlight(v, value) {
 
   localStorage.setItem(
     getHighlightKey(v),
@@ -2045,16 +2047,17 @@ function isBookmarked(v) {
 
   } else {
 
-    saveCloudItem(
+    deleteCloudItem(
       "highlight",
       translationSelect.value,
       currentBookIndex,
       currentChapterIndex,
-      v,
-      "false"
+      v
     );
+
   }
 }
+```
 
 
   /* =========================
