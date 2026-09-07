@@ -2749,26 +2749,7 @@ async function loadChapter() {
   }
 
 
-  verseWrapper.addEventListener(
-  "click",
-  function(event) {
-
-    event.preventDefault();
-    event.stopPropagation();
-
-    selectVerse(
-      verseNumber,
-      verseWrapper
-    );
-
-    showVerseMenu(
-      event.clientX,
-      event.clientY,
-      verseNumber,
-      verseText
-    );
-  }
-);
+  
 
   /* =========================
      HIGHLIGHT
