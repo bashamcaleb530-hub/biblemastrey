@@ -1892,22 +1892,30 @@ concordanceInput.addEventListener(
 
   function saveNote(v,text,statusElement) {
 
-    localStorage.setItem(
-      getNoteKey(v),
-      text
-    );
+  localStorage.setItem(
+    getNoteKey(v),
+    text
+  );
 
-    if (statusElement) {
+  if (statusElement) {
 
-      statusElement.textContent = "Saved";
+    statusElement.textContent = "Saved";
 
-      setTimeout(function() {
-        statusElement.textContent = "";
-      },1200);
+    setTimeout(function() {
+      statusElement.textContent = "";
+    },1200);
 
-    }
   }
 
+  saveCloudItem(
+    "note",
+    translationSelect.value,
+    currentBookIndex,
+    currentChapterIndex,
+    v,
+    text
+  );
+}
   function isHighlighted(v) {
     return localStorage.getItem(
       getHighlightKey(v)
