@@ -1215,16 +1215,17 @@ loginAccountButton.addEventListener(
         error.message;
       return;
     }
+accountMessage.textContent =
+  "Logged in successfully!";
 
-    accountMessage.textContent =
-      "Logged in successfully!";
+syncLocalBibleDataToCloud();
+
 accountButton.textContent = "👤 Admin";
 accountModal.style.display = "none";
-    console.log(
-      "BibleMastrey user logged in:",
-      data.user
-    );
-  }
+
+console.log(
+  "BibleMastrey user logged in:",
+  data.user
 );
 signupAccountButton.addEventListener(
   "click",
