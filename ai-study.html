@@ -446,76 +446,7 @@ if (
        STUDY TYPE
     ========================= */
 
-    studyType.addEventListener(
-      "change",
-      function() {
-
-        const type =
-          studyType.value;
-
-        topicSection.style.display =
-          type ? "block" : "none";
-
-
-        if (type === "personal") {
-
-          topicQuestion.textContent =
-            "What are you doing a personal Bible study on?";
-
-          writingTitle.textContent =
-            "Your Personal Study Notes";
-
-          writingArea.placeholder =
-            "Write your personal Bible study notes here...";
-
-        }
-
-
-        else if (type === "sermon") {
-
-          topicQuestion.textContent =
-            "What will your sermon be about?";
-
-          writingTitle.textContent =
-            "Your Sermon";
-
-          writingArea.placeholder =
-            "Write your sermon here...";
-
-        }
-
-
-        else if (type === "group") {
-
-          topicQuestion.textContent =
-            "What are you doing a group study on?";
-
-          writingTitle.textContent =
-            "Your Bible Group Study";
-
-          writingArea.placeholder =
-            "Write your Bible group study here...";
-
-        }
-
-
-        else if (type === "ministry") {
-
-          topicQuestion.textContent =
-            "What sermon are you working on?";
-
-          writingTitle.textContent =
-            "Desert Springs Ministries Sermon";
-
-          writingArea.placeholder =
-            "Write your Desert Springs Ministries sermon here...";
-
-        }
-
-      }
-    );
-
-
+    
     /* =========================
        START STUDY
     ========================= */
