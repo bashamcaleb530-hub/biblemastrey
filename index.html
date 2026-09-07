@@ -1096,6 +1096,62 @@ checkAdminStatus();
       item.content;
   });
 }
+  async function syncLocalBibleDataToCloud() {
+
+  const user = await getCurrentUser();
+
+  if (!user) {
+    return;
+  }
+
+  for (let i = 0; i < localStorage.length; i++) {
+
+    const key =
+      localStorage.key(i);
+
+    if (!key) {
+      continue;
+    }
+
+    const match =
+      key.match(
+        /^bibleMastrey-(.+)-(\d+)-(\d+)-(note|highlight|bookmark)-(\d+)$/
+      );
+
+    if (!match) {
+      continue;
+    }
+
+    const translation = match[1];
+    const bookIndex = Number(match[2]);
+    const chapterIndex = Number(match[3]);
+    const itemType = match[4];
+    const verseNumber = Number(match[5]);
+
+    const content =
+      localStorage.getItem(key);
+
+    if (
+      content === null ||
+      content === ""
+    ) {
+      continue;
+    }
+
+    await saveCloudItem(
+      itemType,
+      translation,
+      bookIndex,
+      chapterIndex,
+      verseNumber,
+      content
+    );
+  }
+
+  console.log(
+    "Local Bible data synced to cloud."
+  );
+}
   const accountModal =
   document.getElementById("accountModal");
 
