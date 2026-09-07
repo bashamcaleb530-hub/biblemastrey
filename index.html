@@ -3842,41 +3842,40 @@ function findCommentaryForVerse(
   }
 
 
+ ```js
   /* =========================
      HIGHLIGHT
   ========================= */
 
-  /* =========================
-   HIGHLIGHT
-========================= */
+  highlightVerseButton.addEventListener(
+    "click",
+    function() {
 
-highlightVerseButton.addEventListener(
-  "click",
-  function() {
+      if (
+        selectedVerseNumber === null
+      ) {
+        return;
+      }
 
-    if (
-      selectedVerseNumber === null
-    ) {
-      return;
-    }
+      const currentlyHighlighted =
+        isHighlighted(
+          selectedVerseNumber
+        );
 
-    const currentlyHighlighted =
-      isHighlighted(
-        selectedVerseNumber
+      setHighlight(
+        selectedVerseNumber,
+        !currentlyHighlighted
       );
 
-    setHighlight(
-      selectedVerseNumber,
-      !currentlyHighlighted
-    );
+      loadChapter();
 
-    loadChapter();
+      verseMenu.style.display =
+        "none";
 
-    verseMenu.style.display =
-      "none";
+    }
+  );
+```
 
-  }
-);
 ```js
   /* =========================
      BOOKMARK
