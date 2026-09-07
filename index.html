@@ -4243,9 +4243,24 @@ const staySignedIn =
       }
 
       accountMessage.textContent =
-        "Logged in successfully!";
+  "Logged in successfully!";
 
-      await syncLocalBibleDataToCloud();
+if (
+  !staySignedIn.checked
+) {
+  const projectRef =
+    SUPABASE_URL
+      .replace("https://", "")
+      .split(".")[0];
+
+  localStorage.removeItem(
+    "sb-" +
+    projectRef +
+    "-auth-token"
+  );
+}
+
+await syncLocalBibleDataToCloud();
 
       await syncCloudChapter();
 
