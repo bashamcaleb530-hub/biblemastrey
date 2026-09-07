@@ -1872,42 +1872,110 @@
 
 
   function findCommentaryForVerse(
-    data,
-    verseNumber
-  ) {
+  data,
+  verseNumber
+) {
 
-    if (
-      !data ||
-      !Array.isArray(data.verses)
-    ) {
-      return "";
-    }
+  if (!data) {
+    return "";
+  }
 
-    const target =
-      Number(verseNumber);
+  const target =
+    Number(verseNumber);
+
+  /* =========================
+     FORMAT 1: verses array
+  ========================= */
+
+  if (Array.isArray(data.verses)) {
 
     const match =
       data.verses.find(
         function(item) {
+
           return (
-            Number(item.number) ===
-            target
+            Number(
+              item.number ||
+              item.verse ||
+              item.verseNumber
+            ) === target
           );
+
         }
       );
 
-    if (!match) {
-      return "";
+    if (match) {
+
+      return (
+        match.text ||
+        match.content ||
+        match.commentary ||
+        ""
+      );
+
+    }
+  }
+
+
+  /* =========================
+     FORMAT 2: verse object
+  ========================= */
+
+  if (
+    data.verses &&
+    typeof data.verses === "object"
+  ) {
+
+    const match =
+      data.verses[target] ||
+      data.verses[String(target)];
+
+    if (match) {
+
+      if (typeof match === "string") {
+        return match;
+      }
+
+      return (
+        match.text ||
+        match.content ||
+        match.commentary ||
+        ""
+      );
+
+    }
+  }
+
+
+  /* =========================
+     FORMAT 3: direct verse keys
+  ========================= */
+
+  if (
+    data[target] ||
+    data[String(target)]
+  ) {
+
+    const match =
+      data[target] ||
+      data[String(target)];
+
+    if (typeof match === "string") {
+      return match;
     }
 
     return (
       match.text ||
       match.content ||
+      match.commentary ||
       ""
     );
+
   }
 
 
+  return "";
+}
   /* =========================
      MATTHEW HENRY CONCISE
   ========================= */
