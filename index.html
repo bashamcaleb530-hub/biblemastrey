@@ -3455,13 +3455,68 @@
 
 
   /* =========================
-     START BIBLE
-  ========================= */
+   START BIBLE
+========================= */
 
-  async function startBible() {
+function getBooks(data) {
+  if (!data) {
+    return [];
+  }
 
-    try {
+  if (Array.isArray(data)) {
+    return data;
+  }
 
+  if (Array.isArray(data.books)) {
+    return data.books;
+  }
+
+  if (data.books && typeof data.books === "object") {
+    return Object.values(data.books);
+  }
+
+  if (Array.isArray(data.Books)) {
+    return data.Books;
+  }
+
+  return [];
+}
+
+function getChapters(book) {
+  if (!book) {
+    return [];
+  }
+
+  if (Array.isArray(book.chapters)) {
+    return book.chapters;
+  }
+
+  if (book.chapters && typeof book.chapters === "object") {
+    return Object.values(book.chapters);
+  }
+
+  return [];
+}
+
+function getBookName(book) {
+  if (!book) {
+    return "Unknown Book";
+  }
+
+  return book.book || book.name || book.title || "Unknown Book";
+}
+
+function getChapterNumber(chapter, index) {
+  if (!chapter) {
+    return index + 1;
+  }
+
+  return chapter.chapter || chapter.number || (index + 1);
+}
+
+async function startBible() {
+
+  try {
       /*
         IMPORTANT:
 
