@@ -1929,14 +1929,36 @@ concordanceInput.addEventListener(
     ) === "true";
   }
 
-  function setHighlight(v,value) {
+ function setHighlight(v,value) {
 
-    localStorage.setItem(
-      getHighlightKey(v),
-      value ? "true" : "false"
+  localStorage.setItem(
+    getHighlightKey(v),
+    value ? "true" : "false"
+  );
+
+  if (value) {
+
+    saveCloudItem(
+      "highlight",
+      translationSelect.value,
+      currentBookIndex,
+      currentChapterIndex,
+      v,
+      "true"
     );
 
+  } else {
+
+    saveCloudItem(
+      "highlight",
+      translationSelect.value,
+      currentBookIndex,
+      currentChapterIndex,
+      v,
+      "false"
+    );
   }
+}
 
 
   /* =========================
