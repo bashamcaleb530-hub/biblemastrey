@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>BibleMastrey AI Study Assistant</title>
+  <title>Personal Bible Study - BibleMastrey</title>
 
   <style>
     * {
@@ -36,22 +36,36 @@
     }
 
     .container {
-      max-width: 1000px;
-      margin: 30px auto;
+      max-width: 800px;
+      margin: 40px auto;
       padding: 0 20px;
     }
 
     .study-box {
       background: white;
       border-radius: 12px;
-      padding: 25px;
+      padding: 30px;
       box-shadow: 0 3px 12px rgba(0,0,0,.08);
-      margin-bottom: 25px;
     }
 
     .study-box h2 {
       margin-top: 0;
       color: #1f3c88;
+      text-align: center;
+      font-size: 26px;
+    }
+
+    .study-description {
+      text-align: center;
+      color: #555;
+      line-height: 1.6;
+      margin-bottom: 25px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 8px;
     }
 
     .topic-input {
@@ -60,63 +74,23 @@
       font-size: 16px;
       border: 1px solid #ccc;
       border-radius: 8px;
-      margin: 15px 0;
+      margin-bottom: 20px;
     }
 
     .start-button {
+      width: 100%;
       background: #1f3c88;
       color: white;
       border: none;
-      padding: 13px 20px;
+      padding: 14px 20px;
       border-radius: 8px;
       cursor: pointer;
-      font-size: 16px;
+      font-size: 17px;
+      font-weight: bold;
     }
 
     .start-button:hover {
       opacity: .9;
-    }
-
-    .tools {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 15px;
-      margin-top: 20px;
-    }
-
-    .tool {
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 18px;
-      background: #fafafa;
-    }
-
-    .tool h3 {
-      margin-top: 0;
-      color: #1f3c88;
-    }
-
-    .suggestions {
-      margin-top: 25px;
-    }
-
-    .suggestion {
-      background: #f7f9ff;
-      border-left: 4px solid #1f3c88;
-      padding: 12px;
-      margin-bottom: 10px;
-      border-radius: 5px;
-    }
-
-    .writing-area {
-      width: 100%;
-      min-height: 250px;
-      padding: 15px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      resize: vertical;
-      font-family: Arial, sans-serif;
-      font-size: 16px;
     }
 
     .back-button {
@@ -127,18 +101,35 @@
       font-weight: bold;
     }
 
+    .example {
+      margin-top: 20px;
+      padding: 15px;
+      background: #f7f9ff;
+      border-left: 4px solid #1f3c88;
+      border-radius: 5px;
+      color: #555;
+      line-height: 1.5;
+    }
+
     @media (max-width: 600px) {
+
       header h1 {
         font-size: 25px;
       }
 
       .container {
         padding: 0 12px;
+        margin-top: 25px;
       }
 
       .study-box {
-        padding: 18px;
+        padding: 20px;
       }
+
+      .study-box h2 {
+        font-size: 23px;
+      }
+
     }
   </style>
 </head>
@@ -146,9 +137,10 @@
 <body>
 
   <header>
-    <h1>BibleMastrey AI Study Assistant</h1>
-    <p>Your Bible study helper</p>
+    <h1>Personal Bible Study</h1>
+    <p>BibleMastrey</p>
   </header>
+
 
   <div class="container">
 
@@ -156,143 +148,47 @@
       ← Back to BibleMastrey
     </a>
 
+
     <div class="study-box">
 
-      <h2>What do you want to do?</h2>
+      <h2>
+        What would you like to study?
+      </h2>
 
-      <label for="studyTranslationSelect">
-        Bible Translation:
+      <p class="study-description">
+        Enter a Bible topic you would like to study.
+        BibleMastrey will then bring together Scripture
+        and study tools to help you explore that topic.
+      </p>
+
+
+      <label for="topicInput">
+        Bible Study Topic
       </label>
 
-      <select
-        id="studyTranslationSelect"
+      <input
+        type="text"
+        id="topicInput"
         class="topic-input"
-      >
-        <option value="KJV">
-          King James Version (KJV)
-        </option>
-
-        <option value="WEB">
-          World English Bible (WEB)
-        </option>
-
-        <option value="ASV">
-          American Standard Version (ASV)
-        </option>
-      </select>
-
-      
-      <div
-        id="topicSection"
-        style="display:none;"
+        placeholder="Example: How to Forgive"
+        autocomplete="off"
       >
 
-        <h2 id="topicQuestion"></h2>
 
-        <input
-          type="text"
-          id="topicInput"
-          class="topic-input"
-          placeholder="Enter your topic..."
-        >
-
-        <button
-          id="startStudyButton"
-          class="start-button"
-        >
-          Start Study
-        </button>
-
-      </div>
-
-    </div>
+      <button
+        id="startStudyButton"
+        class="start-button"
+      >
+        Start Study
+      </button>
 
 
-    <div
-      id="studyWorkspace"
-      style="display:none;"
-    >
-
-      <div class="study-box">
-
-        <h2>Study Tools</h2>
-
-        <div class="tools">
-
-          <div class="tool">
-            <h3>📖 Bible</h3>
-            <p>
-              Find and study Bible verses.
-            </p>
-          </div>
-
-          <div class="tool">
-            <h3>📚 Commentaries</h3>
-            <p>
-              Study Matthew Henry, Gill, JFB,
-              Clarke, Barnes and more.
-            </p>
-          </div>
-
-          <div class="tool">
-            <h3>📘 Dictionary</h3>
-            <p>
-              Look up important Bible words
-              and meanings.
-            </p>
-          </div>
-
-          <div class="tool">
-            <h3>🔎 Concordance</h3>
-            <p>
-              Search for words and Bible references.
-            </p>
-          </div>
-
-          <div class="tool">
-            <h3>🇬🇷 Greek & Hebrew</h3>
-            <p>
-              Explore original-language words.
-            </p>
-          </div>
-
-          <div class="tool">
-            <h3>🤖 AI Assistant</h3>
-            <p>
-              Ask questions about the Bible
-              and Christian topics.
-            </p>
-          </div>
-
-        </div>
-
-      </div>
-
-
-      <div class="study-box">
-
-        <h2>Suggested Starting Points</h2>
-
-        <div id="suggestions">
-          Enter a topic to see Bible study
-          suggestions.
-        </div>
-
-      </div>
-
-
-      <div class="study-box">
-
-        <h2 id="writingTitle">
-          Your Notes
-        </h2>
-
-        <textarea
-          id="writingArea"
-          class="writing-area"
-          placeholder="Write your notes here..."
-        ></textarea>
-
+      <div class="example">
+        <strong>Example:</strong><br>
+        Type <strong>How to Forgive</strong>, then click
+        <strong>Start Study</strong>. Your dedicated study
+        workspace will open with Bible verses and study
+        tools related to your topic.
       </div>
 
     </div>
@@ -300,37 +196,7 @@
   </div>
 
 
-  <!-- Bible data functions MUST load first -->
-  <script src="bible.js"></script>
-
-
-  <!-- AI Study Assistant JavaScript -->
   <script>
-
-    let studyBible = null;
-
-    let studyTranslation = "KJV";
-
-
-    const studyTranslationSelect =
-      document.getElementById(
-        "studyTranslationSelect"
-      );
-
-    const studyType =
-      document.getElementById(
-        "studyType"
-      );
-
-    const topicSection =
-      document.getElementById(
-        "topicSection"
-      );
-
-    const topicQuestion =
-      document.getElementById(
-        "topicQuestion"
-      );
 
     const topicInput =
       document.getElementById(
@@ -342,447 +208,51 @@
         "startStudyButton"
       );
 
-    const studyWorkspace =
-      document.getElementById(
-        "studyWorkspace"
-      );
 
-    const writingTitle =
-      document.getElementById(
-        "writingTitle"
-      );
+    function startPersonalStudy() {
 
-    const writingArea =
-      document.getElementById(
-        "writingArea"
-      );
-
-    const suggestions =
-      document.getElementById(
-        "suggestions"
-      );
+      const topic =
+        topicInput.value.trim();
 
 
-    /* =========================
-       TRANSLATION
-    ========================= */
+      if (!topic) {
 
-    studyTranslationSelect.addEventListener(
-      "change",
-      function() {
+        alert(
+          "Please enter a Bible study topic."
+        );
 
-        studyTranslation =
-          studyTranslationSelect.value;
+        topicInput.focus();
 
-        studyBible = null;
-
-      }
-    );
-
-
-    /* =========================
-       LOAD SELECTED BIBLE
-    ========================= */
-
-    async function loadStudyBible() {
-
-      if (studyBible) {
-        return studyBible;
+        return;
       }
 
-      if (studyTranslation === "WEB") {
 
-        studyBible =
-          await getWEB();
+      const studyUrl =
+        "study-workspace.html?topic=" +
+        encodeURIComponent(topic);
 
-      }
 
-      else if (studyTranslation === "ASV") {
-
-        studyBible =
-          await getASV();
-
-      }
-
-      else {
-
-        studyBible =
-          await getKJV();
-
-      }
-
-      return studyBible;
+      window.location.href =
+        studyUrl;
 
     }
 
-/* =========================
-   OPENED STUDY TYPE
-========================= */
-
-const urlParams =
-  new URLSearchParams(
-    window.location.search
-  );
-
-const openedStudyType =
-  urlParams.get("type");
-
-if (
-  openedStudyType === "personal" ||
-  openedStudyType === "sermon" ||
-  openedStudyType === "group" ||
-  openedStudyType === "ministry"
-) {
-
-  studyType.value =
-    openedStudyType;
-
-  studyType.dispatchEvent(
-    new Event("change")
-  );
-
-}
-    /* =========================
-       STUDY TYPE
-    ========================= */
-
-    
-    /* =========================
-       START STUDY
-    ========================= */
 
     startStudyButton.addEventListener(
       "click",
-      async function() {
-
-        const topic =
-          topicInput.value.trim();
-
-
-        if (!topic) {
-
-          alert(
-            "Please enter a topic."
-          );
-
-          return;
-
-        }
-
-
-        studyWorkspace.style.display =
-          "block";
-
-
-        suggestions.innerHTML =
-          "<div class='suggestion'>" +
-
-          "🔎 Searching the KJV for verses related to <strong>" +
-
-          topic +
-
-          "</strong>..." +
-
-          "</div>";
-
-
-        try {
-
-          /*
-            Topic suggestions ALWAYS use KJV.
-            The translation selector will be used
-            for the study Bible itself.
-          */
-
-         const bible =
-  await loadStudyBible();
-
-
-          const searchWords =
-            topic
-              .toLowerCase()
-              .split(/\s+/)
-              .filter(
-                function(word) {
-
-                  return word.length > 2;
-
-                }
-              );
-
-
-          const results = [];
-
-
-          /* =========================
-             SEARCH BIBLE
-          ========================= */
-
-         function searchBible(data) {
-
-  const books =
-    Array.isArray(data.books)
-      ? data.books
-      : [];
-
-  const allMatches = [];
-
-  books.forEach(function(book) {
-
-    const bookName =
-      book.englishName ||
-      book.book ||
-      book.name ||
-      book.title ||
-      "Unknown Book";
-
-    const chapters =
-      Array.isArray(book.chapters)
-        ? book.chapters
-        : [];
-
-    chapters.forEach(function(chapter) {
-
-      const verses =
-        Array.isArray(chapter.verses)
-          ? chapter.verses
-          : [];
-
-      verses.forEach(function(verse) {
-
-        const text =
-          (verse.text || "").toString();
-
-        const lowerText =
-          text.toLowerCase();
-
-        const matches =
-          searchWords.some(function(word) {
-            return lowerText.includes(word);
-          });
-
-        if (matches) {
-
-          allMatches.push({
-            book: bookName,
-            chapter: chapter.chapter,
-            verse: verse.number,
-            text: text
-          });
-
-        }
-
-      });
-
-    });
-
-  });
-
-
-  /* =========================
-     PICK VERSES FROM DIFFERENT
-     PARTS OF THE BIBLE
-  ========================= */
-
-  const selected = [];
-
-  if (allMatches.length === 0) {
-    return;
-  }
-
-  const step =
-    Math.max(
-      1,
-      Math.floor(allMatches.length / 8)
+      startPersonalStudy
     );
 
 
-  for (
-    let i = 0;
-    i < allMatches.length && selected.length < 8;
-    i += step
-  ) {
+    topicInput.addEventListener(
+      "keydown",
+      function(event) {
 
-    selected.push(allMatches[i]);
+        if (event.key === "Enter") {
 
-  }
-
-
-  /* =========================
-     RANDOMIZE THE SELECTED
-     VERSES
-  ========================= */
-
-  for (
-    let i = selected.length - 1;
-    i > 0;
-    i--
-  ) {
-
-    const j =
-      Math.floor(
-        Math.random() * (i + 1)
-      );
-
-    [
-      selected[i],
-      selected[j]
-    ] = [
-      selected[j],
-      selected[i]
-    ];
-
-  }
-
-
-  selected.forEach(function(result) {
-
-    results.push(result);
-
-  });
-
-}
-          searchBible(bible);
-
-
-          /* =========================
-             DISPLAY KJV RESULTS
-          ========================= */
-
-          let html =
-            "<div class='suggestion'>" +
-
-            "<strong>📖 KJV Suggested Verses</strong><br>" +
-
-            "Starting points for studying <strong>" +
-
-            topic +
-
-            "</strong>:" +
-
-            "</div>";
-
-
-          if (results.length === 0) {
-
-            html +=
-              "<div class='suggestion'>" +
-
-              "No direct matches were found in the KJV. " +
-
-              "You can still search the full Bible manually." +
-
-              "</div>";
-
-          }
-
-
-          else {
-
-            results.forEach(
-              function(result) {
-
-                html +=
-                  "<div class='suggestion'>" +
-
-                  "<strong>" +
-
-                  result.book +
-
-                  " " +
-
-                  result.chapter +
-
-                  ":" +
-
-                  result.verse +
-
-                  "</strong><br>" +
-
-                  result.text +
-
-                  "</div>";
-
-              }
-            );
-
-          }
-
-
-          /* =========================
-             DICTIONARY
-          ========================= */
-
-          html +=
-
-            "<div class='suggestion'>" +
-
-            "<strong>📘 Dictionary</strong><br>" +
-
-            "Relevant Bible dictionary terms will appear here." +
-
-            "</div>";
-
-
-          /* =========================
-             COMMENTARIES
-          ========================= */
-
-          html +=
-
-            "<div class='suggestion'>" +
-
-            "<strong>📚 Commentaries</strong><br>" +
-
-            "Relevant commentary material will appear here." +
-
-            "</div>";
-
-
-          /* =========================
-             AI ASSISTANT
-          ========================= */
-
-          html +=
-
-            "<div class='suggestion'>" +
-
-            "<strong>🤖 AI Assistant</strong><br>" +
-
-            "Ask questions about the Bible or Christian topics related to your study." +
-
-            "</div>";
-
-
-          suggestions.innerHTML =
-            html;
+          startPersonalStudy();
 
         }
-
-
-        catch (error) {
-
-          console.error(
-            "Bible topic search error:",
-            error
-          );
-
-
-          suggestions.innerHTML =
-            "<div class='suggestion'>" +
-
-            "Sorry, we couldn't search the Bible right now. " +
-
-            "Please try again." +
-
-            "</div>";
-
-        }
-
-
-        studyWorkspace.scrollIntoView({
-          behavior: "smooth"
-        });
 
       }
     );
