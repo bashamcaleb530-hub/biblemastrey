@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,7 +64,7 @@
 
     .controls-grid {
       display: grid;
-      grid-template-columns: repeat(4,1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 12px;
     }
 
@@ -153,7 +153,7 @@
 
     .verse-row {
       display: grid;
-      grid-template-columns: minmax(0,1fr) minmax(280px,35%);
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 35%);
       gap: 20px;
       border-bottom: 1px solid #e3e3e3;
       padding: 18px 0;
@@ -333,7 +333,7 @@
 
     .tools-grid {
       display: grid;
-      grid-template-columns: repeat(3,1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 15px;
     }
 
@@ -463,7 +463,7 @@
     .account-modal {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.55);
+      background: rgba(0,0,0,.55);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -475,7 +475,7 @@
       width: min(90%, 400px);
       padding: 25px;
       border-radius: 12px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
       text-align: center;
       position: relative;
     }
@@ -666,1712 +666,999 @@
       }
     }
   </style>
-
 </head>
 
 <body>
 
-<header>
-  <h1>BibleMastrey</h1>
-  <p>Your Bible Study Companion</p>
+  <header>
+    <h1>BibleMastrey</h1>
 
-  <button id="accountButton" class="account-button">
-    👤 Account
-  </button>
-</header>
+    <p>Your Bible Study Companion</p>
 
-<div id="accountModal" class="account-modal" style="display:none;">
-  <div class="account-box">
-
-    <button id="closeAccountModal" class="account-close">
-      ×
+    <button id="accountButton" class="account-button">
+      👤 Account
     </button>
+  </header>
 
-    <h2>BibleMastrey Account</h2>
+  <div id="accountModal" class="account-modal" style="display:none;">
 
-    <p id="accountMessage">
-      Sign in or create your account.
-    </p>
+    <div class="account-box">
 
-    <input
-      type="email"
-      id="accountEmail"
-      placeholder="Email address"
-      autocomplete="email"
-    >
-
-    <input
-      type="password"
-      id="accountPassword"
-      placeholder="Password"
-      autocomplete="current-password"
-    >
-
-    <button id="loginAccountButton">
-      Log In
-    </button>
-
-    <button id="signupAccountButton">
-      Create Account
-    </button>
-
-  </div>
-</div>
-
-<div class="container">
-
-  <div class="controls">
-
-    <div class="controls-grid">
-
-      <div class="control-group">
-        <label for="translation">Translation</label>
-
-        <select id="translation">
-          <option value="kjv">
-            King James Version (KJV)
-          </option>
-
-          <option value="WEB">
-            World English Bible
-          </option>
-
-          <option value="ASV">
-            American Standard Version
-          </option>
-        </select>
-      </div>
-
-      <div class="control-group">
-        <label for="book">Book</label>
-
-        <select id="book">
-          <option value="">
-            Choose a book
-          </option>
-        </select>
-      </div>
-
-      <div class="control-group">
-        <label for="chapter">Chapter</label>
-
-        <select id="chapter">
-          <option value="">
-            Choose a chapter
-          </option>
-        </select>
-      </div>
-
-      <div class="control-group">
-        <label for="verse">Verse</label>
-
-        <select id="verse">
-          <option value="">
-            Choose a verse
-          </option>
-        </select>
-      </div>
-
-    </div>
-
-    <div class="dictionary-search">
-
-      <label for="dictionaryInput">
-        📖 Bible Dictionary
-      </label>
-
-      <div class="dictionary-search-row">
-
-        <input
-          type="text"
-          id="dictionaryInput"
-          placeholder="Search a Bible word..."
-        >
-
-        <button id="dictionaryButton">
-          Search
-        </button>
-
-      </div>
-
-      <div id="dictionaryResult"></div>
-
-    </div>
-
-    <div class="concordance-search">
-
-      <label for="concordanceInput">
-        🔎 Bible Concordance
-      </label>
-
-      <div class="concordance-search-row">
-
-        <input
-          type="text"
-          id="concordanceInput"
-          placeholder="Search a word in the Bible..."
-        >
-
-        <button id="concordanceButton">
-          Search
-        </button>
-
-      </div>
-
-      <div id="concordanceResult"></div>
-
-    </div>
-
-    <div class="original-word-search">
-
-      <label for="originalWordInput">
-        🔤 Hebrew / Greek Word Lookup
-      </label>
-
-      <div class="original-word-search-row">
-
-        <input
-          type="text"
-          id="originalWordInput"
-          placeholder="Enter Strong's number (e.g. G25 or H157)"
-        >
-
-        <button id="originalWordButton">
-          Search
-        </button>
-
-      </div>
-
-      <div id="originalWordResult"></div>
-
-    </div>
-
-    <div class="study-controls">
-
-      <button id="commentaryButton">
-        📖 Bible Commentary
+      <button id="closeAccountModal" class="account-close">
+        ×
       </button>
 
-      <div
-        id="commentarySelector"
-        class="commentary-selector"
-      >
+      <h2>BibleMastrey Account</h2>
 
-        <select id="commentarySelect">
-
-          <option value="matthew-henry-concise">
-            Matthew Henry — Concise
-          </option>
-
-          <option value="matthew-henry-complete">
-            Matthew Henry — Complete
-          </option>
-
-          <option value="john-gill">
-            John Gill — Exposition
-          </option>
-
-          <option value="jfb">
-            Jamieson-Fausset-Brown
-          </option>
-
-          <option value="adam-clarke">
-            Adam Clarke
-          </option>
-
-          <option value="barnes">
-            Barnes' Notes
-          </option>
-
-        </select>
-
-      </div>
-
-    </div>
-
-  </div>
-
-  <div id="status">
-    Loading Bible...
-  </div>
-
-  <!-- =========================
-       WHAT WOULD YOU LIKE TO DO?
-  ========================= -->
-
-  <div class="ai-study-choice">
-
-    <h2>
-      What would you like to do?
-    </h2>
-
-    <p class="ai-study-intro">
-      Choose how you want to study.
-      BibleMastrey will bring the helpful
-      study tools together in one place
-      while you study for yourself.
-    </p>
-
-    <div class="ai-study-choice-grid">
-
-      <a
-        href="ai-study.html?type=personal"
-        class="ai-study-choice-card"
-      >
-
-        <div class="ai-study-icon">
-          📖
-        </div>
-
-        <h3>
-          Personal Bible Study
-        </h3>
-
-        <p>
-          Study a topic, discover Bible verses,
-          explore definitions, use study tools,
-          read commentaries, and take your own notes.
-        </p>
-
-      </a>
-
-      <a
-        href="sermon.html"
-        class="ai-study-choice-card"
-      >
-
-        <div class="ai-study-icon">
-          🎤
-        </div>
-
-        <h3>
-          Build a Sermon
-        </h3>
-
-        <p>
-          Prepare a sermon step by step with Bible verses,
-          commentaries, study tools, a preparation guide,
-          and a guided sermon template.
-        </p>
-
-      </a>
-
-      <a
-        href="ai-study.html?type=group"
-        class="ai-study-choice-card"
-      >
-
-        <div class="ai-study-icon">
-          👥
-        </div>
-
-        <h3>
-          Bible Group Study
-        </h3>
-
-        <p>
-          Prepare a Bible study for a group with Scripture,
-          definitions, commentaries, and study tools.
-        </p>
-
-      </a>
-
-      <div class="ai-study-choice-card admin-study-card">
-
-        <div class="ai-study-icon">
-          ⛪
-        </div>
-
-        <h3>
-          Desert Springs Ministries Sermons
-        </h3>
-
-        <p>
-          Private sermon workspace for Desert Springs Ministries.
-        </p>
-
-        <span class="admin-label">
-          Admin / Owner
-        </span>
-
-      </div>
-
-    </div>
-
-  </div>
-
-  <div id="chapterContent">
-
-    <h2 id="chapterTitle">
-      Bible
-    </h2>
-
-    <p>
-      Choose a book and chapter to begin reading.
-    </p>
-
-    <div class="navigation">
-
-      <button id="previousChapter">
-        ← Previous Chapter
-      </button>
-
-      <button id="nextChapter">
-        Next Chapter →
-      </button>
-
-    </div>
-
-    <div class="search-box">
-
-      <h3>
-        Search This Chapter
-      </h3>
+      <p id="accountMessage">
+        Sign in or create your account.
+      </p>
 
       <input
-        type="text"
-        id="searchInput"
-        placeholder="Search for a word..."
+        type="email"
+        id="accountEmail"
+        placeholder="Email address"
+        autocomplete="email"
       >
 
-      <div
-        id="searchResults"
-        class="search-results"
-      ></div>
+      <input
+        type="password"
+        id="accountPassword"
+        placeholder="Password"
+        autocomplete="current-password"
+      >
+
+      <button id="loginAccountButton">
+        Log In
+      </button>
+
+      <button id="signupAccountButton">
+        Create Account
+      </button>
 
     </div>
 
   </div>
 
-</div>
+  <div class="container">
 
-<div id="verseMenu" class="verse-menu">
+    <div class="controls">
 
-  <button id="highlightVerse">
-    🟨 Highlight
-  </button>
+      <div class="controls-grid">
 
-  <button id="bookmarkVerse">
-    🔖 Bookmark
-  </button>
+        <div class="control-group">
 
-  <button id="copyVerse">
-    📋 Copy
-  </button>
+          <label for="translationSelect">
+            Translation
+          </label>
 
-  <button id="shareVerse">
-    📤 Share
-  </button>
+          <select id="translationSelect">
 
-</div>
+            <option value="kjv">
+              King James Version (KJV)
+            </option>
 
-<script src="bible.js"></script>
+            <option value="WEB">
+              World English Bible
+            </option>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+            <option value="ASV">
+              American Standard Version
+            </option>
 
-<script>
+          </select>
 
-  let bibleData = null;
-  let books = [];
-  let currentBookIndex = -1;
-  let currentChapterIndex = -1;
-  let selectedVerseNumber = null;
-  let commentaryVisible = false;
+        </div>
 
-  const SUPABASE_URL =
-    "https://pjkkxvntssvukulxipfr.supabase.co";
+        <div class="control-group">
 
-  const SUPABASE_PUBLISHABLE_KEY =
-    "sb_publishable_1kehaIywv1Wb9Iwj2OPGdg_aFosOSwK";
+          <label for="bookSelect">
+            Book
+          </label>
 
-  const supabaseClient =
-    window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_PUBLISHABLE_KEY
-    );
+          <select id="bookSelect">
 
-  supabaseClient.auth.getSession()
-    .then(function(result) {
+            <option value="">
+              Choose a book
+            </option>
 
-      async function checkAdminStatus() {
+          </select>
 
-        const {
-          data: { user }
-        } = await supabaseClient.auth.getUser();
+        </div>
 
-        if (!user) {
+        <div class="control-group">
+
+          <label for="chapterSelect">
+            Chapter
+          </label>
+
+          <select id="chapterSelect">
+
+            <option value="">
+              Choose a chapter
+            </option>
+
+          </select>
+
+        </div>
+
+        <div class="control-group">
+
+          <label for="verseSelect">
+            Verse
+          </label>
+
+          <select id="verseSelect">
+
+            <option value="">
+              Choose a verse
+            </option>
+
+          </select>
+
+        </div>
+
+      </div>
+
+      <div class="dictionary-search">
+
+        <label for="dictionaryInput">
+          📖 Bible Dictionary
+        </label>
+
+        <div class="dictionary-search-row">
+
+          <input
+            type="text"
+            id="dictionaryInput"
+            placeholder="Search a Bible word..."
+          >
+
+          <button id="dictionaryButton">
+            Search
+          </button>
+
+        </div>
+
+        <div id="dictionaryResult"></div>
+
+      </div>
+
+      <div class="concordance-search">
+
+        <label for="concordanceInput">
+          🔎 Bible Concordance
+        </label>
+
+        <div class="concordance-search-row">
+
+          <input
+            type="text"
+            id="concordanceInput"
+            placeholder="Search a word in the Bible..."
+          >
+
+          <button id="concordanceButton">
+            Search
+          </button>
+
+        </div>
+
+        <div id="concordanceResult"></div>
+
+      </div>
+
+      <div class="original-word-search">
+
+        <label for="originalWordInput">
+          🔤 Hebrew / Greek Word Lookup
+        </label>
+
+        <div class="original-word-search-row">
+
+          <input
+            type="text"
+            id="originalWordInput"
+            placeholder="Enter Strong's number (e.g. G25 or H157)"
+          >
+
+          <button id="originalWordButton">
+            Search
+          </button>
+
+        </div>
+
+        <div id="originalWordResult"></div>
+
+      </div>
+
+      <div class="study-controls">
+
+        <button id="commentaryButton">
+          📖 Bible Commentary
+        </button>
+
+        <div
+          id="commentarySelector"
+          class="commentary-selector"
+        >
+
+          <select id="commentarySelect">
+
+            <option value="matthew-henry-concise">
+              Matthew Henry — Concise
+            </option>
+
+            <option value="matthew-henry-complete">
+              Matthew Henry — Complete
+            </option>
+
+            <option value="john-gill">
+              John Gill — Exposition
+            </option>
+
+            <option value="jfb">
+              Jamieson-Fausset-Brown
+            </option>
+
+            <option value="adam-clarke">
+              Adam Clarke
+            </option>
+
+            <option value="barnes">
+              Barnes' Notes
+            </option>
+
+          </select>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div id="status">
+      Loading Bible...
+    </div>
+
+    <!-- =========================
+         WHAT WOULD YOU LIKE TO DO?
+    ========================= -->
+
+    <div class="ai-study-choice">
+
+      <h2>
+        What would you like to do?
+      </h2>
+
+      <p class="ai-study-intro">
+        Choose how you want to study.
+        BibleMastrey will bring the helpful
+        study tools together in one place
+        while you study for yourself.
+      </p>
+
+      <div class="ai-study-choice-grid">
+
+        <a
+          href="ai-study.html?type=personal"
+          class="ai-study-choice-card"
+        >
+
+          <div class="ai-study-icon">
+            📖
+          </div>
+
+          <h3>
+            Personal Bible Study
+          </h3>
+
+          <p>
+            Study a topic, discover Bible verses,
+            explore definitions, use study tools,
+            read commentaries, and take your own notes.
+          </p>
+
+        </a>
+
+        <a
+          href="sermon.html"
+          class="ai-study-choice-card"
+        >
+
+          <div class="ai-study-icon">
+            🎤
+          </div>
+
+          <h3>
+            Build a Sermon
+          </h3>
+
+          <p>
+            Prepare a sermon step by step with Bible verses,
+            commentaries, study tools, a preparation guide,
+            and a guided sermon template.
+          </p>
+
+        </a>
+
+        <a
+          href="ai-study.html?type=group"
+          class="ai-study-choice-card"
+        >
+
+          <div class="ai-study-icon">
+            👥
+          </div>
+
+          <h3>
+            Bible Group Study
+          </h3>
+
+          <p>
+            Prepare a Bible study for a group with Scripture,
+            definitions, commentaries, and study tools.
+          </p>
+
+        </a>
+
+        <div class="ai-study-choice-card admin-study-card">
+
+          <div class="ai-study-icon">
+            ⛪
+          </div>
+
+          <h3>
+            Desert Springs Ministries Sermons
+          </h3>
+
+          <p>
+            Private sermon workspace for Desert Springs Ministries.
+          </p>
+
+          <span class="admin-label">
+            Admin / Owner
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div id="chapterContent">
+
+      <h2 id="chapterTitle">
+        Bible
+      </h2>
+
+      <p>
+        Choose a book and chapter to begin reading.
+      </p>
+
+      <div class="navigation">
+
+        <button id="previousChapterButton">
+          ← Previous Chapter
+        </button>
+
+        <button id="nextChapterButton">
+          Next Chapter →
+        </button>
+
+      </div>
+
+      <div class="search-box">
+
+        <h3>
+          Search This Chapter
+        </h3>
+
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Search for a word..."
+        >
+
+        <div
+          id="searchResults"
+          class="search-results"
+        ></div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div id="verseMenu" class="verse-menu">
+
+    <button id="highlightVerseButton">
+      🟨 Highlight
+    </button>
+
+    <button id="bookmarkVerseButton">
+      🔖 Bookmark
+    </button>
+
+    <button id="copyVerseButton">
+      📋 Copy
+    </button>
+
+    <button id="shareVerseButton">
+      📤 Share
+    </button>
+
+  </div>
+
+  <script src="bible.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+
+    let bibleData = null;
+    let books = [];
+    let currentBookIndex = -1;
+    let currentChapterIndex = -1;
+    let selectedVerseNumber = null;
+    let commentaryVisible = false;
+
+    const SUPABASE_URL =
+      "https://pjkkxvntssvukulxipfr.supabase.co";
+
+    const SUPABASE_PUBLISHABLE_KEY =
+      "sb_publishable_1kehaIywv1Wb9Iwj2OPGdg_aFosOSwK";
+
+    const supabaseClient =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+      );
+
+    supabaseClient.auth.getSession()
+      .then(function(result) {
+
+        async function checkAdminStatus() {
+
+          const {
+            data: { user }
+          } =
+            await supabaseClient.auth.getUser();
+
+          if (!user) {
+
+            console.log(
+              "No user is currently logged in."
+            );
+
+            return false;
+          }
+
+          const { data, error } =
+            await supabaseClient
+              .from("admin_users")
+              .select("user_id")
+              .eq("user_id", user.id)
+              .maybeSingle();
+
+          if (error) {
+
+            console.error(
+              "Admin check error:",
+              error
+            );
+
+            return false;
+          }
+
+          if (data) {
+
+            console.log(
+              "BibleMastrey admin recognized:",
+              user.email
+            );
+
+            return true;
+          }
 
           console.log(
-            "No user is currently logged in."
-          );
-
-          return false;
-        }
-
-        const { data, error } =
-          await supabaseClient
-            .from("admin_users")
-            .select("user_id")
-            .eq("user_id", user.id)
-            .maybeSingle();
-
-        if (error) {
-
-          console.error(
-            "Admin check error:",
-            error
-          );
-
-          return false;
-        }
-
-        if (data) {
-
-          console.log(
-            "BibleMastrey admin recognized:",
+            "Regular user:",
             user.email
           );
 
-          return true;
+          return false;
         }
 
-        console.log(
-          "Regular user:",
-          user.email
-        );
+        checkAdminStatus();
 
-        return false;
-      }
+        if (result.error) {
 
-      checkAdminStatus();
+          console.error(
+            "Supabase connection error:",
+            result.error
+          );
 
-      if (result.error) {
+        } else {
 
-        console.error(
-          "Supabase connection error:",
-          result.error
-        );
+          console.log(
+            "BibleMastrey Supabase connected."
+          );
 
-      } else {
+        }
 
-        console.log(
-          "BibleMastrey Supabase connected."
-        );
-
-      }
-
-    });
-
-  /* =========================
-     CLOUD BIBLE DATA
-  ========================= */
-
-  let cloudBibleData = {};
-
-  function getCloudKey(
-    itemType,
-    translation,
-    bookIndex,
-    chapterIndex,
-    verseNumber
-  ) {
-
-    return (
-      itemType +
-      "|" +
-      translation +
-      "|" +
-      bookIndex +
-      "|" +
-      chapterIndex +
-      "|" +
-      verseNumber
-    );
-
-  }
-
-  async function getCurrentUser() {
-
-    const {
-      data: { user }
-    } =
-      await supabaseClient.auth.getUser();
-
-    return user;
-  }
-
-  async function saveCloudItem(
-    itemType,
-    translation,
-    bookIndex,
-    chapterIndex,
-    verseNumber,
-    content
-  ) {
-
-    const user =
-      await getCurrentUser();
-
-    if (!user) {
-      return;
-    }
-
-    const { error } =
-      await supabaseClient
-        .from("bible_user_data")
-        .upsert(
-          {
-            user_id: user.id,
-            item_type: itemType,
-            translation: translation,
-            book_index: bookIndex,
-            chapter_index: chapterIndex,
-            verse_number: verseNumber,
-            content: content,
-            updated_at:
-              new Date().toISOString()
-          },
-          {
-            onConflict:
-              "user_id,item_type,translation,book_index,chapter_index,verse_number"
-          }
-        );
-
-    if (error) {
-
-      console.error(
-        "Cloud save error:",
-        error
-      );
-
-      return;
-    }
-
-    cloudBibleData[
-      getCloudKey(
-        itemType,
-        translation,
-        bookIndex,
-        chapterIndex,
-        verseNumber
-      )
-    ] = content;
-
-  }
-
-  async function deleteCloudItem(
-    itemType,
-    translation,
-    bookIndex,
-    chapterIndex,
-    verseNumber
-  ) {
-
-    const user =
-      await getCurrentUser();
-
-    if (!user) {
-      return;
-    }
-
-    const { error } =
-      await supabaseClient
-        .from("bible_user_data")
-        .delete()
-        .eq("user_id", user.id)
-        .eq("item_type", itemType)
-        .eq("translation", translation)
-        .eq("book_index", bookIndex)
-        .eq("chapter_index", chapterIndex)
-        .eq("verse_number", verseNumber);
-
-    if (error) {
-
-      console.error(
-        "Cloud delete error:",
-        error
-      );
-
-      return;
-    }
-
-    delete cloudBibleData[
-      getCloudKey(
-        itemType,
-        translation,
-        bookIndex,
-        chapterIndex,
-        verseNumber
-      )
-    ];
-
-  }
-
-  async function syncCloudChapter() {
-
-    cloudBibleData = {};
-
-    const user =
-      await getCurrentUser();
-
-    if (!user) {
-      return;
-    }
-
-    const { data, error } =
-      await supabaseClient
-        .from("bible_user_data")
-        .select("*")
-        .eq("user_id", user.id)
-        .eq(
-          "translation",
-          translationSelect.value
-        )
-        .eq(
-          "book_index",
-          currentBookIndex
-        )
-        .eq(
-          "chapter_index",
-          currentChapterIndex
-        );
-
-    if (error) {
-
-      console.error(
-        "Cloud sync error:",
-        error
-      );
-
-      return;
-    }
-
-    (data || []).forEach(function(item) {
-
-      const key =
-        getCloudKey(
-          item.item_type,
-          item.translation,
-          item.book_index,
-          item.chapter_index,
-          item.verse_number
-        );
-
-      cloudBibleData[key] =
-        item.content;
-
-    });
-
-  }
-
-  async function syncLocalBibleDataToCloud() {
-
-    const user =
-      await getCurrentUser();
-
-    if (!user) {
-      return;
-    }
-
-    for (
-      let i = 0;
-      i < localStorage.length;
-      i++
-    ) {
-
-      const key =
-        localStorage.key(i);
-
-      if (!key) {
-        continue;
-      }
-
-      const match =
-        key.match(
-          /^bibleMastrey-(.+)-(\d+)-(\d+)-(note|highlight|bookmark)-(\d+)$/
-        );
-
-      if (!match) {
-        continue;
-      }
-
-      const translation =
-        match[1];
-
-      const bookIndex =
-        Number(match[2]);
-
-      const chapterIndex =
-        Number(match[3]);
-
-      const itemType =
-        match[4];
-
-      const verseNumber =
-        Number(match[5]);
-
-      const content =
-        localStorage.getItem(key);
-
-      if (
-        content === null ||
-        content === ""
-      ) {
-        continue;
-      }
-
-      await saveCloudItem(
-        itemType,
-        translation,
-        bookIndex,
-        chapterIndex,
-        verseNumber,
-        content
-      );
-
-    }
-
-    console.log(
-      "Local Bible data synced to cloud."
-    );
-
-  }
-
-  /* =========================
-     ACCOUNT
-  ========================= */
-
-  const accountModal =
-    document.getElementById("accountModal");
-
-  const accountButton =
-    document.getElementById("accountButton");
-
-  const closeAccountModal =
-    document.getElementById("closeAccountModal");
-
-  accountButton.addEventListener(
-    "click",
-    function() {
-
-      accountModal.style.display =
-        "flex";
-
-    }
-  );
-
-  closeAccountModal.addEventListener(
-    "click",
-    function() {
-
-      accountModal.style.display =
-        "none";
-
-    }
-  );
-
-  const accountEmail =
-    document.getElementById("accountEmail");
-
-  const accountPassword =
-    document.getElementById("accountPassword");
-
-  const accountMessage =
-    document.getElementById("accountMessage");
-
-  const signupAccountButton =
-    document.getElementById("signupAccountButton");
-
-  const loginAccountButton =
-    document.getElementById("loginAccountButton");
-
-  loginAccountButton.addEventListener(
-    "click",
-    async function() {
-
-      const email =
-        accountEmail.value.trim();
-
-      const password =
-        accountPassword.value;
-
-      if (!email || !password) {
-
-        accountMessage.textContent =
-          "Please enter your email and password.";
-
-        return;
-      }
-
-      const { data, error } =
-        await supabaseClient.auth.signInWithPassword({
-          email: email,
-          password: password
-        });
-
-      if (error) {
-
-        accountMessage.textContent =
-          error.message;
-
-        return;
-      }
-
-      accountMessage.textContent =
-        "Logged in successfully!";
-
-      await syncLocalBibleDataToCloud();
-
-      await syncCloudChapter();
-
-      accountButton.textContent =
-        "👤 Account";
-
-      accountModal.style.display =
-        "none";
-
-      console.log(
-        "BibleMastrey user logged in:",
-        data.user
-      );
-
-    }
-  );
-
-  signupAccountButton.addEventListener(
-    "click",
-    async function() {
-
-      const email =
-        accountEmail.value.trim();
-
-      const password =
-        accountPassword.value;
-
-      if (!email || !password) {
-
-        accountMessage.textContent =
-          "Please enter your email and password.";
-
-        return;
-      }
-
-      const { data, error } =
-        await supabaseClient.auth.signUp({
-          email: email,
-          password: password
-        });
-
-      if (error) {
-
-        accountMessage.textContent =
-          error.message;
-
-        return;
-      }
-
-      accountMessage.textContent =
-        "Account created successfully!";
-
-      console.log(
-        "BibleMastrey account created:",
-        data.user
-      );
-
-    }
-  );
-
-  /* =========================
-     COMMENTARY APIs
-  ========================= */
-
-  const COMMENTARY_API =
-    "https://bible.helloao.org/api/c/";
-
-  /*
-    HelloAO officially provides:
-
-    Matthew Henry
-    John Gill
-    Jamieson-Fausset-Brown
-    Adam Clarke
-  */
-
-  const commentaryApiIds = {
-
-    "matthew-henry-complete":
-      "matthew-henry",
-
-    "john-gill":
-      "john-gill",
-
-    "jfb":
-      "jamieson-fausset-brown",
-
-    "adam-clarke":
-      "adam-clarke"
-
-  };
-
-  /*
-    Matthew Henry Concise has its own
-    public LyteWord repository.
-  */
-
-  const LYTEWORD_CONCISE =
-    "https://raw.githubusercontent.com/lyteword/mhenry-concise/main/";
-
-  /*
-    Barnes is available through CCEL
-    and covers the New Testament.
-  */
-
-  const BARNES_CCEL =
-    "https://www.ccel.org/ccel/barnes/";
+      });
 
     /* =========================
-     BOOK API IDS
-  ========================= */
-
-  const bookApiIds = {
-
-    "Genesis": "GEN",
-    "Exodus": "EXO",
-    "Leviticus": "LEV",
-    "Numbers": "NUM",
-    "Deuteronomy": "DEU",
-    "Joshua": "JOS",
-    "Judges": "JDG",
-    "Ruth": "RUT",
-    "1 Samuel": "1SA",
-    "2 Samuel": "2SA",
-    "1 Kings": "1KI",
-    "2 Kings": "2KI",
-    "1 Chronicles": "1CH",
-    "2 Chronicles": "2CH",
-    "Ezra": "EZR",
-    "Nehemiah": "NEH",
-    "Esther": "EST",
-    "Job": "JOB",
-    "Psalms": "PSA",
-    "Proverbs": "PRO",
-    "Ecclesiastes": "ECC",
-    "Song of Solomon": "SNG",
-    "Isaiah": "ISA",
-    "Jeremiah": "JER",
-    "Lamentations": "LAM",
-    "Ezekiel": "EZK",
-    "Daniel": "DAN",
-    "Hosea": "HOS",
-    "Joel": "JOL",
-    "Amos": "AMO",
-    "Obadiah": "OBA",
-    "Jonah": "JON",
-    "Micah": "MIC",
-    "Nahum": "NAM",
-    "Habakkuk": "HAB",
-    "Zephaniah": "ZEP",
-    "Haggai": "HAG",
-    "Zechariah": "ZEC",
-    "Malachi": "MAL",
-
-    "Matthew": "MAT",
-    "Mark": "MRK",
-    "Luke": "LUK",
-    "John": "JHN",
-    "Acts": "ACT",
-    "Romans": "ROM",
-    "1 Corinthians": "1CO",
-    "2 Corinthians": "2CO",
-    "Galatians": "GAL",
-    "Ephesians": "EPH",
-    "Philippians": "PHP",
-    "Colossians": "COL",
-    "1 Thessalonians": "1TH",
-    "2 Thessalonians": "2TH",
-    "1 Timothy": "1TI",
-    "2 Timothy": "2TI",
-    "Titus": "TIT",
-    "Philemon": "PHM",
-    "Hebrews": "HEB",
-    "James": "JAS",
-    "1 Peter": "1PE",
-    "2 Peter": "2PE",
-    "1 John": "1JN",
-    "2 John": "2JN",
-    "3 John": "3JN",
-    "Jude": "JUD",
-    "Revelation": "REV"
-
-  };
-
-
-  /* =========================
-     DOM REFERENCES
-  ========================= */
-
-  const translationSelect =
-    document.getElementById(
-      "translationSelect"
-    );
-
-  const bookSelect =
-    document.getElementById(
-      "bookSelect"
-    );
-
-  const chapterSelect =
-    document.getElementById(
-      "chapterSelect"
-    );
-
-  const verseSelect =
-    document.getElementById(
-      "verseSelect"
-    );
-
-  const chapterContent =
-    document.getElementById(
-      "chapterContent"
-    );
-
-  const status =
-    document.getElementById(
-      "status"
-    );
-
-  const previousChapterButton =
-    document.getElementById(
-      "previousChapterButton"
-    );
-
-  const nextChapterButton =
-    document.getElementById(
-      "nextChapterButton"
-    );
-
-  const commentaryButton =
-    document.getElementById(
-      "commentaryButton"
-    );
-
-  const commentarySelector =
-    document.getElementById(
-      "commentarySelector"
-    );
-
-  const commentarySelect =
-    document.getElementById(
-      "commentarySelect"
-    );
-
-  const searchInput =
-    document.getElementById(
-      "searchInput"
-    );
-
-  const searchResults =
-    document.getElementById(
-      "searchResults"
-    );
-
-  const verseMenu =
-    document.getElementById(
-      "verseMenu"
-    );
-
-  const highlightVerseButton =
-    document.getElementById(
-      "highlightVerseButton"
-    );
-
-  const bookmarkVerseButton =
-    document.getElementById(
-      "bookmarkVerseButton"
-    );
-
-  const copyVerseButton =
-    document.getElementById(
-      "copyVerseButton"
-    );
-
-  const shareVerseButton =
-    document.getElementById(
-      "shareVerseButton"
-    );
-
-
-  /* =========================
-     DICTIONARY / CONCORDANCE
-  ========================= */
-
-  const dictionaryInput =
-    document.getElementById(
-      "dictionaryInput"
-    );
-
-  const dictionaryButton =
-    document.getElementById(
-      "dictionaryButton"
-    );
-
-  const dictionaryResult =
-    document.getElementById(
-      "dictionaryResult"
-    );
-
-  const concordanceInput =
-    document.getElementById(
-      "concordanceInput"
-    );
-
-  const concordanceButton =
-    document.getElementById(
-      "concordanceButton"
-    );
-
-  const concordanceResult =
-    document.getElementById(
-      "concordanceResult"
-    );
-
-  const originalWordInput =
-    document.getElementById(
-      "originalWordInput"
-    );
-
-  const originalWordButton =
-    document.getElementById(
-      "originalWordButton"
-    );
-
-  const originalWordResult =
-    document.getElementById(
-      "originalWordResult"
-    );
-
-
-  /* =========================
-     COMMENTARY NAMES
-  ========================= */
-
-  function getCommentaryName() {
-
-    const value =
-      commentarySelect.value;
-
-    const names = {
-
-      "matthew-henry-concise":
-        "Matthew Henry — Concise",
-
-      "matthew-henry-complete":
-        "Matthew Henry — Complete",
-
-      "john-gill":
-        "John Gill — Exposition",
-
-      "jfb":
-        "Jamieson-Fausset-Brown",
-
-      "adam-clarke":
-        "Adam Clarke",
-
-      "barnes":
-        "Barnes' Notes"
-
-    };
-
-    return names[value] ||
-      "Bible Commentary";
-  }
-
-
-  /* =========================
-     COMMENTARY BOOK ID
-  ========================= */
-
-  function getApiBookId(bookName) {
-
-    if (!bookName) {
-      return null;
-    }
-
-    const name =
-      String(bookName).trim();
-
-    if (bookApiIds[name]) {
-      return bookApiIds[name];
-    }
-
-    const normalized =
-      name
-        .replace(/^The\s+/i, "")
-        .trim();
-
-    if (bookApiIds[normalized]) {
-      return bookApiIds[normalized];
-    }
-
-    const lowerName =
-      normalized.toLowerCase();
-
-    const aliases = {
-
-      "gen": "Genesis",
-      "ex": "Exodus",
-      "lev": "Leviticus",
-      "num": "Numbers",
-      "deut": "Deuteronomy",
-      "ps": "Psalms",
-      "psa": "Psalms",
-      "prov": "Proverbs",
-      "matt": "Matthew",
-      "mk": "Mark",
-      "mrk": "Mark",
-      "lk": "Luke",
-      "jn": "John",
-      "jhn": "John",
-      "rom": "Romans",
-      "rev": "Revelation"
-
-    };
-
-    if (aliases[lowerName]) {
-      return bookApiIds[
-        aliases[lowerName]
-      ];
-    }
-
-    const match =
-      Object.keys(bookApiIds)
-        .find(function(key) {
-
-          return (
-            key.toLowerCase() ===
-            lowerName
-          );
-
-        });
-
-    return match
-      ? bookApiIds[match]
-      : null;
-  }
-
-
-  /* =========================
-     HELLOAO
-  ========================= */
-
-  async function loadHelloAOCommentary(
-    commentaryId,
-    bookName,
-    chapterNumber
-  ) {
-
-    const bookId =
-      getApiBookId(bookName);
-
-    if (!bookId) {
-      throw new Error(
-        "Commentary book ID not found."
-      );
-    }
-
-    const cacheKey =
-      "helloao-" +
-      commentaryId +
-      "-" +
-      bookId +
-      "-" +
-      chapterNumber;
-
-    if (commentaryCache[cacheKey]) {
-      return commentaryCache[cacheKey];
-    }
-
-    const url =
-      COMMENTARY_API +
-      commentaryId +
-      "/" +
-      bookId +
-      "/" +
-      chapterNumber +
-      ".json";
-
-    const response =
-      await fetch(url);
-
-    if (!response.ok) {
-
-      if (response.status === 404) {
-
-        return {
-          entries: []
-        };
-
-      }
-
-      throw new Error(
-        "Commentary server returned HTTP " +
-        response.status
-      );
-
-    }
-
-    const data =
-      await response.json();
-
-    const normalized =
-      normalizeHelloAOCommentary(data);
-
-    commentaryCache[cacheKey] =
-      normalized;
-
-    return normalized;
-  }
-
-
-  function normalizeHelloAOCommentary(data) {
-
-    const entries = [];
-
-    if (
-      !data ||
-      !data.chapter ||
-      !Array.isArray(
-        data.chapter.content
-      )
+       CLOUD BIBLE DATA
+    ========================= */
+
+    let cloudBibleData = {};
+
+    function getCloudKey(
+      itemType,
+      translation,
+      bookIndex,
+      chapterIndex,
+      verseNumber
     ) {
 
-      return {
-        entries: []
-      };
-
-    }
-
-    data.chapter.content.forEach(
-      function(item) {
-
-        if (
-          !item ||
-          item.type !== "verse" ||
-          item.number === undefined
-        ) {
-          return;
-        }
-
-        const verseNumber =
-          Number(item.number);
-
-        let text = "";
-
-        if (
-          Array.isArray(item.content)
-        ) {
-
-          text =
-            item.content
-              .map(function(part) {
-
-                if (
-                  typeof part ===
-                  "string"
-                ) {
-                  return part;
-                }
-
-                if (
-                  part &&
-                  typeof part.text ===
-                  "string"
-                ) {
-                  return part.text;
-                }
-
-                return "";
-
-              })
-              .join("");
-
-        }
-
-        else if (
-          typeof item.text ===
-          "string"
-        ) {
-
-          text = item.text;
-
-        }
-
-        else if (
-          typeof item.content ===
-          "string"
-        ) {
-
-          text = item.content;
-
-        }
-
-        text =
-          text
-            .replace(/\s+/g, " ")
-            .trim();
-
-        if (text) {
-
-          entries.push({
-
-            start: verseNumber,
-
-            end: verseNumber,
-
-            text: text
-
-          });
-
-        }
-
-      }
-    );
-
-    return {
-      entries: entries
-    };
-  }
-
-
-  function findCommentaryForVerse(
-    data,
-    verseNumber
-  ) {
-
-    if (
-      !data ||
-      !Array.isArray(data.entries)
-    ) {
-
-      return "";
-
-    }
-
-    const target =
-      Number(verseNumber);
-
-    const match =
-      data.entries.find(
-        function(entry) {
-
-          return (
-            target >=
-              Number(entry.start) &&
-            target <=
-              Number(
-                entry.end ||
-                entry.start
-              )
-          );
-
-        }
+      return (
+        itemType +
+        "|" +
+        translation +
+        "|" +
+        bookIndex +
+        "|" +
+        chapterIndex +
+        "|" +
+        verseNumber
       );
 
-    return match
-      ? match.text
-      : "";
-  }
-
-
-  /* =========================
-     MATTHEW HENRY CONCISE
-  ========================= */
-
-  async function loadMatthewHenryConcise(
-    bookName,
-    chapterNumber
-  ) {
-
-    const slug =
-      String(bookName)
-        .toLowerCase()
-        .replace(/&/g, "and")
-        .replace(/\s+/g, "-");
-
-    const cacheKey =
-      "concise-" +
-      slug +
-      "-" +
-      chapterNumber;
-
-    if (commentaryCache[cacheKey]) {
-      return commentaryCache[cacheKey];
     }
 
-    const urls = [
+    async function getCurrentUser() {
 
-      LYTEWORD_CONCISE +
-      slug +
-      "/chapter-" +
-      chapterNumber +
-      ".md",
+      const {
+        data: { user }
+      } =
+        await supabaseClient.auth.getUser();
 
-      LYTEWORD_CONCISE +
-      slug +
-      "/" +
-      chapterNumber +
-      ".md",
+      return user;
+    }
 
-      LYTEWORD_CONCISE +
-      "books/" +
-      slug +
-      "/chapter-" +
-      chapterNumber +
-      ".md"
+    async function saveCloudItem(
+      itemType,
+      translation,
+      bookIndex,
+      chapterIndex,
+      verseNumber,
+      content
+    ) {
 
-    ];
+      const user =
+        await getCurrentUser();
 
-    for (const url of urls) {
-
-      try {
-
-        const response =
-          await fetch(url);
-
-        if (!response.ok) {
-          continue;
-        }
-
-        const markdown =
-          await response.text();
-
-        const entries =
-          parseConciseMarkdown(
-            markdown
-          );
-
-        if (entries.length) {
-
-          const result = {
-            entries: entries
-          };
-
-          commentaryCache[cacheKey] =
-            result;
-
-          return result;
-        }
-
+      if (!user) {
+        return;
       }
 
-      catch(error) {
+      const { error } =
+        await supabaseClient
+          .from("bible_user_data")
+          .upsert(
+            {
+              user_id: user.id,
+              item_type: itemType,
+              translation: translation,
+              book_index: bookIndex,
+              chapter_index: chapterIndex,
+              verse_number: verseNumber,
+              content: content,
+              updated_at:
+                new Date().toISOString()
+            },
+            {
+              onConflict:
+                "user_id,item_type,translation,book_index,chapter_index,verse_number"
+            }
+          );
 
-        console.warn(
-          "Concise source failed:",
+      if (error) {
+
+        console.error(
+          "Cloud save error:",
           error
         );
 
+        return;
       }
+
+      cloudBibleData[
+        getCloudKey(
+          itemType,
+          translation,
+          bookIndex,
+          chapterIndex,
+          verseNumber
+        )
+      ] = content;
 
     }
 
-    return loadHelloAOCommentary(
-      "matthew-henry",
-      bookName,
-      chapterNumber
-    );
-  }
+    async function deleteCloudItem(
+      itemType,
+      translation,
+      bookIndex,
+      chapterIndex,
+      verseNumber
+    ) {
 
+      const user =
+        await getCurrentUser();
 
-  function parseConciseMarkdown(
-    markdown
-  ) {
-
-    const lines =
-      markdown.split(/\r?\n/);
-
-    const entries = [];
-
-    let currentStart = null;
-    let currentEnd = null;
-    let currentText = [];
-
-    function saveCurrent() {
-
-      if (
-        currentStart !== null &&
-        currentText.length
-      ) {
-
-        const text =
-          currentText
-            .join(" ")
-            .replace(/\s+/g, " ")
-            .trim();
-
-        if (text) {
-
-          entries.push({
-
-            start: currentStart,
-
-            end: currentEnd,
-
-            text: text
-
-          });
-
-        }
-
+      if (!user) {
+        return;
       }
-    }
 
-    lines.forEach(function(line) {
+      const { error } =
+        await supabaseClient
+          .from("bible_user_data")
+          .delete()
+          .eq("user_id", user.id)
+          .eq("item_type", itemType)
+          .eq("translation", translation)
+          .eq("book_index", bookIndex)
+          .eq("chapter_index", chapterIndex)
+          .eq("verse_number", verseNumber);
 
-      const clean =
-        line.trim();
+      if (error) {
 
-      const match =
-        clean.match(
-          /^(?:#{1,6}\s*)?(?:Verses?|vv?\.)?\s*(\d+)(?:\s*[-–—]\s*(\d+))?\s*$/i
+        console.error(
+          "Cloud delete error:",
+          error
         );
-
-      if (match) {
-
-        saveCurrent();
-
-        currentText = [];
-
-        currentStart =
-          Number(match[1]);
-
-        currentEnd =
-          match[2]
-            ? Number(match[2])
-            : currentStart;
 
         return;
       }
 
-      if (
-        currentStart !== null &&
-        clean &&
-        !/^#{1,6}\s/.test(clean) &&
-        !/^---+$/.test(clean)
+      delete cloudBibleData[
+        getCloudKey(
+          itemType,
+          translation,
+          bookIndex,
+          chapterIndex,
+          verseNumber
+        )
+      ];
+
+    }
+
+    async function syncCloudChapter() {
+
+      cloudBibleData = {};
+
+      const user =
+        await getCurrentUser();
+
+      if (!user) {
+        return;
+      }
+
+      const { data, error } =
+        await supabaseClient
+          .from("bible_user_data")
+          .select("*")
+          .eq("user_id", user.id)
+          .eq(
+            "translation",
+            translationSelect.value
+          )
+          .eq(
+            "book_index",
+            currentBookIndex
+          )
+          .eq(
+            "chapter_index",
+            currentChapterIndex
+          );
+
+      if (error) {
+
+        console.error(
+          "Cloud sync error:",
+          error
+        );
+
+        return;
+      }
+
+      (data || []).forEach(function(item) {
+
+        const key =
+          getCloudKey(
+            item.item_type,
+            item.translation,
+            item.book_index,
+            item.chapter_index,
+            item.verse_number
+          );
+
+        cloudBibleData[key] =
+          item.content;
+
+      });
+
+    }
+
+    async function syncLocalBibleDataToCloud() {
+
+      const user =
+        await getCurrentUser();
+
+      if (!user) {
+        return;
+      }
+
+      for (
+        let i = 0;
+        i < localStorage.length;
+        i++
       ) {
 
-        currentText.push(clean);
+        const key =
+          localStorage.key(i);
+
+        if (!key) {
+          continue;
+        }
+
+        const match =
+          key.match(
+            /^bibleMastrey-(.+)-(\d+)-(\d+)-(note|highlight|bookmark)-(\d+)$/
+          );
+
+        if (!match) {
+          continue;
+        }
+
+        const translation =
+          match[1];
+
+        const bookIndex =
+          Number(match[2]);
+
+        const chapterIndex =
+          Number(match[3]);
+
+        const itemType =
+          match[4];
+
+        const verseNumber =
+          Number(match[5]);
+
+        const content =
+          localStorage.getItem(key);
+
+        if (
+          content === null ||
+          content === ""
+        ) {
+          continue;
+        }
+
+        await saveCloudItem(
+          itemType,
+          translation,
+          bookIndex,
+          chapterIndex,
+          verseNumber,
+          content
+        );
 
       }
 
-    });
+      console.log(
+        "Local Bible data synced to cloud."
+      );
 
-    saveCurrent();
+    }
 
-    return entries;
-  }
+    /* =========================
+       ACCOUNT
+    ========================= */
 
+    const accountModal =
+      document.getElementById("accountModal");
 
+    const accountButton =
+      document.getElementById("accountButton");
+
+    const closeAccountModal =
+      document.getElementById("closeAccountModal");
+
+    accountButton.addEventListener(
+      "click",
+      function() {
+
+        accountModal.style.display =
+          "flex";
+
+      }
+    );
+
+    closeAccountModal.addEventListener(
+      "click",
+      function() {
+
+        accountModal.style.display =
+          "none";
+
+      }
+    );
+
+    const accountEmail =
+      document.getElementById("accountEmail");
+
+    const accountPassword =
+      document.getElementById("accountPassword");
+
+    const accountMessage =
+      document.getElementById("accountMessage");
+
+    const signupAccountButton =
+      document.getElementById("signupAccountButton");
+
+    const loginAccountButton =
+      document.getElementById("loginAccountButton");
+
+    loginAccountButton.addEventListener(
+      "click",
+      async function() {
+
+        const email =
+          accountEmail.value.trim();
+
+        const password =
+          accountPassword.value;
+
+        if (!email || !password) {
+
+          accountMessage.textContent =
+            "Please enter your email and password.";
+
+          return;
+        }
+
+        const { data, error } =
+          await supabaseClient.auth.signInWithPassword({
+            email: email,
+            password: password
+          });
+
+        if (error) {
+
+          accountMessage.textContent =
+            error.message;
+
+          return;
+        }
+
+        accountMessage.textContent =
+          "Logged in successfully!";
+
+        await syncLocalBibleDataToCloud();
+
+        await syncCloudChapter();
+
+        accountButton.textContent =
+          "👤 Account";
+
+        accountModal.style.display =
+          "none";
+
+        console.log(
+          "BibleMastrey user logged in:",
+          data.user
+        );
+
+      }
+    );
+
+    signupAccountButton.addEventListener(
+      "click",
+      async function() {
+
+        const email =
+          accountEmail.value.trim();
+
+        const password =
+          accountPassword.value;
+
+        if (!email || !password) {
+
+          accountMessage.textContent =
+            "Please enter your email and password.";
+
+          return;
+        }
+
+        const { data, error } =
+          await supabaseClient.auth.signUp({
+            email: email,
+            password: password
+          });
+
+        if (error) {
+
+          accountMessage.textContent =
+            error.message;
+
+          return;
+        }
+
+        accountMessage.textContent =
+          "Account created successfully!";
+
+        console.log(
+          "BibleMastrey account created:",
+          data.user
+        );
+
+      }
+    );
+
+    /* =========================
+       COMMENTARY APIs
+    ========================= */
+
+    const COMMENTARY_API =
+      "https://bible.helloao.org/api/c/";
+
+    /*
+      HelloAO officially provides:
+
+      Matthew Henry
+      John Gill
+      Jamieson-Fausset-Brown
+      Adam Clarke
+    */
+
+    const commentaryApiIds = {
+
+      "matthew-henry-complete":
+        "matthew-henry",
+
+      "john-gill":
+        "john-gill",
+
+      "jfb":
+        "jamieson-fausset-brown",
+
+      "adam-clarke":
+        "adam-clarke"
+
+    };
+
+    /*
+      Matthew Henry Concise has its own
+      public LyteWord repository.
+    */
+
+    const LYTEWORD_CONCISE =
+      "https://raw.githubusercontent.com/lyteword/mhenry-concise/main/";
+
+    /*
+      Barnes is available through CCEL
+      and covers the New Testament.
+    */
+
+    const BARNES_CCEL =
+      "https://www.ccel.org/ccel/barnes/";
+
+    /* =========================
+       BARNES
+    ========================= */
   /* =========================
      BARNES
   ========================= */
