@@ -1923,12 +1923,29 @@ concordanceInput.addEventListener(
     text
   );
 }
-  function isHighlighted(v) {
-    return localStorage.getItem(
-      getHighlightKey(v)
-    ) === "true";
+ function isHighlighted(v) {
+
+  const cloudKey = getCloudKey(
+    "highlight",
+    translationSelect.value,
+    currentBookIndex,
+    currentChapterIndex,
+    v
+  );
+
+  if (
+    Object.prototype.hasOwnProperty.call(
+      cloudBibleData,
+      cloudKey
+    )
+  ) {
+    return cloudBibleData[cloudKey] === "true";
   }
 
+  return localStorage.getItem(
+    getHighlightKey(v)
+  ) === "true";
+}
  function setHighlight(v,value) {
 
   localStorage.setItem(
