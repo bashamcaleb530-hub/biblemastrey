@@ -3786,64 +3786,70 @@ highlightVerseButton.addEventListener(
 
   }
 );
-
+```js
   /* =========================
      BOOKMARK
   ========================= */
 
- bookmarkVerseButton.addEventListener(
-  "click",
-  function() {
+  bookmarkVerseButton.addEventListener(
+    "click",
+    function() {
 
-    if (
-      selectedVerseNumber === null
-    ) {
-      return;
+      if (
+        selectedVerseNumber === null
+      ) {
+        return;
+      }
+
+      const key =
+        getBookmarkKey(
+          selectedVerseNumber
+        );
+
+      const existing =
+        localStorage.getItem(key);
+
+      if (existing === "true") {
+
+        localStorage.removeItem(key);
+
+        saveCloudItem(
+          "bookmark",
+          translationSelect.value,
+          currentBookIndex,
+          currentChapterIndex,
+          selectedVerseNumber,
+          "false"
+        );
+
+      } else {
+
+        localStorage.setItem(
+          key,
+          "true"
+        );
+
+        saveCloudItem(
+          "bookmark",
+          translationSelect.value,
+          currentBookIndex,
+          currentChapterIndex,
+          selectedVerseNumber,
+          "true"
+        );
+
+      }
+
+      verseMenu.style.display =
+        "none";
+
     }
+  );
+```
 
-    const key =
-      getBookmarkKey(
-        selectedVerseNumber
-      );
 
-    const existing =
-      localStorage.getItem(key);
-
-    if (existing === "true") {
-
-      localStorage.removeItem(key);
-
-      saveCloudItem(
-        "bookmark",
-        translationSelect.value,
-        currentBookIndex,
-        currentChapterIndex,
-        selectedVerseNumber,
-        "false"
-      );
-
-    } else {
-
-      localStorage.setItem(
-        key,
-        "true"
-      );
-
-      saveCloudItem(
-        "bookmark",
-        translationSelect.value,
-        currentBookIndex,
-        currentChapterIndex,
-        selectedVerseNumber,
-        "true"
-      );
-    }
-
-    verseMenu.style.display =
-      "none";
-  }
-);
-
+   
+      
   /* =========================
      COPY
   ========================= */
