@@ -1656,1325 +1656,756 @@
     const BARNES_CCEL =
       "https://www.ccel.org/ccel/barnes/";
 
-    /* =========================
-       BARNES
-    ========================= */
-  /* =========================
-     BARNES
-  ========================= */
+   /* =========================
+   BARNES
+========================= */
 
-  const barnesBooks = {
+const barnesBooks = {
+  "Matthew": "matt",
+  "Mark": "mark",
+  "Luke": "luke",
+  "John": "john",
+  "Acts": "acts",
+  "Romans": "rom",
+  "1 Corinthians": "1cor",
+  "2 Corinthians": "2cor",
+  "Galatians": "gal",
+  "Ephesians": "eph",
+  "Philippians": "phil",
+  "Colossians": "col",
+  "1 Thessalonians": "1thess",
+  "2 Thessalonians": "2thess",
+  "1 Timothy": "1tim",
+  "2 Timothy": "2tim",
+  "Titus": "titus",
+  "Philemon": "philem",
+  "Hebrews": "heb",
+  "James": "james",
+  "1 Peter": "1pet",
+  "2 Peter": "2pet",
+  "1 John": "1john",
+  "2 John": "2john",
+  "3 John": "3john",
+  "Jude": "jude",
+  "Revelation": "rev"
+};
 
-    "Matthew": "matt",
-    "Mark": "mark",
-    "Luke": "luke",
-    "John": "john",
-    "Acts": "acts",
-    "Romans": "rom",
-    "1 Corinthians": "1cor",
-    "2 Corinthians": "2cor",
-    "Galatians": "gal",
-    "Ephesians": "eph",
-    "Philippians": "phil",
-    "Colossians": "col",
-    "1 Thessalonians": "1thess",
-    "2 Thessalonians": "2thess",
-    "1 Timothy": "1tim",
-    "2 Timothy": "2tim",
-    "Titus": "titus",
-    "Philemon": "philem",
-    "Hebrews": "heb",
-    "James": "james",
-    "1 Peter": "1pet",
-    "2 Peter": "2pet",
-    "1 John": "1john",
-    "2 John": "2john",
-    "3 John": "3john",
-    "Jude": "jude",
-    "Revelation": "rev"
+async function loadBarnes(bookName, chapterNumber) {
+  const bookId = barnesBooks[bookName];
 
-  };
-
-
-  async function loadBarnes(
-    bookName,
-    chapterNumber
-  ) {
-
-    const bookId =
-      barnesBooks[bookName];
-
-    if (!bookId) {
-
-      return {
-        entries: [],
-        unavailable: true
-      };
-
-    }
-
-    const cacheKey =
-      "barnes-" +
-      bookId +
-      "-" +
-      chapterNumber;
-
-    if (commentaryCache[cacheKey]) {
-      return commentaryCache[cacheKey];
-    }
-
-    const possibleUrls = [
-
-      BARNES_CCEL +
-      bookId,
-
-      BARNES_CCEL +
-      bookId +
-      ".html"
-
-    ];
-
-    for (const url of possibleUrls) {
-
-      try {
-
-        const response =
-          await fetch(url);
-
-        if (!response.ok) {
-          continue;
-        }
-
-        const html =
-          await response.text();
-
-        const entries =
-          parseBarnesHTML(
-            html,
-            bookName,
-            chapterNumber
-          );
-
-        if (entries.length) {
-
-          const result = {
-            entries: entries
-          };
-
-          commentaryCache[cacheKey] =
-            result;
-
-          return result;
-        }
-
-      }
-
-      catch(error) {
-
-        console.warn(
-          "Barnes source failed:",
-          error
-        );
-
-      }
-
-    }
-
+  if (!bookId) {
     return {
       entries: [],
       unavailable: true
     };
   }
 
+  const cacheKey =
+    "barnes-" +
+    bookId +
+    "-" +
+    chapterNumber;
 
-  function parseBarnesHTML(
-    html,
-    bookName,
-    chapterNumber
-  ) {
+  if (commentaryCache[cacheKey]) {
+    return commentaryCache[cacheKey];
+  }
 
-    const doc =
-      new DOMParser()
-        .parseFromString(
-          html,
-          "text/html"
-        );
+  const possibleUrls = [
+    BARNES_CCEL + bookId,
+    BARNES_CCEL + bookId + ".html"
+  ];
 
-    const text =
-      doc.body
-        ? doc.body.innerText
-        : "";
+  for (const url of possibleUrls) {
+    try {
+      const response = await fetch(url);
 
-    const entries = [];
+      if (!response.ok) {
+        continue;
+      }
 
-    const lines =
-      text
-        .split(/\r?\n/)
-        .map(function(x) {
-          return x.trim();
-        })
-        .filter(Boolean);
+      const html = await response.text();
 
-    let current = null;
+      const entries = parseBarnesHTML(
+        html,
+        bookName,
+        chapterNumber
+      );
 
-    lines.forEach(function(line) {
-
-      const match =
-        line.match(
-          new RegExp(
-            "^" +
-            escapeRegExp(bookName) +
-            "\\s+" +
-            chapterNumber +
-            ":(\\d+)(?:-(\\d+))?$",
-            "i"
-          )
-        );
-
-      if (match) {
-
-        if (
-          current &&
-          current.text
-        ) {
-
-          entries.push(current);
-
-        }
-
-        current = {
-
-          verse:
-            Number(match[1]),
-
-          end:
-            match[2]
-              ? Number(match[2])
-              : Number(match[1]),
-
-          text: ""
-
+      if (entries.length) {
+        const result = {
+          entries: entries
         };
 
-        return;
+        commentaryCache[cacheKey] = result;
+
+        return result;
       }
-
-      if (current) {
-
-        if (
-          !/^(Barnes|Notes|Commentary)$/i
-            .test(line)
-        ) {
-
-          current.text +=
-            (current.text
-              ? "\n"
-              : "") +
-            line;
-
-        }
-
-      }
-
-    });
-
-    if (
-      current &&
-      current.text
-    ) {
-
-      entries.push(current);
-
     }
 
-    return entries;
+    catch (error) {
+      console.warn(
+        "Barnes source failed:",
+        error
+      );
+    }
   }
 
+  return {
+    entries: [],
+    unavailable: true
+  };
+}
 
-  function findBarnesCommentary(
-    data,
-    verseNumber
-  ) {
 
-    if (
-      !data ||
-      !Array.isArray(data.entries)
-    ) {
+function parseBarnesHTML(
+  html,
+  bookName,
+  chapterNumber
+) {
+  const doc =
+    new DOMParser().parseFromString(
+      html,
+      "text/html"
+    );
 
-      return "";
-
-    }
-
-    const target =
-      Number(verseNumber);
-
-    const match =
-      data.entries.find(
-        function(entry) {
-
-          return (
-            target >=
-              Number(entry.verse) &&
-            target <=
-              Number(
-                entry.end ||
-                entry.verse
-              )
-          );
-
-        }
-      );
-
-    return match
-      ? match.text
+  const text =
+    doc.body
+      ? doc.body.innerText
       : "";
-  }
 
+  const entries = [];
 
-  function escapeRegExp(text) {
+  const lines =
+    text
+      .split(/\r?\n/)
+      .map(function(line) {
+        return line.trim();
+      })
+      .filter(Boolean);
 
-    return String(text)
-      .replace(
-        /[.*+?^${}()|[\]\\]/g,
-        "\\$&"
+  let current = null;
+
+  lines.forEach(function(line) {
+    const match =
+      line.match(
+        new RegExp(
+          "^" +
+          escapeRegExp(bookName) +
+          "\\s+" +
+          chapterNumber +
+          ":(\\d+)(?:-(\\d+))?$",
+          "i"
+        )
       );
-  }
 
+    if (match) {
+      if (
+        current &&
+        current.text
+      ) {
+        entries.push(current);
+      }
 
-  /* =========================
-     LOAD SELECTED COMMENTARY
-  ========================= */
+      current = {
+        verse: Number(match[1]),
+        end: match[2]
+          ? Number(match[2])
+          : Number(match[1]),
+        text: ""
+      };
 
-  async function loadSelectedCommentary(
-    bookName,
-    chapterNumber
+      return;
+    }
+
+    if (current) {
+      if (
+        !/^(Barnes|Notes|Commentary)$/i.test(
+          line
+        )
+      ) {
+        current.text +=
+          (current.text
+            ? "\n"
+            : "") +
+          line;
+      }
+    }
+  });
+
+  if (
+    current &&
+    current.text
   ) {
+    entries.push(current);
+  }
 
-    const selected =
-      commentarySelect.value;
+  return entries;
+}
 
-    if (
-      selected ===
-      "matthew-henry-concise"
-    ) {
 
-      return loadMatthewHenryConcise(
-        bookName,
-        chapterNumber
-      );
+function findBarnesCommentary(
+  data,
+  verseNumber
+) {
+  if (
+    !data ||
+    !Array.isArray(data.entries)
+  ) {
+    return "";
+  }
 
-    }
+  const target =
+    Number(verseNumber);
 
-    if (
-      selected === "barnes"
-    ) {
+  const match =
+    data.entries.find(
+      function(entry) {
+        return (
+          target >=
+            Number(entry.verse) &&
+          target <=
+            Number(
+              entry.end ||
+              entry.verse
+            )
+        );
+      }
+    );
 
-      return loadBarnes(
-        bookName,
-        chapterNumber
-      );
+  return match
+    ? match.text
+    : "";
+}
 
-    }
 
-    const apiId =
-      commentaryApiIds[selected];
+function escapeRegExp(text) {
+  return String(text).replace(
+    /[.*+?^${}()|[\]\\]/g,
+    "\\$&"
+  );
+}
 
-    if (!apiId) {
 
-      throw new Error(
-        "Commentary source is not configured."
-      );
+/* =========================
+   LOAD SELECTED COMMENTARY
+========================= */
 
-    }
+async function loadSelectedCommentary(
+  bookName,
+  chapterNumber
+) {
+  const selected =
+    commentarySelect.value;
 
-    return loadHelloAOCommentary(
-      apiId,
+  if (
+    selected ===
+    "matthew-henry-concise"
+  ) {
+    return loadMatthewHenryConcise(
       bookName,
       chapterNumber
     );
   }
 
+  if (selected === "barnes") {
+    return loadBarnes(
+      bookName,
+      chapterNumber
+    );
+  }
 
-  /* =========================
-     POPULATE COMMENTARY
-  ========================= */
+  const apiId =
+    commentaryApiIds[selected];
 
-  async function populateCommentaryPanels(
+  if (!apiId) {
+    throw new Error(
+      "Commentary source is not configured."
+    );
+  }
+
+  return loadHelloAOCommentary(
+    apiId,
     bookName,
     chapterNumber
-  ) {
+  );
+}
 
-    if (!commentaryVisible) {
-      return;
-    }
 
-    const panels =
-      document.querySelectorAll(
-        ".commentary-panel"
-      );
+/* =========================
+   POPULATE COMMENTARY
+========================= */
 
-    panels.forEach(function(panel) {
-
-      panel.classList.add("show");
-
-      const title =
-        panel.querySelector(
-          ".commentary-title"
-        );
-
-      if (title) {
-
-        title.textContent =
-          getCommentaryName();
-
-      }
-
-      const text =
-        panel.querySelector(
-          ".commentary-text"
-        );
-
-      if (text) {
-
-        text.innerHTML =
-          '<span class="commentary-loading">' +
-          "Loading commentary..." +
-          "</span>";
-
-      }
-
-    });
-
-    try {
-
-      const data =
-        await loadSelectedCommentary(
-          bookName,
-          chapterNumber
-        );
-
-      panels.forEach(function(panel) {
-
-        const verseNumber =
-          panel.dataset.verseNumber;
-
-        let commentaryText = "";
-
-        if (
-          commentarySelect.value ===
-          "barnes"
-        ) {
-
-          commentaryText =
-            findBarnesCommentary(
-              data,
-              verseNumber
-            );
-
-        }
-
-        else {
-
-          commentaryText =
-            findCommentaryForVerse(
-              data,
-              verseNumber
-            );
-
-        }
-
-        const textElement =
-          panel.querySelector(
-            ".commentary-text"
-          );
-
-        if (!textElement) {
-          return;
-        }
-
-        if (commentaryText) {
-
-          textElement.textContent =
-            commentaryText;
-
-        }
-
-        else if (
-          data.unavailable
-        ) {
-
-          textElement.innerHTML =
-            '<span class="commentary-placeholder">' +
-            "Barnes' Notes is available for the New Testament only." +
-            "</span>";
-
-        }
-
-        else {
-
-          textElement.innerHTML =
-            '<span class="commentary-placeholder">' +
-            "No commentary entry was found for this verse." +
-            "</span>";
-
-        }
-
-      });
-
-      status.textContent =
-        getCommentaryName() +
-        " loaded.";
-
-    }
-
-    catch(error) {
-
-      console.error(
-        "Commentary error:",
-        error
-      );
-
-      panels.forEach(function(panel) {
-
-        const textElement =
-          panel.querySelector(
-            ".commentary-text"
-          );
-
-        if (textElement) {
-
-          textElement.innerHTML =
-            '<span class="commentary-error">' +
-            "Unable to load this commentary right now." +
-            "</span>";
-
-        }
-
-      });
-
-      status.textContent =
-        getCommentaryName() +
-        " unavailable for this passage.";
-
-    }
+async function populateCommentaryPanels(
+  bookName,
+  chapterNumber
+) {
+  if (!commentaryVisible) {
+    return;
   }
 
+  const panels =
+    document.querySelectorAll(
+      ".commentary-panel"
+    );
 
-  /* =========================
-     VERSE SELECTION
-  ========================= */
-
-  function selectVerse(
-    verseNumber,
-    verseElement
-  ) {
-
-    document
-      .querySelectorAll(
-        ".verse-text"
-      )
-      .forEach(function(element) {
-
-        element.classList.remove(
-          "selected"
-        );
-
-      });
-
-    if (verseElement) {
-
-      verseElement.classList.add(
-        "selected"
-      );
-
-    }
-
-    selectedVerseNumber =
-      Number(verseNumber);
-
-    verseSelect.value =
-      Number(verseNumber);
-  }
-
-
-  /* =========================
-     LOAD CHAPTER
-  ========================= */
-
-  async function loadChapter() {
-
-    currentBookIndex =
-      Number(bookSelect.value);
-
-    currentChapterIndex =
-      Number(chapterSelect.value);
-
-    if (
-      isNaN(currentBookIndex) ||
-      isNaN(currentChapterIndex)
-    ) {
-      return;
-    }
-
-    await syncCloudChapter();
-
-    const book =
-      books[currentBookIndex];
-
-    if (!book) {
-      return;
-    }
-
-    const chapters =
-      getChapters(book);
-
-    const chapter =
-      chapters[currentChapterIndex];
-
-    if (!chapter) {
-      return;
-    }
-
-    const bookName =
-      getBookName(book);
-
-    const chapterNumber =
-      getChapterNumber(
-        chapter,
-        currentChapterIndex
-      );
-
-    const verses =
-      getVerses(chapter);
-
-    chapterContent.innerHTML = "";
+  panels.forEach(function(panel) {
+    panel.classList.add("show");
 
     const title =
-      document.createElement("h2");
-
-    title.id =
-      "chapterTitle";
-
-    title.textContent =
-      bookName +
-      " " +
-      chapterNumber;
-
-    chapterContent.appendChild(title);
-
-    if (!verses.length) {
-
-      const message =
-        document.createElement("p");
-
-      message.textContent =
-        "No verses found.";
-
-      chapterContent.appendChild(
-        message
+      panel.querySelector(
+        ".commentary-title"
       );
 
-      return;
+    if (title) {
+      title.textContent =
+        getCommentaryName();
     }
 
-
-    /* =========================
-       RENDER VERSES
-    ========================= */
-
-    verses.forEach(
-      function(verse, index) {
-
-        const verseNumber =
-          getVerseNumber(
-            verse,
-            index
-          );
-
-        const verseText =
-          getVerseText(verse);
-
-        const verseRow =
-          document.createElement("div");
-
-        verseRow.className =
-          "verse-row";
-
-        const verseLeft =
-          document.createElement("div");
-
-        verseLeft.className =
-          "verse-left";
-
-        const verseElement =
-          document.createElement("div");
-
-        verseElement.className =
-          "verse-text";
-
-        if (
-          isHighlighted(verseNumber)
-        ) {
-
-          verseElement.classList.add(
-            "permanent-highlight"
-          );
-
-        }
-
-        const numberSpan =
-          document.createElement("span");
-
-        numberSpan.className =
-          "verse-number";
-
-        numberSpan.textContent =
-          verseNumber;
-
-        verseElement.appendChild(
-          numberSpan
-        );
-
-        const textSpan =
-          document.createElement("span");
-
-        textSpan.textContent =
-          verseText;
-
-        verseElement.appendChild(
-          textSpan
-        );
-
-        verseElement.addEventListener(
-          "click",
-          function(event) {
-
-            selectVerse(
-              verseNumber,
-              verseElement
-            );
-
-            showVerseMenu(
-              event.pageX,
-              event.pageY,
-              verseNumber,
-              verseText
-            );
-
-          }
-        );
-
-        verseLeft.appendChild(
-          verseElement
-        );
-
-
-        /* =========================
-           NOTES
-        ========================= */
-
-        const notesArea =
-          document.createElement("div");
-
-        notesArea.className =
-          "notes-area";
-
-        const notesLabel =
-          document.createElement("label");
-
-        notesLabel.className =
-          "notes-label";
-
-        notesLabel.textContent =
-          "📝 Your Notes";
-
-        const note =
-          document.createElement("textarea");
-
-        note.className =
-          "verse-note";
-
-        note.placeholder =
-          "Write your notes about this verse...";
-
-        note.value =
-          loadNote(verseNumber);
-
-        const noteStatus =
-          document.createElement("span");
-
-        noteStatus.className =
-          "note-status";
-
-        note.addEventListener(
-          "input",
-          function() {
-
-            saveNote(
-              verseNumber,
-              note.value,
-              noteStatus
-            );
-
-          }
-        );
-
-        notesArea.appendChild(
-          notesLabel
-        );
-
-        notesArea.appendChild(
-          note
-        );
-
-        notesArea.appendChild(
-          noteStatus
-        );
-
-        verseLeft.appendChild(
-          notesArea
-        );
-
-
-        /* =========================
-           COMMENTARY
-        ========================= */
-
-        const commentaryPanel =
-          document.createElement("div");
-
-        commentaryPanel.className =
-          "commentary-panel";
-
-        commentaryPanel.dataset.verseNumber =
-          verseNumber;
-
-        if (commentaryVisible) {
-
-          commentaryPanel.classList.add(
-            "show"
-          );
-
-        }
-
-        const commentaryTitle =
-          document.createElement("div");
-
-        commentaryTitle.className =
-          "commentary-title";
-
-        commentaryTitle.textContent =
-          getCommentaryName();
-
-        const commentaryReference =
-          document.createElement("div");
-
-        commentaryReference.className =
-          "commentary-reference";
-
-        commentaryReference.textContent =
-          bookName +
-          " " +
-          chapterNumber +
-          ":" +
-          verseNumber;
-
-        const commentaryText =
-          document.createElement("div");
-
-        commentaryText.className =
-          "commentary-text";
-
-        commentaryText.innerHTML =
-          commentaryVisible
-
-            ? '<span class="commentary-loading">Loading commentary...</span>'
-
-            : '<span class="commentary-placeholder">Turn on Bible Commentary to view this.</span>';
-
-        commentaryPanel.appendChild(
-          commentaryTitle
-        );
-
-        commentaryPanel.appendChild(
-          commentaryReference
-        );
-
-        commentaryPanel.appendChild(
-          commentaryText
-        );
-
-        verseRow.appendChild(
-          verseLeft
-        );
-
-        verseRow.appendChild(
-          commentaryPanel
-        );
-
-        chapterContent.appendChild(
-          verseRow
-        );
-
-      }
-    );
-
-
-    /* =========================
-       VERSE SELECTOR
-    ========================= */
-
-    verseSelect.innerHTML =
-      '<option value="">Choose a verse</option>';
-
-    verses.forEach(
-      function(verse, index) {
-
-        const verseNumber =
-          getVerseNumber(
-            verse,
-            index
-          );
-
-        const option =
-          document.createElement("option");
-
-        option.value =
-          verseNumber;
-
-        option.textContent =
-          "Verse " +
-          verseNumber;
-
-        verseSelect.appendChild(
-          option
-        );
-
-      }
-    );
-
-
-    /* =========================
-       RESTORE SELECTED VERSE
-    ========================= */
-
-    if (
-      selectedVerseNumber !== null
-    ) {
-
-      const selectedElement =
-        Array.from(
-          document.querySelectorAll(
-            ".verse-text"
-          )
-        ).find(function(element) {
-
-          const number =
-            element.querySelector(
-              ".verse-number"
-            );
-
-          return (
-            number &&
-            number.textContent ===
-            String(
-              selectedVerseNumber
-            )
-          );
-
-        });
-
-      if (selectedElement) {
-
-        selectVerse(
-          selectedVerseNumber,
-          selectedElement
-        );
-
-      }
-
-      else {
-
-        selectedVerseNumber =
-          null;
-
-      }
-
+    const text =
+      panel.querySelector(
+        ".commentary-text"
+      );
+
+    if (text) {
+      text.innerHTML =
+        '<span class="commentary-loading">' +
+        "Loading commentary..." +
+        "</span>";
     }
+  });
 
-
-    updateNavigation();
-
-    runSearch();
-
-    if (commentaryVisible) {
-
-      populateCommentaryPanels(
+  try {
+    const data =
+      await loadSelectedCommentary(
         bookName,
         chapterNumber
       );
 
-    }
-  }
+    panels.forEach(function(panel) {
+      const verseNumber =
+        panel.dataset.verseNumber;
 
+      let commentaryText = "";
 
-  /* =========================
-     CHAPTERS
-  ========================= */
-
-  function loadChapters() {
-
-    const bookIndex =
-      Number(bookSelect.value);
-
-    if (
-      isNaN(bookIndex) ||
-      !books[bookIndex]
-    ) {
-
-      chapterSelect.innerHTML =
-        '<option value="">Choose a chapter</option>';
-
-      return;
-    }
-
-    const chapters =
-      getChapters(
-        books[bookIndex]
-      );
-
-    chapterSelect.innerHTML =
-      '<option value="">Choose a chapter</option>';
-
-    chapters.forEach(
-      function(chapter, index) {
-
-        const option =
-          document.createElement("option");
-
-        option.value =
-          index;
-
-        option.textContent =
-          getChapterNumber(
-            chapter,
-            index
+      if (
+        commentarySelect.value ===
+        "barnes"
+      ) {
+        commentaryText =
+          findBarnesCommentary(
+            data,
+            verseNumber
           );
+      }
 
-        chapterSelect.appendChild(
-          option
+      else {
+        commentaryText =
+          findCommentaryForVerse(
+            data,
+            verseNumber
+          );
+      }
+
+      const textElement =
+        panel.querySelector(
+          ".commentary-text"
         );
 
+      if (!textElement) {
+        return;
       }
+
+      if (commentaryText) {
+        textElement.textContent =
+          commentaryText;
+      }
+
+      else if (data.unavailable) {
+        textElement.innerHTML =
+          '<span class="commentary-placeholder">' +
+          "Barnes' Notes is available for the New Testament only." +
+          "</span>";
+      }
+
+      else {
+        textElement.innerHTML =
+          '<span class="commentary-placeholder">' +
+          "No commentary entry was found for this verse." +
+          "</span>";
+      }
+    });
+
+    status.textContent =
+      getCommentaryName() +
+      " loaded.";
+  }
+
+  catch (error) {
+    console.error(
+      "Commentary error:",
+      error
+    );
+
+    panels.forEach(function(panel) {
+      const textElement =
+        panel.querySelector(
+          ".commentary-text"
+        );
+
+      if (textElement) {
+        textElement.innerHTML =
+          '<span class="commentary-error">' +
+          "Unable to load this commentary right now." +
+          "</span>";
+      }
+    });
+
+    status.textContent =
+      getCommentaryName() +
+      " unavailable for this passage.";
+  }
+}
+
+
+/* =========================
+   VERSE SELECTION
+========================= */
+
+function selectVerse(
+  verseNumber,
+  verseElement
+) {
+  document
+    .querySelectorAll(".verse-text")
+    .forEach(function(element) {
+      element.classList.remove(
+        "selected"
+      );
+    });
+
+  if (verseElement) {
+    verseElement.classList.add(
+      "selected"
     );
   }
 
+  selectedVerseNumber =
+    Number(verseNumber);
 
-  /* =========================
-     START BIBLE
-  ========================= */
-
-  async function startBible() {
-
-    try {
-
-      const selectedTranslation =
-        translationSelect.value;
-
-      /*
-        Save the current reference before
-        changing translation.
-      */
-
-      const oldBookIndex =
-        currentBookIndex;
-
-      const oldChapterIndex =
-        currentChapterIndex;
-
-      const oldVerseNumber =
-        selectedVerseNumber;
+  verseSelect.value =
+    Number(verseNumber);
+}
 
 
-      /* =========================
-         LOAD TRANSLATION
-      ========================= */
+/* =========================
+   LOAD CHAPTER
+========================= */
 
-      if (
-        selectedTranslation ===
-        "WEB"
-      ) {
+async function loadChapter() {
+  currentBookIndex =
+    Number(bookSelect.value);
 
-        bibleData =
-          await getWEB();
+  currentChapterIndex =
+    Number(chapterSelect.value);
 
-      }
+  if (
+    isNaN(currentBookIndex) ||
+    isNaN(currentChapterIndex)
+  ) {
+    return;
+  }
 
-      else if (
-        selectedTranslation ===
-        "ASV"
-      ) {
+  await syncCloudChapter();
 
-        bibleData =
-          await getASV();
+  const book =
+    books[currentBookIndex];
 
-      }
+  if (!book) {
+    return;
+  }
 
-      else {
+  const chapters =
+    getChapters(book);
 
-        bibleData =
-          await getKJV();
+  const chapter =
+    chapters[currentChapterIndex];
 
-      }
+  if (!chapter) {
+    return;
+  }
 
-      books =
-        getBooks(bibleData);
+  const bookName =
+    getBookName(book);
 
-      if (!books.length) {
+  const chapterNumber =
+    getChapterNumber(
+      chapter,
+      currentChapterIndex
+    );
 
-        throw new Error(
-          "No Bible books were found."
-        );
+  const verses =
+    getVerses(chapter);
 
-      }
+  chapterContent.innerHTML = "";
 
+  const title =
+    document.createElement("h2");
 
-      /* =========================
-         BOOK SELECTOR
-      ========================= */
+  title.id =
+    "chapterTitle";
 
-      bookSelect.innerHTML =
-        '<option value="">Choose a book</option>';
+  title.textContent =
+    bookName +
+    " " +
+    chapterNumber;
 
-      books.forEach(
-        function(book, index) {
+  chapterContent.appendChild(
+    title
+  );
 
-          const option =
-            document.createElement(
-              "option"
-            );
+  if (!verses.length) {
+    const message =
+      document.createElement("p");
 
-          option.value =
-            index;
+    message.textContent =
+      "No verses found.";
 
-          option.textContent =
-            getBookName(book);
+    chapterContent.appendChild(
+      message
+    );
 
-          bookSelect.appendChild(
-            option
-          );
-
-        }
-      );
-
-
-      /* =========================
-         RESTORE BOOK / CHAPTER
-      ========================= */
-
-      if (
-        oldBookIndex >= 0 &&
-        oldBookIndex < books.length
-      ) {
-
-        bookSelect.value =
-          oldBookIndex;
-
-        loadChapters();
-
-        const chapters =
-          getChapters(
-            books[oldBookIndex]
-          );
-
-        if (
-          oldChapterIndex >= 0 &&
-          oldChapterIndex <
-          chapters.length
-        ) {
-
-          chapterSelect.value =
-            oldChapterIndex;
-
-          /*
-            Restore verse reference after
-            the new translation loads.
-          */
-
-          selectedVerseNumber =
-            oldVerseNumber;
-
-          await loadChapter();
-
-        }
-
-      }
-
-
-      /* =========================
-         TRANSLATION STATUS
-      ========================= */
-
-      let translationName =
-        "King James Version";
-
-      if (
-        selectedTranslation ===
-        "WEB"
-      ) {
-
-        translationName =
-          "World English Bible";
-
-      }
-
-      else if (
-        selectedTranslation ===
-        "ASV"
-      ) {
-
-        translationName =
-          "American Standard Version";
-
-      }
-
-      if (
-        currentBookIndex < 0 ||
-        currentChapterIndex < 0
-      ) {
-
-        status.textContent =
-          translationName +
-          " loaded. Choose a book and chapter.";
-
-      }
-
-    }
-
-    catch(error) {
-
-      console.error(error);
-
-      status.textContent =
-        error.message ||
-        "Unable to load the Bible.";
-
-    }
+    return;
   }
 
 
   /* =========================
-     COMMENTARY BUTTON
+     RENDER VERSES
   ========================= */
 
-  commentaryButton.addEventListener(
-    "click",
-    function() {
-
-      commentaryVisible =
-        !commentaryVisible;
-
-      if (commentaryVisible) {
-
-        commentarySelector.classList.add(
-          "show"
+  verses.forEach(
+    function(verse, index) {
+      const verseNumber =
+        getVerseNumber(
+          verse,
+          index
         );
 
-        commentaryButton.textContent =
-          "📖 Hide Bible Commentary";
+      const verseText =
+        getVerseText(verse);
 
-      }
+      const verseRow =
+        document.createElement("div");
 
-      else {
+      verseRow.className =
+        "verse-row";
 
-        commentarySelector.classList.remove(
-          "show"
-        );
+      const verseLeft =
+        document.createElement("div");
 
-        commentaryButton.textContent =
-          "📖 Bible Commentary";
+      verseLeft.className =
+        "verse-left";
 
-      }
+      const verseElement =
+        document.createElement("div");
+
+      verseElement.className =
+        "verse-text";
 
       if (
-        currentBookIndex >= 0 &&
-        currentChapterIndex >= 0
+        isHighlighted(
+          verseNumber
+        )
       ) {
-
-        loadChapter();
-
+        verseElement.classList.add(
+          "permanent-highlight"
+        );
       }
 
-    }
-  );
+      const numberSpan =
+        document.createElement("span");
+
+      numberSpan.className =
+        "verse-number";
+
+      numberSpan.textContent =
+        verseNumber;
+
+      verseElement.appendChild(
+        numberSpan
+      );
+
+      const textSpan =
+        document.createElement("span");
+
+      textSpan.textContent =
+        verseText;
+
+      verseElement.appendChild(
+        textSpan
+      );
+
+      verseElement.addEventListener(
+        "click",
+        function(event) {
+          selectVerse(
+            verseNumber,
+            verseElement
+          );
+
+          showVerseMenu(
+            event.pageX,
+            event.pageY,
+            verseNumber,
+            verseText
+          );
+        }
+      );
+
+      verseLeft.appendChild(
+        verseElement
+      );
 
 
-  /* =========================
-     COMMENTARY CHANGE
-  ========================= */
+      /* =========================
+         NOTES
+      ========================= */
 
-  commentarySelect.addEventListener(
-    "change",
-    function() {
+      const notesArea =
+        document.createElement("div");
+
+      notesArea.className =
+        "notes-area";
+
+      const notesLabel =
+        document.createElement("label");
+
+      notesLabel.className =
+        "notes-label";
+
+      notesLabel.textContent =
+        "📝 Your Notes";
+
+      const note =
+        document.createElement("textarea");
+
+      note.className =
+        "verse-note";
+
+      note.placeholder =
+        "Write your notes about this verse...";
+
+      note.value =
+        loadNote(verseNumber);
+
+      const noteStatus =
+        document.createElement("span");
+
+      noteStatus.className =
+        "note-status";
+
+      note.addEventListener(
+        "input",
+        function() {
+          saveNote(
+            verseNumber,
+            note.value,
+            noteStatus
+          );
+        }
+      );
+
+      notesArea.appendChild(
+        notesLabel
+      );
+
+      notesArea.appendChild(
+        note
+      );
+
+      notesArea.appendChild(
+        noteStatus
+      );
+
+      verseLeft.appendChild(
+        notesArea
+      );
+
+
+      /* =========================
+         COMMENTARY
+      ========================= */
+
+      const commentaryPanel =
+        document.createElement("div");
+
+      commentaryPanel.className =
+        "commentary-panel";
+
+      commentaryPanel.dataset.verseNumber =
+        verseNumber;
 
       if (commentaryVisible) {
-
-        loadChapter();
-
+        commentaryPanel.classList.add(
+          "show"
+        );
       }
 
-    }
-  );
+      const commentaryTitle =
+        document.createElement("div");
 
+      commentaryTitle.className =
+        "commentary-title";
 
-  /* =========================
-     BOOK CHANGE
-  ========================= */
+      commentaryTitle.textContent =
+        getCommentaryName();
 
-  bookSelect.addEventListener(
-    "change",
-    function() {
+      const commentaryReference =
+        document.createElement("div");
 
-      currentBookIndex =
-        Number(bookSelect.value);
+      commentaryReference.className =
+        "commentary-reference";
 
-      currentChapterIndex =
-        -1;
+      commentaryReference.textContent =
+        bookName +
+        " " +
+        chapterNumber +
+        ":" +
+        verseNumber;
 
-      selectedVerseNumber =
-        null;
+      const commentaryText =
+        document.createElement("div");
 
-      loadChapters();
+      commentaryText.className =
+        "commentary-text";
 
-      chapterContent.innerHTML =
-        '<h2 id="chapterTitle">Bible</h2>' +
-        '<p>Choose a chapter to begin reading.</p>';
+      commentaryText.innerHTML =
+        commentaryVisible
+          ? '<span class="commentary-loading">Loading commentary...</span>'
+          : '<span class="commentary-placeholder">Turn on Bible Commentary to view this.</span>';
 
-      verseSelect.innerHTML =
-        '<option value="">Choose a verse</option>';
+      commentaryPanel.appendChild(
+        commentaryTitle
+      );
 
-    }
-  );
+      commentaryPanel.appendChild(
+        commentaryReference
+      );
 
+      commentaryPanel.appendChild(
+        commentaryText
+      );
 
-  /* =========================
-     CHAPTER CHANGE
-  ========================= */
+      verseRow.appendChild(
+        verseLeft
+      );
 
-  chapterSelect.addEventListener(
-    "change",
-    function() {
+      verseRow.appendChild(
+        commentaryPanel
+      );
 
-      currentChapterIndex =
-        Number(
-          chapterSelect.value
-        );
-
-      selectedVerseNumber =
-        null;
-
-      loadChapter();
-
+      chapterContent.appendChild(
+        verseRow
+      );
     }
   );
 
@@ -2983,566 +2414,888 @@
      VERSE SELECTOR
   ========================= */
 
-  verseSelect.addEventListener(
-    "change",
-    function() {
+  verseSelect.innerHTML =
+    '<option value="">Choose a verse</option>';
 
+  verses.forEach(
+    function(verse, index) {
       const verseNumber =
-        verseSelect.value;
+        getVerseNumber(
+          verse,
+          index
+        );
 
-      if (!verseNumber) {
-        return;
-      }
+      const option =
+        document.createElement("option");
 
-      const elements =
+      option.value =
+        verseNumber;
+
+      option.textContent =
+        "Verse " +
+        verseNumber;
+
+      verseSelect.appendChild(
+        option
+      );
+    }
+  );
+
+
+  /* =========================
+     RESTORE SELECTED VERSE
+  ========================= */
+
+  if (
+    selectedVerseNumber !== null
+  ) {
+    const selectedElement =
+      Array.from(
         document.querySelectorAll(
           ".verse-text"
+        )
+      ).find(function(element) {
+        const number =
+          element.querySelector(
+            ".verse-number"
+          );
+
+        return (
+          number &&
+          number.textContent ===
+          String(
+            selectedVerseNumber
+          )
         );
+      });
 
-      elements.forEach(
-        function(element) {
-
-          const number =
-            element.querySelector(
-              ".verse-number"
-            );
-
-          if (
-            number &&
-            number.textContent ===
-            String(verseNumber)
-          ) {
-
-            selectVerse(
-              verseNumber,
-              element
-            );
-
-            element.scrollIntoView({
-              behavior: "smooth",
-              block: "center"
-            });
-
-          }
-
-        }
+    if (selectedElement) {
+      selectVerse(
+        selectedVerseNumber,
+        selectedElement
       );
-
     }
-  );
 
-
-  /* =========================
-     VERSE MENU
-  ========================= */
-
-  function showVerseMenu(
-    x,
-    y,
-    verseNumber,
-    verseText
-  ) {
-
-    selectedVerseNumber =
-      Number(verseNumber);
-
-    verseMenu.style.display =
-      "block";
-
-    verseMenu.style.left =
-      x + "px";
-
-    verseMenu.style.top =
-      y + "px";
-
-    verseMenu.dataset.verseText =
-      verseText;
-
+    else {
+      selectedVerseNumber =
+        null;
+    }
   }
 
+  updateNavigation();
 
-  /* =========================
-     HIGHLIGHT
-  ========================= */
+  runSearch();
 
-  highlightVerseButton.addEventListener(
-    "click",
-    function() {
+  if (commentaryVisible) {
+    populateCommentaryPanels(
+      bookName,
+      chapterNumber
+    );
+  }
+}
 
-      if (
-        selectedVerseNumber ===
-        null
-      ) {
-        return;
-      }
 
-      const currentlyHighlighted =
-        isHighlighted(
-          selectedVerseNumber
+/* =========================
+   CHAPTERS
+========================= */
+
+function loadChapters() {
+  const bookIndex =
+    Number(bookSelect.value);
+
+  if (
+    isNaN(bookIndex) ||
+    !books[bookIndex]
+  ) {
+    chapterSelect.innerHTML =
+      '<option value="">Choose a chapter</option>';
+
+    return;
+  }
+
+  const chapters =
+    getChapters(
+      books[bookIndex]
+    );
+
+  chapterSelect.innerHTML =
+    '<option value="">Choose a chapter</option>';
+
+  chapters.forEach(
+    function(chapter, index) {
+      const option =
+        document.createElement(
+          "option"
         );
 
-      setHighlight(
-        selectedVerseNumber,
-        !currentlyHighlighted
+      option.value =
+        index;
+
+      option.textContent =
+        getChapterNumber(
+          chapter,
+          index
+        );
+
+      chapterSelect.appendChild(
+        option
+      );
+    }
+  );
+}
+
+
+/* =========================
+   START BIBLE
+========================= */
+
+async function startBible() {
+  try {
+    const selectedTranslation =
+      translationSelect.value;
+
+    const oldBookIndex =
+      currentBookIndex;
+
+    const oldChapterIndex =
+      currentChapterIndex;
+
+    const oldVerseNumber =
+      selectedVerseNumber;
+
+
+    /* =========================
+       LOAD TRANSLATION
+    ========================= */
+
+    if (
+      selectedTranslation ===
+      "WEB"
+    ) {
+      bibleData =
+        await getWEB();
+    }
+
+    else if (
+      selectedTranslation ===
+      "ASV"
+    ) {
+      bibleData =
+        await getASV();
+    }
+
+    else {
+      bibleData =
+        await getKJV();
+    }
+
+    books =
+      getBooks(bibleData);
+
+    if (!books.length) {
+      throw new Error(
+        "No Bible books were found."
+      );
+    }
+
+
+    /* =========================
+       BOOK SELECTOR
+    ========================= */
+
+    bookSelect.innerHTML =
+      '<option value="">Choose a book</option>';
+
+    books.forEach(
+      function(book, index) {
+        const option =
+          document.createElement(
+            "option"
+          );
+
+        option.value =
+          index;
+
+        option.textContent =
+          getBookName(book);
+
+        bookSelect.appendChild(
+          option
+        );
+      }
+    );
+
+
+    /* =========================
+       RESTORE BOOK / CHAPTER
+    ========================= */
+
+    if (
+      oldBookIndex >= 0 &&
+      oldBookIndex < books.length
+    ) {
+      bookSelect.value =
+        oldBookIndex;
+
+      loadChapters();
+
+      const chapters =
+        getChapters(
+          books[oldBookIndex]
+        );
+
+      if (
+        oldChapterIndex >= 0 &&
+        oldChapterIndex <
+          chapters.length
+      ) {
+        chapterSelect.value =
+          oldChapterIndex;
+
+        /*
+          Keep the same verse when
+          changing translations.
+        */
+
+        selectedVerseNumber =
+          oldVerseNumber;
+
+        await loadChapter();
+      }
+    }
+
+
+    /* =========================
+       TRANSLATION STATUS
+    ========================= */
+
+    let translationName =
+      "King James Version";
+
+    if (
+      selectedTranslation ===
+      "WEB"
+    ) {
+      translationName =
+        "World English Bible";
+    }
+
+    else if (
+      selectedTranslation ===
+      "ASV"
+    ) {
+      translationName =
+        "American Standard Version";
+    }
+
+    if (
+      currentBookIndex < 0 ||
+      currentChapterIndex < 0
+    ) {
+      status.textContent =
+        translationName +
+        " loaded. Choose a book and chapter.";
+    }
+  }
+
+  catch (error) {
+    console.error(error);
+
+    status.textContent =
+      error.message ||
+      "Unable to load the Bible.";
+  }
+}
+
+
+/* =========================
+   COMMENTARY BUTTON
+========================= */
+
+commentaryButton.addEventListener(
+  "click",
+  function() {
+    commentaryVisible =
+      !commentaryVisible;
+
+    if (commentaryVisible) {
+      commentarySelector.classList.add(
+        "show"
       );
 
+      commentaryButton.textContent =
+        "📖 Hide Bible Commentary";
+    }
+
+    else {
+      commentarySelector.classList.remove(
+        "show"
+      );
+
+      commentaryButton.textContent =
+        "📖 Bible Commentary";
+    }
+
+    if (
+      currentBookIndex >= 0 &&
+      currentChapterIndex >= 0
+    ) {
       loadChapter();
-
-      verseMenu.style.display =
-        "none";
-
     }
-  );
+  }
+);
 
 
-  /* =========================
-     BOOKMARK
-  ========================= */
+/* =========================
+   COMMENTARY CHANGE
+========================= */
 
-  bookmarkVerseButton.addEventListener(
-    "click",
-    function() {
-
-      if (
-        selectedVerseNumber ===
-        null
-      ) {
-        return;
-      }
-
-      const key =
-        getBookmarkKey(
-          selectedVerseNumber
-        );
-
-      const existing =
-        localStorage.getItem(key);
-
-      if (existing === "true") {
-
-        localStorage.removeItem(
-          key
-        );
-
-        saveCloudItem(
-          "bookmark",
-          translationSelect.value,
-          currentBookIndex,
-          currentChapterIndex,
-          selectedVerseNumber,
-          "false"
-        );
-
-      }
-
-      else {
-
-        localStorage.setItem(
-          key,
-          "true"
-        );
-
-        saveCloudItem(
-          "bookmark",
-          translationSelect.value,
-          currentBookIndex,
-          currentChapterIndex,
-          selectedVerseNumber,
-          "true"
-        );
-
-      }
-
-      verseMenu.style.display =
-        "none";
-
+commentarySelect.addEventListener(
+  "change",
+  function() {
+    if (commentaryVisible) {
+      loadChapter();
     }
-  );
+  }
+);
 
 
-  /* =========================
-     COPY
-  ========================= */
+/* =========================
+   BOOK CHANGE
+========================= */
 
-  copyVerseButton.addEventListener(
-    "click",
-    async function() {
+bookSelect.addEventListener(
+  "change",
+  function() {
+    currentBookIndex =
+      Number(bookSelect.value);
 
-      const text =
-        verseMenu.dataset.verseText ||
-        "";
+    currentChapterIndex =
+      -1;
 
+    selectedVerseNumber =
+      null;
+
+    loadChapters();
+
+    chapterContent.innerHTML =
+      '<h2 id="chapterTitle">Bible</h2>' +
+      '<p>Choose a chapter to begin reading.</p>';
+
+    verseSelect.innerHTML =
+      '<option value="">Choose a verse</option>';
+  }
+);
+
+
+/* =========================
+   CHAPTER CHANGE
+========================= */
+
+chapterSelect.addEventListener(
+  "change",
+  function() {
+    currentChapterIndex =
+      Number(
+        chapterSelect.value
+      );
+
+    selectedVerseNumber =
+      null;
+
+    loadChapter();
+  }
+);
+
+
+/* =========================
+   VERSE SELECTOR
+========================= */
+
+verseSelect.addEventListener(
+  "change",
+  function() {
+    const verseNumber =
+      verseSelect.value;
+
+    if (!verseNumber) {
+      return;
+    }
+
+    const elements =
+      document.querySelectorAll(
+        ".verse-text"
+      );
+
+    elements.forEach(
+      function(element) {
+        const number =
+          element.querySelector(
+            ".verse-number"
+          );
+
+        if (
+          number &&
+          number.textContent ===
+          String(verseNumber)
+        ) {
+          selectVerse(
+            verseNumber,
+            element
+          );
+
+          element.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+          });
+        }
+      }
+    );
+  }
+);
+
+
+/* =========================
+   VERSE MENU
+========================= */
+
+function showVerseMenu(
+  x,
+  y,
+  verseNumber,
+  verseText
+) {
+  selectedVerseNumber =
+    Number(verseNumber);
+
+  verseMenu.style.display =
+    "block";
+
+  verseMenu.style.left =
+    x + "px";
+
+  verseMenu.style.top =
+    y + "px";
+
+  verseMenu.dataset.verseText =
+    verseText;
+}
+
+
+/* =========================
+   HIGHLIGHT
+========================= */
+
+highlightVerseButton.addEventListener(
+  "click",
+  function() {
+    if (
+      selectedVerseNumber ===
+      null
+    ) {
+      return;
+    }
+
+    const currentlyHighlighted =
+      isHighlighted(
+        selectedVerseNumber
+      );
+
+    setHighlight(
+      selectedVerseNumber,
+      !currentlyHighlighted
+    );
+
+    loadChapter();
+
+    verseMenu.style.display =
+      "none";
+  }
+);
+
+
+/* =========================
+   BOOKMARK
+========================= */
+
+bookmarkVerseButton.addEventListener(
+  "click",
+  function() {
+    if (
+      selectedVerseNumber ===
+      null
+    ) {
+      return;
+    }
+
+    const key =
+      getBookmarkKey(
+        selectedVerseNumber
+      );
+
+    const existing =
+      localStorage.getItem(key);
+
+    if (existing === "true") {
+      localStorage.removeItem(
+        key
+      );
+
+      saveCloudItem(
+        "bookmark",
+        translationSelect.value,
+        currentBookIndex,
+        currentChapterIndex,
+        selectedVerseNumber,
+        "false"
+      );
+    }
+
+    else {
+      localStorage.setItem(
+        key,
+        "true"
+      );
+
+      saveCloudItem(
+        "bookmark",
+        translationSelect.value,
+        currentBookIndex,
+        currentChapterIndex,
+        selectedVerseNumber,
+        "true"
+      );
+    }
+
+    verseMenu.style.display =
+      "none";
+  }
+);
+
+
+/* =========================
+   COPY
+========================= */
+
+copyVerseButton.addEventListener(
+  "click",
+  async function() {
+    const text =
+      verseMenu.dataset.verseText ||
+      "";
+
+    try {
+      await navigator.clipboard.writeText(
+        text
+      );
+
+      status.textContent =
+        "Verse copied.";
+    }
+
+    catch (error) {
+      console.error(error);
+    }
+
+    verseMenu.style.display =
+      "none";
+  }
+);
+
+
+/* =========================
+   SHARE
+========================= */
+
+shareVerseButton.addEventListener(
+  "click",
+  async function() {
+    const text =
+      verseMenu.dataset.verseText ||
+      "";
+
+    if (navigator.share) {
       try {
+        await navigator.share({
+          title:
+            "BibleMastrey",
+          text:
+            text
+        });
+      }
 
+      catch (error) {
+        console.log(error);
+      }
+    }
+
+    else {
+      try {
         await navigator.clipboard.writeText(
           text
         );
 
         status.textContent =
-          "Verse copied.";
-
+          "Verse copied. Sharing is not supported on this device.";
       }
 
-      catch(error) {
-
+      catch (error) {
         console.error(error);
-
       }
+    }
 
+    verseMenu.style.display =
+      "none";
+  }
+);
+
+
+/* =========================
+   CLOSE MENU
+========================= */
+
+document.addEventListener(
+  "click",
+  function(event) {
+    if (
+      !verseMenu.contains(
+        event.target
+      ) &&
+      !event.target.closest(
+        ".verse-text"
+      )
+    ) {
       verseMenu.style.display =
         "none";
-
     }
-  );
+  }
+);
 
 
-  /* =========================
-     SHARE
-  ========================= */
+/* =========================
+   NAVIGATION
+========================= */
 
-  shareVerseButton.addEventListener(
-    "click",
-    async function() {
+function updateNavigation() {
+  const book =
+    books[currentBookIndex];
 
-      const text =
-        verseMenu.dataset.verseText ||
-        "";
+  if (!book) {
+    previousChapterButton.disabled =
+      true;
 
-      if (navigator.share) {
+    nextChapterButton.disabled =
+      true;
 
-        try {
+    return;
+  }
 
-          await navigator.share({
+  const chapters =
+    getChapters(book);
 
-            title:
-              "BibleMastrey",
+  previousChapterButton.disabled =
+    currentChapterIndex <= 0;
 
-            text:
-              text
+  nextChapterButton.disabled =
+    currentChapterIndex >=
+    chapters.length - 1;
+}
 
-          });
 
-        }
-
-        catch(error) {
-
-          console.log(error);
-
-        }
-
-      }
-
-      else {
-
-        try {
-
-          await navigator.clipboard.writeText(
-            text
-          );
-
-          status.textContent =
-            "Verse copied. Sharing is not supported on this device.";
-
-        }
-
-        catch(error) {
-
-          console.error(error);
-
-        }
-
-      }
-
-      verseMenu.style.display =
-        "none";
-
+previousChapterButton.addEventListener(
+  "click",
+  function() {
+    if (
+      currentChapterIndex <= 0
+    ) {
+      return;
     }
-  );
+
+    currentChapterIndex--;
+
+    chapterSelect.value =
+      currentChapterIndex;
+
+    selectedVerseNumber =
+      null;
+
+    loadChapter();
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  }
+);
 
 
-  /* =========================
-     CLOSE MENU
-  ========================= */
-
-  document.addEventListener(
-    "click",
-    function(event) {
-
-      if (
-        !verseMenu.contains(
-          event.target
-        ) &&
-        !event.target.closest(
-          ".verse-text"
-        )
-      ) {
-
-        verseMenu.style.display =
-          "none";
-
-      }
-
-    }
-  );
-
-
-  /* =========================
-     NAVIGATION
-  ========================= */
-
-  function updateNavigation() {
-
+nextChapterButton.addEventListener(
+  "click",
+  function() {
     const book =
       books[currentBookIndex];
 
     if (!book) {
-
-      previousChapterButton.disabled =
-        true;
-
-      nextChapterButton.disabled =
-        true;
-
       return;
     }
 
     const chapters =
       getChapters(book);
 
-    previousChapterButton.disabled =
-      currentChapterIndex <= 0;
-
-    nextChapterButton.disabled =
+    if (
       currentChapterIndex >=
-      chapters.length - 1;
-
-  }
-
-
-  previousChapterButton.addEventListener(
-    "click",
-    function() {
-
-      if (
-        currentChapterIndex <= 0
-      ) {
-        return;
-      }
-
-      currentChapterIndex--;
-
-      chapterSelect.value =
-        currentChapterIndex;
-
-      selectedVerseNumber =
-        null;
-
-      loadChapter();
-
-      window.scrollTo({
-
-        top: 0,
-
-        behavior: "smooth"
-
-      });
-
-    }
-  );
-
-
-  nextChapterButton.addEventListener(
-    "click",
-    function() {
-
-      const book =
-        books[currentBookIndex];
-
-      if (!book) {
-        return;
-      }
-
-      const chapters =
-        getChapters(book);
-
-      if (
-        currentChapterIndex >=
-        chapters.length - 1
-      ) {
-        return;
-      }
-
-      currentChapterIndex++;
-
-      chapterSelect.value =
-        currentChapterIndex;
-
-      selectedVerseNumber =
-        null;
-
-      loadChapter();
-
-      window.scrollTo({
-
-        top: 0,
-
-        behavior: "smooth"
-
-      });
-
-    }
-  );
-
-
-  /* =========================
-     SEARCH
-  ========================= */
-
-  searchInput.addEventListener(
-    "input",
-    runSearch
-  );
-
-
-  function runSearch() {
-
-    searchResults.innerHTML =
-      "";
-
-    const searchTerm =
-      searchInput.value
-        .trim()
-        .toLowerCase();
-
-    if (!searchTerm) {
+      chapters.length - 1
+    ) {
       return;
     }
 
-    const verseElements =
-      document.querySelectorAll(
-        ".verse-text"
-      );
+    currentChapterIndex++;
 
-    let found = 0;
+    chapterSelect.value =
+      currentChapterIndex;
 
-    verseElements.forEach(
-      function(element) {
+    selectedVerseNumber =
+      null;
 
-        const text =
-          element.textContent
-            .toLowerCase();
+    loadChapter();
 
-        if (
-          text.includes(searchTerm)
-        ) {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  }
+);
 
-          found++;
 
-          const result =
-            document.createElement(
-              "div"
-            );
+/* =========================
+   SEARCH
+========================= */
 
-          result.className =
-            "search-result";
+searchInput.addEventListener(
+  "input",
+  runSearch
+);
 
-          result.textContent =
-            element.textContent;
 
-          result.style.cursor =
-            "pointer";
+function runSearch() {
+  searchResults.innerHTML =
+    "";
 
-          result.addEventListener(
-            "click",
-            function() {
+  const searchTerm =
+    searchInput.value
+      .trim()
+      .toLowerCase();
 
-              element.scrollIntoView({
-
-                behavior:
-                  "smooth",
-
-                block:
-                  "center"
-
-              });
-
-              const number =
-                element.querySelector(
-                  ".verse-number"
-                );
-
-              if (number) {
-
-                selectVerse(
-                  number.textContent,
-                  element
-                );
-
-              }
-
-            }
-          );
-
-          searchResults.appendChild(
-            result
-          );
-
-        }
-
-      }
-    );
-
-    if (found === 0) {
-
-      searchResults.textContent =
-        "No results found.";
-
-    }
+  if (!searchTerm) {
+    return;
   }
 
+  const verseElements =
+    document.querySelectorAll(
+      ".verse-text"
+    );
 
-  /* =========================
-     TRANSLATION
-  ========================= */
+  let found = 0;
 
-  translationSelect.addEventListener(
-    "change",
-    async function() {
+  verseElements.forEach(
+    function(element) {
+      const text =
+        element.textContent
+          .toLowerCase();
 
-      status.textContent =
-        "Loading " +
-        translationSelect.options[
-          translationSelect.selectedIndex
-        ].text +
-        "...";
+      if (
+        text.includes(searchTerm)
+      ) {
+        found++;
 
-      try {
+        const result =
+          document.createElement(
+            "div"
+          );
 
-        await startBible();
+        result.className =
+          "search-result";
 
-      }
+        result.textContent =
+          element.textContent;
 
-      catch(error) {
+        result.style.cursor =
+          "pointer";
 
-        console.error(
-          "Translation error:",
-          error
+        result.addEventListener(
+          "click",
+          function() {
+            element.scrollIntoView({
+              behavior:
+                "smooth",
+              block:
+                "center"
+            });
+
+            const number =
+              element.querySelector(
+                ".verse-number"
+              );
+
+            if (number) {
+              selectVerse(
+                number.textContent,
+                element
+              );
+            }
+          }
         );
 
-        status.textContent =
-          "Unable to load this translation.";
-
+        searchResults.appendChild(
+          result
+        );
       }
-
     }
   );
 
+  if (found === 0) {
+    searchResults.textContent =
+      "No results found.";
+  }
+}
 
-  /* =========================
-     START
-  ========================= */
 
-  startBible();
+/* =========================
+   TRANSLATION
+========================= */
+
+translationSelect.addEventListener(
+  "change",
+  async function() {
+    status.textContent =
+      "Loading " +
+      translationSelect.options[
+        translationSelect.selectedIndex
+      ].text +
+      "...";
+
+    try {
+      await startBible();
+    }
+
+    catch (error) {
+      console.error(
+        "Translation error:",
+        error
+      );
+
+      status.textContent =
+        "Unable to load this translation.";
+    }
+  }
+);
+
+
+/* =========================
+   START
+========================= */
+
+startBible();
 
 </script>
 
