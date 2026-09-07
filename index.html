@@ -4369,7 +4369,90 @@ await syncLocalBibleDataToCloud();
       }
     );
 
+  /* =========================
+     BIBLEMASTREY AI
+  ========================= */
 
+  const bibleMastreyAIButton =
+    document.getElementById(
+      "bibleMastreyAIButton"
+    );
+
+  bibleMastreyAIButton.addEventListener(
+    "click",
+    async function() {
+
+      const question =
+        prompt(
+          "What would you like to ask BibleMastrey AI?"
+        );
+
+      if (!question) {
+        return;
+      }
+
+      status.textContent =
+        "BibleMastrey AI is thinking...";
+
+      try {
+
+        const response =
+          await fetch(
+            "https://biblemastrey-ai.bashamcaleb530.workers.dev",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({
+                question: question
+              })
+            }
+          );
+
+        const data =
+          await response.json();
+
+        if (!response.ok) {
+          throw new Error(
+            data.error ||
+            "AI request failed."
+          );
+        }
+
+        alert(
+          data.answer ||
+          "No answer was returned."
+        );
+
+        status.textContent =
+          "BibleMastrey AI is ready.";
+
+      } catch (error) {
+
+        console.error(
+          "BibleMastrey AI error:",
+          error
+        );
+
+        status.textContent =
+          "BibleMastrey AI could not connect.";
+
+        alert(
+          "BibleMastrey AI could not connect right now."
+        );
+      }
+    }
+  );
+
+
+  /* =========================
+     START BIBLEMASTREY
+  ========================= */
+
+  startBible();
+
+</script>
   /* =========================
      START BIBLEMASTREY
   ========================= */
