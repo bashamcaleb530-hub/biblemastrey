@@ -223,18 +223,10 @@
       width: 220px;
     }
 
-    .commentary-control {
-      width: 320px;
-    }
-
     .translation-control label,
     .commentary-control label {
       margin-bottom: 6px;
     }
-
-    /*
-      BIBLE + COMMENTARY LAYOUT
-    */
 
     .study-columns {
       display: grid;
@@ -287,10 +279,6 @@
       padding: 14px;
       margin-bottom: 12px;
       line-height: 1.65;
-    }
-
-    .commentary-verse:last-child {
-      margin-bottom: 0;
     }
 
     .commentary-reference {
@@ -439,6 +427,23 @@
       padding: 10px;
     }
 
+    .strongs-number {
+      color: #1f3c88;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .strongs-lemma {
+      font-size: 20px;
+      font-weight: bold;
+      margin-top: 5px;
+    }
+
+    .strongs-definition {
+      line-height: 1.7;
+      margin-top: 10px;
+    }
+
     @media (max-width: 900px) {
 
       .study-columns {
@@ -470,8 +475,7 @@
         width: 100%;
       }
 
-      .translation-control,
-      .commentary-control {
+      .translation-control {
         width: 100%;
       }
 
@@ -510,8 +514,6 @@
     ← Back to BibleMastrey
   </a>
 
-
-  <!-- TOPIC -->
 
   <div
     class="study-box"
@@ -552,15 +554,11 @@
   </div>
 
 
-  <!-- WORKSPACE -->
-
   <div
     id="studyWorkspace"
     class="workspace"
   >
 
-
-    <!-- TOPIC HEADER -->
 
     <div class="workspace-section">
 
@@ -579,16 +577,12 @@
     </div>
 
 
-    <!-- STUDY TOOLS -->
-
     <div class="workspace-section">
 
       <h2>Study Tools</h2>
 
       <div class="workspace-grid">
 
-
-        <!-- DICTIONARY -->
 
         <div class="tool-box">
 
@@ -625,8 +619,6 @@
         </div>
 
 
-        <!-- CONCORDANCE -->
-
         <div class="tool-box">
 
           <h3>🔎 Concordance</h3>
@@ -662,8 +654,6 @@
         </div>
 
 
-        <!-- HEBREW / GREEK -->
-
         <div class="tool-box">
 
           <h3>🇬🇷 Hebrew & Greek Word Lookup</h3>
@@ -697,14 +687,12 @@
           ></div>
 
           <div class="small-note">
-            You can search by English meaning,
+            Search by English meaning,
             Greek/Hebrew word, or Strong's number.
           </div>
 
         </div>
 
-
-        <!-- COMMENTARY SELECTOR -->
 
         <div class="tool-box">
 
@@ -774,8 +762,6 @@
     </div>
 
 
-    <!-- BIBLE -->
-
     <div class="workspace-section">
 
       <h2>📖 Bible Verses</h2>
@@ -815,8 +801,6 @@
       <div class="study-columns">
 
 
-        <!-- VERSES -->
-
         <div
           class="verses-column"
           id="verseResults"
@@ -828,8 +812,6 @@
 
         </div>
 
-
-        <!-- COMMENTARY -->
 
         <aside
           class="commentary-column"
@@ -909,6 +891,8 @@
 
   let commentaryCache = {};
 
+  let commentaryBooksCache = {};
+
 
   /* =========================================
      ELEMENTS
@@ -955,13 +939,13 @@
 
 
   /* =========================================
-     COMMENTARY IDS
+     COMMENTARY API
   ========================================= */
 
-  const commentaryIds = {
+  const COMMENTARY_API =
+    "https://bible.helloao.org/api/c/";
 
-    "matthew-henry-concise":
-      "matthew-henry",
+  const commentaryIds = {
 
     "matthew-henry-complete":
       "matthew-henry",
@@ -973,10 +957,7 @@
       "jamieson-fausset-brown",
 
     "adam-clarke":
-      "adam-clarke",
-
-    "barnes":
-      "barnes"
+      "adam-clarke"
 
   };
 
@@ -1060,7 +1041,10 @@
     }
     catch (error) {
 
-      console.error(error);
+      console.error(
+        "Study error:",
+        error
+      );
 
       verseResults.innerHTML =
         "<div class='error-message'>" +
@@ -1078,53 +1062,39 @@
 
   async function loadStudyBible() {
 
-    try {
+    if (
+      studyTranslation === "WEB"
+    ) {
 
-      if (
-        studyTranslation === "WEB"
-      ) {
-
-        studyBible =
-          await getWEB();
-
-      }
-
-      else if (
-        studyTranslation === "ASV"
-      ) {
-
-        studyBible =
-          await getASV();
-
-      }
-
-      else {
-
-        studyBible =
-          await getKJV();
-
-      }
-
-      if (
-        !studyBible ||
-        !Array.isArray(studyBible.books)
-      ) {
-
-        throw new Error(
-          "Bible data was not returned."
-        );
-
-      }
+      studyBible =
+        await getWEB();
 
     }
-    catch (error) {
 
-      console.error(
-        "Bible loading error:",
-        error
+    else if (
+      studyTranslation === "ASV"
+    ) {
+
+      studyBible =
+        await getASV();
+
+    }
+
+    else {
+
+      studyBible =
+        await getKJV();
+
+    }
+
+    if (
+      !studyBible ||
+      !Array.isArray(studyBible.books)
+    ) {
+
+      throw new Error(
+        "Bible data was not returned."
       );
-
-      throw error;
 
     }
 
@@ -1167,7 +1137,7 @@
 
 
   /* =========================================
-     NORMALIZE BOOK ID
+     BOOK ID MAP
   ========================================= */
 
   const bookIdMap = {
@@ -1273,7 +1243,7 @@
 
 
   /* =========================================
-     WHOLE BIBLE SEARCH
+     BIBLE SEARCH
   ========================================= */
 
   function searchBible(
@@ -1409,7 +1379,7 @@
 
 
   /* =========================================
-     SELECT VARIED VERSES
+     VARIED VERSES
   ========================================= */
 
   function selectVariedVerses(
@@ -1424,20 +1394,23 @@
 
     }
 
-    matches.sort(
-      function(a, b) {
+    const sorted =
+      matches
+        .slice()
+        .sort(
+          function(a, b) {
 
-        return b.score - a.score;
+            return b.score - a.score;
 
-      }
-    );
+          }
+        );
 
     const pool =
-      matches.slice(
+      sorted.slice(
         0,
         Math.min(
-          100,
-          matches.length
+          150,
+          sorted.length
         )
       );
 
@@ -1553,7 +1526,7 @@
 
     }
 
-    const matches =
+    let matches =
       searchBible(
         studyBible,
         currentTopic
@@ -1564,11 +1537,6 @@
         matches
       );
 
-    /*
-      If the exact topic does not appear,
-      search the individual topic words.
-    */
-
     if (
       !selected.length
     ) {
@@ -1576,9 +1544,22 @@
       const words =
         currentTopic
           .split(/\s+/)
+          .map(
+            function(word) {
+
+              return word
+                .replace(
+                  /[^a-zA-Z]/g,
+                  ""
+                );
+
+            }
+          )
           .filter(
             function(word) {
+
               return word.length > 3;
+
             }
           );
 
@@ -1627,7 +1608,8 @@
 
     }
 
-    verseResults.innerHTML = "";
+    verseResults.innerHTML =
+      "";
 
     selected.forEach(
       function(result, index) {
@@ -1644,7 +1626,7 @@
 
 
   /* =========================================
-     CREATE VERSE CARD
+     VERSE CARD
   ========================================= */
 
   function createVerseCard(
@@ -1692,8 +1674,6 @@
     text.textContent =
       result.text;
 
-
-    /* ACTIONS */
 
     const actions =
       document.createElement(
@@ -1750,8 +1730,6 @@
       shareButton
     );
 
-
-    /* NOTES */
 
     const notesArea =
       document.createElement(
@@ -1815,8 +1793,6 @@
     );
 
 
-    /* HIGHLIGHT */
-
     const highlightKey =
       getHighlightKey(result);
 
@@ -1866,8 +1842,6 @@
     );
 
 
-    /* NOTES BUTTON */
-
     notesButton.addEventListener(
       "click",
       function(event) {
@@ -1881,8 +1855,6 @@
       }
     );
 
-
-    /* BOOKMARK */
 
     const bookmarkKey =
       getBookmarkKey(result);
@@ -1904,13 +1876,10 @@
 
         event.stopPropagation();
 
-        const existing =
+        if (
           localStorage.getItem(
             bookmarkKey
-          );
-
-        if (
-          existing === "true"
+          ) === "true"
         ) {
 
           localStorage.removeItem(
@@ -1936,8 +1905,6 @@
       }
     );
 
-
-    /* COPY */
 
     copyButton.addEventListener(
       "click",
@@ -1987,8 +1954,6 @@
       }
     );
 
-
-    /* SHARE */
 
     shareButton.addEventListener(
       "click",
@@ -2067,8 +2032,6 @@
     );
 
 
-    /* CARD CLICK */
-
     card.addEventListener(
       "click",
       function() {
@@ -2124,10 +2087,6 @@
   }
 
 
-  /* =========================================
-     CREATE BUTTON
-  ========================================= */
-
   function createVerseButton(
     text
   ) {
@@ -2149,7 +2108,7 @@
 
 
   /* =========================================
-     LOCAL STORAGE KEYS
+     LOCAL STORAGE
   ========================================= */
 
   function getHighlightKey(
@@ -2265,10 +2224,6 @@
   );
 
 
-  /* =========================================
-     COMMENTARY SELECT
-  ========================================= */
-
   commentarySelect.addEventListener(
     "change",
     function() {
@@ -2284,6 +2239,225 @@
 
     }
   );
+
+
+  /* =========================================
+     GROUP VERSES
+  ========================================= */
+
+  function groupVersesByChapter(
+    verses
+  ) {
+
+    const groups = [];
+
+    verses.forEach(
+      function(verse) {
+
+        let group =
+          groups.find(
+            function(item) {
+
+              return (
+                item.bookId ===
+                  verse.bookId &&
+                String(
+                  item.chapter
+                ) ===
+                  String(
+                    verse.chapter
+                  )
+              );
+
+            }
+          );
+
+        if (!group) {
+
+          group = {
+
+            bookId:
+              verse.bookId,
+
+            bookName:
+              verse.book,
+
+            chapter:
+              verse.chapter,
+
+            verses:
+              []
+
+          };
+
+          groups.push(
+            group
+          );
+
+        }
+
+        group.verses.push(
+          verse
+        );
+
+      }
+    );
+
+    return groups;
+
+  }
+
+
+  /* =========================================
+     COMMENTARY BOOK RESOLVER
+  ========================================= */
+
+  async function getCommentaryBooks(
+    apiId
+  ) {
+
+    if (
+      commentaryBooksCache[
+        apiId
+      ]
+    ) {
+
+      return commentaryBooksCache[
+        apiId
+      ];
+
+    }
+
+    const response =
+      await fetch(
+        COMMENTARY_API +
+        apiId +
+        "/books.json"
+      );
+
+    if (
+      !response.ok
+    ) {
+
+      throw new Error(
+        "Could not load commentary books."
+      );
+
+    }
+
+    const data =
+      await response.json();
+
+    const books =
+      Array.isArray(
+        data.books
+      )
+        ? data.books
+        : [];
+
+    commentaryBooksCache[
+      apiId
+    ] =
+      books;
+
+    return books;
+
+  }
+
+
+  function resolveCommentaryBookId(
+    books,
+    group
+  ) {
+
+    const wantedId =
+      String(
+        group.bookId ||
+        ""
+      ).toUpperCase();
+
+    const wantedName =
+      String(
+        group.bookName ||
+        ""
+      )
+      .toLowerCase()
+      .trim();
+
+    let found =
+      books.find(
+        function(book) {
+
+          return String(
+            book.id ||
+            book.bookId ||
+            ""
+          )
+          .toUpperCase() ===
+          wantedId;
+
+        }
+      );
+
+    if (
+      found
+    ) {
+
+      return (
+        found.id ||
+        found.bookId
+      );
+
+    }
+
+    found =
+      books.find(
+        function(book) {
+
+          const names = [
+
+            book.name,
+            book.commonName,
+            book.englishName,
+            book.title
+
+          ]
+          .filter(
+            Boolean
+          )
+          .map(
+            function(name) {
+
+              return String(
+                name
+              )
+              .toLowerCase()
+              .trim();
+
+            }
+          );
+
+          return names.includes(
+            wantedName
+          );
+
+        }
+      );
+
+    if (
+      found
+    ) {
+
+      return (
+        found.id ||
+        found.bookId
+      );
+
+    }
+
+    return null;
+
+  }
 
 
   /* =========================================
@@ -2329,16 +2503,24 @@
       "... Please wait." +
       "</div>";
 
+
     try {
 
-      /*
-        Barnes is handled separately because
-        the HelloAO API does not currently list
-        Barnes among its available commentaries.
-      */
+      if (
+        selectedCommentary ===
+        "matthew-henry-concise"
+      ) {
+
+        await loadMatthewHenryConcise();
+
+        return;
+
+      }
+
 
       if (
-        selectedCommentary === "barnes"
+        selectedCommentary ===
+        "barnes"
       ) {
 
         await loadBarnesCommentary();
@@ -2348,19 +2530,20 @@
       }
 
 
-      /*
-        Matthew Henry Concise currently uses
-        the same public-domain Matthew Henry
-        source as the available HelloAO endpoint.
-        The selector remains separate so the
-        Concise source can be replaced with its
-        dedicated normalized data later.
-      */
-
       const apiId =
         commentaryIds[
           selectedCommentary
         ];
+
+      if (
+        !apiId
+      ) {
+
+        throw new Error(
+          "No commentary API configured."
+        );
+
+      }
 
       const groups =
         groupVersesByChapter(
@@ -2370,32 +2553,77 @@
       const allCommentary =
         [];
 
+
       for (
         const group of groups
       ) {
 
+        const books =
+          await getCommentaryBooks(
+            apiId
+          );
+
+        const commentaryBookId =
+          resolveCommentaryBookId(
+            books,
+            group
+          );
+
+        if (
+          !commentaryBookId
+        ) {
+
+          group.verses.forEach(
+            function(verse) {
+
+              allCommentary.push({
+
+                book:
+                  verse.book,
+
+                chapter:
+                  verse.chapter,
+
+                verse:
+                  verse.verse,
+
+                text:
+                  ""
+
+              });
+
+            }
+          );
+
+          continue;
+
+        }
+
+
         const cacheKey =
           apiId +
           "|" +
-          group.bookId +
+          commentaryBookId +
           "|" +
           group.chapter;
+
 
         let chapterData =
           commentaryCache[
             cacheKey
           ];
 
+
         if (
           !chapterData
         ) {
 
           const url =
-            "https://bible.helloao.org/api/c/" +
+            COMMENTARY_API +
             apiId +
             "/" +
             encodeURIComponent(
-              group.bookId
+              commentaryBookId
             ) +
             "/" +
             encodeURIComponent(
@@ -2403,24 +2631,28 @@
             ) +
             ".simple.json";
 
+
           const response =
             await fetch(
               url
             );
+
 
           if (
             !response.ok
           ) {
 
             throw new Error(
-              "Commentary request failed: " +
+              "Commentary chapter request failed: " +
               response.status
             );
 
           }
 
+
           chapterData =
             await response.json();
+
 
           commentaryCache[
             cacheKey
@@ -2429,10 +2661,12 @@
 
         }
 
+
         const entries =
           extractCommentaryEntries(
             chapterData
           );
+
 
         group.verses.forEach(
           function(verse) {
@@ -2464,10 +2698,12 @@
 
       }
 
+
       renderCommentary(
         commentaryName,
         allCommentary
       );
+
 
       commentaryStatus.textContent =
         commentaryName +
@@ -2497,71 +2733,7 @@
 
 
   /* =========================================
-     GROUP VERSES
-  ========================================= */
-
-  function groupVersesByChapter(
-    verses
-  ) {
-
-    const groups = [];
-
-    verses.forEach(
-      function(verse) {
-
-        let group =
-          groups.find(
-            function(item) {
-
-              return (
-                item.bookId ===
-                  verse.bookId &&
-                String(
-                  item.chapter
-                ) ===
-                  String(
-                    verse.chapter
-                  )
-              );
-
-            }
-          );
-
-        if (!group) {
-
-          group = {
-
-            bookId:
-              verse.bookId,
-
-            chapter:
-              verse.chapter,
-
-            verses:
-              []
-
-          };
-
-          groups.push(
-            group
-          );
-
-        }
-
-        group.verses.push(
-          verse
-        );
-
-      }
-    );
-
-    return groups;
-
-  }
-
-
-  /* =========================================
-     EXTRACT COMMENTARY ENTRIES
+     EXTRACT HELLOAO COMMENTARY
   ========================================= */
 
   function extractCommentaryEntries(
@@ -2576,16 +2748,20 @@
 
     }
 
-    let content =
+    let content = [];
+
+    if (
       data.chapter &&
       Array.isArray(
         data.chapter.content
       )
-        ? data.chapter.content
-        : [];
+    ) {
 
-    if (
-      !content.length &&
+      content =
+        data.chapter.content;
+
+    }
+    else if (
       Array.isArray(
         data.content
       )
@@ -2637,7 +2813,7 @@
 
 
   /* =========================================
-     FIND COMMENTARY
+     FIND COMMENTARY TEXT
   ========================================= */
 
   function findCommentaryText(
@@ -2670,15 +2846,12 @@
 
     }
 
-    /*
-      Some commentary chapters use
-      verse ranges. Try those next.
-    */
 
     const numericVerse =
       Number(
         verseNumber
       );
+
 
     for (
       let i = 0;
@@ -2691,13 +2864,16 @@
 
       const range =
         String(
-          entry.number || ""
+          entry.number ||
+          ""
         );
+
 
       const match =
         range.match(
           /(\d+)\s*[-–]\s*(\d+)/
         );
+
 
       if (
         match
@@ -2713,6 +2889,7 @@
             match[2]
           );
 
+
         if (
           numericVerse >= start &&
           numericVerse <= end
@@ -2725,6 +2902,7 @@
       }
 
     }
+
 
     return "";
 
@@ -2748,6 +2926,7 @@
 
     }
 
+
     if (
       Array.isArray(value)
     ) {
@@ -2763,6 +2942,7 @@
 
     }
 
+
     if (
       value &&
       typeof value ===
@@ -2777,6 +2957,7 @@
         return value.text.trim();
 
       }
+
 
       if (
         Array.isArray(
@@ -2796,6 +2977,7 @@
       }
 
     }
+
 
     return "";
 
@@ -2817,6 +2999,7 @@
     let shown =
       0;
 
+
     entries.forEach(
       function(entry) {
 
@@ -2828,6 +3011,7 @@
 
         }
 
+
         const box =
           document.createElement(
             "div"
@@ -2835,6 +3019,7 @@
 
         box.className =
           "commentary-verse";
+
 
         const reference =
           document.createElement(
@@ -2844,12 +3029,14 @@
         reference.className =
           "commentary-reference";
 
+
         reference.textContent =
           entry.book +
           " " +
           entry.chapter +
           ":" +
           entry.verse;
+
 
         const body =
           document.createElement(
@@ -2859,8 +3046,10 @@
         body.className =
           "commentary-text";
 
+
         body.textContent =
           entry.text;
+
 
         box.appendChild(
           reference
@@ -2870,14 +3059,17 @@
           body
         );
 
+
         commentaryContent.appendChild(
           box
         );
+
 
         shown++;
 
       }
     );
+
 
     if (
       !shown
@@ -2887,6 +3079,340 @@
         "<div class='commentary-empty'>" +
         "This commentary does not have notes for the selected verses." +
         "</div>";
+
+    }
+
+  }
+
+
+  /* =========================================
+     MATTHEW HENRY CONCISE
+  ========================================= */
+
+  const conciseBookSlugs = {
+
+    "GENESIS": "genesis",
+    "EXODUS": "exodus",
+    "LEVITICUS": "leviticus",
+    "NUMBERS": "numbers",
+    "DEUTERONOMY": "deuteronomy",
+    "JOSHUA": "joshua",
+    "JUDGES": "judges",
+    "RUTH": "ruth",
+    "1 SAMUEL": "1-samuel",
+    "2 SAMUEL": "2-samuel",
+    "1 KINGS": "1-kings",
+    "2 KINGS": "2-kings",
+    "1 CHRONICLES": "1-chronicles",
+    "2 CHRONICLES": "2-chronicles",
+    "EZRA": "ezra",
+    "NEHEMIAH": "nehemiah",
+    "ESTHER": "esther",
+    "JOB": "job",
+    "PSALMS": "psalms",
+    "PROVERBS": "proverbs",
+    "ECCLESIASTES": "ecclesiastes",
+    "SONG OF SOLOMON": "song-of-solomon",
+    "ISAIAH": "isaiah",
+    "JEREMIAH": "jeremiah",
+    "LAMENTATIONS": "lamentations",
+    "EZEKIEL": "ezekiel",
+    "DANIEL": "daniel",
+    "HOSEA": "hosea",
+    "JOEL": "joel",
+    "AMOS": "amos",
+    "OBADIAH": "obadiah",
+    "JONAH": "jonah",
+    "MICAH": "micah",
+    "NAHUM": "nahum",
+    "HABAKKUK": "habakkuk",
+    "ZEPHANIAH": "zephaniah",
+    "HAGGAI": "haggai",
+    "ZECHARIAH": "zechariah",
+    "MALACHI": "malachi",
+
+    "MATTHEW": "matthew",
+    "MARK": "mark",
+    "LUKE": "luke",
+    "JOHN": "john",
+    "ACTS": "acts",
+    "ROMANS": "romans",
+    "1 CORINTHIANS": "1-corinthians",
+    "2 CORINTHIANS": "2-corinthians",
+    "GALATIANS": "galatians",
+    "EPHESIANS": "ephesians",
+    "PHILIPPIANS": "philippians",
+    "COLOSSIANS": "colossians",
+    "1 THESSALONIANS": "1-thessalonians",
+    "2 THESSALONIANS": "2-thessalonians",
+    "1 TIMOTHY": "1-timothy",
+    "2 TIMOTHY": "2-timothy",
+    "TITUS": "titus",
+    "PHILEMON": "philemon",
+    "HEBREWS": "hebrews",
+    "JAMES": "james",
+    "1 PETER": "1-peter",
+    "2 PETER": "2-peter",
+    "1 JOHN": "1-john",
+    "2 JOHN": "2-john",
+    "3 JOHN": "3-john",
+    "JUDE": "jude",
+    "REVELATION": "revelation"
+
+  };
+
+
+  const CONCISE_SOURCE =
+    "https://raw.githubusercontent.com/lyteword/mhenry-concise/main/";
+
+
+  function parseConciseMarkdown(
+    markdown
+  ) {
+
+    const entries = [];
+
+    const lines =
+      markdown.split(
+        /\r?\n/
+      );
+
+    let currentRange =
+      "";
+
+    let currentText =
+      [];
+
+    function saveCurrent() {
+
+      if (
+        currentRange &&
+        currentText.length
+      ) {
+
+        entries.push({
+
+          number:
+            currentRange,
+
+          text:
+            currentText
+              .join(" ")
+              .replace(
+                /\s+/g,
+                " "
+              )
+              .trim()
+
+        });
+
+      }
+
+      currentText = [];
+
+    }
+
+
+    lines.forEach(
+      function(line) {
+
+        const trimmed =
+          line.trim();
+
+        const headingMatch =
+          trimmed.match(
+            /^##\s+Verses?\s+(.+)$/i
+          );
+
+        if (
+          headingMatch
+        ) {
+
+          saveCurrent();
+
+          currentRange =
+            headingMatch[1]
+              .replace(
+                /[–—]/g,
+                "-"
+              )
+              .trim();
+
+          return;
+
+        }
+
+
+        if (
+          currentRange &&
+          trimmed &&
+          !trimmed.startsWith(
+            "#"
+          ) &&
+          !trimmed.startsWith(
+            "---"
+          )
+        ) {
+
+          currentText.push(
+            trimmed
+              .replace(
+                /^\s*[-*]\s+/,
+                ""
+              )
+          );
+
+        }
+
+      }
+    );
+
+
+    saveCurrent();
+
+    return entries;
+
+  }
+
+
+  async function loadMatthewHenryConcise() {
+
+    const entries = [];
+
+    const groups =
+      groupVersesByChapter(
+        currentVerses
+      );
+
+
+    for (
+      const group of groups
+    ) {
+
+      const bookName =
+        String(
+          group.bookName
+        )
+        .toUpperCase();
+
+      const slug =
+        conciseBookSlugs[
+          bookName
+        ];
+
+
+      if (
+        !slug
+      ) {
+
+        continue;
+
+      }
+
+
+      const url =
+        CONCISE_SOURCE +
+        slug +
+        "/chapter-" +
+        encodeURIComponent(
+          group.chapter
+        ) +
+        ".md";
+
+
+      try {
+
+        const response =
+          await fetch(
+            url
+          );
+
+
+        if (
+          !response.ok
+        ) {
+
+          continue;
+
+        }
+
+
+        const markdown =
+          await response.text();
+
+
+        const chapterEntries =
+          parseConciseMarkdown(
+            markdown
+          );
+
+
+        group.verses.forEach(
+          function(verse) {
+
+            const text =
+              findCommentaryText(
+                chapterEntries,
+                verse.verse
+              );
+
+
+            entries.push({
+
+              book:
+                verse.book,
+
+              chapter:
+                verse.chapter,
+
+              verse:
+                verse.verse,
+
+              text:
+                text
+
+            });
+
+          }
+        );
+
+      }
+      catch (error) {
+
+        console.log(
+          "Concise commentary chapter error:",
+          error
+        );
+
+      }
+
+    }
+
+
+    renderCommentary(
+      "Matthew Henry Concise",
+      entries
+    );
+
+
+    if (
+      entries.some(
+        function(entry) {
+
+          return !!entry.text;
+
+        }
+      )
+    ) {
+
+      commentaryStatus.textContent =
+        "Matthew Henry Concise loaded.";
+
+    }
+    else {
+
+      commentaryStatus.textContent =
+        "Matthew Henry Concise could not be loaded.";
 
     }
 
@@ -2910,6 +3436,15 @@
       "Loading Barnes' Notes..." +
       "</div>";
 
+
+    /*
+      Barnes' Notes is a New Testament commentary.
+      The browser may block direct retrieval from
+      external Barnes pages because of CORS.
+
+      We attempt the public SermonIndex source.
+    */
+
     const entries = [];
 
     const groups =
@@ -2917,16 +3452,63 @@
         currentVerses
       );
 
+
     for (
       const group of groups
     ) {
 
-      try {
+      if (
+        [
+          "GEN",
+          "EXO",
+          "LEV",
+          "NUM",
+          "DEU",
+          "JOS",
+          "JDG",
+          "RUT",
+          "1SA",
+          "2SA",
+          "1KI",
+          "2KI",
+          "1CH",
+          "2CH",
+          "EZR",
+          "NEH",
+          "EST",
+          "JOB",
+          "PSA",
+          "PRO",
+          "ECC",
+          "SNG",
+          "ISA",
+          "JER",
+          "LAM",
+          "EZK",
+          "DAN",
+          "HOS",
+          "JOL",
+          "AMO",
+          "OBA",
+          "JON",
+          "MIC",
+          "NAM",
+          "HAB",
+          "ZEP",
+          "HAG",
+          "ZEC",
+          "MAL"
+        ].includes(
+          group.bookId
+        )
+      ) {
 
-        /*
-          SermonIndex provides Barnes chapter
-          pages using the same Bible book IDs.
-        */
+        continue;
+
+      }
+
+
+      try {
 
         const url =
           "https://www.sermonindex.net/commentary/barnes/" +
@@ -2939,10 +3521,12 @@
           ) +
           "/";
 
+
         const response =
           await fetch(
             url
           );
+
 
         if (
           !response.ok
@@ -2952,33 +3536,29 @@
 
         }
 
+
         const html =
           await response.text();
+
 
         const parser =
           new DOMParser();
 
-        const documentPage =
+
+        const page =
           parser.parseFromString(
             html,
             "text/html"
           );
 
-        const main =
-          documentPage.querySelector(
-            "main"
-          ) ||
-          documentPage.querySelector(
-            "article"
-          ) ||
-          documentPage.body;
 
         const paragraphs =
           Array.from(
-            main.querySelectorAll(
+            page.querySelectorAll(
               "p"
             )
           );
+
 
         const selectedNumbers =
           new Set(
@@ -2993,16 +3573,18 @@
             )
           );
 
+
         paragraphs.forEach(
-          function(p) {
+          function(paragraph) {
 
             const text =
-              p.textContent
+              paragraph.textContent
                 .replace(
                   /\s+/g,
                   " "
                 )
                 .trim();
+
 
             if (
               !text
@@ -3012,10 +3594,12 @@
 
             }
 
+
             const match =
               text.match(
                 /^(\d+)\s*[\.\-:]\s*(.*)$/
               );
+
 
             if (
               match &&
@@ -3027,7 +3611,7 @@
               entries.push({
 
                 book:
-                  group.verses[0].book,
+                  group.bookName,
 
                 chapter:
                   group.chapter,
@@ -3049,7 +3633,7 @@
       catch (error) {
 
         console.log(
-          "Barnes chapter could not be loaded:",
+          "Barnes retrieval error:",
           error
         );
 
@@ -3057,11 +3641,6 @@
 
     }
 
-    /*
-      If the external Barnes source blocks
-      browser requests, give the user a useful
-      message instead of fake commentary.
-    */
 
     if (
       !entries.length
@@ -3069,20 +3648,22 @@
 
       commentaryContent.innerHTML =
         "<div class='commentary-empty'>" +
-        "Barnes' Notes is available as a public-domain commentary, but this browser could not retrieve the chapter directly. The other five commentaries use the BibleMastrey commentary API connection." +
+        "Barnes' Notes could not be retrieved directly by this browser. Barnes is a New Testament commentary, so Old Testament verses will not have Barnes notes here. We can connect a dedicated Barnes data source later if needed." +
         "</div>";
 
       commentaryStatus.textContent =
-        "Barnes' Notes could not be retrieved by the browser.";
+        "Barnes' Notes could not be retrieved.";
 
       return;
 
     }
 
+
     renderCommentary(
       "Barnes' Notes",
       entries
     );
+
 
     commentaryStatus.textContent =
       "Barnes' Notes loaded.";
@@ -3115,6 +3696,7 @@
             "concordanceResults"
           );
 
+
         if (
           !word
         ) {
@@ -3128,8 +3710,10 @@
 
         }
 
+
         results.innerHTML =
           "<div class='status-message'>Searching the Bible...</div>";
+
 
         try {
 
@@ -3141,11 +3725,13 @@
 
           }
 
+
           const matches =
             searchBible(
               studyBible,
               word
             );
+
 
           if (
             !matches.length
@@ -3160,10 +3746,12 @@
 
           }
 
+
           results.innerHTML =
             "<div class='success-message'>" +
             matches.length +
             " matching verses found.</div>";
+
 
           matches
             .slice(
@@ -3181,6 +3769,7 @@
                 result.className =
                   "result-item";
 
+
                 result.innerHTML =
                   "<div class='result-reference'>" +
                   escapeHtml(
@@ -3196,6 +3785,7 @@
                     item.text
                   ) +
                   "</div>";
+
 
                 results.appendChild(
                   result
@@ -3298,6 +3888,7 @@
             "dictionaryResults"
           );
 
+
         if (
           !word
         ) {
@@ -3311,8 +3902,10 @@
 
         }
 
+
         const lower =
           word.toLowerCase();
+
 
         if (
           simpleBibleDictionary[
@@ -3339,17 +3932,12 @@
 
         }
 
+
         results.innerHTML =
           "<div class='status-message'>" +
           "Searching dictionary..." +
           "</div>";
 
-        /*
-          Dictionary API fallback.
-          This gives the search a real lookup
-          for words not yet in the Bible-specific
-          quick dictionary.
-        */
 
         try {
 
@@ -3361,6 +3949,7 @@
               )
             );
 
+
           if (
             !response.ok
           ) {
@@ -3371,8 +3960,10 @@
 
           }
 
+
           const data =
             await response.json();
+
 
           let html =
             "<div class='result-item dictionary-definition'>" +
@@ -3381,6 +3972,7 @@
               word
             ) +
             "</strong>";
+
 
           data
             .slice(
@@ -3411,6 +4003,7 @@
                             ""
                           ) +
                           "</strong>";
+
 
                         if (
                           Array.isArray(
@@ -3446,8 +4039,10 @@
               }
             );
 
+
           html +=
             "</div>";
+
 
           results.innerHTML =
             html;
@@ -3464,6 +4059,361 @@
 
       }
     );
+
+
+  /* =========================================
+     STRONG'S DATA
+  ========================================= */
+
+  const strongsGreek = {
+
+    G1: {
+      lemma: "alpha",
+      transliteration: "alpha",
+      definition: "alpha; the first letter of the Greek alphabet."
+    },
+
+    G25: {
+      lemma: "agapao",
+      transliteration: "agapaō",
+      definition: "to love, to value, to show love or goodwill."
+    },
+
+    G26: {
+      lemma: "agape",
+      transliteration: "agapē",
+      definition: "love, goodwill, benevolence; especially the love of God and the love Christians are to have toward one another."
+    },
+
+    G27: {
+      lemma: "agapetos",
+      transliteration: "agapētos",
+      definition: "beloved, dearly loved, esteemed."
+    },
+
+    G40: {
+      lemma: "hagios",
+      transliteration: "hagios",
+      definition: "holy, sacred, set apart, morally pure."
+    },
+
+    G1343: {
+      lemma: "dikaiosune",
+      transliteration: "dikaiosynē",
+      definition: "righteousness, uprightness, justice."
+    },
+
+    G1577: {
+      lemma: "ekklesia",
+      transliteration: "ekklēsia",
+      definition: "assembly, congregation, church."
+    },
+
+    G1680: {
+      lemma: "elpis",
+      transliteration: "elpis",
+      definition: "hope, expectation, confidence."
+    },
+
+    G2316: {
+      lemma: "theos",
+      transliteration: "theos",
+      definition: "God, deity, the true God."
+    },
+
+    G2424: {
+      lemma: "Iesous",
+      transliteration: "Iēsous",
+      definition: "Jesus; the Greek form of the Hebrew name Joshua."
+    },
+
+    G266: {
+      lemma: "hamartia",
+      transliteration: "hamartia",
+      definition: "sin, offense, a failure to conform to God's standard."
+    },
+
+    G2962: {
+      lemma: "kurios",
+      transliteration: "kyrios",
+      definition: "Lord, master, one possessing authority."
+    },
+
+    G2983: {
+      lemma: "lambano",
+      transliteration: "lambanō",
+      definition: "to take, receive, obtain."
+    },
+
+    G3056: {
+      lemma: "logos",
+      transliteration: "logos",
+      definition: "word, message, statement, account; also used of the Word in John 1."
+    },
+
+    G3340: {
+      lemma: "metanoeo",
+      transliteration: "metanoeō",
+      definition: "to repent, change one's mind or turn from a former way."
+    },
+
+    G4100: {
+      lemma: "pisteuo",
+      transliteration: "pisteuō",
+      definition: "to believe, trust, have faith in."
+    },
+
+    G4102: {
+      lemma: "pistis",
+      transliteration: "pistis",
+      definition: "faith, belief, trust, confidence."
+    },
+
+    G4151: {
+      lemma: "pneuma",
+      transliteration: "pneuma",
+      definition: "spirit, wind, breath; used of the Holy Spirit and the human spirit."
+    },
+
+    G4678: {
+      lemma: "sophia",
+      transliteration: "sophia",
+      definition: "wisdom, skill, insight, especially wisdom that comes from God."
+    },
+
+    G4991: {
+      lemma: "soteria",
+      transliteration: "sōtēria",
+      definition: "salvation, deliverance, preservation."
+    },
+
+    G5485: {
+      lemma: "charis",
+      transliteration: "charis",
+      definition: "grace, favor, kindness, graciousness."
+    },
+
+    G932: {
+      lemma: "basileia",
+      transliteration: "basileia",
+      definition: "kingdom, royal rule, reign."
+    }
+
+  };
+
+
+  const strongsHebrew = {
+
+    H1: {
+      lemma: "ab",
+      transliteration: "ab",
+      definition: "father."
+    },
+
+    H430: {
+      lemma: "elohim",
+      transliteration: "elohim",
+      definition: "God, gods, divine being."
+    },
+
+    H2617: {
+      lemma: "chesed",
+      transliteration: "ḥesed",
+      definition: "steadfast love, lovingkindness, mercy, covenant faithfulness."
+    },
+
+    H530: {
+      lemma: "emunah",
+      transliteration: "emunah",
+      definition: "faithfulness, firmness, faith."
+    },
+
+    H539: {
+      lemma: "aman",
+      transliteration: "aman",
+      definition: "to believe, support, confirm, trust."
+    },
+
+    H2403: {
+      lemma: "chatta'ah",
+      transliteration: "chatta'ah",
+      definition: "sin, sin offering."
+    },
+
+    H3068: {
+      lemma: "YHWH",
+      transliteration: "YHWH",
+      definition: "the personal covenant name of God, traditionally represented as LORD."
+    },
+
+    H3467: {
+      lemma: "yasha",
+      transliteration: "yāshaʿ",
+      definition: "to save, deliver, give victory."
+    },
+
+    H3820: {
+      lemma: "leb",
+      transliteration: "lēb",
+      definition: "heart, inner person, mind, understanding."
+    },
+
+    H7225: {
+      lemma: "reshith",
+      transliteration: "rēshith",
+      definition: "beginning, first, firstfruits."
+    },
+
+    H7307: {
+      lemma: "ruach",
+      transliteration: "rûaḥ",
+      definition: "spirit, wind, breath."
+    },
+
+    H7965: {
+      lemma: "shalom",
+      transliteration: "shālôm",
+      definition: "peace, completeness, welfare, wholeness."
+    },
+
+    H8451: {
+      lemma: "torah",
+      transliteration: "tôrāh",
+      definition: "instruction, teaching, law."
+    }
+
+  };
+
+
+  /* =========================================
+     NORMALIZE STRONG'S INPUT
+  ========================================= */
+
+  function normalizeStrongs(
+    value
+  ) {
+
+    return String(
+      value || ""
+    )
+      .trim()
+      .toUpperCase()
+      .replace(
+        /\s+/g,
+        ""
+      );
+
+  }
+
+
+  function findStrongEntry(
+    value
+  ) {
+
+    const normalized =
+      normalizeStrongs(
+        value
+      );
+
+
+    if (
+      strongsGreek[
+        normalized
+      ]
+    ) {
+
+      return {
+
+        number:
+          normalized,
+
+        language:
+          "Greek",
+
+        data:
+          strongsGreek[
+            normalized
+          ]
+
+      };
+
+    }
+
+
+    if (
+      strongsHebrew[
+        normalized
+      ]
+    ) {
+
+      return {
+
+        number:
+          normalized,
+
+        language:
+          "Hebrew",
+
+        data:
+          strongsHebrew[
+            normalized
+          ]
+
+      };
+
+    }
+
+
+    return null;
+
+  }
+
+
+  function renderStrongEntry(
+    entry
+  ) {
+
+    const data =
+      entry.data;
+
+
+    return (
+      "<div class='result-item'>" +
+
+      "<div class='strongs-number'>" +
+      escapeHtml(
+        entry.number
+      ) +
+      "</div>" +
+
+      "<div class='small-note'>" +
+      escapeHtml(
+        entry.language
+      ) +
+      "</div>" +
+
+      "<div class='strongs-lemma'>" +
+      escapeHtml(
+        data.lemma
+      ) +
+      "</div>" +
+
+      "<div style='margin-top:4px'>" +
+      escapeHtml(
+        data.transliteration
+      ) +
+      "</div>" +
+
+      "<div class='strongs-definition'>" +
+      escapeHtml(
+        data.definition
+      ) +
+      "</div>" +
+
+      "</div>"
+    );
+
+  }
 
 
   /* =========================================
@@ -3491,6 +4441,7 @@
             "wordResults"
           );
 
+
         if (
           !word
         ) {
@@ -3504,17 +4455,39 @@
 
         }
 
+
+        /*
+          Check Strong's numbers first.
+          This is what fixes G26.
+        */
+
+        const strongEntry =
+          findStrongEntry(
+            word
+          );
+
+
+        if (
+          strongEntry
+        ) {
+
+          results.innerHTML =
+            renderStrongEntry(
+              strongEntry
+            );
+
+          return;
+
+        }
+
+
         results.innerHTML =
           "<div class='status-message'>" +
           "Searching original-language lexicons..." +
           "</div>";
 
-        try {
 
-          /*
-            Sefaria provides a public lexicon
-            endpoint without an API key.
-          */
+        try {
 
           const url =
             "https://www.sefaria.org/api/words/" +
@@ -3522,10 +4495,12 @@
               word
             );
 
+
           const response =
             await fetch(
               url
             );
+
 
           if (
             !response.ok
@@ -3537,8 +4512,10 @@
 
           }
 
+
           const data =
             await response.json();
+
 
           if (
             !Array.isArray(data) ||
@@ -3551,15 +4528,17 @@
               escapeHtml(
                 word
               ) +
-              "\". Try the original-language spelling or another form of the word." +
+              "\". Try the original Hebrew or Greek spelling, or a Strong's number such as G26." +
               "</div>";
 
             return;
 
           }
 
+
           results.innerHTML =
             "";
+
 
           data
             .slice(
@@ -3577,13 +4556,16 @@
                 item.className =
                   "result-item";
 
+
                 const headword =
                   entry.headword ||
                   entry.word ||
                   word;
 
+
                 let definition =
                   "";
+
 
                 if (
                   entry.content
@@ -3596,6 +4578,7 @@
 
                 }
 
+
                 if (
                   !definition &&
                   entry.definition
@@ -3603,7 +4586,9 @@
 
                   definition =
                     entry.definition;
+
                 }
+
 
                 item.innerHTML =
                   "<div class='result-reference'>" +
@@ -3611,18 +4596,21 @@
                     headword
                   ) +
                   "</div>" +
+
                   "<div class='small-note'>" +
                   escapeHtml(
                     entry.parent_lexicon ||
                     ""
                   ) +
                   "</div>" +
+
                   "<div style='margin-top:8px;line-height:1.6'>" +
                   escapeHtml(
                     definition ||
                     "Lexicon entry found."
                   ) +
                   "</div>";
+
 
                 results.appendChild(
                   item
@@ -3639,9 +4627,10 @@
             error
           );
 
+
           results.innerHTML =
             "<div class='error-message'>" +
-            "The original-language lookup could not be reached right now. Try again in a moment, or search using the original Hebrew or Greek spelling." +
+            "The original-language lookup could not be reached right now. Try a Strong's number such as G26 or search using the original Hebrew or Greek spelling." +
             "</div>";
 
         }
@@ -3667,6 +4656,7 @@
 
     }
 
+
     if (
       Array.isArray(value)
     ) {
@@ -3681,6 +4671,7 @@
         .join(" ");
 
     }
+
 
     if (
       value &&
@@ -3698,6 +4689,7 @@
 
       }
 
+
       if (
         value.senses
       ) {
@@ -3707,6 +4699,7 @@
         );
 
       }
+
 
       if (
         value.content
@@ -3719,6 +4712,7 @@
       }
 
     }
+
 
     return "";
 
@@ -3804,6 +4798,7 @@
     urlParams.get(
       "topic"
     );
+
 
   if (
     urlTopic
