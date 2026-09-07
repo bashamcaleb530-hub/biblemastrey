@@ -1,0 +1,2090 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Build a Sermon - BibleMastrey</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f7fa;
+      color: #222;
+    }
+
+    header {
+      background: #243447;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0 0 8px;
+      font-size: 28px;
+    }
+
+    header p {
+      margin: 0;
+      color: #dfe7ef;
+    }
+
+    .back-button {
+      display: inline-block;
+      margin-top: 15px;
+      padding: 10px 16px;
+      background: white;
+      color: #243447;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: bold;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 25px auto;
+      padding: 0 15px;
+    }
+
+    .intro {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.08);
+    }
+
+    .choice-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+      margin-bottom: 25px;
+    }
+
+    .choice-card {
+      background: white;
+      padding: 22px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.08);
+      cursor: pointer;
+      border: 2px solid transparent;
+    }
+
+    .choice-card:hover {
+      border-color: #527aa3;
+    }
+
+    .choice-card h2 {
+      margin-top: 0;
+    }
+
+    .section {
+      background: white;
+      padding: 22px;
+      margin-bottom: 25px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.08);
+    }
+
+    .section h2 {
+      margin-top: 0;
+      color: #243447;
+    }
+
+    .section h3 {
+      color: #34495e;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin: 14px 0 6px;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      padding: 11px;
+      border: 1px solid #bbb;
+      border-radius: 6px;
+      font-family: Arial, sans-serif;
+      font-size: 15px;
+    }
+
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    button {
+      border: none;
+      padding: 11px 17px;
+      border-radius: 6px;
+      cursor: pointer;
+      background: #243447;
+      color: white;
+      font-weight: bold;
+      margin: 5px;
+    }
+
+    button:hover {
+      opacity: .9;
+    }
+
+    .secondary {
+      background: #64748b;
+    }
+
+    .danger {
+      background: #a33a3a;
+    }
+
+    .success {
+      background: #356859;
+    }
+
+    .lesson {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 18px;
+      margin-bottom: 15px;
+      background: #fafafa;
+    }
+
+    .lesson h3 {
+      margin-top: 0;
+    }
+
+    .lesson-question {
+      background: #eef3f7;
+      padding: 12px;
+      border-radius: 6px;
+      margin-top: 10px;
+    }
+
+    .guide-template {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .sticky-box {
+      position: sticky;
+      top: 15px;
+    }
+
+    .helper {
+      background: #f1f5f9;
+      border-left: 4px solid #527aa3;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    .tool-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .tool-box {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 16px;
+      background: #fafafa;
+    }
+
+    .result {
+      margin-top: 12px;
+      padding: 12px;
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      white-space: pre-wrap;
+    }
+
+    .verse-result {
+      padding: 12px;
+      margin: 8px 0;
+      background: #fff;
+      border-left: 4px solid #527aa3;
+      border-radius: 5px;
+    }
+
+    .small {
+      font-size: 13px;
+      color: #666;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .course-progress {
+      background: #e5e7eb;
+      height: 12px;
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 12px 0;
+    }
+
+    .course-progress-bar {
+      height: 100%;
+      width: 0%;
+      background: #527aa3;
+    }
+
+    .template-section {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 18px;
+      background: #fff;
+    }
+
+    .template-section h3 {
+      margin-top: 0;
+    }
+
+    @media (max-width: 800px) {
+      .choice-grid,
+      .guide-template,
+      .tool-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .sticky-box {
+        position: static;
+      }
+    }
+
+    @media print {
+      header,
+      .no-print,
+      .tool-section,
+      .choice-grid,
+      .intro {
+        display: none !important;
+      }
+
+      body {
+        background: white;
+      }
+
+      .section {
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>🎤 Build a Sermon</h1>
+  <p>Prepare a biblical sermon step by step with Bible study tools.</p>
+
+  <a href="index.html" class="back-button">
+    ← Back to BibleMastrey
+  </a>
+</header>
+
+<div class="container">
+
+  <div class="intro">
+    <h2>Build Your Sermon Step by Step</h2>
+
+    <p>
+      BibleMastrey helps you move from studying Scripture to preparing
+      a clear, biblical, practical sermon.
+    </p>
+
+    <p>
+      Use the Bible tools first. Then use the preparation guide and
+      sermon template to organize what you discover.
+    </p>
+  </div>
+
+  <!-- CHOICES -->
+
+  <div class="choice-grid no-print">
+
+    <div class="choice-card" onclick="showSection('courseSection')">
+      <h2>📖 Sermon Preparation Guide</h2>
+
+      <p>
+        Learn how to prepare a sermon from beginning to end.
+        Each step explains what to do, how to do it, why it matters,
+        and questions to ask.
+      </p>
+    </div>
+
+    <div class="choice-card" onclick="showSection('templateSection')">
+      <h2>📝 Sermon Template</h2>
+
+      <p>
+        Build your actual sermon while following the preparation guide.
+        Your work can be saved and loaded later.
+      </p>
+    </div>
+
+  </div>
+
+  <!-- BIBLE STUDY TOOLS -->
+
+  <div class="section tool-section no-print">
+
+    <h2>📚 Bible Study Tools</h2>
+
+    <p>
+      Start here. Study the passage before building your sermon.
+    </p>
+
+    <div class="tool-grid">
+
+      <!-- Bible Search -->
+
+      <div class="tool-box">
+
+        <h3>📖 Bible Search</h3>
+
+        <label for="translation">Translation</label>
+
+        <select id="translation">
+          <option value="kjv">KJV</option>
+          <option value="web">WEB</option>
+          <option value="asv">ASV</option>
+        </select>
+
+        <label for="bibleSearch">
+          Search Scripture
+        </label>
+
+        <input
+          id="bibleSearch"
+          type="text"
+          placeholder="Example: John 3:16 or faith"
+        >
+
+        <button onclick="searchBible()">
+          Search Bible
+        </button>
+
+        <div id="bibleResults" class="result">
+          Enter a passage or Bible word to search.
+        </div>
+
+      </div>
+
+      <!-- Dictionary -->
+
+      <div class="tool-box">
+
+        <h3>📘 Bible Dictionary</h3>
+
+        <label for="dictionarySearch">
+          Search Dictionary
+        </label>
+
+        <input
+          id="dictionarySearch"
+          type="text"
+          placeholder="Example: grace"
+        >
+
+        <button onclick="searchDictionary()">
+          Search Dictionary
+        </button>
+
+        <div id="dictionaryResults" class="result">
+          Search for a Bible word or topic.
+        </div>
+
+      </div>
+
+      <!-- Strong's -->
+
+      <div class="tool-box">
+
+        <h3>🔤 Hebrew & Greek Word Lookup</h3>
+
+        <label for="strongSearch">
+          Strong's Number
+        </label>
+
+        <input
+          id="strongSearch"
+          type="text"
+          placeholder="Example: G26 or H2617"
+        >
+
+        <button onclick="searchStrongs()">
+          Look Up Word
+        </button>
+
+        <div id="strongResults" class="result">
+          Enter a Strong's number.
+        </div>
+
+      </div>
+
+      <!-- Concordance -->
+
+      <div class="tool-box">
+
+        <h3>🔎 Concordance</h3>
+
+        <label for="concordanceSearch">
+          Search Word
+        </label>
+
+        <input
+          id="concordanceSearch"
+          type="text"
+          placeholder="Example: love"
+        >
+
+        <button onclick="searchConcordance()">
+          Search Concordance
+        </button>
+
+        <div id="concordanceResults" class="result">
+          Search for where a word appears in Scripture.
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- COMMENTARIES -->
+
+  <div class="section tool-section no-print">
+
+    <h2>📚 Bible Commentaries</h2>
+
+    <p>
+      Use commentaries as study helps. Compare what you learn with
+      the actual biblical text and context.
+    </p>
+
+    <select id="commentarySelect">
+      <option value="matthew-henry-concise">
+        Matthew Henry Concise
+      </option>
+
+      <option value="matthew-henry-complete">
+        Matthew Henry Complete
+      </option>
+
+      <option value="john-gill">
+        John Gill
+      </option>
+
+      <option value="jfb">
+        Jamieson-Fausset-Brown
+      </option>
+
+      <option value="adam-clarke">
+        Adam Clarke
+      </option>
+
+      <option value="barnes">
+        Barnes' Notes
+      </option>
+    </select>
+
+    <label for="commentaryReference">
+      Bible Passage
+    </label>
+
+    <input
+      id="commentaryReference"
+      type="text"
+      placeholder="Example: John 3:16"
+    >
+
+    <button onclick="loadCommentary()">
+      Read Commentary
+    </button>
+
+    <div id="commentaryResults" class="result">
+      Enter a Bible passage to read commentary.
+    </div>
+
+  </div>
+
+  <!-- COURSE -->
+
+  <div id="courseSection" class="section">
+
+    <h2>📖 Sermon Preparation Guide</h2>
+
+    <p>
+      Follow these steps from prayer and preparation through reviewing
+      your finished sermon.
+    </p>
+
+    <div class="course-progress">
+      <div id="progressBar" class="course-progress-bar"></div>
+    </div>
+
+    <p id="progressText" class="small">
+      Lesson 1 of 18
+    </p>
+
+    <div id="lessons">
+
+      <div class="lesson">
+        <h3>1. Pray and Begin With the Right Purpose</h3>
+
+        <p>
+          Begin by asking God for wisdom, understanding, humility,
+          and faithfulness to Scripture.
+        </p>
+
+        <div class="helper">
+          <strong>Ask yourself:</strong>
+          Am I preparing this sermon to faithfully teach God's Word
+          and help people understand and apply it?
+        </div>
+      </div>
+
+      <div class="lesson">
+        <h3>2. Choose the Sermon Topic or Passage</h3>
+
+        <p>
+          Choose a biblical passage or a clear biblical topic.
+          Avoid starting with an idea and forcing Scripture to support it.
+        </p>
+
+        <div class="helper">
+          <strong>Suggestion:</strong>
+          Start with the Scripture whenever possible. Let the text
+          help determine the message.
+        </div>
+      </div>
+
+      <div class="lesson">
+        <h3>3. Read the Passage Carefully</h3>
+
+        <p>
+          Read the passage several times. Read what comes before and
+          after it. Look for repeated words, commands, promises,
+          warnings, contrasts, and important ideas.
+        </p>
+
+        <div class="helper">
+          <strong>Question:</strong>
+          What does the passage actually say?
+        </div>
+      </div>
+
+      <div class="lesson">
+        <h3>4. Study the Context</h3>
+
+        <p>
+          Determine who wrote the passage, who received it, what was
+          happening, and how the passage fits into the surrounding chapter
+          and book.
+        </p>
+
+        <div class="helper">
+          <strong>Why it matters:</strong>
+          Context helps prevent taking a verse out of its intended meaning.
+        </div>
+      </div>
+
+      <div class="lesson">
+        <h3>5. Find the Main Biblical Truth</h3>
+
+        <p>
+          Ask what central truth the passage teaches.
+        </p>
+
+        <div class="helper">
+          <strong>Try this:</strong>
+          Write the main truth in one clear sentence.
+        </div>
+      </div>
+
+      <div class="lesson">
+        <h3>6. Study Important Hebrew or Greek Words</h3>
+
+        <p>
+          Use the Hebrew and Greek tools when a word's original meaning
+          helps clarify the passage.
+        </p>
+
+        <div class="helper">
+          <strong>Important:</strong>
+          Original-language study should clarify Scripture, not replace
+          the context of Scripture.
+        </div>
+      </div>
+
+      <div class="lesson">
+        <h3>7. Use the Bible Dictionary</h3>
+
+        <p>
+          Look up important people, places, concepts, customs, and
+          theological terms connected to your passage.
+        </p>
+
+        <div class="helper">
+          <strong>Question:</strong>
+          Is there background information that would help someone
+          understand this passage?
+        </div>
+      </div>
+
+      <div class="lesson">
+        <h3>8. Use the Concordance</h3>
+
+        <p>
+          Search important words and see how Scripture uses those words
+          elsewhere.
+        </p>
+
+        <div class="helper">
+          <strong>Suggestion:</strong>
+          Compare related passages rather than relying on one verse alone.
+        </div>
+      </div>
+
+      <div class="lesson">
+        <h3>9. Compare Bible Translations</h3>
+
+        <p>
+          Compare KJV, WEB, and ASV to notice wording differences
+          that may help clarify the passage.
+        </p>
+
+        <div class="helper">
+          <strong>Question:</strong>
+          What does every translation clearly communicate?
+        </div>
+      </div>
+
+      <div class="lesson">
+        <h3>10. Read the Commentaries</h3>
+
+        <p>
+          Compare trusted commentaries and look for historical,
+          grammatical, and theological observations.
+        </p>
+
+        <div class="helper">
+          <strong>Remember:</strong>
+          Commentaries are study helps. Scripture remains the primary source.
+        </div>
+      </div>
+
+      <div class="lesson">
+        <h3>11. Develop the Main Sermon Point</h3>
+
+        <p>
+          Turn your main biblical truth into a clear statement
+          that your listeners can remember.
+        </p>
+
+        <div class="helper">
+          <strong>Example:</strong>
+          "Because God has forgiven us, we should learn to forgive others."
+        </div>
+      </div>
+
+      <div class="lesson">
+        <h3>12. Build Supporting Points</h3>
+
+        <p>
+          Develop two or three major points that explain and support
+          the main biblical truth.
+        </p>
+
+        <div class="helper">
+          <strong>Tip:</strong>
+          Every major point should connect back to the main message.
+        </div>
+      </div>
+
+      <div class="lesson">
+        <h3>13. Explain the Scripture</h3>
+
+        <p>
+          Explain what the passage means before moving to personal
+          opinions or applications.
+        </p>
+
+        <div class="helper">
+          <strong>Ask:</strong>
+          What does this verse mean in its original context?
+        </div>
+      </div>
+
+      <div class="lesson">
+        <h3>14. Give Practical Application</h3>
+
+        <p>
+          Show people how the biblical truth should affect their lives,
+          choices, relationships, faith, and actions.
+        </p>
+
+        <div class="helper">
+          <strong>Question:</strong>
+          What should someone do differently because of this truth?
+        </div>
+      </div>
+
+      <div class="lesson">
+        <h3>15. Write the Introduction</h3>
+
+        <p>
+          Introduce the problem, question, situation, or biblical truth
+          that will lead people into the message.
+        </p>
+
+        <div class="helper">
+          <strong>Goal:</strong>
+          Get attention while clearly pointing toward the biblical message.
+        </div>
+      </div>
+
+      <div class="lesson">
+        <h3>16. Write the Conclusion</h3>
+
+        <p>
+          Bring the sermon back to the main biblical truth.
+          Do not introduce a completely new message at the end.
+        </p>
+
+        <div class="helper">
+          <strong>Question:</strong>
+          What do I want people to remember after they leave?
+        </div>
+      </div>
+
+      <div class="lesson">
+        <h3>17. Put the Sermon Together</h3>
+
+        <p>
+          Organize the introduction, Scripture, explanation,
+          points, illustrations, applications, and conclusion.
+        </p>
+
+        <div class="helper">
+          <strong>Check:</strong>
+          Does every part of the sermon support the central biblical truth?
+        </div>
+      </div>
+
+      <div class="lesson">
+        <h3>18. Review for Biblical Accuracy and Clarity</h3>
+
+        <p>
+          Read through the complete sermon carefully.
+          Check every Scripture reference and make sure your conclusions
+          actually follow the biblical text.
+        </p>
+
+        <div class="helper">
+          <strong>Final questions:</strong>
+          Is it biblical? Is it clear? Is it faithful to context?
+          Is it practical? Can someone understand the main message?
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- SERMON TEMPLATE -->
+
+  <div id="templateSection" class="section">
+
+    <h2>📝 Guided Teaching Sermon Template</h2>
+
+    <p>
+      Use this template while following the preparation guide.
+      The guide explains what belongs in each section.
+    </p>
+
+    <div class="guide-template">
+
+      <!-- TEMPLATE -->
+
+      <div>
+
+        <div class="template-section">
+
+          <h3>1. Sermon Title</h3>
+
+          <div class="helper">
+            <strong>What goes here:</strong>
+            A short title that communicates the message.
+          </div>
+
+          <input id="sermonTitle" placeholder="Enter sermon title">
+
+        </div>
+
+        <div class="template-section">
+
+          <h3>2. Main Scripture</h3>
+
+          <div class="helper">
+            <strong>Suggestion:</strong>
+            Choose the primary passage your sermon will explain.
+          </div>
+
+          <input
+            id="mainScripture"
+            placeholder="Example: John 3:16"
+          >
+
+        </div>
+
+        <div class="template-section">
+
+          <h3>3. Sermon Topic</h3>
+
+          <input
+            id="sermonTopic"
+            placeholder="What is this sermon about?"
+          >
+
+        </div>
+
+        <div class="template-section">
+
+          <h3>4. Sermon Purpose</h3>
+
+          <div class="helper">
+            What do you want people to understand, believe, or do?
+          </div>
+
+          <textarea
+            id="sermonPurpose"
+            placeholder="The purpose of this sermon is..."
+          ></textarea>
+
+        </div>
+
+        <div class="template-section">
+
+          <h3>5. Main Biblical Truth</h3>
+
+          <div class="helper">
+            Write the central truth of the sermon in one sentence.
+          </div>
+
+          <textarea
+            id="mainTruth"
+            placeholder="The main biblical truth is..."
+          ></textarea>
+
+        </div>
+
+        <div class="template-section">
+
+          <h3>6. Introduction</h3>
+
+          <div class="helper">
+            Introduce the subject and lead listeners toward the main
+            biblical truth.
+          </div>
+
+          <textarea
+            id="introduction"
+            placeholder="Write your introduction..."
+          ></textarea>
+
+        </div>
+
+        <div class="template-section">
+
+          <h3>7. Read the Scripture</h3>
+
+          <div class="helper">
+            Write notes about the primary passage and what you want
+            listeners to notice.
+          </div>
+
+          <textarea
+            id="readScripture"
+            placeholder="Scripture reading notes..."
+          ></textarea>
+
+        </div>
+
+        <div class="template-section">
+
+          <h3>8. Context</h3>
+
+          <div class="helper">
+            Explain the historical, literary, and immediate context.
+          </div>
+
+          <textarea
+            id="context"
+            placeholder="Explain the context..."
+          ></textarea>
+
+        </div>
+
+        <div class="template-section">
+
+          <h3>9. Main Biblical Truth</h3>
+
+          <textarea
+            id="templateMainTruth"
+            placeholder="State the main truth..."
+          ></textarea>
+
+        </div>
+
+        <!-- POINT 1 -->
+
+        <div class="template-section">
+
+          <h3>10. Point 1 — Explain the Scripture</h3>
+
+          <input
+            id="point1Title"
+            placeholder="Point 1 title"
+          >
+
+          <label>Explanation</label>
+
+          <textarea
+            id="point1Explanation"
+            placeholder="Explain what Scripture teaches..."
+          ></textarea>
+
+          <label>Supporting Scripture</label>
+
+          <textarea
+            id="point1Scripture"
+            placeholder="Supporting Bible verses..."
+          ></textarea>
+
+          <label>Application</label>
+
+          <textarea
+            id="point1Application"
+            placeholder="How should this truth affect our lives?"
+          ></textarea>
+
+        </div>
+
+        <!-- POINT 2 -->
+
+        <div class="template-section">
+
+          <h3>11. Point 2 — Explain the Scripture</h3>
+
+          <input
+            id="point2Title"
+            placeholder="Point 2 title"
+          >
+
+          <label>Explanation</label>
+
+          <textarea
+            id="point2Explanation"
+            placeholder="Explain what Scripture teaches..."
+          ></textarea>
+
+          <label>Supporting Scripture</label>
+
+          <textarea
+            id="point2Scripture"
+            placeholder="Supporting Bible verses..."
+          ></textarea>
+
+          <label>Application</label>
+
+          <textarea
+            id="point2Application"
+            placeholder="How should this truth affect our lives?"
+          ></textarea>
+
+        </div>
+
+        <!-- POINT 3 -->
+
+        <div class="template-section">
+
+          <h3>12. Point 3 — Explain the Scripture</h3>
+
+          <input
+            id="point3Title"
+            placeholder="Point 3 title"
+          >
+
+          <label>Explanation</label>
+
+          <textarea
+            id="point3Explanation"
+            placeholder="Explain what Scripture teaches..."
+          ></textarea>
+
+          <label>Supporting Scripture</label>
+
+          <textarea
+            id="point3Scripture"
+            placeholder="Supporting Bible verses..."
+          ></textarea>
+
+          <label>Application</label>
+
+          <textarea
+            id="point3Application"
+            placeholder="How should this truth affect our lives?"
+          ></textarea>
+
+        </div>
+
+        <div class="template-section">
+
+          <h3>13. Additional Scriptures</h3>
+
+          <textarea
+            id="additionalScriptures"
+            placeholder="List additional supporting passages..."
+          ></textarea>
+
+        </div>
+
+        <div class="template-section">
+
+          <h3>14. Illustrations and Examples</h3>
+
+          <div class="helper">
+            Use illustrations that clarify the biblical truth rather
+            than distracting from it.
+          </div>
+
+          <textarea
+            id="illustrations"
+            placeholder="Write illustrations or examples..."
+          ></textarea>
+
+        </div>
+
+        <div class="template-section">
+
+          <h3>15. Practical Application</h3>
+
+          <textarea
+            id="practicalApplication"
+            placeholder="What should listeners do with this message?"
+          ></textarea>
+
+        </div>
+
+        <div class="template-section">
+
+          <h3>16. Conclusion</h3>
+
+          <textarea
+            id="conclusion"
+            placeholder="Bring the message back to the main truth..."
+          ></textarea>
+
+        </div>
+
+        <div class="template-section">
+
+          <h3>17. Response / Call to Action</h3>
+
+          <textarea
+            id="response"
+            placeholder="What response should listeners make?"
+          ></textarea>
+
+        </div>
+
+        <div class="template-section">
+
+          <h3>18. Closing Prayer</h3>
+
+          <textarea
+            id="closingPrayer"
+            placeholder="Write the closing prayer..."
+          ></textarea>
+
+        </div>
+
+      </div>
+
+      <!-- GUIDE -->
+
+      <div class="sticky-box">
+
+        <div class="section">
+
+          <h2>🧭 Keep the Guide Beside You</h2>
+
+          <p>
+            As you write, keep asking:
+          </p>
+
+          <div class="helper">
+            <strong>1.</strong> What does Scripture say?
+          </div>
+
+          <div class="helper">
+            <strong>2.</strong> What does Scripture mean in context?
+          </div>
+
+          <div class="helper">
+            <strong>3.</strong> What biblical truth should people understand?
+          </div>
+
+          <div class="helper">
+            <strong>4.</strong> How should this truth change our lives?
+          </div>
+
+          <div class="helper">
+            <strong>5.</strong> Can I support my teaching with Scripture?
+          </div>
+
+          <div class="helper">
+            <strong>6.</strong> Am I explaining Scripture or merely giving
+            my opinion?
+          </div>
+
+          <div class="helper">
+            <strong>7.</strong> Is the message clear enough for someone
+            hearing it for the first time?
+          </div>
+
+        </div>
+
+        <div class="section">
+
+          <h2>🤖 Sermon Study Assistant</h2>
+
+          <p>
+            AI assistance can be added here later to help with research,
+            organization, questions, outlines, and review.
+          </p>
+
+          <div class="helper">
+            AI should assist your study rather than replace your study
+            of Scripture.
+          </div>
+
+          <button onclick="alert('AI Sermon Assistant will be added later.')">
+            Open AI Assistant
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- SAVE CONTROLS -->
+
+  <div class="section no-print">
+
+    <h2>💾 Sermon Controls</h2>
+
+    <button class="success" onclick="saveSermon()">
+      Save Sermon
+    </button>
+
+    <button onclick="loadSermon()">
+      Load Sermon
+    </button>
+
+    <button class="danger" onclick="clearSermon()">
+      Clear Sermon
+    </button>
+
+    <button class="secondary" onclick="window.print()">
+      Print Sermon
+    </button>
+
+    <p id="saveStatus" class="small"></p>
+
+  </div>
+
+</div>
+
+<script src="bible.js"></script>
+
+<script>
+
+  function showSection(id) {
+
+    const section = document.getElementById(id);
+
+    if (!section) return;
+
+    section.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+
+  }
+
+
+  /* =========================
+     COURSE PROGRESS
+  ========================= */
+
+  const lessons =
+    document.querySelectorAll(".lesson");
+
+  const progressBar =
+    document.getElementById("progressBar");
+
+  const progressText =
+    document.getElementById("progressText");
+
+  function updateProgress() {
+
+    if (!lessons.length) return;
+
+    const total = lessons.length;
+
+    const scrollTop =
+      window.scrollY;
+
+    let current = 1;
+
+    lessons.forEach(function(lesson, index) {
+
+      const position =
+        lesson.getBoundingClientRect().top +
+        window.scrollY;
+
+      if (scrollTop >= position - 200) {
+        current = index + 1;
+      }
+
+    });
+
+    const percent =
+      (current / total) * 100;
+
+    progressBar.style.width =
+      percent + "%";
+
+    progressText.textContent =
+      "Lesson " + current + " of " + total;
+  }
+
+  window.addEventListener(
+    "scroll",
+    updateProgress
+  );
+
+  updateProgress();
+
+
+  /* =========================
+     BIBLE SEARCH
+  ========================= */
+
+  async function searchBible() {
+
+    const query =
+      document.getElementById("bibleSearch").value.trim();
+
+    const results =
+      document.getElementById("bibleResults");
+
+    if (!query) {
+
+      results.textContent =
+        "Please enter a Bible passage or word.";
+
+      return;
+    }
+
+    results.textContent =
+      "Searching Scripture...";
+
+    try {
+
+      const translation =
+        document.getElementById("translation").value;
+
+      let bible;
+
+      if (translation === "web") {
+
+        bible = await getWEB();
+
+      } else if (translation === "asv") {
+
+        bible = await getASV();
+
+      } else {
+
+        bible = await getKJV();
+
+      }
+
+      const found = [];
+
+      if (
+        bible &&
+        Array.isArray(bible.books)
+      ) {
+
+        bible.books.forEach(function(book) {
+
+          const chapters =
+            Array.isArray(book.chapters)
+              ? book.chapters
+              : [];
+
+          chapters.forEach(function(chapter) {
+
+            const verses =
+              Array.isArray(chapter.verses)
+                ? chapter.verses
+                : [];
+
+            verses.forEach(function(verse) {
+
+              const text =
+                verse.text || "";
+
+              const reference =
+                (book.book ||
+                 book.name ||
+                 book.englishName ||
+                 "") +
+                " " +
+                chapter.chapter +
+                ":" +
+                verse.number;
+
+              if (
+                reference.toLowerCase().includes(
+                  query.toLowerCase()
+                ) ||
+                text.toLowerCase().includes(
+                  query.toLowerCase()
+                )
+              ) {
+
+                found.push({
+                  reference,
+                  text
+                });
+
+              }
+
+            });
+
+          });
+
+        });
+
+      }
+
+      if (!found.length) {
+
+        results.textContent =
+          "No results found.";
+
+        return;
+      }
+
+      results.innerHTML =
+        found.slice(0, 50).map(function(item) {
+
+          return `
+            <div class="verse-result">
+              <strong>${escapeHTML(item.reference)}</strong>
+              <br>
+              ${escapeHTML(item.text)}
+            </div>
+          `;
+
+        }).join("");
+
+    } catch (error) {
+
+      console.error(error);
+
+      results.textContent =
+        "Bible search could not be completed.";
+
+    }
+
+  }
+
+
+  /* =========================
+     DICTIONARY
+  ========================= */
+
+  function searchDictionary() {
+
+    const word =
+      document.getElementById(
+        "dictionarySearch"
+      ).value.trim();
+
+    const results =
+      document.getElementById(
+        "dictionaryResults"
+      );
+
+    if (!word) {
+
+      results.textContent =
+        "Enter a word or Bible topic.";
+
+      return;
+    }
+
+    results.innerHTML = `
+      <strong>${escapeHTML(word)}</strong>
+
+      <p>
+        Bible Dictionary lookup is connected to the
+        BibleMastrey study system. Use this area to
+        research the meaning, background, people,
+        places, or biblical concepts connected to
+        your sermon.
+      </p>
+
+      <p class="small">
+        Additional dictionary entries can be connected
+        here as the BibleMastrey study library grows.
+      </p>
+    `;
+
+  }
+
+
+  /* =========================
+     STRONG'S
+  ========================= */
+
+  function searchStrongs() {
+
+    const number =
+      document.getElementById(
+        "strongSearch"
+      ).value.trim().toUpperCase();
+
+    const results =
+      document.getElementById(
+        "strongResults"
+      );
+
+    if (!number) {
+
+      results.textContent =
+        "Enter a Strong's number.";
+
+      return;
+    }
+
+    /*
+      Use the Strong's data already available
+      in BibleMastrey when it exists.
+    */
+
+    if (
+      typeof window.strongsMap !== "undefined" &&
+      window.strongsMap[number]
+    ) {
+
+      const entry =
+        window.strongsMap[number];
+
+      results.innerHTML = `
+        <strong>${escapeHTML(number)}</strong>
+        <br><br>
+        ${escapeHTML(
+          typeof entry === "string"
+            ? entry
+            : JSON.stringify(entry)
+        )}
+      `;
+
+      return;
+    }
+
+    results.innerHTML = `
+      <strong>${escapeHTML(number)}</strong>
+
+      <p>
+        No entry was found in the currently loaded
+        Strong's lookup data.
+      </p>
+
+      <p class="small">
+        The scalable Strong's database will be expanded
+        as BibleMastrey develops.
+      </p>
+    `;
+
+  }
+
+
+  /* =========================
+     CONCORDANCE
+  ========================= */
+
+  async function searchConcordance() {
+
+    const word =
+      document.getElementById(
+        "concordanceSearch"
+      ).value.trim().toLowerCase();
+
+    const results =
+      document.getElementById(
+        "concordanceResults"
+      );
+
+    if (!word) {
+
+      results.textContent =
+        "Enter a word to search.";
+
+      return;
+    }
+
+    results.textContent =
+      "Searching Scripture...";
+
+    try {
+
+      const bible =
+        await getKJV();
+
+      const found = [];
+
+      if (
+        bible &&
+        Array.isArray(bible.books)
+      ) {
+
+        bible.books.forEach(function(book) {
+
+          const chapters =
+            Array.isArray(book.chapters)
+              ? book.chapters
+              : [];
+
+          chapters.forEach(function(chapter) {
+
+            const verses =
+              Array.isArray(chapter.verses)
+                ? chapter.verses
+                : [];
+
+            verses.forEach(function(verse) {
+
+              const text =
+                verse.text || "";
+
+              if (
+                text.toLowerCase().includes(word)
+              ) {
+
+                found.push({
+                  reference:
+                    (book.book ||
+                     book.name ||
+                     book.englishName ||
+                     "") +
+                    " " +
+                    chapter.chapter +
+                    ":" +
+                    verse.number,
+
+                  text
+                });
+
+              }
+
+            });
+
+          });
+
+        });
+
+      }
+
+      if (!found.length) {
+
+        results.textContent =
+          "No occurrences found.";
+
+        return;
+      }
+
+      results.innerHTML =
+        found.slice(0, 100).map(function(item) {
+
+          return `
+            <div class="verse-result">
+              <strong>${escapeHTML(item.reference)}</strong>
+              <br>
+              ${escapeHTML(item.text)}
+            </div>
+          `;
+
+        }).join("");
+
+    } catch (error) {
+
+      console.error(error);
+
+      results.textContent =
+        "Concordance search failed.";
+
+    }
+
+  }
+
+
+  /* =========================
+     COMMENTARY
+  ========================= */
+
+  async function loadCommentary() {
+
+    const reference =
+      document.getElementById(
+        "commentaryReference"
+      ).value.trim();
+
+    const commentary =
+      document.getElementById(
+        "commentarySelect"
+      ).value;
+
+    const results =
+      document.getElementById(
+        "commentaryResults"
+      );
+
+    if (!reference) {
+
+      results.textContent =
+        "Enter a Bible passage.";
+
+      return;
+    }
+
+    /*
+      Commentary API used by BibleMastrey.
+    */
+
+    const commentaryApiIds = {
+
+      "matthew-henry-complete":
+        "matthew-henry",
+
+      "john-gill":
+        "john-gill",
+
+      "jfb":
+        "jamieson-fausset-brown",
+
+      "adam-clarke":
+        "adam-clarke"
+
+    };
+
+    if (commentary === "barnes") {
+
+      results.innerHTML = `
+        <strong>Barnes' Notes</strong>
+
+        <p>
+          Barnes' Notes is being connected to the
+          BibleMastrey commentary system.
+        </p>
+
+        <p class="small">
+          Barnes' Notes is primarily a New Testament
+          commentary.
+        </p>
+      `;
+
+      return;
+    }
+
+    if (
+      commentary ===
+      "matthew-henry-concise"
+    ) {
+
+      results.innerHTML = `
+        <strong>Matthew Henry Concise</strong>
+
+        <p>
+          Matthew Henry Concise commentary support
+          is available through the BibleMastrey
+          commentary system.
+        </p>
+
+        <p>
+          Passage requested:
+          <strong>
+            ${escapeHTML(reference)}
+          </strong>
+        </p>
+      `;
+
+      return;
+    }
+
+    const apiId =
+      commentaryApiIds[commentary];
+
+    if (!apiId) {
+
+      results.textContent =
+        "This commentary is not currently connected.";
+
+      return;
+    }
+
+    /*
+      Parse a simple reference such as:
+      John 3:16
+      Genesis 1
+    */
+
+    const match =
+      reference.match(
+        /^(.+?)\s+(\d+)(?::(\d+))?$/
+      );
+
+    if (!match) {
+
+      results.textContent =
+        "Use a reference such as John 3:16 or Genesis 1.";
+
+      return;
+    }
+
+    const bookName =
+      match[1].trim();
+
+    const chapter =
+      match[2];
+
+    try {
+
+      const url =
+        "https://bible.helloao.org/api/c/" +
+        encodeURIComponent(apiId) +
+        "/" +
+        encodeURIComponent(bookName) +
+        "/" +
+        chapter +
+        ".simple.json";
+
+      results.textContent =
+        "Loading commentary...";
+
+      const response =
+        await fetch(url);
+
+      if (!response.ok) {
+
+        throw new Error(
+          "Commentary request failed"
+        );
+
+      }
+
+      const data =
+        await response.json();
+
+      let content =
+        data &&
+        data.chapter &&
+        Array.isArray(data.chapter.content)
+          ? data.chapter.content
+          : [];
+
+      if (!content.length) {
+
+        results.textContent =
+          "No commentary was found for this passage.";
+
+        return;
+      }
+
+      const requestedVerse =
+        match[3]
+          ? Number(match[3])
+          : null;
+
+      if (requestedVerse !== null) {
+
+        const verse =
+          content.find(function(item) {
+
+            return (
+              item.type === "verse" &&
+              Number(item.number) ===
+                requestedVerse
+            );
+
+          });
+
+        if (verse) {
+
+          content = [verse];
+
+        }
+
+      }
+
+      results.innerHTML =
+        content.map(function(item) {
+
+          return `
+            <div class="verse-result">
+              ${
+                item.number
+                  ? `<strong>Verse ${escapeHTML(String(item.number))}</strong><br>`
+                  : ""
+              }
+
+              ${escapeHTML(
+                item.text || ""
+              )}
+            </div>
+          `;
+
+        }).join("");
+
+    } catch (error) {
+
+      console.error(error);
+
+      results.innerHTML = `
+        <strong>Commentary could not be loaded.</strong>
+
+        <p>
+          Check the Bible book and chapter and try again.
+        </p>
+      `;
+
+    }
+
+  }
+
+
+  /* =========================
+     SAVE SERMON
+  ========================= */
+
+  const sermonFields = [
+
+    "sermonTitle",
+    "mainScripture",
+    "sermonTopic",
+    "sermonPurpose",
+    "mainTruth",
+    "introduction",
+    "readScripture",
+    "context",
+    "templateMainTruth",
+
+    "point1Title",
+    "point1Explanation",
+    "point1Scripture",
+    "point1Application",
+
+    "point2Title",
+    "point2Explanation",
+    "point2Scripture",
+    "point2Application",
+
+    "point3Title",
+    "point3Explanation",
+    "point3Scripture",
+    "point3Application",
+
+    "additionalScriptures",
+    "illustrations",
+    "practicalApplication",
+    "conclusion",
+    "response",
+    "closingPrayer"
+
+  ];
+
+
+  function saveSermon() {
+
+    const sermon = {};
+
+    sermonFields.forEach(function(id) {
+
+      const element =
+        document.getElementById(id);
+
+      if (element) {
+
+        sermon[id] =
+          element.value;
+
+      }
+
+    });
+
+    localStorage.setItem(
+      "bibleMastreySermon",
+      JSON.stringify(sermon)
+    );
+
+    document.getElementById(
+      "saveStatus"
+    ).textContent =
+      "Sermon saved successfully on this device.";
+
+  }
+
+
+  /* =========================
+     LOAD SERMON
+  ========================= */
+
+  function loadSermon() {
+
+    const saved =
+      localStorage.getItem(
+        "bibleMastreySermon"
+      );
+
+    const status =
+      document.getElementById(
+        "saveStatus"
+      );
+
+    if (!saved) {
+
+      status.textContent =
+        "No saved sermon was found on this device.";
+
+      return;
+    }
+
+    try {
+
+      const sermon =
+        JSON.parse(saved);
+
+      sermonFields.forEach(function(id) {
+
+        const element =
+          document.getElementById(id);
+
+        if (
+          element &&
+          Object.prototype.hasOwnProperty.call(
+            sermon,
+            id
+          )
+        ) {
+
+          element.value =
+            sermon[id];
+
+        }
+
+      });
+
+      status.textContent =
+        "Saved sermon loaded.";
+
+    } catch (error) {
+
+      console.error(error);
+
+      status.textContent =
+        "The saved sermon could not be loaded.";
+
+    }
+
+  }
+
+
+  /* =========================
+     CLEAR SERMON
+  ========================= */
+
+  function clearSermon() {
+
+    const confirmed =
+      confirm(
+        "Are you sure you want to clear the sermon fields? Your saved sermon will remain available until you overwrite or delete it."
+      );
+
+    if (!confirmed) return;
+
+    sermonFields.forEach(function(id) {
+
+      const element =
+        document.getElementById(id);
+
+      if (element) {
+
+        element.value = "";
+
+      }
+
+    });
+
+    document.getElementById(
+      "saveStatus"
+    ).textContent =
+      "Sermon fields cleared.";
+
+  }
+
+
+  /* =========================
+     ESCAPE HTML
+  ========================= */
+
+  function escapeHTML(value) {
+
+    return String(value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+
+  }
+
+</script>
+
+</body>
+</html>
