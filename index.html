@@ -3225,13 +3225,15 @@ function findCommentaryForVerse(
      LOAD CHAPTER
   ========================= */
 
-  function loadChapter() {
+  async function loadChapter() {
 
     currentBookIndex =
       Number(bookSelect.value);
 
     currentChapterIndex =
       Number(chapterSelect.value);
+
+    await syncCloudChapter();
 
     if (
       isNaN(currentBookIndex) ||
