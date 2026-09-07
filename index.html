@@ -969,81 +969,151 @@ checkAdminStatus();
 
     });
 
-  /* =========================
-     CLOUD BIBLE DATA
-  ========================= */
+  ```js
+/* =========================
+   CLOUD BIBLE DATA
+========================= */
 
-  let cloudBibleData = {};
+let cloudBibleData = {};
 
-  function getCloudKey(
-    itemType,
-    translation,
-    bookIndex,
-    chapterIndex,
+function getCloudKey(
+  itemType,
+  translation,
+  bookIndex,
+  chapterIndex,
+  verseNumber
+) {
+  return (
+    itemType +
+    "|" +
+    translation +
+    "|" +
+    bookIndex +
+    "|" +
+    chapterIndex +
+    "|" +
     verseNumber
-  ) {
-    return (
-      itemType +
-      "|" +
-      translation +
-      "|" +
-      bookIndex +
-      "|" +
-      chapterIndex +
-      "|" +
-      verseNumber
-    );
+  );
+}
+
+async function getCurrentUser() {
+
+  const {
+    data: { user }
+  } =
+    await supabaseClient.auth.getUser();
+
+  return user;
+}
+
+async function saveCloudItem(
+  itemType,
+  translation,
+  bookIndex,
+  chapterIndex,
+  verseNumber,
+  content
+) {
+
+  const user =
+    await getCurrentUser();
+
+  if (!user) {
+    return;
   }
 
-  async function getCurrentUser() {
-    const {
-      data: { user }
-    } = await supabaseClient.auth.getUser();
-
-    return user;
-  }
-
-  async function saveCloudItem(
-    itemType,
-    translation,
-    bookIndex,
-    chapterIndex,
-    verseNumber,
-    content
-  ) {
-    const user = await getCurrentUser();
-
-    if (!user) {
-      return;
-    }
-
-    const { error } =
-      await supabaseClient
-        .from("bible_user_data")
-        .upsert(
-          {
-            user_id: user.id,
-            item_type: itemType,
-            translation: translation,
-            book_index: bookIndex,
-            chapter_index: chapterIndex,
-            verse_number: verseNumber,
-            content: content,
-            updated_at: new Date().toISOString()
-          },
-          {
-            onConflict:
-              "user_id,item_type,translation,book_index,chapter_index,verse_number"
-          }
-        );
-
-    if (error) {
-      console.error(
-        "Cloud save error:",
-        error
+  const { error } =
+    await supabaseClient
+      .from("bible_user_data")
+      .upsert(
+        {
+          user_id: user.id,
+          item_type: itemType,
+          translation: translation,
+          book_index: bookIndex,
+          chapter_index: chapterIndex,
+          verse_number: verseNumber,
+          content: content,
+          updated_at:
+            new Date().toISOString()
+        },
+        {
+          onConflict:
+            "user_id,item_type,translation,book_index,chapter_index,verse_number"
+        }
       );
-    }
+
+  if (error) {
+
+    console.error(
+      "Cloud save error:",
+      error
+    );
+
+  } else {
+
+    cloudBibleData[
+      getCloudKey(
+        itemType,
+        translation,
+        bookIndex,
+        chapterIndex,
+        verseNumber
+      )
+    ] = content;
+
   }
+}
+
+async function deleteCloudItem(
+  itemType,
+  translation,
+  bookIndex,
+  chapterIndex,
+  verseNumber
+) {
+
+  const user =
+    await getCurrentUser();
+
+  if (!user) {
+    return;
+  }
+
+  const { error } =
+    await supabaseClient
+      .from("bible_user_data")
+      .delete()
+      .eq("user_id", user.id)
+      .eq("item_type", itemType)
+      .eq("translation", translation)
+      .eq("book_index", bookIndex)
+      .eq("chapter_index", chapterIndex)
+      .eq("verse_number", verseNumber);
+
+  if (error) {
+
+    console.error(
+      "Cloud delete error:",
+      error
+    );
+
+  } else {
+
+    delete cloudBibleData[
+      getCloudKey(
+        itemType,
+        translation,
+        bookIndex,
+        chapterIndex,
+        verseNumber
+      )
+    ];
+
+  }
+}
+```
+
 
   const commentaryCache = {};
   async function syncCloudChapter() {
