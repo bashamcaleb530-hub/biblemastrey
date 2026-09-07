@@ -1767,23 +1767,74 @@
       await response.json();
 
     const result = {
-      verses:
-        data &&
-        data.chapter &&
-        Array.isArray(
-          data.chapter.content
-        )
-          ? data.chapter.content.filter(
-              function(item) {
-                return (
-                  item.type ===
-                  "verse"
-                );
-              }
-            )
-          : []
-    };
+  verses:
+    data &&
+    data.chapter &&
+    Array.isArray(
+      data.chapter.content
+    )
+      ? data.chapter.content
+          .filter(
+            function(item) {
+              return (
+                item.type ===
+                "verse"
+              );
+            }
+          )
+          .map(
+            function(item) {
 
+              let text = "";
+
+              if (
+                typeof item.text ===
+                "string"
+              ) {
+
+                text =
+                  item.text;
+
+              } else if (
+                typeof item.content ===
+                "string"
+              ) {
+
+                text =
+                  item.content;
+
+              } else if (
+                Array.isArray(
+                  item.content
+                )
+              ) {
+
+                text =
+                  item.content
+                    .map(
+                      function(part) {
+                        return (
+                          part.text ||
+                          part.content ||
+                          ""
+                        );
+                      }
+                    )
+                    .join("");
+
+              }
+
+              return {
+                number:
+                  item.number,
+
+                text:
+                  text
+              };
+            }
+          )
+      : []
+};
     commentaryCache[
       cacheKey
     ] = result;
