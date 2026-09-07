@@ -1046,6 +1046,56 @@ checkAdminStatus();
   }
 
   const commentaryCache = {};
+  async function syncCloudChapter() {
+
+  cloudBibleData = {};
+
+  const user = await getCurrentUser();
+
+  if (!user) {
+    return;
+  }
+
+  const { data, error } =
+    await supabaseClient
+      .from("bible_user_data")
+      .select("*")
+      .eq("user_id", user.id)
+      .eq(
+        "translation",
+        translationSelect.value
+      )
+      .eq(
+        "book_index",
+        currentBookIndex
+      )
+      .eq(
+        "chapter_index",
+        currentChapterIndex
+      );
+
+  if (error) {
+    console.error(
+      "Cloud sync error:",
+      error
+    );
+    return;
+  }
+
+  (data || []).forEach(function(item) {
+
+    const key = getCloudKey(
+      item.item_type,
+      item.translation,
+      item.book_index,
+      item.chapter_index,
+      item.verse_number
+    );
+
+    cloudBibleData[key] =
+      item.content;
+  });
+}
   const accountModal =
   document.getElementById("accountModal");
 
