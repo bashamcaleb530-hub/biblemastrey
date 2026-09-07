@@ -1890,22 +1890,29 @@ concordanceInput.addEventListener(
     return localStorage.getItem(getNoteKey(v)) || "";
   }
 
-  function saveNote(v,text,statusElement) {
+  function loadNote(v) {
 
-  localStorage.setItem(
-    getNoteKey(v),
-    text
+  const cloudKey = getCloudKey(
+    "note",
+    translationSelect.value,
+    currentBookIndex,
+    currentChapterIndex,
+    v
   );
 
-  if (statusElement) {
-
-    statusElement.textContent = "Saved";
-
-    setTimeout(function() {
-      statusElement.textContent = "";
-    },1200);
-
+  if (
+    Object.prototype.hasOwnProperty.call(
+      cloudBibleData,
+      cloudKey
+    )
+  ) {
+    return cloudBibleData[cloudKey] || "";
   }
+
+  return localStorage.getItem(
+    getNoteKey(v)
+  ) || "";
+}
 
   saveCloudItem(
     "note",
