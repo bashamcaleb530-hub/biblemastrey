@@ -2749,25 +2749,26 @@ async function loadChapter() {
   }
 
 
-  document.addEventListener(
-    "click",
-    function(event) {
+  verseWrapper.addEventListener(
+  "click",
+  function(event) {
 
-      if (
-        !verseMenu.contains(
-          event.target
-        ) &&
-        !event.target.closest(
-          ".verse-text"
-        )
-      ) {
+    event.preventDefault();
+    event.stopPropagation();
 
-        verseMenu.style.display =
-          "none";
-      }
-    }
-  );
+    selectVerse(
+      verseNumber,
+      verseWrapper
+    );
 
+    showVerseMenu(
+      event.clientX,
+      event.clientY,
+      verseNumber,
+      verseText
+    );
+  }
+);
 
   /* =========================
      HIGHLIGHT
