@@ -3514,6 +3514,47 @@ function getChapterNumber(chapter, index) {
   return chapter.chapter || chapter.number || (index + 1);
 }
 
+function getVerses(chapter) {
+  if (!chapter) {
+    return [];
+  }
+
+  if (Array.isArray(chapter.verses)) {
+    return chapter.verses;
+  }
+
+  if (chapter.verses && typeof chapter.verses === "object") {
+    return Object.values(chapter.verses);
+  }
+
+  if (Array.isArray(chapter.Verses)) {
+    return chapter.Verses;
+  }
+
+  return [];
+}
+
+function getVerseNumber(verse, index) {
+  if (!verse) {
+    return index + 1;
+  }
+
+  return verse.verse ||
+         verse.number ||
+         (index + 1);
+}
+
+function getVerseText(verse) {
+  if (!verse) {
+    return "";
+  }
+
+  return verse.text ||
+         verse.content ||
+         verse.verse ||
+         "";
+}
+
 async function startBible() {
 
   try {
