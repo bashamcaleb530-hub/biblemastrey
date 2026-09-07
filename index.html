@@ -1998,16 +1998,14 @@ async function loadHelloAOCommentary(
     unavailable: false
   };
 
-  commentaryCache[
-    cacheKey
-  ] = result;
+  commentaryCache[cacheKey] = result;
 
-  console.log(
-    "Commentary verses loaded:",
-    verses.length
-  );
+console.log(
+  "Commentary verses loaded:",
+  verses.length
+);
 
-  return result;
+return result;
 }
 
 
