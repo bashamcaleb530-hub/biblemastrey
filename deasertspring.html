@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Desert Springs Ministries — Sermon Verse Slides</title>
+
+<style>
+*{box-sizing:border-box}
+
+:root{
+  --bg:#080f1d;
+  --panel:#111d31;
+  --panel2:#0d1728;
+  --gold:#d8b96a;
+  --gold-light:#ecd58e;
+  --text:#f6f2e9;
+  --muted:#aeb7c5;
+  --line:rgba(216,185,106,.28);
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  font-family:Arial,Helvetica,sans-serif;
+  background:
+    radial-gradient(circle at top,#17233b 0%,#0d1628 45%,#080f1d 100%);
+  color:var(--text);
+}
+
+header{
+  padding:18px 5%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+  background:linear-gradient(135deg,#111c32,#182742);
+  border-bottom:1px solid var(--gold);
+  box-shadow:0 8px 24px rgba(0,0,0,.28);
+}
+
+.brand h1{
+  margin:0;
+  color:var(--gold);
+  font-size:25px;
+}
+
+.brand p{
+  margin:3px 0 0;
+  color:var(--muted);
+  font-size:14px;
+}
+
+.back-link{
+  color:var(--gold);
+  text-decoration:none;
+  font-weight:700;
+  border:1px solid var(--line);
+  background:#0d1728;
+  padding:10px 14px;
+  border-radius:8px;
+}
+
+.setup{
+  max-width:1100px;
+  margin:28px auto;
+  padding:0 18px 40px;
+}
+
+.panel{
+  background:rgba(17,29,49,.96);
+  border:1px solid var(--line);
+  border-radius:16px;
+  box-shadow:0 14px 36px rgba(0,0,0,.28);
+  padding:24px;
+  margin-bottom:20px;
+}
+
+.panel h2{
+  margin-top:0;
+  color:var(--gold);
+}
+
+label{
+  display:block;
+  margin:14px 0 7px;
+  color:var(--gold);
+  font-weight:700;
+}
+
+input,select,textarea{
+  width:100%;
+  padding:12px;
+  border-radius:9px;
+  border:1px solid rgba(216,185,106,.30);
+  background:var(--panel2);
+  color:var(--text);
+  font:inherit;
+}
+
+textarea{
+  min-height:170px;
+  resize:vertical;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+}
+
+.help{
+  color:var(--muted);
+  line-height:1.55;
+  font-size:14px;
+}
+
+.actions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:18px;
+}
+
+button{
+  border:1px solid var(--gold);
+  background:var(--gold);
+  color:#0d1628;
+  padding:11px 17px;
+  border-radius:8px;
+  font-weight:800;
+  cursor:pointer;
+  font-size:15px;
+}
+
+button:hover{
+  background:var(--gold-light);
+}
+
+button.secondary{
+  background:#1b2b46;
+  color:var(--text);
+  border-color:rgba(216,185,106,.32);
+}
+
+.status{
+  margin-top:14px;
+  color:var(--muted);
+}
+
+.preview-list{
+  display:grid;
+  gap:10px;
+  margin-top:16px;
+}
+
+.preview-item{
+  background:#0d1728;
+  border:1px solid rgba(216,185,106,.18);
+  border-left:4px solid var(--gold);
+  border-radius:9px;
+  padding:12px 14px;
+}
+
+.preview-item strong{
+  color:var(--gold);
+}
+
+.presentation{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:5000;
+  background:
+    radial-gradient(circle at center,#15233a 0%,#0a1220 62%,#050a12 100%);
+  color:var(--text);
+}
+
+.presentation.show{
+  display:flex;
+  flex-direction:column;
+}
+
+.slide-stage{
+  flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:6vh 7vw 3vh;
+}
+
+.slide-inner{
+  width:min(1400px,94vw);
+}
+
+.slide-ministry{
+  color:var(--gold);
+  font-weight:800;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  font-size:clamp(16px,2vw,26px);
+  margin-bottom:22px;
+}
+
+.slide-reference{
+  color:var(--gold);
+  font-weight:900;
+  font-size:clamp(28px,4.4vw,62px);
+  margin-bottom:24px;
+}
+
+.slide-text{
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:clamp(40px,5.4vw,82px);
+  line-height:1.30;
+  max-width:1500px;
+  margin:0 auto;
+  text-wrap:balance;
+}
+
+.slide-footer{
+  min-height:88px;
+  padding:14px 22px 20px;
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  align-items:center;
+  gap:16px;
+  border-top:1px solid rgba(216,185,106,.18);
+  background:rgba(5,10,18,.60);
+}
+
+.slide-count{
+  justify-self:center;
+  color:var(--muted);
+  font-weight:700;
+}
+
+.nav-left{justify-self:start}
+.nav-right{justify-self:end}
+
+.slide-footer button{
+  min-width:150px;
+}
+
+.exit-button{
+  position:absolute;
+  top:16px;
+  right:16px;
+  z-index:5100;
+  background:rgba(13,23,40,.82);
+  color:var(--gold);
+}
+
+.sermon-title{
+  position:absolute;
+  top:18px;
+  left:22px;
+  color:var(--muted);
+  font-size:14px;
+}
+
+.error{
+  color:#ffb4b4;
+}
+
+
+.presentation.size-large .slide-text{
+  font-size:clamp(36px,4.8vw,72px);
+}
+
+.presentation.size-extra .slide-text{
+  font-size:clamp(42px,5.7vw,88px);
+}
+
+.presentation.size-maximum .slide-text{
+  font-size:clamp(50px,6.8vw,104px);
+}
+
+.presentation.size-large .slide-reference{
+  font-size:clamp(30px,4vw,56px);
+}
+
+.presentation.size-extra .slide-reference{
+  font-size:clamp(34px,4.5vw,64px);
+}
+
+.presentation.size-maximum .slide-reference{
+  font-size:clamp(38px,5vw,72px);
+}
+
+@media(max-width:760px){
+  header{flex-direction:column;align-items:flex-start}
+  .grid{grid-template-columns:1fr}
+  .slide-footer{
+    grid-template-columns:1fr 1fr;
+  }
+  .slide-count{
+    grid-column:1 / -1;
+    grid-row:1;
+  }
+  .nav-left{grid-column:1;grid-row:2}
+  .nav-right{grid-column:2;grid-row:2}
+  .slide-footer button{min-width:0;width:100%}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="brand">
+    <h1>Desert Springs Ministries</h1>
+    <p>Sermon Verse Slides</p>
+  </div>
+  <a class="back-link" href="index.html">← Back to BibleMastery</a>
+</header>
+
+<main class="setup">
+
+  <section class="panel">
+    <h2>Build Sermon Verse Slides</h2>
+
+    <div class="grid">
+      <div>
+        <label for="sermonTitleInput">Sermon Title</label>
+        <input id="sermonTitleInput" type="text" placeholder="Example: Walking by Faith">
+      </div>
+
+      <div>
+        <label for="translationSelect">Bible Translation</label>
+        <select id="translationSelect">
+          <option value="KJV">King James Version (KJV)</option>
+          <option value="KJV1611">King James Version 1611</option>
+          <option value="KJVPLUS">King James Version Plus (KJV+)</option>
+          <option value="YLT">Young's Literal Translation</option>
+          <option value="WEB">World English Bible</option>
+          <option value="ASV">American Standard Version</option>
+          <option value="GENEVA1599">Geneva Bible 1599</option>
+          <option value="DRA">Douay-Rheims American Edition</option>
+          <option value="BSB">Berean Standard Bible</option>
+          <option value="MSB">Majority Standard Bible</option>
+        </select>
+
+        <label for="displaySizeSelect">Display Size</label>
+        <select id="displaySizeSelect">
+          <option value="large">Large</option>
+          <option value="extra" selected>Extra Large</option>
+          <option value="maximum">Maximum</option>
+        </select>
+      </div>
+    </div>
+
+    <label for="referencesInput">Sermon Verses</label>
+    <textarea id="referencesInput" placeholder="Enter one passage per line, for example:
+John 3:16
+Romans 8:28
+Psalm 23:1-4"></textarea>
+
+    <p class="help">
+      Put the verses in the exact order you want them shown. A verse range such as
+      John 3:16-18 will automatically become three separate slides so the words stay large
+      and easy to read from across the room.
+    </p>
+
+    <div class="actions">
+      <button id="buildSlidesButton">Build Slides</button>
+      <button id="startPresentationButton" class="secondary" disabled>Start Presentation</button>
+      <button id="clearButton" class="secondary">Clear</button>
+    </div>
+
+    <div id="status" class="status">
+      Enter your sermon verses, then click Build Slides.
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Slide Preview</h2>
+    <div id="previewList" class="preview-list">
+      <div class="help">Your sermon verses will appear here after you build the slides.</div>
+    </div>
+  </section>
+
+</main>
+
+<section id="presentation" class="presentation" aria-hidden="true">
+  <div id="presentationTitle" class="sermon-title"></div>
+  <button id="exitPresentationButton" class="exit-button">Exit</button>
+
+  <div class="slide-stage">
+    <div class="slide-inner">
+      <div class="slide-ministry">Desert Springs Ministries</div>
+      <div id="slideReference" class="slide-reference"></div>
+      <div id="slideText" class="slide-text"></div>
+    </div>
+  </div>
+
+  <div class="slide-footer">
+    <div class="nav-left">
+      <button id="previousSlideButton" class="secondary">← Previous</button>
+    </div>
+
+    <div id="slideCount" class="slide-count">Slide 1 of 1</div>
+
+    <div class="nav-right">
+      <button id="nextSlideButton">Next →</button>
+    </div>
+  </div>
+</section>
+
+<script src="bible.js"></script>
+
+<script>
+const sermonTitleInput =
+  document.getElementById("sermonTitleInput");
+
+const translationSelect =
+  document.getElementById("translationSelect");
+
+const referencesInput =
+  document.getElementById("referencesInput");
+
+const displaySizeSelect =
+  document.getElementById("displaySizeSelect");
+
+const buildSlidesButton =
+  document.getElementById("buildSlidesButton");
+
+const startPresentationButton =
+  document.getElementById("startPresentationButton");
+
+const clearButton =
+  document.getElementById("clearButton");
+
+const status =
+  document.getElementById("status");
+
+const previewList =
+  document.getElementById("previewList");
+
+const presentation =
+  document.getElementById("presentation");
+
+const presentationTitle =
+  document.getElementById("presentationTitle");
+
+const slideReference =
+  document.getElementById("slideReference");
+
+const slideText =
+  document.getElementById("slideText");
+
+const slideCount =
+  document.getElementById("slideCount");
+
+const previousSlideButton =
+  document.getElementById("previousSlideButton");
+
+const nextSlideButton =
+  document.getElementById("nextSlideButton");
+
+const exitPresentationButton =
+  document.getElementById("exitPresentationButton");
+
+let bibleData = null;
+let slides = [];
+let currentSlideIndex = 0;
+
+
+function escapeHTML(value){
+
+  return String(value)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+function getBooks(data){
+
+  if(
+    data &&
+    data.bible &&
+    Array.isArray(data.bible.books)
+  ){
+    return data.bible.books;
+  }
+
+  if(
+    data &&
+    Array.isArray(data.books)
+  ){
+    return data.books;
+  }
+
+  return [];
+}
+
+
+function getBookName(book){
+
+  return (
+    book.book ||
+    book.englishName ||
+    book.name ||
+    book.title ||
+    ""
+  );
+
+}
+
+
+function getChapters(book){
+
+  return Array.isArray(book.chapters)
+    ? book.chapters
+    : [];
+
+}
+
+
+function getVerses(chapter){
+
+  if(Array.isArray(chapter.verses)){
+    return chapter.verses;
+  }
+
+  if(Array.isArray(chapter)){
+    return chapter;
+  }
+
+  return [];
+}
+
+
+function getChapterNumber(chapter,index){
+
+  return (
+    chapter.chapter ||
+    chapter.number ||
+    (index + 1)
+  );
+
+}
+
+
+function getVerseNumber(verse,index){
+
+  return (
+    verse.number ||
+    verse.verse ||
+    verse.id ||
+    (index + 1)
+  );
+
+}
+
+
+function getVerseText(verse,bookIndex){
+
+  let text =
+    String(
+      verse.text ||
+      verse.content ||
+      verse.verseText ||
+      ""
+    );
+
+  if(
+    translationSelect.value ===
+    "KJVPLUS"
+  ){
+
+    const prefix =
+      bookIndex < 39
+        ? "H"
+        : "G";
+
+    text =
+      text.replace(
+        /<S>(\d+)<\/S>/g,
+        prefix + "$1"
+      );
+
+  }
+
+  return text;
+}
+
+
+async function loadSelectedBible(){
+
+  const translation =
+    translationSelect.value;
+
+  if(translation === "KJV1611"){
+    return await getKJV1611();
+  }
+
+  if(translation === "KJVPLUS"){
+    return await getKJVPLUS();
+  }
+
+  if(translation === "YLT"){
+    return await getYLT();
+  }
+
+  if(translation === "WEB"){
+    return await getWEB();
+  }
+
+  if(translation === "ASV"){
+    return await getASV();
+  }
+
+  if(translation === "GENEVA1599"){
+    return await getGENEVA1599();
+  }
+
+  if(translation === "DRA"){
+    return await getDRA();
+  }
+
+  if(translation === "BSB"){
+    return await getBSB();
+  }
+
+  if(translation === "MSB"){
+    return await getMSB();
+  }
+
+  return await getKJV();
+}
+
+
+function normalizeBookName(value){
+
+  return String(value)
+    .toLowerCase()
+    .replace(/\s+/g," ")
+    .trim();
+}
+
+
+function findBookIndex(bookName,books){
+
+  const target =
+    normalizeBookName(bookName);
+
+  const aliases = {
+    "psalm":"psalms",
+    "song of songs":"song of solomon",
+    "canticles":"song of solomon"
+  };
+
+  const normalizedTarget =
+    aliases[target] || target;
+
+  return books.findIndex(function(book){
+
+    const current =
+      normalizeBookName(
+        getBookName(book)
+      );
+
+    return (
+      current === normalizedTarget ||
+      current === target
+    );
+
+  });
+}
+
+
+function parseReference(line){
+
+  const text =
+    String(line).trim();
+
+  const match =
+    text.match(
+      /^(.+?)\s+(\d+):(\d+)(?:-(\d+))?$/
+    );
+
+  if(!match){
+    return null;
+  }
+
+  return {
+    bookName:match[1].trim(),
+    chapterNumber:Number(match[2]),
+    startVerse:Number(match[3]),
+    endVerse:match[4]
+      ? Number(match[4])
+      : Number(match[3])
+  };
+}
+
+
+function makeSlideReference(
+  bookName,
+  chapterNumber,
+  startVerse,
+  endVerse
+){
+
+  if(startVerse === endVerse){
+
+    return (
+      bookName +
+      " " +
+      chapterNumber +
+      ":" +
+      startVerse
+    );
+
+  }
+
+  return (
+    bookName +
+    " " +
+    chapterNumber +
+    ":" +
+    startVerse +
+    "-" +
+    endVerse
+  );
+}
+
+
+function buildSlidesFromReference(
+  parsed,
+  books
+){
+
+  const bookIndex =
+    findBookIndex(
+      parsed.bookName,
+      books
+    );
+
+  if(bookIndex < 0){
+    throw new Error(
+      "Book not found: " +
+      parsed.bookName
+    );
+  }
+
+  const book =
+    books[bookIndex];
+
+  const chapters =
+    getChapters(book);
+
+  const chapterIndex =
+    chapters.findIndex(
+      function(chapter,index){
+
+        return (
+          Number(
+            getChapterNumber(
+              chapter,
+              index
+            )
+          ) ===
+          parsed.chapterNumber
+        );
+
+      }
+    );
+
+  if(chapterIndex < 0){
+    throw new Error(
+      "Chapter not found: " +
+      parsed.bookName +
+      " " +
+      parsed.chapterNumber
+    );
+  }
+
+  const verses =
+    getVerses(
+      chapters[chapterIndex]
+    );
+
+  const selected =
+    verses.filter(
+      function(verse,index){
+
+        const number =
+          Number(
+            getVerseNumber(
+              verse,
+              index
+            )
+          );
+
+        return (
+          number >= parsed.startVerse &&
+          number <= parsed.endVerse
+        );
+
+      }
+    );
+
+  if(!selected.length){
+    throw new Error(
+      "Verse not found: " +
+      parsed.bookName +
+      " " +
+      parsed.chapterNumber +
+      ":" +
+      parsed.startVerse
+    );
+  }
+
+  return selected.map(
+    function(verse,index){
+
+      const verseNumber =
+        Number(
+          getVerseNumber(
+            verse,
+            verses.indexOf(verse)
+          )
+        );
+
+      return {
+        reference:
+          getBookName(book) +
+          " " +
+          parsed.chapterNumber +
+          ":" +
+          verseNumber,
+        text:
+          getVerseText(
+            verse,
+            bookIndex
+          )
+      };
+
+    }
+  );
+}
+
+
+async function buildSlides(){
+
+  const lines =
+    referencesInput.value
+      .split(/\n+/)
+      .map(function(line){
+        return line.trim();
+      })
+      .filter(Boolean);
+
+  if(!lines.length){
+
+    status.textContent =
+      "Enter at least one Bible verse.";
+
+    status.className =
+      "status error";
+
+    return;
+  }
+
+  buildSlidesButton.disabled = true;
+  startPresentationButton.disabled = true;
+
+  status.textContent =
+    "Loading Bible and building slides...";
+
+  status.className =
+    "status";
+
+  try{
+
+    bibleData =
+      await loadSelectedBible();
+
+    const books =
+      getBooks(bibleData);
+
+    if(!books.length){
+      throw new Error(
+        "No Bible books were loaded."
+      );
+    }
+
+    const built = [];
+
+    lines.forEach(function(line){
+
+      const parsed =
+        parseReference(line);
+
+      if(!parsed){
+        throw new Error(
+          "Could not understand this reference: " +
+          line
+        );
+      }
+
+      built.push(
+        ...buildSlidesFromReference(
+          parsed,
+          books
+        )
+      );
+
+    });
+
+    slides = built;
+
+    renderPreview();
+
+    status.textContent =
+      slides.length +
+      " sermon slide" +
+      (slides.length === 1 ? "" : "s") +
+      " ready.";
+
+    startPresentationButton.disabled = false;
+
+  }
+  catch(error){
+
+    console.error(error);
+
+    slides = [];
+
+    previewList.innerHTML =
+      '<div class="help">No slides were built.</div>';
+
+    status.textContent =
+      error.message ||
+      "The sermon slides could not be built.";
+
+    status.className =
+      "status error";
+
+  }
+  finally{
+
+    buildSlidesButton.disabled = false;
+
+  }
+
+}
+
+
+function renderPreview(){
+
+  previewList.innerHTML =
+    slides.map(
+      function(slide,index){
+
+        return (
+          '<div class="preview-item">' +
+            '<strong>' +
+              (index + 1) +
+              ". " +
+              escapeHTML(slide.reference) +
+            '</strong>' +
+            '<div>' +
+              escapeHTML(slide.text) +
+            '</div>' +
+          '</div>'
+        );
+
+      }
+    ).join("");
+
+}
+
+
+function showSlide(index){
+
+  if(!slides.length){
+    return;
+  }
+
+  if(index < 0){
+    index = 0;
+  }
+
+  if(index >= slides.length){
+    index = slides.length - 1;
+  }
+
+  currentSlideIndex = index;
+
+  const slide =
+    slides[currentSlideIndex];
+
+  slideReference.textContent =
+    slide.reference;
+
+  slideText.textContent =
+    slide.text;
+
+  slideCount.textContent =
+    "Slide " +
+    (currentSlideIndex + 1) +
+    " of " +
+    slides.length;
+
+  previousSlideButton.disabled =
+    currentSlideIndex === 0;
+
+  nextSlideButton.disabled =
+    currentSlideIndex ===
+    slides.length - 1;
+
+}
+
+
+function startPresentation(){
+
+  if(!slides.length){
+    return;
+  }
+
+  currentSlideIndex = 0;
+
+  presentationTitle.textContent =
+    sermonTitleInput.value.trim();
+
+  presentation.classList.remove(
+    "size-large",
+    "size-extra",
+    "size-maximum"
+  );
+
+  presentation.classList.add(
+    "show",
+    "size-" + displaySizeSelect.value
+  );
+
+  presentation.setAttribute(
+    "aria-hidden",
+    "false"
+  );
+
+  showSlide(0);
+
+  if(
+    document.documentElement.requestFullscreen
+  ){
+
+    document.documentElement
+      .requestFullscreen()
+      .catch(function(){});
+
+  }
+
+}
+
+
+function exitPresentation(){
+
+  presentation.classList.remove("show");
+
+  presentation.setAttribute(
+    "aria-hidden",
+    "true"
+  );
+
+  if(document.fullscreenElement){
+
+    document
+      .exitFullscreen()
+      .catch(function(){});
+
+  }
+
+}
+
+
+function nextSlide(){
+
+  if(
+    currentSlideIndex <
+    slides.length - 1
+  ){
+
+    showSlide(
+      currentSlideIndex + 1
+    );
+
+  }
+
+}
+
+
+function previousSlide(){
+
+  if(currentSlideIndex > 0){
+
+    showSlide(
+      currentSlideIndex - 1
+    );
+
+  }
+
+}
+
+
+buildSlidesButton.addEventListener(
+  "click",
+  buildSlides
+);
+
+startPresentationButton.addEventListener(
+  "click",
+  startPresentation
+);
+
+clearButton.addEventListener(
+  "click",
+  function(){
+
+    sermonTitleInput.value = "";
+    referencesInput.value = "";
+    slides = [];
+
+    previewList.innerHTML =
+      '<div class="help">Your sermon verses will appear here after you build the slides.</div>';
+
+    status.textContent =
+      "Enter your sermon verses, then click Build Slides.";
+
+    status.className =
+      "status";
+
+    startPresentationButton.disabled = true;
+
+  }
+);
+
+previousSlideButton.addEventListener(
+  "click",
+  previousSlide
+);
+
+nextSlideButton.addEventListener(
+  "click",
+  nextSlide
+);
+
+exitPresentationButton.addEventListener(
+  "click",
+  exitPresentation
+);
+
+
+document.addEventListener(
+  "keydown",
+  function(event){
+
+    if(
+      !presentation.classList.contains(
+        "show"
+      )
+    ){
+      return;
+    }
+
+    if(
+      event.key === "ArrowRight" ||
+      event.key === "PageDown" ||
+      event.key === " "
+    ){
+      event.preventDefault();
+      nextSlide();
+    }
+
+    if(
+      event.key === "ArrowLeft" ||
+      event.key === "PageUp"
+    ){
+      event.preventDefault();
+      previousSlide();
+    }
+
+    if(event.key === "Escape"){
+      exitPresentation();
+    }
+
+  }
+);
+</script>
+
+</body>
+</html>
