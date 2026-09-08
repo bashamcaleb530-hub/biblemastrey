@@ -16,6 +16,8 @@ const BSB_SOURCE =
   "https://bible.helloao.org/api/BSB/complete.simple.json";
 const MSB_SOURCE =
   "https://bible.helloao.org/api/eng_msb/complete.simple.json";
+const YLT_SOURCE =
+  "https://bible.helloao.org/api/eng_ylt/complete.simple.json";
 let kjvBible = null;
 let webBible = null;
 let asvBible = null;
@@ -23,6 +25,7 @@ let geneva1599Bible = null;
 let draBible = null;
 let bsbBible = null;
 let msbBible = null;
+let yltBible = null;
 /* =========================
    KJV
 ========================= */
@@ -160,6 +163,23 @@ async function getMSB() {
 
   return msbBible;
 }
+async function getYLT() {
+  if (yltBible) {
+    return yltBible;
+  }
+
+  const response = await fetch(YLT_SOURCE);
+
+  if (!response.ok) {
+    throw new Error("Failed to load Young's Literal Translation");
+  }
+
+  const data = await response.json();
+
+  yltBible = data;
+
+  return yltBible;
+}
 /* =========================
    MAKE FUNCTIONS AVAILABLE
 ========================= */
@@ -171,3 +191,4 @@ window.getGENEVA1599 = getGENEVA1599;
 window.getDRA = getDRA;
 window.getBSB = getBSB;
 window.getMSB = getMSB;
+window.getYLT = getYLT;
