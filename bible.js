@@ -69,24 +69,24 @@ async function getKJV1611() {
   "3 John", "Jude", "Revelation"
 ];
 
-  kjv1611Bible = await Promise.all(
-    bookFiles.map(async function(bookFile) {
-     const response = await fetch(
-  KJV1611_SOURCE + encodeURIComponent(bookFile) + ".json"
-);
+  kjv1611Bible = [];
 
-      if (!response.ok) {
-        throw new Error(
-          "Failed to load KJV 1611 book: " + bookFile
-        );
-      }
-
-      return await response.json();
-    })
+for (const bookFile of bookFiles) {
+  const response = await fetch(
+    KJV1611_SOURCE + encodeURIComponent(bookFile) + ".json"
   );
 
-  return kjv1611Bible;
+  if (!response.ok) {
+    throw new Error(
+      "Failed to load KJV 1611 book: " + bookFile
+    );
+  }
+
+  const bookData = await response.json();
+  kjv1611Bible.push(bookData);
 }
+
+return kjv1611Bible;
 
 /* =========================
    WEB
