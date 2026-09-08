@@ -10,486 +10,639 @@
     content="width=device-width, initial-scale=1.0"
   >
 
-  <title>Personal Bible Study - BibleMastrey</title>
+  <title>Personal Bible Study - BibleMastery</title>
 
   <style>
+  * {
+    box-sizing: border-box;
+  }
 
-    * {
-      box-sizing: border-box;
+  :root {
+    --bg-deep: #080f1d;
+    --bg-mid: #0d1628;
+    --panel: #121e33;
+    --panel-2: #101b2e;
+    --panel-3: #16243c;
+    --gold: #d8b96a;
+    --gold-light: #e7ca7d;
+    --text: #f5f1e8;
+    --muted: #b8bfcb;
+    --line: rgba(216,185,106,.28);
+    --soft-line: rgba(255,255,255,.09);
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    background:
+      radial-gradient(circle at top, #17233b 0%, #0d1628 45%, #080f1d 100%);
+    color: var(--text);
+  }
+
+  header {
+    background: linear-gradient(135deg, #111c32, #182742);
+    border-bottom: 1px solid var(--gold);
+    box-shadow: 0 8px 25px rgba(0,0,0,.30);
+    padding: 24px 20px;
+    text-align: center;
+  }
+
+  header h1 {
+    margin: 0 0 7px;
+    color: var(--gold);
+    font-size: 32px;
+    letter-spacing: .4px;
+  }
+
+  header p {
+    margin: 0;
+    color: #d6d9e0;
+  }
+
+  .container {
+    max-width: 1450px;
+    margin: 0 auto;
+    padding: 24px 20px 40px;
+  }
+
+  .back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 18px;
+    padding: 10px 14px;
+    color: var(--gold);
+    text-decoration: none;
+    font-weight: bold;
+    background: rgba(18,30,51,.92);
+    border: 1px solid var(--line);
+    border-radius: 9px;
+  }
+
+  .back-button:hover {
+    border-color: var(--gold);
+    background: #172640;
+  }
+
+  .study-box,
+  .workspace-section {
+    background: rgba(18,30,51,.95);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 26px;
+    margin-bottom: 20px;
+    box-shadow: 0 14px 35px rgba(0,0,0,.30);
+  }
+
+  .study-box h2,
+  .workspace-section h2 {
+    margin-top: 0;
+    color: var(--gold);
+  }
+
+  .study-box h2 {
+    text-align: center;
+    font-size: 28px;
+  }
+
+  .study-description {
+    max-width: 780px;
+    margin: 0 auto 24px;
+    text-align: center;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 7px;
+    color: var(--gold);
+    font-weight: bold;
+  }
+
+  input,
+  select,
+  textarea,
+  button {
+    font-family: inherit;
+  }
+
+  .topic-input,
+  .search-input,
+  .translation-select,
+  .commentary-select,
+  .reader-select {
+    width: 100%;
+    padding: 12px 13px;
+    font-size: 15px;
+    color: var(--text);
+    background: var(--panel-2);
+    border: 1px solid rgba(216,185,106,.35);
+    border-radius: 8px;
+  }
+
+  input:focus,
+  select:focus,
+  textarea:focus {
+    outline: none;
+    border-color: var(--gold);
+    box-shadow: 0 0 0 2px rgba(216,185,106,.14);
+  }
+
+  .start-button,
+  .search-button,
+  .commentary-button,
+  .reader-nav-button {
+    border: 1px solid var(--gold);
+    background: var(--gold);
+    color: var(--bg-mid);
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+  .start-button {
+    width: 100%;
+    padding: 14px 20px;
+    font-size: 17px;
+  }
+
+  .search-button,
+  .commentary-button,
+  .reader-nav-button {
+    padding: 11px 15px;
+    white-space: nowrap;
+  }
+
+  .start-button:hover,
+  .search-button:hover,
+  .commentary-button:hover,
+  .reader-nav-button:hover {
+    background: var(--gold-light);
+    border-color: var(--gold-light);
+  }
+
+  .workspace {
+    display: none;
+  }
+
+  .workspace.visible {
+    display: block;
+  }
+
+  .topic-title {
+    color: var(--gold);
+    margin-top: 0;
+    font-size: 29px;
+  }
+
+  .workspace-intro {
+    color: var(--muted);
+    line-height: 1.65;
+  }
+
+  .workspace-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .tool-box {
+    background: linear-gradient(145deg, #132039, #101a2d);
+    border: 1px solid rgba(216,185,106,.24);
+    border-radius: 13px;
+    padding: 20px;
+    min-width: 0;
+  }
+
+  .tool-box h3 {
+    margin-top: 0;
+    color: var(--gold);
+  }
+
+  .tool-box p {
+    color: var(--muted);
+    line-height: 1.55;
+  }
+
+  .bible-reader-tool {
+    grid-column: 1 / -1;
+  }
+
+  .reader-shell {
+    display: grid;
+    grid-template-columns: minmax(250px, .75fr) minmax(0, 1.6fr);
+    gap: 18px;
+    margin-top: 16px;
+  }
+
+  .reader-controls {
+    background: rgba(8,15,29,.38);
+    border: 1px solid var(--soft-line);
+    border-radius: 11px;
+    padding: 16px;
+  }
+
+  .reader-control {
+    margin-bottom: 12px;
+  }
+
+  .reader-control:last-child {
+    margin-bottom: 0;
+  }
+
+  .reader-display {
+    background: rgba(8,15,29,.42);
+    border: 1px solid rgba(216,185,106,.24);
+    border-radius: 11px;
+    padding: 18px;
+    min-height: 320px;
+    max-height: 650px;
+    overflow-y: auto;
+  }
+
+  .reader-title {
+    margin: 0 0 14px;
+    color: var(--gold);
+    font-size: 23px;
+  }
+
+  .reader-placeholder {
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .reader-verse {
+    padding: 9px 8px;
+    line-height: 1.72;
+    border-bottom: 1px solid rgba(255,255,255,.06);
+    color: #eeeae2;
+    border-radius: 6px;
+  }
+
+  .reader-verse:hover {
+    background: rgba(255,255,255,.05);
+  }
+
+  .reader-verse.active-reader-verse {
+    background: rgba(216,185,106,.12);
+    box-shadow: inset 3px 0 0 var(--gold);
+  }
+
+  .reader-verse-number {
+    color: var(--gold);
+    font-weight: bold;
+    margin-right: 7px;
+  }
+
+  .reader-nav {
+    display: flex;
+    gap: 9px;
+    margin-top: 13px;
+  }
+
+  .reader-nav-button {
+    flex: 1;
+  }
+
+  .reader-nav-button:disabled {
+    cursor: not-allowed;
+    background: #4c5565;
+    border-color: #4c5565;
+    color: #abb2bd;
+  }
+
+  .search-row {
+    display: flex;
+    gap: 10px;
+  }
+
+  .search-row .search-input {
+    flex: 1;
+  }
+
+  .results-box {
+    margin-top: 15px;
+    max-height: 350px;
+    overflow-y: auto;
+  }
+
+  .result-item {
+    background: var(--panel-2);
+    border: 1px solid rgba(216,185,106,.20);
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 10px;
+    line-height: 1.6;
+    color: #d8dce4;
+  }
+
+  .result-reference {
+    color: var(--gold);
+    font-weight: bold;
+  }
+
+  .dictionary-definition {
+    line-height: 1.7;
+    color: #d5d9e1;
+  }
+
+  .bible-controls {
+    display: flex;
+    gap: 15px;
+    align-items: end;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  .translation-control {
+    width: 240px;
+  }
+
+  .translation-control label,
+  .commentary-control label {
+    margin-bottom: 6px;
+  }
+
+  .study-columns {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(330px, .9fr);
+    gap: 20px;
+    align-items: start;
+  }
+
+  .verses-column {
+    min-width: 0;
+  }
+
+  .commentary-column {
+    position: sticky;
+    top: 15px;
+    min-width: 0;
+  }
+
+  .commentary-header {
+    background: linear-gradient(135deg, #172640, #1b2c48);
+    color: var(--text);
+    border: 1px solid var(--line);
+    border-bottom: none;
+    border-radius: 11px 11px 0 0;
+    padding: 15px;
+  }
+
+  .commentary-header h3 {
+    margin: 0 0 5px;
+    color: var(--gold);
+  }
+
+  .commentary-header p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  .commentary-content {
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: 0 0 11px 11px;
+    padding: 15px;
+    max-height: 75vh;
+    overflow-y: auto;
+  }
+
+  .commentary-verse {
+    background: #132039;
+    border: 1px solid rgba(216,185,106,.18);
+    border-radius: 8px;
+    padding: 14px;
+    margin-bottom: 12px;
+    line-height: 1.65;
+  }
+
+  .commentary-reference {
+    color: var(--gold);
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+
+  .commentary-text,
+  .commentary-loading,
+  .commentary-empty {
+    color: #d4d8df;
+    line-height: 1.6;
+  }
+
+  .commentary-text {
+    white-space: pre-wrap;
+  }
+
+  .verse-card {
+    background: #101b2e;
+    border: 1px solid rgba(216,185,106,.20);
+    border-radius: 11px;
+    padding: 18px;
+    margin-bottom: 15px;
+    position: relative;
+    cursor: pointer;
+  }
+
+  .verse-card:hover {
+    border-color: var(--gold);
+  }
+
+  .verse-card.highlighted {
+    background: #fff3a6;
+    color: #151515;
+  }
+
+  .verse-card.highlighted .verse-reference,
+  .verse-card.highlighted .verse-text {
+    color: #151515;
+  }
+
+  .verse-reference {
+    color: var(--gold);
+    font-weight: bold;
+    font-size: 17px;
+    margin-bottom: 10px;
+  }
+
+  .verse-text {
+    color: #eeeae2;
+    line-height: 1.72;
+    font-size: 16px;
+  }
+
+  .verse-actions {
+    display: none;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-top: 15px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,.10);
+  }
+
+  .verse-card.selected .verse-actions {
+    display: flex;
+  }
+
+  .verse-action {
+    background: #1b2b46;
+    color: #eeeae2;
+    border: 1px solid rgba(216,185,106,.24);
+    border-radius: 6px;
+    padding: 7px 10px;
+    cursor: pointer;
+    font-size: 13px;
+  }
+
+  .verse-action:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  .verse-notes {
+    display: none;
+    margin-top: 12px;
+  }
+
+  .verse-card.notes-open .verse-notes {
+    display: block;
+  }
+
+  .verse-notes textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 10px;
+    color: var(--text);
+    background: #0e192a;
+    border: 1px solid rgba(216,185,106,.30);
+    border-radius: 7px;
+    resize: vertical;
+  }
+
+  .save-note-button {
+    margin-top: 8px;
+    background: var(--gold);
+    color: var(--bg-mid);
+    border: none;
+    padding: 8px 13px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+  .status-message {
+    color: var(--muted);
+    padding: 15px 0;
+    line-height: 1.6;
+  }
+
+  .study-note {
+    background: rgba(216,185,106,.08);
+    border-left: 4px solid var(--gold);
+    padding: 15px;
+    border-radius: 7px;
+    line-height: 1.6;
+    color: #d5d9e1;
+    margin-top: 15px;
+  }
+
+  .small-note {
+    font-size: 13px;
+    color: #aeb5c2;
+    margin-top: 8px;
+    line-height: 1.5;
+  }
+
+  .error-message {
+    color: #ffb3b3;
+    background: rgba(125,27,27,.20);
+    border: 1px solid rgba(255,130,130,.28);
+    border-radius: 7px;
+    padding: 10px;
+    line-height: 1.5;
+  }
+
+  .success-message {
+    color: #b7e8c4;
+    background: rgba(40,97,58,.20);
+    border: 1px solid rgba(112,188,133,.28);
+    border-radius: 7px;
+    padding: 10px;
+  }
+
+  .strongs-number {
+    color: var(--gold);
+    font-weight: bold;
+    font-size: 18px;
+  }
+
+  .strongs-lemma {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 5px;
+  }
+
+  .strongs-definition {
+    line-height: 1.7;
+    margin-top: 10px;
+  }
+
+  @media (max-width: 1000px) {
+    .reader-shell,
+    .study-columns {
+      grid-template-columns: 1fr;
     }
 
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f4f6fb;
-      color: #222;
+    .commentary-column {
+      position: static;
     }
 
-    header {
-      background: #1f3c88;
-      color: white;
-      padding: 25px 20px;
-      text-align: center;
+    .commentary-content {
+      max-height: 500px;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .workspace-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .bible-reader-tool {
+      grid-column: auto;
+    }
+
+    .search-row,
+    .reader-nav {
+      flex-direction: column;
+    }
+
+    .search-button,
+    .commentary-button,
+    .reader-nav-button {
+      width: 100%;
+    }
+
+    .translation-control {
+      width: 100%;
     }
 
     header h1 {
-      margin: 0 0 8px;
-      font-size: 30px;
-    }
-
-    header p {
-      margin: 0;
-      opacity: .9;
+      font-size: 26px;
     }
 
     .container {
-      max-width: 1250px;
-      margin: 30px auto;
-      padding: 0 20px;
-    }
-
-    .back-button {
-      display: inline-block;
-      margin-bottom: 20px;
-      color: #1f3c88;
-      text-decoration: none;
-      font-weight: bold;
+      padding: 14px 12px 30px;
     }
 
     .study-box,
     .workspace-section {
-      background: white;
-      border-radius: 12px;
-      padding: 25px;
-      margin-bottom: 20px;
-      box-shadow: 0 3px 12px rgba(0,0,0,.08);
-    }
-
-    .study-box h2,
-    .workspace-section h2 {
-      margin-top: 0;
-      color: #1f3c88;
-    }
-
-    .study-box h2 {
-      text-align: center;
-    }
-
-    .study-description {
-      text-align: center;
-      color: #555;
-      line-height: 1.6;
-      margin-bottom: 25px;
-    }
-
-    label {
-      display: block;
-      font-weight: bold;
-      margin-bottom: 8px;
-    }
-
-    input,
-    select,
-    textarea {
-      font-family: Arial, sans-serif;
-    }
-
-    .topic-input,
-    .search-input,
-    .translation-select,
-    .commentary-select {
-      width: 100%;
-      padding: 13px;
-      font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-    }
-
-    .start-button {
-      width: 100%;
-      background: #1f3c88;
-      color: white;
-      border: none;
-      padding: 14px 20px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 17px;
-      font-weight: bold;
-    }
-
-    .start-button:hover,
-    .search-button:hover,
-    .commentary-button:hover {
-      opacity: .9;
-    }
-
-    .workspace {
-      display: none;
-    }
-
-    .workspace.visible {
-      display: block;
-    }
-
-    .topic-title {
-      color: #1f3c88;
-      margin-top: 0;
-      font-size: 28px;
-    }
-
-    .workspace-intro {
-      color: #555;
-      line-height: 1.6;
-    }
-
-    .workspace-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 15px;
-    }
-
-    .tool-box {
-      background: #f8f9fc;
-      border: 1px solid #ddd;
-      border-radius: 10px;
       padding: 18px;
     }
-
-    .tool-box h3 {
-      margin-top: 0;
-      color: #1f3c88;
-    }
-
-    .tool-box p {
-      color: #666;
-      line-height: 1.5;
-    }
-
-    .search-row {
-      display: flex;
-      gap: 10px;
-    }
-
-    .search-row .search-input {
-      flex: 1;
-    }
-
-    .search-button,
-    .commentary-button {
-      background: #1f3c88;
-      color: white;
-      border: none;
-      padding: 12px 16px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: bold;
-      white-space: nowrap;
-    }
-
-    .results-box {
-      margin-top: 15px;
-      max-height: 350px;
-      overflow-y: auto;
-    }
-
-    .result-item {
-      background: white;
-      border: 1px solid #ddd;
-      border-radius: 7px;
-      padding: 12px;
-      margin-bottom: 10px;
-      line-height: 1.6;
-    }
-
-    .result-reference {
-      color: #1f3c88;
-      font-weight: bold;
-    }
-
-    .dictionary-definition {
-      line-height: 1.7;
-      color: #444;
-    }
-
-    .bible-controls {
-      display: flex;
-      gap: 15px;
-      align-items: end;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-    }
-
-    .translation-control {
-      width: 220px;
-    }
-
-    .translation-control label,
-    .commentary-control label {
-      margin-bottom: 6px;
-    }
-
-    .study-columns {
-      display: grid;
-      grid-template-columns: minmax(0, 1.35fr) minmax(330px, .9fr);
-      gap: 20px;
-      align-items: start;
-    }
-
-    .verses-column {
-      min-width: 0;
-    }
-
-    .commentary-column {
-      position: sticky;
-      top: 15px;
-      min-width: 0;
-    }
-
-    .commentary-header {
-      background: #1f3c88;
-      color: white;
-      border-radius: 10px 10px 0 0;
-      padding: 15px;
-    }
-
-    .commentary-header h3 {
-      margin: 0 0 5px;
-    }
-
-    .commentary-header p {
-      margin: 0;
-      opacity: .9;
-      font-size: 14px;
-    }
-
-    .commentary-content {
-      background: #f7f9ff;
-      border: 1px solid #d5dcef;
-      border-top: none;
-      border-radius: 0 0 10px 10px;
-      padding: 15px;
-      max-height: 75vh;
-      overflow-y: auto;
-    }
-
-    .commentary-verse {
-      background: white;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 14px;
-      margin-bottom: 12px;
-      line-height: 1.65;
-    }
-
-    .commentary-reference {
-      color: #1f3c88;
-      font-weight: bold;
-      margin-bottom: 8px;
-    }
-
-    .commentary-text {
-      color: #444;
-      white-space: pre-wrap;
-    }
-
-    .commentary-loading {
-      color: #666;
-      padding: 10px 0;
-      line-height: 1.6;
-    }
-
-    .commentary-empty {
-      color: #666;
-      line-height: 1.6;
-    }
-
-    .verse-card {
-      background: #fafafa;
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      padding: 18px;
-      margin-bottom: 15px;
-      position: relative;
-      cursor: pointer;
-    }
-
-    .verse-card:hover {
-      border-color: #aeb9d5;
-    }
-
-    .verse-card.highlighted {
-      background: #fff3a6;
-    }
-
-    .verse-reference {
-      color: #1f3c88;
-      font-weight: bold;
-      font-size: 17px;
-      margin-bottom: 10px;
-    }
-
-    .verse-text {
-      line-height: 1.7;
-      font-size: 16px;
-    }
-
-    .verse-actions {
-      display: none;
-      flex-wrap: wrap;
-      gap: 7px;
-      margin-top: 15px;
-      padding-top: 12px;
-      border-top: 1px solid #ddd;
-    }
-
-    .verse-card.selected .verse-actions {
-      display: flex;
-    }
-
-    .verse-action {
-      background: #eee;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      padding: 7px 10px;
-      cursor: pointer;
-      font-size: 13px;
-    }
-
-    .verse-action:hover {
-      background: #ddd;
-    }
-
-    .verse-notes {
-      display: none;
-      margin-top: 12px;
-    }
-
-    .verse-card.notes-open .verse-notes {
-      display: block;
-    }
-
-    .verse-notes textarea {
-      width: 100%;
-      min-height: 100px;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 7px;
-      resize: vertical;
-    }
-
-    .save-note-button {
-      margin-top: 8px;
-      background: #1f3c88;
-      color: white;
-      border: none;
-      padding: 8px 13px;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    .status-message {
-      color: #666;
-      padding: 15px 0;
-      line-height: 1.6;
-    }
-
-    .study-note {
-      background: #f7f9ff;
-      border-left: 4px solid #1f3c88;
-      padding: 15px;
-      border-radius: 6px;
-      line-height: 1.6;
-      color: #555;
-      margin-top: 15px;
-    }
-
-    .small-note {
-      font-size: 13px;
-      color: #777;
-      margin-top: 8px;
-      line-height: 1.5;
-    }
-
-    .error-message {
-      color: #9b2226;
-      background: #fff2f2;
-      border: 1px solid #e3b4b4;
-      border-radius: 7px;
-      padding: 10px;
-      line-height: 1.5;
-    }
-
-    .success-message {
-      color: #28613a;
-      background: #eef9f1;
-      border: 1px solid #b9ddc2;
-      border-radius: 7px;
-      padding: 10px;
-    }
-
-    .strongs-number {
-      color: #1f3c88;
-      font-weight: bold;
-      font-size: 18px;
-    }
-
-    .strongs-lemma {
-      font-size: 20px;
-      font-weight: bold;
-      margin-top: 5px;
-    }
-
-    .strongs-definition {
-      line-height: 1.7;
-      margin-top: 10px;
-    }
-
-    @media (max-width: 900px) {
-
-      .study-columns {
-        grid-template-columns: 1fr;
-      }
-
-      .commentary-column {
-        position: static;
-      }
-
-      .commentary-content {
-        max-height: 500px;
-      }
-
-    }
-
-    @media (max-width: 700px) {
-
-      .workspace-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .search-row {
-        flex-direction: column;
-      }
-
-      .search-button,
-      .commentary-button {
-        width: 100%;
-      }
-
-      .translation-control {
-        width: 100%;
-      }
-
-      header h1 {
-        font-size: 25px;
-      }
-
-      .container {
-        padding: 0 12px;
-      }
-
-    }
-
-  </style>
+  }
+</style>
 
 </head>
 
@@ -500,7 +653,7 @@
 
   <h1>Personal Bible Study</h1>
 
-  <p>BibleMastrey</p>
+  <p>BibleMastery • Personal Study Workspace</p>
 
 </header>
 
@@ -511,7 +664,7 @@
     href="index.html"
     class="back-button"
   >
-    ← Back to BibleMastrey
+    ← Back to BibleMastery
   </a>
 
 
@@ -525,7 +678,7 @@
     </h2>
 
     <p class="study-description">
-      Enter a Bible topic and BibleMastrey will
+      Enter a Bible topic and BibleMastery will
       bring Scripture and study tools together
       to help you study it for yourself.
     </p>
@@ -694,6 +847,79 @@
         </div>
 
 
+
+        <div class="tool-box bible-reader-tool">
+
+          <h3>📖 Bible Reader</h3>
+
+          <p>
+            Look up any Bible book, chapter, and verse while you study.
+            This reader works independently from the topic verses below.
+          </p>
+
+          <div class="reader-shell">
+
+            <div class="reader-controls">
+
+              <div class="reader-control">
+                <label for="readerTranslationSelect">Translation</label>
+                <select id="readerTranslationSelect" class="reader-select">
+                  <option value="KJV">King James Version (KJV)</option>
+                  <option value="KJV1611">King James Version 1611</option>
+                  <option value="KJVPLUS">King James Version Plus (KJV+)</option>
+                  <option value="YLT">Young's Literal Translation</option>
+                  <option value="WEB">World English Bible</option>
+                  <option value="ASV">American Standard Version</option>
+                  <option value="GENEVA1599">Geneva Bible 1599</option>
+                  <option value="DRA">Douay-Rheims American Edition</option>
+                  <option value="BSB">Berean Standard Bible</option>
+                  <option value="MSB">Majority Standard Bible</option>
+                </select>
+              </div>
+
+              <div class="reader-control">
+                <label for="readerBookSelect">📖 Book</label>
+                <select id="readerBookSelect" class="reader-select">
+                  <option value="">Choose a book</option>
+                </select>
+              </div>
+
+              <div class="reader-control">
+                <label for="readerChapterSelect">Chapter</label>
+                <select id="readerChapterSelect" class="reader-select">
+                  <option value="">Choose a chapter</option>
+                </select>
+              </div>
+
+              <div class="reader-control">
+                <label for="readerVerseSelect">Verse</label>
+                <select id="readerVerseSelect" class="reader-select">
+                  <option value="">All verses</option>
+                </select>
+              </div>
+
+              <div class="reader-nav">
+                <button id="readerPreviousButton" class="reader-nav-button" disabled>
+                  ← Previous
+                </button>
+                <button id="readerNextButton" class="reader-nav-button" disabled>
+                  Next →
+                </button>
+              </div>
+
+            </div>
+
+            <div id="readerDisplay" class="reader-display">
+              <h3 id="readerTitle" class="reader-title">Bible Reader</h3>
+              <div class="reader-placeholder">
+                Choose a book and chapter to read the Bible while you study.
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
         <div class="tool-box">
 
           <h3>📖 Bible Commentary</h3>
@@ -779,17 +1005,16 @@
             class="translation-select"
           >
 
-            <option value="KJV">
-              KJV
-            </option>
-
-            <option value="WEB">
-              WEB
-            </option>
-
-            <option value="ASV">
-              ASV
-            </option>
+            <option value="KJV">King James Version (KJV)</option>
+            <option value="KJV1611">King James Version 1611</option>
+            <option value="KJVPLUS">King James Version Plus (KJV+)</option>
+            <option value="YLT">Young's Literal Translation</option>
+            <option value="WEB">World English Bible</option>
+            <option value="ASV">American Standard Version</option>
+            <option value="GENEVA1599">Geneva Bible 1599</option>
+            <option value="DRA">Douay-Rheims American Edition</option>
+            <option value="BSB">Berean Standard Bible</option>
+            <option value="MSB">Majority Standard Bible</option>
 
           </select>
 
@@ -939,6 +1164,39 @@
 
 
   /* =========================================
+     INDEPENDENT BIBLE READER
+  ========================================= */
+
+  const readerTranslationSelect =
+    document.getElementById("readerTranslationSelect");
+
+  const readerBookSelect =
+    document.getElementById("readerBookSelect");
+
+  const readerChapterSelect =
+    document.getElementById("readerChapterSelect");
+
+  const readerVerseSelect =
+    document.getElementById("readerVerseSelect");
+
+  const readerPreviousButton =
+    document.getElementById("readerPreviousButton");
+
+  const readerNextButton =
+    document.getElementById("readerNextButton");
+
+  const readerDisplay =
+    document.getElementById("readerDisplay");
+
+  const readerTitle =
+    document.getElementById("readerTitle");
+
+  let readerBible = null;
+  let readerBookIndex = -1;
+  let readerChapterIndex = -1;
+
+
+  /* =========================================
      COMMENTARY API
   ========================================= */
 
@@ -985,6 +1243,537 @@
   };
 
 
+
+  /* =========================================
+     LOAD ANY BIBLE TRANSLATION
+  ========================================= */
+
+  async function loadBibleTranslation(
+    translation
+  ) {
+
+    if (translation === "KJV1611") {
+      return await getKJV1611();
+    }
+
+    if (translation === "KJVPLUS") {
+      return await getKJVPLUS();
+    }
+
+    if (translation === "YLT") {
+      return await getYLT();
+    }
+
+    if (translation === "WEB") {
+      return await getWEB();
+    }
+
+    if (translation === "ASV") {
+      return await getASV();
+    }
+
+    if (translation === "GENEVA1599") {
+      return await getGENEVA1599();
+    }
+
+    if (translation === "DRA") {
+      return await getDRA();
+    }
+
+    if (translation === "BSB") {
+      return await getBSB();
+    }
+
+    if (translation === "MSB") {
+      return await getMSB();
+    }
+
+    return await getKJV();
+  }
+
+
+  function getReaderVerseText(
+    verse,
+    bookIndex,
+    translation
+  ) {
+
+    let text =
+      String(
+        verse.text ||
+        verse.content ||
+        verse.verse ||
+        ""
+      );
+
+    if (translation === "KJVPLUS") {
+
+      const prefix =
+        bookIndex < 39
+          ? "H"
+          : "G";
+
+      text =
+        text.replace(
+          /<S>(\d+)<\/S>/g,
+          prefix + "$1"
+        );
+    }
+
+    return text;
+  }
+
+
+  async function loadIndependentBible() {
+
+    readerDisplay.innerHTML =
+      "<div class='reader-placeholder'>Loading Bible...</div>";
+
+    try {
+
+      readerBible =
+        await loadBibleTranslation(
+          readerTranslationSelect.value
+        );
+
+      if (
+        !readerBible ||
+        !Array.isArray(readerBible.books)
+      ) {
+        throw new Error("Bible data was not returned.");
+      }
+
+      populateReaderBooks();
+
+    } catch (error) {
+
+      console.error(
+        "Independent Bible reader error:",
+        error
+      );
+
+      readerDisplay.innerHTML =
+        "<div class='error-message'>Unable to load this Bible translation right now.</div>";
+    }
+  }
+
+
+  function populateReaderBooks() {
+
+    readerBookSelect.innerHTML =
+      '<option value="">Choose a book</option>';
+
+    readerChapterSelect.innerHTML =
+      '<option value="">Choose a chapter</option>';
+
+    readerVerseSelect.innerHTML =
+      '<option value="">All verses</option>';
+
+    readerBible.books.forEach(
+      function(book, index) {
+
+        const option =
+          document.createElement("option");
+
+        option.value =
+          index;
+
+        option.textContent =
+          getBookName(book);
+
+        readerBookSelect.appendChild(
+          option
+        );
+      }
+    );
+
+    readerBookIndex = -1;
+    readerChapterIndex = -1;
+
+    readerPreviousButton.disabled = true;
+    readerNextButton.disabled = true;
+
+    readerTitle.textContent =
+      "Bible Reader";
+
+    readerDisplay.innerHTML =
+      "<h3 id='readerTitle' class='reader-title'>Bible Reader</h3>" +
+      "<div class='reader-placeholder'>Choose a book and chapter to read the Bible while you study.</div>";
+
+    /* readerTitle was recreated by innerHTML */
+    window.readerTitle =
+      document.getElementById("readerTitle");
+  }
+
+
+  function populateReaderChapters() {
+
+    readerChapterSelect.innerHTML =
+      '<option value="">Choose a chapter</option>';
+
+    readerVerseSelect.innerHTML =
+      '<option value="">All verses</option>';
+
+    readerChapterIndex = -1;
+
+    if (
+      !readerBible ||
+      readerBookIndex < 0
+    ) {
+      return;
+    }
+
+    const book =
+      readerBible.books[
+        readerBookIndex
+      ];
+
+    const chapters =
+      Array.isArray(book.chapters)
+        ? book.chapters
+        : [];
+
+    chapters.forEach(
+      function(chapter, index) {
+
+        const option =
+          document.createElement("option");
+
+        option.value =
+          index;
+
+        option.textContent =
+          chapter.chapter ||
+          (index + 1);
+
+        readerChapterSelect.appendChild(
+          option
+        );
+      }
+    );
+
+    updateReaderNavButtons();
+  }
+
+
+  function populateReaderVerses() {
+
+    readerVerseSelect.innerHTML =
+      '<option value="">All verses</option>';
+
+    if (
+      !readerBible ||
+      readerBookIndex < 0 ||
+      readerChapterIndex < 0
+    ) {
+      return;
+    }
+
+    const chapter =
+      readerBible
+        .books[readerBookIndex]
+        .chapters[readerChapterIndex];
+
+    const verses =
+      Array.isArray(chapter.verses)
+        ? chapter.verses
+        : [];
+
+    verses.forEach(
+      function(verse, index) {
+
+        const option =
+          document.createElement("option");
+
+        option.value =
+          index;
+
+        option.textContent =
+          verse.number ||
+          (index + 1);
+
+        readerVerseSelect.appendChild(
+          option
+        );
+      }
+    );
+  }
+
+
+  function renderReaderChapter() {
+
+    if (
+      !readerBible ||
+      readerBookIndex < 0 ||
+      readerChapterIndex < 0
+    ) {
+      return;
+    }
+
+    const book =
+      readerBible.books[
+        readerBookIndex
+      ];
+
+    const chapter =
+      book.chapters[
+        readerChapterIndex
+      ];
+
+    const verses =
+      Array.isArray(chapter.verses)
+        ? chapter.verses
+        : [];
+
+    const bookName =
+      getBookName(book);
+
+    const chapterNumber =
+      chapter.chapter ||
+      (readerChapterIndex + 1);
+
+    let content =
+      "<h3 id='readerTitle' class='reader-title'>" +
+      escapeHtml(bookName) +
+      " " +
+      escapeHtml(String(chapterNumber)) +
+      "</h3>";
+
+    verses.forEach(
+      function(verse, index) {
+
+        content +=
+          "<div class='reader-verse' data-reader-verse='" +
+          index +
+          "'>" +
+          "<span class='reader-verse-number'>" +
+          escapeHtml(
+            String(
+              verse.number ||
+              (index + 1)
+            )
+          ) +
+          "</span>" +
+          escapeHtml(
+            getReaderVerseText(
+              verse,
+              readerBookIndex,
+              readerTranslationSelect.value
+            )
+          ) +
+          "</div>";
+      }
+    );
+
+    readerDisplay.innerHTML =
+      content;
+
+    populateReaderVerses();
+    updateReaderNavButtons();
+  }
+
+
+  function scrollToReaderVerse() {
+
+    const selected =
+      readerVerseSelect.value;
+
+    readerDisplay
+      .querySelectorAll(".reader-verse")
+      .forEach(
+        function(element) {
+          element.classList.remove(
+            "active-reader-verse"
+          );
+        }
+      );
+
+    if (selected === "") {
+      readerDisplay.scrollTop = 0;
+      return;
+    }
+
+    const verseElement =
+      readerDisplay.querySelector(
+        "[data-reader-verse='" +
+        selected +
+        "']"
+      );
+
+    if (verseElement) {
+
+      verseElement.classList.add(
+        "active-reader-verse"
+      );
+
+      verseElement.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
+    }
+  }
+
+
+  function updateReaderNavButtons() {
+
+    if (
+      !readerBible ||
+      readerBookIndex < 0 ||
+      readerChapterIndex < 0
+    ) {
+      readerPreviousButton.disabled = true;
+      readerNextButton.disabled = true;
+      return;
+    }
+
+    readerPreviousButton.disabled =
+      readerBookIndex === 0 &&
+      readerChapterIndex === 0;
+
+    const lastBookIndex =
+      readerBible.books.length - 1;
+
+    const lastChapterIndex =
+      readerBible
+        .books[lastBookIndex]
+        .chapters.length - 1;
+
+    readerNextButton.disabled =
+      readerBookIndex === lastBookIndex &&
+      readerChapterIndex === lastChapterIndex;
+  }
+
+
+  function moveReaderChapter(
+    direction
+  ) {
+
+    if (
+      !readerBible ||
+      readerBookIndex < 0 ||
+      readerChapterIndex < 0
+    ) {
+      return;
+    }
+
+    if (direction < 0) {
+
+      if (readerChapterIndex > 0) {
+        readerChapterIndex--;
+      } else if (readerBookIndex > 0) {
+        readerBookIndex--;
+        readerChapterIndex =
+          readerBible
+            .books[readerBookIndex]
+            .chapters.length - 1;
+      }
+
+    } else {
+
+      const chapterCount =
+        readerBible
+          .books[readerBookIndex]
+          .chapters.length;
+
+      if (
+        readerChapterIndex <
+        chapterCount - 1
+      ) {
+        readerChapterIndex++;
+      } else if (
+        readerBookIndex <
+        readerBible.books.length - 1
+      ) {
+        readerBookIndex++;
+        readerChapterIndex = 0;
+      }
+    }
+
+    readerBookSelect.value =
+      String(readerBookIndex);
+
+    populateReaderChapters();
+
+    readerChapterSelect.value =
+      String(readerChapterIndex);
+
+    renderReaderChapter();
+  }
+
+
+  readerTranslationSelect.addEventListener(
+    "change",
+    loadIndependentBible
+  );
+
+
+  readerBookSelect.addEventListener(
+    "change",
+    function() {
+
+      if (readerBookSelect.value === "") {
+        readerBookIndex = -1;
+        populateReaderChapters();
+        return;
+      }
+
+      readerBookIndex =
+        Number(
+          readerBookSelect.value
+        );
+
+      populateReaderChapters();
+    }
+  );
+
+
+  readerChapterSelect.addEventListener(
+    "change",
+    function() {
+
+      if (
+        readerChapterSelect.value === ""
+      ) {
+        readerChapterIndex = -1;
+        updateReaderNavButtons();
+        return;
+      }
+
+      readerChapterIndex =
+        Number(
+          readerChapterSelect.value
+        );
+
+      renderReaderChapter();
+    }
+  );
+
+
+  readerVerseSelect.addEventListener(
+    "change",
+    scrollToReaderVerse
+  );
+
+
+  readerPreviousButton.addEventListener(
+    "click",
+    function() {
+      moveReaderChapter(-1);
+    }
+  );
+
+
+  readerNextButton.addEventListener(
+    "click",
+    function() {
+      moveReaderChapter(1);
+    }
+  );
+
+
+  loadIndependentBible();
+
+
   /* =========================================
      START STUDY
   ========================================= */
@@ -1012,7 +1801,7 @@
       "Study: " + topic;
 
     topicIntro.textContent =
-      "BibleMastrey is helping you begin your study of \"" +
+      "BibleMastery is helping you begin your study of \"" +
       topic +
       "\". Start with the Scriptures below, then use the study tools to explore the topic further.";
 
@@ -1062,30 +1851,10 @@
 
   async function loadStudyBible() {
 
-    if (
-      studyTranslation === "WEB"
-    ) {
-
-      studyBible =
-        await getWEB();
-
-    }
-
-    else if (
-      studyTranslation === "ASV"
-    ) {
-
-      studyBible =
-        await getASV();
-
-    }
-
-    else {
-
-      studyBible =
-        await getKJV();
-
-    }
+    studyBible =
+      await loadBibleTranslation(
+        studyTranslation
+      );
 
     if (
       !studyBible ||
