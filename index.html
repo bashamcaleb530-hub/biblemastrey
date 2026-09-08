@@ -2062,43 +2062,6 @@ async function loadSelectedCommentary(
   const selected =
     commentarySelect.value;
 
-  /*
-    Matthew Henry Concise:
-    Use the live Matthew Henry source
-    when the concise source is unavailable.
-  */
-
-  if (
-    selected ===
-    "matthew-henry-concise"
-  ) {
-
-    return loadHelloAOCommentary(
-      "matthew-henry",
-      bookName,
-      chapterNumber
-    );
-  }
-
-
-  /*
-    Barnes:
-    Barnes is not currently available
-    through the active source.
-  */
-
-  if (
-    selected === "barnes"
-  ) {
-
-    return {
-      verses: [],
-      unavailable: true,
-      source: "barnes"
-    };
-  }
-
-
   const commentaryId =
     commentaryApiIds[
       selected
@@ -2117,7 +2080,6 @@ async function loadSelectedCommentary(
     chapterNumber
   );
 }
-
 
 /* =========================
    COMMENTARY PANELS
