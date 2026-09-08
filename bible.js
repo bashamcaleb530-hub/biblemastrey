@@ -71,9 +71,9 @@ async function getKJV1611() {
 
   kjv1611Bible = await Promise.all(
     bookFiles.map(async function(bookFile) {
-      const response = await fetch(
-        KJV1611_SOURCE + bookFile + ".json"
-      );
+     const response = await fetch(
+  KJV1611_SOURCE + encodeURIComponent(bookFile) + ".json"
+);
 
       if (!response.ok) {
         throw new Error(
