@@ -1987,49 +1987,68 @@ function findCommentaryForVerse(
   verseNumber
 ) {
 
-  if (!data) {
-    return "";
+  if (
+    !data ||
+    !Array.isArray(data.verses) ||
+    !data.verses.length
+  ) {
+    return null;
   }
 
   const target =
     Number(verseNumber);
 
-  if (
-    !Number.isFinite(target)
-  ) {
-    return "";
+  if (!Number.isFinite(target)) {
+    return null;
   }
 
-  if (
-    Array.isArray(
-      data.verses
-    )
-  ) {
+  const verses =
+    data.verses
+      .slice()
+      .sort(function(a, b) {
+        return Number(a.number) -
+               Number(b.number);
+      });
 
-    const match =
-      data.verses.find(
-        function(item) {
+  const exact =
+    verses.find(function(item) {
+      return Number(item.number) === target;
+    });
 
-          return (
-            Number(
-              item.number
-            ) === target
-          );
-        }
-      );
+  if (exact) {
+    return {
+      text: exact.text,
+      startVerse: target,
+      exact: true
+    };
+  }
 
-    if (match) {
+  let previous = null;
 
-      return (
-        match.text ||
-        ""
-      );
+  for (let i = 0; i < verses.length; i++) {
+
+    const number =
+      Number(verses[i].number);
+
+    if (number > target) {
+      break;
     }
+
+    previous =
+      verses[i];
   }
 
-  return "";
-}
+  if (previous) {
+    return {
+      text: previous.text,
+      startVerse:
+        Number(previous.number),
+      exact: false
+    };
+  }
 
+  return null;
+}
 
 /* =========================
    SELECT COMMENTARY
