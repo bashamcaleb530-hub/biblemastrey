@@ -3566,29 +3566,29 @@ async function startBible() {
         translationSelect.value;
 
 
-    if (
+ if (
   selectedTranslation ===
   "kjv"
 ) {
 
-  translationName =
-    "King James Version";
+  bibleData =
+    await getKJV();
 
 } else if (
   selectedTranslation ===
   "KJV1611"
 ) {
 
-  translationName =
-    "King James Version 1611";
+  bibleData =
+    await getKJV1611();
 
 } else if (
   selectedTranslation ===
   "WEB"
 ) {
 
-  translationName =
-    "World English Bible";
+  bibleData =
+    await getWEB();
 
 } else if (
   selectedTranslation ===
@@ -3621,7 +3621,7 @@ async function startBible() {
 
   bibleData =
     await getBSB();
-      
+
 } else if (
   selectedTranslation ===
   "MSB"
@@ -3629,13 +3629,15 @@ async function startBible() {
 
   bibleData =
     await getMSB();
-      } else if (
+
+} else if (
   selectedTranslation ===
   "YLT"
 ) {
 
   bibleData =
     await getYLT();
+
 } else {
 
   bibleData =
