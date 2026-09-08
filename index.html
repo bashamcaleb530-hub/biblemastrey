@@ -1868,7 +1868,7 @@ async function loadHelloAOCommentary(
     bookId +
     "/" +
     chapterNumber +
-    ".json";
+    ".simple.json";
 
   console.log(
     "Loading commentary:",
@@ -1896,7 +1896,10 @@ async function loadHelloAOCommentary(
 
   if (
     !data ||
-    !data.chapter
+    !data.chapter ||
+    !Array.isArray(
+      data.chapter.content
+    )
   ) {
 
     throw new Error(
@@ -1904,16 +1907,9 @@ async function loadHelloAOCommentary(
     );
   }
 
-  const content =
-    Array.isArray(
-      data.chapter.content
-    )
-      ? data.chapter.content
-      : [];
-
   const verses = [];
 
-  content.forEach(
+  data.chapter.content.forEach(
     function(item) {
 
       if (
@@ -1937,6 +1933,14 @@ async function loadHelloAOCommentary(
       let text = "";
 
       if (
+        typeof item.content ===
+        "string"
+      ) {
+
+        text =
+          item.content;
+
+      } else if (
         Array.isArray(
           item.content
         )
@@ -1944,47 +1948,7 @@ async function loadHelloAOCommentary(
 
         text =
           item.content
-            .map(
-              function(part) {
-
-                if (
-                  typeof part ===
-                  "string"
-                ) {
-
-                  return part;
-                }
-
-                if (
-                  part &&
-                  typeof part.text ===
-                  "string"
-                ) {
-
-                  return part.text;
-                }
-
-                if (
-                  part &&
-                  typeof part.content ===
-                  "string"
-                ) {
-
-                  return part.content;
-                }
-
-                return "";
-              }
-            )
-            .join("");
-
-      } else if (
-        typeof item.content ===
-        "string"
-      ) {
-
-        text =
-          item.content;
+            .join(" ");
 
       } else if (
         typeof item.text ===
@@ -2015,16 +1979,17 @@ async function loadHelloAOCommentary(
     unavailable: false
   };
 
-  commentaryCache[cacheKey] = result;
+  commentaryCache[
+    cacheKey
+  ] = result;
 
-console.log(
-  "Commentary verses loaded:",
-  verses.length
-);
+  console.log(
+    "Commentary verses loaded:",
+    verses.length
+  );
 
-return result;
+  return result;
 }
-
 
 /* =========================
    FIND COMMENTARY VERSE
