@@ -1879,104 +1879,124 @@ async function loadHelloAOCommentary(
     chapterNumber +
     ".simple.json";
 
-  console.log(
-    "Loading commentary:",
-    url
+  const response =
+    await fetch(url);
+
+  if (!response.ok) {
+
+    if (response.status === 404) {
+      return {
+        verses: [],
+        unavailable: true
+      };
+    }
+
+    throw new Error(
+      "Commentary request failed: " +
+      response.status
+    );
+  }
+
+  const data =
+    await response.json();
+
+  const chapter =
+    data &&
+    data.chapter
+      ? data.chapter
+      : (
+          data &&
+          data.data &&
+          data.data.chapter
+            ? data.data.chapter
+            : null
+        );
+
+  if (
+    !chapter ||
+    !Array.isArray(chapter.content)
+  ) {
+    throw new Error(
+      "Commentary response was invalid."
+    );
+  }
+
+  const verses = [];
+
+  chapter.content.forEach(
+    function(item) {
+
+      if (
+        !item ||
+        item.type !== "verse"
+      ) {
+        return;
+      }
+
+      const number =
+        Number(item.number);
+
+      if (!Number.isFinite(number)) {
+        return;
+      }
+
+      let text = "";
+
+      if (typeof item.text === "string") {
+
+        text = item.text;
+
+      } else if (
+        Array.isArray(item.content)
+      ) {
+
+        text =
+          item.content
+            .map(function(part) {
+
+              if (
+                typeof part === "string"
+              ) {
+                return part;
+              }
+
+              if (
+                part &&
+                typeof part.text === "string"
+              ) {
+                return part.text;
+              }
+
+              return "";
+            })
+            .join(" ");
+      }
+
+      text =
+        text
+          .replace(/\s+/g, " ")
+          .trim();
+
+      if (!text) {
+        return;
+      }
+
+      verses.push({
+        number: number,
+        text: text
+      });
+    }
   );
 
-  try {
+  const result = {
+    verses: verses,
+    unavailable: false
+  };
 
-    const response =
-      await fetch(url, {
-        cache: "no-store"
-      });
+  commentaryCache[cacheKey] =
+    result;
 
-    if (!response.ok) {
-      throw new Error(
-        "Commentary request failed: " +
-        response.status
-      );
-    }
-
-    const data =
-      await response.json();
-
-    console.log(
-      "Commentary raw data:",
-      data
-    );
-
-    if (
-      !data ||
-      !data.chapter ||
-      !Array.isArray(data.chapter.content)
-    ) {
-      throw new Error(
-        "Commentary response was invalid."
-      );
-    }
-
-    const verses = [];
-
-    data.chapter.content.forEach(
-      function(item) {
-
-        if (
-          !item ||
-          item.type !== "verse"
-        ) {
-          return;
-        }
-
-        const number =
-          Number(item.number);
-
-        if (!Number.isFinite(number)) {
-          return;
-        }
-
-        const text =
-          String(
-            item.text || ""
-          )
-            .replace(/\s+/g, " ")
-            .trim();
-
-        if (!text) {
-          return;
-        }
-
-        verses.push({
-          number: number,
-          text: text
-        });
-      }
-    );
-
-    console.log(
-      "Commentary verses loaded:",
-      verses
-    );
-
-    const result = {
-      verses: verses,
-      unavailable: false
-    };
-
-    commentaryCache[cacheKey] =
-      result;
-
-    return result;
-
-  } catch (error) {
-
-    console.error(
-      "HelloAO commentary error:",
-      error
-    );
-
-    throw error;
-  }
+  return result;
 }
 /* =========================
    FIND COMMENTARY VERSE
