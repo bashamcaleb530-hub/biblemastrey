@@ -3493,9 +3493,14 @@ function getVerses(chapter) {
     return chapter.Verses;
   }
 
+  if (Array.isArray(chapter.content)) {
+    return chapter.content.filter(function(item) {
+      return item && item.type === "verse";
+    });
+  }
+
   return [];
 }
-
 function getVerseNumber(verse, index) {
   if (!verse) {
     return index + 1;
