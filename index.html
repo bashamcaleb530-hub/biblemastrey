@@ -1842,12 +1842,9 @@ async function loadHelloAOCommentary(
 ) {
 
   const bookId =
-    getCommentaryBookId(
-      bookName
-    );
+    getCommentaryBookId(bookName);
 
   if (!bookId) {
-
     return {
       verses: [],
       unavailable: true
@@ -1862,13 +1859,8 @@ async function loadHelloAOCommentary(
     "-" +
     chapterNumber;
 
-  if (
-    commentaryCache[cacheKey]
-  ) {
-
-    return commentaryCache[
-      cacheKey
-    ];
+  if (commentaryCache[cacheKey]) {
+    return commentaryCache[cacheKey];
   }
 
   const url =
@@ -1885,112 +1877,124 @@ async function loadHelloAOCommentary(
     url
   );
 
-  const response =
-    await fetch(
-      url,
-      {
+  try {
+
+    const response =
+      await fetch(url, {
         cache: "no-store"
-      }
-    );
-
-  if (!response.ok) {
-
-    throw new Error(
-      "Commentary request failed: " +
-      response.status
-    );
-  }
-
-  const data =
-    await response.json();
-
-  if (!data || !data.chapter) {
-  throw new Error(
-    "Commentary response was invalid."
-  );
-}
-  const verses = [];
-
-  data.chapter.content.forEach(
-    function(item) {
-
-      if (
-        !item ||
-        item.type !== "verse"
-      ) {
-        return;
-      }
-
-      const number =
-        Number(
-          item.number
-        );
-
-      if (
-        !Number.isFinite(number)
-      ) {
-        return;
-      }
-
-      let text = "";
-
-      if (
-        typeof item.content ===
-        "string"
-      ) {
-
-        text =
-          item.content;
-
-      } else if (
-        Array.isArray(
-          item.content
-        )
-      ) {
-
-        text =
-          item.content
-            .join(" ");
-
-      } else if (
-        typeof item.text ===
-        "string"
-      ) {
-
-        text =
-          item.text;
-      }
-
-      text =
-        text
-          .replace(
-            /\s+/g,
-            " "
-          )
-          .trim();
-
-      verses.push({
-        number: number,
-        text: text
       });
+
+    if (!response.ok) {
+      throw new Error(
+        "Commentary request failed: " +
+        response.status
+      );
     }
-  );
 
-  const result = {
-    verses: verses,
-    unavailable: false
-  };
+    const data =
+      await response.json();
 
-  commentaryCache[
-    cacheKey
-  ] = result;
+    if (
+      !data ||
+      !data.chapter ||
+      !Array.isArray(data.chapter.content)
+    ) {
+      throw new Error(
+        "Commentary response was invalid."
+      );
+    }
 
-  console.log(
-    "Commentary verses loaded:",
-    verses.length
-  );
+    const verses = [];
 
-  return result;
+    data.chapter.content.forEach(
+      function(item) {
+
+        if (!item) {
+          return;
+        }
+
+        const number =
+          Number(item.number);
+
+        if (!Number.isFinite(number)) {
+          return;
+        }
+
+        let text = "";
+
+        if (
+          typeof item.text === "string"
+        ) {
+          text = item.text;
+
+        } else if (
+          typeof item.content === "string"
+        ) {
+          text = item.content;
+
+        } else if (
+          Array.isArray(item.content)
+        ) {
+          text =
+            item.content
+              .map(function(part) {
+
+                if (
+                  typeof part === "string"
+                ) {
+                  return part;
+                }
+
+                if (
+                  part &&
+                  typeof part.text === "string"
+                ) {
+                  return part.text;
+                }
+
+                return "";
+              })
+              .join(" ");
+        }
+
+        text =
+          text
+            .replace(/\s+/g, " ")
+            .trim();
+
+        if (text) {
+          verses.push({
+            number: number,
+            text: text
+          });
+        }
+      }
+    );
+
+    const result = {
+      verses: verses,
+      unavailable: false
+    };
+
+    commentaryCache[cacheKey] =
+      result;
+
+    console.log(
+      "Commentary verses loaded:",
+      verses.length
+    );
+
+    return result;
+
+  } catch (error) {
+
+    console.error(
+      "HelloAO commentary error:",
+      error
+    );
+
+    throw error;
+  }
 }
 
 /* =========================
