@@ -3628,6 +3628,14 @@ async function startBible() {
       bibleData =
         await getKJV1611();
 
+      } else if (
+  selectedTranslation ===
+  "KJVPLUS"
+) {
+
+  bibleData =
+    await getKJVPLUS();
+      
     } else if (
       selectedTranslation ===
       "WEB"
