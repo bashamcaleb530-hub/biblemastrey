@@ -869,6 +869,877 @@
     🤖 Ask BibleMastrey AI
   </button>
 </div>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>BibleMastrey</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f7fa;
+      color: #222;
+    }
+
+    header {
+      background: #1f3c88;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      position: relative;
+    }
+
+    header h1 {
+      margin: 0 0 8px;
+      font-size: 30px;
+    }
+
+    header p {
+      margin: 0;
+      opacity: .9;
+    }
+
+    .account-button {
+      position: absolute;
+      right: 20px;
+      top: 20px;
+      padding: 10px 14px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .controls {
+      background: white;
+      padding: 18px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.08);
+      margin-bottom: 20px;
+    }
+
+    .controls-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .control-group label {
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    select,
+    input,
+    textarea,
+    button {
+      font-family: inherit;
+    }
+
+    select,
+    input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 15px;
+      background: white;
+    }
+
+    .study-controls {
+      margin-top: 15px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .study-controls button,
+    .dictionary-search-row button,
+    .concordance-search-row button,
+    .original-word-search-row button {
+      border: none;
+      background: #1f3c88;
+      color: white;
+      padding: 11px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .study-controls button:hover,
+    .dictionary-search-row button:hover,
+    .concordance-search-row button:hover,
+    .original-word-search-row button:hover {
+      background: #162d68;
+    }
+
+    .commentary-selector {
+      display: none;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .commentary-selector.show {
+      display: flex;
+    }
+
+    .commentary-selector select {
+      width: auto;
+      min-width: 300px;
+    }
+
+    #status {
+      margin: 15px 0;
+      font-weight: bold;
+    }
+
+    #chapterContent {
+      background: white;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.08);
+    }
+
+    #chapterTitle {
+      margin-top: 0;
+      margin-bottom: 20px;
+      font-size: 26px;
+      color: #1f3c88;
+    }
+
+    .verse-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 35%);
+      gap: 20px;
+      border-bottom: 1px solid #e3e3e3;
+      padding: 18px 0;
+    }
+
+    .verse-left {
+      min-width: 0;
+    }
+
+    .verse-text {
+      padding: 12px;
+      border-radius: 7px;
+      cursor: pointer;
+      line-height: 1.7;
+      font-size: 18px;
+    }
+
+    .verse-text:hover {
+      background: #f1f4fa;
+    }
+
+    .verse-text.selected {
+      background: transparent;
+    }
+
+    .verse-text.permanent-highlight {
+      background: #fff3a6;
+      box-shadow: inset 4px 0 0 #d6ae00;
+    }
+
+    .verse-number {
+      font-weight: bold;
+      color: #1f3c88;
+      margin-right: 8px;
+    }
+
+    .notes-area {
+      margin-top: 10px;
+      padding: 10px 12px;
+    }
+
+    .notes-label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+
+    .verse-note {
+      width: 100%;
+      min-height: 100px;
+      resize: vertical;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 10px;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .verse-note:focus {
+      outline: none;
+      border-color: #1f3c88;
+      box-shadow: 0 0 0 2px rgba(31,60,136,.1);
+    }
+
+    .note-status {
+      display: block;
+      font-size: 12px;
+      color: #666;
+      margin-top: 4px;
+    }
+
+    .commentary-panel {
+      display: none;
+      background: #f8f9fc;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 15px;
+      min-height: 150px;
+      max-height: 600px;
+      overflow-y: auto;
+    }
+
+    .commentary-panel.show {
+      display: block;
+    }
+
+    .commentary-title {
+      font-weight: bold;
+      color: #1f3c88;
+      margin-bottom: 10px;
+    }
+
+    .commentary-reference {
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .commentary-text {
+      line-height: 1.6;
+      color: #444;
+      white-space: pre-wrap;
+    }
+
+    .commentary-placeholder,
+    .commentary-loading {
+      color: #777;
+      font-style: italic;
+    }
+
+    .commentary-error {
+      color: #a33;
+    }
+
+    .navigation {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 25px;
+    }
+
+    .navigation button {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 6px;
+      background: #1f3c88;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .navigation button:hover {
+      background: #162d68;
+    }
+
+    .navigation button:disabled {
+      background: #aaa;
+      cursor: not-allowed;
+    }
+
+    .search-box {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #ddd;
+    }
+
+    .search-box input {
+      max-width: 400px;
+    }
+
+    .search-results {
+      margin-top: 10px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .search-result {
+      padding: 8px;
+      background: #f5f5f5;
+      margin-bottom: 5px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .dictionary-search,
+    .concordance-search,
+    .original-word-search {
+      margin-top: 20px;
+    }
+
+    .dictionary-search-row,
+    .concordance-search-row,
+    .original-word-search-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .dictionary-search-row input,
+    .concordance-search-row input,
+    .original-word-search-row input {
+      flex: 1;
+    }
+
+    #dictionaryResult,
+    #concordanceResult,
+    #originalWordResult {
+      margin-top: 12px;
+    }
+
+    #concordanceResult {
+      max-height: 350px;
+      overflow-y: auto;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 7px;
+      background: #f8f9fc;
+    }
+
+    .dictionary-entry,
+    .original-word-entry,
+    .concordance-entry {
+      background: #f8f9fc;
+      border: 1px solid #ddd;
+      border-radius: 7px;
+      padding: 15px;
+      margin-bottom: 10px;
+    }
+
+    .dictionary-word {
+      font-weight: bold;
+      color: #1f3c88;
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+
+    .dictionary-source,
+    .original-word-source {
+      margin-top: 12px;
+      font-size: 12px;
+      color: #777;
+      font-style: italic;
+    }
+
+    .verse-menu {
+      display: none;
+      position: fixed;
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 7px;
+      box-shadow: 0 4px 12px rgba(0,0,0,.15);
+      z-index: 1000;
+      overflow: hidden;
+    }
+
+    .verse-menu button {
+      display: block;
+      width: 100%;
+      border: none;
+      background: white;
+      padding: 10px 15px;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .verse-menu button:hover {
+      background: #f1f1f1;
+    }
+
+    .ai-study-choice {
+      background: white;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.08);
+      margin: 20px 0;
+    }
+
+    .ai-study-choice h2 {
+      margin-top: 0;
+      color: #1f3c88;
+      text-align: center;
+    }
+
+    .ai-study-intro {
+      text-align: center;
+      color: #555;
+      line-height: 1.6;
+      max-width: 800px;
+      margin: 0 auto 20px;
+    }
+
+    .ai-study-choice-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+    }
+
+    .ai-study-choice-card {
+      display: block;
+      background: #f8f9fc;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 20px;
+      text-decoration: none;
+      color: #222;
+    }
+
+    .ai-study-choice-card:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,.12);
+      border-color: #1f3c88;
+    }
+
+    .ai-study-icon {
+      font-size: 30px;
+      margin-bottom: 8px;
+    }
+
+    .ai-study-choice-card h3 {
+      margin: 0 0 8px;
+      color: #1f3c88;
+    }
+
+    .ai-study-choice-card p {
+      margin: 0;
+      color: #555;
+      line-height: 1.5;
+    }
+
+    .admin-study-card {
+      border-style: dashed;
+    }
+
+    .admin-label {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 5px 9px;
+      border-radius: 5px;
+      background: #e8edf9;
+      color: #1f3c88;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .account-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    .account-box {
+      background: white;
+      width: min(90%, 400px);
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+      text-align: center;
+      position: relative;
+    }
+
+    .account-box h2 {
+      margin-top: 0;
+      color: #1f3c88;
+    }
+
+    .account-box input {
+      margin: 8px 0;
+    }
+
+    .account-box button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    #loginAccountButton {
+      background: #1f3c88;
+      color: white;
+    }
+
+    #signupAccountButton {
+      background: #e8edf9;
+      color: #1f3c88;
+    }
+
+    .account-close {
+      position: absolute;
+      top: 8px;
+      right: 12px;
+      width: auto !important;
+      padding: 2px 8px !important;
+      background: transparent !important;
+      color: #555;
+      font-size: 28px !important;
+    }
+
+    @media(max-width:800px) {
+      .controls-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .verse-row {
+        grid-template-columns: 1fr;
+      }
+
+      .ai-study-choice-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media(max-width:500px) {
+      .container {
+        padding: 10px;
+      }
+
+      .controls-grid {
+        grid-template-columns: 1fr;
+      }
+
+      #chapterContent {
+        padding: 15px;
+      }
+
+      .verse-text {
+        font-size: 17px;
+      }
+
+      .study-controls {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .commentary-selector {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .commentary-selector select {
+        width: 100%;
+      }
+
+      .navigation {
+        flex-direction: column;
+      }
+
+      .dictionary-search-row,
+      .concordance-search-row,
+      .original-word-search-row {
+        flex-direction: column;
+      }
+
+      .account-button {
+        position: static;
+        margin-top: 15px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>BibleMastery</h1>
+  <p>Your Bible Study Companion</p>
+
+  <button id="accountButton" class="account-button">
+    👤 Account
+  </button>
+</header>
+
+<div id="accountModal" class="account-modal" style="display:none;">
+
+  <div class="account-box">
+
+    <button id="closeAccountModal" class="account-close">
+      ×
+    </button>
+
+    <h2>BibleMastrey Account</h2>
+
+    <p id="accountMessage">
+      Sign in or create your account.
+    </p>
+
+    <input
+      type="email"
+      id="accountEmail"
+      placeholder="Email address"
+      autocomplete="email"
+    >
+
+    <input
+      type="password"
+      id="accountPassword"
+      placeholder="Password"
+      autocomplete="current-password"
+    >
+
+   <label>
+  <input
+    type="checkbox"
+    id="staySignedIn"
+  >
+  Stay signed in
+</label>
+    <button id="loginAccountButton">
+  Log In
+</button>
+
+<button id="signupAccountButton">
+  Create Account
+</button>
+  </div>
+
+</div>
+
+<div class="container">
+<div class="ai-study-choice">
+
+  <h2>
+    What would you like to do?
+  </h2>
+
+  <p class="ai-study-intro">
+    Choose how you want to study.
+    BibleMastery will bring helpful
+    study tools together in one place.
+  </p>
+
+  <div class="ai-study-choice-grid">
+
+    <a
+      href="ai-study.html?type=personal"
+      class="ai-study-choice-card"
+    >
+
+      <div class="ai-study-icon">
+        📖
+      </div>
+
+      <h3>
+        Personal Bible Study
+      </h3>
+
+      <p>
+        Study a topic, discover Bible verses,
+        explore definitions, use study tools,
+        read commentaries, and take your own notes.
+      </p>
+
+    </a>
+
+    <a
+      href="sermon.html"
+      class="ai-study-choice-card"
+    >
+
+      <div class="ai-study-icon">
+        🎤
+      </div>
+
+      <h3>
+        Build a Sermon
+      </h3>
+
+      <p>
+        Prepare a sermon step by step with Bible verses,
+        commentaries, study tools, a preparation guide,
+        and a guided sermon template.
+      </p>
+
+    </a>
+
+    <a
+      href="bible-study.html"
+      class="ai-study-choice-card"
+    >
+
+      <div class="ai-study-icon">
+        📚
+      </div>
+
+      <h3>
+        Write a Group Bible Study
+      </h3>
+
+      <p>
+        Build a complete group Bible study with Scripture,
+        discussion questions, explanations, commentary,
+        and study tools.
+      </p>
+
+    </a>
+
+    <div class="ai-study-choice-card admin-study-card">
+
+      <div class="ai-study-icon">
+        ⛪
+      </div>
+
+      <h3>
+        Desert Springs Ministries Sermons
+      </h3>
+
+      <p>
+        Private sermon workspace for
+        Desert Springs Ministries.
+      </p>
+
+      <span class="admin-label">
+        Admin / Owner
+      </span>
+
+    </div>
+
+  </div>
+
+</div>
+  <div class="controls">
+
+    <div class="controls-grid">
+
+      <div class="control-group">
+        <label for="translationSelect">
+          Translation
+        </label>
+
+        <select id="translationSelect">
+
+  <option value="kjv">
+    King James Version (KJV)
+  </option>
+          
+<option value="KJV1611">
+  King James Version 1611
+</option>
+          
+    <option value="KJVPLUS">
+  King James Version Plus (KJV+)
+</option>
+          
+   <option value="YLT">
+  Young's Literal Translation
+</option>
+          
+  <option value="WEB">
+    World English Bible
+  </option>
+
+  <option value="ASV">
+    American Standard Version
+  </option>
+
+  <option value="GENEVA1599">
+    Geneva Bible 1599
+  </option>
+
+  <option value="DRA">
+    Douay-Rheims American Edition
+  </option>
+          <option value="BSB">
+  Berean Standard Bible
+</option>
+
+<option value="MSB">
+  Majority Standard Bible
+</option>
+</select>
+
+</div>
+
+<div class="control-group">
+  <label for="bookSelect">
+  📖 Books
+</label>
+
+        <select id="bookSelect">
+          <option value="">
+            Choose a book
+          </option>
+        </select>
+      </div>
+
+      <div class="control-group">
+        <label for="chapterSelect">
+          Chapter
+        </label>
+
+        <select id="chapterSelect">
+          <option value="">
+            Choose a chapter
+          </option>
+        </select>
+      </div>
+
+      <div class="control-group">
+        <label for="verseSelect">
+          Verse
+        </label>
+
+        <select id="verseSelect">
+          <option value="">
+            Choose a verse
+          </option>
+        </select>
+      </div>
+
+    </div>
+
+    
+
+  </div>
+
+  <div id="status">
+    Loading Bible...
+  </div>
+<!-- BibleMastrey AI -->
+<div class="biblemastrey-ai-box">
+  <button id="bibleMastreyAIButton" type="button">
+    🤖 Ask BibleMastrey AI
+  </button>
+</div>
 
   <div id="chapterContent">
 
@@ -1027,6 +1898,3758 @@
 
 <script>
 
+  /* =========================
+     MAIN BIBLE STATE
+  ========================= */
+
+  let bibleData = null;
+  let books = [];
+  let currentBookIndex = -1;
+  let currentChapterIndex = -1;
+  let selectedVerseNumber = null;
+  let commentaryVisible = false;
+
+  const commentaryCache = {};
+
+
+  /* =========================
+     DOM REFERENCES
+  ========================= */
+
+  const translationSelect =
+    document.getElementById("translationSelect");
+
+  const bookSelect =
+    document.getElementById("bookSelect");
+
+  const chapterSelect =
+    document.getElementById("chapterSelect");
+
+  const verseSelect =
+    document.getElementById("verseSelect");
+
+  const status =
+    document.getElementById("status");
+
+  const chapterContent =
+    document.getElementById("chapterContent");
+
+  const chapterTitle =
+    document.getElementById("chapterTitle");
+
+  const chapterIntro =
+    document.getElementById("chapterIntro");
+
+  const verseContainer =
+    document.getElementById("verseContainer");
+
+  const previousChapterButton =
+    document.getElementById(
+      "previousChapterButton"
+    );
+
+  const nextChapterButton =
+    document.getElementById(
+      "nextChapterButton"
+    );
+
+  const searchInput =
+    document.getElementById("searchInput");
+
+  const searchResults =
+    document.getElementById("searchResults");
+
+  const commentaryButton =
+    document.getElementById("commentaryButton");
+
+  const commentarySelector =
+    document.getElementById("commentarySelector");
+
+  const commentarySelect =
+    document.getElementById("commentarySelect");
+
+  const verseMenu =
+    document.getElementById("verseMenu");
+
+  const highlightVerseButton =
+    document.getElementById(
+      "highlightVerseButton"
+    );
+
+  const bookmarkVerseButton =
+    document.getElementById(
+      "bookmarkVerseButton"
+    );
+const noteVerseButton =
+  document.getElementById(
+    "noteVerseButton"
+  );
+  const copyVerseButton =
+    document.getElementById(
+      "copyVerseButton"
+    );
+
+  const shareVerseButton =
+    document.getElementById(
+      "shareVerseButton"
+    );
+
+
+  /* =========================
+     SEARCH / STUDY DOM
+  ========================= */
+
+  const dictionaryInput =
+    document.getElementById("dictionaryInput");
+
+  const dictionaryButton =
+    document.getElementById("dictionaryButton");
+
+  const dictionaryResult =
+    document.getElementById("dictionaryResult");
+
+  const concordanceInput =
+    document.getElementById("concordanceInput");
+
+  const concordanceButton =
+    document.getElementById("concordanceButton");
+
+  const concordanceResult =
+    document.getElementById("concordanceResult");
+
+  const originalWordInput =
+    document.getElementById("originalWordInput");
+
+  const originalWordButton =
+    document.getElementById("originalWordButton");
+
+  const originalWordResult =
+    document.getElementById("originalWordResult");
+
+
+  /* =========================
+     SUPABASE
+  ========================= */
+
+  const SUPABASE_URL =
+    "https://pjkkxvntssvukulxipfr.supabase.co";
+
+  const SUPABASE_PUBLISHABLE_KEY =
+    "sb_publishable_1kehaIywv1Wb9Iwj2OPGdg_aFosOSwK";
+
+  const supabaseClient =
+    window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_PUBLISHABLE_KEY
+    );
+
+
+  /* =========================
+     CLOUD DATA
+  ========================= */
+
+  let cloudBibleData = {};
+
+  function getCloudKey(
+    itemType,
+    translation,
+    bookIndex,
+    chapterIndex,
+    verseNumber
+  ) {
+    return (
+      itemType +
+      "|" +
+      translation +
+      "|" +
+      bookIndex +
+      "|" +
+      chapterIndex +
+      "|" +
+      verseNumber
+    );
+  }
+
+  async function getCurrentUser() {
+
+    const {
+      data: { user }
+    } =
+      await supabaseClient.auth.getUser();
+
+    return user;
+  }
+
+
+  async function saveCloudItem(
+    itemType,
+    translation,
+    bookIndex,
+    chapterIndex,
+    verseNumber,
+    content
+  ) {
+
+    const user =
+      await getCurrentUser();
+
+    if (!user) {
+      return;
+    }
+
+    const { error } =
+      await supabaseClient
+        .from("bible_user_data")
+        .upsert(
+          {
+            user_id: user.id,
+            item_type: itemType,
+            translation: translation,
+            book_index: bookIndex,
+            chapter_index: chapterIndex,
+            verse_number: verseNumber,
+            content: content,
+            updated_at:
+              new Date().toISOString()
+          },
+          {
+            onConflict:
+              "user_id,item_type,translation,book_index,chapter_index,verse_number"
+          }
+        );
+
+    if (error) {
+      console.error(
+        "Cloud save error:",
+        error
+      );
+      return;
+    }
+
+    cloudBibleData[
+      getCloudKey(
+        itemType,
+        translation,
+        bookIndex,
+        chapterIndex,
+        verseNumber
+      )
+    ] = content;
+  }
+
+
+  async function deleteCloudItem(
+    itemType,
+    translation,
+    bookIndex,
+    chapterIndex,
+    verseNumber
+  ) {
+
+    const user =
+      await getCurrentUser();
+
+    if (!user) {
+      return;
+    }
+
+    const { error } =
+      await supabaseClient
+        .from("bible_user_data")
+        .delete()
+        .eq("user_id", user.id)
+        .eq("item_type", itemType)
+        .eq("translation", translation)
+        .eq("book_index", bookIndex)
+        .eq("chapter_index", chapterIndex)
+        .eq("verse_number", verseNumber);
+
+    if (error) {
+      console.error(
+        "Cloud delete error:",
+        error
+      );
+      return;
+    }
+
+    delete cloudBibleData[
+      getCloudKey(
+        itemType,
+        translation,
+        bookIndex,
+        chapterIndex,
+        verseNumber
+      )
+    ];
+  }
+
+
+  async function syncCloudChapter() {
+
+    cloudBibleData = {};
+
+    const user =
+      await getCurrentUser();
+
+    if (!user) {
+      return;
+    }
+
+    const { data, error } =
+      await supabaseClient
+        .from("bible_user_data")
+        .select("*")
+        .eq("user_id", user.id)
+        .eq(
+          "translation",
+          translationSelect.value
+        )
+        .eq(
+          "book_index",
+          currentBookIndex
+        )
+        .eq(
+          "chapter_index",
+          currentChapterIndex
+        );
+
+    if (error) {
+      console.error(
+        "Cloud sync error:",
+        error
+      );
+      return;
+    }
+
+    (data || []).forEach(
+      function(item) {
+
+        const key =
+          getCloudKey(
+            item.item_type,
+            item.translation,
+            item.book_index,
+            item.chapter_index,
+            item.verse_number
+          );
+
+        cloudBibleData[key] =
+          item.content;
+      }
+    );
+  }
+
+
+  async function syncLocalBibleDataToCloud() {
+
+    const user =
+      await getCurrentUser();
+
+    if (!user) {
+      return;
+    }
+
+    const keys = [];
+
+    for (
+      let i = 0;
+      i < localStorage.length;
+      i++
+    ) {
+      const key =
+        localStorage.key(i);
+
+      if (key) {
+        keys.push(key);
+      }
+    }
+
+    for (const key of keys) {
+
+      const match =
+        key.match(
+          /^bibleMastrey-(.+)-(\d+)-(\d+)-(note|highlight|bookmark)-(\d+)$/
+        );
+
+      if (!match) {
+        continue;
+      }
+
+      const translation =
+        match[1];
+
+      const bookIndex =
+        Number(match[2]);
+
+      const chapterIndex =
+        Number(match[3]);
+
+      const itemType =
+        match[4];
+
+      const verseNumber =
+        Number(match[5]);
+
+      const content =
+        localStorage.getItem(key);
+
+      if (
+        content === null ||
+        content === ""
+      ) {
+        continue;
+      }
+
+      await saveCloudItem(
+        itemType,
+        translation,
+        bookIndex,
+        chapterIndex,
+        verseNumber,
+        content
+      );
+    }
+  }
+
+
+  /* =========================
+     LOCAL DATA HELPERS
+  ========================= */
+
+  function getBibleStorageKey(
+    itemType,
+    verseNumber
+  ) {
+    return (
+      "bibleMastrey-" +
+      translationSelect.value +
+      "-" +
+      currentBookIndex +
+      "-" +
+      currentChapterIndex +
+      "-" +
+      itemType +
+      "-" +
+      verseNumber
+    );
+  }
+
+
+  function getBookmarkKey(
+    verseNumber
+  ) {
+    return getBibleStorageKey(
+      "bookmark",
+      verseNumber
+    );
+  }
+
+
+  function loadNote(
+    verseNumber
+  ) {
+
+    const cloudKey =
+      getCloudKey(
+        "note",
+        translationSelect.value,
+        currentBookIndex,
+        currentChapterIndex,
+        verseNumber
+      );
+
+    if (
+      Object.prototype.hasOwnProperty.call(
+        cloudBibleData,
+        cloudKey
+      )
+    ) {
+      return (
+        cloudBibleData[cloudKey] ||
+        ""
+      );
+    }
+
+    return (
+      localStorage.getItem(
+        getBibleStorageKey(
+          "note",
+          verseNumber
+        )
+      ) ||
+      ""
+    );
+  }
+
+
+  function saveNote(
+    verseNumber,
+    content,
+    statusElement
+  ) {
+
+    const key =
+      getBibleStorageKey(
+        "note",
+        verseNumber
+      );
+
+    const trimmed =
+      content.trim();
+
+    if (trimmed) {
+
+      localStorage.setItem(
+        key,
+        content
+      );
+
+      saveCloudItem(
+        "note",
+        translationSelect.value,
+        currentBookIndex,
+        currentChapterIndex,
+        verseNumber,
+        content
+      );
+
+      if (statusElement) {
+        statusElement.textContent =
+          "Saved";
+      }
+
+    } else {
+
+      localStorage.removeItem(
+        key
+      );
+
+      deleteCloudItem(
+        "note",
+        translationSelect.value,
+        currentBookIndex,
+        currentChapterIndex,
+        verseNumber
+      );
+
+      if (statusElement) {
+        statusElement.textContent =
+          "";
+      }
+    }
+  }
+
+
+  function isHighlighted(
+    verseNumber
+  ) {
+
+    const cloudKey =
+      getCloudKey(
+        "highlight",
+        translationSelect.value,
+        currentBookIndex,
+        currentChapterIndex,
+        verseNumber
+      );
+
+    if (
+      cloudBibleData[cloudKey] ===
+      "true"
+    ) {
+      return true;
+    }
+
+    return (
+      localStorage.getItem(
+        getBibleStorageKey(
+          "highlight",
+          verseNumber
+        )
+      ) === "true"
+    );
+  }
+
+
+  async function setHighlight(
+    verseNumber,
+    shouldHighlight
+  ) {
+
+    const key =
+      getBibleStorageKey(
+        "highlight",
+        verseNumber
+      );
+
+    if (shouldHighlight) {
+
+      localStorage.setItem(
+        key,
+        "true"
+      );
+
+      await saveCloudItem(
+        "highlight",
+        translationSelect.value,
+        currentBookIndex,
+        currentChapterIndex,
+        verseNumber,
+        "true"
+      );
+
+    } else {
+
+      localStorage.removeItem(
+        key
+      );
+
+      await deleteCloudItem(
+        "highlight",
+        translationSelect.value,
+        currentBookIndex,
+        currentChapterIndex,
+        verseNumber
+      );
+    }
+  }
+
+
+  function isBookmarked(
+    verseNumber
+  ) {
+
+    return (
+      localStorage.getItem(
+        getBookmarkKey(
+          verseNumber
+        )
+      ) === "true"
+    );
+  }
+
+
+ /* =========================
+   COMMENTARY
+========================= */
+
+const COMMENTARY_API =
+  "https://bible.helloao.org/api/c/";
+
+const commentaryApiIds = {
+
+  "matthew-henry-complete":
+    "matthew-henry",
+
+  "john-gill":
+    "john-gill",
+
+  "jfb":
+    "jamieson-fausset-brown",
+
+  "adam-clarke":
+    "adam-clarke",
+
+  "john-calvin":
+    "john-calvin",
+
+  "keil-delitzsch":
+    "keil-delitzsch",
+
+  "tyndale":
+    "tyndale"
+};
+/* =========================
+   COMMENTARY BOOK IDS
+========================= */
+
+function getCommentaryBookId(bookName) {
+
+  const map = {
+
+    "Genesis": "GEN",
+    "Exodus": "EXO",
+    "Leviticus": "LEV",
+    "Numbers": "NUM",
+    "Deuteronomy": "DEU",
+    "Joshua": "JOS",
+    "Judges": "JDG",
+    "Ruth": "RUT",
+    "1 Samuel": "1SA",
+    "2 Samuel": "2SA",
+    "1 Kings": "1KI",
+    "2 Kings": "2KI",
+    "1 Chronicles": "1CH",
+    "2 Chronicles": "2CH",
+    "Ezra": "EZR",
+    "Nehemiah": "NEH",
+    "Esther": "EST",
+    "Job": "JOB",
+    "Psalms": "PSA",
+    "Proverbs": "PRO",
+    "Ecclesiastes": "ECC",
+    "Song of Solomon": "SNG",
+    "Isaiah": "ISA",
+    "Jeremiah": "JER",
+    "Lamentations": "LAM",
+    "Ezekiel": "EZK",
+    "Daniel": "DAN",
+    "Hosea": "HOS",
+    "Joel": "JOL",
+    "Amos": "AMO",
+    "Obadiah": "OBA",
+    "Jonah": "JON",
+    "Micah": "MIC",
+    "Nahum": "NAM",
+    "Habakkuk": "HAB",
+    "Zephaniah": "ZEP",
+    "Haggai": "HAG",
+    "Zechariah": "ZEC",
+    "Malachi": "MAL",
+
+    "Matthew": "MAT",
+    "Mark": "MRK",
+    "Luke": "LUK",
+    "John": "JHN",
+    "Acts": "ACT",
+    "Romans": "ROM",
+    "1 Corinthians": "1CO",
+    "2 Corinthians": "2CO",
+    "Galatians": "GAL",
+    "Ephesians": "EPH",
+    "Philippians": "PHP",
+    "Colossians": "COL",
+    "1 Thessalonians": "1TH",
+    "2 Thessalonians": "2TH",
+    "1 Timothy": "1TI",
+    "2 Timothy": "2TI",
+    "Titus": "TIT",
+    "Philemon": "PHM",
+    "Hebrews": "HEB",
+    "James": "JAS",
+    "1 Peter": "1PE",
+    "2 Peter": "2PE",
+    "1 John": "1JN",
+    "2 John": "2JN",
+    "3 John": "3JN",
+    "Jude": "JUD",
+    "Revelation": "REV"
+  };
+
+  return map[bookName] || "";
+}
+
+
+/* =========================
+   COMMENTARY NAME
+========================= */
+
+function getCommentaryName() {
+
+  if (
+    !commentarySelect ||
+    !commentarySelect.options
+  ) {
+    return "Bible Commentary";
+  }
+
+  const option =
+    commentarySelect.options[
+      commentarySelect.selectedIndex
+    ];
+
+  return option
+    ? option.textContent
+    : "Bible Commentary";
+}
+
+
+/* =========================
+   LOAD HELLOAO COMMENTARY
+========================= */
+
+async function loadHelloAOCommentary(
+  commentaryId,
+  bookName,
+  chapterNumber
+) {
+
+  const bookId =
+    getCommentaryBookId(bookName);
+
+  if (!bookId) {
+    return {
+      verses: [],
+      unavailable: true
+    };
+  }
+
+  const cacheKey =
+    "helloao-" +
+    commentaryId +
+    "-" +
+    bookId +
+    "-" +
+    chapterNumber;
+
+  if (commentaryCache[cacheKey]) {
+    return commentaryCache[cacheKey];
+  }
+
+  const url =
+    COMMENTARY_API +
+    commentaryId +
+    "/" +
+    bookId +
+    "/" +
+    chapterNumber +
+    ".simple.json";
+
+  const response =
+    await fetch(url);
+
+  if (!response.ok) {
+
+    if (response.status === 404) {
+      return {
+        verses: [],
+        unavailable: true
+      };
+    }
+
+    throw new Error(
+      "Commentary request failed: " +
+      response.status
+    );
+  }
+
+  const data =
+    await response.json();
+
+  const chapter =
+    data &&
+    data.chapter
+      ? data.chapter
+      : (
+          data &&
+          data.data &&
+          data.data.chapter
+            ? data.data.chapter
+            : null
+        );
+
+  if (
+    !chapter ||
+    !Array.isArray(chapter.content)
+  ) {
+    throw new Error(
+      "Commentary response was invalid."
+    );
+  }
+
+  const verses = [];
+
+  chapter.content.forEach(
+    function(item) {
+
+      if (
+        !item ||
+        item.type !== "verse"
+      ) {
+        return;
+      }
+
+      const number =
+        Number(item.number);
+
+      if (!Number.isFinite(number)) {
+        return;
+      }
+
+      let text = "";
+
+      if (typeof item.text === "string") {
+
+        text = item.text;
+
+      } else if (
+        Array.isArray(item.content)
+      ) {
+
+        text =
+          item.content
+            .map(function(part) {
+
+              if (
+                typeof part === "string"
+              ) {
+                return part;
+              }
+
+              if (
+                part &&
+                typeof part.text === "string"
+              ) {
+                return part.text;
+              }
+
+              return "";
+            })
+            .join(" ");
+      }
+
+      text =
+        text
+          .replace(/\s+/g, " ")
+          .trim();
+
+      if (!text) {
+        return;
+      }
+
+      verses.push({
+        number: number,
+        text: text
+      });
+    }
+  );
+
+  const result = {
+    verses: verses,
+    unavailable: false
+  };
+
+  commentaryCache[cacheKey] =
+    result;
+
+  return result;
+}
+/* =========================
+   FIND COMMENTARY VERSE
+========================= */
+
+function findCommentaryForVerse(
+  data,
+  verseNumber
+) {
+
+  if (
+    !data ||
+    !Array.isArray(data.verses) ||
+    !data.verses.length
+  ) {
+    return null;
+  }
+
+  const target =
+    Number(verseNumber);
+
+  if (!Number.isFinite(target)) {
+    return null;
+  }
+
+  const verses =
+    data.verses
+      .slice()
+      .sort(function(a, b) {
+        return Number(a.number) -
+               Number(b.number);
+      });
+
+  const exact =
+    verses.find(function(item) {
+      return Number(item.number) === target;
+    });
+
+  if (exact) {
+    return {
+      text: exact.text,
+      startVerse: target,
+      exact: true
+    };
+  }
+
+  let previous = null;
+
+  for (let i = 0; i < verses.length; i++) {
+
+    const number =
+      Number(verses[i].number);
+
+    if (number > target) {
+      break;
+    }
+
+    previous =
+      verses[i];
+  }
+
+  if (previous) {
+    return {
+      text: previous.text,
+      startVerse:
+        Number(previous.number),
+      exact: false
+    };
+  }
+
+  return null;
+}
+
+/* =========================
+   SELECT COMMENTARY
+========================= */
+
+async function loadSelectedCommentary(
+  bookName,
+  chapterNumber
+) {
+
+  const selected =
+    commentarySelect.value;
+
+  const commentaryId =
+    commentaryApiIds[
+      selected
+    ];
+
+  if (!commentaryId) {
+
+    throw new Error(
+      "Commentary source is not configured."
+    );
+  }
+
+  return loadHelloAOCommentary(
+    commentaryId,
+    bookName,
+    chapterNumber
+  );
+}
+
+/* =========================
+   COMMENTARY PANELS
+========================= */
+
+async function populateCommentaryPanels(
+  bookName,
+  chapterNumber
+) {
+
+  if (!commentaryVisible) {
+    return;
+  }
+
+  const panels =
+    document.querySelectorAll(
+      ".commentary-panel"
+    );
+
+  if (!panels.length) {
+    return;
+  }
+
+  panels.forEach(function(panel) {
+
+    const textElement =
+      panel.querySelector(
+        ".commentary-text"
+      );
+
+    const titleElement =
+      panel.querySelector(
+        ".commentary-title"
+      );
+
+    if (titleElement) {
+      titleElement.textContent =
+        getCommentaryName();
+    }
+
+    if (textElement) {
+      textElement.innerHTML =
+        '<span class="commentary-loading">' +
+        "Loading commentary..." +
+        "</span>";
+    }
+  });
+
+
+  try {
+
+    const data =
+      await loadSelectedCommentary(
+        bookName,
+        chapterNumber
+      );
+
+
+    panels.forEach(function(panel) {
+
+      const textElement =
+        panel.querySelector(
+          ".commentary-text"
+        );
+
+      if (!textElement) {
+        return;
+      }
+
+      const verseNumber =
+        Number(
+          panel.dataset.verseNumber
+        );
+
+      const result =
+        findCommentaryForVerse(
+          data,
+          verseNumber
+        );
+
+
+      if (result) {
+
+        if (
+          typeof result === "object" &&
+          result.text
+        ) {
+
+          if (
+            result.exact === false &&
+            result.startVerse
+          ) {
+
+            textElement.textContent =
+              "Section beginning at verse " +
+              result.startVerse +
+              ": " +
+              result.text;
+
+          } else {
+
+            textElement.textContent =
+              result.text;
+          }
+
+        } else {
+
+          textElement.textContent =
+            result;
+        }
+
+      } else {
+
+        textElement.innerHTML =
+          '<span class="commentary-placeholder">' +
+          "This commentary has no separate note for this verse." +
+          "</span>";
+      }
+    });
+
+  } catch (error) {
+
+    console.error(
+      "Commentary error:",
+      error
+    );
+
+    panels.forEach(function(panel) {
+
+      const textElement =
+        panel.querySelector(
+          ".commentary-text"
+        );
+
+      if (textElement) {
+
+        textElement.innerHTML =
+          '<span class="commentary-error">' +
+          "Unable to load this commentary: " +
+          (error.message || "Unknown error") +
+          "</span>";
+      }
+    });
+  }
+}
+
+  /* =========================
+     VERSE SELECTION
+  ========================= */
+
+  function selectVerse(
+    verseNumber,
+    verseElement
+  ) {
+
+    document
+      .querySelectorAll(
+        ".verse-text"
+      )
+      .forEach(
+        function(element) {
+
+          element.classList.remove(
+            "selected"
+          );
+        }
+      );
+
+    if (verseElement) {
+
+      verseElement.classList.add(
+        "selected"
+      );
+    }
+
+    selectedVerseNumber =
+      Number(verseNumber);
+
+    verseSelect.value =
+      Number(verseNumber);
+  }
+
+
+  /* =========================
+     CHAPTERS
+  ========================= */
+async function loadChapter() {
+
+  if (
+    !bibleData ||
+    currentBookIndex < 0 ||
+    currentChapterIndex < 0 ||
+    !books[currentBookIndex]
+  ) {
+    verseContainer.innerHTML = "";
+    chapterTitle.textContent = "Bible";
+    chapterIntro.textContent =
+      "Choose a book and chapter to begin reading.";
+    verseSelect.innerHTML =
+      '<option value="">Choose a verse</option>';
+
+    updateNavigation();
+
+    return;
+  }
+
+  const book =
+    books[currentBookIndex];
+
+  const chapters =
+    getChapters(book);
+
+  const chapter =
+    chapters[currentChapterIndex];
+
+  if (!chapter) {
+    verseContainer.innerHTML = "";
+    chapterTitle.textContent = "Bible";
+    chapterIntro.textContent =
+      "Chapter could not be loaded.";
+
+    verseSelect.innerHTML =
+      '<option value="">Choose a verse</option>';
+
+    updateNavigation();
+
+    return;
+  }
+
+  const bookName =
+    getBookName(book);
+
+  const chapterNumber =
+    getChapterNumber(
+      chapter,
+      currentChapterIndex
+    );
+
+  const verses =
+    getVerses(chapter);
+
+  chapterTitle.textContent =
+    bookName +
+    " " +
+    chapterNumber;
+
+  chapterIntro.textContent =
+    "Read, study, highlight, bookmark, and search this chapter.";
+
+  verseContainer.innerHTML = "";
+
+  verseSelect.innerHTML =
+    '<option value="">Choose a verse</option>';
+
+  if (!verses.length) {
+
+    verseContainer.innerHTML =
+      '<p class="empty-state">' +
+      "No verses were found for this chapter." +
+      "</p>";
+
+    updateNavigation();
+
+    return;
+  }
+
+  verses.forEach(
+    function(verse, index) {
+
+      const verseNumber =
+        Number(
+          getVerseNumber(
+            verse,
+            index
+          )
+        );
+
+      const verseText =
+        getVerseText(verse);
+
+      const verseWrapper =
+        document.createElement("div");
+
+      verseWrapper.className =
+        "verse-text";
+
+      verseWrapper.dataset.verse =
+        verseNumber;
+
+      if (
+        isHighlighted(verseNumber)
+      ) {
+        verseWrapper.classList.add(
+          "permanent-highlight"
+        );
+      }
+
+      const verseNumberSpan =
+        document.createElement("span");
+
+      verseNumberSpan.className =
+        "verse-number";
+
+      verseNumberSpan.textContent =
+        verseNumber;
+
+      const textSpan =
+        document.createElement("span");
+
+      textSpan.className =
+        "verse-content";
+
+     let displayVerseText =
+  verseText;
+
+if (
+  translationSelect.value ===
+  "KJVPLUS"
+) {
+  const strongPrefix =
+    currentBookIndex < 39
+      ? "H"
+      : "G";
+
+  displayVerseText =
+    verseText.replace(
+      /<S>(\d+)<\/S>/g,
+      strongPrefix + "$1"
+    );
+}
+
+textSpan.textContent =
+  " " + displayVerseText;
+
+      verseWrapper.appendChild(
+        verseNumberSpan
+      );
+
+      verseWrapper.appendChild(
+        textSpan
+      );
+
+      verseWrapper.addEventListener(
+        "click",
+        function(event) {
+
+          event.stopPropagation();
+
+          selectVerse(
+            verseNumber,
+            verseWrapper
+          );
+
+          showVerseMenu(
+            event.clientX,
+            event.clientY,
+            verseNumber,
+            verseText
+          );
+        }
+      );
+
+          const verseRow =
+  document.createElement("div");
+
+verseRow.className =
+  "verse-row";
+
+const verseLeft =
+  document.createElement("div");
+
+verseLeft.className =
+  "verse-left";
+
+verseLeft.appendChild(
+  verseWrapper
+);
+
+verseRow.appendChild(
+  verseLeft
+);
+
+verseContainer.appendChild(
+  verseRow
+);
+
+      /* =========================
+         COMMENTARY PANEL
+      ========================= */
+
+      if (commentaryVisible) {
+
+        const commentaryPanel =
+          document.createElement("div");
+
+        commentaryPanel.className =
+          "commentary-panel show";
+
+        commentaryPanel.dataset.verseNumber =
+          verseNumber;
+
+        const commentaryTitle =
+          document.createElement("div");
+
+        commentaryTitle.className =
+          "commentary-title";
+
+        commentaryTitle.textContent =
+          getCommentaryName();
+
+        const commentaryReference =
+          document.createElement("div");
+
+        commentaryReference.className =
+          "commentary-reference";
+
+        commentaryReference.textContent =
+          bookName +
+          " " +
+          chapterNumber +
+          ":" +
+          verseNumber;
+
+        const commentaryText =
+          document.createElement("div");
+
+        commentaryText.className =
+          "commentary-text";
+
+        commentaryText.innerHTML =
+          '<span class="commentary-loading">' +
+          "Loading commentary..." +
+          "</span>";
+
+        commentaryPanel.appendChild(
+          commentaryTitle
+        );
+
+        commentaryPanel.appendChild(
+          commentaryReference
+        );
+
+        commentaryPanel.appendChild(
+          commentaryText
+        );
+
+  verseRow.appendChild(
+  commentaryPanel
+);
+
+}
+
+const option =
+        document.createElement(
+          "option"
+        );
+
+      option.value =
+        verseNumber;
+
+      option.textContent =
+        "Verse " + verseNumber;
+
+      verseSelect.appendChild(
+        option
+      );
+    }
+  );
+
+
+  if (
+    selectedVerseNumber !== null
+  ) {
+
+    const selectedElement =
+      verseContainer.querySelector(
+        '[data-verse="' +
+        selectedVerseNumber +
+        '"]'
+      );
+
+    if (selectedElement) {
+
+      selectVerse(
+        selectedVerseNumber,
+        selectedElement
+      );
+    } else {
+
+      selectedVerseNumber =
+        null;
+
+      verseSelect.value = "";
+    }
+
+  } else {
+
+    verseSelect.value = "";
+  }
+
+
+  updateNavigation();
+
+
+  if (
+    typeof populateCommentaryPanels ===
+    "function"
+  ) {
+
+    await populateCommentaryPanels(
+      bookName,
+      chapterNumber
+    );
+  }
+}
+  function loadChapters() {
+
+    const bookIndex =
+      Number(bookSelect.value);
+
+    if (
+      isNaN(bookIndex) ||
+      !books[bookIndex]
+    ) {
+
+      chapterSelect.innerHTML =
+        '<option value="">Choose a chapter</option>';
+
+      return;
+    }
+
+    const chapters =
+      getChapters(
+        books[bookIndex]
+      );
+
+    chapterSelect.innerHTML =
+      '<option value="">Choose a chapter</option>';
+
+    chapters.forEach(
+      function(chapter, index) {
+
+        const option =
+          document.createElement(
+            "option"
+          );
+
+        option.value =
+          index;
+
+        option.textContent =
+          getChapterNumber(
+            chapter,
+            index
+          );
+
+        chapterSelect.appendChild(
+          option
+        );
+      }
+    );
+  }
+
+
+  /* =========================
+     NAVIGATION
+  ========================= */
+
+  function updateNavigation() {
+
+    const book =
+      books[currentBookIndex];
+
+    if (!book) {
+
+      previousChapterButton.disabled =
+        true;
+
+      nextChapterButton.disabled =
+        true;
+
+      return;
+    }
+
+    const chapters =
+      getChapters(book);
+
+    previousChapterButton.disabled =
+      currentChapterIndex <= 0;
+
+    nextChapterButton.disabled =
+      currentChapterIndex >=
+      chapters.length - 1;
+  }
+
+
+  /* =========================
+     SEARCH
+  ========================= */
+
+  function runSearch() {
+
+    searchResults.innerHTML =
+      "";
+
+    const searchTerm =
+      searchInput.value
+        .trim()
+        .toLowerCase();
+
+    if (!searchTerm) {
+      return;
+    }
+
+    const verses =
+      verseContainer.querySelectorAll(
+        ".verse-text"
+      );
+
+    let found = 0;
+
+    verses.forEach(
+      function(element) {
+
+        const text =
+          element.textContent
+            .toLowerCase();
+
+        if (
+          text.includes(
+            searchTerm
+          )
+        ) {
+
+          found++;
+
+          const result =
+            document.createElement(
+              "div"
+            );
+
+          result.className =
+            "search-result";
+
+          result.textContent =
+            element.textContent;
+
+          result.addEventListener(
+            "click",
+            function() {
+
+              element.scrollIntoView({
+                behavior:
+                  "smooth",
+                block:
+                  "center"
+              });
+
+              const number =
+                element.querySelector(
+                  ".verse-number"
+                );
+
+              if (number) {
+
+                selectVerse(
+                  number.textContent,
+                  element
+                );
+              }
+            }
+          );
+
+          searchResults.appendChild(
+            result
+          );
+        }
+      }
+    );
+
+    if (found === 0) {
+
+      searchResults.textContent =
+        "No results found.";
+    }
+  }
+
+
+  searchInput.addEventListener(
+    "input",
+    runSearch
+  );
+
+
+  /* =========================
+     VERSE MENU
+  ========================= */
+
+  function showVerseMenu(
+    x,
+    y,
+    verseNumber,
+    verseText
+  ) {
+
+    selectedVerseNumber =
+      Number(verseNumber);
+
+    verseMenu.dataset.verseText =
+      verseText;
+
+    verseMenu.style.display =
+      "block";
+
+    verseMenu.style.left =
+      x + "px";
+
+    verseMenu.style.top =
+      y + "px";
+  }
+verseMenu.addEventListener(
+  "click",
+  function(event) {
+    event.stopPropagation();
+  }
+);
+
+document.addEventListener(
+  "click",
+  function() {
+    verseMenu.style.display =
+      "none";
+  }
+);
+
+  
+
+  /* =========================
+     HIGHLIGHT
+  ========================= */
+
+  highlightVerseButton.addEventListener(
+    "click",
+    async function() {
+
+      if (
+        selectedVerseNumber ===
+        null
+      ) {
+        return;
+      }
+
+      const highlighted =
+        isHighlighted(
+          selectedVerseNumber
+        );
+
+      await setHighlight(
+        selectedVerseNumber,
+        !highlighted
+      );
+
+      verseMenu.style.display =
+        "none";
+
+      await loadChapter();
+    }
+  );
+
+
+  /* =========================
+     BOOKMARK
+  ========================= */
+
+  bookmarkVerseButton.addEventListener(
+    "click",
+    async function() {
+
+      if (
+        selectedVerseNumber ===
+        null
+      ) {
+        return;
+      }
+
+      const key =
+        getBookmarkKey(
+          selectedVerseNumber
+        );
+
+      const existing =
+        localStorage.getItem(
+          key
+        );
+
+      if (
+        existing === "true"
+      ) {
+
+        localStorage.removeItem(
+          key
+        );
+
+        await deleteCloudItem(
+          "bookmark",
+          translationSelect.value,
+          currentBookIndex,
+          currentChapterIndex,
+          selectedVerseNumber
+        );
+
+      } else {
+
+        localStorage.setItem(
+          key,
+          "true"
+        );
+
+        await saveCloudItem(
+          "bookmark",
+          translationSelect.value,
+          currentBookIndex,
+          currentChapterIndex,
+          selectedVerseNumber,
+          "true"
+        );
+      }
+
+      verseMenu.style.display =
+        "none";
+    }
+  );
+
+
+  /* =========================
+     COPY
+  ========================= */
+  /* =========================
+     NOTE
+  ========================= */
+
+  noteVerseButton.addEventListener(
+    "click",
+    function(event) {
+
+      event.stopPropagation();
+
+      if (
+        selectedVerseNumber ===
+        null
+      ) {
+        return;
+      }
+
+      const verseElement =
+        verseContainer.querySelector(
+          '[data-verse="' +
+          selectedVerseNumber +
+          '"]'
+        );
+
+      if (!verseElement) {
+        return;
+      }
+
+      let notesArea =
+  verseElement.querySelector(
+    ".notes-area"
+  );
+
+if (notesArea) {
+  notesArea.remove();
+
+  verseMenu.style.display =
+    "none";
+
+  return;
+}
+
+if (!notesArea) {
+
+        notesArea =
+          document.createElement(
+            "div"
+          );
+
+        notesArea.className =
+          "notes-area";
+
+        const label =
+          document.createElement(
+            "label"
+          );
+
+        label.className =
+          "notes-label";
+
+        label.textContent =
+          "My Note";
+
+        const textarea =
+          document.createElement(
+            "textarea"
+          );
+
+        textarea.className =
+          "verse-note";
+
+        textarea.placeholder =
+          "Write your note for this verse...";
+
+        textarea.value =
+          loadNote(
+            selectedVerseNumber
+          );
+
+        const noteStatus =
+          document.createElement(
+            "span"
+          );
+
+        noteStatus.className =
+          "note-status";
+
+        textarea.addEventListener(
+          "input",
+          function() {
+
+            saveNote(
+              selectedVerseNumber,
+              textarea.value,
+              noteStatus
+            );
+
+          }
+        );
+
+        notesArea.appendChild(
+          label
+        );
+
+        notesArea.appendChild(
+          textarea
+        );
+
+        notesArea.appendChild(
+          noteStatus
+        );
+
+        verseElement.appendChild(
+          notesArea
+        );
+      }
+
+      const textarea =
+        notesArea.querySelector(
+          ".verse-note"
+        );
+
+      if (textarea) {
+        textarea.focus();
+      }
+
+      verseMenu.style.display =
+        "none";
+    }
+  );
+
+  copyVerseButton.addEventListener(
+    "click",
+    async function() {
+
+      const text =
+        verseMenu.dataset.verseText ||
+        "";
+
+      try {
+
+        await navigator.clipboard.writeText(
+          text
+        );
+
+        status.textContent =
+          "Verse copied.";
+
+      } catch (error) {
+
+        console.error(
+          "Copy error:",
+          error
+        );
+      }
+
+      verseMenu.style.display =
+        "none";
+    }
+  );
+
+
+  /* =========================
+     SHARE
+  ========================= */
+
+  shareVerseButton.addEventListener(
+    "click",
+    async function() {
+
+      const text =
+        verseMenu.dataset.verseText ||
+        "";
+
+      try {
+
+        if (
+          navigator.share
+        ) {
+
+          await navigator.share({
+            title:
+              "BibleMastrey",
+            text:
+              text
+          });
+
+        } else {
+
+          await navigator.clipboard.writeText(
+            text
+          );
+
+          status.textContent =
+            "Verse copied. Sharing is not supported on this device.";
+        }
+
+      } catch (error) {
+
+        console.log(
+          "Share cancelled or failed:",
+          error
+        );
+      }
+
+      verseMenu.style.display =
+        "none";
+    }
+  );
+
+
+  /* =========================
+     BOOK CHANGE
+  ========================= */
+
+  bookSelect.addEventListener(
+    "change",
+    function() {
+
+      if (!bookSelect.value) {
+
+        currentBookIndex =
+          -1;
+
+        currentChapterIndex =
+          -1;
+
+        selectedVerseNumber =
+          null;
+
+        chapterSelect.innerHTML =
+          '<option value="">Choose a chapter</option>';
+
+        verseSelect.innerHTML =
+          '<option value="">Choose a verse</option>';
+
+        chapterTitle.textContent =
+          "Bible";
+
+        chapterIntro.style.display =
+          "block";
+
+        verseContainer.innerHTML =
+          "";
+
+        updateNavigation();
+
+        return;
+      }
+
+      currentBookIndex =
+        Number(
+          bookSelect.value
+        );
+
+      currentChapterIndex =
+        -1;
+
+      selectedVerseNumber =
+        null;
+
+      loadChapters();
+
+      chapterTitle.textContent =
+        getBookName(
+          books[currentBookIndex]
+        );
+
+      chapterIntro.style.display =
+        "block";
+
+      verseContainer.innerHTML =
+        "";
+
+      verseSelect.innerHTML =
+        '<option value="">Choose a verse</option>';
+
+      updateNavigation();
+    }
+  );
+
+
+  /* =========================
+     CHAPTER CHANGE
+  ========================= */
+
+  chapterSelect.addEventListener(
+    "change",
+    async function() {
+
+      if (!chapterSelect.value) {
+        return;
+      }
+
+      currentChapterIndex =
+        Number(
+          chapterSelect.value
+        );
+
+      selectedVerseNumber =
+        null;
+
+      await loadChapter();
+    }
+  );
+
+
+  /* =========================
+     VERSE SELECTOR
+  ========================= */
+
+  verseSelect.addEventListener(
+    "change",
+    function() {
+
+      const verseNumber =
+        verseSelect.value;
+
+      if (!verseNumber) {
+        return;
+      }
+
+      const elements =
+        document.querySelectorAll(
+          ".verse-text"
+        );
+
+      elements.forEach(
+        function(element) {
+
+          const number =
+            element.querySelector(
+              ".verse-number"
+            );
+
+          if (
+            number &&
+            number.textContent ===
+            String(
+              verseNumber
+            )
+          ) {
+
+            selectVerse(
+              verseNumber,
+              element
+            );
+
+            element.scrollIntoView({
+              behavior:
+                "smooth",
+              block:
+                "center"
+            });
+          }
+        }
+      );
+    }
+  );
+
+
+  /* =========================
+     PREVIOUS CHAPTER
+  ========================= */
+
+  previousChapterButton.addEventListener(
+    "click",
+    async function() {
+
+      if (
+        currentChapterIndex <= 0
+      ) {
+        return;
+      }
+
+      currentChapterIndex--;
+
+      chapterSelect.value =
+        currentChapterIndex;
+
+      selectedVerseNumber =
+        null;
+
+      await loadChapter();
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    }
+  );
+
+
+  /* =========================
+     NEXT CHAPTER
+  ========================= */
+
+  nextChapterButton.addEventListener(
+    "click",
+    async function() {
+
+      const book =
+        books[currentBookIndex];
+
+      if (!book) {
+        return;
+      }
+
+      const chapters =
+        getChapters(book);
+
+      if (
+        currentChapterIndex >=
+        chapters.length - 1
+      ) {
+        return;
+      }
+
+      currentChapterIndex++;
+
+      chapterSelect.value =
+        currentChapterIndex;
+
+      selectedVerseNumber =
+        null;
+
+      await loadChapter();
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    }
+  );
+
+
+  /* =========================
+     TRANSLATION CHANGE
+  ========================= */
+
+  translationSelect.addEventListener(
+    "change",
+    async function() {
+
+      status.textContent =
+        "Loading " +
+        translationSelect.options[
+          translationSelect.selectedIndex
+        ].text +
+        "...";
+
+      await startBible();
+    }
+  );
+
+
+  /* =========================
+   START BIBLE
+========================= */
+
+function getBooks(data) {
+  if (!data) {
+    return [];
+  }
+
+  if (Array.isArray(data)) {
+    return data;
+  }
+
+  if (Array.isArray(data.books)) {
+    return data.books;
+  }
+
+  if (data.books && typeof data.books === "object") {
+    return Object.values(data.books);
+  }
+
+  if (Array.isArray(data.Books)) {
+    return data.Books;
+  }
+
+  return [];
+}
+
+function getChapters(book) {
+  if (!book) {
+    return [];
+  }
+
+  if (Array.isArray(book.chapters)) {
+    return book.chapters;
+  }
+
+  if (book.chapters && typeof book.chapters === "object") {
+    return Object.values(book.chapters);
+  }
+
+  return [];
+}
+
+function getBookName(book) {
+  if (!book) {
+    return "Unknown Book";
+  }
+
+  const fullBookNames = {
+    Gen: "Genesis",
+    Exod: "Exodus",
+    Lev: "Leviticus",
+    Num: "Numbers",
+    Deut: "Deuteronomy",
+    Josh: "Joshua",
+    Judg: "Judges",
+    Ruth: "Ruth",
+    "1Sam": "1 Samuel",
+    "2Sam": "2 Samuel",
+    "1Kgs": "1 Kings",
+    "2Kgs": "2 Kings",
+    "1Chr": "1 Chronicles",
+    "2Chr": "2 Chronicles",
+    Ezra: "Ezra",
+    Neh: "Nehemiah",
+    Esth: "Esther",
+    Job: "Job",
+    Ps: "Psalms",
+    Prov: "Proverbs",
+    Eccl: "Ecclesiastes",
+    Song: "Song of Solomon",
+    Isa: "Isaiah",
+    Jer: "Jeremiah",
+    Lam: "Lamentations",
+    Ezek: "Ezekiel",
+    Dan: "Daniel",
+    Hos: "Hosea",
+    Joel: "Joel",
+    Amos: "Amos",
+    Obad: "Obadiah",
+    Jonah: "Jonah",
+    Mic: "Micah",
+    Nah: "Nahum",
+    Hab: "Habakkuk",
+    Zeph: "Zephaniah",
+    Hag: "Haggai",
+    Zech: "Zechariah",
+    Mal: "Malachi",
+    Matt: "Matthew",
+    Mark: "Mark",
+    Luke: "Luke",
+    John: "John",
+    Acts: "Acts",
+    Rom: "Romans",
+    "1Cor": "1 Corinthians",
+    "2Cor": "2 Corinthians",
+    Gal: "Galatians",
+    Eph: "Ephesians",
+    Phil: "Philippians",
+    Col: "Colossians",
+    "1Thess": "1 Thessalonians",
+    "2Thess": "2 Thessalonians",
+    "1Tim": "1 Timothy",
+    "2Tim": "2 Timothy",
+    Titus: "Titus",
+    Phlm: "Philemon",
+    Heb: "Hebrews",
+    Jas: "James",
+    "1Pet": "1 Peter",
+    "2Pet": "2 Peter",
+    "1John": "1 John",
+    "2John": "2 John",
+    "3John": "3 John",
+    Jude: "Jude",
+    Rev: "Revelation"
+  };
+
+  const bookCode = book.book || book.name || book.title;
+
+  return fullBookNames[bookCode] || bookCode || "Unknown Book";
+}
+function getChapterNumber(chapter, index) {
+  if (!chapter) {
+    return index + 1;
+  }
+
+  if (
+    chapter.chapter &&
+    typeof chapter.chapter === "object" &&
+    chapter.chapter.number
+  ) {
+    return chapter.chapter.number;
+  }
+
+  return chapter.chapter || chapter.number || (index + 1);
+}
+
+function getVerses(chapter) {
+  if (!chapter) {
+    return [];
+  }
+
+  if (Array.isArray(chapter.verses)) {
+    return chapter.verses;
+  }
+
+  if (chapter.verses && typeof chapter.verses === "object") {
+    return Object.values(chapter.verses);
+  }
+
+  if (Array.isArray(chapter.Verses)) {
+    return chapter.Verses;
+  }
+
+  if (Array.isArray(chapter.content)) {
+    return chapter.content.filter(function(item) {
+      return item && item.type === "verse";
+    });
+  }
+if (
+  chapter.chapter &&
+  Array.isArray(chapter.chapter.content)
+) {
+  return chapter.chapter.content.filter(function(item) {
+    return item && item.type === "verse";
+  });
+}
+  return [];
+}
+function getVerseNumber(verse, index) {
+  if (!verse) {
+    return index + 1;
+  }
+
+  return verse.verse ||
+         verse.number ||
+         (index + 1);
+}
+
+function getVerseText(verse) {
+  if (!verse) {
+    return "";
+  }
+
+  return verse.text ||
+         verse.content ||
+         verse.verse ||
+         "";
+}
+
+async function startBible() {
+
+  try {
+
+    /*
+      Save the current location before
+      changing translations.
+    */
+
+    const oldBookIndex =
+      currentBookIndex;
+
+    const oldChapterIndex =
+      currentChapterIndex;
+
+    const oldVerseNumber =
+      selectedVerseNumber;
+
+    const selectedTranslation =
+      translationSelect.value;
+
+
+    /* =========================
+       LOAD TRANSLATION
+    ========================= */
+
+    if (
+      selectedTranslation ===
+      "kjv"
+    ) {
+
+      bibleData =
+        await getKJV();
+
+    } else if (
+      selectedTranslation ===
+      "KJV1611"
+    ) {
+
+      bibleData =
+        await getKJV1611();
+
+      } else if (
+  selectedTranslation ===
+  "KJVPLUS"
+) {
+
+  bibleData =
+    await getKJVPLUS();
+      
+    } else if (
+      selectedTranslation ===
+      "WEB"
+    ) {
+
+      bibleData =
+        await getWEB();
+
+    } else if (
+      selectedTranslation ===
+      "ASV"
+    ) {
+
+      bibleData =
+        await getASV();
+
+    } else if (
+      selectedTranslation ===
+      "GENEVA1599"
+    ) {
+
+      bibleData =
+        await getGENEVA1599();
+
+    } else if (
+      selectedTranslation ===
+      "DRA"
+    ) {
+
+      bibleData =
+        await getDRA();
+
+    } else if (
+      selectedTranslation ===
+      "BSB"
+    ) {
+
+      bibleData =
+        await getBSB();
+
+    } else if (
+      selectedTranslation ===
+      "MSB"
+    ) {
+
+      bibleData =
+        await getMSB();
+
+    } else if (
+      selectedTranslation ===
+      "YLT"
+    ) {
+
+      bibleData =
+        await getYLT();
+
+    } else {
+
+      bibleData =
+        await getKJV();
+    }
+
+
+    /* =========================
+       LOAD BOOKS
+    ========================= */
+
+    books =
+      getBooks(
+        bibleData
+      );
+
+    if (!books.length) {
+
+      throw new Error(
+        "No Bible books were found."
+      );
+    }
+
+
+    bookSelect.innerHTML =
+      '<option value="">Choose a book</option>';
+
+
+    books.forEach(
+      function(book, index) {
+
+        const option =
+          document.createElement(
+            "option"
+          );
+
+        option.value =
+          index;
+
+        option.textContent =
+          getBookName(book);
+
+        bookSelect.appendChild(
+          option
+        );
+      }
+    );
+
+
+    /* =========================
+       RESTORE LOCATION
+    ========================= */
+
+    if (
+      oldBookIndex >= 0 &&
+      oldBookIndex <
+        books.length
+    ) {
+
+      currentBookIndex =
+        oldBookIndex;
+
+      bookSelect.value =
+        oldBookIndex;
+
+      loadChapters();
+
+      const chapters =
+        getChapters(
+          books[oldBookIndex]
+        );
+
+      if (
+        oldChapterIndex >= 0 &&
+        oldChapterIndex <
+          chapters.length
+      ) {
+
+        currentChapterIndex =
+          oldChapterIndex;
+
+        chapterSelect.value =
+          oldChapterIndex;
+
+        selectedVerseNumber =
+          oldVerseNumber;
+
+        await loadChapter();
+      }
+
+    } else {
+
+      currentBookIndex =
+        -1;
+
+      currentChapterIndex =
+        -1;
+
+      selectedVerseNumber =
+        null;
+
+      chapterSelect.innerHTML =
+        '<option value="">Choose a chapter</option>';
+
+      verseSelect.innerHTML =
+        '<option value="">Choose a verse</option>';
+
+      chapterTitle.textContent =
+        "Bible";
+
+      chapterIntro.style.display =
+        "block";
+
+      verseContainer.innerHTML =
+        "";
+
+      updateNavigation();
+    }
+
+
+    /* =========================
+       TRANSLATION NAME
+    ========================= */
+
+    let translationName =
+      "King James Version";
+
+    if (
+      selectedTranslation ===
+      "KJV1611"
+    ) {
+
+      translationName =
+        "King James Version 1611";
+
+      } else if (
+  selectedTranslation ===
+  "KJVPLUS"
+) {
+
+  translationName =
+    "King James Version Plus (KJV+)";
+      
+    } else if (
+      selectedTranslation ===
+      "WEB"
+    ) {
+
+      translationName =
+        "World English Bible";
+
+    } else if (
+      selectedTranslation ===
+      "ASV"
+    ) {
+
+      translationName =
+        "American Standard Version";
+
+    } else if (
+      selectedTranslation ===
+      "GENEVA1599"
+    ) {
+
+      translationName =
+        "Geneva Bible 1599";
+
+    } else if (
+      selectedTranslation ===
+      "DRA"
+    ) {
+
+      translationName =
+        "Douay-Rheims American Edition";
+
+    } else if (
+      selectedTranslation ===
+      "BSB"
+    ) {
+
+      translationName =
+        "Berean Standard Bible";
+
+    } else if (
+      selectedTranslation ===
+      "MSB"
+    ) {
+
+      translationName =
+        "Majority Standard Bible";
+
+    } else if (
+      selectedTranslation ===
+      "YLT"
+    ) {
+
+      translationName =
+        "Young's Literal Translation";
+    }
+
+
+    if (
+      oldBookIndex >= 0 &&
+      oldChapterIndex >= 0
+    ) {
+
+      status.textContent =
+        translationName +
+        " loaded.";
+
+    } else {
+
+      status.textContent =
+        translationName +
+        " loaded. Choose a book and chapter.";
+    }
+
+  } catch (error) {
+
+    console.error(
+      "Bible loading error:",
+      error
+    );
+
+    status.textContent =
+      error.message ||
+      "Unable to load the Bible.";
+  }
+}
+
+  /* =========================
+     COMMENTARY BUTTON
+  ========================= */
+
+  commentaryButton.addEventListener(
+    "click",
+    async function() {
+
+      commentaryVisible =
+        !commentaryVisible;
+
+      if (
+        commentaryVisible
+      ) {
+
+        commentarySelector.classList.add(
+          "show"
+        );
+
+        commentaryButton.textContent =
+          "📖 Hide Bible Commentary";
+
+      } else {
+
+        commentarySelector.classList.remove(
+          "show"
+        );
+
+        commentaryButton.textContent =
+          "📖 Bible Commentary";
+      }
+
+      if (
+        currentBookIndex >= 0 &&
+        currentChapterIndex >= 0
+      ) {
+
+        await loadChapter();
+      }
+    }
+  );
+
+
+  commentarySelect.addEventListener(
+    "change",
+    async function() {
+
+      if (
+        commentaryVisible &&
+        currentBookIndex >= 0 &&
+        currentChapterIndex >= 0
+      ) {
+
+        await loadChapter();
+      }
+    }
+  );
+
+
+  /* =========================
+     DICTIONARY
+  ========================= */
+
+  const dictionary = {
+
+    love:
+      "A strong affection, goodwill, or devoted concern. Biblical love often includes selfless commitment to God and others.",
+
+    faith:
+      "Trust, confidence, and reliance upon God and His promises.",
+
+    grace:
+      "God's undeserved favor and kindness toward people.",
+
+    mercy:
+      "Compassion and withholding deserved judgment.",
+
+    salvation:
+      "Deliverance from sin and its consequences, and reconciliation with God.",
+
+    sin:
+      "Disobedience to God's will or falling short of His righteous standard.",
+
+    righteousness:
+      "Right standing or conduct according to God's righteous standard.",
+
+    holiness:
+      "Being set apart for God and characterized by moral purity.",
+
+    repentance:
+      "Turning away from sin and turning toward God.",
+
+    gospel:
+      "The good news concerning Jesus Christ, His death, resurrection, and salvation.",
+
+    covenant:
+      "A solemn relationship or agreement established between God and people.",
+
+    prayer:
+      "Communication with God that may include worship, confession, thanksgiving, and requests.",
+
+    wisdom:
+      "The ability to live rightly and make godly decisions according to truth."
+  };
+
+
+  dictionaryButton.addEventListener(
+    "click",
+    function() {
+
+      const word =
+        dictionaryInput.value
+          .trim()
+          .toLowerCase();
+
+      if (!word) {
+
+        dictionaryResult.innerHTML =
+          "";
+
+        return;
+      }
+
+      const definition =
+        dictionary[word];
+
+      if (!definition) {
+
+        dictionaryResult.innerHTML =
+          '<div class="dictionary-entry">' +
+          "<strong>" +
+          word +
+          "</strong><br><br>" +
+          "No built-in dictionary entry was found for this word yet." +
+          "</div>";
+
+        return;
+      }
+
+      dictionaryResult.innerHTML =
+        '<div class="dictionary-entry">' +
+        '<div class="dictionary-word">' +
+        word +
+        "</div>" +
+        "<div>" +
+        definition +
+        "</div>" +
+        '<div class="dictionary-source">' +
+        "BibleMastrey study dictionary" +
+        "</div>" +
+        "</div>";
+    }
+  );
+
+
+  /* =========================
+     CONCORDANCE
+  ========================= */
+
+  concordanceButton.addEventListener(
+    "click",
+    function() {
+
+      const word =
+        concordanceInput.value
+          .trim()
+          .toLowerCase();
+
+      concordanceResult.innerHTML =
+        "";
+
+      if (!word) {
+        return;
+      }
+
+      if (
+        !bibleData ||
+        !books.length
+      ) {
+
+        concordanceResult.textContent =
+          "Load the Bible first.";
+
+        return;
+      }
+
+      let found = 0;
+
+      books.forEach(
+        function(book, bookIndex) {
+
+          const bookName =
+            getBookName(book);
+
+          const chapters =
+            getChapters(book);
+
+          chapters.forEach(
+            function(chapter, chapterIndex) {
+
+              const verses =
+                getVerses(chapter);
+
+              verses.forEach(
+                function(verse, verseIndex) {
+
+                  const text =
+                    getVerseText(
+                      verse
+                    );
+
+                  if (
+                    text
+                      .toLowerCase()
+                      .includes(word)
+                  ) {
+
+                    found++;
+
+                    const result =
+                      document.createElement(
+                        "div"
+                      );
+
+                    result.className =
+                      "concordance-entry";
+
+                    result.textContent =
+                      bookName +
+                      " " +
+                      getChapterNumber(
+                        chapter,
+                        chapterIndex
+                      ) +
+                      ":" +
+                      getVerseNumber(
+                        verse,
+                        verseIndex
+                      ) +
+                      " — " +
+                      text;
+
+                    concordanceResult.appendChild(
+                      result
+                    );
+                  }
+                }
+              );
+            }
+          );
+        }
+      );
+
+      if (!found) {
+
+        concordanceResult.textContent =
+          "No matching verses found.";
+      }
+    }
+  );
+
+
+  /* =========================
+     STRONG'S LOOKUP
+  ========================= */
+
+  const strongs = {
+
+    G1: {
+      word: "Ἀαρών",
+      transliteration: "Aarōn",
+      definition: "Aaron"
+    },
+
+    G25: {
+      word: "ἀγαπάω",
+      transliteration: "agapaō",
+      definition: "To love, value, or regard with affection."
+    },
+
+    G26: {
+      word: "ἀγάπη",
+      transliteration: "agapē",
+      definition: "Love, goodwill, benevolence, and selfless love."
+    },
+
+    G27: {
+      word: "ἀγαπητός",
+      transliteration: "agapētos",
+      definition: "Beloved, dearly loved."
+    },
+
+    G40: {
+      word: "ἅγιος",
+      transliteration: "hagios",
+      definition: "Holy, sacred, set apart."
+    },
+
+    G932: {
+      word: "βασιλεία",
+      transliteration: "basileia",
+      definition: "Kingdom, reign, royal power."
+    },
+
+    G1343: {
+      word: "δικαιοσύνη",
+      transliteration: "dikaiosynē",
+      definition: "Righteousness, justice, uprightness."
+    },
+
+    G1577: {
+      word: "ἐκκλησία",
+      transliteration: "ekklēsia",
+      definition: "Assembly, congregation, church."
+    },
+
+    G1680: {
+      word: "ἐλπίς",
+      transliteration: "elpis",
+      definition: "Hope, expectation, confidence."
+    },
+
+    G2316: {
+      word: "θεός",
+      transliteration: "theos",
+      definition: "God, deity."
+    },
+
+    G2424: {
+      word: "Ἰησοῦς",
+      transliteration: "Iēsous",
+      definition: "Jesus."
+    },
+
+    G266: {
+      word: "ἁμαρτία",
+      transliteration: "hamartia",
+      definition: "Sin, wrongdoing, missing the mark."
+    },
+
+    G2962: {
+      word: "κύριος",
+      transliteration: "kyrios",
+      definition: "Lord, master."
+    },
+
+    G3056: {
+      word: "λόγος",
+      transliteration: "logos",
+      definition: "Word, message, statement, reason."
+    },
+
+    G3340: {
+      word: "μετανοέω",
+      transliteration: "metanoeō",
+      definition: "To repent, change one's mind or direction."
+    },
+
+    G4100: {
+      word: "πιστεύω",
+      transliteration: "pisteuō",
+      definition: "To believe, trust, have faith."
+    },
+
+    G4102: {
+      word: "πίστις",
+      transliteration: "pistis",
+      definition: "Faith, belief, trust."
+    },
+
+    G4151: {
+      word: "πνεῦμα",
+      transliteration: "pneuma",
+      definition: "Spirit, breath, wind."
+    },
+
+    G5485: {
+      word: "χάρις",
+      transliteration: "charis",
+      definition: "Grace, favor, kindness."
+    },
+
+    H430: {
+      word: "אֱלֹהִים",
+      transliteration: "Elohim",
+      definition: "God, gods, divine being."
+    },
+
+    H2617: {
+      word: "חֶסֶד",
+      transliteration: "chesed",
+      definition: "Lovingkindness, steadfast love, mercy, covenant faithfulness."
+    },
+
+    H3068: {
+      word: "יְהֹוָה",
+      transliteration: "YHWH",
+      definition: "The personal covenant name of God."
+    },
+
+    H3467: {
+      word: "יָשַׁע",
+      transliteration: "yasha",
+      definition: "To save, deliver, rescue."
+    },
+
+    H3820: {
+      word: "לֵב",
+      transliteration: "lev",
+      definition: "Heart, inner person, mind, understanding."
+    },
+
+    H530: {
+      word: "אֱמוּנָה",
+      transliteration: "emunah",
+      definition: "Faithfulness, firmness, faith."
+    },
+
+    H539: {
+      word: "אָמַן",
+      transliteration: "aman",
+      definition: "To believe, support, be faithful."
+    },
+
+    H7225: {
+      word: "רֵאשִׁית",
+      transliteration: "reshith",
+      definition: "Beginning, first, firstfruits."
+    },
+
+    H7307: {
+      word: "רוּחַ",
+      transliteration: "ruach",
+      definition: "Spirit, wind, breath."
+    },
+
+    H7965: {
+      word: "שָׁלוֹם",
+      transliteration: "shalom",
+      definition: "Peace, completeness, wholeness."
+    },
+
+    H8451: {
+      word: "תּוֹרָה",
+      transliteration: "torah",
+      definition: "Instruction, law, teaching."
+    }
+  };
+
+
+  originalWordButton.addEventListener(
+    "click",
+    function() {
+
+      const key =
+        originalWordInput.value
+          .trim()
+          .toUpperCase();
+
+      originalWordResult.innerHTML =
+        "";
+
+      if (!key) {
+        return;
+      }
+
+      const entry =
+        strongs[key];
+
+      if (!entry) {
+
+        originalWordResult.innerHTML =
+          '<div class="original-word-entry">' +
+          "<strong>" +
+          key +
+          "</strong><br><br>" +
+          "Strong's entry not found in the current built-in lookup." +
+          "</div>";
+
+        return;
+      }
+
+      originalWordResult.innerHTML =
+        '<div class="original-word-entry">' +
+
+        '<div class="dictionary-word">' +
+        entry.word +
+        "</div>" +
+
+        "<strong>Strong's:</strong> " +
+        key +
+        "<br><br>" +
+
+        "<strong>Transliteration:</strong> " +
+        entry.transliteration +
+        "<br><br>" +
+
+        "<strong>Meaning:</strong> " +
+        entry.definition +
+
+        '<div class="original-word-source">' +
+        "Strong's reference lookup" +
+        "</div>" +
+
+        "</div>";
+    }
+  );
+
+
+  /* =========================
+     ACCOUNT
+  ========================= */
+
+  const accountModal =
+    document.getElementById(
+      "accountModal"
+    );
+
+  const accountButton =
+    document.getElementById(
+      "accountButton"
+    );
+
+  const closeAccountModal =
+    document.getElementById(
+      "closeAccountModal"
+    );
+
+  const accountEmail =
+    document.getElementById(
+      "accountEmail"
+    );
+
+  const accountPassword =
+    document.getElementById(
+      "accountPassword"
+    );
+const staySignedIn =
+  document.getElementById(
+    "staySignedIn"
+  );
+  const accountMessage =
+    document.getElementById(
+      "accountMessage"
+    );
+
+  const loginAccountButton =
+    document.getElementById(
+      "loginAccountButton"
+    );
+
+  const signupAccountButton =
+    document.getElementById(
+      "signupAccountButton"
+    );
+
+
+  accountButton.addEventListener(
+    "click",
+    function() {
+
+      accountModal.style.display =
+        "flex";
+    }
+  );
+
+
+  closeAccountModal.addEventListener(
+    "click",
+    function() {
+
+      accountModal.style.display =
+        "none";
+    }
+  );
+
+
+  accountModal.addEventListener(
+    "click",
+    function(event) {
+
+      if (
+        event.target ===
+        accountModal
+      ) {
+
+        accountModal.style.display =
+          "none";
+      }
+    }
+  );
+
+
+  loginAccountButton.addEventListener(
+    "click",
+    async function() {
+
+      const email =
+        accountEmail.value.trim();
+
+      const password =
+        accountPassword.value;
+
+      if (!email || !password) {
+
+        accountMessage.textContent =
+          "Please enter your email and password.";
+
+        return;
+      }
+
+      const {
+        data,
+        error
+      } =
+        await supabaseClient.auth
+          .signInWithPassword({
+            email: email,
+            password: password
+          });
+
+      if (error) {
+
+        accountMessage.textContent =
+          error.message;
+
+        return;
+      }
+
+      accountMessage.textContent =
+  "Logged in successfully!";
+
+if (
+  !staySignedIn.checked
+) {
+  const projectRef =
+    SUPABASE_URL
+      .replace("https://", "")
+      .split(".")[0];
+
+  localStorage.removeItem(
+    "sb-" +
+    projectRef +
+    "-auth-token"
+  );
+}
+
+await syncLocalBibleDataToCloud();
+
+      await syncCloudChapter();
+
+      accountModal.style.display =
+        "none";
+
+      console.log(
+        "BibleMastrey user logged in:",
+        data.user
+      );
+    }
+  );
+
+
+  signupAccountButton.addEventListener(
+    "click",
+    async function() {
+
+      const email =
+        accountEmail.value.trim();
+
+      const password =
+        accountPassword.value;
+
+      if (!email || !password) {
+
+        accountMessage.textContent =
+          "Please enter your email and password.";
+
+        return;
+      }
+
+      const {
+        data,
+        error
+      } =
+        await supabaseClient.auth
+          .signUp({
+            email: email,
+            password: password
+          });
+
+      if (error) {
+
+        accountMessage.textContent =
+          error.message;
+
+        return;
+      }
+
+      accountMessage.textContent =
+        "Account created successfully!";
+
+      console.log(
+        "BibleMastrey account created:",
+        data.user
+      );
+    }
+  );
+
+
+  /* =========================
+     INITIAL SESSION
+  ========================= */
+
+  supabaseClient.auth
+    .getSession()
+    .then(
+      async function(result) {
+
+        if (result.error) {
+
+          console.error(
+            "Supabase session error:",
+            result.error
+          );
+
+          return;
+        }
+
+        if (
+          result.data &&
+          result.data.session
+        ) {
+
+          await syncCloudChapter();
+        }
+      }
+    );
+
+  /* =========================
+     BIBLEMASTREY AI
+  ========================= */
+
+  const bibleMastreyAIButton =
+    document.getElementById(
+      "bibleMastreyAIButton"
+    );
+
+  bibleMastreyAIButton.addEventListener(
+    "click",
+    async function() {
+
+      const question =
+        prompt(
+          "What would you like to ask BibleMastrey AI?"
+        );
+
+      if (!question) {
+        return;
+      }
+
+      status.textContent =
+        "BibleMastrey AI is thinking...";
+
+      try {
+
+        const response =
+          await fetch(
+            "https://biblemastrey-ai.bashamcaleb530.workers.dev",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({
+                question: question
+              })
+            }
+          );
+
+        const data =
+          await response.json();
+
+        if (!response.ok) {
+          throw new Error(
+            data.error ||
+            "AI request failed."
+          );
+        }
+
+        alert(
+          data.answer ||
+          "No answer was returned."
+        );
+
+        status.textContent =
+          "BibleMastrey AI is ready.";
+
+      } catch (error) {
+
+        console.error(
+          "BibleMastrey AI error:",
+          error
+        );
+
+        status.textContent =
+          "BibleMastrey AI could not connect.";
+
+        alert(
+          "BibleMastrey AI could not connect right now."
+        );
+      }
+    }
+  );
+
+  /* =========================
+     START BIBLEMASTREY
+  ========================= */
+
+  startBible();
+
+</script>
+
+</body>
+</html>
+  <div id="chapterContent">
+
+    <h2 id="chapterTitle">
+      Bible
+    </h2>
+
+    <p id="chapterIntro">
+      Choose a book and chapter to begin reading.
+    </p>
+
+    <div id="verseContainer"></div>
+
+    <div class="navigation">
+
+      <button id="previousChapterButton" disabled>
+        ← Previous Chapter
+      </button>
+
+      <button id="nextChapterButton" disabled>
+        Next Chapter →
+      </button>
+
+    </div>
+
+    <div class="search-box">
+
+      <h3>
+        Search This Chapter
+      </h3>
+
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Search for a word..."
+      >
+
+      <div
+        id="searchResults"
+        class="search-results"
+      ></div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div id="verseMenu" class="verse-menu">
+
+  <button id="highlightVerseButton">
+    🟨 Highlight
+  </button>
+
+  <button id="bookmarkVerseButton">
+    🔖 Bookmark
+  </button>
+
+  <button id="noteVerseButton">
+    📝 Note
+  </button>
+
+  <button id="copyVerseButton">
+    📋 Copy
+  </button>
+
+  <button id="shareVerseButton">
+    📤 Share
+  </button>
+
+</div>
+
+
+<script src="bible.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+
+  
   /* =========================
      MAIN BIBLE STATE
   ========================= */
