@@ -8,675 +8,259 @@
   <title>BibleMastrey</title>
 
   <style>
-  * {
-    box-sizing: border-box;
+  * { box-sizing: border-box; }
+  :root {
+    --bg: #08101f;
+    --panel: #101b2e;
+    --panel-2: #13213a;
+    --panel-soft: rgba(18,30,51,.92);
+    --gold: #d8b96a;
+    --gold-light: #ead18a;
+    --text: #f4f0e7;
+    --muted: #b8c0ce;
+    --line: rgba(216,185,106,.22);
+    --line-soft: rgba(255,255,255,.08);
+    --shadow: 0 18px 45px rgba(0,0,0,.28);
   }
 
   body {
     margin: 0;
     font-family: Arial, sans-serif;
     background:
-      radial-gradient(
-        circle at top,
-        #17233b 0%,
-        #0d1628 45%,
-        #080f1d 100%
-      );
-    color: #f5f1e8;
+      radial-gradient(circle at 15% 0%, #172744 0, transparent 28%),
+      radial-gradient(circle at 85% 0%, #1a2944 0, transparent 24%),
+      linear-gradient(180deg, #0a1324 0%, #08101f 100%);
+    color: var(--text);
     min-height: 100vh;
   }
 
-  header {
-    background:
-      linear-gradient(
-        135deg,
-        #111c32,
-        #182742
-      );
-    color: #f8f3e7;
-    padding: 26px 20px;
-    text-align: center;
-    position: relative;
-    border-bottom: 1px solid #c9a85c;
-    box-shadow: 0 8px 25px rgba(0,0,0,.28);
+  header.app-header {
+    height: 76px;
+    padding: 0 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(9,17,31,.93);
+    border-bottom: 1px solid var(--line);
+    box-shadow: 0 10px 30px rgba(0,0,0,.22);
+    backdrop-filter: blur(14px);
   }
 
-  header h1 {
-    margin: 0 0 8px;
-    font-size: 32px;
-    color: #e0c276;
-    letter-spacing: .5px;
+  .brand-wrap { display:flex; align-items:center; gap:13px; min-width:0; }
+  .brand-mark {
+    width: 42px; height:42px; border-radius:12px;
+    display:grid; place-items:center;
+    background: linear-gradient(145deg,#e5c778,#b9933f);
+    color:#0b1425; font-size:22px; box-shadow:0 8px 20px rgba(216,185,106,.18);
   }
-
-  header p {
-    margin: 0;
-    color: #d6d9e0;
-    opacity: .95;
-  }
+  .brand-text h1 { margin:0; font-size:24px; color:var(--gold-light); letter-spacing:.3px; }
+  .brand-text p { margin:3px 0 0; color:var(--muted); font-size:13px; }
 
   .account-button {
-    position: absolute;
-    right: 20px;
-    top: 20px;
-    padding: 10px 16px;
-    border: 1px solid #d8b96a;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 15px;
-    font-weight: bold;
-    background: transparent;
-    color: #e0c276;
+    padding:10px 15px;
+    border:1px solid var(--gold);
+    border-radius:10px;
+    background:transparent;
+    color:var(--gold-light);
+    cursor:pointer;
+    font-size:14px;
+    font-weight:700;
+  }
+  .account-button:hover { background:var(--gold); color:#0d1628; }
+
+  .app-shell {
+    width:min(1500px,100%);
+    margin:0 auto;
+    padding:22px;
+    display:grid;
+    grid-template-columns: 250px minmax(0,1fr);
+    gap:22px;
   }
 
-  .account-button:hover {
-    background: #d8b96a;
-    color: #0d1628;
+  .sidebar {
+    position:sticky;
+    top:98px;
+    align-self:start;
+    background:linear-gradient(180deg,rgba(18,30,51,.96),rgba(13,23,40,.96));
+    border:1px solid var(--line);
+    border-radius:18px;
+    box-shadow:var(--shadow);
+    overflow:hidden;
   }
+  .sidebar-heading { padding:18px 18px 10px; color:var(--gold); font-size:12px; font-weight:800; letter-spacing:1.2px; text-transform:uppercase; }
+  .sidebar-link, .sidebar-static {
+    display:block;
+    margin:0 10px 8px;
+    padding:13px 14px;
+    border-radius:11px;
+    border:1px solid transparent;
+    color:var(--text);
+    text-decoration:none;
+    background:rgba(255,255,255,.025);
+  }
+  .sidebar-link:hover { border-color:var(--line); background:rgba(216,185,106,.08); }
+  .sidebar-link strong, .sidebar-static strong { display:block; color:var(--gold-light); margin-bottom:4px; font-size:14px; }
+  .sidebar-link span, .sidebar-static span { color:var(--muted); font-size:12px; line-height:1.4; }
+  .sidebar-static { border-style:dashed; border-color:rgba(216,185,106,.22); }
+  .admin-label { display:inline-block; margin-top:8px; padding:4px 7px; border-radius:999px; border:1px solid var(--line); color:var(--gold); font-size:10px; font-weight:800; }
 
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 24px 20px;
+  .main-workspace { min-width:0; }
+  .workspace-hero {
+    margin-bottom:18px;
+    padding:22px 24px;
+    background:linear-gradient(135deg,rgba(19,33,58,.98),rgba(15,26,46,.96));
+    border:1px solid var(--line);
+    border-radius:18px;
+    box-shadow:var(--shadow);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:18px;
   }
+  .workspace-hero h2 { margin:0 0 6px; color:var(--gold-light); font-size:26px; }
+  .workspace-hero p { margin:0; color:var(--muted); line-height:1.5; }
+  .hero-badge { white-space:nowrap; padding:8px 11px; border-radius:999px; border:1px solid var(--line); color:var(--gold); background:rgba(216,185,106,.08); font-size:12px; font-weight:700; }
 
   .controls {
-    background: rgba(18,30,51,.94);
-    padding: 22px;
-    border-radius: 16px;
-    border: 1px solid rgba(201,168,92,.32);
-    box-shadow: 0 14px 35px rgba(0,0,0,.30);
-    margin-bottom: 20px;
-    backdrop-filter: blur(8px);
+    background:var(--panel-soft);
+    padding:18px;
+    border-radius:16px;
+    border:1px solid var(--line);
+    box-shadow:var(--shadow);
+    margin-bottom:18px;
   }
+  .controls-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; }
+  .control-group { display:flex; flex-direction:column; min-width:0; }
+  .control-group label { font-weight:700; margin-bottom:6px; color:var(--gold); font-size:13px; }
 
-  .controls-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 14px;
+  select,input,textarea,button { font-family:inherit; }
+  select,input {
+    width:100%; padding:11px 12px; border:1px solid rgba(216,185,106,.28); border-radius:9px;
+    font-size:14px; background:#0d192b; color:var(--text);
   }
+  select:focus,input:focus,textarea:focus { outline:none; border-color:var(--gold); box-shadow:0 0 0 2px rgba(216,185,106,.12); }
 
-  .control-group {
-    display: flex;
-    flex-direction: column;
-  }
+  #status { margin:0 0 14px; padding:9px 12px; color:var(--muted); font-size:13px; }
 
-  .control-group label {
-    font-weight: bold;
-    margin-bottom: 7px;
-    color: #d8b96a;
-  }
-
-  select,
-  input,
-  textarea,
-  button {
-    font-family: inherit;
-  }
-
-  select,
-  input {
-    width: 100%;
-    padding: 11px 12px;
-    border: 1px solid rgba(201,168,92,.35);
-    border-radius: 8px;
-    font-size: 15px;
-    background: #101b2e;
-    color: #f5f1e8;
-  }
-
-  select:focus,
-  input:focus,
-  textarea:focus {
-    outline: none;
-    border-color: #d8b96a;
-    box-shadow: 0 0 0 2px rgba(216,185,106,.15);
-  }
-
-  .study-controls {
-    margin-top: 15px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    align-items: center;
-  }
-
-  .study-controls button,
-  .dictionary-search-row button,
-  .concordance-search-row button,
-  .original-word-search-row button {
-    border: 1px solid #d8b96a;
-    background: #d8b96a;
-    color: #0d1628;
-    padding: 11px 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
-  }
-
-  .study-controls button:hover,
-  .dictionary-search-row button:hover,
-  .concordance-search-row button:hover,
-  .original-word-search-row button:hover {
-    background: #e7ca7d;
-    border-color: #e7ca7d;
-  }
-
-  .commentary-selector {
-    display: none;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .commentary-selector.show {
-    display: flex;
-  }
-
-  .commentary-selector select {
-    width: auto;
-    min-width: 300px;
-  }
-
-  #status {
-    margin: 15px 0;
-    font-weight: bold;
-    color: #c5cad4;
-  }
+  .reader-tools-grid { display:grid; grid-template-columns:minmax(0,1fr) 330px; gap:18px; align-items:start; }
+  .reader-column { min-width:0; }
+  .tools-column { min-width:0; display:flex; flex-direction:column; gap:12px; }
 
   #chapterContent {
-    background: rgba(18,30,51,.95);
-    padding: 28px;
-    border-radius: 16px;
-    border: 1px solid rgba(201,168,92,.30);
-    box-shadow: 0 14px 35px rgba(0,0,0,.32);
+    background:rgba(18,30,51,.96);
+    padding:26px;
+    border-radius:18px;
+    border:1px solid var(--line);
+    box-shadow:var(--shadow);
   }
+  #chapterTitle { margin:0 0 6px; color:var(--gold-light); font-size:30px; letter-spacing:.2px; }
+  #chapterIntro { margin:0 0 18px; color:var(--muted); }
 
-  #chapterTitle {
-    margin-top: 0;
-    margin-bottom: 20px;
-    font-size: 29px;
-    color: #d8b96a;
-    letter-spacing: .3px;
+  .verse-row { display:grid; grid-template-columns:minmax(0,1fr) minmax(260px,34%); gap:18px; border-bottom:1px solid var(--line-soft); padding:16px 0; }
+  .verse-left { min-width:0; }
+  .verse-text { padding:11px 12px; border-radius:9px; cursor:pointer; line-height:1.78; font-size:18px; color:#f3efe7; transition:background .18s ease; }
+  .verse-text:hover { background:rgba(216,185,106,.07); }
+  .verse-text.selected { background:transparent; }
+  .verse-text.permanent-highlight { background:#fff3a6; color:#171717; box-shadow:inset 4px 0 0 #d6ae00; }
+  .verse-number { font-weight:800; color:var(--gold); margin-right:8px; }
+
+  .notes-area { margin-top:8px; padding:8px 10px; }
+  .notes-label { display:block; font-weight:700; margin-bottom:6px; font-size:13px; color:var(--gold); }
+  .verse-note { width:100%; min-height:95px; resize:vertical; border:1px solid var(--line); border-radius:9px; padding:10px; font-size:14px; line-height:1.5; background:#0d192b; color:var(--text); }
+  .note-status { display:block; margin-top:4px; color:var(--muted); font-size:11px; }
+
+  .commentary-panel { display:none; background:#0d192b; border:1px solid var(--line); border-radius:11px; padding:14px; min-height:130px; max-height:540px; overflow-y:auto; }
+  .commentary-panel.show { display:block; }
+  .commentary-title { font-weight:800; color:var(--gold); margin-bottom:8px; }
+  .commentary-reference { font-weight:700; margin-bottom:8px; }
+  .commentary-text { line-height:1.6; color:#d7dbe3; white-space:pre-wrap; }
+  .commentary-placeholder,.commentary-loading { color:var(--muted); font-style:italic; }
+  .commentary-error { color:#ff9e9e; }
+
+  .tool-card,.study-controls,.biblemastrey-ai-box {
+    background:rgba(18,30,51,.96);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:15px;
+    box-shadow:0 12px 28px rgba(0,0,0,.20);
   }
-
-  .verse-row {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(280px, 35%);
-    gap: 20px;
-    border-bottom: 1px solid rgba(255,255,255,.10);
-    padding: 18px 0;
+  .tool-card label { display:block; color:var(--gold); font-weight:800; margin-bottom:8px; font-size:13px; }
+  .dictionary-search-row,.concordance-search-row,.original-word-search-row { display:flex; gap:8px; }
+  .dictionary-search-row input,.concordance-search-row input,.original-word-search-row input { flex:1; min-width:0; }
+  .tool-card button,.study-controls button,.biblemastrey-ai-box button {
+    border:1px solid var(--gold); background:var(--gold); color:#0d1628; padding:10px 12px; border-radius:9px; cursor:pointer; font-weight:800;
   }
+  .tool-card button:hover,.study-controls button:hover,.biblemastrey-ai-box button:hover { background:var(--gold-light); border-color:var(--gold-light); }
+  #dictionaryResult,#concordanceResult,#originalWordResult { margin-top:10px; }
+  #concordanceResult { max-height:320px; overflow-y:auto; }
+  .dictionary-entry,.original-word-entry,.concordance-entry { background:#0d192b; border:1px solid var(--line); border-radius:9px; padding:12px; margin-bottom:8px; color:#d7dbe3; }
+  .dictionary-word { font-weight:800; color:var(--gold); font-size:18px; margin-bottom:8px; }
+  .dictionary-source,.original-word-source { margin-top:10px; font-size:11px; color:var(--muted); font-style:italic; }
 
-  .verse-left {
-    min-width: 0;
+  .biblemastrey-ai-box { padding:12px; }
+  .biblemastrey-ai-box button { width:100%; }
+  .study-controls { display:flex; flex-direction:column; align-items:stretch; gap:9px; }
+  .commentary-selector { display:none; align-items:stretch; gap:8px; }
+  .commentary-selector.show { display:flex; flex-direction:column; }
+  .commentary-selector select { width:100%; min-width:0; }
+
+  .navigation { display:flex; justify-content:space-between; gap:10px; margin-top:24px; }
+  .navigation button { padding:11px 16px; border:1px solid var(--gold); border-radius:9px; background:var(--gold); color:#0d1628; cursor:pointer; font-weight:800; }
+  .navigation button:hover { background:var(--gold-light); }
+  .navigation button:disabled { background:#465064; border-color:#465064; color:#a8b0bd; cursor:not-allowed; }
+
+  .search-box { margin-top:20px; padding-top:18px; border-top:1px solid var(--line-soft); }
+  .search-box h3 { color:var(--gold); margin:0 0 10px; }
+  .search-box input { max-width:420px; }
+  .search-results { margin-top:10px; max-height:280px; overflow-y:auto; }
+  .search-result { padding:9px 10px; background:#0d192b; border:1px solid var(--line); margin-bottom:5px; border-radius:7px; cursor:pointer; color:#e3e5ea; }
+
+  .verse-menu { display:none; position:fixed; background:#0d192b; border:1px solid var(--gold); border-radius:9px; box-shadow:0 10px 28px rgba(0,0,0,.42); z-index:1000; overflow:hidden; }
+  .verse-menu button { display:block; width:100%; border:none; border-bottom:1px solid var(--line-soft); background:#0d192b; color:var(--text); padding:10px 14px; text-align:left; cursor:pointer; }
+  .verse-menu button:hover { background:#172844; color:var(--gold-light); }
+
+  .account-modal { position:fixed; inset:0; background:rgba(0,0,0,.72); display:flex; align-items:center; justify-content:center; z-index:9999; }
+  .account-box { background:#111f35; width:min(90%,410px); padding:25px; border-radius:16px; border:1px solid var(--line); box-shadow:0 20px 50px rgba(0,0,0,.46); text-align:center; position:relative; color:var(--text); }
+  .account-box h2 { margin-top:0; color:var(--gold); }
+  .account-box input { margin:7px 0; }
+  .account-box button { width:100%; padding:11px; margin-top:9px; border:none; border-radius:9px; cursor:pointer; font-size:14px; }
+  #loginAccountButton { background:var(--gold); color:#0d1628; font-weight:800; }
+  #signupAccountButton { background:#1a2b48; color:var(--gold-light); border:1px solid var(--line); }
+  .account-close { position:absolute; top:8px; right:12px; width:auto!important; padding:2px 8px!important; background:transparent!important; color:var(--gold)!important; font-size:27px!important; }
+  .account-box label { display:flex; align-items:center; gap:8px; color:var(--muted); font-size:13px; text-align:left; }
+  .account-box label input { width:auto; }
+
+  @media(max-width:1150px) {
+    .app-shell { grid-template-columns:210px minmax(0,1fr); }
+    .reader-tools-grid { grid-template-columns:1fr; }
+    .tools-column { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); }
+    .biblemastrey-ai-box,.study-controls { grid-column:span 1; }
   }
-
-  .verse-text {
-    padding: 12px;
-    border-radius: 8px;
-    cursor: pointer;
-    line-height: 1.75;
-    font-size: 18px;
-    color: #f0eee8;
-    transition: background .2s ease;
+  @media(max-width:860px) {
+    header.app-header { position:relative; height:auto; padding:16px; }
+    .app-shell { grid-template-columns:1fr; padding:14px; }
+    .sidebar { position:static; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); padding:10px; }
+    .sidebar-heading { grid-column:1/-1; }
+    .sidebar-link,.sidebar-static { margin:0; }
+    .controls-grid { grid-template-columns:1fr 1fr; }
+    .verse-row { grid-template-columns:1fr; }
   }
-
-  .verse-text:hover {
-    background: rgba(255,255,255,.06);
-  }
-
-  .verse-text.selected {
-    background: transparent;
-  }
-
-  .verse-text.permanent-highlight {
-    background: #fff3a6;
-    color: #161616;
-    box-shadow: inset 4px 0 0 #d6ae00;
-  }
-
-  .verse-number {
-    font-weight: bold;
-    color: #d8b96a;
-    margin-right: 8px;
-  }
-
-  .notes-area {
-    margin-top: 10px;
-    padding: 10px 12px;
-  }
-
-  .notes-label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 6px;
-    font-size: 14px;
-    color: #d8b96a;
-  }
-
-  .verse-note {
-    width: 100%;
-    min-height: 100px;
-    resize: vertical;
-    border: 1px solid rgba(201,168,92,.35);
-    border-radius: 8px;
-    padding: 10px;
-    font-size: 15px;
-    line-height: 1.5;
-    background: #101b2e;
-    color: #f5f1e8;
-  }
-
-  .note-status {
-    display: block;
-    font-size: 12px;
-    color: #aeb5c2;
-    margin-top: 4px;
-  }
-
-  .commentary-panel {
-    display: none;
-    background: #101b2e;
-    border: 1px solid rgba(201,168,92,.30);
-    border-radius: 10px;
-    padding: 15px;
-    min-height: 150px;
-    max-height: 600px;
-    overflow-y: auto;
-  }
-
-  .commentary-panel.show {
-    display: block;
-  }
-
-  .commentary-title {
-    font-weight: bold;
-    color: #d8b96a;
-    margin-bottom: 10px;
-  }
-
-  .commentary-reference {
-    font-weight: bold;
-    margin-bottom: 10px;
-    color: #f5f1e8;
-  }
-
-  .commentary-text {
-    line-height: 1.65;
-    color: #d6d9e0;
-    white-space: pre-wrap;
-  }
-
-  .commentary-placeholder,
-  .commentary-loading {
-    color: #aeb5c2;
-    font-style: italic;
-  }
-
-  .commentary-error {
-    color: #ff9b9b;
-  }
-
-  .navigation {
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-    margin-top: 25px;
-  }
-
-  .navigation button {
-    padding: 12px 20px;
-    border: 1px solid #d8b96a;
-    border-radius: 8px;
-    background: #d8b96a;
-    color: #0d1628;
-    cursor: pointer;
-    font-weight: bold;
-  }
-
-  .navigation button:hover {
-    background: #e7ca7d;
-  }
-
-  .navigation button:disabled {
-    background: #4c5565;
-    border-color: #4c5565;
-    color: #aeb5c2;
-    cursor: not-allowed;
-  }
-
-  .search-box {
-    margin-top: 20px;
-    padding-top: 20px;
-    border-top: 1px solid rgba(255,255,255,.10);
-  }
-
-  .search-box input {
-    max-width: 400px;
-  }
-
-  .search-results {
-    margin-top: 10px;
-    max-height: 300px;
-    overflow-y: auto;
-  }
-
-  .search-result {
-    padding: 10px;
-    background: #101b2e;
-    border: 1px solid rgba(201,168,92,.20);
-    margin-bottom: 6px;
-    border-radius: 7px;
-    cursor: pointer;
-    color: #e5e3dd;
-  }
-
-  .search-result:hover {
-    border-color: #d8b96a;
-  }
-
-  .dictionary-search,
-  .concordance-search,
-  .original-word-search {
-    margin-top: 20px;
-    padding: 16px;
-    background: rgba(18,30,51,.90);
-    border: 1px solid rgba(201,168,92,.25);
-    border-radius: 12px;
-  }
-
-  .dictionary-search label,
-  .concordance-search label,
-  .original-word-search label {
-    color: #d8b96a;
-    font-weight: bold;
-  }
-
-  .dictionary-search-row,
-  .concordance-search-row,
-  .original-word-search-row {
-    display: flex;
-    gap: 10px;
-    margin-top: 8px;
-  }
-
-  .dictionary-search-row input,
-  .concordance-search-row input,
-  .original-word-search-row input {
-    flex: 1;
-  }
-
-  #dictionaryResult,
-  #concordanceResult,
-  #originalWordResult {
-    margin-top: 12px;
-  }
-
-  #concordanceResult {
-    max-height: 350px;
-    overflow-y: auto;
-    padding: 10px;
-    border: 1px solid rgba(201,168,92,.25);
-    border-radius: 8px;
-    background: #101b2e;
-  }
-
-  .dictionary-entry,
-  .original-word-entry,
-  .concordance-entry {
-    background: #101b2e;
-    border: 1px solid rgba(201,168,92,.25);
-    border-radius: 8px;
-    padding: 15px;
-    margin-bottom: 10px;
-    color: #d6d9e0;
-  }
-
-  .dictionary-word {
-    font-weight: bold;
-    color: #d8b96a;
-    font-size: 20px;
-    margin-bottom: 10px;
-  }
-
-  .dictionary-source,
-  .original-word-source {
-    margin-top: 12px;
-    font-size: 12px;
-    color: #aeb5c2;
-    font-style: italic;
-  }
-
-  .verse-menu {
-    display: none;
-    position: fixed;
-    background: #101b2e;
-    border: 1px solid #d8b96a;
-    border-radius: 9px;
-    box-shadow: 0 8px 24px rgba(0,0,0,.40);
-    z-index: 1000;
-    overflow: hidden;
-  }
-
-  .verse-menu button {
-    display: block;
-    width: 100%;
-    border: none;
-    border-bottom: 1px solid rgba(255,255,255,.07);
-    background: #101b2e;
-    color: #f5f1e8;
-    padding: 11px 16px;
-    text-align: left;
-    cursor: pointer;
-  }
-
-  .verse-menu button:hover {
-    background: #1b2b46;
-    color: #e0c276;
-  }
-
-  .ai-study-choice {
-    background: rgba(18,30,51,.94);
-    padding: 28px;
-    border-radius: 16px;
-    border: 1px solid rgba(201,168,92,.30);
-    box-shadow: 0 14px 35px rgba(0,0,0,.30);
-    margin: 20px 0;
-  }
-
-  .ai-study-choice h2 {
-    margin-top: 0;
-    color: #d8b96a;
-    text-align: center;
-    font-size: 28px;
-  }
-
-  .ai-study-intro {
-    text-align: center;
-    color: #c5cad4;
-    line-height: 1.6;
-    max-width: 800px;
-    margin: 0 auto 22px;
-  }
-
-  .ai-study-choice-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-  }
-
-  .ai-study-choice-card {
-    display: block;
-    background: linear-gradient(145deg, #132039, #101a2d);
-    border: 1px solid rgba(201,168,92,.28);
-    border-radius: 13px;
-    padding: 22px;
-    text-decoration: none;
-    color: #f5f1e8;
-    transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
-  }
-
-  .ai-study-choice-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 25px rgba(0,0,0,.30);
-    border-color: #d8b96a;
-  }
-
-  .ai-study-icon {
-    font-size: 30px;
-    margin-bottom: 10px;
-  }
-
-  .ai-study-choice-card h3 {
-    margin: 0 0 8px;
-    color: #d8b96a;
-  }
-
-  .ai-study-choice-card p {
-    margin: 0;
-    color: #c5cad4;
-    line-height: 1.55;
-  }
-
-  .admin-study-card {
-    border-style: dashed;
-  }
-
-  .admin-label {
-    display: inline-block;
-    margin-top: 12px;
-    padding: 6px 10px;
-    border-radius: 6px;
-    background: rgba(216,185,106,.14);
-    border: 1px solid rgba(216,185,106,.35);
-    color: #d8b96a;
-    font-size: 12px;
-    font-weight: bold;
-  }
-
-  .account-modal {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,.72);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-  }
-
-  .account-box {
-    background: #121e33;
-    width: min(90%, 400px);
-    padding: 25px;
-    border-radius: 14px;
-    border: 1px solid rgba(201,168,92,.40);
-    box-shadow: 0 18px 45px rgba(0,0,0,.45);
-    text-align: center;
-    position: relative;
-    color: #f5f1e8;
-  }
-
-  .account-box h2 {
-    margin-top: 0;
-    color: #d8b96a;
-  }
-
-  .account-box input {
-    margin: 8px 0;
-  }
-
-  .account-box button {
-    width: 100%;
-    padding: 12px;
-    margin-top: 10px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 15px;
-  }
-
-  #loginAccountButton {
-    background: #d8b96a;
-    color: #0d1628;
-    font-weight: bold;
-  }
-
-  #signupAccountButton {
-    background: #1b2b46;
-    color: #e0c276;
-    border: 1px solid rgba(216,185,106,.35);
-  }
-
-  .account-close {
-    position: absolute;
-    top: 8px;
-    right: 12px;
-    width: auto !important;
-    padding: 2px 8px !important;
-    background: transparent !important;
-    color: #d8b96a;
-    font-size: 28px !important;
-  }
-
-  @media(max-width:800px) {
-    .controls-grid {
-      grid-template-columns: 1fr 1fr;
-    }
-
-    .verse-row {
-      grid-template-columns: 1fr;
-    }
-
-    .ai-study-choice-grid {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  @media(max-width:500px) {
-    .container {
-      padding: 10px;
-    }
-
-    .controls-grid {
-      grid-template-columns: 1fr;
-    }
-
-    #chapterContent {
-      padding: 16px;
-    }
-
-    .verse-text {
-      font-size: 17px;
-    }
-
-    .study-controls {
-      flex-direction: column;
-      align-items: stretch;
-    }
-
-    .commentary-selector {
-      flex-direction: column;
-      align-items: stretch;
-    }
-
-    .commentary-selector select {
-      width: 100%;
-      min-width: 0;
-    }
-
-    .navigation {
-      flex-direction: column;
-    }
-
-    .dictionary-search-row,
-    .concordance-search-row,
-    .original-word-search-row {
-      flex-direction: column;
-    }
-
-    .account-button {
-      position: static;
-      margin-top: 15px;
-    }
+  @media(max-width:560px) {
+    header.app-header { align-items:flex-start; }
+    .brand-text p { display:none; }
+    .brand-text h1 { font-size:20px; }
+    .workspace-hero { align-items:flex-start; flex-direction:column; }
+    .sidebar { grid-template-columns:1fr; }
+    .sidebar-heading { grid-column:auto; }
+    .controls-grid,.tools-column { grid-template-columns:1fr; }
+    #chapterContent { padding:17px; }
+    #chapterTitle { font-size:25px; }
+    .verse-text { font-size:17px; }
+    .dictionary-search-row,.concordance-search-row,.original-word-search-row,.navigation { flex-direction:column; }
   }
 </style>
 
@@ -684,466 +268,182 @@
 
 <body>
 
-<header>
-  <h1>BibleMastery</h1>
-  <p>Your Bible Study Companion</p>
-
-  <button id="accountButton" class="account-button">
-    👤 Account
-  </button>
+<header class="app-header">
+  <div class="brand-wrap">
+    <div class="brand-mark">✦</div>
+    <div class="brand-text">
+      <h1>BibleMastery</h1>
+      <p>Your Bible Study Companion</p>
+    </div>
+  </div>
+  <button id="accountButton" class="account-button">👤 Account</button>
 </header>
 
 <div id="accountModal" class="account-modal" style="display:none;">
-
   <div class="account-box">
-
-    <button id="closeAccountModal" class="account-close">
-      ×
-    </button>
-
+    <button id="closeAccountModal" class="account-close">×</button>
     <h2>BibleMastrey Account</h2>
-
-    <p id="accountMessage">
-      Sign in or create your account.
-    </p>
-
-    <input
-      type="email"
-      id="accountEmail"
-      placeholder="Email address"
-      autocomplete="email"
-    >
-
-    <input
-      type="password"
-      id="accountPassword"
-      placeholder="Password"
-      autocomplete="current-password"
-    >
-
-   <label>
-  <input
-    type="checkbox"
-    id="staySignedIn"
-  >
-  Stay signed in
-</label>
-    <button id="loginAccountButton">
-  Log In
-</button>
-
-<button id="signupAccountButton">
-  Create Account
-</button>
+    <p id="accountMessage">Sign in or create your account.</p>
+    <input type="email" id="accountEmail" placeholder="Email address" autocomplete="email">
+    <input type="password" id="accountPassword" placeholder="Password" autocomplete="current-password">
+    <label><input type="checkbox" id="staySignedIn"> Stay signed in</label>
+    <button id="loginAccountButton">Log In</button>
+    <button id="signupAccountButton">Create Account</button>
   </div>
-
 </div>
 
-<div class="container">
-<div class="ai-study-choice">
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="sidebar-heading">Study Workspace</div>
 
-  <h2>
-    What would you like to do?
-  </h2>
-
-  <p class="ai-study-intro">
-    Choose how you want to study.
-    BibleMastery will bring helpful
-    study tools together in one place.
-  </p>
-
-  <div class="ai-study-choice-grid">
-
-    <a
-      href="ai-study.html?type=personal"
-      class="ai-study-choice-card"
-    >
-
-      <div class="ai-study-icon">
-        📖
-      </div>
-
-      <h3>
-        Personal Bible Study
-      </h3>
-
-      <p>
-        Study a topic, discover Bible verses,
-        explore definitions, use study tools,
-        read commentaries, and take your own notes.
-      </p>
-
+    <a href="ai-study.html?type=personal" class="sidebar-link">
+      <strong>📖 Personal Bible Study</strong>
+      <span>Study topics, verses, definitions, commentaries, and notes.</span>
     </a>
 
-    <a
-      href="sermon.html"
-      class="ai-study-choice-card"
-    >
-
-      <div class="ai-study-icon">
-        🎤
-      </div>
-
-      <h3>
-        Build a Sermon
-      </h3>
-
-      <p>
-        Prepare a sermon step by step with Bible verses,
-        commentaries, study tools, a preparation guide,
-        and a guided sermon template.
-      </p>
-
+    <a href="sermon.html" class="sidebar-link">
+      <strong>🎤 Build a Sermon</strong>
+      <span>Prepare sermons with Scripture and study tools.</span>
     </a>
 
-    <a
-      href="bible-study.html"
-      class="ai-study-choice-card"
-    >
-
-      <div class="ai-study-icon">
-        📚
-      </div>
-
-      <h3>
-        Write a Group Bible Study
-      </h3>
-
-      <p>
-        Build a complete group Bible study with Scripture,
-        discussion questions, explanations, commentary,
-        and study tools.
-      </p>
-
+    <a href="bible-study.html" class="sidebar-link">
+      <strong>📚 Group Bible Study</strong>
+      <span>Build complete studies with questions and explanations.</span>
     </a>
 
-    <div class="ai-study-choice-card admin-study-card">
+    <div class="sidebar-static">
+      <strong>⛪ Desert Springs</strong>
+      <span>Private ministry sermon workspace.</span>
+      <div class="admin-label">Admin / Owner</div>
+    </div>
+  </aside>
 
-      <div class="ai-study-icon">
-        ⛪
+  <main class="main-workspace">
+    <section class="workspace-hero">
+      <div>
+        <h2>Bible Study Dashboard</h2>
+        <p>Read Scripture, compare study resources, take notes, and build deeper studies in one workspace.</p>
       </div>
+      <div class="hero-badge">BibleMastery Study Center</div>
+    </section>
 
-      <h3>
-        Desert Springs Ministries Sermons
-      </h3>
+    <section class="controls">
+      <div class="controls-grid">
+        <div class="control-group">
+          <label for="translationSelect">Translation</label>
+          <select id="translationSelect">
+            <option value="kjv">King James Version (KJV)</option>
+            <option value="KJV1611">King James Version 1611</option>
+            <option value="KJVPLUS">King James Version Plus (KJV+)</option>
+            <option value="YLT">Young's Literal Translation</option>
+            <option value="WEB">World English Bible</option>
+            <option value="ASV">American Standard Version</option>
+            <option value="GENEVA1599">Geneva Bible 1599</option>
+            <option value="DRA">Douay-Rheims American Edition</option>
+            <option value="BSB">Berean Standard Bible</option>
+            <option value="MSB">Majority Standard Bible</option>
+          </select>
+        </div>
 
-      <p>
-        Private sermon workspace for
-        Desert Springs Ministries.
-      </p>
+        <div class="control-group">
+          <label for="bookSelect">📖 Books</label>
+          <select id="bookSelect"><option value="">Choose a book</option></select>
+        </div>
 
-      <span class="admin-label">
-        Admin / Owner
-      </span>
+        <div class="control-group">
+          <label for="chapterSelect">Chapter</label>
+          <select id="chapterSelect"><option value="">Choose a chapter</option></select>
+        </div>
 
-    </div>
-
-  </div>
-
-</div>
-  <div class="controls">
-
-    <div class="controls-grid">
-
-      <div class="control-group">
-        <label for="translationSelect">
-          Translation
-        </label>
-
-        <select id="translationSelect">
-
-  <option value="kjv">
-    King James Version (KJV)
-  </option>
-          
-<option value="KJV1611">
-  King James Version 1611
-</option>
-          
-    <option value="KJVPLUS">
-  King James Version Plus (KJV+)
-</option>
-          
-   <option value="YLT">
-  Young's Literal Translation
-</option>
-          
-  <option value="WEB">
-    World English Bible
-  </option>
-
-  <option value="ASV">
-    American Standard Version
-  </option>
-
-  <option value="GENEVA1599">
-    Geneva Bible 1599
-  </option>
-
-  <option value="DRA">
-    Douay-Rheims American Edition
-  </option>
-          <option value="BSB">
-  Berean Standard Bible
-</option>
-
-<option value="MSB">
-  Majority Standard Bible
-</option>
-</select>
-
-</div>
-
-<div class="control-group">
-  <label for="bookSelect">
-  📖 Books
-</label>
-
-        <select id="bookSelect">
-          <option value="">
-            Choose a book
-          </option>
-        </select>
+        <div class="control-group">
+          <label for="verseSelect">Verse</label>
+          <select id="verseSelect"><option value="">Choose a verse</option></select>
+        </div>
       </div>
+    </section>
 
-      <div class="control-group">
-        <label for="chapterSelect">
-          Chapter
-        </label>
+    <div id="status">Loading Bible...</div>
 
-        <select id="chapterSelect">
-          <option value="">
-            Choose a chapter
-          </option>
-        </select>
-      </div>
+    <div class="reader-tools-grid">
+      <section class="reader-column">
+        <div id="chapterContent">
+          <h2 id="chapterTitle">Bible</h2>
+          <p id="chapterIntro">Choose a book and chapter to begin reading.</p>
+          <div id="verseContainer"></div>
 
-      <div class="control-group">
-        <label for="verseSelect">
-          Verse
-        </label>
+          <div class="navigation">
+            <button id="previousChapterButton" disabled>← Previous Chapter</button>
+            <button id="nextChapterButton" disabled>Next Chapter →</button>
+          </div>
 
-        <select id="verseSelect">
-          <option value="">
-            Choose a verse
-          </option>
-        </select>
-      </div>
+          <div class="search-box">
+            <h3>Search This Chapter</h3>
+            <input type="text" id="searchInput" placeholder="Search for a word...">
+            <div id="searchResults" class="search-results"></div>
+          </div>
+        </div>
+      </section>
 
+      <aside class="tools-column">
+        <div class="biblemastrey-ai-box">
+          <button id="bibleMastreyAIButton" type="button">🤖 Ask BibleMastrey AI</button>
+        </div>
+
+        <div class="dictionary-search tool-card">
+          <label for="dictionaryInput">📖 Bible Dictionary</label>
+          <div class="dictionary-search-row">
+            <input type="text" id="dictionaryInput" placeholder="Search a Bible word...">
+            <button id="dictionaryButton">Search</button>
+          </div>
+          <div id="dictionaryResult"></div>
+        </div>
+
+        <div class="concordance-search tool-card">
+          <label for="concordanceInput">🔎 Bible Concordance</label>
+          <div class="concordance-search-row">
+            <input type="text" id="concordanceInput" placeholder="Search a word in the Bible...">
+            <button id="concordanceButton">Search</button>
+          </div>
+          <div id="concordanceResult"></div>
+        </div>
+
+        <div class="original-word-search tool-card">
+          <label for="originalWordInput">🔤 Hebrew / Greek Word Lookup</label>
+          <div class="original-word-search-row">
+            <input type="text" id="originalWordInput" placeholder="Enter Strong's number (e.g. G26 or H2617)">
+            <button id="originalWordButton">Search</button>
+          </div>
+          <div id="originalWordResult"></div>
+        </div>
+
+        <div class="study-controls">
+          <button id="commentaryButton">📖 Bible Commentary</button>
+          <div id="commentarySelector" class="commentary-selector">
+            <select id="commentarySelect">
+              <option value="matthew-henry-concise">Matthew Henry — Concise</option>
+              <option value="matthew-henry-complete" selected>Matthew Henry — Complete</option>
+              <option value="john-gill">John Gill — Exposition</option>
+              <option value="jfb">Jamieson-Fausset-Brown</option>
+              <option value="adam-clarke">Adam Clarke</option>
+              <option value="barnes">Barnes' Notes</option>
+              <option value="john-calvin">John Calvin — Commentaries</option>
+              <option value="keil-delitzsch">Keil & Delitzsch — Old Testament</option>
+              <option value="tyndale">Tyndale — Open Study Notes</option>
+            </select>
+          </div>
+        </div>
+      </aside>
     </div>
-
-    
-
-  </div>
-
-  <div id="status">
-    Loading Bible...
-  </div>
-<!-- BibleMastrey AI -->
-<div class="biblemastrey-ai-box">
-  <button id="bibleMastreyAIButton" type="button">
-    🤖 Ask BibleMastrey AI
-  </button>
-</div>
-
-  <div class="dictionary-search">
-
-    <label for="dictionaryInput">
-      📖 Bible Dictionary
-    </label>
-
-    <div class="dictionary-search-row">
-
-      <input
-        type="text"
-        id="dictionaryInput"
-        placeholder="Search a Bible word..."
-      >
-
-      <button id="dictionaryButton">
-        Search
-      </button>
-
-    </div>
-
-    <div id="dictionaryResult"></div>
-
-  </div>
-
-  <div class="concordance-search">
-
-    <label for="concordanceInput">
-      🔎 Bible Concordance
-    </label>
-
-    <div class="concordance-search-row">
-
-      <input
-        type="text"
-        id="concordanceInput"
-        placeholder="Search a word in the Bible..."
-      >
-
-      <button id="concordanceButton">
-        Search
-      </button>
-
-    </div>
-
-    <div id="concordanceResult"></div>
-
-  </div>
-
-  <div class="original-word-search">
-
-    <label for="originalWordInput">
-      🔤 Hebrew / Greek Word Lookup
-    </label>
-
-    <div class="original-word-search-row">
-
-      <input
-        type="text"
-        id="originalWordInput"
-        placeholder="Enter Strong's number (e.g. G26 or H2617)"
-      >
-
-      <button id="originalWordButton">
-        Search
-      </button>
-
-    </div>
-
-    <div id="originalWordResult"></div>
-
-  </div>
-
-  <div class="study-controls">
-
-    <button id="commentaryButton">
-      📖 Bible Commentary
-    </button>
-
-    <div
-      id="commentarySelector"
-      class="commentary-selector"
-    >
-
-      <select id="commentarySelect">
-
-        <option value="matthew-henry-concise">
-          Matthew Henry — Concise
-        </option>
-
-        <option value="matthew-henry-complete" selected>
-          Matthew Henry — Complete
-        </option>
-
-        <option value="john-gill">
-          John Gill — Exposition
-        </option>
-
-        <option value="jfb">
-          Jamieson-Fausset-Brown
-        </option>
-
-        <option value="adam-clarke">
-          Adam Clarke
-        </option>
-
-        <option value="barnes">
-          Barnes' Notes
-        </option>
-
-        <option value="john-calvin">
-          John Calvin — Commentaries
-        </option>
-
-        <option value="keil-delitzsch">
-          Keil & Delitzsch — Old Testament
-        </option>
-
-        <option value="tyndale">
-          Tyndale — Open Study Notes
-        </option>
-
-      </select>
-
-    </div>
-
-  </div>
-
-  <div id="chapterContent">
-
-    <h2 id="chapterTitle">
-      Bible
-    </h2>
-
-    <p id="chapterIntro">
-      Choose a book and chapter to begin reading.
-    </p>
-
-    <div id="verseContainer"></div>
-
-    <div class="navigation">
-
-      <button id="previousChapterButton" disabled>
-        ← Previous Chapter
-      </button>
-
-      <button id="nextChapterButton" disabled>
-        Next Chapter →
-      </button>
-
-    </div>
-
-    <div class="search-box">
-
-      <h3>
-        Search This Chapter
-      </h3>
-
-      <input
-        type="text"
-        id="searchInput"
-        placeholder="Search for a word..."
-      >
-
-      <div
-        id="searchResults"
-        class="search-results"
-      ></div>
-
-    </div>
-
-  </div>
-
+  </main>
 </div>
 
 <div id="verseMenu" class="verse-menu">
-
-  <button id="highlightVerseButton">
-    🟨 Highlight
-  </button>
-
-  <button id="bookmarkVerseButton">
-    🔖 Bookmark
-  </button>
-
-  <button id="noteVerseButton">
-    📝 Note
-  </button>
-
-  <button id="copyVerseButton">
-    📋 Copy
-  </button>
-
-  <button id="shareVerseButton">
-    📤 Share
-  </button>
-
+  <button id="highlightVerseButton">🟨 Highlight</button>
+  <button id="bookmarkVerseButton">🔖 Bookmark</button>
+  <button id="noteVerseButton">📝 Note</button>
+  <button id="copyVerseButton">📋 Copy</button>
+  <button id="shareVerseButton">📤 Share</button>
 </div>
-
 
 <script src="bible.js"></script>
 
