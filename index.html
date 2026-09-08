@@ -3506,7 +3506,14 @@ function getVerses(chapter) {
       return item && item.type === "verse";
     });
   }
-
+if (
+  chapter.chapter &&
+  Array.isArray(chapter.chapter.content)
+) {
+  return chapter.chapter.content.filter(function(item) {
+    return item && item.type === "verse";
+  });
+}
   return [];
 }
 function getVerseNumber(verse, index) {
