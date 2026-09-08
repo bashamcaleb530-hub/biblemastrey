@@ -1904,19 +1904,11 @@ async function loadHelloAOCommentary(
   const data =
     await response.json();
 
-  if (
-    !data ||
-    !data.chapter ||
-    !Array.isArray(
-      data.chapter.content
-    )
-  ) {
-
-    throw new Error(
-      "Commentary response was invalid."
-    );
-  }
-
+  if (!data || !data.chapter) {
+  throw new Error(
+    "Commentary response was invalid."
+  );
+}
   const verses = [];
 
   data.chapter.content.forEach(
