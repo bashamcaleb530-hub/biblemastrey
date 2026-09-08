@@ -3609,6 +3609,13 @@ async function startBible() {
 
   bibleData =
     await getMSB();
+      } else if (
+  selectedTranslation ===
+  "YLT"
+) {
+
+  bibleData =
+    await getYLT();
 } else {
 
   bibleData =
