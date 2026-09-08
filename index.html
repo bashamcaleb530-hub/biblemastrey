@@ -3674,7 +3674,7 @@ async function startBible() {
       }
 
 
-      let translationName =
+     let translationName =
   "King James Version";
 
 if (
@@ -3708,6 +3708,30 @@ if (
 
   translationName =
     "Douay-Rheims American Edition";
+
+} else if (
+  selectedTranslation ===
+  "BSB"
+) {
+
+  translationName =
+    "Berean Standard Bible";
+
+} else if (
+  selectedTranslation ===
+  "MSB"
+) {
+
+  translationName =
+    "Majority Standard Bible";
+
+} else if (
+  selectedTranslation ===
+  "YLT"
+) {
+
+  translationName =
+    "Young's Literal Translation";
 }
       if (
         oldBookIndex >= 0 &&
