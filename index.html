@@ -3468,9 +3468,17 @@ function getBookName(book) {
 
   return fullBookNames[bookCode] || bookCode || "Unknown Book";
 }
-function getChapterNumber(chapter, index) {
+ffunction getChapterNumber(chapter, index) {
   if (!chapter) {
     return index + 1;
+  }
+
+  if (
+    chapter.chapter &&
+    typeof chapter.chapter === "object" &&
+    chapter.chapter.number
+  ) {
+    return chapter.chapter.number;
   }
 
   return chapter.chapter || chapter.number || (index + 1);
