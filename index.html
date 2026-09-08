@@ -1901,6 +1901,11 @@ async function loadHelloAOCommentary(
     const data =
       await response.json();
 
+    console.log(
+      "Commentary raw data:",
+      data
+    );
+
     if (
       !data ||
       !data.chapter ||
@@ -1916,7 +1921,10 @@ async function loadHelloAOCommentary(
     data.chapter.content.forEach(
       function(item) {
 
-        if (!item) {
+        if (
+          !item ||
+          item.type !== "verse"
+        ) {
           return;
         }
 
@@ -1927,55 +1935,27 @@ async function loadHelloAOCommentary(
           return;
         }
 
-        let text = "";
-
-        if (
-          typeof item.text === "string"
-        ) {
-          text = item.text;
-
-        } else if (
-          typeof item.content === "string"
-        ) {
-          text = item.content;
-
-        } else if (
-          Array.isArray(item.content)
-        ) {
-          text =
-            item.content
-              .map(function(part) {
-
-                if (
-                  typeof part === "string"
-                ) {
-                  return part;
-                }
-
-                if (
-                  part &&
-                  typeof part.text === "string"
-                ) {
-                  return part.text;
-                }
-
-                return "";
-              })
-              .join(" ");
-        }
-
-        text =
-          text
+        const text =
+          String(
+            item.text || ""
+          )
             .replace(/\s+/g, " ")
             .trim();
 
-        if (text) {
-          verses.push({
-            number: number,
-            text: text
-          });
+        if (!text) {
+          return;
         }
+
+        verses.push({
+          number: number,
+          text: text
+        });
       }
+    );
+
+    console.log(
+      "Commentary verses loaded:",
+      verses
     );
 
     const result = {
@@ -1985,11 +1965,6 @@ async function loadHelloAOCommentary(
 
     commentaryCache[cacheKey] =
       result;
-
-    console.log(
-      "Commentary verses loaded:",
-      verses.length
-    );
 
     return result;
 
@@ -2003,7 +1978,6 @@ async function loadHelloAOCommentary(
     throw error;
   }
 }
-
 /* =========================
    FIND COMMENTARY VERSE
 ========================= */
