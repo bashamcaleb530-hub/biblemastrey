@@ -856,130 +856,7 @@
 
     </div>
 
-    <div class="dictionary-search">
-
-      <label for="dictionaryInput">
-        📖 Bible Dictionary
-      </label>
-
-      <div class="dictionary-search-row">
-
-        <input
-          type="text"
-          id="dictionaryInput"
-          placeholder="Search a Bible word..."
-        >
-
-        <button id="dictionaryButton">
-          Search
-        </button>
-
-      </div>
-
-      <div id="dictionaryResult"></div>
-
-    </div>
-
-    <div class="concordance-search">
-
-      <label for="concordanceInput">
-        🔎 Bible Concordance
-      </label>
-
-      <div class="concordance-search-row">
-
-        <input
-          type="text"
-          id="concordanceInput"
-          placeholder="Search a word in the Bible..."
-        >
-
-        <button id="concordanceButton">
-          Search
-        </button>
-
-      </div>
-
-      <div id="concordanceResult"></div>
-
-    </div>
-
-    <div class="original-word-search">
-
-      <label for="originalWordInput">
-        🔤 Hebrew / Greek Word Lookup
-      </label>
-
-      <div class="original-word-search-row">
-
-        <input
-          type="text"
-          id="originalWordInput"
-          placeholder="Enter Strong's number (e.g. G26 or H2617)"
-        >
-
-        <button id="originalWordButton">
-          Search
-        </button>
-
-      </div>
-
-      <div id="originalWordResult"></div>
-
-    </div>
-
-    <div class="study-controls">
-
-      <button id="commentaryButton">
-        📖 Bible Commentary
-      </button>
-
-      <div
-        id="commentarySelector"
-        class="commentary-selector"
-      >
-
-        <select id="commentarySelect">
-
-          <option value="matthew-henry-concise">
-            Matthew Henry — Concise
-          </option>
-          
- <option value="matthew-henry-complete" selected>
-  Matthew Henry — Complete
-</option>
-
-<option value="john-gill">
-            John Gill — Exposition
-          </option>
-
-          <option value="jfb">
-            Jamieson-Fausset-Brown
-          </option>
-
-          <option value="adam-clarke">
-            Adam Clarke
-          </option>
-
-          <option value="barnes">
-            Barnes' Notes
-          </option>
-<option value="john-calvin">
-  John Calvin — Commentaries
-</option>
-
-<option value="keil-delitzsch">
-  Keil & Delitzsch — Old Testament
-</option>
-
-<option value="tyndale">
-  Tyndale — Open Study Notes
-</option>
-        </select>
-
-      </div>
-
-    </div>
+    
 
   </div>
 
@@ -993,7 +870,84 @@
   </button>
 </div>
 
-  
+  <div id="chapterContent">
+
+    <h2 id="chapterTitle">
+      Bible
+    </h2>
+
+    <p id="chapterIntro">
+      Choose a book and chapter to begin reading.
+    </p>
+
+    <div id="verseContainer"></div>
+
+    <div class="navigation">
+
+      <button id="previousChapterButton" disabled>
+        ← Previous Chapter
+      </button>
+
+      <button id="nextChapterButton" disabled>
+        Next Chapter →
+      </button>
+
+    </div>
+
+    <div class="search-box">
+
+      <h3>
+        Search This Chapter
+      </h3>
+
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Search for a word..."
+      >
+
+      <div
+        id="searchResults"
+        class="search-results"
+      ></div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div id="verseMenu" class="verse-menu">
+
+  <button id="highlightVerseButton">
+    🟨 Highlight
+  </button>
+
+  <button id="bookmarkVerseButton">
+    🔖 Bookmark
+  </button>
+
+  <button id="noteVerseButton">
+    📝 Note
+  </button>
+
+  <button id="copyVerseButton">
+    📋 Copy
+  </button>
+
+  <button id="shareVerseButton">
+    📤 Share
+  </button>
+
+</div>
+
+
+<script src="bible.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
 
   <div id="chapterContent">
 
