@@ -3468,7 +3468,7 @@ function getBookName(book) {
 
   return fullBookNames[bookCode] || bookCode || "Unknown Book";
 }
-ffunction getChapterNumber(chapter, index) {
+function getChapterNumber(chapter, index) {
   if (!chapter) {
     return index + 1;
   }
@@ -3506,40 +3506,7 @@ function getVerses(chapter) {
       return item && item.type === "verse";
     });
   }
-function getVerses(chapter) {
-  if (!chapter) {
-    return [];
-  }
 
-  if (Array.isArray(chapter.verses)) {
-    return chapter.verses;
-  }
-
-  if (chapter.verses && typeof chapter.verses === "object") {
-    return Object.values(chapter.verses);
-  }
-
-  if (Array.isArray(chapter.Verses)) {
-    return chapter.Verses;
-  }
-
-  if (Array.isArray(chapter.content)) {
-    return chapter.content.filter(function(item) {
-      return item && item.type === "verse";
-    });
-  }
-
-  if (
-    chapter.chapter &&
-    Array.isArray(chapter.chapter.content)
-  ) {
-    return chapter.chapter.content.filter(function(item) {
-      return item && item.type === "verse";
-    });
-  }
-
-  return [];
-}
   return [];
 }
 function getVerseNumber(verse, index) {
