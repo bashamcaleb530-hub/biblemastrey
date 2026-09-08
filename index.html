@@ -3542,7 +3542,7 @@ async function startBible() {
         translationSelect.value;
 
 
-      if (
+    if (
   selectedTranslation ===
   "WEB"
 ) {
@@ -3573,6 +3573,14 @@ async function startBible() {
 
   bibleData =
     await getDRA();
+
+} else if (
+  selectedTranslation ===
+  "BSB"
+) {
+
+  bibleData =
+    await getBSB();
 
 } else {
 
