@@ -14,14 +14,15 @@ const DRA_SOURCE =
   "https://raw.githubusercontent.com/midvash/bible-data/main/versions/en/dra/dra.json";
 const BSB_SOURCE =
   "https://bible.helloao.org/api/BSB/complete.simple.json";
-
+const MSB_SOURCE =
+  "https://bible.helloao.org/api/eng_msb/complete.simple.json";
 let kjvBible = null;
 let webBible = null;
 let asvBible = null;
 let geneva1599Bible = null;
 let draBible = null;
 let bsbBible = null;
-
+let msbBible = null;
 /* =========================
    KJV
 ========================= */
@@ -142,6 +143,23 @@ async function getBSB() {
 
   return bsbBible;
 }
+async function getMSB() {
+  if (msbBible) {
+    return msbBible;
+  }
+
+  const response = await fetch(MSB_SOURCE);
+
+  if (!response.ok) {
+    throw new Error("Failed to load the Majority Standard Bible");
+  }
+
+  const data = await response.json();
+
+  msbBible = data;
+
+  return msbBible;
+}
 /* =========================
    MAKE FUNCTIONS AVAILABLE
 ========================= */
@@ -152,3 +170,4 @@ window.getASV = getASV;
 window.getGENEVA1599 = getGENEVA1599;
 window.getDRA = getDRA;
 window.getBSB = getBSB;
+window.getMSB = getMSB;
