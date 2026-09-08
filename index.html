@@ -3568,11 +3568,27 @@ async function startBible() {
 
     if (
   selectedTranslation ===
+  "kjv"
+) {
+
+  translationName =
+    "King James Version";
+
+} else if (
+  selectedTranslation ===
+  "KJV1611"
+) {
+
+  translationName =
+    "King James Version 1611";
+
+} else if (
+  selectedTranslation ===
   "WEB"
 ) {
 
-  bibleData =
-    await getWEB();
+  translationName =
+    "World English Bible";
 
 } else if (
   selectedTranslation ===
