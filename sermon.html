@@ -4,287 +4,398 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Build a Sermon - BibleMastrey</title>
+  <title>Build a Sermon - BibleMastery</title>
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
+  * { box-sizing: border-box; }
 
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f5f7fa;
-      color: #222;
-    }
+  :root {
+    --bg-deep: #080f1d;
+    --bg-mid: #0d1628;
+    --panel: #121e33;
+    --panel-2: #101b2e;
+    --panel-3: #16243c;
+    --gold: #d8b96a;
+    --gold-light: #e7ca7d;
+    --text: #f5f1e8;
+    --muted: #b8bfcb;
+    --line: rgba(216,185,106,.28);
+    --soft-line: rgba(255,255,255,.09);
+  }
 
-    header {
-      background: #243447;
-      color: white;
-      padding: 20px;
-      text-align: center;
-    }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    background:
+      radial-gradient(circle at top, #17233b 0%, #0d1628 45%, #080f1d 100%);
+    color: var(--text);
+  }
 
-    header h1 {
-      margin: 0 0 8px;
-      font-size: 28px;
-    }
+  header {
+    background: linear-gradient(135deg, #111c32, #182742);
+    border-bottom: 1px solid var(--gold);
+    box-shadow: 0 8px 25px rgba(0,0,0,.30);
+    padding: 24px 20px;
+    text-align: center;
+  }
 
-    header p {
-      margin: 0;
-      color: #dfe7ef;
-    }
+  header h1 {
+    margin: 0 0 7px;
+    color: var(--gold);
+    font-size: 32px;
+  }
 
-    .back-button {
-      display: inline-block;
-      margin-top: 15px;
-      padding: 10px 16px;
-      background: white;
-      color: #243447;
-      text-decoration: none;
-      border-radius: 6px;
-      font-weight: bold;
-    }
+  header p {
+    margin: 0;
+    color: #d6d9e0;
+  }
 
-    .container {
-      max-width: 1200px;
-      margin: 25px auto;
-      padding: 0 15px;
-    }
+  .back-button {
+    display: inline-flex;
+    margin-top: 15px;
+    padding: 10px 15px;
+    color: var(--gold);
+    background: #101b2e;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+  }
 
-    .intro {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      margin-bottom: 20px;
-      box-shadow: 0 2px 8px rgba(0,0,0,.08);
-    }
+  .container {
+    max-width: 1450px;
+    margin: 24px auto;
+    padding: 0 18px 40px;
+  }
 
-    .choice-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 18px;
-      margin-bottom: 25px;
-    }
+  .intro,
+  .choice-card,
+  .section {
+    background: rgba(18,30,51,.95);
+    border: 1px solid var(--line);
+    border-radius: 15px;
+    box-shadow: 0 14px 35px rgba(0,0,0,.28);
+  }
 
-    .choice-card {
-      background: white;
-      padding: 22px;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,.08);
-      cursor: pointer;
-      border: 2px solid transparent;
-    }
+  .intro {
+    padding: 22px;
+    margin-bottom: 20px;
+  }
 
-    .choice-card:hover {
-      border-color: #527aa3;
-    }
+  .intro h2,
+  .choice-card h2,
+  .section h2 {
+    color: var(--gold);
+  }
 
-    .choice-card h2 {
-      margin-top: 0;
-    }
+  .intro p,
+  .choice-card p,
+  .section p,
+  .small {
+    color: var(--muted);
+  }
 
-    .section {
-      background: white;
-      padding: 22px;
-      margin-bottom: 25px;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,.08);
-    }
+  .choice-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: 18px;
+    margin-bottom: 25px;
+  }
 
-    .section h2 {
-      margin-top: 0;
-      color: #243447;
-    }
+  .choice-card {
+    padding: 22px;
+    cursor: pointer;
+  }
 
-    .section h3 {
-      color: #34495e;
-    }
+  .choice-card:hover {
+    border-color: var(--gold);
+    transform: translateY(-1px);
+  }
 
-    label {
-      display: block;
-      font-weight: bold;
-      margin: 14px 0 6px;
-    }
+  .section {
+    padding: 22px;
+    margin-bottom: 25px;
+  }
 
-    input,
-    textarea,
-    select {
-      width: 100%;
-      padding: 11px;
-      border: 1px solid #bbb;
-      border-radius: 6px;
-      font-family: Arial, sans-serif;
-      font-size: 15px;
-    }
+  .section h2 { margin-top: 0; }
+  .section h3 { color: var(--gold); }
 
-    textarea {
-      min-height: 110px;
-      resize: vertical;
-    }
+  label {
+    display: block;
+    margin: 14px 0 6px;
+    color: var(--gold);
+    font-weight: bold;
+  }
 
-    button {
-      border: none;
-      padding: 11px 17px;
-      border-radius: 6px;
-      cursor: pointer;
-      background: #243447;
-      color: white;
-      font-weight: bold;
-      margin: 5px;
-    }
+  input,
+  textarea,
+  select {
+    width: 100%;
+    padding: 11px;
+    color: var(--text);
+    background: var(--panel-2);
+    border: 1px solid rgba(216,185,106,.32);
+    border-radius: 7px;
+    font-family: Arial, sans-serif;
+    font-size: 15px;
+  }
 
-    button:hover {
-      opacity: .9;
-    }
+  textarea {
+    min-height: 110px;
+    resize: vertical;
+  }
 
-    .secondary {
-      background: #64748b;
-    }
+  input:focus,
+  textarea:focus,
+  select:focus {
+    outline: none;
+    border-color: var(--gold);
+    box-shadow: 0 0 0 2px rgba(216,185,106,.14);
+  }
 
-    .danger {
-      background: #a33a3a;
-    }
+  button {
+    border: 1px solid var(--gold);
+    padding: 11px 17px;
+    border-radius: 7px;
+    cursor: pointer;
+    background: var(--gold);
+    color: var(--bg-mid);
+    font-weight: bold;
+    margin: 5px;
+  }
 
-    .success {
-      background: #356859;
-    }
+  button:hover {
+    background: var(--gold-light);
+    border-color: var(--gold-light);
+  }
 
-    .lesson {
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 18px;
-      margin-bottom: 15px;
-      background: #fafafa;
-    }
+  .secondary { background: #25324a; color: var(--text); }
+  .danger { background: #6f2e35; color: white; border-color: #9b4b55; }
+  .success { background: #305c47; color: white; border-color: #4e8c6d; }
 
-    .lesson h3 {
-      margin-top: 0;
-    }
+  .lesson,
+  .template-section,
+  .tool-box,
+  .result {
+    background: var(--panel-2);
+    border: 1px solid rgba(216,185,106,.20);
+    border-radius: 9px;
+  }
 
-    .lesson-question {
-      background: #eef3f7;
-      padding: 12px;
-      border-radius: 6px;
-      margin-top: 10px;
-    }
+  .lesson {
+    padding: 18px;
+    margin-bottom: 15px;
+  }
 
-    .guide-template {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-      align-items: start;
+  .lesson h3,
+  .template-section h3,
+  .tool-box h3 {
+    margin-top: 0;
+    color: var(--gold);
+  }
+
+  .lesson-question,
+  .helper {
+    background: rgba(216,185,106,.08);
+    border-left: 4px solid var(--gold);
+    padding: 12px;
+    border-radius: 5px;
+    color: #d6d9e0;
+  }
+
+  .guide-template {
+    display: grid;
+    grid-template-columns: minmax(0,1.25fr) minmax(300px,.75fr);
+    gap: 20px;
+    align-items: start;
+  }
+
+  .sticky-box {
+    position: sticky;
+    top: 15px;
+  }
+
+  .tool-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: 18px;
+  }
+
+  .tool-box {
+    padding: 17px;
+    min-width: 0;
+  }
+
+  .bible-reader-tool {
+    grid-column: 1 / -1;
+  }
+
+  .reader-shell {
+    display: grid;
+    grid-template-columns: minmax(250px,.72fr) minmax(0,1.6fr);
+    gap: 18px;
+    margin-top: 15px;
+  }
+
+  .reader-controls,
+  .reader-display {
+    background: rgba(8,15,29,.42);
+    border: 1px solid rgba(216,185,106,.22);
+    border-radius: 10px;
+    padding: 16px;
+  }
+
+  .reader-control {
+    margin-bottom: 12px;
+  }
+
+  .reader-display {
+    min-height: 340px;
+    max-height: 650px;
+    overflow-y: auto;
+  }
+
+  .reader-title {
+    margin: 0 0 14px;
+    color: var(--gold);
+  }
+
+  .reader-placeholder {
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .reader-verse {
+    padding: 9px 8px;
+    line-height: 1.7;
+    border-bottom: 1px solid rgba(255,255,255,.06);
+    border-radius: 5px;
+  }
+
+  .reader-verse:hover {
+    background: rgba(255,255,255,.05);
+  }
+
+  .reader-verse.active-reader-verse {
+    background: rgba(216,185,106,.12);
+    box-shadow: inset 3px 0 0 var(--gold);
+  }
+
+  .reader-verse-number {
+    color: var(--gold);
+    font-weight: bold;
+    margin-right: 7px;
+  }
+
+  .reader-nav {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .reader-nav button {
+    flex: 1;
+    margin: 0;
+  }
+
+  .reader-nav button:disabled {
+    background: #4b5565;
+    border-color: #4b5565;
+    color: #aeb4bd;
+    cursor: not-allowed;
+  }
+
+  .result {
+    margin-top: 12px;
+    padding: 12px;
+    white-space: pre-wrap;
+    color: #d9dde5;
+  }
+
+  .verse-result {
+    padding: 12px;
+    margin: 8px 0;
+    background: #132039;
+    border-left: 4px solid var(--gold);
+    border-radius: 5px;
+    color: #e8e6df;
+  }
+
+  .small {
+    font-size: 13px;
+  }
+
+  .hidden { display: none; }
+
+  .course-progress {
+    background: #273247;
+    height: 12px;
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 12px 0;
+  }
+
+  .course-progress-bar {
+    height: 100%;
+    width: 0%;
+    background: var(--gold);
+  }
+
+  .template-section {
+    padding: 16px;
+    margin-bottom: 18px;
+  }
+
+  @media (max-width: 1000px) {
+    .guide-template,
+    .reader-shell {
+      grid-template-columns: 1fr;
     }
 
     .sticky-box {
-      position: sticky;
-      top: 15px;
+      position: static;
     }
+  }
 
-    .helper {
-      background: #f1f5f9;
-      border-left: 4px solid #527aa3;
-      padding: 12px;
-      margin: 10px 0;
-      border-radius: 4px;
-      font-size: 14px;
-    }
-
+  @media (max-width: 800px) {
+    .choice-grid,
     .tool-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
+      grid-template-columns: 1fr;
     }
 
-    .tool-box {
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 16px;
-      background: #fafafa;
+    .bible-reader-tool {
+      grid-column: auto;
     }
 
-    .result {
-      margin-top: 12px;
-      padding: 12px;
+    .reader-nav {
+      flex-direction: column;
+    }
+  }
+
+  @media print {
+    header,
+    .no-print,
+    .tool-section,
+    .choice-grid,
+    .intro {
+      display: none !important;
+    }
+
+    body {
       background: white;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      white-space: pre-wrap;
+      color: black;
     }
 
-    .verse-result {
-      padding: 12px;
-      margin: 8px 0;
-      background: #fff;
-      border-left: 4px solid #527aa3;
-      border-radius: 5px;
-    }
-
-    .small {
-      font-size: 13px;
-      color: #666;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    .course-progress {
-      background: #e5e7eb;
-      height: 12px;
-      border-radius: 10px;
-      overflow: hidden;
-      margin: 12px 0;
-    }
-
-    .course-progress-bar {
-      height: 100%;
-      width: 0%;
-      background: #527aa3;
-    }
-
+    .section,
     .template-section {
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 16px;
-      margin-bottom: 18px;
-      background: #fff;
+      box-shadow: none;
+      background: white;
+      color: black;
+      border-color: #ccc;
     }
-
-    .template-section h3 {
-      margin-top: 0;
-    }
-
-    @media (max-width: 800px) {
-      .choice-grid,
-      .guide-template,
-      .tool-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .sticky-box {
-        position: static;
-      }
-    }
-
-    @media print {
-      header,
-      .no-print,
-      .tool-section,
-      .choice-grid,
-      .intro {
-        display: none !important;
-      }
-
-      body {
-        background: white;
-      }
-
-      .section {
-        box-shadow: none;
-      }
-    }
-  </style>
+  }
+</style>
 </head>
 
 <body>
@@ -294,7 +405,7 @@
   <p>Prepare a biblical sermon step by step with Bible study tools.</p>
 
   <a href="index.html" class="back-button">
-    ← Back to BibleMastrey
+    ← Back to BibleMastery
   </a>
 </header>
 
@@ -304,7 +415,7 @@
     <h2>Build Your Sermon Step by Step</h2>
 
     <p>
-      BibleMastrey helps you move from studying Scripture to preparing
+      BibleMastery helps you move from studying Scripture to preparing
       a clear, biblical, practical sermon.
     </p>
 
@@ -360,9 +471,16 @@
         <label for="translation">Translation</label>
 
         <select id="translation">
-          <option value="kjv">KJV</option>
-          <option value="web">WEB</option>
-          <option value="asv">ASV</option>
+          <option value="kjv">King James Version (KJV)</option>
+          <option value="KJV1611">King James Version 1611</option>
+          <option value="KJVPLUS">King James Version Plus (KJV+)</option>
+          <option value="YLT">Young's Literal Translation</option>
+          <option value="web">World English Bible</option>
+          <option value="asv">American Standard Version</option>
+          <option value="GENEVA1599">Geneva Bible 1599</option>
+          <option value="DRA">Douay-Rheims American Edition</option>
+          <option value="BSB">Berean Standard Bible</option>
+          <option value="MSB">Majority Standard Bible</option>
         </select>
 
         <label for="bibleSearch">
@@ -381,6 +499,76 @@
 
         <div id="bibleResults" class="result">
           Enter a passage or Bible word to search.
+        </div>
+
+      </div>
+
+      <!-- Independent Bible Reader -->
+
+      <div class="tool-box bible-reader-tool">
+
+        <h3>📖 Bible Reader</h3>
+
+        <p>
+          Read any Bible book and chapter while preparing your sermon.
+          This reader works independently from Bible Search.
+        </p>
+
+        <div class="reader-shell">
+
+          <div class="reader-controls">
+
+            <div class="reader-control">
+              <label for="readerTranslation">Translation</label>
+              <select id="readerTranslation">
+                <option value="KJV">King James Version (KJV)</option>
+                <option value="KJV1611">King James Version 1611</option>
+                <option value="KJVPLUS">King James Version Plus (KJV+)</option>
+                <option value="YLT">Young's Literal Translation</option>
+                <option value="WEB">World English Bible</option>
+                <option value="ASV">American Standard Version</option>
+                <option value="GENEVA1599">Geneva Bible 1599</option>
+                <option value="DRA">Douay-Rheims American Edition</option>
+                <option value="BSB">Berean Standard Bible</option>
+                <option value="MSB">Majority Standard Bible</option>
+              </select>
+            </div>
+
+            <div class="reader-control">
+              <label for="readerBook">Book</label>
+              <select id="readerBook">
+                <option value="">Choose a book</option>
+              </select>
+            </div>
+
+            <div class="reader-control">
+              <label for="readerChapter">Chapter</label>
+              <select id="readerChapter">
+                <option value="">Choose a chapter</option>
+              </select>
+            </div>
+
+            <div class="reader-control">
+              <label for="readerVerse">Verse</label>
+              <select id="readerVerse">
+                <option value="">All verses</option>
+              </select>
+            </div>
+
+            <div class="reader-nav">
+              <button id="readerPrev" type="button" disabled>← Previous</button>
+              <button id="readerNext" type="button" disabled>Next →</button>
+            </div>
+
+          </div>
+
+          <div id="readerDisplay" class="reader-display">
+            <h3 class="reader-title">Bible Reader</h3>
+            <div class="reader-placeholder">
+              Choose a book and chapter to begin reading.
+            </div>
+          </div>
+
         </div>
 
       </div>
@@ -1244,6 +1432,540 @@
   }
 
 
+
+  /* =========================
+     INDEPENDENT BIBLE READER
+  ========================= */
+
+  const readerTranslation =
+    document.getElementById("readerTranslation");
+
+  const readerBook =
+    document.getElementById("readerBook");
+
+  const readerChapter =
+    document.getElementById("readerChapter");
+
+  const readerVerse =
+    document.getElementById("readerVerse");
+
+  const readerPrev =
+    document.getElementById("readerPrev");
+
+  const readerNext =
+    document.getElementById("readerNext");
+
+  const readerDisplay =
+    document.getElementById("readerDisplay");
+
+  let readerBible = null;
+  let readerBookIndex = -1;
+  let readerChapterIndex = -1;
+
+
+  async function getReaderBible(
+    translation
+  ) {
+
+    if (translation === "KJV1611") {
+      return await getKJV1611();
+    }
+
+    if (translation === "KJVPLUS") {
+      return await getKJVPLUS();
+    }
+
+    if (translation === "YLT") {
+      return await getYLT();
+    }
+
+    if (translation === "WEB") {
+      return await getWEB();
+    }
+
+    if (translation === "ASV") {
+      return await getASV();
+    }
+
+    if (translation === "GENEVA1599") {
+      return await getGENEVA1599();
+    }
+
+    if (translation === "DRA") {
+      return await getDRA();
+    }
+
+    if (translation === "BSB") {
+      return await getBSB();
+    }
+
+    if (translation === "MSB") {
+      return await getMSB();
+    }
+
+    return await getKJV();
+  }
+
+
+  function getReaderBookName(book) {
+
+    return (
+      book.englishName ||
+      book.book ||
+      book.name ||
+      book.title ||
+      "Unknown Book"
+    );
+  }
+
+
+  function getReaderVerseText(
+    verse,
+    bookIndex
+  ) {
+
+    let text =
+      String(
+        verse.text ||
+        verse.content ||
+        verse.verse ||
+        ""
+      );
+
+    if (
+      readerTranslation.value ===
+      "KJVPLUS"
+    ) {
+
+      const prefix =
+        bookIndex < 39
+          ? "H"
+          : "G";
+
+      text =
+        text.replace(
+          /<S>(\d+)<\/S>/g,
+          prefix + "$1"
+        );
+    }
+
+    return text;
+  }
+
+
+  async function loadReaderBible() {
+
+    readerDisplay.innerHTML =
+      "<div class='reader-placeholder'>Loading Bible...</div>";
+
+    try {
+
+      readerBible =
+        await getReaderBible(
+          readerTranslation.value
+        );
+
+      if (
+        !readerBible ||
+        !Array.isArray(readerBible.books)
+      ) {
+        throw new Error(
+          "Bible data was not returned."
+        );
+      }
+
+      readerBook.innerHTML =
+        '<option value="">Choose a book</option>';
+
+      readerBible.books.forEach(
+        function(book, index) {
+
+          const option =
+            document.createElement("option");
+
+          option.value = index;
+          option.textContent =
+            getReaderBookName(book);
+
+          readerBook.appendChild(option);
+        }
+      );
+
+      readerChapter.innerHTML =
+        '<option value="">Choose a chapter</option>';
+
+      readerVerse.innerHTML =
+        '<option value="">All verses</option>';
+
+      readerBookIndex = -1;
+      readerChapterIndex = -1;
+
+      readerPrev.disabled = true;
+      readerNext.disabled = true;
+
+      readerDisplay.innerHTML =
+        "<h3 class='reader-title'>Bible Reader</h3>" +
+        "<div class='reader-placeholder'>Choose a book and chapter to begin reading.</div>";
+
+    } catch (error) {
+
+      console.error(
+        "Sermon Bible reader error:",
+        error
+      );
+
+      readerDisplay.innerHTML =
+        "<div class='reader-placeholder'>Unable to load this Bible translation right now.</div>";
+    }
+  }
+
+
+  function fillReaderChapters() {
+
+    readerChapter.innerHTML =
+      '<option value="">Choose a chapter</option>';
+
+    readerVerse.innerHTML =
+      '<option value="">All verses</option>';
+
+    readerChapterIndex = -1;
+
+    if (
+      !readerBible ||
+      readerBookIndex < 0
+    ) {
+      updateReaderButtons();
+      return;
+    }
+
+    const chapters =
+      readerBible.books[
+        readerBookIndex
+      ].chapters || [];
+
+    chapters.forEach(
+      function(chapter, index) {
+
+        const option =
+          document.createElement("option");
+
+        option.value = index;
+        option.textContent =
+          chapter.chapter ||
+          (index + 1);
+
+        readerChapter.appendChild(option);
+      }
+    );
+
+    updateReaderButtons();
+  }
+
+
+  function fillReaderVerses() {
+
+    readerVerse.innerHTML =
+      '<option value="">All verses</option>';
+
+    if (
+      !readerBible ||
+      readerBookIndex < 0 ||
+      readerChapterIndex < 0
+    ) {
+      return;
+    }
+
+    const verses =
+      readerBible.books[
+        readerBookIndex
+      ].chapters[
+        readerChapterIndex
+      ].verses || [];
+
+    verses.forEach(
+      function(verse, index) {
+
+        const option =
+          document.createElement("option");
+
+        option.value = index;
+        option.textContent =
+          verse.number ||
+          (index + 1);
+
+        readerVerse.appendChild(option);
+      }
+    );
+  }
+
+
+  function renderReaderChapter() {
+
+    if (
+      !readerBible ||
+      readerBookIndex < 0 ||
+      readerChapterIndex < 0
+    ) {
+      return;
+    }
+
+    const book =
+      readerBible.books[
+        readerBookIndex
+      ];
+
+    const chapter =
+      book.chapters[
+        readerChapterIndex
+      ];
+
+    const verses =
+      Array.isArray(chapter.verses)
+        ? chapter.verses
+        : [];
+
+    let content =
+      "<h3 class='reader-title'>" +
+      escapeHTML(
+        getReaderBookName(book)
+      ) +
+      " " +
+      escapeHTML(
+        String(
+          chapter.chapter ||
+          (readerChapterIndex + 1)
+        )
+      ) +
+      "</h3>";
+
+    verses.forEach(
+      function(verse, index) {
+
+        content +=
+          "<div class='reader-verse' data-reader-verse='" +
+          index +
+          "'>" +
+          "<span class='reader-verse-number'>" +
+          escapeHTML(
+            String(
+              verse.number ||
+              (index + 1)
+            )
+          ) +
+          "</span>" +
+          escapeHTML(
+            getReaderVerseText(
+              verse,
+              readerBookIndex
+            )
+          ) +
+          "</div>";
+      }
+    );
+
+    readerDisplay.innerHTML =
+      content;
+
+    fillReaderVerses();
+    updateReaderButtons();
+  }
+
+
+  function updateReaderButtons() {
+
+    if (
+      !readerBible ||
+      readerBookIndex < 0 ||
+      readerChapterIndex < 0
+    ) {
+      readerPrev.disabled = true;
+      readerNext.disabled = true;
+      return;
+    }
+
+    readerPrev.disabled =
+      readerBookIndex === 0 &&
+      readerChapterIndex === 0;
+
+    const lastBookIndex =
+      readerBible.books.length - 1;
+
+    const lastChapterIndex =
+      readerBible.books[
+        lastBookIndex
+      ].chapters.length - 1;
+
+    readerNext.disabled =
+      readerBookIndex ===
+        lastBookIndex &&
+      readerChapterIndex ===
+        lastChapterIndex;
+  }
+
+
+  function moveReader(
+    direction
+  ) {
+
+    if (
+      !readerBible ||
+      readerBookIndex < 0 ||
+      readerChapterIndex < 0
+    ) {
+      return;
+    }
+
+    if (direction < 0) {
+
+      if (readerChapterIndex > 0) {
+        readerChapterIndex--;
+      } else if (readerBookIndex > 0) {
+        readerBookIndex--;
+        readerChapterIndex =
+          readerBible.books[
+            readerBookIndex
+          ].chapters.length - 1;
+      }
+
+    } else {
+
+      const chapterCount =
+        readerBible.books[
+          readerBookIndex
+        ].chapters.length;
+
+      if (
+        readerChapterIndex <
+        chapterCount - 1
+      ) {
+        readerChapterIndex++;
+      } else if (
+        readerBookIndex <
+        readerBible.books.length - 1
+      ) {
+        readerBookIndex++;
+        readerChapterIndex = 0;
+      }
+    }
+
+    readerBook.value =
+      String(readerBookIndex);
+
+    fillReaderChapters();
+
+    readerChapter.value =
+      String(readerChapterIndex);
+
+    renderReaderChapter();
+  }
+
+
+  readerTranslation.addEventListener(
+    "change",
+    loadReaderBible
+  );
+
+
+  readerBook.addEventListener(
+    "change",
+    function() {
+
+      if (readerBook.value === "") {
+        readerBookIndex = -1;
+        fillReaderChapters();
+        return;
+      }
+
+      readerBookIndex =
+        Number(readerBook.value);
+
+      fillReaderChapters();
+    }
+  );
+
+
+  readerChapter.addEventListener(
+    "change",
+    function() {
+
+      if (readerChapter.value === "") {
+        readerChapterIndex = -1;
+        updateReaderButtons();
+        return;
+      }
+
+      readerChapterIndex =
+        Number(readerChapter.value);
+
+      renderReaderChapter();
+    }
+  );
+
+
+  readerVerse.addEventListener(
+    "change",
+    function() {
+
+      readerDisplay
+        .querySelectorAll(
+          ".reader-verse"
+        )
+        .forEach(
+          function(item) {
+            item.classList.remove(
+              "active-reader-verse"
+            );
+          }
+        );
+
+      if (
+        readerVerse.value === ""
+      ) {
+        readerDisplay.scrollTop = 0;
+        return;
+      }
+
+      const verse =
+        readerDisplay.querySelector(
+          "[data-reader-verse='" +
+          readerVerse.value +
+          "']"
+        );
+
+      if (verse) {
+
+        verse.classList.add(
+          "active-reader-verse"
+        );
+
+        verse.scrollIntoView({
+          behavior: "smooth",
+          block: "center"
+        });
+      }
+    }
+  );
+
+
+  readerPrev.addEventListener(
+    "click",
+    function() {
+      moveReader(-1);
+    }
+  );
+
+
+  readerNext.addEventListener(
+    "click",
+    function() {
+      moveReader(1);
+    }
+  );
+
+
+  loadReaderBible();
+
+
   /* =========================
      COURSE PROGRESS
   ========================= */
@@ -1335,6 +2057,34 @@
       } else if (translation === "asv") {
 
         bible = await getASV();
+
+      } else if (translation === "KJV1611") {
+
+        bible = await getKJV1611();
+
+      } else if (translation === "KJVPLUS") {
+
+        bible = await getKJVPLUS();
+
+      } else if (translation === "YLT") {
+
+        bible = await getYLT();
+
+      } else if (translation === "GENEVA1599") {
+
+        bible = await getGENEVA1599();
+
+      } else if (translation === "DRA") {
+
+        bible = await getDRA();
+
+      } else if (translation === "BSB") {
+
+        bible = await getBSB();
+
+      } else if (translation === "MSB") {
+
+        bible = await getMSB();
 
       } else {
 
