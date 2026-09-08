@@ -2460,10 +2460,29 @@ async function loadChapter() {
         }
       );
 
-           verseContainer.appendChild(
-        verseWrapper
-      );
+          const verseRow =
+  document.createElement("div");
 
+verseRow.className =
+  "verse-row";
+
+const verseLeft =
+  document.createElement("div");
+
+verseLeft.className =
+  "verse-left";
+
+verseLeft.appendChild(
+  verseWrapper
+);
+
+verseRow.appendChild(
+  verseLeft
+);
+
+verseContainer.appendChild(
+  verseRow
+);
 
       /* =========================
          COMMENTARY PANEL
