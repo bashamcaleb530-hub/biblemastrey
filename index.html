@@ -2433,8 +2433,27 @@ async function loadChapter() {
       textSpan.className =
         "verse-content";
 
-      textSpan.textContent =
-        " " + verseText;
+     let displayVerseText =
+  verseText;
+
+if (
+  translationSelect.value ===
+  "KJVPLUS"
+) {
+  const strongPrefix =
+    currentBookIndex < 39
+      ? "H"
+      : "G";
+
+  displayVerseText =
+    verseText.replace(
+      /<S>(\d+)<\/S>/g,
+      strongPrefix + "$1"
+    );
+}
+
+textSpan.textContent =
+  " " + displayVerseText;
 
       verseWrapper.appendChild(
         verseNumberSpan
