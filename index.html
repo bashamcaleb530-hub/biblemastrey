@@ -3680,26 +3680,40 @@ async function startBible() {
 
 
       let translationName =
-        "King James Version";
+  "King James Version";
 
-      if (
-        selectedTranslation ===
-        "WEB"
-      ) {
+if (
+  selectedTranslation ===
+  "WEB"
+) {
 
-        translationName =
-          "World English Bible";
+  translationName =
+    "World English Bible";
 
-      } else if (
-        selectedTranslation ===
-        "ASV"
-      ) {
+} else if (
+  selectedTranslation ===
+  "ASV"
+) {
 
-        translationName =
-          "American Standard Version";
-      }
+  translationName =
+    "American Standard Version";
 
+} else if (
+  selectedTranslation ===
+  "GENEVA1599"
+) {
 
+  translationName =
+    "Geneva Bible 1599";
+
+} else if (
+  selectedTranslation ===
+  "DRA"
+) {
+
+  translationName =
+    "Douay-Rheims American Edition";
+}
       if (
         oldBookIndex >= 0 &&
         oldChapterIndex >= 0
