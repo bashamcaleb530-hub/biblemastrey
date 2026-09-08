@@ -2499,9 +2499,75 @@ async function loadChapter() {
         }
       );
 
-      verseContainer.appendChild(
+           verseContainer.appendChild(
         verseWrapper
       );
+
+
+      /* =========================
+         COMMENTARY PANEL
+      ========================= */
+
+      if (commentaryVisible) {
+
+        const commentaryPanel =
+          document.createElement("div");
+
+        commentaryPanel.className =
+          "commentary-panel show";
+
+        commentaryPanel.dataset.verseNumber =
+          verseNumber;
+
+        const commentaryTitle =
+          document.createElement("div");
+
+        commentaryTitle.className =
+          "commentary-title";
+
+        commentaryTitle.textContent =
+          getCommentaryName();
+
+        const commentaryReference =
+          document.createElement("div");
+
+        commentaryReference.className =
+          "commentary-reference";
+
+        commentaryReference.textContent =
+          bookName +
+          " " +
+          chapterNumber +
+          ":" +
+          verseNumber;
+
+        const commentaryText =
+          document.createElement("div");
+
+        commentaryText.className =
+          "commentary-text";
+
+        commentaryText.innerHTML =
+          '<span class="commentary-loading">' +
+          "Loading commentary..." +
+          "</span>";
+
+        commentaryPanel.appendChild(
+          commentaryTitle
+        );
+
+        commentaryPanel.appendChild(
+          commentaryReference
+        );
+
+        commentaryPanel.appendChild(
+          commentaryText
+        );
+
+        verseContainer.appendChild(
+          commentaryPanel
+        );
+      }
 
 
       const option =
