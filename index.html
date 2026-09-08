@@ -3544,311 +3544,322 @@ function getVerseText(verse) {
 async function startBible() {
 
   try {
-      /*
-        IMPORTANT:
 
-        Save the current location BEFORE
-        changing the Bible translation.
-        This keeps John 3:16 as John 3:16
-        when changing KJV → WEB → ASV.
-      */
+    /*
+      Save the current location before
+      changing translations.
+    */
 
-      const oldBookIndex =
-        currentBookIndex;
+    const oldBookIndex =
+      currentBookIndex;
 
-      const oldChapterIndex =
-        currentChapterIndex;
+    const oldChapterIndex =
+      currentChapterIndex;
 
-      const oldVerseNumber =
-        selectedVerseNumber;
+    const oldVerseNumber =
+      selectedVerseNumber;
 
-      const selectedTranslation =
-        translationSelect.value;
+    const selectedTranslation =
+      translationSelect.value;
 
 
- if (
-  selectedTranslation ===
-  "kjv"
-) {
+    /* =========================
+       LOAD TRANSLATION
+    ========================= */
 
-  bibleData =
-    await getKJV();
+    if (
+      selectedTranslation ===
+      "kjv"
+    ) {
 
-if (
-  selectedTranslation ===
-  "KJV1611"
-) {
+      bibleData =
+        await getKJV();
 
-  bibleData =
-    await getKJV1611();
+    } else if (
+      selectedTranslation ===
+      "KJV1611"
+    ) {
 
-} else if (
-  selectedTranslation ===
-  "WEB"
-) {
+      bibleData =
+        await getKJV1611();
 
-  bibleData =
-    await getWEB();
+    } else if (
+      selectedTranslation ===
+      "WEB"
+    ) {
 
-} else if (
-  selectedTranslation ===
-  "ASV"
-) {
+      bibleData =
+        await getWEB();
 
-  bibleData =
-    await getASV();
+    } else if (
+      selectedTranslation ===
+      "ASV"
+    ) {
 
-} else if (
-  selectedTranslation ===
-  "GENEVA1599"
-) {
+      bibleData =
+        await getASV();
 
-  bibleData =
-    await getGENEVA1599();
+    } else if (
+      selectedTranslation ===
+      "GENEVA1599"
+    ) {
 
-} else if (
-  selectedTranslation ===
-  "DRA"
-) {
+      bibleData =
+        await getGENEVA1599();
 
-  bibleData =
-    await getDRA();
+    } else if (
+      selectedTranslation ===
+      "DRA"
+    ) {
 
-} else if (
-  selectedTranslation ===
-  "BSB"
-) {
+      bibleData =
+        await getDRA();
 
-  bibleData =
-    await getBSB();
+    } else if (
+      selectedTranslation ===
+      "BSB"
+    ) {
 
-} else if (
-  selectedTranslation ===
-  "MSB"
-) {
+      bibleData =
+        await getBSB();
 
-  bibleData =
-    await getMSB();
+    } else if (
+      selectedTranslation ===
+      "MSB"
+    ) {
 
-} else if (
-  selectedTranslation ===
-  "YLT"
-) {
+      bibleData =
+        await getMSB();
 
-  bibleData =
-    await getYLT();
+    } else if (
+      selectedTranslation ===
+      "YLT"
+    ) {
 
-} else {
+      bibleData =
+        await getYLT();
 
-  bibleData =
-    await getKJV();
-}
-      books =
-        getBooks(
-          bibleData
-        );
+    } else {
 
-      if (!books.length) {
-        throw new Error(
-          "No Bible books were found."
-        );
-      }
+      bibleData =
+        await getKJV();
+    }
 
 
-      bookSelect.innerHTML =
-        '<option value="">Choose a book</option>';
+    /* =========================
+       LOAD BOOKS
+    ========================= */
 
-      books.forEach(
-        function(book, index) {
-
-          const option =
-            document.createElement(
-              "option"
-            );
-
-          option.value =
-            index;
-
-          option.textContent =
-            getBookName(book);
-
-          bookSelect.appendChild(
-            option
-          );
-        }
+    books =
+      getBooks(
+        bibleData
       );
 
+    if (!books.length) {
 
-      /*
-        Restore the exact same
-        book and chapter.
-      */
+      throw new Error(
+        "No Bible books were found."
+      );
+    }
 
-      if (
-        oldBookIndex >= 0 &&
-        oldBookIndex <
-          books.length
-      ) {
 
-        bookSelect.value =
-          oldBookIndex;
+    bookSelect.innerHTML =
+      '<option value="">Choose a book</option>';
 
-        loadChapters();
 
-        const chapters =
-          getChapters(
-            books[oldBookIndex]
+    books.forEach(
+      function(book, index) {
+
+        const option =
+          document.createElement(
+            "option"
           );
 
-        if (
-          oldChapterIndex >= 0 &&
-          oldChapterIndex <
-            chapters.length
-        ) {
+        option.value =
+          index;
 
-          chapterSelect.value =
-            oldChapterIndex;
+        option.textContent =
+          getBookName(book);
 
-          /*
-            Restore the same verse.
-          */
+        bookSelect.appendChild(
+          option
+        );
+      }
+    );
 
-          selectedVerseNumber =
-            oldVerseNumber;
 
-          await loadChapter();
-        }
+    /* =========================
+       RESTORE LOCATION
+    ========================= */
 
-      } else {
+    if (
+      oldBookIndex >= 0 &&
+      oldBookIndex <
+        books.length
+    ) {
 
-        currentBookIndex =
-          -1;
+      currentBookIndex =
+        oldBookIndex;
+
+      bookSelect.value =
+        oldBookIndex;
+
+      loadChapters();
+
+      const chapters =
+        getChapters(
+          books[oldBookIndex]
+        );
+
+      if (
+        oldChapterIndex >= 0 &&
+        oldChapterIndex <
+          chapters.length
+      ) {
 
         currentChapterIndex =
-          -1;
+          oldChapterIndex;
+
+        chapterSelect.value =
+          oldChapterIndex;
 
         selectedVerseNumber =
-          null;
+          oldVerseNumber;
 
-        chapterSelect.innerHTML =
-          '<option value="">Choose a chapter</option>';
-
-        verseSelect.innerHTML =
-          '<option value="">Choose a verse</option>';
-
-        chapterTitle.textContent =
-          "Bible";
-
-        chapterIntro.style.display =
-          "block";
-
-        verseContainer.innerHTML =
-          "";
-
-        updateNavigation();
+        await loadChapter();
       }
 
+    } else {
 
-     let translationName =
-  "King James Version";
+      currentBookIndex =
+        -1;
 
-if (
-  if (
-  selectedTranslation ===
-  "KJV1611"
-) {
+      currentChapterIndex =
+        -1;
 
-  translationName =
-    "King James Version 1611";
+      selectedVerseNumber =
+        null;
 
-} else if (
-  
-  selectedTranslation ===
-  "WEB"
-) {
+      chapterSelect.innerHTML =
+        '<option value="">Choose a chapter</option>';
 
-  translationName =
-    "World English Bible";
+      verseSelect.innerHTML =
+        '<option value="">Choose a verse</option>';
 
-} else if (
-  selectedTranslation ===
-  "ASV"
-) {
+      chapterTitle.textContent =
+        "Bible";
 
-  translationName =
-    "American Standard Version";
+      chapterIntro.style.display =
+        "block";
 
-} else if (
-  selectedTranslation ===
-  "GENEVA1599"
-) {
+      verseContainer.innerHTML =
+        "";
 
-  translationName =
-    "Geneva Bible 1599";
-
-} else if (
-  selectedTranslation ===
-  "DRA"
-) {
-
-  translationName =
-    "Douay-Rheims American Edition";
-
-} else if (
-  selectedTranslation ===
-  "BSB"
-) {
-
-  translationName =
-    "Berean Standard Bible";
-
-} else if (
-  selectedTranslation ===
-  "MSB"
-) {
-
-  translationName =
-    "Majority Standard Bible";
-
-} else if (
-  selectedTranslation ===
-  "YLT"
-) {
-
-  translationName =
-    "Young's Literal Translation";
-}
-      if (
-        oldBookIndex >= 0 &&
-        oldChapterIndex >= 0
-      ) {
-
-        status.textContent =
-          translationName +
-          " loaded.";
-
-      } else {
-
-        status.textContent =
-          translationName +
-          " loaded. Choose a book and chapter.";
-      }
-
+      updateNavigation();
     }
 
-    catch (error) {
 
-      console.error(
-        "Bible loading error:",
-        error
-      );
+    /* =========================
+       TRANSLATION NAME
+    ========================= */
+
+    let translationName =
+      "King James Version";
+
+    if (
+      selectedTranslation ===
+      "KJV1611"
+    ) {
+
+      translationName =
+        "King James Version 1611";
+
+    } else if (
+      selectedTranslation ===
+      "WEB"
+    ) {
+
+      translationName =
+        "World English Bible";
+
+    } else if (
+      selectedTranslation ===
+      "ASV"
+    ) {
+
+      translationName =
+        "American Standard Version";
+
+    } else if (
+      selectedTranslation ===
+      "GENEVA1599"
+    ) {
+
+      translationName =
+        "Geneva Bible 1599";
+
+    } else if (
+      selectedTranslation ===
+      "DRA"
+    ) {
+
+      translationName =
+        "Douay-Rheims American Edition";
+
+    } else if (
+      selectedTranslation ===
+      "BSB"
+    ) {
+
+      translationName =
+        "Berean Standard Bible";
+
+    } else if (
+      selectedTranslation ===
+      "MSB"
+    ) {
+
+      translationName =
+        "Majority Standard Bible";
+
+    } else if (
+      selectedTranslation ===
+      "YLT"
+    ) {
+
+      translationName =
+        "Young's Literal Translation";
+    }
+
+
+    if (
+      oldBookIndex >= 0 &&
+      oldChapterIndex >= 0
+    ) {
 
       status.textContent =
-        error.message ||
-        "Unable to load the Bible.";
-    }
-  }
+        translationName +
+        " loaded.";
 
+    } else {
+
+      status.textContent =
+        translationName +
+        " loaded. Choose a book and chapter.";
+    }
+
+  } catch (error) {
+
+    console.error(
+      "Bible loading error:",
+      error
+    );
+
+    status.textContent =
+      error.message ||
+      "Unable to load the Bible.";
+  }
+}
 
   /* =========================
      COMMENTARY BUTTON
