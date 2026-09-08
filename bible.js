@@ -125,7 +125,21 @@ async function getDRA() {
 
   return draBible;
 }
+async function getBSB() {
+  if (bsbBible) {
+    return bsbBible;
+  }
 
+  const response = await fetch(BSB_SOURCE);
+
+  if (!response.ok) {
+    throw new Error("Failed to load the Berean Standard Bible");
+  }
+
+  bsbBible = await response.json();
+
+  return bsbBible;
+}
 
 /* =========================
    MAKE FUNCTIONS AVAILABLE
@@ -136,3 +150,4 @@ window.getWEB = getWEB;
 window.getASV = getASV;
 window.getGENEVA1599 = getGENEVA1599;
 window.getDRA = getDRA;
+window.getBSB = getBSB;
