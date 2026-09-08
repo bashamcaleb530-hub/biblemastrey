@@ -2799,7 +2799,20 @@ async function loadChapter() {
     verseMenu.style.top =
       y + "px";
   }
+verseMenu.addEventListener(
+  "click",
+  function(event) {
+    event.stopPropagation();
+  }
+);
 
+document.addEventListener(
+  "click",
+  function() {
+    verseMenu.style.display =
+      "none";
+  }
+);
 
   
 
