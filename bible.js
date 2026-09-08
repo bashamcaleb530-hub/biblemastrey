@@ -136,11 +136,12 @@ async function getBSB() {
     throw new Error("Failed to load the Berean Standard Bible");
   }
 
-  bsbBible = await response.json();
+  const data = await response.json();
+
+  bsbBible = data;
 
   return bsbBible;
 }
-
 /* =========================
    MAKE FUNCTIONS AVAILABLE
 ========================= */
