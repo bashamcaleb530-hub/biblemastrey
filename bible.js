@@ -19,6 +19,8 @@ const YLT_SOURCE =
   "https://bible.helloao.org/api/eng_ylt/complete.simple.json";
 const KJV1611_SOURCE =
   "https://raw.githubusercontent.com/aruljohn/Bible-kjv-1611/main/";
+const KJVPLUS_SOURCE =
+  "https://raw.githubusercontent.com/prive8/bible-llm-reference/main/kjv.json";
 let kjvBible = null;
 let webBible = null;
 let asvBible = null;
@@ -28,6 +30,7 @@ let bsbBible = null;
 let msbBible = null;
 let yltBible = null;
 let kjv1611Bible = null;
+let kjvplusBible = null;
 /* =========================
    KJV
 ========================= */
@@ -87,6 +90,29 @@ for (const bookFile of bookFiles) {
 }
 
 return kjv1611Bible;
+}
+
+async function getKJVPLUS() {
+  if (kjvplusBible) {
+    return kjvplusBible;
+  }
+
+  const response =
+    await fetch(KJVPLUS_SOURCE);
+
+  if (!response.ok) {
+    throw new Error(
+      "Failed to load King James Version Plus"
+    );
+  }
+
+  const data =
+    await response.json();
+
+  kjvplusBible =
+    data.books;
+
+  return kjvplusBible;
 }
 
 /* =========================
@@ -228,6 +254,7 @@ async function getYLT() {
 
 window.getKJV = getKJV;
 window.getKJV1611 = getKJV1611;
+window.getKJVPLUS = getKJVPLUS;
 window.getWEB = getWEB;
 window.getASV = getASV;
 window.getGENEVA1599 = getGENEVA1599;
