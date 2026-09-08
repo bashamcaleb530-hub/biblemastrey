@@ -87,6 +87,7 @@ for (const bookFile of bookFiles) {
 }
 
 return kjv1611Bible;
+}
 
 /* =========================
    WEB
