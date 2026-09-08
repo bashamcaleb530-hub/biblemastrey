@@ -2945,11 +2945,20 @@ document.addEventListener(
       }
 
       let notesArea =
-        verseElement.querySelector(
-          ".notes-area"
-        );
+  verseElement.querySelector(
+    ".notes-area"
+  );
 
-      if (!notesArea) {
+if (notesArea) {
+  notesArea.remove();
+
+  verseMenu.style.display =
+    "none";
+
+  return;
+}
+
+if (!notesArea) {
 
         notesArea =
           document.createElement(
