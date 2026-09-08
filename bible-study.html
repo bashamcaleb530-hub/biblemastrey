@@ -1,32 +1,41 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>BibleMastrey — Bible Study</title>
+<title>BibleMastery — Bible Study</title>
 
 <style>
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
 
-html{
-  scroll-behavior:smooth;
+:root{
+  --bg-deep:#080f1d;
+  --bg-mid:#0d1628;
+  --panel:#121e33;
+  --panel-2:#101b2e;
+  --panel-3:#16243c;
+  --gold:#d8b96a;
+  --gold-light:#e7ca7d;
+  --text:#f5f1e8;
+  --muted:#b8bfcb;
+  --line:rgba(216,185,106,.28);
+  --soft-line:rgba(255,255,255,.09);
 }
 
 body{
   margin:0;
   font-family:Arial,Helvetica,sans-serif;
-  background:#f5f7fb;
-  color:#182033;
+  background:
+    radial-gradient(circle at top,#17233b 0%,#0d1628 45%,#080f1d 100%);
+  color:var(--text);
   line-height:1.6;
 }
 
 header{
-  background:#fff;
-  border-bottom:1px solid #e5e7eb;
+  background:linear-gradient(135deg,#111c32,#182742);
+  border-bottom:1px solid var(--gold);
   padding:16px 5%;
   display:flex;
   align-items:center;
@@ -35,12 +44,13 @@ header{
   position:sticky;
   top:0;
   z-index:100;
+  box-shadow:0 8px 25px rgba(0,0,0,.28);
 }
 
 .logo{
   font-size:25px;
   font-weight:800;
-  color:#172554;
+  color:var(--gold);
 }
 
 nav{
@@ -51,64 +61,76 @@ nav{
 
 nav a{
   text-decoration:none;
-  color:#374151;
+  color:#e0e3e9;
   font-weight:700;
 }
 
+nav a:hover{color:var(--gold)}
+
 .hero{
   text-align:center;
-  padding:65px 20px;
-  background:linear-gradient(135deg,#eef2ff,#fff);
+  padding:60px 20px;
+  background:
+    radial-gradient(circle at center top,rgba(216,185,106,.12),transparent 45%);
+  border-bottom:1px solid rgba(216,185,106,.15);
 }
 
 .hero h1{
   font-size:clamp(36px,7vw,60px);
   margin:0 0 15px;
-  color:#172554;
+  color:var(--gold);
 }
 
 .hero p{
   max-width:760px;
   margin:auto;
   font-size:19px;
-  color:#4b5563;
+  color:var(--muted);
 }
 
 .container{
   width:92%;
-  max-width:1150px;
+  max-width:1350px;
   margin:auto;
 }
 
-section{
-  padding:55px 0;
-}
+section{padding:48px 0}
 
 .section-title{
   text-align:center;
   font-size:34px;
   margin:0 0 10px;
-  color:#172554;
+  color:var(--gold);
 }
 
 .section-intro{
   text-align:center;
   max-width:780px;
   margin:0 auto 30px;
-  color:#6b7280;
+  color:var(--muted);
+}
+
+.study-box,
+.bible-workspace,
+.tool-card,
+.guide-item,
+.question,
+.template-section{
+  background:rgba(18,30,51,.95);
+  border:1px solid var(--line);
+  box-shadow:0 12px 32px rgba(0,0,0,.26);
 }
 
 .study-box{
-  background:#fff;
   border-radius:18px;
   padding:30px;
-  box-shadow:0 10px 35px rgba(0,0,0,.08);
 }
 
 label{
   display:block;
   font-weight:700;
   margin-bottom:8px;
+  color:var(--gold);
 }
 
 input,
@@ -116,11 +138,20 @@ textarea,
 select{
   width:100%;
   padding:13px;
-  border:1px solid #d1d5db;
+  border:1px solid rgba(216,185,106,.32);
   border-radius:10px;
   font-size:16px;
   font-family:inherit;
-  background:#fff;
+  background:var(--panel-2);
+  color:var(--text);
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+  outline:none;
+  border-color:var(--gold);
+  box-shadow:0 0 0 2px rgba(216,185,106,.14);
 }
 
 textarea{
@@ -129,7 +160,7 @@ textarea{
 }
 
 button{
-  border:0;
+  border:1px solid var(--gold);
   border-radius:10px;
   padding:12px 17px;
   font-size:15px;
@@ -138,13 +169,24 @@ button{
 }
 
 .primary{
-  background:#172554;
-  color:#fff;
+  background:var(--gold);
+  color:var(--bg-mid);
+}
+
+.primary:hover{
+  background:var(--gold-light);
+  border-color:var(--gold-light);
 }
 
 .secondary{
-  background:#e8ecf7;
-  color:#172554;
+  background:#1b2b46;
+  color:#eeeae2;
+  border-color:rgba(216,185,106,.30);
+}
+
+.secondary:hover{
+  color:var(--gold);
+  border-color:var(--gold);
 }
 
 .topic-search{
@@ -153,19 +195,15 @@ button{
   margin-top:20px;
 }
 
-.topic-search input{
-  flex:1;
-}
-
-/* =========================
-   BIBLE WORKSPACE
-========================= */
+.topic-search input{flex:1}
 
 .bible-workspace{
-  background:#fff;
   border-radius:18px;
   padding:25px;
-  box-shadow:0 10px 35px rgba(0,0,0,.08);
+}
+
+.bible-workspace > h2{
+  color:var(--gold)!important;
 }
 
 .controls-grid{
@@ -175,9 +213,7 @@ button{
   margin-bottom:18px;
 }
 
-.control-group label{
-  margin-bottom:6px;
-}
+.control-group label{margin-bottom:6px}
 
 .search-row{
   display:flex;
@@ -185,26 +221,23 @@ button{
   margin-bottom:15px;
 }
 
-.search-row input{
-  flex:1;
-}
+.search-row input{flex:1}
 
 .message{
   padding:12px 15px;
   border-radius:9px;
-  background:#f1f5f9;
-  color:#475569;
+  background:rgba(216,185,106,.08);
+  border:1px solid rgba(216,185,106,.20);
+  color:#d5d9e1;
   margin-bottom:20px;
 }
 
 .chapter-heading{
-  color:#172554;
+  color:var(--gold);
   margin-top:0;
 }
 
-.chapter-content{
-  margin-top:15px;
-}
+.chapter-content{margin-top:15px}
 
 .verse-row{
   display:grid;
@@ -213,9 +246,7 @@ button{
   margin-bottom:18px;
 }
 
-.verse-left{
-  min-width:0;
-}
+.verse-left{min-width:0}
 
 .verse-text{
   padding:14px;
@@ -223,40 +254,48 @@ button{
   cursor:pointer;
   font-family:Georgia,"Times New Roman",serif;
   font-size:18px;
-  background:#fff;
-  border:1px solid #e5e7eb;
+  background:var(--panel-2);
+  border:1px solid rgba(216,185,106,.18);
   transition:.2s;
+  color:#eeeae2;
 }
 
 .verse-text:hover{
-  background:#f8fafc;
+  background:#16243c;
+  border-color:var(--gold);
 }
 
 .verse-text.selected{
-  outline:2px solid #93c5fd;
+  outline:2px solid var(--gold);
 }
 
 .verse-text.permanent-highlight{
   background:#fff3a3;
   border-color:#facc15;
+  color:#171717;
 }
 
 .verse-number{
   font-weight:800;
-  color:#172554;
+  color:var(--gold);
   margin-right:9px;
   font-family:Arial,Helvetica,sans-serif;
 }
 
+.verse-text.permanent-highlight .verse-number{
+  color:#6b5200;
+}
+
 .notes-area{
-  background:#f8fafc;
+  background:#0d182a;
+  border:1px solid rgba(216,185,106,.18);
   border-radius:10px;
   padding:12px;
 }
 
 .notes-label{
   font-size:14px;
-  color:#475569;
+  color:var(--gold);
 }
 
 .verse-note{
@@ -267,58 +306,40 @@ button{
 
 .note-status{
   font-size:12px;
-  color:#15803d;
+  color:#8bd4a0;
   margin-left:5px;
 }
 
 .commentary-panel{
   display:none;
-  background:#f8fafc;
-  border-left:4px solid #172554;
+  background:#0f1b2f;
+  border-left:4px solid var(--gold);
   border-radius:10px;
   padding:15px;
 }
 
-.commentary-panel.show{
-  display:block;
-}
+.commentary-panel.show{display:block}
 
 .commentary-title{
   font-weight:800;
-  color:#172554;
+  color:var(--gold);
 }
 
 .commentary-reference{
   font-size:13px;
-  color:#64748b;
+  color:#aeb5c2;
   margin-bottom:8px;
 }
 
-.commentary-text{
-  white-space:pre-wrap;
-}
-
+.commentary-text{white-space:pre-wrap}
 .commentary-selector{
   display:none;
   margin:10px 0 20px;
   max-width:400px;
 }
-
-.commentary-selector.show{
-  display:block;
-}
-
-.commentary-loading{
-  color:#64748b;
-}
-
-.commentary-placeholder{
-  color:#64748b;
-}
-
-.commentary-error{
-  color:#b91c1c;
-}
+.commentary-selector.show{display:block}
+.commentary-loading,.commentary-placeholder{color:#aeb5c2}
+.commentary-error{color:#ffabab}
 
 .navigation{
   display:flex;
@@ -330,10 +351,10 @@ button{
 .verse-menu{
   display:none;
   position:fixed;
-  background:#fff;
-  border:1px solid #ccc;
-  border-radius:7px;
-  box-shadow:0 4px 12px rgba(0,0,0,.15);
+  background:#101b2e;
+  border:1px solid var(--gold);
+  border-radius:8px;
+  box-shadow:0 8px 22px rgba(0,0,0,.35);
   z-index:1000;
   overflow:hidden;
   min-width:160px;
@@ -344,28 +365,25 @@ button{
   width:100%;
   text-align:left;
   border-radius:0;
-  background:#fff;
-  color:#172554;
+  background:#101b2e;
+  color:#eeeae2;
+  border:0;
 }
 
 .verse-menu button:hover{
-  background:#eef2ff;
+  background:#1b2b46;
+  color:var(--gold);
 }
 
-.search-results{
-  margin-top:15px;
-}
+.search-results{margin-top:15px}
 
 .search-result{
-  background:#f8fafc;
+  background:#101b2e;
+  border:1px solid rgba(216,185,106,.18);
   border-radius:10px;
   padding:12px;
   margin-bottom:10px;
 }
-
-/* =========================
-   TOOL GRID
-========================= */
 
 .tool-grid{
   display:grid;
@@ -374,20 +392,16 @@ button{
 }
 
 .tool-card{
-  background:#fff;
   padding:24px;
   border-radius:15px;
-  box-shadow:0 5px 20px rgba(0,0,0,.06);
 }
 
 .tool-card h3{
   margin-top:0;
-  color:#172554;
+  color:var(--gold);
 }
 
-.tool-card p{
-  color:#6b7280;
-}
+.tool-card p{color:var(--muted)}
 
 .tool-form{
   display:flex;
@@ -395,70 +409,56 @@ button{
   margin-top:15px;
 }
 
-.tool-form input{
-  flex:1;
-}
+.tool-form input{flex:1}
 
 .tool-result{
   margin-top:15px;
   padding:15px;
+  border:1px solid rgba(216,185,106,.16);
   border-radius:10px;
-  background:#f8fafc;
+  background:#0e192a;
   min-height:45px;
+  color:#d9dde5;
 }
 
 .dictionary-word{
   font-size:22px;
   font-weight:800;
-  color:#172554;
+  color:var(--gold);
 }
 
 .dictionary-source,
 .original-word-source{
   margin-top:12px;
   font-size:12px;
-  color:#64748b;
+  color:#9fa8b6;
 }
 
-/* =========================
-   TOPIC VERSES
-========================= */
-
-.verse-results{
-  margin-top:25px;
-}
-
-.verse-results.empty{
-  display:none;
-}
+.verse-results{margin-top:25px}
+.verse-results.empty{display:none}
 
 .topic-verse-card{
-  background:#fff;
-  border-left:5px solid #172554;
+  background:#101b2e;
+  border:1px solid rgba(216,185,106,.20);
+  border-left:5px solid var(--gold);
   padding:20px;
   margin-bottom:14px;
   border-radius:10px;
-  box-shadow:0 4px 15px rgba(0,0,0,.05);
+  box-shadow:0 8px 22px rgba(0,0,0,.20);
 }
 
 .topic-verse-reference{
   font-size:19px;
   font-weight:800;
-  color:#172554;
+  color:var(--gold);
 }
 
 .topic-verse-description{
-  color:#6b7280;
+  color:var(--muted);
   margin-top:6px;
 }
 
-.topic-open{
-  margin-top:12px;
-}
-
-/* =========================
-   GUIDE
-========================= */
+.topic-open{margin-top:12px}
 
 .guide-grid{
   display:grid;
@@ -467,18 +467,16 @@ button{
 }
 
 .guide-item{
-  background:#fff;
   padding:20px;
   border-radius:12px;
-  box-shadow:0 4px 15px rgba(0,0,0,.05);
 }
 
-.guide-item strong{
-  color:#172554;
-}
+.guide-item strong{color:var(--gold)}
 
 .questions{
-  background:#eef2ff;
+  background:rgba(11,20,35,.72);
+  border-top:1px solid rgba(216,185,106,.12);
+  border-bottom:1px solid rgba(216,185,106,.12);
 }
 
 .question-list{
@@ -487,12 +485,12 @@ button{
 }
 
 .question{
-  background:#fff;
   padding:18px 20px;
   border-radius:10px;
   margin-bottom:12px;
-  box-shadow:0 4px 12px rgba(0,0,0,.04);
 }
+
+.question strong{color:var(--gold)}
 
 .template-list{
   display:grid;
@@ -500,20 +498,14 @@ button{
 }
 
 .template-section{
-  background:#fff;
   padding:22px;
   border-radius:14px;
-  box-shadow:0 4px 15px rgba(0,0,0,.05);
 }
 
 .template-section h3{
   margin-top:0;
-  color:#172554;
+  color:var(--gold);
 }
-
-/* =========================
-   WRITING
-========================= */
 
 .write-grid{
   display:grid;
@@ -527,70 +519,46 @@ button{
   margin-top:25px;
 }
 
-/* =========================
-   AI
-========================= */
-
 .ai-box{
-  background:#172554;
+  background:linear-gradient(135deg,#15233c,#1b2b46);
+  border:1px solid var(--line);
   color:#fff;
   border-radius:18px;
   padding:35px;
   text-align:center;
+  box-shadow:0 12px 30px rgba(0,0,0,.25);
 }
 
 .ai-box h2{
   margin-top:0;
+  color:var(--gold);
 }
 
 .ai-box p{
-  color:#dbeafe;
+  color:#d3d8e2;
   max-width:700px;
   margin:10px auto 20px;
 }
 
 footer{
-  background:#0f172a;
-  color:#cbd5e1;
+  background:#070d18;
+  border-top:1px solid rgba(216,185,106,.18);
+  color:#aeb6c5;
   text-align:center;
   padding:30px 20px;
 }
 
 @media(max-width:850px){
-  .controls-grid{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-  .tool-grid,
-  .guide-grid{
-    grid-template-columns:1fr 1fr;
-  }
+  .controls-grid{grid-template-columns:repeat(2,1fr)}
+  .tool-grid,.guide-grid{grid-template-columns:1fr}
 }
 
 @media(max-width:600px){
-  header{
-    flex-direction:column;
-  }
-
-  nav{
-    justify-content:center;
-  }
-
-  .controls-grid,
-  .tool-grid,
-  .guide-grid{
-    grid-template-columns:1fr;
-  }
-
-  .topic-search,
-  .search-row,
-  .tool-form{
-    flex-direction:column;
-  }
-
-  .navigation{
-    flex-direction:column;
-  }
+  header{flex-direction:column}
+  nav{justify-content:center}
+  .controls-grid,.tool-grid,.guide-grid{grid-template-columns:1fr}
+  .topic-search,.search-row,.tool-form{flex-direction:column}
+  .navigation{flex-direction:column}
 }
 </style>
 </head>
@@ -598,7 +566,7 @@ footer{
 <body>
 
 <header>
-  <div class="logo">BibleMastrey</div>
+  <div class="logo">BibleMastery</div>
 
   <nav>
     <a href="/">Bible</a>
@@ -615,7 +583,7 @@ footer{
     <h1>Write and Prepare a Bible Study</h1>
 
     <p>
-      Choose your topic, study Scripture, use BibleMastrey's
+      Choose your topic, study Scripture, use BibleMastery's
       study tools, prepare your teaching, and write your Bible study.
     </p>
   </div>
@@ -636,7 +604,7 @@ footer{
 
     <p class="section-intro">
       Start with the subject you want to study.
-      BibleMastrey will give you Scripture references
+      BibleMastery will give you Scripture references
       to help you begin your research.
     </p>
 
@@ -704,17 +672,16 @@ footer{
           </label>
 
           <select id="translation">
-            <option value="kjv">
-              King James Version (KJV)
-            </option>
-
-            <option value="WEB">
-              World English Bible
-            </option>
-
-            <option value="ASV">
-              American Standard Version
-            </option>
+            <option value="kjv">King James Version (KJV)</option>
+            <option value="KJV1611">King James Version 1611</option>
+            <option value="KJVPLUS">King James Version Plus (KJV+)</option>
+            <option value="YLT">Young's Literal Translation</option>
+            <option value="WEB">World English Bible</option>
+            <option value="ASV">American Standard Version</option>
+            <option value="GENEVA1599">Geneva Bible 1599</option>
+            <option value="DRA">Douay-Rheims American Edition</option>
+            <option value="BSB">Berean Standard Bible</option>
+            <option value="MSB">Majority Standard Bible</option>
           </select>
         </div>
 
@@ -1056,8 +1023,7 @@ footer{
         </button>
 
         <div class="tool-result">
-          KJV, WEB, and ASV are currently available here.
-          More free translations can be added incrementally.
+          Choose from the Bible translations available in BibleMastery, including KJV, KJV 1611, KJV+, YLT, WEB, ASV, Geneva 1599, DRA, BSB, and MSB.
         </div>
 
       </div>
@@ -1694,7 +1660,7 @@ footer{
 
 
 <footer>
-  © 2026 BibleMastrey.net
+  © 2026 BibleMastery
 </footer>
 
 
@@ -1992,12 +1958,33 @@ function getVerseNumber(verse,index){
 
 function getVerseText(verse){
 
-  return (
-    verse.text ||
-    verse.content ||
-    verse.verseText ||
-    ""
-  );
+  let text =
+    (
+      verse.text ||
+      verse.content ||
+      verse.verseText ||
+      ""
+    );
+
+  if(
+    translationSelect.value ===
+    "KJVPLUS"
+  ){
+
+    const strongPrefix =
+      currentBookIndex < 39
+        ? "H"
+        : "G";
+
+    text =
+      String(text).replace(
+        /<S>(\d+)<\/S>/g,
+        strongPrefix + "$1"
+      );
+
+  }
+
+  return text;
 
 }
 
@@ -3632,22 +3619,58 @@ async function startBible(){
       currentChapterIndex;
 
 
-    if(
-      selectedTranslation ===
-      "WEB"
-    ){
+    if(selectedTranslation === "KJV1611"){
+
+      bibleData =
+        await getKJV1611();
+
+    }
+    else if(selectedTranslation === "KJVPLUS"){
+
+      bibleData =
+        await getKJVPLUS();
+
+    }
+    else if(selectedTranslation === "YLT"){
+
+      bibleData =
+        await getYLT();
+
+    }
+    else if(selectedTranslation === "WEB"){
 
       bibleData =
         await getWEB();
 
     }
-    else if(
-      selectedTranslation ===
-      "ASV"
-    ){
+    else if(selectedTranslation === "ASV"){
 
       bibleData =
         await getASV();
+
+    }
+    else if(selectedTranslation === "GENEVA1599"){
+
+      bibleData =
+        await getGENEVA1599();
+
+    }
+    else if(selectedTranslation === "DRA"){
+
+      bibleData =
+        await getDRA();
+
+    }
+    else if(selectedTranslation === "BSB"){
+
+      bibleData =
+        await getBSB();
+
+    }
+    else if(selectedTranslation === "MSB"){
+
+      bibleData =
+        await getMSB();
 
     }
     else{
@@ -3728,27 +3751,46 @@ async function startBible(){
     }
 
 
-    let translationName =
+    const translationNames = {
+
+      kjv:
+        "King James Version",
+
+      KJV1611:
+        "King James Version 1611",
+
+      KJVPLUS:
+        "King James Version Plus",
+
+      YLT:
+        "Young's Literal Translation",
+
+      WEB:
+        "World English Bible",
+
+      ASV:
+        "American Standard Version",
+
+      GENEVA1599:
+        "Geneva Bible 1599",
+
+      DRA:
+        "Douay-Rheims American Edition",
+
+      BSB:
+        "Berean Standard Bible",
+
+      MSB:
+        "Majority Standard Bible"
+
+    };
+
+
+    const translationName =
+      translationNames[
+        selectedTranslation
+      ] ||
       "King James Version";
-
-    if(
-      selectedTranslation ===
-      "WEB"
-    ){
-
-      translationName =
-        "World English Bible";
-
-    }
-    else if(
-      selectedTranslation ===
-      "ASV"
-    ){
-
-      translationName =
-        "American Standard Version";
-
-    }
 
 
     if(
@@ -5740,4 +5782,3 @@ startBible();
 
 </body>
 </html>
-```
