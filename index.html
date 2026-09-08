@@ -3537,28 +3537,42 @@ async function startBible() {
 
 
       if (
-        selectedTranslation ===
-        "WEB"
-      ) {
+  selectedTranslation ===
+  "WEB"
+) {
 
-        bibleData =
-          await getWEB();
+  bibleData =
+    await getWEB();
 
-      } else if (
-        selectedTranslation ===
-        "ASV"
-      ) {
+} else if (
+  selectedTranslation ===
+  "ASV"
+) {
 
-        bibleData =
-          await getASV();
+  bibleData =
+    await getASV();
 
-      } else {
+} else if (
+  selectedTranslation ===
+  "GENEVA1599"
+) {
 
-        bibleData =
-          await getKJV();
-      }
+  bibleData =
+    await getGENEVA1599();
 
+} else if (
+  selectedTranslation ===
+  "DRA"
+) {
 
+  bibleData =
+    await getDRA();
+
+} else {
+
+  bibleData =
+    await getKJV();
+}
       books =
         getBooks(
           bibleData
