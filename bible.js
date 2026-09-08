@@ -20,7 +20,7 @@ let webBible = null;
 let asvBible = null;
 let geneva1599Bible = null;
 let draBible = null;
-
+let bsbBible = null;
 
 /* =========================
    KJV
