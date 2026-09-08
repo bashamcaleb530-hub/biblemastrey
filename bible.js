@@ -12,7 +12,8 @@ const GENEVA1599_SOURCE =
 
 const DRA_SOURCE =
   "https://raw.githubusercontent.com/midvash/bible-data/main/versions/en/dra/dra.json";
-
+const BSB_SOURCE =
+  "https://bible.helloao.org/api/BSB/complete.simple.json";
 
 let kjvBible = null;
 let webBible = null;
