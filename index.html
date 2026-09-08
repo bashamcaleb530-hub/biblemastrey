@@ -2260,7 +2260,8 @@ async function populateCommentaryPanels(
 
           textElement.innerHTML =
             '<span class="commentary-error">' +
-            "Unable to load this commentary right now." +
+            "Unable to load this commentary: " +
+(error.message || "Unknown error")
             "</span>";
         }
       }
