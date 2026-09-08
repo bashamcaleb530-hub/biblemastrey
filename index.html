@@ -2084,39 +2084,30 @@ async function populateCommentaryPanels(
     return;
   }
 
+  panels.forEach(function(panel) {
 
-  /*
-    Show loading state.
-  */
+    const textElement =
+      panel.querySelector(
+        ".commentary-text"
+      );
 
-  panels.forEach(
-    function(panel) {
+    const titleElement =
+      panel.querySelector(
+        ".commentary-title"
+      );
 
-      const textElement =
-        panel.querySelector(
-          ".commentary-text"
-        );
-
-      if (textElement) {
-
-        textElement.innerHTML =
-          '<span class="commentary-loading">' +
-          "Loading commentary..." +
-          "</span>";
-      }
-
-      const titleElement =
-        panel.querySelector(
-          ".commentary-title"
-        );
-
-      if (titleElement) {
-
-        titleElement.textContent =
-          getCommentaryName();
-      }
+    if (titleElement) {
+      titleElement.textContent =
+        getCommentaryName();
     }
-  );
+
+    if (textElement) {
+      textElement.innerHTML =
+        '<span class="commentary-loading">' +
+        "Loading commentary..." +
+        "</span>";
+    }
+  });
 
 
   try {
@@ -2128,94 +2119,93 @@ async function populateCommentaryPanels(
       );
 
 
-    panels.forEach(
-      function(panel) {
+    panels.forEach(function(panel) {
 
-        const textElement =
-          panel.querySelector(
-            ".commentary-text"
-          );
+      const textElement =
+        panel.querySelector(
+          ".commentary-text"
+        );
 
-        if (!textElement) {
-          return;
-        }
+      if (!textElement) {
+        return;
+      }
 
-        const verseNumber =
-          Number(
-            panel.dataset.verseNumber
-          );
+      const verseNumber =
+        Number(
+          panel.dataset.verseNumber
+        );
+
+      const result =
+        findCommentaryForVerse(
+          data,
+          verseNumber
+        );
 
 
-        /*
-          Barnes unavailable.
-        */
+      if (result) {
 
         if (
-          commentarySelect.value ===
-          "barnes"
+          typeof result === "object" &&
+          result.text
         ) {
 
-          textElement.innerHTML =
-            '<span class="commentary-placeholder">' +
-            "Barnes' Notes is not currently available from the connected source." +
-            "</span>";
+          if (
+            result.exact === false &&
+            result.startVerse
+          ) {
 
-          return;
-        }
+            textElement.textContent =
+              "Section beginning at verse " +
+              result.startVerse +
+              ": " +
+              result.text;
 
+          } else {
 
-        const commentaryText =
-          findCommentaryForVerse(
-            data,
-            verseNumber
-          );
-
-
-        if (commentaryText) {
-
-          textElement.textContent =
-            commentaryText;
+            textElement.textContent =
+              result.text;
+          }
 
         } else {
 
-          textElement.innerHTML =
-            '<span class="commentary-placeholder">' +
-            "No commentary entry was found for this verse." +
-            "</span>";
+          textElement.textContent =
+            result;
         }
+
+      } else {
+
+        textElement.innerHTML =
+          '<span class="commentary-placeholder">' +
+          "This commentary has no separate note for this verse." +
+          "</span>";
       }
-    );
+    });
 
-  }
-
-  catch (error) {
+  } catch (error) {
 
     console.error(
       "Commentary error:",
       error
     );
 
-    panels.forEach(
-      function(panel) {
+    panels.forEach(function(panel) {
 
-        const textElement =
-          panel.querySelector(
-            ".commentary-text"
-          );
+      const textElement =
+        panel.querySelector(
+          ".commentary-text"
+        );
 
-        if (textElement) {
+      if (textElement) {
 
-          textElement.innerHTML =
-            '<span class="commentary-error">' +
-            "Unable to load this commentary: " +
-(error.message || "Unknown error")
-            "</span>";
-        }
+        textElement.innerHTML =
+          '<span class="commentary-error">' +
+          "Unable to load this commentary: " +
+          (error.message || "Unknown error") +
+          "</span>";
       }
-    );
+    });
   }
 }
-
 
   /* =========================
      VERSE SELECTION
