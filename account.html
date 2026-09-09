@@ -821,7 +821,18 @@ setEmpty(
         { ascending: false }
       );
 
-
+const {
+  data: supportMessages,
+  error: supportError
+} =
+  await supabaseClient
+    .from("support_messages")
+    .select("*")
+    .order(
+      "created_at",
+      { ascending: false }
+    );
+  
   if (error) {
 
     console.error(error);
