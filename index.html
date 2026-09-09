@@ -4019,6 +4019,12 @@ if (helpSupportLink) {
   ) {
     accountButton.textContent =
       "👑 Admin";
+    const helpSupportLink =
+  document.getElementById("helpSupportLink");
+
+if (helpSupportLink) {
+  helpSupportLink.style.display = "none";
+}
   }
 
   await syncCloudChapter();
