@@ -2,7 +2,7 @@
   "name": "BibleMastery",
   "short_name": "BibleMastery",
   "description": "Bible study, sermons, notes, highlights, bookmarks, and study tools in one place.",
-  "start_url": "./index.html",
+  "start_url": "/",
   "scope": "./",
   "display": "standalone",
   "background_color": "#08101f",
