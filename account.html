@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>BibleMastery Account</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #071426;
+      color: #f5f7fa;
+      min-height: 100vh;
+    }
+
+    .topbar {
+      background: #0b1d33;
+      border-bottom: 1px solid #c9a94b;
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: #c9a94b;
+      color: #071426;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .brand-title {
+      margin: 0;
+      color: #f2d77d;
+      font-size: 23px;
+    }
+
+    .brand-subtitle {
+      margin: 3px 0 0;
+      color: #aebbd0;
+      font-size: 13px;
+    }
+
+    .home-button,
+    button {
+      border: none;
+      border-radius: 9px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .home-button {
+      display: inline-block;
+      text-decoration: none;
+      padding: 11px 16px;
+      background: #c9a94b;
+      color: #071426;
+    }
+
+    .page {
+      width: min(1150px, calc(100% - 30px));
+      margin: 30px auto;
+    }
+
+    .panel {
+      background: #0d2038;
+      border: 1px solid #263d59;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 22px;
+      box-shadow: 0 10px 28px rgba(0,0,0,.22);
+    }
+
+    h1,
+    h2,
+    h3 {
+      color: #f2d77d;
+      margin-top: 0;
+    }
+
+    .muted {
+      color: #aebbd0;
+    }
+
+    .auth-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .auth-card {
+      background: #09192c;
+      border: 1px solid #263d59;
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    label {
+      display: block;
+      margin: 13px 0 6px;
+      color: #dce5f1;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #405675;
+      background: #061220;
+      color: white;
+      font-size: 15px;
+    }
+
+    input:focus {
+      outline: 2px solid #c9a94b;
+      border-color: #c9a94b;
+    }
+
+    .primary-button {
+      margin-top: 15px;
+      padding: 12px 18px;
+      background: #c9a94b;
+      color: #071426;
+    }
+
+    .danger-button {
+      padding: 10px 15px;
+      background: #7a2630;
+      color: white;
+    }
+
+    .account-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .saved-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .saved-section {
+      background: #09192c;
+      border: 1px solid #263d59;
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .saved-section-header {
+      padding: 16px;
+      border-bottom: 1px solid #263d59;
+    }
+
+    .saved-section-header h3 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .saved-list {
+      padding: 14px;
+      min-height: 100px;
+    }
+
+    .saved-item {
+      background: #0d2038;
+      border: 1px solid #2d4665;
+      border-radius: 9px;
+      padding: 12px;
+      margin-bottom: 10px;
+    }
+
+    .saved-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .saved-item-title {
+      color: #f2d77d;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    .saved-item-content {
+      color: #e5ebf3;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      line-height: 1.5;
+    }
+
+    .saved-item-meta {
+      margin-top: 7px;
+      color: #8293aa;
+      font-size: 12px;
+    }
+
+    .empty-message {
+      color: #8293aa;
+      font-style: italic;
+    }
+
+    .status {
+      margin-top: 14px;
+      min-height: 20px;
+      color: #f2d77d;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 900px) {
+      .saved-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 650px) {
+      .auth-grid,
+      .saved-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .page {
+        width: min(100% - 20px, 1150px);
+        margin-top: 18px;
+      }
+
+      .panel {
+        padding: 18px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-icon">✝</div>
+
+    <div>
+      <h1 class="brand-title">BibleMastery</h1>
+      <p class="brand-subtitle">My Account & Saved Work</p>
+    </div>
+  </div>
+
+  <a class="home-button" href="index.html">← Bible Dashboard</a>
+</header>
+
+<main class="page">
+
+  <!-- SIGNED OUT AREA -->
+  <section id="signedOutArea" class="panel">
+    <h2>Account</h2>
+
+    <p class="muted">
+      Sign in to access your BibleMastery notes, highlights,
+      bookmarks, sermons, and Bible studies.
+    </p>
+
+    <div class="auth-grid">
+
+      <div class="auth-card">
+        <h3>Sign In</h3>
+
+        <label for="loginEmail">Email</label>
+        <input
+          id="loginEmail"
+          type="email"
+          autocomplete="email"
+          placeholder="Email"
+        >
+
+        <label for="loginPassword">Password</label>
+        <input
+          id="loginPassword"
+          type="password"
+          autocomplete="current-password"
+          placeholder="Password"
+        >
+
+        <button
+          id="loginButton"
+          class="primary-button"
+          type="button"
+        >
+          Sign In
+        </button>
+      </div>
+
+      <div class="auth-card">
+        <h3>Create Account</h3>
+
+        <label for="signupEmail">Email</label>
+        <input
+          id="signupEmail"
+          type="email"
+          autocomplete="email"
+          placeholder="Email"
+        >
+
+        <label for="signupPassword">Password</label>
+        <input
+          id="signupPassword"
+          type="password"
+          autocomplete="new-password"
+          placeholder="Create password"
+        >
+
+        <button
+          id="signupButton"
+          class="primary-button"
+          type="button"
+        >
+          Create Account
+        </button>
+      </div>
+
+    </div>
+
+    <div id="authStatus" class="status"></div>
+  </section>
+
+
+  <!-- SIGNED IN AREA -->
+  <section id="signedInArea" class="hidden">
+
+    <div class="panel account-header">
+      <div>
+        <h2>My BibleMastery Account</h2>
+
+        <div class="muted">
+          Signed in as
+          <strong id="accountEmail"></strong>
+        </div>
+      </div>
+
+      <button
+        id="logoutButton"
+        class="danger-button"
+        type="button"
+      >
+        Log Out
+      </button>
+    </div>
+
+
+    <div class="panel">
+      <h2>My Saved Work</h2>
+
+      <p class="muted">
+        Your saved Bible study work appears here when it is connected
+        to your account.
+      </p>
+
+      <div class="saved-grid">
+
+        <div class="saved-section">
+          <div class="saved-section-header">
+            <h3>📝 Notes</h3>
+          </div>
+          <div id="notesList" class="saved-list"></div>
+        </div>
+
+
+        <div class="saved-section">
+          <div class="saved-section-header">
+            <h3>🖍 Highlights</h3>
+          </div>
+          <div id="highlightsList" class="saved-list"></div>
+        </div>
+
+
+        <div class="saved-section">
+          <div class="saved-section-header">
+            <h3>🔖 Bookmarks</h3>
+          </div>
+          <div id="bookmarksList" class="saved-list"></div>
+        </div>
+
+
+        <div class="saved-section">
+          <div class="saved-section-header">
+            <h3>🎤 Saved Sermons</h3>
+          </div>
+          <div id="sermonsList" class="saved-list"></div>
+        </div>
+
+
+        <div class="saved-section">
+          <div class="saved-section-header">
+            <h3>📖 Personal Bible Studies</h3>
+          </div>
+          <div id="personalStudiesList" class="saved-list"></div>
+        </div>
+
+
+        <div class="saved-section">
+          <div class="saved-section-header">
+            <h3>📚 Group Bible Studies</h3>
+          </div>
+          <div id="groupStudiesList" class="saved-list"></div>
+        </div>
+
+      </div>
+
+      <div id="accountStatus" class="status"></div>
+    </div>
+
+  </section>
+
+</main>
+
+
+<script>
+
+const SUPABASE_URL =
+  "https://pjkkxvntssvukulxipfr.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+  "sb_publishable_1kehaIywv1Wb9Iwj2OPGdg_aFosOSwK";
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+  );
+
+
+const signedOutArea =
+  document.getElementById("signedOutArea");
+
+const signedInArea =
+  document.getElementById("signedInArea");
+
+const accountEmail =
+  document.getElementById("accountEmail");
+
+const authStatus =
+  document.getElementById("authStatus");
+
+const accountStatus =
+  document.getElementById("accountStatus");
+
+
+function setEmpty(element, message) {
+  element.innerHTML =
+    '<div class="empty-message">' +
+    message +
+    '</div>';
+}
+
+
+function formatBibleLocation(item) {
+
+  let parts = [];
+
+  if (item.translation) {
+    parts.push(item.translation);
+  }
+
+  if (
+    item.book_index !== null &&
+    item.book_index !== undefined
+  ) {
+    parts.push(
+      "Book " +
+      (Number(item.book_index) + 1)
+    );
+  }
+
+  if (
+    item.chapter_index !== null &&
+    item.chapter_index !== undefined
+  ) {
+    parts.push(
+      "Chapter " +
+      (Number(item.chapter_index) + 1)
+    );
+  }
+
+  if (item.verse_number) {
+    parts.push(
+      "Verse " +
+      item.verse_number
+    );
+  }
+
+  return parts.join(" • ");
+}
+
+
+function createBibleItem(item) {
+
+  const wrapper =
+    document.createElement("div");
+
+  wrapper.className = "saved-item";
+
+
+  const title =
+    document.createElement("div");
+
+  title.className =
+    "saved-item-title";
+
+  title.textContent =
+    formatBibleLocation(item) ||
+    "Saved Bible Item";
+
+
+  const content =
+    document.createElement("div");
+
+  content.className =
+    "saved-item-content";
+
+  if (
+    item.item_type === "highlight"
+  ) {
+    content.textContent =
+      "Highlighted verse";
+  }
+
+  else if (
+    item.item_type === "bookmark"
+  ) {
+    content.textContent =
+      "Bookmarked verse";
+  }
+
+  else {
+    content.textContent =
+      item.content || "";
+  }
+
+
+  wrapper.appendChild(title);
+  wrapper.appendChild(content);
+
+  return wrapper;
+}
+
+
+function createSavedWorkItem(item) {
+
+  const wrapper =
+    document.createElement("div");
+
+  wrapper.className = "saved-item";
+
+
+  const title =
+    document.createElement("div");
+
+  title.className =
+    "saved-item-title";
+
+  title.textContent =
+    item.title ||
+    "Untitled";
+
+
+  const content =
+    document.createElement("div");
+
+  content.className =
+    "saved-item-content";
+
+
+  let contentText = "";
+
+  if (
+    typeof item.content === "string"
+  ) {
+    contentText = item.content;
+  }
+
+  else if (item.content) {
+
+    if (item.content.text) {
+      contentText =
+        item.content.text;
+    }
+
+    else if (item.content.content) {
+      contentText =
+        item.content.content;
+    }
+
+    else {
+      contentText =
+        JSON.stringify(
+          item.content,
+          null,
+          2
+        );
+    }
+  }
+
+
+  content.textContent =
+    contentText ||
+    "Saved work";
+
+
+  const meta =
+    document.createElement("div");
+
+  meta.className =
+    "saved-item-meta";
+
+  if (item.updated_at) {
+
+    const date =
+      new Date(item.updated_at);
+
+    meta.textContent =
+      "Updated " +
+      date.toLocaleString();
+  }
+
+
+  wrapper.appendChild(title);
+  wrapper.appendChild(content);
+
+  if (meta.textContent) {
+    wrapper.appendChild(meta);
+  }
+
+  return wrapper;
+}
+
+
+async function loadBibleUserData(user) {
+
+  const notesList =
+    document.getElementById("notesList");
+
+  const highlightsList =
+    document.getElementById("highlightsList");
+
+  const bookmarksList =
+    document.getElementById("bookmarksList");
+
+
+  setEmpty(
+    notesList,
+    "No saved notes yet."
+  );
+
+  setEmpty(
+    highlightsList,
+    "No saved highlights yet."
+  );
+
+  setEmpty(
+    bookmarksList,
+    "No saved bookmarks yet."
+  );
+
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient
+      .from("bible_user_data")
+      .select("*")
+      .eq("user_id", user.id)
+      .order(
+        "updated_at",
+        { ascending: false }
+      );
+
+
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+
+  const notes =
+    data.filter(
+      item =>
+        item.item_type === "note"
+    );
+
+  const highlights =
+    data.filter(
+      item =>
+        item.item_type === "highlight"
+    );
+
+  const bookmarks =
+    data.filter(
+      item =>
+        item.item_type === "bookmark"
+    );
+
+
+  if (notes.length) {
+
+    notesList.innerHTML = "";
+
+    notes.forEach(item => {
+      notesList.appendChild(
+        createBibleItem(item)
+      );
+    });
+  }
+
+
+  if (highlights.length) {
+
+    highlightsList.innerHTML = "";
+
+    highlights.forEach(item => {
+      highlightsList.appendChild(
+        createBibleItem(item)
+      );
+    });
+  }
+
+
+  if (bookmarks.length) {
+
+    bookmarksList.innerHTML = "";
+
+    bookmarks.forEach(item => {
+      bookmarksList.appendChild(
+        createBibleItem(item)
+      );
+    });
+  }
+}
+
+
+async function loadSavedWork(user) {
+
+  const sermonsList =
+    document.getElementById("sermonsList");
+
+  const personalStudiesList =
+    document.getElementById(
+      "personalStudiesList"
+    );
+
+  const groupStudiesList =
+    document.getElementById(
+      "groupStudiesList"
+    );
+
+
+  setEmpty(
+    sermonsList,
+    "No saved sermons yet."
+  );
+
+  setEmpty(
+    personalStudiesList,
+    "No saved personal studies yet."
+  );
+
+  setEmpty(
+    groupStudiesList,
+    "No saved group studies yet."
+  );
+
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient
+      .from("saved_work")
+      .select("*")
+      .eq("user_id", user.id)
+      .order(
+        "updated_at",
+        { ascending: false }
+      );
+
+
+  if (error) {
+
+    console.error(error);
+
+    accountStatus.textContent =
+      "Saved work could not be loaded.";
+
+    return;
+  }
+
+
+  const sermons =
+    data.filter(
+      item =>
+        item.work_type === "sermon"
+    );
+
+
+  const personalStudies =
+    data.filter(
+      item =>
+        item.work_type ===
+        "personal_study"
+    );
+
+
+  const groupStudies =
+    data.filter(
+      item =>
+        item.work_type ===
+        "group_study"
+    );
+
+
+  if (sermons.length) {
+
+    sermonsList.innerHTML = "";
+
+    sermons.forEach(item => {
+      sermonsList.appendChild(
+        createSavedWorkItem(item)
+      );
+    });
+  }
+
+
+  if (personalStudies.length) {
+
+    personalStudiesList.innerHTML = "";
+
+    personalStudies.forEach(item => {
+      personalStudiesList.appendChild(
+        createSavedWorkItem(item)
+      );
+    });
+  }
+
+
+  if (groupStudies.length) {
+
+    groupStudiesList.innerHTML = "";
+
+    groupStudies.forEach(item => {
+      groupStudiesList.appendChild(
+        createSavedWorkItem(item)
+      );
+    });
+  }
+}
+
+
+async function showSignedIn(user) {
+
+  signedOutArea.classList.add(
+    "hidden"
+  );
+
+  signedInArea.classList.remove(
+    "hidden"
+  );
+
+  accountEmail.textContent =
+    user.email || "Signed-in user";
+
+  accountStatus.textContent =
+    "Loading saved work...";
+
+
+  await Promise.all([
+    loadBibleUserData(user),
+    loadSavedWork(user)
+  ]);
+
+
+  accountStatus.textContent = "";
+}
+
+
+function showSignedOut() {
+
+  signedOutArea.classList.remove(
+    "hidden"
+  );
+
+  signedInArea.classList.add(
+    "hidden"
+  );
+
+  accountEmail.textContent = "";
+}
+
+
+async function checkAccount() {
+
+  const {
+    data: {
+      session
+    }
+  } =
+    await supabaseClient.auth.getSession();
+
+
+  if (
+    session &&
+    session.user
+  ) {
+    await showSignedIn(
+      session.user
+    );
+  }
+
+  else {
+    showSignedOut();
+  }
+}
+
+
+document
+  .getElementById("loginButton")
+  .addEventListener(
+    "click",
+    async function() {
+
+      authStatus.textContent =
+        "Signing in...";
+
+
+      const email =
+        document
+          .getElementById(
+            "loginEmail"
+          )
+          .value
+          .trim();
+
+
+      const password =
+        document
+          .getElementById(
+            "loginPassword"
+          )
+          .value;
+
+
+      if (
+        !email ||
+        !password
+      ) {
+        authStatus.textContent =
+          "Enter your email and password.";
+        return;
+      }
+
+
+      const {
+        data,
+        error
+      } =
+        await supabaseClient
+          .auth
+          .signInWithPassword({
+            email: email,
+            password: password
+          });
+
+
+      if (error) {
+        authStatus.textContent =
+          error.message;
+        return;
+      }
+
+
+      authStatus.textContent = "";
+
+      await showSignedIn(
+        data.user
+      );
+    }
+  );
+
+
+document
+  .getElementById("signupButton")
+  .addEventListener(
+    "click",
+    async function() {
+
+      authStatus.textContent =
+        "Creating account...";
+
+
+      const email =
+        document
+          .getElementById(
+            "signupEmail"
+          )
+          .value
+          .trim();
+
+
+      const password =
+        document
+          .getElementById(
+            "signupPassword"
+          )
+          .value;
+
+
+      if (
+        !email ||
+        !password
+      ) {
+        authStatus.textContent =
+          "Enter an email and password.";
+        return;
+      }
+
+
+      if (
+        password.length < 6
+      ) {
+        authStatus.textContent =
+          "Password must be at least 6 characters.";
+        return;
+      }
+
+
+      const {
+        data,
+        error
+      } =
+        await supabaseClient
+          .auth
+          .signUp({
+            email: email,
+            password: password
+          });
+
+
+      if (error) {
+        authStatus.textContent =
+          error.message;
+        return;
+      }
+
+
+      if (
+        data.session &&
+        data.user
+      ) {
+
+        authStatus.textContent = "";
+
+        await showSignedIn(
+          data.user
+        );
+      }
+
+      else {
+        authStatus.textContent =
+          "Account created. Check your email if confirmation is required, then sign in.";
+      }
+    }
+  );
+
+
+document
+  .getElementById("logoutButton")
+  .addEventListener(
+    "click",
+    async function() {
+
+      await supabaseClient
+        .auth
+        .signOut();
+
+      showSignedOut();
+
+      authStatus.textContent =
+        "You are signed out.";
+    }
+  );
+
+
+supabaseClient
+  .auth
+  .onAuthStateChange(
+    function(event, session) {
+
+      if (
+        event === "SIGNED_OUT"
+      ) {
+        showSignedOut();
+      }
+    }
+  );
+
+
+checkAccount();
+
+</script>
+
+</body>
+</html>
