@@ -219,6 +219,33 @@
       font-size: 12px;
     }
 
+    .support-message-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .support-reply-button,
+    .support-delete-button {
+      padding: 9px 13px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .support-reply-button {
+      background: #c9a94b;
+      color: #071426;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .support-delete-button {
+      background: #7a2630;
+      color: white;
+    }
+
     .empty-message {
       color: #8293aa;
       font-style: italic;
@@ -405,14 +432,22 @@
         </div>
 
 
+        <div
+          id="supportMessagesSection"
+          class="saved-section hidden"
+        >
+          <div class="saved-section-header">
+            <h3>📨 Support Messages</h3>
+          </div>
+          <div
+            id="supportMessagesList"
+            class="saved-list"
+          ></div>
+        </div>
+
+
         <div class="saved-section">
           <div class="saved-section-header">
-            <div class="saved-section">
-  <div class="saved-section-header">
-    <h3>📨 Support Messages</h3>
-  </div>
-  <div id="supportMessagesList" class="saved-list"></div>
-</div>
             <h3>🎤 Saved Sermons</h3>
           </div>
           <div id="sermonsList" class="saved-list"></div>
@@ -457,6 +492,10 @@ const supabaseClient =
     SUPABASE_URL,
     SUPABASE_PUBLISHABLE_KEY
   );
+
+
+const ADMIN_EMAIL =
+  "bashamcaleb530@gmail.com";
 
 
 const signedOutArea =
@@ -527,7 +566,8 @@ function createBibleItem(item) {
   const wrapper =
     document.createElement("div");
 
-  wrapper.className = "saved-item";
+  wrapper.className =
+    "saved-item";
 
 
   const title =
@@ -579,7 +619,8 @@ function createSavedWorkItem(item) {
   const wrapper =
     document.createElement("div");
 
-  wrapper.className = "saved-item";
+  wrapper.className =
+    "saved-item";
 
 
   const title =
@@ -605,7 +646,8 @@ function createSavedWorkItem(item) {
   if (
     typeof item.content === "string"
   ) {
-    contentText = item.content;
+    contentText =
+      item.content;
   }
 
   else if (item.content) {
@@ -664,16 +706,241 @@ function createSavedWorkItem(item) {
 }
 
 
+function createSupportMessageItem(item) {
+
+  const wrapper =
+    document.createElement("div");
+
+  wrapper.className =
+    "saved-item";
+
+
+  const title =
+    document.createElement("div");
+
+  title.className =
+    "saved-item-title";
+
+
+  const typeLabel =
+    item.message_type === "problem"
+      ? "Report a Problem"
+      : (
+          item.message_type === "suggestion"
+            ? "Suggestion or Feedback"
+            : "General Question"
+        );
+
+
+  title.textContent =
+    typeLabel +
+    " — " +
+    (item.name || "Unknown sender");
+
+
+  const content =
+    document.createElement("div");
+
+  content.className =
+    "saved-item-content";
+
+  content.textContent =
+    item.message || "";
+
+
+  const meta =
+    document.createElement("div");
+
+  meta.className =
+    "saved-item-meta";
+
+
+  let metaText =
+    item.email ||
+    "No email provided";
+
+
+  if (item.created_at) {
+
+    const date =
+      new Date(item.created_at);
+
+    metaText +=
+      " • " +
+      date.toLocaleString();
+  }
+
+
+  meta.textContent =
+    metaText;
+
+
+  const actions =
+    document.createElement("div");
+
+  actions.className =
+    "support-message-actions";
+
+
+  const replyLink =
+    document.createElement("a");
+
+  replyLink.className =
+    "support-reply-button";
+
+  replyLink.textContent =
+    "Reply";
+
+  replyLink.href =
+    "mailto:" +
+    encodeURIComponent(
+      item.email || ""
+    ) +
+    "?subject=" +
+    encodeURIComponent(
+      "BibleMastery Support Reply"
+    );
+
+
+  const deleteButton =
+    document.createElement("button");
+
+  deleteButton.type =
+    "button";
+
+  deleteButton.className =
+    "support-delete-button";
+
+  deleteButton.textContent =
+    "Delete";
+
+
+  deleteButton.addEventListener(
+    "click",
+    async function() {
+
+      const confirmed =
+        window.confirm(
+          "Delete this support message?"
+        );
+
+      if (!confirmed) {
+        return;
+      }
+
+
+      deleteButton.disabled =
+        true;
+
+      deleteButton.textContent =
+        "Deleting...";
+
+
+      const {
+        error
+      } =
+        await supabaseClient
+          .from(
+            "support_messages"
+          )
+          .delete()
+          .eq(
+            "id",
+            item.id
+          );
+
+
+      if (error) {
+
+        console.error(error);
+
+        accountStatus.textContent =
+          "Support message could not be deleted.";
+
+        deleteButton.disabled =
+          false;
+
+        deleteButton.textContent =
+          "Delete";
+
+        return;
+      }
+
+
+      wrapper.remove();
+
+
+      const list =
+        document.getElementById(
+          "supportMessagesList"
+        );
+
+
+      if (
+        list &&
+        !list.querySelector(
+          ".saved-item"
+        )
+      ) {
+        setEmpty(
+          list,
+          "No support messages yet."
+        );
+      }
+
+
+      accountStatus.textContent =
+        "Support message deleted.";
+    }
+  );
+
+
+  actions.appendChild(
+    replyLink
+  );
+
+  actions.appendChild(
+    deleteButton
+  );
+
+
+  wrapper.appendChild(
+    title
+  );
+
+  wrapper.appendChild(
+    content
+  );
+
+  wrapper.appendChild(
+    meta
+  );
+
+  wrapper.appendChild(
+    actions
+  );
+
+
+  return wrapper;
+}
+
+
 async function loadBibleUserData(user) {
 
   const notesList =
-    document.getElementById("notesList");
+    document.getElementById(
+      "notesList"
+    );
 
   const highlightsList =
-    document.getElementById("highlightsList");
+    document.getElementById(
+      "highlightsList"
+    );
 
   const bookmarksList =
-    document.getElementById("bookmarksList");
+    document.getElementById(
+      "bookmarksList"
+    );
 
 
   setEmpty(
@@ -697,12 +964,19 @@ async function loadBibleUserData(user) {
     error
   } =
     await supabaseClient
-      .from("bible_user_data")
+      .from(
+        "bible_user_data"
+      )
       .select("*")
-      .eq("user_id", user.id)
+      .eq(
+        "user_id",
+        user.id
+      )
       .order(
         "updated_at",
-        { ascending: false }
+        {
+          ascending: false
+        }
       );
 
 
@@ -715,55 +989,78 @@ async function loadBibleUserData(user) {
   const notes =
     data.filter(
       item =>
-        item.item_type === "note"
+        item.item_type ===
+        "note"
     );
+
 
   const highlights =
     data.filter(
       item =>
-        item.item_type === "highlight"
+        item.item_type ===
+        "highlight"
     );
+
 
   const bookmarks =
     data.filter(
       item =>
-        item.item_type === "bookmark"
+        item.item_type ===
+        "bookmark"
     );
 
 
   if (notes.length) {
 
-    notesList.innerHTML = "";
+    notesList.innerHTML =
+      "";
 
-    notes.forEach(item => {
-      notesList.appendChild(
-        createBibleItem(item)
-      );
-    });
+    notes.forEach(
+      item => {
+
+        notesList.appendChild(
+          createBibleItem(
+            item
+          )
+        );
+      }
+    );
   }
 
 
   if (highlights.length) {
 
-    highlightsList.innerHTML = "";
+    highlightsList.innerHTML =
+      "";
 
-    highlights.forEach(item => {
-      highlightsList.appendChild(
-        createBibleItem(item)
-      );
-    });
+    highlights.forEach(
+      item => {
+
+        highlightsList.appendChild(
+          createBibleItem(
+            item
+          )
+        );
+      }
+    );
   }
 
 
   if (bookmarks.length) {
 
-    bookmarksList.innerHTML = "";
+    bookmarksList.innerHTML =
+      "";
 
-    bookmarks.forEach(item => {
-      bookmarksList.appendChild(
-        createBibleItem(item)
-      );
-    });
+    bookmarks.forEach(
+      item => {
+
+        bookmarksList.appendChild(
+          createBibleItem(
+            item
+          )
+        );
+      }
+    );
   }
 }
 
@@ -771,68 +1068,74 @@ async function loadBibleUserData(user) {
 async function loadSavedWork(user) {
 
   const sermonsList =
-    document.getElementById("sermonsList");
+    document.getElementById(
+      "sermonsList"
+    );
+
 
   const personalStudiesList =
     document.getElementById(
       "personalStudiesList"
     );
 
+
   const groupStudiesList =
     document.getElementById(
       "groupStudiesList"
     );
 
-const supportMessagesList =
-  document.getElementById(
-    "supportMessagesList"
-  );
-  
+
+  const supportMessagesSection =
+    document.getElementById(
+      "supportMessagesSection"
+    );
+
+
+  const supportMessagesList =
+    document.getElementById(
+      "supportMessagesList"
+    );
+
+
   setEmpty(
     sermonsList,
     "No saved sermons yet."
   );
+
 
   setEmpty(
     personalStudiesList,
     "No saved personal studies yet."
   );
 
+
   setEmpty(
     groupStudiesList,
     "No saved group studies yet."
   );
 
-setEmpty(
-  supportMessagesList,
-  "No support messages yet."
-);
-  
+
   const {
     data,
     error
   } =
     await supabaseClient
-      .from("saved_work")
+      .from(
+        "saved_work"
+      )
       .select("*")
-      .eq("user_id", user.id)
+      .eq(
+        "user_id",
+        user.id
+      )
       .order(
         "updated_at",
-        { ascending: false }
+        {
+          ascending: false
+        }
       );
 
-const {
-  data: supportMessages,
-  error: supportError
-} =
-  await supabaseClient
-    .from("support_messages")
-    .select("*")
-    .order(
-      "created_at",
-      { ascending: false }
-    );
-  
+
   if (error) {
 
     console.error(error);
@@ -847,7 +1150,8 @@ const {
   const sermons =
     data.filter(
       item =>
-        item.work_type === "sermon"
+        item.work_type ===
+        "sermon"
     );
 
 
@@ -869,79 +1173,198 @@ const {
 
   if (sermons.length) {
 
-    sermonsList.innerHTML = "";
+    sermonsList.innerHTML =
+      "";
 
-    sermons.forEach(item => {
-      sermonsList.appendChild(
-        createSavedWorkItem(item)
-      );
-    });
+    sermons.forEach(
+      item => {
+
+        sermonsList.appendChild(
+          createSavedWorkItem(
+            item
+          )
+        );
+      }
+    );
   }
 
 
   if (personalStudies.length) {
 
-    personalStudiesList.innerHTML = "";
+    personalStudiesList.innerHTML =
+      "";
 
-    personalStudies.forEach(item => {
-      personalStudiesList.appendChild(
-        createSavedWorkItem(item)
-      );
-    });
+    personalStudies.forEach(
+      item => {
+
+        personalStudiesList.appendChild(
+          createSavedWorkItem(
+            item
+          )
+        );
+      }
+    );
   }
 
 
   if (groupStudies.length) {
 
-    groupStudiesList.innerHTML = "";
+    groupStudiesList.innerHTML =
+      "";
 
-    groupStudies.forEach(item => {
-      groupStudiesList.appendChild(
-        createSavedWorkItem(item)
+    groupStudies.forEach(
+      item => {
+
+        groupStudiesList.appendChild(
+          createSavedWorkItem(
+            item
+          )
+        );
+      }
+    );
+  }
+
+
+  if (
+    user.email ===
+    ADMIN_EMAIL
+  ) {
+
+    supportMessagesSection
+      .classList
+      .remove(
+        "hidden"
       );
-    });
+
+
+    setEmpty(
+      supportMessagesList,
+      "No support messages yet."
+    );
+
+
+    const {
+      data: supportMessages,
+      error: supportError
+    } =
+      await supabaseClient
+        .from(
+          "support_messages"
+        )
+        .select("*")
+        .order(
+          "created_at",
+          {
+            ascending: false
+          }
+        );
+
+
+    if (supportError) {
+
+      console.error(
+        supportError
+      );
+
+      accountStatus.textContent =
+        "Support messages could not be loaded.";
+
+      return;
+    }
+
+
+    if (
+      supportMessages.length
+    ) {
+
+      supportMessagesList.innerHTML =
+        "";
+
+
+      supportMessages.forEach(
+        item => {
+
+          supportMessagesList
+            .appendChild(
+              createSupportMessageItem(
+                item
+              )
+            );
+        }
+      );
+    }
+  }
+
+  else {
+
+    supportMessagesSection
+      .classList
+      .add(
+        "hidden"
+      );
   }
 }
 
 
 async function showSignedIn(user) {
 
-  signedOutArea.classList.add(
-    "hidden"
-  );
+  signedOutArea
+    .classList
+    .add(
+      "hidden"
+    );
 
-  signedInArea.classList.remove(
-    "hidden"
-  );
+
+  signedInArea
+    .classList
+    .remove(
+      "hidden"
+    );
+
 
   accountEmail.textContent =
-    user.email || "Signed-in user";
+    user.email ||
+    "Signed-in user";
+
 
   accountStatus.textContent =
     "Loading saved work...";
 
 
   await Promise.all([
-    loadBibleUserData(user),
-    loadSavedWork(user)
+    loadBibleUserData(
+      user
+    ),
+
+    loadSavedWork(
+      user
+    )
   ]);
 
 
-  accountStatus.textContent = "";
+  accountStatus.textContent =
+    "";
 }
 
 
 function showSignedOut() {
 
-  signedOutArea.classList.remove(
-    "hidden"
-  );
+  signedOutArea
+    .classList
+    .remove(
+      "hidden"
+    );
 
-  signedInArea.classList.add(
-    "hidden"
-  );
 
-  accountEmail.textContent = "";
+  signedInArea
+    .classList
+    .add(
+      "hidden"
+    );
+
+
+  accountEmail.textContent =
+    "";
 }
 
 
@@ -952,26 +1375,32 @@ async function checkAccount() {
       session
     }
   } =
-    await supabaseClient.auth.getSession();
+    await supabaseClient
+      .auth
+      .getSession();
 
 
   if (
     session &&
     session.user
   ) {
+
     await showSignedIn(
       session.user
     );
   }
 
   else {
+
     showSignedOut();
   }
 }
 
 
 document
-  .getElementById("loginButton")
+  .getElementById(
+    "loginButton"
+  )
   .addEventListener(
     "click",
     async function() {
@@ -1001,8 +1430,10 @@ document
         !email ||
         !password
       ) {
+
         authStatus.textContent =
           "Enter your email and password.";
+
         return;
       }
 
@@ -1020,13 +1451,17 @@ document
 
 
       if (error) {
+
         authStatus.textContent =
           error.message;
+
         return;
       }
 
 
-      authStatus.textContent = "";
+      authStatus.textContent =
+        "";
+
 
       await showSignedIn(
         data.user
@@ -1036,7 +1471,9 @@ document
 
 
 document
-  .getElementById("signupButton")
+  .getElementById(
+    "signupButton"
+  )
   .addEventListener(
     "click",
     async function() {
@@ -1066,8 +1503,10 @@ document
         !email ||
         !password
       ) {
+
         authStatus.textContent =
           "Enter an email and password.";
+
         return;
       }
 
@@ -1075,8 +1514,10 @@ document
       if (
         password.length < 6
       ) {
+
         authStatus.textContent =
           "Password must be at least 6 characters.";
+
         return;
       }
 
@@ -1094,8 +1535,10 @@ document
 
 
       if (error) {
+
         authStatus.textContent =
           error.message;
+
         return;
       }
 
@@ -1105,7 +1548,9 @@ document
         data.user
       ) {
 
-        authStatus.textContent = "";
+        authStatus.textContent =
+          "";
+
 
         await showSignedIn(
           data.user
@@ -1113,6 +1558,7 @@ document
       }
 
       else {
+
         authStatus.textContent =
           "Account created. Check your email if confirmation is required, then sign in.";
       }
@@ -1121,7 +1567,9 @@ document
 
 
 document
-  .getElementById("logoutButton")
+  .getElementById(
+    "logoutButton"
+  )
   .addEventListener(
     "click",
     async function() {
@@ -1130,7 +1578,9 @@ document
         .auth
         .signOut();
 
+
       showSignedOut();
+
 
       authStatus.textContent =
         "You are signed out.";
@@ -1141,11 +1591,16 @@ document
 supabaseClient
   .auth
   .onAuthStateChange(
-    function(event, session) {
+    function(
+      event,
+      session
+    ) {
 
       if (
-        event === "SIGNED_OUT"
+        event ===
+        "SIGNED_OUT"
       ) {
+
         showSignedOut();
       }
     }
