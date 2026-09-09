@@ -3961,53 +3961,29 @@ await syncLocalBibleDataToCloud();
   );
 
 
-  signupAccountButton.addEventListener(
-    "click",
-    async function() {
+  accountButton.addEventListener(
+  "click",
+  async function() {
 
-      const email =
-        accountEmail.value.trim();
+    const {
+      data: { session }
+    } =
+      await supabaseClient.auth.getSession();
 
-      const password =
-        accountPassword.value;
-
-      if (!email || !password) {
-
-        accountMessage.textContent =
-          "Please enter your email and password.";
-
-        return;
-      }
-
-      const {
-        data,
-        error
-      } =
-        await supabaseClient.auth
-          .signUp({
-            email: email,
-            password: password
-          });
-
-      if (error) {
-
-        accountMessage.textContent =
-          error.message;
-
-        return;
-      }
-
-      accountMessage.textContent =
-        "Account created successfully!";
-
-      console.log(
-        "BibleMastrey account created:",
-        data.user
-      );
+    if (
+      session &&
+      session.user
+    ) {
+      window.location.href =
+        "account.html";
     }
-  );
 
-
+    else {
+      accountModal.style.display =
+        "flex";
+    }
+  }
+);
   /* =========================
      INITIAL SESSION
   ========================= */
