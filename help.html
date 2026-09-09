@@ -247,29 +247,70 @@ const supabaseClient =
     SUPABASE_URL,
     SUPABASE_PUBLISHABLE_KEY
   );
-    function submitSupportMessage() {
+    async function submitSupportMessage() {
 
-      const name =
-        document.getElementById("contactName").value.trim();
+  const name =
+    document.getElementById("contactName").value.trim();
 
-      const email =
-        document.getElementById("contactEmail").value.trim();
+  const email =
+    document.getElementById("contactEmail").value.trim();
 
-      const message =
-        document.getElementById("contactMessage").value.trim();
+  const messageType =
+    document.getElementById("contactType").value;
 
-      const status =
-        document.getElementById("formStatus");
+  const message =
+    document.getElementById("contactMessage").value.trim();
 
-      if (!name || !email || !message) {
-        status.textContent =
-          "Please enter your name, email, and message.";
-        return;
-      }
+  const status =
+    document.getElementById("formStatus");
 
-      status.textContent =
-        "Your message form is ready. Message delivery will be connected next.";
-    }
+  if (!name || !email || !message) {
+    status.textContent =
+      "Please enter your name, email, and message.";
+    return;
+  }
+
+  status.textContent =
+    "Sending message...";
+
+  const {
+    data: { session }
+  } =
+    await supabaseClient.auth.getSession();
+
+  const userId =
+    session
+      ? session.user.id
+      : null;
+
+  const { error } =
+    await supabaseClient
+      .from("support_messages")
+      .insert({
+        user_id: userId,
+        name: name,
+        email: email,
+        message_type: messageType,
+        message: message,
+        status: "new"
+      });
+
+  if (error) {
+    console.error(error);
+
+    status.textContent =
+      "Your message could not be sent. Please try again.";
+
+    return;
+  }
+
+  status.textContent =
+    "Message sent successfully. Thank you!";
+
+  document.getElementById("contactName").value = "";
+  document.getElementById("contactEmail").value = "";
+  document.getElementById("contactMessage").value = "";
+}
   </script>
 
 </body>
