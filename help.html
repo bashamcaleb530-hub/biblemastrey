@@ -236,6 +236,17 @@
   </main>
 
   <script>
+    const SUPABASE_URL =
+  "https://pjkkxvntssvukulxipfr.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+  "sb_publishable_1kehaIywv1Wb9Iwj2OPGdg_aFosOSwK";
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+  );
     function submitSupportMessage() {
 
       const name =
