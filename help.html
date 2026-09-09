@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Help & Support | BibleMastery</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #08101f;
+      color: #f5f5f5;
+      min-height: 100vh;
+    }
+
+    .page {
+      width: 92%;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 35px 0 60px;
+    }
+
+    .back-button {
+      display: inline-block;
+      margin-bottom: 30px;
+      padding: 11px 18px;
+      border: 1px solid #d4af37;
+      border-radius: 8px;
+      color: #ffd84d;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .back-button:hover {
+      background: #d4af37;
+      color: #08101f;
+    }
+
+    h1 {
+      color: #ffd84d;
+      margin-bottom: 8px;
+      font-size: 36px;
+    }
+
+    .intro {
+      color: #cbd5e1;
+      font-size: 17px;
+      line-height: 1.6;
+      margin-bottom: 30px;
+    }
+
+    .support-card {
+      background: #101b30;
+      border: 1px solid #263650;
+      border-radius: 14px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+
+    .support-card h2 {
+      color: #ffd84d;
+      margin-top: 0;
+      margin-bottom: 12px;
+    }
+
+    .support-card p {
+      color: #d7deea;
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+
+    .support-card ul {
+      line-height: 1.8;
+      color: #d7deea;
+      padding-left: 22px;
+    }
+
+    label {
+      display: block;
+      margin-top: 16px;
+      margin-bottom: 7px;
+      font-weight: bold;
+      color: #f5f5f5;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #42516b;
+      background: #08101f;
+      color: #ffffff;
+      font-size: 16px;
+    }
+
+    textarea {
+      min-height: 150px;
+      resize: vertical;
+    }
+
+    button {
+      margin-top: 18px;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      background: #d4af37;
+      color: #08101f;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #ffd84d;
+    }
+
+    .notice {
+      margin-top: 12px;
+      color: #9eabc0;
+      font-size: 14px;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 35px;
+      color: #8390a5;
+      font-size: 14px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="page">
+
+    <a href="/" class="back-button">
+      ← Back to BibleMastery
+    </a>
+
+    <h1>Help & Support</h1>
+
+    <p class="intro">
+      Need help using BibleMastery, have a question,
+      or found something that isn't working?
+      You're in the right place.
+    </p>
+
+    <section class="support-card">
+      <h2>📖 BibleMastery Help</h2>
+
+      <p>
+        BibleMastery provides tools for reading and studying
+        Scripture, preparing sermons, creating Bible studies,
+        taking notes, saving bookmarks, and more.
+      </p>
+
+      <p>
+        If a feature isn't working as expected, you can report
+        the problem below.
+      </p>
+    </section>
+
+    <section class="support-card">
+      <h2>✉️ Contact BibleMastery</h2>
+
+      <p>
+        Have a question, suggestion, or feedback?
+        Use the form below to send your message.
+      </p>
+
+      <label for="contactName">Name</label>
+      <input
+        id="contactName"
+        type="text"
+        placeholder="Your name"
+      >
+
+      <label for="contactEmail">Email</label>
+      <input
+        id="contactEmail"
+        type="email"
+        placeholder="Your email address"
+      >
+
+      <label for="contactType">What can we help with?</label>
+      <select id="contactType">
+        <option value="question">General Question</option>
+        <option value="problem">Report a Problem</option>
+        <option value="suggestion">Suggestion or Feedback</option>
+      </select>
+
+      <label for="contactMessage">Message</label>
+      <textarea
+        id="contactMessage"
+        placeholder="Tell us how we can help..."
+      ></textarea>
+
+      <button
+        type="button"
+        onclick="submitSupportMessage()"
+      >
+        Send Message
+      </button>
+
+      <p id="formStatus" class="notice"></p>
+    </section>
+
+    <section class="support-card">
+      <h2>⚠️ Report a Problem</h2>
+
+      <p>
+        When reporting a problem, please include:
+      </p>
+
+      <ul>
+        <li>What part of BibleMastery you were using.</li>
+        <li>What you were trying to do.</li>
+        <li>What happened instead.</li>
+        <li>The Bible translation or study tool involved, if applicable.</li>
+      </ul>
+    </section>
+
+    <footer>
+      BibleMastery — Study Scripture. Grow in Understanding.
+    </footer>
+
+  </main>
+
+  <script>
+    function submitSupportMessage() {
+
+      const name =
+        document.getElementById("contactName").value.trim();
+
+      const email =
+        document.getElementById("contactEmail").value.trim();
+
+      const message =
+        document.getElementById("contactMessage").value.trim();
+
+      const status =
+        document.getElementById("formStatus");
+
+      if (!name || !email || !message) {
+        status.textContent =
+          "Please enter your name, email, and message.";
+        return;
+      }
+
+      status.textContent =
+        "Your message form is ready. Message delivery will be connected next.";
+    }
+  </script>
+
+</body>
+</html>
