@@ -3966,6 +3966,13 @@ await syncLocalBibleDataToCloud();
         "BibleMastrey user logged in:",
         data.user
       );
+      if (
+  data.user &&
+  data.user.email === ADMIN_EMAIL
+) {
+  accountButton.textContent =
+    "👑 Admin";
+}
     }
   );
 
