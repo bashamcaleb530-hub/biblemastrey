@@ -4020,12 +4020,24 @@ await syncLocalBibleDataToCloud();
         }
 
         if (
-          result.data &&
-          result.data.session
-        ) {
+  result.data &&
+  result.data.session
+) {
 
-          await syncCloudChapter();
-        }
+ if (
+  result.data &&
+  result.data.session
+) {
+
+  if (
+    result.data.session.user.email === ADMIN_EMAIL
+  ) {
+    accountButton.textContent =
+      "👑 Admin";
+  }
+
+  await syncCloudChapter();
+}
       }
     );
 
