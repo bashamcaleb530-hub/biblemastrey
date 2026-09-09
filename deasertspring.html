@@ -1195,6 +1195,33 @@ document.addEventListener(
   }
 );
 </script>
+<script>
+  const SUPABASE_URL =
+    "https://pjkkxvntssvukulxipfr.supabase.co";
 
+  const SUPABASE_PUBLISHABLE_KEY =
+    "sb_publishable_1kehaIywv1Wb9Iwj2OPGdg_aFosOSwK";
+
+  const supabaseClient =
+    window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_PUBLISHABLE_KEY
+    );
+
+  async function checkDesertSpringsOwner() {
+    const {
+      data: { user }
+    } = await supabaseClient.auth.getUser();
+
+    if (
+      !user ||
+      user.email !== "bashamcaleb530@gmail.com"
+    ) {
+      window.location.replace("index.html");
+    }
+  }
+
+  checkDesertSpringsOwner();
+</script>
 </body>
 </html>
