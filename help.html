@@ -249,6 +249,29 @@ const supabaseClient =
   );
     const ADMIN_EMAIL =
   "bashamcaleb530@gmail.com";
+    async function checkAdminSupportPage() {
+
+  const {
+    data: { session }
+  } =
+    await supabaseClient.auth.getSession();
+
+  if (
+    session &&
+    session.user.email === ADMIN_EMAIL
+  ) {
+    const section =
+      document.getElementById(
+        "contactSupportSection"
+      );
+
+    if (section) {
+      section.style.display = "none";
+    }
+  }
+}
+
+checkAdminSupportPage();
     async function submitSupportMessage() {
 
   const name =
