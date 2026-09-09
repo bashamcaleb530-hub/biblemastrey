@@ -1467,13 +1467,6 @@ async function loadSelectedCommentary(
  const selected =
   commentarySelect.value;
 
-if (selected === "barnes") {
-  return loadBarnesCommentary(
-    bookName,
-    chapterNumber
-  );
-}
-
 const commentaryId =
   commentaryApiIds[
     selected
