@@ -395,321 +395,267 @@
       border-color: #ccc;
     }
   }
+
+  .choice-grid-three {
+    grid-template-columns: repeat(3, minmax(0,1fr));
+  }
+  .commentary-layout {
+    display: grid;
+    grid-template-columns: minmax(260px,.7fr) minmax(0,1.5fr);
+    gap: 18px;
+    align-items: start;
+  }
+  .commentary-panel,
+  .commentary-results-panel {
+    background: rgba(8,15,29,.42);
+    border: 1px solid rgba(216,185,106,.22);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .commentary-results-panel {
+    min-height: 220px;
+    max-height: 600px;
+    overflow-y: auto;
+  }
+  .parallel-tool { grid-column: 1 / -1; }
+  .parallel-location,
+  .parallel-controls,
+  .parallel-results {
+    display: grid;
+    gap: 14px;
+  }
+  .parallel-location { grid-template-columns: repeat(3,minmax(0,1fr)); }
+  .parallel-controls { grid-template-columns: repeat(3,minmax(0,1fr)); margin-top: 14px; }
+  .parallel-results { grid-template-columns: repeat(3,minmax(0,1fr)); margin-top: 14px; }
+  .parallel-card {
+    background: rgba(8,15,29,.42);
+    border: 1px solid rgba(216,185,106,.22);
+    border-radius: 10px;
+    padding: 14px;
+    min-height: 160px;
+  }
+  .parallel-card h4 { margin: 0 0 10px; color: var(--gold); }
+  .manual-sermon-area { min-height: 520px; line-height: 1.6; }
+  .saved-sermon-row {
+    display: grid;
+    grid-template-columns: minmax(220px,1fr) auto;
+    gap: 10px;
+    align-items: end;
+    margin-top: 12px;
+  }
+  .status-message { color: var(--muted); }
+  .error-message { color: #ffb3b3; }
+  .result-item {
+    padding: 12px;
+    margin: 10px 0;
+    background: #132039;
+    border-left: 4px solid var(--gold);
+    border-radius: 5px;
+  }
+  .result-reference,
+  .strongs-number,
+  .strongs-lemma { color: var(--gold); font-weight: bold; }
+  .small-note { color: var(--muted); font-size: 13px; margin-top: 8px; }
+  .strongs-definition { margin-top: 10px; line-height: 1.55; }
+  @media (max-width: 1000px) {
+    .commentary-layout,
+    .parallel-location,
+    .parallel-controls,
+    .parallel-results,
+    .choice-grid-three,
+    .saved-sermon-row { grid-template-columns: 1fr; }
+  }
+
 </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
-<body>
 
+<body>
 <header>
   <h1>🎤 Build a Sermon</h1>
-  <p>Prepare a biblical sermon step by step with Bible study tools.</p>
-
-  <a href="/" class="back-button">
-  ← Back to BibleMastery
-</a>
+  <p>Study Scripture, prepare your message, and write your sermon your way.</p>
+  <a href="/" class="back-button">← Back to BibleMastery</a>
 </header>
 
 <div class="container">
-
   <div class="intro">
-    <h2>Build Your Sermon Step by Step</h2>
-
-    <p>
-      BibleMastery helps you move from studying Scripture to preparing
-      a clear, biblical, practical sermon.
-    </p>
-
-    <p>
-      Use the Bible tools first. Then use the preparation guide and
-      sermon template to organize what you discover.
-    </p>
+    <h2>Build Your Sermon Your Way</h2>
+    <p>Use the Bible study tools first, then write your sermon manually or use the guided sermon template.</p>
   </div>
 
-  <!-- CHOICES -->
-
-  <div class="choice-grid no-print">
-
+  <div class="choice-grid choice-grid-three no-print">
+    <div class="choice-card" onclick="showSection('manualSermonSection')">
+      <h2>✍️ Write Sermon Manually</h2>
+      <p>Write your sermon freely in one large workspace without using the guided template.</p>
+    </div>
+    <div class="choice-card" onclick="showSection('templateSection')">
+      <h2>📝 Guided Sermon Template</h2>
+      <p>Build your sermon with the structured 18-part teaching template.</p>
+    </div>
     <div class="choice-card" onclick="showSection('courseSection')">
       <h2>📖 Sermon Preparation Guide</h2>
-
-      <p>
-        Learn how to prepare a sermon from beginning to end.
-        Each step explains what to do, how to do it, why it matters,
-        and questions to ask.
-      </p>
+      <p>Follow the 18-step guide for studying, organizing, and reviewing a biblical sermon.</p>
     </div>
-
-    <div class="choice-card" onclick="showSection('templateSection')">
-      <h2>📝 Sermon Template</h2>
-
-      <p>
-        Build your actual sermon while following the preparation guide.
-        Your work can be saved and loaded later.
-      </p>
-    </div>
-
   </div>
 
-  <!-- BIBLE STUDY TOOLS -->
-
   <div class="section tool-section no-print">
-
     <h2>📚 Bible Study Tools</h2>
-
-    <p>
-      Start here. Study the passage before building your sermon.
-    </p>
+    <p>Study the passage here before or while you write your sermon.</p>
 
     <div class="tool-grid">
-
-      <!-- Bible Search -->
-
-      <div class="tool-box">
-
-        <h3>📖 Bible Search</h3>
-
-        <label for="translation">Translation</label>
-
-        <select id="translation">
-          <option value="kjv">King James Version (KJV)</option>
-          <option value="KJV1611">King James Version 1611</option>
-          <option value="KJVPLUS">King James Version Plus (KJV+)</option>
-          <option value="YLT">Young's Literal Translation</option>
-          <option value="web">World English Bible</option>
-          <option value="asv">American Standard Version</option>
-          <option value="GENEVA1599">Geneva Bible 1599</option>
-          <option value="DRA">Douay-Rheims American Edition</option>
-          <option value="BSB">Berean Standard Bible</option>
-          <option value="MSB">Majority Standard Bible</option>
-        </select>
-
-        <label for="bibleSearch">
-          Search Scripture
-        </label>
-
-        <input
-          id="bibleSearch"
-          type="text"
-          placeholder="Example: John 3:16 or faith"
-        >
-
-        <button onclick="searchBible()">
-          Search Bible
-        </button>
-
-        <div id="bibleResults" class="result">
-          Enter a passage or Bible word to search.
-        </div>
-
-      </div>
-
-      <!-- Independent Bible Reader -->
-
       <div class="tool-box bible-reader-tool">
-
         <h3>📖 Bible Reader</h3>
-
-        <p>
-          Read any Bible book and chapter while preparing your sermon.
-          This reader works independently from Bible Search.
-        </p>
-
+        <p>Read any book, chapter, and verse in all 10 BibleMastery translations.</p>
         <div class="reader-shell">
-
           <div class="reader-controls">
-
-            <div class="reader-control">
-              <label for="readerTranslation">Translation</label>
-              <select id="readerTranslation">
-                <option value="KJV">King James Version (KJV)</option>
-                <option value="KJV1611">King James Version 1611</option>
-                <option value="KJVPLUS">King James Version Plus (KJV+)</option>
-                <option value="YLT">Young's Literal Translation</option>
-                <option value="WEB">World English Bible</option>
-                <option value="ASV">American Standard Version</option>
-                <option value="GENEVA1599">Geneva Bible 1599</option>
-                <option value="DRA">Douay-Rheims American Edition</option>
-                <option value="BSB">Berean Standard Bible</option>
-                <option value="MSB">Majority Standard Bible</option>
-              </select>
-            </div>
-
-            <div class="reader-control">
-              <label for="readerBook">Book</label>
-              <select id="readerBook">
-                <option value="">Choose a book</option>
-              </select>
-            </div>
-
-            <div class="reader-control">
-              <label for="readerChapter">Chapter</label>
-              <select id="readerChapter">
-                <option value="">Choose a chapter</option>
-              </select>
-            </div>
-
-            <div class="reader-control">
-              <label for="readerVerse">Verse</label>
-              <select id="readerVerse">
-                <option value="">All verses</option>
-              </select>
-            </div>
-
-            <div class="reader-nav">
-              <button id="readerPrev" type="button" disabled>← Previous</button>
-              <button id="readerNext" type="button" disabled>Next →</button>
-            </div>
-
+            <div class="reader-control"><label for="readerTranslation">Translation</label><select id="readerTranslation">
+            <option value="KJV">King James Version (KJV)</option>
+            <option value="KJV1611">King James Version 1611</option>
+            <option value="KJVPLUS">King James Version Plus (KJV+)</option>
+            <option value="YLT">Young's Literal Translation</option>
+            <option value="WEB">World English Bible</option>
+            <option value="ASV">American Standard Version</option>
+            <option value="GENEVA1599">Geneva Bible 1599</option>
+            <option value="DRA">Douay-Rheims American Edition</option>
+            <option value="BSB">Berean Standard Bible</option>
+            <option value="MSB">Majority Standard Bible</option></select></div>
+            <div class="reader-control"><label for="readerBook">Book</label><select id="readerBook"><option value="">Choose a book</option></select></div>
+            <div class="reader-control"><label for="readerChapter">Chapter</label><select id="readerChapter"><option value="">Choose a chapter</option></select></div>
+            <div class="reader-control"><label for="readerVerse">Verse</label><select id="readerVerse"><option value="">All verses</option></select></div>
+            <div class="reader-nav"><button id="readerPrev" type="button" disabled>← Previous</button><button id="readerNext" type="button" disabled>Next →</button></div>
           </div>
-
-          <div id="readerDisplay" class="reader-display">
-            <h3 class="reader-title">Bible Reader</h3>
-            <div class="reader-placeholder">
-              Choose a book and chapter to begin reading.
-            </div>
-          </div>
-
+          <div id="readerDisplay" class="reader-display"><h3 class="reader-title">Bible Reader</h3><div class="reader-placeholder">Choose a book and chapter to begin reading.</div></div>
         </div>
-
       </div>
-
-      <!-- Dictionary -->
-
-      <div class="tool-box">
-
-        <h3>📘 Bible Dictionary</h3>
-
-        <label for="dictionarySearch">
-          Search Dictionary
-        </label>
-
-        <input
-          id="dictionarySearch"
-          type="text"
-          placeholder="Example: grace"
-        >
-
-        <button onclick="searchDictionary()">
-          Search Dictionary
-        </button>
-
-        <div id="dictionaryResults" class="result">
-          Search for a Bible word or topic.
-        </div>
-
-      </div>
-
-      <!-- Strong's -->
-
-      <div class="tool-box">
-
-        <h3>🔤 Hebrew & Greek Word Lookup</h3>
-
-        <label for="strongSearch">
-          Strong's Number
-        </label>
-
-        <input
-          id="strongSearch"
-          type="text"
-          placeholder="Example: G26 or H2617"
-        >
-
-        <button onclick="searchStrongs()">
-          Look Up Word
-        </button>
-
-        <div id="strongResults" class="result">
-          Enter a Strong's number.
-        </div>
-
-      </div>
-
-      <!-- Concordance -->
-
-      <div class="tool-box">
-
-        <h3>🔎 Concordance</h3>
-
-        <label for="concordanceSearch">
-          Search Word
-        </label>
-
-        <input
-          id="concordanceSearch"
-          type="text"
-          placeholder="Example: love"
-        >
-
-        <button onclick="searchConcordance()">
-          Search Concordance
-        </button>
-
-        <div id="concordanceResults" class="result">
-          Search for where a word appears in Scripture.
-        </div>
-
-      </div>
-
     </div>
-
   </div>
 
-  <!-- COMMENTARIES -->
+  <div class="section tool-section no-print">
+    <h2>📖 Bible Commentary</h2>
+    <p>Commentary follows the passage in the Bible Reader. Change the commentary and it loads automatically.</p>
+    <div class="commentary-layout">
+      <div class="commentary-panel">
+        <label for="commentarySelect">Choose Commentary</label>
+        <select id="commentarySelect">
+          <option value="matthew-henry-complete">Matthew Henry — Complete</option>
+          <option value="john-gill">John Gill — Exposition</option>
+          <option value="jfb">Jamieson-Fausset-Brown</option>
+          <option value="adam-clarke">Adam Clarke</option>
+          <option value="john-calvin">John Calvin — Commentaries</option>
+          <option value="keil-delitzsch">Keil & Delitzsch — Old Testament</option>
+          <option value="tyndale">Tyndale — Open Study Notes</option>
+        </select>
+        <div id="commentaryStatus" class="small-note">Choose a book and chapter in the Bible Reader above.</div>
+      </div>
+      <div class="commentary-results-panel">
+        <h3 id="commentaryHeading">📖 Matthew Henry — Complete</h3>
+        <div id="commentarySubheading" class="small-note">Commentary will follow the Bible Reader.</div>
+        <div id="commentaryContent" class="result">Choose a book and chapter in the Bible Reader above.</div>
+      </div>
+    </div>
+  </div>
 
   <div class="section tool-section no-print">
+    <h2>🧰 Bible Tools</h2>
+    <div class="tool-grid">
+      <div class="tool-box">
+        <h3>📘 Bible Dictionaries</h3>
+        <p>Search Easton’s and Smith’s Bible dictionaries.</p>
+        <label for="dictionarySource">Dictionary</label>
+        <select id="dictionarySource"><option value="both">Easton’s + Smith’s</option><option value="easton">Easton’s Bible Dictionary</option><option value="smith">Smith’s Bible Dictionary</option></select>
+        <label for="dictionarySearch">Search Dictionary</label>
+        <input id="dictionarySearch" type="text" placeholder="Example: grace">
+        <button id="dictionaryButton" type="button">Search Dictionary</button>
+        <div id="dictionaryResults" class="result">Search for a Bible word or topic.</div>
+      </div>
 
-    <h2>📚 Bible Commentaries</h2>
+      <div class="tool-box">
+        <h3>🔤 Hebrew & Greek Word Lookup</h3>
+        <p>Search Strong’s, Brown–Driver–Briggs (BDB), and Thayer’s Greek-English Lexicon.</p>
+        <label for="lexiconSource">Resource</label>
+        <select id="lexiconSource"><option value="auto">Strong’s + BDB / Thayer’s</option><option value="strongs">Strong’s</option><option value="bdb">BDB Hebrew Lexicon</option><option value="thayer">Thayer’s Greek Lexicon</option></select>
+        <label for="wordSearch">Strong's Number</label>
+        <input id="wordSearch" type="text" placeholder="Example: G26 or H2617">
+        <button id="wordButton" type="button">Look Up Word</button>
+        <div id="wordResults" class="result">Enter a Strong’s number.</div>
+      </div>
 
-    <p>
-      Use commentaries as study helps. Compare what you learn with
-      the actual biblical text and context.
-    </p>
+      <div class="tool-box">
+        <h3>🔎 Concordance</h3>
+        <label for="concordanceTranslation">Translation</label>
+        <select id="concordanceTranslation">
+            <option value="KJV">King James Version (KJV)</option>
+            <option value="KJV1611">King James Version 1611</option>
+            <option value="KJVPLUS">King James Version Plus (KJV+)</option>
+            <option value="YLT">Young's Literal Translation</option>
+            <option value="WEB">World English Bible</option>
+            <option value="ASV">American Standard Version</option>
+            <option value="GENEVA1599">Geneva Bible 1599</option>
+            <option value="DRA">Douay-Rheims American Edition</option>
+            <option value="BSB">Berean Standard Bible</option>
+            <option value="MSB">Majority Standard Bible</option></select>
+        <label for="concordanceSearch">Search Word</label>
+        <input id="concordanceSearch" type="text" placeholder="Example: love">
+        <button id="concordanceButton" type="button">Search Concordance</button>
+        <div id="concordanceResults" class="result">Search for where a word appears in Scripture.</div>
+      </div>
 
-    <select id="commentarySelect">
-      <option value="matthew-henry-concise">
-        Matthew Henry Concise
-      </option>
-
-      <option value="matthew-henry-complete">
-        Matthew Henry Complete
-      </option>
-
-      <option value="john-gill">
-        John Gill
-      </option>
-
-      <option value="jfb">
-        Jamieson-Fausset-Brown
-      </option>
-
-      <option value="adam-clarke">
-        Adam Clarke
-      </option>
-
-      <option value="barnes">
-        Barnes' Notes
-      </option>
-    </select>
-
-    <label for="commentaryReference">
-      Bible Passage
-    </label>
-
-    <input
-      id="commentaryReference"
-      type="text"
-      placeholder="Example: John 3:16"
-    >
-
-    <button onclick="loadCommentary()">
-      Read Commentary
-    </button>
-
-    <div id="commentaryResults" class="result">
-      Enter a Bible passage to read commentary.
+      <div class="tool-box parallel-tool">
+        <h3>📚 Parallel Bible</h3>
+        <p>Compare the same verse in three Bible translations.</p>
+        <div class="parallel-location">
+          <div><label for="parallelBook">Book</label><select id="parallelBook"><option value="">Choose a book</option></select></div>
+          <div><label for="parallelChapter">Chapter</label><select id="parallelChapter"><option value="">Choose a chapter</option></select></div>
+          <div><label for="parallelVerse">Verse</label><select id="parallelVerse"><option value="">Choose a verse</option></select></div>
+        </div>
+        <div class="parallel-controls">
+          <div><label for="parallelTranslation1">Version 1</label><select id="parallelTranslation1">
+            <option value="KJV">King James Version (KJV)</option>
+            <option value="KJV1611">King James Version 1611</option>
+            <option value="KJVPLUS">King James Version Plus (KJV+)</option>
+            <option value="YLT">Young's Literal Translation</option>
+            <option value="WEB">World English Bible</option>
+            <option value="ASV">American Standard Version</option>
+            <option value="GENEVA1599">Geneva Bible 1599</option>
+            <option value="DRA">Douay-Rheims American Edition</option>
+            <option value="BSB">Berean Standard Bible</option>
+            <option value="MSB">Majority Standard Bible</option></select></div>
+          <div><label for="parallelTranslation2">Version 2</label><select id="parallelTranslation2">
+            <option value="KJV">King James Version (KJV)</option>
+            <option value="KJV1611">King James Version 1611</option>
+            <option value="KJVPLUS">King James Version Plus (KJV+)</option>
+            <option value="YLT">Young's Literal Translation</option>
+            <option value="WEB">World English Bible</option>
+            <option value="ASV">American Standard Version</option>
+            <option value="GENEVA1599">Geneva Bible 1599</option>
+            <option value="DRA">Douay-Rheims American Edition</option>
+            <option value="BSB">Berean Standard Bible</option>
+            <option value="MSB">Majority Standard Bible</option></select></div>
+          <div><label for="parallelTranslation3">Version 3</label><select id="parallelTranslation3">
+            <option value="KJV">King James Version (KJV)</option>
+            <option value="KJV1611">King James Version 1611</option>
+            <option value="KJVPLUS">King James Version Plus (KJV+)</option>
+            <option value="YLT">Young's Literal Translation</option>
+            <option value="WEB">World English Bible</option>
+            <option value="ASV">American Standard Version</option>
+            <option value="GENEVA1599">Geneva Bible 1599</option>
+            <option value="DRA">Douay-Rheims American Edition</option>
+            <option value="BSB">Berean Standard Bible</option>
+            <option value="MSB">Majority Standard Bible</option></select></div>
+        </div>
+        <div class="parallel-results"><div id="parallelResult1" class="parallel-card">Choose a verse.</div><div id="parallelResult2" class="parallel-card">Choose a verse.</div><div id="parallelResult3" class="parallel-card">Choose a verse.</div></div>
+      </div>
     </div>
+  </div>
 
+  <div id="manualSermonSection" class="section">
+    <h2>✍️ Write Sermon Manually</h2>
+    <p>Write your sermon exactly the way you want. You do not have to use the guided template.</p>
+    <label for="manualSermonTitle">Sermon Title</label>
+    <input id="manualSermonTitle" placeholder="Enter sermon title">
+    <label for="manualSermon">Sermon</label>
+    <textarea id="manualSermon" class="manual-sermon-area" placeholder="Write your sermon here..."></textarea>
   </div>
 
   <!-- COURSE -->
@@ -1360,154 +1306,83 @@
 
         </div>
 
-        <div class="section">
-
-          <h2>🤖 Sermon Study Assistant</h2>
-
-          <p>
-            AI assistance can be added here later to help with research,
-            organization, questions, outlines, and review.
-          </p>
-
-          <div class="helper">
-            AI should assist your study rather than replace your study
-            of Scripture.
-          </div>
-
-          <button onclick="alert('AI Sermon Assistant will be added later.')">
-            Open AI Assistant
-          </button>
-
-        </div>
-
       </div>
 
     </div>
 
   </div>
 
-  <!-- SAVE CONTROLS -->
 
   <div class="section no-print">
-
     <h2>💾 Sermon Controls</h2>
-
-    <button class="success" onclick="saveSermon()">
-      Save Sermon
-    </button>
-
-    <button onclick="loadSermon()">
-      Load Sermon
-    </button>
-
-    <button class="danger" onclick="clearSermon()">
-      Clear Sermon
-    </button>
-
-    <button class="secondary" onclick="window.print()">
-      Print Sermon
-    </button>
-
+    <p>Save more than one sermon on this device. If you are signed in, BibleMastery also saves your sermon to your account.</p>
+    <button class="success" id="saveSermonButton" type="button">Save Sermon</button>
+    <button id="loadSermonButton" type="button">Load Sermon</button>
+    <button class="danger" id="clearSermonButton" type="button">Clear Sermon</button>
+    <button class="secondary" type="button" onclick="window.print()">Print Sermon</button>
+    <div class="saved-sermon-row">
+      <div><label for="savedSermonSelect">Saved Sermons</label><select id="savedSermonSelect"><option value="">Choose a saved sermon</option></select></div>
+      <button class="danger" id="deleteSermonButton" type="button">Delete Saved Sermon</button>
+    </div>
     <p id="saveStatus" class="small"></p>
-
   </div>
-
 </div>
 
 <script src="bible.js"></script>
-
 <script>
 
   function showSection(id) {
-
     const section = document.getElementById(id);
-
-    if (!section) return;
-
-    section.scrollIntoView({
-      behavior: "smooth",
-      block: "start"
-    });
-
+    if (section) section.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
+  function escapeHTML(value) {
+    return String(value == null ? "" : value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+  const escapeHtml = escapeHTML;
 
-
-  /* =========================
-     INDEPENDENT BIBLE READER
-  ========================= */
-
-  const readerTranslation =
-    document.getElementById("readerTranslation");
-
-  const readerBook =
-    document.getElementById("readerBook");
-
-  const readerChapter =
-    document.getElementById("readerChapter");
-
-  const readerVerse =
-    document.getElementById("readerVerse");
-
-  const readerPrev =
-    document.getElementById("readerPrev");
-
-  const readerNext =
-    document.getElementById("readerNext");
-
-  const readerDisplay =
-    document.getElementById("readerDisplay");
-
-  let readerBible = null;
-  let readerBookIndex = -1;
-  let readerChapterIndex = -1;
-
-
-  async function getReaderBible(
-    translation
-  ) {
-
-    if (translation === "KJV1611") {
-      return await getKJV1611();
-    }
-
-    if (translation === "KJVPLUS") {
-      return await getKJVPLUS();
-    }
-
-    if (translation === "YLT") {
-      return await getYLT();
-    }
-
-    if (translation === "WEB") {
-      return await getWEB();
-    }
-
-    if (translation === "ASV") {
-      return await getASV();
-    }
-
-    if (translation === "GENEVA1599") {
-      return await getGENEVA1599();
-    }
-
-    if (translation === "DRA") {
-      return await getDRA();
-    }
-
-    if (translation === "BSB") {
-      return await getBSB();
-    }
-
-    if (translation === "MSB") {
-      return await getMSB();
-    }
-
+  async function getBibleByTranslation(translation) {
+    if (translation === "KJV1611") return await getKJV1611();
+    if (translation === "KJVPLUS") return await getKJVPLUS();
+    if (translation === "YLT") return await getYLT();
+    if (translation === "WEB") return await getWEB();
+    if (translation === "ASV") return await getASV();
+    if (translation === "GENEVA1599") return await getGENEVA1599();
+    if (translation === "DRA") return await getDRA();
+    if (translation === "BSB") return await getBSB();
+    if (translation === "MSB") return await getMSB();
     return await getKJV();
   }
 
+  function chapterNumber(chapter, index) {
+    return chapter && (chapter.chapter || chapter.number || chapter.chapterNumber) || (index + 1);
+  }
 
-  function getReaderBookName(book) {
+  function verseText(verse, translation, bookIndex) {
+    let text = String((verse && (verse.text || verse.content || verse.verseText || verse.verse)) || "");
+    if (translation === "KJVPLUS") {
+      const prefix = bookIndex < 39 ? "H" : "G";
+      text = text.replace(/<S>(\d+)<\/S>/g, prefix + "$1");
+    }
+    return text;
+  }
+
+  function verseNumber(verse, index) {
+    return verse && (verse.number || verse.verseNumber || verse.verse) || (index + 1);
+  }
+
+
+
+  /* =========================================
+     BOOK NAME
+  ========================================= */
+
+  function getBookName(book) {
 
     return (
       book.englishName ||
@@ -1516,1325 +1391,692 @@
       book.title ||
       "Unknown Book"
     );
+
   }
 
 
-  function getReaderVerseText(
-    verse,
-    bookIndex
-  ) {
+  /* =========================================
+     BOOK ID
+  ========================================= */
 
-    let text =
-      String(
-        verse.text ||
-        verse.content ||
-        verse.verse ||
-        ""
-      );
+  function getBookId(book) {
 
-    if (
-      readerTranslation.value ===
-      "KJVPLUS"
-    ) {
+    return (
+      book.bookId ||
+      book.id ||
+      book.book ||
+      ""
+    )
+      .toString()
+      .toUpperCase();
 
-      const prefix =
-        bookIndex < 39
-          ? "H"
-          : "G";
-
-      text =
-        text.replace(
-          /<S>(\d+)<\/S>/g,
-          prefix + "$1"
-        );
-    }
-
-    return text;
   }
 
 
-  async function loadReaderBible() {
+  /* =========================================
+     BOOK ID MAP
+  ========================================= */
 
-    readerDisplay.innerHTML =
-      "<div class='reader-placeholder'>Loading Bible...</div>";
+  const bookIdMap = {
 
+    "GENESIS": "GEN",
+    "EXODUS": "EXO",
+    "LEVITICUS": "LEV",
+    "NUMBERS": "NUM",
+    "DEUTERONOMY": "DEU",
+    "JOSHUA": "JOS",
+    "JUDGES": "JDG",
+    "RUTH": "RUT",
+    "1 SAMUEL": "1SA",
+    "2 SAMUEL": "2SA",
+    "1 KINGS": "1KI",
+    "2 KINGS": "2KI",
+    "1 CHRONICLES": "1CH",
+    "2 CHRONICLES": "2CH",
+    "EZRA": "EZR",
+    "NEHEMIAH": "NEH",
+    "ESTHER": "EST",
+    "JOB": "JOB",
+    "PSALMS": "PSA",
+    "PSALM": "PSA",
+    "PROVERBS": "PRO",
+    "ECCLESIASTES": "ECC",
+    "SONG OF SOLOMON": "SNG",
+    "SONG OF SONGS": "SNG",
+    "ISAIAH": "ISA",
+    "JEREMIAH": "JER",
+    "LAMENTATIONS": "LAM",
+    "EZEKIEL": "EZK",
+    "DANIEL": "DAN",
+    "HOSEA": "HOS",
+    "JOEL": "JOL",
+    "AMOS": "AMO",
+    "OBADIAH": "OBA",
+    "JONAH": "JON",
+    "MICAH": "MIC",
+    "NAHUM": "NAM",
+    "HABAKKUK": "HAB",
+    "ZEPHANIAH": "ZEP",
+    "HAGGAI": "HAG",
+    "ZECHARIAH": "ZEC",
+    "MALACHI": "MAL",
+
+    "MATTHEW": "MAT",
+    "MARK": "MRK",
+    "LUKE": "LUK",
+    "JOHN": "JHN",
+    "ACTS": "ACT",
+    "ROMANS": "ROM",
+    "1 CORINTHIANS": "1CO",
+    "2 CORINTHIANS": "2CO",
+    "GALATIANS": "GAL",
+    "EPHESIANS": "EPH",
+    "PHILIPPIANS": "PHP",
+    "COLOSSIANS": "COL",
+    "1 THESSALONIANS": "1TH",
+    "2 THESSALONIANS": "2TH",
+    "1 TIMOTHY": "1TI",
+    "2 TIMOTHY": "2TI",
+    "TITUS": "TIT",
+    "PHILEMON": "PHM",
+    "HEBREWS": "HEB",
+    "JAMES": "JAS",
+    "1 PETER": "1PE",
+    "2 PETER": "2PE",
+    "1 JOHN": "1JN",
+    "2 JOHN": "2JN",
+    "3 JOHN": "3JN",
+    "JUDE": "JUD",
+    "REVELATION": "REV"
+
+  };
+
+
+
+
+  const readerTranslation = document.getElementById("readerTranslation");
+  const readerBook = document.getElementById("readerBook");
+  const readerChapter = document.getElementById("readerChapter");
+  const readerVerse = document.getElementById("readerVerse");
+  const readerPrev = document.getElementById("readerPrev");
+  const readerNext = document.getElementById("readerNext");
+  const readerDisplay = document.getElementById("readerDisplay");
+  let readerBible = null;
+  let readerBookIndex = -1;
+  let readerChapterIndex = -1;
+
+  async function loadReaderBible(preserveLocation) {
+    const oldBook = preserveLocation ? readerBookIndex : -1;
+    const oldChapter = preserveLocation ? readerChapterIndex : -1;
+    const oldVerse = preserveLocation ? readerVerse.value : "";
+    readerDisplay.innerHTML = "<div class='reader-placeholder'>Loading Bible...</div>";
     try {
-
-      readerBible =
-        await getReaderBible(
-          readerTranslation.value
-        );
-
-      if (
-        !readerBible ||
-        !Array.isArray(readerBible.books)
-      ) {
-        throw new Error(
-          "Bible data was not returned."
-        );
-      }
-
-      readerBook.innerHTML =
-        '<option value="">Choose a book</option>';
-
-      readerBible.books.forEach(
-        function(book, index) {
-
-          const option =
-            document.createElement("option");
-
-          option.value = index;
-          option.textContent =
-            getReaderBookName(book);
-
-          readerBook.appendChild(option);
+      readerBible = await getBibleByTranslation(readerTranslation.value);
+      if (!readerBible || !Array.isArray(readerBible.books)) throw new Error("Bible data was not returned.");
+      readerBook.innerHTML = '<option value="">Choose a book</option>';
+      readerBible.books.forEach(function(book, index) {
+        const option = document.createElement("option");
+        option.value = index;
+        option.textContent = getBookName(book);
+        readerBook.appendChild(option);
+      });
+      if (oldBook >= 0 && readerBible.books[oldBook]) {
+        readerBookIndex = oldBook;
+        readerBook.value = String(oldBook);
+        fillReaderChapters();
+        if (oldChapter >= 0 && readerBible.books[oldBook].chapters && readerBible.books[oldBook].chapters[oldChapter]) {
+          readerChapterIndex = oldChapter;
+          readerChapter.value = String(oldChapter);
+          renderReaderChapter();
+          if (oldVerse !== "") {
+            readerVerse.value = oldVerse;
+            scrollToReaderVerse();
+          }
         }
-      );
-
-      readerChapter.innerHTML =
-        '<option value="">Choose a chapter</option>';
-
-      readerVerse.innerHTML =
-        '<option value="">All verses</option>';
-
-      readerBookIndex = -1;
-      readerChapterIndex = -1;
-
-      readerPrev.disabled = true;
-      readerNext.disabled = true;
-
-      readerDisplay.innerHTML =
-        "<h3 class='reader-title'>Bible Reader</h3>" +
-        "<div class='reader-placeholder'>Choose a book and chapter to begin reading.</div>";
-
+      } else {
+        readerBookIndex = -1;
+        readerChapterIndex = -1;
+        readerChapter.innerHTML = '<option value="">Choose a chapter</option>';
+        readerVerse.innerHTML = '<option value="">All verses</option>';
+        readerPrev.disabled = true;
+        readerNext.disabled = true;
+        readerDisplay.innerHTML = "<h3 class='reader-title'>Bible Reader</h3><div class='reader-placeholder'>Choose a book and chapter to begin reading.</div>";
+        loadReaderCommentary();
+      }
     } catch (error) {
-
-      console.error(
-        "Sermon Bible reader error:",
-        error
-      );
-
-      readerDisplay.innerHTML =
-        "<div class='reader-placeholder'>Unable to load this Bible translation right now.</div>";
+      console.error("Sermon Bible reader error:", error);
+      readerDisplay.innerHTML = "<div class='error-message'>Unable to load this Bible translation right now.</div>";
     }
   }
-
 
   function fillReaderChapters() {
-
-    readerChapter.innerHTML =
-      '<option value="">Choose a chapter</option>';
-
-    readerVerse.innerHTML =
-      '<option value="">All verses</option>';
-
+    readerChapter.innerHTML = '<option value="">Choose a chapter</option>';
+    readerVerse.innerHTML = '<option value="">All verses</option>';
     readerChapterIndex = -1;
-
-    if (
-      !readerBible ||
-      readerBookIndex < 0
-    ) {
-      updateReaderButtons();
-      return;
-    }
-
-    const chapters =
-      readerBible.books[
-        readerBookIndex
-      ].chapters || [];
-
-    chapters.forEach(
-      function(chapter, index) {
-
-        const option =
-          document.createElement("option");
-
-        option.value = index;
-        option.textContent =
-          chapter.chapter ||
-          (index + 1);
-
-        readerChapter.appendChild(option);
-      }
-    );
-
+    if (!readerBible || readerBookIndex < 0 || !readerBible.books[readerBookIndex]) { updateReaderButtons(); return; }
+    (readerBible.books[readerBookIndex].chapters || []).forEach(function(chapter, index) {
+      const option = document.createElement("option");
+      option.value = index;
+      option.textContent = chapterNumber(chapter, index);
+      readerChapter.appendChild(option);
+    });
     updateReaderButtons();
   }
-
 
   function fillReaderVerses() {
-
-    readerVerse.innerHTML =
-      '<option value="">All verses</option>';
-
-    if (
-      !readerBible ||
-      readerBookIndex < 0 ||
-      readerChapterIndex < 0
-    ) {
-      return;
-    }
-
-    const verses =
-      readerBible.books[
-        readerBookIndex
-      ].chapters[
-        readerChapterIndex
-      ].verses || [];
-
-    verses.forEach(
-      function(verse, index) {
-
-        const option =
-          document.createElement("option");
-
-        option.value = index;
-        option.textContent =
-          verse.number ||
-          (index + 1);
-
-        readerVerse.appendChild(option);
-      }
-    );
+    readerVerse.innerHTML = '<option value="">All verses</option>';
+    if (!readerBible || readerBookIndex < 0 || readerChapterIndex < 0) return;
+    const verses = readerBible.books[readerBookIndex].chapters[readerChapterIndex].verses || [];
+    verses.forEach(function(verse, index) {
+      const option = document.createElement("option");
+      option.value = index;
+      option.textContent = verseNumber(verse, index);
+      readerVerse.appendChild(option);
+    });
   }
-
 
   function renderReaderChapter() {
-
-    if (
-      !readerBible ||
-      readerBookIndex < 0 ||
-      readerChapterIndex < 0
-    ) {
-      return;
-    }
-
-    const book =
-      readerBible.books[
-        readerBookIndex
-      ];
-
-    const chapter =
-      book.chapters[
-        readerChapterIndex
-      ];
-
-    const verses =
-      Array.isArray(chapter.verses)
-        ? chapter.verses
-        : [];
-
-    let content =
-      "<h3 class='reader-title'>" +
-      escapeHTML(
-        getReaderBookName(book)
-      ) +
-      " " +
-      escapeHTML(
-        String(
-          chapter.chapter ||
-          (readerChapterIndex + 1)
-        )
-      ) +
-      "</h3>";
-
-    verses.forEach(
-      function(verse, index) {
-
-        content +=
-          "<div class='reader-verse' data-reader-verse='" +
-          index +
-          "'>" +
-          "<span class='reader-verse-number'>" +
-          escapeHTML(
-            String(
-              verse.number ||
-              (index + 1)
-            )
-          ) +
-          "</span>" +
-          escapeHTML(
-            getReaderVerseText(
-              verse,
-              readerBookIndex
-            )
-          ) +
-          "</div>";
-      }
-    );
-
-    readerDisplay.innerHTML =
-      content;
-
+    if (!readerBible || readerBookIndex < 0 || readerChapterIndex < 0) return;
+    const book = readerBible.books[readerBookIndex];
+    const chapter = book.chapters[readerChapterIndex];
+    const verses = Array.isArray(chapter.verses) ? chapter.verses : [];
+    let content = "<h3 class='reader-title'>" + escapeHTML(getBookName(book)) + " " + escapeHTML(chapterNumber(chapter, readerChapterIndex)) + "</h3>";
+    verses.forEach(function(verse, index) {
+      content += "<div class='reader-verse' data-reader-verse='" + index + "'><span class='reader-verse-number'>" + escapeHTML(verseNumber(verse,index)) + "</span>" + escapeHTML(verseText(verse, readerTranslation.value, readerBookIndex)) + "</div>";
+    });
+    readerDisplay.innerHTML = content;
     fillReaderVerses();
     updateReaderButtons();
+    loadReaderCommentary();
   }
 
+  function scrollToReaderVerse() {
+    readerDisplay.querySelectorAll(".reader-verse").forEach(function(item){ item.classList.remove("active-reader-verse"); });
+    if (readerVerse.value === "") { readerDisplay.scrollTop = 0; return; }
+    const element = readerDisplay.querySelector("[data-reader-verse='" + readerVerse.value + "']");
+    if (element) { element.classList.add("active-reader-verse"); element.scrollIntoView({behavior:"smooth", block:"center"}); }
+  }
 
   function updateReaderButtons() {
-
-    if (
-      !readerBible ||
-      readerBookIndex < 0 ||
-      readerChapterIndex < 0
-    ) {
-      readerPrev.disabled = true;
-      readerNext.disabled = true;
-      return;
-    }
-
-    readerPrev.disabled =
-      readerBookIndex === 0 &&
-      readerChapterIndex === 0;
-
-    const lastBookIndex =
-      readerBible.books.length - 1;
-
-    const lastChapterIndex =
-      readerBible.books[
-        lastBookIndex
-      ].chapters.length - 1;
-
-    readerNext.disabled =
-      readerBookIndex ===
-        lastBookIndex &&
-      readerChapterIndex ===
-        lastChapterIndex;
+    if (!readerBible || readerBookIndex < 0 || readerChapterIndex < 0) { readerPrev.disabled = true; readerNext.disabled = true; return; }
+    readerPrev.disabled = readerBookIndex === 0 && readerChapterIndex === 0;
+    const lastBookIndex = readerBible.books.length - 1;
+    const lastChapterIndex = readerBible.books[lastBookIndex].chapters.length - 1;
+    readerNext.disabled = readerBookIndex === lastBookIndex && readerChapterIndex === lastChapterIndex;
   }
 
-
-  function moveReader(
-    direction
-  ) {
-
-    if (
-      !readerBible ||
-      readerBookIndex < 0 ||
-      readerChapterIndex < 0
-    ) {
-      return;
-    }
-
+  function moveReader(direction) {
+    if (!readerBible || readerBookIndex < 0 || readerChapterIndex < 0) return;
     if (direction < 0) {
-
-      if (readerChapterIndex > 0) {
-        readerChapterIndex--;
-      } else if (readerBookIndex > 0) {
-        readerBookIndex--;
-        readerChapterIndex =
-          readerBible.books[
-            readerBookIndex
-          ].chapters.length - 1;
-      }
-
+      if (readerChapterIndex > 0) readerChapterIndex--;
+      else if (readerBookIndex > 0) { readerBookIndex--; readerChapterIndex = readerBible.books[readerBookIndex].chapters.length - 1; }
     } else {
-
-      const chapterCount =
-        readerBible.books[
-          readerBookIndex
-        ].chapters.length;
-
-      if (
-        readerChapterIndex <
-        chapterCount - 1
-      ) {
-        readerChapterIndex++;
-      } else if (
-        readerBookIndex <
-        readerBible.books.length - 1
-      ) {
-        readerBookIndex++;
-        readerChapterIndex = 0;
-      }
+      const count = readerBible.books[readerBookIndex].chapters.length;
+      if (readerChapterIndex < count - 1) readerChapterIndex++;
+      else if (readerBookIndex < readerBible.books.length - 1) { readerBookIndex++; readerChapterIndex = 0; }
     }
-
-    readerBook.value =
-      String(readerBookIndex);
-
+    readerBook.value = String(readerBookIndex);
     fillReaderChapters();
-
-    readerChapter.value =
-      String(readerChapterIndex);
-
+    readerChapter.value = String(readerChapterIndex);
     renderReaderChapter();
   }
 
-
-  readerTranslation.addEventListener(
-    "change",
-    loadReaderBible
-  );
-
-
-  readerBook.addEventListener(
-    "change",
-    function() {
-
-      if (readerBook.value === "") {
-        readerBookIndex = -1;
-        fillReaderChapters();
-        return;
-      }
-
-      readerBookIndex =
-        Number(readerBook.value);
-
-      fillReaderChapters();
-    }
-  );
+  readerTranslation.addEventListener("change", function(){ loadReaderBible(true); });
+  readerBook.addEventListener("change", function(){ readerBookIndex = readerBook.value === "" ? -1 : Number(readerBook.value); fillReaderChapters(); loadReaderCommentary(); });
+  readerChapter.addEventListener("change", function(){ readerChapterIndex = readerChapter.value === "" ? -1 : Number(readerChapter.value); if (readerChapterIndex >= 0) renderReaderChapter(); else { updateReaderButtons(); loadReaderCommentary(); } });
+  readerVerse.addEventListener("change", scrollToReaderVerse);
+  readerPrev.addEventListener("click", function(){ moveReader(-1); });
+  readerNext.addEventListener("click", function(){ moveReader(1); });
 
 
-  readerChapter.addEventListener(
-    "change",
-    function() {
+  const COMMENTARY_API = "https://bible.helloao.org/api/c/";
+  const commentaryIds = {
+    "matthew-henry-complete":"matthew-henry",
+    "john-gill":"john-gill",
+    "jfb":"jamieson-fausset-brown",
+    "adam-clarke":"adam-clarke",
+    "john-calvin":"john-calvin",
+    "keil-delitzsch":"keil-delitzsch",
+    "tyndale":"tyndale"
+  };
+  const commentaryNames = {
+    "matthew-henry-complete":"Matthew Henry — Complete",
+    "john-gill":"John Gill — Exposition",
+    "jfb":"Jamieson-Fausset-Brown",
+    "adam-clarke":"Adam Clarke",
+    "john-calvin":"John Calvin — Commentaries",
+    "keil-delitzsch":"Keil & Delitzsch — Old Testament",
+    "tyndale":"Tyndale — Open Study Notes"
+  };
+  const commentarySelect = document.getElementById("commentarySelect");
+  const commentaryStatus = document.getElementById("commentaryStatus");
+  const commentaryHeading = document.getElementById("commentaryHeading");
+  const commentarySubheading = document.getElementById("commentarySubheading");
+  const commentaryContent = document.getElementById("commentaryContent");
+  let commentaryRequestId = 0;
+  const commentaryCache = {};
 
-      if (readerChapter.value === "") {
-        readerChapterIndex = -1;
-        updateReaderButtons();
-        return;
-      }
-
-      readerChapterIndex =
-        Number(readerChapter.value);
-
-      renderReaderChapter();
-    }
-  );
-
-
-  readerVerse.addEventListener(
-    "change",
-    function() {
-
-      readerDisplay
-        .querySelectorAll(
-          ".reader-verse"
-        )
-        .forEach(
-          function(item) {
-            item.classList.remove(
-              "active-reader-verse"
-            );
-          }
-        );
-
-      if (
-        readerVerse.value === ""
-      ) {
-        readerDisplay.scrollTop = 0;
-        return;
-      }
-
-      const verse =
-        readerDisplay.querySelector(
-          "[data-reader-verse='" +
-          readerVerse.value +
-          "']"
-        );
-
-      if (verse) {
-
-        verse.classList.add(
-          "active-reader-verse"
-        );
-
-        verse.scrollIntoView({
-          behavior: "smooth",
-          block: "center"
-        });
-      }
-    }
-  );
-
-
-  readerPrev.addEventListener(
-    "click",
-    function() {
-      moveReader(-1);
-    }
-  );
-
-
-  readerNext.addEventListener(
-    "click",
-    function() {
-      moveReader(1);
-    }
-  );
-
-
-  loadReaderBible();
-
-
-  /* =========================
-     COURSE PROGRESS
-  ========================= */
-
-  const lessons =
-    document.querySelectorAll(".lesson");
-
-  const progressBar =
-    document.getElementById("progressBar");
-
-  const progressText =
-    document.getElementById("progressText");
-
-  function updateProgress() {
-
-    if (!lessons.length) return;
-
-    const total = lessons.length;
-
-    const scrollTop =
-      window.scrollY;
-
-    let current = 1;
-
-    lessons.forEach(function(lesson, index) {
-
-      const position =
-        lesson.getBoundingClientRect().top +
-        window.scrollY;
-
-      if (scrollTop >= position - 200) {
-        current = index + 1;
-      }
-
-    });
-
-    const percent =
-      (current / total) * 100;
-
-    progressBar.style.width =
-      percent + "%";
-
-    progressText.textContent =
-      "Lesson " + current + " of " + total;
+  function commentaryBookId(name) {
+    return bookIdMap[String(name || "").trim().toUpperCase()] || "";
   }
 
-  window.addEventListener(
-    "scroll",
-    updateProgress
-  );
+  function flattenCommentaryNode(node) {
+    if (node == null) return "";
+    if (typeof node === "string" || typeof node === "number") return String(node);
+    if (Array.isArray(node)) return node.map(flattenCommentaryNode).filter(Boolean).join(" ");
+    if (typeof node === "object") {
+      if (node.text) return flattenCommentaryNode(node.text);
+      if (node.content) return flattenCommentaryNode(node.content);
+      return Object.keys(node).filter(function(k){ return !["type","number","verse","verseNumber"].includes(k); }).map(function(k){ return flattenCommentaryNode(node[k]); }).filter(Boolean).join(" ");
+    }
+    return "";
+  }
 
-  updateProgress();
+  function extractCommentaryEntries(data) {
+    const content = data && data.chapter && Array.isArray(data.chapter.content) ? data.chapter.content : [];
+    const entries = [];
+    content.forEach(function(item){
+      const number = item && (item.number || item.verse || item.verseNumber);
+      const text = flattenCommentaryNode(item).replace(/\s+/g," ").trim();
+      if (text) entries.push({number:number, text:text});
+    });
+    return entries;
+  }
 
-
-  /* =========================
-     BIBLE SEARCH
-  ========================= */
-
-  async function searchBible() {
-
-    const query =
-      document.getElementById("bibleSearch").value.trim();
-
-    const results =
-      document.getElementById("bibleResults");
-
-    if (!query) {
-
-      results.textContent =
-        "Please enter a Bible passage or word.";
-
+  async function loadReaderCommentary() {
+    const requestId = ++commentaryRequestId;
+    if (!readerBible || readerBookIndex < 0 || readerChapterIndex < 0) {
+      commentaryContent.innerHTML = "Choose a book and chapter in the Bible Reader above.";
+      commentaryStatus.textContent = "Choose a book and chapter in the Bible Reader above.";
       return;
     }
-
-    results.textContent =
-      "Searching Scripture...";
-
+    const key = commentarySelect.value;
+    const name = commentaryNames[key];
+    const book = readerBible.books[readerBookIndex];
+    const bookName = getBookName(book);
+    const chapter = book.chapters[readerChapterIndex];
+    const ch = chapterNumber(chapter, readerChapterIndex);
+    const bookId = commentaryBookId(bookName);
+    commentaryHeading.textContent = "📖 " + name;
+    commentarySubheading.textContent = bookName + " " + ch;
+    if (!bookId) { commentaryContent.innerHTML = "<div class='error-message'>This Bible book could not be matched to the commentary source.</div>"; return; }
+    commentaryStatus.textContent = "Loading " + name + "...";
+    commentaryContent.innerHTML = "<div class='status-message'>Loading commentary...</div>";
     try {
-
-      const translation =
-        document.getElementById("translation").value;
-
-      let bible;
-
-      if (translation === "web") {
-
-        bible = await getWEB();
-
-      } else if (translation === "asv") {
-
-        bible = await getASV();
-
-      } else if (translation === "KJV1611") {
-
-        bible = await getKJV1611();
-
-      } else if (translation === "KJVPLUS") {
-
-        bible = await getKJVPLUS();
-
-      } else if (translation === "YLT") {
-
-        bible = await getYLT();
-
-      } else if (translation === "GENEVA1599") {
-
-        bible = await getGENEVA1599();
-
-      } else if (translation === "DRA") {
-
-        bible = await getDRA();
-
-      } else if (translation === "BSB") {
-
-        bible = await getBSB();
-
-      } else if (translation === "MSB") {
-
-        bible = await getMSB();
-
+      const cacheKey = key + "|" + bookId + "|" + ch;
+      let data = commentaryCache[cacheKey];
+      if (!data) {
+        const response = await fetch(COMMENTARY_API + commentaryIds[key] + "/" + bookId + "/" + ch + ".simple.json");
+        if (response.status === 404) {
+          if (requestId !== commentaryRequestId) return;
+          commentaryContent.innerHTML = "<div class='status-message'>This commentary does not have material for this chapter.</div>";
+          commentaryStatus.textContent = name + " has no entry for this chapter.";
+          return;
+        }
+        if (!response.ok) throw new Error("Commentary request failed: " + response.status);
+        data = await response.json();
+        commentaryCache[cacheKey] = data;
+      }
+      if (requestId !== commentaryRequestId) return;
+      const entries = extractCommentaryEntries(data);
+      if (!entries.length) {
+        commentaryContent.innerHTML = "<div class='status-message'>No commentary was found for this chapter.</div>";
+      } else if (key === "matthew-henry-complete") {
+        commentaryContent.innerHTML = "<div class='result-item'><div class='result-reference'>" + escapeHTML(bookName + " " + ch) + "</div><div style='margin-top:8px'>" + escapeHTML(entries.map(function(e){return e.text;}).join(" ")) + "</div></div>";
       } else {
-
-        bible = await getKJV();
-
+        commentaryContent.innerHTML = entries.map(function(e){ return "<div class='result-item'>" + (e.number ? "<div class='result-reference'>Verse " + escapeHTML(e.number) + "</div>" : "") + "<div style='margin-top:8px'>" + escapeHTML(e.text) + "</div></div>"; }).join("");
       }
-
-      const found = [];
-
-      if (
-        bible &&
-        Array.isArray(bible.books)
-      ) {
-
-        bible.books.forEach(function(book) {
-
-          const chapters =
-            Array.isArray(book.chapters)
-              ? book.chapters
-              : [];
-
-          chapters.forEach(function(chapter) {
-
-            const verses =
-              Array.isArray(chapter.verses)
-                ? chapter.verses
-                : [];
-
-            verses.forEach(function(verse) {
-
-              const text =
-                verse.text || "";
-
-              const reference =
-                (book.book ||
-                 book.name ||
-                 book.englishName ||
-                 "") +
-                " " +
-                chapter.chapter +
-                ":" +
-                verse.number;
-
-              if (
-                reference.toLowerCase().includes(
-                  query.toLowerCase()
-                ) ||
-                text.toLowerCase().includes(
-                  query.toLowerCase()
-                )
-              ) {
-
-                found.push({
-                  reference,
-                  text
-                });
-
-              }
-
-            });
-
-          });
-
-        });
-
-      }
-
-      if (!found.length) {
-
-        results.textContent =
-          "No results found.";
-
-        return;
-      }
-
-      results.innerHTML =
-        found.slice(0, 50).map(function(item) {
-
-          return `
-            <div class="verse-result">
-              <strong>${escapeHTML(item.reference)}</strong>
-              <br>
-              ${escapeHTML(item.text)}
-            </div>
-          `;
-
-        }).join("");
-
+      commentaryStatus.textContent = name + " loaded.";
     } catch (error) {
-
-      console.error(error);
-
-      results.textContent =
-        "Bible search could not be completed.";
-
+      if (requestId !== commentaryRequestId) return;
+      console.error("Commentary error:", error);
+      commentaryContent.innerHTML = "<div class='error-message'>This commentary could not be loaded for this chapter. Try another commentary.</div>";
+      commentaryStatus.textContent = "Unable to load " + name + ".";
     }
-
   }
+  commentarySelect.addEventListener("change", loadReaderCommentary);
 
 
-  /* =========================
-     DICTIONARY
-  ========================= */
-
-  function searchDictionary() {
-
-    const word =
-      document.getElementById(
-        "dictionarySearch"
-      ).value.trim();
-
-    const results =
-      document.getElementById(
-        "dictionaryResults"
-      );
-
-    if (!word) {
-
-      results.textContent =
-        "Enter a word or Bible topic.";
-
-      return;
-    }
-
-    results.innerHTML = `
-      <strong>${escapeHTML(word)}</strong>
-
-      <p>
-        Bible Dictionary lookup is connected to the
-        BibleMastrey study system. Use this area to
-        research the meaning, background, people,
-        places, or biblical concepts connected to
-        your sermon.
-      </p>
-
-      <p class="small">
-        Additional dictionary entries can be connected
-        here as the BibleMastrey study library grows.
-      </p>
-    `;
-
+  const bibleDictionaryCache = {};
+  function normalizeDictionaryWord(value) { return String(value || "").toLowerCase().replace(/[^a-z0-9]/g, ""); }
+  async function loadBibleDictionaryLetter(letter) {
+    const key = String(letter || "").toLowerCase();
+    if (bibleDictionaryCache[key]) return bibleDictionaryCache[key];
+    const response = await fetch("https://raw.githubusercontent.com/neuu-org/bible-dictionary-dataset/main/data/01_parsed/" + key + ".json");
+    if (!response.ok) throw new Error("Bible dictionary data could not be loaded.");
+    const data = await response.json(); bibleDictionaryCache[key] = data; return data;
   }
-
-
-  /* =========================
-     STRONG'S
-  ========================= */
-
-  function searchStrongs() {
-
-    const number =
-      document.getElementById(
-        "strongSearch"
-      ).value.trim().toUpperCase();
-
-    const results =
-      document.getElementById(
-        "strongResults"
-      );
-
-    if (!number) {
-
-      results.textContent =
-        "Enter a Strong's number.";
-
-      return;
-    }
-
-    /*
-      Use the Strong's data already available
-      in BibleMastrey when it exists.
-    */
-
-    if (
-      typeof window.strongsMap !== "undefined" &&
-      window.strongsMap[number]
-    ) {
-
-      const entry =
-        window.strongsMap[number];
-
-      results.innerHTML = `
-        <strong>${escapeHTML(number)}</strong>
-        <br><br>
-        ${escapeHTML(
-          typeof entry === "string"
-            ? entry
-            : JSON.stringify(entry)
-        )}
-      `;
-
-      return;
-    }
-
-    results.innerHTML = `
-      <strong>${escapeHTML(number)}</strong>
-
-      <p>
-        No entry was found in the currently loaded
-        Strong's lookup data.
-      </p>
-
-      <p class="small">
-        The scalable Strong's database will be expanded
-        as BibleMastrey develops.
-      </p>
-    `;
-
+  async function searchBibleDictionaries(word) {
+    const firstLetter = word.trim().charAt(0).toLowerCase();
+    if (!/[a-z]/.test(firstLetter)) return null;
+    const data = await loadBibleDictionaryLetter(firstLetter);
+    const wanted = normalizeDictionaryWord(word);
+    const exactKey = Object.keys(data).find(function(key){ return normalizeDictionaryWord(key) === wanted; });
+    if (exactKey) return data[exactKey];
+    const partialKey = Object.keys(data).find(function(key){ return normalizeDictionaryWord(key).startsWith(wanted); });
+    return partialKey ? data[partialKey] : null;
   }
-
-
-  /* =========================
-     CONCORDANCE
-  ========================= */
-
-  async function searchConcordance() {
-
-    const word =
-      document.getElementById(
-        "concordanceSearch"
-      ).value.trim().toLowerCase();
-
-    const results =
-      document.getElementById(
-        "concordanceResults"
-      );
-
-    if (!word) {
-
-      results.textContent =
-        "Enter a word to search.";
-
-      return;
-    }
-
-    results.textContent =
-      "Searching Scripture...";
-
+  document.getElementById("dictionaryButton").addEventListener("click", async function(){
+    const word = document.getElementById("dictionarySearch").value.trim();
+    const results = document.getElementById("dictionaryResults");
+    if (!word) { results.innerHTML = "<div class='status-message'>Enter a Bible word or topic.</div>"; return; }
+    results.innerHTML = "<div class='status-message'>Searching Easton’s and Smith’s...</div>";
     try {
+      const entry = await searchBibleDictionaries(word);
+      if (!entry) { results.innerHTML = "<div class='status-message'>No Easton’s or Smith’s entry was found for this exact term.</div>"; return; }
+      const source = document.getElementById("dictionarySource").value;
+      const allowed = source === "easton" ? ["EAS"] : source === "smith" ? ["SMI"] : ["EAS","SMI"];
+      const definitions = (entry.definitions || []).filter(function(def){ return allowed.includes(def.source); });
+      results.innerHTML = definitions.length ? definitions.map(function(def){ const sourceName = def.source === "EAS" ? "Easton’s Bible Dictionary (1897)" : "Smith’s Bible Dictionary (1863)"; return "<div class='result-item'><div class='result-reference'>" + escapeHTML(entry.name || word) + "</div><div style='margin-top:8px'>" + escapeHTML(def.text || "") + "</div><div class='small-note'>" + sourceName + "</div></div>"; }).join("") : "<div class='status-message'>This term is not included in the selected dictionary.</div>";
+    } catch(error) { console.error("Bible dictionary error:", error); results.innerHTML = "<div class='error-message'>Bible dictionary could not be loaded right now.</div>"; }
+  });
 
-      const bible =
-        await getKJV();
+  const strongsGreek = {
 
-      const found = [];
+    G1: {
+      lemma: "alpha",
+      transliteration: "alpha",
+      definition: "alpha; the first letter of the Greek alphabet."
+    },
 
-      if (
-        bible &&
-        Array.isArray(bible.books)
-      ) {
+    G25: {
+      lemma: "agapao",
+      transliteration: "agapaō",
+      definition: "to love, to value, to show love or goodwill."
+    },
 
-        bible.books.forEach(function(book) {
+    G26: {
+      lemma: "agape",
+      transliteration: "agapē",
+      definition: "love, goodwill, benevolence; especially the love of God and the love Christians are to have toward one another."
+    },
 
-          const chapters =
-            Array.isArray(book.chapters)
-              ? book.chapters
-              : [];
+    G27: {
+      lemma: "agapetos",
+      transliteration: "agapētos",
+      definition: "beloved, dearly loved, esteemed."
+    },
 
-          chapters.forEach(function(chapter) {
+    G40: {
+      lemma: "hagios",
+      transliteration: "hagios",
+      definition: "holy, sacred, set apart, morally pure."
+    },
 
-            const verses =
-              Array.isArray(chapter.verses)
-                ? chapter.verses
-                : [];
+    G1343: {
+      lemma: "dikaiosune",
+      transliteration: "dikaiosynē",
+      definition: "righteousness, uprightness, justice."
+    },
 
-            verses.forEach(function(verse) {
+    G1577: {
+      lemma: "ekklesia",
+      transliteration: "ekklēsia",
+      definition: "assembly, congregation, church."
+    },
 
-              const text =
-                verse.text || "";
+    G1680: {
+      lemma: "elpis",
+      transliteration: "elpis",
+      definition: "hope, expectation, confidence."
+    },
 
-              if (
-                text.toLowerCase().includes(word)
-              ) {
+    G2316: {
+      lemma: "theos",
+      transliteration: "theos",
+      definition: "God, deity, the true God."
+    },
 
-                found.push({
-                  reference:
-                    (book.book ||
-                     book.name ||
-                     book.englishName ||
-                     "") +
-                    " " +
-                    chapter.chapter +
-                    ":" +
-                    verse.number,
+    G2424: {
+      lemma: "Iesous",
+      transliteration: "Iēsous",
+      definition: "Jesus; the Greek form of the Hebrew name Joshua."
+    },
 
-                  text
-                });
+    G266: {
+      lemma: "hamartia",
+      transliteration: "hamartia",
+      definition: "sin, offense, a failure to conform to God's standard."
+    },
 
-              }
+    G2962: {
+      lemma: "kurios",
+      transliteration: "kyrios",
+      definition: "Lord, master, one possessing authority."
+    },
 
-            });
+    G2983: {
+      lemma: "lambano",
+      transliteration: "lambanō",
+      definition: "to take, receive, obtain."
+    },
 
-          });
+    G3056: {
+      lemma: "logos",
+      transliteration: "logos",
+      definition: "word, message, statement, account; also used of the Word in John 1."
+    },
 
-        });
+    G3340: {
+      lemma: "metanoeo",
+      transliteration: "metanoeō",
+      definition: "to repent, change one's mind or turn from a former way."
+    },
 
-      }
+    G4100: {
+      lemma: "pisteuo",
+      transliteration: "pisteuō",
+      definition: "to believe, trust, have faith in."
+    },
 
-      if (!found.length) {
+    G4102: {
+      lemma: "pistis",
+      transliteration: "pistis",
+      definition: "faith, belief, trust, confidence."
+    },
 
-        results.textContent =
-          "No occurrences found.";
+    G4151: {
+      lemma: "pneuma",
+      transliteration: "pneuma",
+      definition: "spirit, wind, breath; used of the Holy Spirit and the human spirit."
+    },
 
-        return;
-      }
+    G4678: {
+      lemma: "sophia",
+      transliteration: "sophia",
+      definition: "wisdom, skill, insight, especially wisdom that comes from God."
+    },
 
-      results.innerHTML =
-        found.slice(0, 100).map(function(item) {
+    G4991: {
+      lemma: "soteria",
+      transliteration: "sōtēria",
+      definition: "salvation, deliverance, preservation."
+    },
 
-          return `
-            <div class="verse-result">
-              <strong>${escapeHTML(item.reference)}</strong>
-              <br>
-              ${escapeHTML(item.text)}
-            </div>
-          `;
+    G5485: {
+      lemma: "charis",
+      transliteration: "charis",
+      definition: "grace, favor, kindness, graciousness."
+    },
 
-        }).join("");
-
-    } catch (error) {
-
-      console.error(error);
-
-      results.textContent =
-        "Concordance search failed.";
-
+    G932: {
+      lemma: "basileia",
+      transliteration: "basileia",
+      definition: "kingdom, royal rule, reign."
     }
 
+  };
+
+
+  const strongsHebrew = {
+
+    H1: {
+      lemma: "ab",
+      transliteration: "ab",
+      definition: "father."
+    },
+
+    H430: {
+      lemma: "elohim",
+      transliteration: "elohim",
+      definition: "God, gods, divine being."
+    },
+
+    H2617: {
+      lemma: "chesed",
+      transliteration: "ḥesed",
+      definition: "steadfast love, lovingkindness, mercy, covenant faithfulness."
+    },
+
+    H530: {
+      lemma: "emunah",
+      transliteration: "emunah",
+      definition: "faithfulness, firmness, faith."
+    },
+
+    H539: {
+      lemma: "aman",
+      transliteration: "aman",
+      definition: "to believe, support, confirm, trust."
+    },
+
+    H2403: {
+      lemma: "chatta'ah",
+      transliteration: "chatta'ah",
+      definition: "sin, sin offering."
+    },
+
+    H3068: {
+      lemma: "YHWH",
+      transliteration: "YHWH",
+      definition: "the personal covenant name of God, traditionally represented as LORD."
+    },
+
+    H3467: {
+      lemma: "yasha",
+      transliteration: "yāshaʿ",
+      definition: "to save, deliver, give victory."
+    },
+
+    H3820: {
+      lemma: "leb",
+      transliteration: "lēb",
+      definition: "heart, inner person, mind, understanding."
+    },
+
+    H7225: {
+      lemma: "reshith",
+      transliteration: "rēshith",
+      definition: "beginning, first, firstfruits."
+    },
+
+    H7307: {
+      lemma: "ruach",
+      transliteration: "rûaḥ",
+      definition: "spirit, wind, breath."
+    },
+
+    H7965: {
+      lemma: "shalom",
+      transliteration: "shālôm",
+      definition: "peace, completeness, welfare, wholeness."
+    },
+
+    H8451: {
+      lemma: "torah",
+      transliteration: "tôrāh",
+      definition: "instruction, teaching, law."
+    }
+
+  };
+
+
+  /* =========================================
+     NORMALIZE STRONG'S INPUT
+  ========================================= */
+
+
+  function normalizeStrongs(value) { return String(value || "").trim().toUpperCase().replace(/\s+/g, ""); }
+  function findStrongEntry(value) {
+    const normalized = normalizeStrongs(value);
+    if (strongsGreek[normalized]) return {number:normalized, language:"Greek", data:strongsGreek[normalized]};
+    if (strongsHebrew[normalized]) return {number:normalized, language:"Hebrew", data:strongsHebrew[normalized]};
+    return null;
   }
-
-
-  /* =========================
-     COMMENTARY
-  ========================= */
-
-  async function loadCommentary() {
-
-    const reference =
-      document.getElementById(
-        "commentaryReference"
-      ).value.trim();
-
-    const commentary =
-      document.getElementById(
-        "commentarySelect"
-      ).value;
-
-    const results =
-      document.getElementById(
-        "commentaryResults"
-      );
-
-    if (!reference) {
-
-      results.textContent =
-        "Enter a Bible passage.";
-
-      return;
-    }
-
-    /*
-      Commentary API used by BibleMastrey.
-    */
-
-    const commentaryApiIds = {
-
-      "matthew-henry-complete":
-        "matthew-henry",
-
-      "john-gill":
-        "john-gill",
-
-      "jfb":
-        "jamieson-fausset-brown",
-
-      "adam-clarke":
-        "adam-clarke"
-
-    };
-
-    if (commentary === "barnes") {
-
-      results.innerHTML = `
-        <strong>Barnes' Notes</strong>
-
-        <p>
-          Barnes' Notes is being connected to the
-          BibleMastrey commentary system.
-        </p>
-
-        <p class="small">
-          Barnes' Notes is primarily a New Testament
-          commentary.
-        </p>
-      `;
-
-      return;
-    }
-
-    if (
-      commentary ===
-      "matthew-henry-concise"
-    ) {
-
-      results.innerHTML = `
-        <strong>Matthew Henry Concise</strong>
-
-        <p>
-          Matthew Henry Concise commentary support
-          is available through the BibleMastrey
-          commentary system.
-        </p>
-
-        <p>
-          Passage requested:
-          <strong>
-            ${escapeHTML(reference)}
-          </strong>
-        </p>
-      `;
-
-      return;
-    }
-
-    const apiId =
-      commentaryApiIds[commentary];
-
-    if (!apiId) {
-
-      results.textContent =
-        "This commentary is not currently connected.";
-
-      return;
-    }
-
-    /*
-      Parse a simple reference such as:
-      John 3:16
-      Genesis 1
-    */
-
-    const match =
-      reference.match(
-        /^(.+?)\s+(\d+)(?::(\d+))?$/
-      );
-
-    if (!match) {
-
-      results.textContent =
-        "Use a reference such as John 3:16 or Genesis 1.";
-
-      return;
-    }
-
-    const bookName =
-      match[1].trim();
-
-    const chapter =
-      match[2];
-
-    try {
-
-      const url =
-        "https://bible.helloao.org/api/c/" +
-        encodeURIComponent(apiId) +
-        "/" +
-        encodeURIComponent(bookName) +
-        "/" +
-        chapter +
-        ".simple.json";
-
-      results.textContent =
-        "Loading commentary...";
-
-      const response =
-        await fetch(url);
-
-      if (!response.ok) {
-
-        throw new Error(
-          "Commentary request failed"
-        );
-
-      }
-
-      const data =
-        await response.json();
-
-      let content =
-        data &&
-        data.chapter &&
-        Array.isArray(data.chapter.content)
-          ? data.chapter.content
-          : [];
-
-      if (!content.length) {
-
-        results.textContent =
-          "No commentary was found for this passage.";
-
-        return;
-      }
-
-      const requestedVerse =
-        match[3]
-          ? Number(match[3])
-          : null;
-
-      if (requestedVerse !== null) {
-
-        const verse =
-          content.find(function(item) {
-
-            return (
-              item.type === "verse" &&
-              Number(item.number) ===
-                requestedVerse
-            );
-
-          });
-
-        if (verse) {
-
-          content = [verse];
-
-        }
-
-      }
-
-      results.innerHTML =
-        content.map(function(item) {
-
-          return `
-            <div class="verse-result">
-              ${
-                item.number
-                  ? `<strong>Verse ${escapeHTML(String(item.number))}</strong><br>`
-                  : ""
-              }
-
-              ${escapeHTML(
-                item.text || ""
-              )}
-            </div>
-          `;
-
-        }).join("");
-
-    } catch (error) {
-
-      console.error(error);
-
-      results.innerHTML = `
-        <strong>Commentary could not be loaded.</strong>
-
-        <p>
-          Check the Bible book and chapter and try again.
-        </p>
-      `;
-
-    }
-
+  function renderStrongEntry(entry) {
+    const data = entry.data;
+    return "<div class='result-item'><div class='strongs-number'>" + escapeHTML(entry.number) + "</div><div class='small-note'>" + escapeHTML(entry.language) + "</div><div class='strongs-lemma'>" + escapeHTML(data.lemma || "") + "</div><div style='margin-top:4px'>" + escapeHTML(data.transliteration || "") + "</div><div class='strongs-definition'>" + escapeHTML(data.definition || "") + "</div></div>";
   }
-
-
-  /* =========================
-     SAVE SERMON
-  ========================= */
-
-  const sermonFields = [
-
-    "sermonTitle",
-    "mainScripture",
-    "sermonTopic",
-    "sermonPurpose",
-    "mainTruth",
-    "introduction",
-    "readScripture",
-    "context",
-    "templateMainTruth",
-
-    "point1Title",
-    "point1Explanation",
-    "point1Scripture",
-    "point1Application",
-
-    "point2Title",
-    "point2Explanation",
-    "point2Scripture",
-    "point2Application",
-
-    "point3Title",
-    "point3Explanation",
-    "point3Scripture",
-    "point3Application",
-
-    "additionalScriptures",
-    "illustrations",
-    "practicalApplication",
-    "conclusion",
-    "response",
-    "closingPrayer"
-
-  ];
-
-
-  function saveSermon() {
-
-    const sermon = {};
-
-    sermonFields.forEach(function(id) {
-
-      const element =
-        document.getElementById(id);
-
-      if (element) {
-
-        sermon[id] =
-          element.value;
-
-      }
-
-    });
-
-    localStorage.setItem(
-      "bibleMastreySermon",
-      JSON.stringify(sermon)
-    );
-
-    document.getElementById(
-      "saveStatus"
-    ).textContent =
-      "Sermon saved successfully on this device.";
-
+  let thayerLexiconCache = null, thayerLexiconMap = null, thayerLexiconPromise = null, bdbIndexCache = null, bdbLexiconCache = null;
+  function normalizeGreekStrongsKey(value) { const raw=String(value||"").trim().toUpperCase(); const m=raw.match(/^G?0*(\d+)$/); return m ? "G"+String(Number(m[1])) : raw; }
+  async function loadThayerLexicon() {
+    if (thayerLexiconMap) return thayerLexiconMap;
+    if (thayerLexiconPromise) return thayerLexiconPromise;
+    const urls=["https://raw.githubusercontent.com/nigelmsipa/thayers-greek-lexicon-dataset/master/data/thayer_lexicon.json","https://cdn.jsdelivr.net/gh/nigelmsipa/thayers-greek-lexicon-dataset@master/data/thayer_lexicon.json"];
+    thayerLexiconPromise=(async function(){ let data=null,lastError=null; for (const url of urls){ try { const response=await fetch(url,{cache:"force-cache"}); if(!response.ok) throw new Error("Thayer source returned "+response.status); const candidate=await response.json(); data=Array.isArray(candidate)?candidate:(candidate&&Array.isArray(candidate.entries)?candidate.entries:(candidate&&Array.isArray(candidate.data)?candidate.data:null)); if(data&&data.length) break; throw new Error("Unexpected Thayer format"); } catch(e){lastError=e; data=null;} } if(!data||!data.length) throw lastError||new Error("Thayer could not be loaded"); thayerLexiconCache=data; thayerLexiconMap=new Map(); data.forEach(function(entry){ if(!entry||typeof entry!=="object")return; let keys=[entry.id,entry.strong,entry.strongsNumber,entry.strongs_number].filter(function(v){return v!==undefined&&v!==null&&v!=="";}); if(Array.isArray(entry.strongs)) keys=keys.concat(entry.strongs); else if(entry.strongs) keys.push(entry.strongs); keys.forEach(function(v){const k=normalizeGreekStrongsKey(v); if(/^G\d+$/.test(k)) thayerLexiconMap.set(k,entry);}); }); return thayerLexiconMap; })().catch(function(e){thayerLexiconPromise=null; throw e;});
+    return thayerLexiconPromise;
   }
+  async function findThayerEntry(key) { const normalized=normalizeGreekStrongsKey(key); if(!/^G\d+$/.test(normalized)) return null; const map=await loadThayerLexicon(); if(map.get(normalized)) return map.get(normalized); const n=normalized.replace(/^G/,""); return (thayerLexiconCache||[]).find(function(entry){ return Object.values(entry||{}).some(function(v){ if(Array.isArray(v)) return v.some(function(x){return normalizeGreekStrongsKey(x)===normalized;}); return (typeof v==="string"||typeof v==="number") && normalizeGreekStrongsKey(v)===normalized; }); }) || null; }
+  async function loadBdbData(){ if(bdbIndexCache&&bdbLexiconCache)return; const responses=await Promise.all([fetch("https://raw.githubusercontent.com/openscriptures/HebrewLexicon/master/LexicalIndex.xml"),fetch("https://raw.githubusercontent.com/openscriptures/HebrewLexicon/master/BrownDriverBriggs.xml")]); if(!responses[0].ok||!responses[1].ok) throw new Error("BDB lexicon data could not be loaded."); const parser=new DOMParser(); bdbIndexCache=parser.parseFromString(await responses[0].text(),"application/xml"); bdbLexiconCache=parser.parseFromString(await responses[1].text(),"application/xml"); }
+  async function findBdbEntry(key){ await loadBdbData(); const n=String(key||"").trim().toUpperCase().replace(/^H/,"").replace(/^0+/,""); if(!/^\d+$/.test(n))return null; const xrefs=Array.from(bdbIndexCache.getElementsByTagNameNS("*","xref")); const xref=xrefs.find(function(node){return String(node.getAttribute("strong")||"").replace(/^0+/,"")===n;}); if(!xref)return null; const bdbId=xref.getAttribute("bdb"); if(!bdbId)return null; const parent=xref.parentElement; const wordNode=parent?parent.getElementsByTagNameNS("*","w")[0]:null; const shortDefNode=parent?parent.getElementsByTagNameNS("*","def")[0]:null; const entry=Array.from(bdbLexiconCache.getElementsByTagNameNS("*","entry")).find(function(node){return node.getAttribute("id")===bdbId;}); return {strong:"H"+n,word:wordNode?wordNode.textContent.trim():"",transliteration:wordNode?(wordNode.getAttribute("xlit")||""):"",shortDefinition:shortDefNode?shortDefNode.textContent.trim():"",text:entry?entry.textContent.replace(/\s+/g," ").trim():""}; }
+  setTimeout(function(){ loadThayerLexicon().catch(function(){}); },1200);
+  document.getElementById("wordButton").addEventListener("click", async function(){
+    const key=normalizeStrongs(document.getElementById("wordSearch").value); const results=document.getElementById("wordResults"); const source=document.getElementById("lexiconSource").value;
+    if(!key){results.innerHTML="<div class='status-message'>Enter a Strong’s number such as G26 or H2617.</div>";return;}
+    if(source==="thayer"&&key.startsWith("H")){results.innerHTML="<div class='status-message'>Thayer’s is a Greek lexicon. Use a G number. For H numbers, choose BDB.</div>";return;}
+    if(source==="bdb"&&key.startsWith("G")){results.innerHTML="<div class='status-message'>BDB is a Hebrew lexicon. Use an H number. For G numbers, choose Thayer’s.</div>";return;}
+    results.innerHTML="<div class='status-message'>Searching lexicons...</div>";
+    try { const sections=[]; const strong=findStrongEntry(key); if((source==="auto"||source==="strongs")&&strong) sections.push(renderStrongEntry(strong)); if(key.startsWith("H")&&(source==="auto"||source==="bdb")){const b=await findBdbEntry(key); if(b) sections.push("<div class='result-item'><div class='strongs-number'>"+escapeHTML(b.strong)+"</div><div class='small-note'>Brown–Driver–Briggs Hebrew Lexicon</div><div class='strongs-lemma'>"+escapeHTML(b.word||key)+"</div>"+(b.transliteration?"<div>"+escapeHTML(b.transliteration)+"</div>":"")+(b.shortDefinition?"<div class='strongs-definition'><strong>Gloss:</strong> "+escapeHTML(b.shortDefinition)+"</div>":"")+(b.text?"<div class='strongs-definition'>"+escapeHTML(b.text)+"</div>":"")+"</div>");} if(key.startsWith("G")&&(source==="auto"||source==="thayer")){const t=await findThayerEntry(key); if(t) sections.push("<div class='result-item'><div class='strongs-number'>"+escapeHTML(key)+"</div><div class='small-note'>Thayer’s Greek-English Lexicon</div><div class='strongs-lemma'>"+escapeHTML(t.lemma||key)+"</div>"+(t.grammar?"<div>"+escapeHTML(t.grammar)+"</div>":"")+"<div class='strongs-definition'>"+escapeHTML(t.text||(t.paragraphs||[]).join(" "))+"</div></div>");} results.innerHTML=sections.length?sections.join(""):"<div class='status-message'>No matching entry was found.</div>"; }
+    catch(error){console.error("Lexicon lookup error:",error);results.innerHTML="<div class='error-message'>The selected lexicon could not be loaded right now.</div>";}
+  });
 
 
-  /* =========================
-     LOAD SERMON
-  ========================= */
+  document.getElementById("concordanceButton").addEventListener("click", async function(){
+    const word=document.getElementById("concordanceSearch").value.trim().toLowerCase(); const results=document.getElementById("concordanceResults"); const translation=document.getElementById("concordanceTranslation").value;
+    if(!word){results.textContent="Enter a word to search.";return;} results.textContent="Searching Scripture...";
+    try { const bible=await getBibleByTranslation(translation); const found=[]; (bible.books||[]).forEach(function(book,bi){(book.chapters||[]).forEach(function(chapter,ci){(chapter.verses||[]).forEach(function(verse,vi){const text=verseText(verse,translation,bi); if(text.toLowerCase().includes(word)) found.push({reference:getBookName(book)+" "+chapterNumber(chapter,ci)+":"+verseNumber(verse,vi),text:text});});});}); results.innerHTML=found.length?found.slice(0,100).map(function(item){return "<div class='verse-result'><strong>"+escapeHTML(item.reference)+"</strong><br>"+escapeHTML(item.text)+"</div>";}).join(""):"No occurrences found."; }
+    catch(error){console.error(error);results.textContent="Concordance search failed.";}
+  });
 
-  function loadSermon() {
-
-    const saved =
-      localStorage.getItem(
-        "bibleMastreySermon"
-      );
-
-    const status =
-      document.getElementById(
-        "saveStatus"
-      );
-
-    if (!saved) {
-
-      status.textContent =
-        "No saved sermon was found on this device.";
-
-      return;
-    }
-
-    try {
-
-      const sermon =
-        JSON.parse(saved);
-
-      sermonFields.forEach(function(id) {
-
-        const element =
-          document.getElementById(id);
-
-        if (
-          element &&
-          Object.prototype.hasOwnProperty.call(
-            sermon,
-            id
-          )
-        ) {
-
-          element.value =
-            sermon[id];
-
-        }
-
-      });
-
-      status.textContent =
-        "Saved sermon loaded.";
-
-    } catch (error) {
-
-      console.error(error);
-
-      status.textContent =
-        "The saved sermon could not be loaded.";
-
-    }
-
-  }
+  const parallelBook=document.getElementById("parallelBook"), parallelChapter=document.getElementById("parallelChapter"), parallelVerse=document.getElementById("parallelVerse");
+  const parallelTranslations=[document.getElementById("parallelTranslation1"),document.getElementById("parallelTranslation2"),document.getElementById("parallelTranslation3")];
+  const parallelResults=[document.getElementById("parallelResult1"),document.getElementById("parallelResult2"),document.getElementById("parallelResult3")];
+  let parallelBaseBible=null;
+  parallelTranslations[0].value="KJV"; parallelTranslations[1].value="WEB"; parallelTranslations[2].value="ASV";
+  async function setupParallel(){ try { parallelBaseBible=await getBibleByTranslation("KJV"); parallelBook.innerHTML='<option value="">Choose a book</option>'; (parallelBaseBible.books||[]).forEach(function(book,index){const o=document.createElement("option");o.value=index;o.textContent=getBookName(book);parallelBook.appendChild(o);}); } catch(e){console.error("Parallel setup error:",e);} }
+  function fillParallelChapters(){ parallelChapter.innerHTML='<option value="">Choose a chapter</option>'; parallelVerse.innerHTML='<option value="">Choose a verse</option>'; if(parallelBook.value===""||!parallelBaseBible)return; const bi=Number(parallelBook.value); (parallelBaseBible.books[bi].chapters||[]).forEach(function(ch,index){const o=document.createElement("option");o.value=index;o.textContent=chapterNumber(ch,index);parallelChapter.appendChild(o);}); renderParallel(); }
+  function fillParallelVerses(){ parallelVerse.innerHTML='<option value="">Choose a verse</option>'; if(parallelBook.value===""||parallelChapter.value===""||!parallelBaseBible)return; const bi=Number(parallelBook.value),ci=Number(parallelChapter.value); (parallelBaseBible.books[bi].chapters[ci].verses||[]).forEach(function(v,index){const o=document.createElement("option");o.value=index;o.textContent=verseNumber(v,index);parallelVerse.appendChild(o);}); renderParallel(); }
+  async function renderParallel(){ if(parallelBook.value===""||parallelChapter.value===""||parallelVerse.value===""){parallelResults.forEach(function(r){r.innerHTML="Choose a book, chapter, and verse.";});return;} const bi=Number(parallelBook.value),ci=Number(parallelChapter.value),vi=Number(parallelVerse.value); await Promise.all(parallelTranslations.map(async function(sel,index){parallelResults[index].innerHTML="Loading...";try{const bible=await getBibleByTranslation(sel.value);const book=bible.books[bi],chapter=book&&book.chapters?book.chapters[ci]:null,verse=chapter&&chapter.verses?chapter.verses[vi]:null;if(!book||!chapter||!verse)throw new Error("Verse unavailable");parallelResults[index].innerHTML="<h4>"+escapeHTML(sel.options[sel.selectedIndex].text)+"</h4><div class='small-note'>"+escapeHTML(getBookName(book)+" "+chapterNumber(chapter,ci)+":"+verseNumber(verse,vi))+"</div><div style='margin-top:10px'>"+escapeHTML(verseText(verse,sel.value,bi))+"</div>";}catch(e){console.error("Parallel column error:",e);parallelResults[index].innerHTML="<div class='error-message'>This verse could not be loaded in this translation.</div>";}})); }
+  parallelBook.addEventListener("change",fillParallelChapters); parallelChapter.addEventListener("change",fillParallelVerses); parallelVerse.addEventListener("change",renderParallel); parallelTranslations.forEach(function(s){s.addEventListener("change",renderParallel);});
 
 
-  /* =========================
-     CLEAR SERMON
-  ========================= */
+  const lessons=document.querySelectorAll(".lesson"), progressBar=document.getElementById("progressBar"), progressText=document.getElementById("progressText");
+  function updateProgress(){ if(!lessons.length)return; let current=1; const top=window.scrollY; lessons.forEach(function(lesson,index){const pos=lesson.getBoundingClientRect().top+window.scrollY;if(top>=pos-200)current=index+1;}); progressBar.style.width=((current/lessons.length)*100)+"%"; progressText.textContent="Lesson "+current+" of "+lessons.length; }
+  window.addEventListener("scroll",updateProgress); updateProgress();
 
-  function clearSermon() {
+  const sermonFields=["manualSermonTitle","manualSermon","sermonTitle","mainScripture","sermonTopic","sermonPurpose","mainTruth","introduction","readScripture","context","templateMainTruth","point1Title","point1Explanation","point1Scripture","point1Application","point2Title","point2Explanation","point2Scripture","point2Application","point3Title","point3Explanation","point3Scripture","point3Application","additionalScriptures","illustrations","practicalApplication","conclusion","response","closingPrayer"];
+  const LOCAL_KEY="bibleMasterySavedSermons"; const LEGACY_KEY="bibleMastreySermon"; let cloudSermons=[];
+  const savedSermonSelect=document.getElementById("savedSermonSelect"), saveStatus=document.getElementById("saveStatus");
+  const SUPABASE_URL="https://pjkkxvntssvukulxipfr.supabase.co"; const SUPABASE_PUBLISHABLE_KEY="sb_publishable_1kehaIywv1Wb9Iwj2OPGdg_aFosOSwK";
+  const supabaseClient=(window.supabase&&window.supabase.createClient)?window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY):null;
+  function collectSermon(){const fields={};sermonFields.forEach(function(id){const e=document.getElementById(id);if(e)fields[id]=e.value;});const title=(fields.manualSermonTitle||fields.sermonTitle||"Untitled Sermon").trim()||"Untitled Sermon";return {title:title,fields:fields,updatedAt:new Date().toISOString()};}
+  function applySermon(data){const fields=data&&data.fields?data.fields:data;sermonFields.forEach(function(id){const e=document.getElementById(id);if(e)e.value=(fields&&fields[id])||"";});}
+  function getLocalSermons(){try{const value=JSON.parse(localStorage.getItem(LOCAL_KEY)||"[]");return Array.isArray(value)?value:[];}catch(e){return[];}}
+  function saveLocalSermon(sermon){const list=getLocalSermons();const idx=list.findIndex(function(x){return x.title.toLowerCase()===sermon.title.toLowerCase();});if(idx>=0)list[idx]=sermon;else list.unshift(sermon);localStorage.setItem(LOCAL_KEY,JSON.stringify(list));return sermon;}
+  function refreshSavedSermons(){const local=getLocalSermons();savedSermonSelect.innerHTML='<option value="">Choose a saved sermon</option>';local.forEach(function(item,index){const o=document.createElement("option");o.value="local:"+index;o.textContent=item.title+" — on this device";savedSermonSelect.appendChild(o);});cloudSermons.forEach(function(item,index){const o=document.createElement("option");o.value="cloud:"+index;o.textContent=(item.title||"Untitled Sermon")+" — account";savedSermonSelect.appendChild(o);});}
+  async function loadCloudSermons(){if(!supabaseClient)return;try{const sessionResult=await supabaseClient.auth.getSession();const user=sessionResult.data&&sessionResult.data.session&&sessionResult.data.session.user;if(!user){cloudSermons=[];refreshSavedSermons();return;}const result=await supabaseClient.from("saved_work").select("*").eq("user_id",user.id).eq("work_type","sermon").order("updated_at",{ascending:false});if(result.error)throw result.error;cloudSermons=result.data||[];refreshSavedSermons();}catch(e){console.error("Cloud sermon load error:",e);}}
+  async function saveCloudSermon(sermon){if(!supabaseClient)return false;const sessionResult=await supabaseClient.auth.getSession();const user=sessionResult.data&&sessionResult.data.session&&sessionResult.data.session.user;if(!user)return false;const existing=await supabaseClient.from("saved_work").select("id").eq("user_id",user.id).eq("work_type","sermon").eq("title",sermon.title).limit(1);if(existing.error)throw existing.error;const content={text:sermon.fields.manualSermon||sermon.fields.introduction||"Saved sermon",fields:sermon.fields};let result;if(existing.data&&existing.data.length){result=await supabaseClient.from("saved_work").update({content:content,updated_at:new Date().toISOString()}).eq("id",existing.data[0].id);}else{result=await supabaseClient.from("saved_work").insert({user_id:user.id,work_type:"sermon",title:sermon.title,content:content,updated_at:new Date().toISOString()});}if(result.error)throw result.error;await loadCloudSermons();return true;}
+  async function saveSermon(){const sermon=collectSermon();saveLocalSermon(sermon);localStorage.setItem(LEGACY_KEY,JSON.stringify(sermon.fields));refreshSavedSermons();let cloud=false;try{cloud=await saveCloudSermon(sermon);}catch(e){console.error("Cloud sermon save error:",e);}saveStatus.textContent=cloud?"Sermon saved on this device and to your BibleMastery account.":"Sermon saved on this device.";}
+  function loadSermon(){const value=savedSermonSelect.value;if(!value){saveStatus.textContent="Choose a saved sermon first.";return;}const parts=value.split(":");if(parts[0]==="local"){const item=getLocalSermons()[Number(parts[1])];if(item)applySermon(item);}else{const item=cloudSermons[Number(parts[1])];if(item){const content=item.content&&item.content.fields?item.content:item.content||{};applySermon(content);}}saveStatus.textContent="Saved sermon loaded.";}
+  function clearSermon(){if(!confirm("Are you sure you want to clear the sermon fields? Your saved sermons will remain available."))return;sermonFields.forEach(function(id){const e=document.getElementById(id);if(e)e.value="";});saveStatus.textContent="Sermon fields cleared.";}
+  async function deleteSavedSermon(){const value=savedSermonSelect.value;if(!value){saveStatus.textContent="Choose a saved sermon first.";return;}if(!confirm("Delete this saved sermon?"))return;const parts=value.split(":");if(parts[0]==="local"){const list=getLocalSermons();list.splice(Number(parts[1]),1);localStorage.setItem(LOCAL_KEY,JSON.stringify(list));}else{const item=cloudSermons[Number(parts[1])];if(item&&supabaseClient){const result=await supabaseClient.from("saved_work").delete().eq("id",item.id);if(result.error){console.error(result.error);saveStatus.textContent="The cloud sermon could not be deleted.";return;}await loadCloudSermons();}}refreshSavedSermons();savedSermonSelect.value="";saveStatus.textContent="Saved sermon deleted.";}
+  document.getElementById("saveSermonButton").addEventListener("click",saveSermon);document.getElementById("loadSermonButton").addEventListener("click",loadSermon);document.getElementById("clearSermonButton").addEventListener("click",clearSermon);document.getElementById("deleteSermonButton").addEventListener("click",deleteSavedSermon);
+  (function migrateLegacy(){if(getLocalSermons().length)return;const legacy=localStorage.getItem(LEGACY_KEY);if(!legacy)return;try{const fields=JSON.parse(legacy);const title=(fields.manualSermonTitle||fields.sermonTitle||"Saved Sermon").trim()||"Saved Sermon";localStorage.setItem(LOCAL_KEY,JSON.stringify([{title:title,fields:fields,updatedAt:new Date().toISOString()}]));}catch(e){}})();
+  refreshSavedSermons(); loadCloudSermons();
 
-    const confirmed =
-      confirm(
-        "Are you sure you want to clear the sermon fields? Your saved sermon will remain available until you overwrite or delete it."
-      );
-
-    if (!confirmed) return;
-
-    sermonFields.forEach(function(id) {
-
-      const element =
-        document.getElementById(id);
-
-      if (element) {
-
-        element.value = "";
-
-      }
-
-    });
-
-    document.getElementById(
-      "saveStatus"
-    ).textContent =
-      "Sermon fields cleared.";
-
-  }
-
-
-  /* =========================
-     ESCAPE HTML
-  ========================= */
-
-  function escapeHTML(value) {
-
-    return String(value)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
-
-  }
+  setupParallel();
+  loadReaderBible(false);
 
 </script>
-
 </body>
 </html>
