@@ -195,15 +195,18 @@
     box-shadow:0 12px 28px rgba(0,0,0,.20);
   }
   .tool-card label { display:block; color:var(--gold); font-weight:800; margin-bottom:8px; font-size:13px; }
-  .dictionary-search-row,.concordance-search-row,.original-word-search-row { display:flex; gap:8px; }
-  .dictionary-search-row input,.concordance-search-row input,.original-word-search-row input { flex:1; min-width:0; }
+  .dictionary-search-row,.regular-dictionary-search-row,.concordance-search-row,.original-word-search-row { display:flex; gap:8px; }
+  .dictionary-search-row input,.regular-dictionary-search-row input,.concordance-search-row input,.original-word-search-row input { flex:1; min-width:0; }
+  .dictionary-source-select,.lexicon-source-select { margin-bottom:8px; }
   .tool-card button,.study-controls button,.biblemastrey-ai-box button {
     border:1px solid var(--gold); background:var(--gold); color:#0d1628; padding:10px 12px; border-radius:9px; cursor:pointer; font-weight:800;
   }
   .tool-card button:hover,.study-controls button:hover,.biblemastrey-ai-box button:hover { background:var(--gold-light); border-color:var(--gold-light); }
-  #dictionaryResult,#concordanceResult,#originalWordResult { margin-top:10px; }
+  #dictionaryResult,#regularDictionaryResult,#concordanceResult,#originalWordResult { margin-top:10px; }
   #concordanceResult { max-height:320px; overflow-y:auto; }
   .dictionary-entry,.original-word-entry,.concordance-entry { background:#0d192b; border:1px solid var(--line); border-radius:9px; padding:12px; margin-bottom:8px; color:#d7dbe3; }
+  .dictionary-entry p,.original-word-entry p { margin:8px 0; line-height:1.6; }
+  .dictionary-entry + .dictionary-entry { margin-top:10px; }
   .dictionary-word { font-weight:800; color:var(--gold); font-size:18px; margin-bottom:8px; }
   .dictionary-source,.original-word-source { margin-top:10px; font-size:11px; color:var(--muted); font-style:italic; }
 
@@ -266,7 +269,7 @@
     #chapterContent { padding:17px; }
     #chapterTitle { font-size:25px; }
     .verse-text { font-size:17px; }
-    .dictionary-search-row,.concordance-search-row,.original-word-search-row,.navigation { flex-direction:column; }
+    .dictionary-search-row,.regular-dictionary-search-row,.concordance-search-row,.original-word-search-row,.navigation { flex-direction:column; }
   }
 </style>
 
@@ -401,11 +404,29 @@
 
         <div class="dictionary-search tool-card">
           <label for="dictionaryInput">📖 Bible Dictionary</label>
+          <select id="dictionarySource" class="dictionary-source-select">
+            <option value="both" selected>Easton’s + Smith’s</option>
+            <option value="easton">Easton’s Bible Dictionary</option>
+            <option value="smith">Smith’s Bible Dictionary</option>
+          </select>
           <div class="dictionary-search-row">
             <input type="text" id="dictionaryInput" placeholder="Search a Bible word...">
             <button id="dictionaryButton">Search</button>
           </div>
           <div id="dictionaryResult"></div>
+        </div>
+
+        <div class="regular-dictionary-search tool-card">
+          <label for="regularDictionaryInput">📘 English Dictionary</label>
+          <select id="regularDictionarySource" class="dictionary-source-select">
+            <option value="webster" selected>Webster’s 1913</option>
+            <option value="free">Free English Dictionary</option>
+          </select>
+          <div class="regular-dictionary-search-row">
+            <input type="text" id="regularDictionaryInput" placeholder="Search an English word...">
+            <button id="regularDictionaryButton">Search</button>
+          </div>
+          <div id="regularDictionaryResult"></div>
         </div>
 
         <div class="concordance-search tool-card">
@@ -419,6 +440,12 @@
 
         <div class="original-word-search tool-card">
           <label for="originalWordInput">🔤 Hebrew / Greek Word Lookup</label>
+          <select id="lexiconSource" class="lexicon-source-select">
+            <option value="auto" selected>Strong’s + BDB / Thayer’s</option>
+            <option value="strongs">Strong’s</option>
+            <option value="bdb">BDB Hebrew Lexicon</option>
+            <option value="thayer">Thayer’s Greek Lexicon</option>
+          </select>
           <div class="original-word-search-row">
             <input type="text" id="originalWordInput" placeholder="Enter Strong's number (e.g. G26 or H2617)">
             <button id="originalWordButton">Search</button>
@@ -569,6 +596,21 @@ const noteVerseButton =
   const dictionaryResult =
     document.getElementById("dictionaryResult");
 
+  const dictionarySource =
+    document.getElementById("dictionarySource");
+
+  const regularDictionaryInput =
+    document.getElementById("regularDictionaryInput");
+
+  const regularDictionaryButton =
+    document.getElementById("regularDictionaryButton");
+
+  const regularDictionaryResult =
+    document.getElementById("regularDictionaryResult");
+
+  const regularDictionarySource =
+    document.getElementById("regularDictionarySource");
+
   const concordanceInput =
     document.getElementById("concordanceInput");
 
@@ -586,6 +628,9 @@ const noteVerseButton =
 
   const originalWordResult =
     document.getElementById("originalWordResult");
+
+  const lexiconSource =
+    document.getElementById("lexiconSource");
 
 
   /* =========================
@@ -762,16 +807,16 @@ const noteVerseButton =
         .select("*")
         .eq("user_id", user.id)
         .eq(
-          "translation",
-          translationSelect.value
-        )
-        .eq(
           "book_index",
           currentBookIndex
         )
         .eq(
           "chapter_index",
           currentChapterIndex
+        )
+        .order(
+          "updated_at",
+          { ascending: false }
         );
 
     if (error) {
@@ -784,6 +829,39 @@ const noteVerseButton =
 
     (data || []).forEach(
       function(item) {
+
+        if (
+          item.item_type === "note" ||
+          item.item_type === "highlight"
+        ) {
+          const sharedKey =
+            getCloudKey(
+              item.item_type,
+              SHARED_STUDY_TRANSLATION,
+              item.book_index,
+              item.chapter_index,
+              item.verse_number
+            );
+
+          if (
+            !Object.prototype.hasOwnProperty.call(
+              cloudBibleData,
+              sharedKey
+            )
+          ) {
+            cloudBibleData[sharedKey] =
+              item.content;
+          }
+
+          return;
+        }
+
+        if (
+          item.translation !==
+          translationSelect.value
+        ) {
+          return;
+        }
 
         const key =
           getCloudKey(
@@ -798,6 +876,38 @@ const noteVerseButton =
           item.content;
       }
     );
+  }
+
+  async function deleteCloudSharedStudyItem(
+    itemType,
+    bookIndex,
+    chapterIndex,
+    verseNumber
+  ) {
+
+    const user =
+      await getCurrentUser();
+
+    if (!user) {
+      return;
+    }
+
+    const { error } =
+      await supabaseClient
+        .from("bible_user_data")
+        .delete()
+        .eq("user_id", user.id)
+        .eq("item_type", itemType)
+        .eq("book_index", bookIndex)
+        .eq("chapter_index", chapterIndex)
+        .eq("verse_number", verseNumber);
+
+    if (error) {
+      console.error(
+        "Cloud shared delete error:",
+        error
+      );
+    }
   }
 
 
@@ -877,13 +987,25 @@ const noteVerseButton =
      LOCAL DATA HELPERS
   ========================= */
 
+  const SHARED_STUDY_TRANSLATION =
+    "__shared__";
+
+  function getStudyTranslation(itemType) {
+    return (
+      itemType === "note" ||
+      itemType === "highlight"
+    )
+      ? SHARED_STUDY_TRANSLATION
+      : translationSelect.value;
+  }
+
   function getBibleStorageKey(
     itemType,
     verseNumber
   ) {
     return (
       "bibleMastrey-" +
-      translationSelect.value +
+      getStudyTranslation(itemType) +
       "-" +
       currentBookIndex +
       "-" +
@@ -895,6 +1017,68 @@ const noteVerseButton =
     );
   }
 
+  function findLegacyLocalStudyItem(
+    itemType,
+    verseNumber
+  ) {
+    const suffix =
+      "-" +
+      currentBookIndex +
+      "-" +
+      currentChapterIndex +
+      "-" +
+      itemType +
+      "-" +
+      verseNumber;
+
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (
+        key &&
+        key.startsWith("bibleMastrey-") &&
+        key.endsWith(suffix)
+      ) {
+        const value = localStorage.getItem(key);
+        if (value !== null && value !== "") {
+          return value;
+        }
+      }
+    }
+
+    return "";
+  }
+
+  function removeLocalSharedStudyItem(
+    itemType,
+    verseNumber
+  ) {
+    const suffix =
+      "-" +
+      currentBookIndex +
+      "-" +
+      currentChapterIndex +
+      "-" +
+      itemType +
+      "-" +
+      verseNumber;
+
+    const keys = [];
+
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (
+        key &&
+        key.startsWith("bibleMastrey-") &&
+        key.endsWith(suffix)
+      ) {
+        keys.push(key);
+      }
+    }
+
+    keys.forEach(function(key) {
+      localStorage.removeItem(key);
+    });
+  }
 
   function getBookmarkKey(
     verseNumber
@@ -913,7 +1097,7 @@ const noteVerseButton =
     const cloudKey =
       getCloudKey(
         "note",
-        translationSelect.value,
+        SHARED_STUDY_TRANSLATION,
         currentBookIndex,
         currentChapterIndex,
         verseNumber
@@ -931,15 +1115,35 @@ const noteVerseButton =
       );
     }
 
-    return (
+    const sharedLocal =
       localStorage.getItem(
         getBibleStorageKey(
           "note",
           verseNumber
         )
-      ) ||
-      ""
-    );
+      );
+
+    if (sharedLocal) {
+      return sharedLocal;
+    }
+
+    const legacyLocal =
+      findLegacyLocalStudyItem(
+        "note",
+        verseNumber
+      );
+
+    if (legacyLocal) {
+      localStorage.setItem(
+        getBibleStorageKey(
+          "note",
+          verseNumber
+        ),
+        legacyLocal
+      );
+    }
+
+    return legacyLocal || "";
   }
 
 
@@ -967,7 +1171,7 @@ const noteVerseButton =
 
       saveCloudItem(
         "note",
-        translationSelect.value,
+        SHARED_STUDY_TRANSLATION,
         currentBookIndex,
         currentChapterIndex,
         verseNumber,
@@ -981,13 +1185,13 @@ const noteVerseButton =
 
     } else {
 
-      localStorage.removeItem(
-        key
+      removeLocalSharedStudyItem(
+        "note",
+        verseNumber
       );
 
-      deleteCloudItem(
+      deleteCloudSharedStudyItem(
         "note",
-        translationSelect.value,
         currentBookIndex,
         currentChapterIndex,
         verseNumber
@@ -1008,7 +1212,7 @@ const noteVerseButton =
     const cloudKey =
       getCloudKey(
         "highlight",
-        translationSelect.value,
+        SHARED_STUDY_TRANSLATION,
         currentBookIndex,
         currentChapterIndex,
         verseNumber
@@ -1021,14 +1225,34 @@ const noteVerseButton =
       return true;
     }
 
-    return (
-      localStorage.getItem(
-        getBibleStorageKey(
-          "highlight",
-          verseNumber
-        )
-      ) === "true"
-    );
+    const sharedKey =
+      getBibleStorageKey(
+        "highlight",
+        verseNumber
+      );
+
+    if (
+      localStorage.getItem(sharedKey) ===
+      "true"
+    ) {
+      return true;
+    }
+
+    const legacyLocal =
+      findLegacyLocalStudyItem(
+        "highlight",
+        verseNumber
+      );
+
+    if (legacyLocal === "true") {
+      localStorage.setItem(
+        sharedKey,
+        "true"
+      );
+      return true;
+    }
+
+    return false;
   }
 
 
@@ -1052,7 +1276,7 @@ const noteVerseButton =
 
       await saveCloudItem(
         "highlight",
-        translationSelect.value,
+        SHARED_STUDY_TRANSLATION,
         currentBookIndex,
         currentChapterIndex,
         verseNumber,
@@ -1061,13 +1285,13 @@ const noteVerseButton =
 
     } else {
 
-      localStorage.removeItem(
-        key
+      removeLocalSharedStudyItem(
+        "highlight",
+        verseNumber
       );
 
-      await deleteCloudItem(
+      await deleteCloudSharedStudyItem(
         "highlight",
-        translationSelect.value,
         currentBookIndex,
         currentChapterIndex,
         verseNumber
@@ -1543,6 +1767,59 @@ async function populateCommentaryPanels(
         chapterNumber
       );
 
+    if (
+      commentarySelect.value ===
+        "matthew-henry-complete"
+    ) {
+      const chapterPanel =
+        document.querySelector(
+          ".chapter-commentary"
+        );
+
+      if (!chapterPanel) {
+        return;
+      }
+
+      const textElement =
+        chapterPanel.querySelector(
+          ".commentary-text"
+        );
+
+      if (!textElement) {
+        return;
+      }
+
+      if (
+        !data ||
+        !Array.isArray(data.verses) ||
+        !data.verses.length
+      ) {
+        textElement.innerHTML =
+          '<span class="commentary-placeholder">' +
+          "No Matthew Henry commentary was found for this chapter." +
+          "</span>";
+        return;
+      }
+
+      const chapterText =
+        data.verses
+          .slice()
+          .sort(function(a, b) {
+            return Number(a.number) -
+                   Number(b.number);
+          })
+          .map(function(item) {
+            return item.text || "";
+          })
+          .filter(Boolean)
+          .join("\n\n");
+
+      textElement.textContent =
+        chapterText ||
+        "No Matthew Henry commentary was found for this chapter.";
+
+      return;
+    }
 
     panels.forEach(function(panel) {
 
@@ -1565,7 +1842,6 @@ async function populateCommentaryPanels(
           data,
           verseNumber
         );
-
 
       if (result) {
 
@@ -1752,6 +2028,63 @@ async function loadChapter() {
     return;
   }
 
+  if (
+    commentaryVisible &&
+    commentarySelect.value ===
+      "matthew-henry-complete"
+  ) {
+    const chapterCommentaryPanel =
+      document.createElement("div");
+
+    chapterCommentaryPanel.className =
+      "commentary-panel show chapter-commentary";
+
+    const chapterCommentaryTitle =
+      document.createElement("div");
+
+    chapterCommentaryTitle.className =
+      "commentary-title";
+
+    chapterCommentaryTitle.textContent =
+      getCommentaryName();
+
+    const chapterCommentaryReference =
+      document.createElement("div");
+
+    chapterCommentaryReference.className =
+      "commentary-reference";
+
+    chapterCommentaryReference.textContent =
+      bookName + " " + chapterNumber;
+
+    const chapterCommentaryText =
+      document.createElement("div");
+
+    chapterCommentaryText.className =
+      "commentary-text";
+
+    chapterCommentaryText.innerHTML =
+      '<span class="commentary-loading">' +
+      "Loading chapter commentary..." +
+      "</span>";
+
+    chapterCommentaryPanel.appendChild(
+      chapterCommentaryTitle
+    );
+
+    chapterCommentaryPanel.appendChild(
+      chapterCommentaryReference
+    );
+
+    chapterCommentaryPanel.appendChild(
+      chapterCommentaryText
+    );
+
+    verseContainer.appendChild(
+      chapterCommentaryPanel
+    );
+  }
+
   verses.forEach(
     function(verse, index) {
 
@@ -1876,7 +2209,11 @@ verseContainer.appendChild(
          COMMENTARY PANEL
       ========================= */
 
-      if (commentaryVisible) {
+      if (
+        commentaryVisible &&
+        commentarySelect.value !==
+          "matthew-henry-complete"
+      ) {
 
         const commentaryPanel =
           document.createElement("div");
@@ -3366,97 +3703,363 @@ async function startBible() {
 
 
   /* =========================
-     DICTIONARY
+     BIBLE + ENGLISH DICTIONARIES
   ========================= */
 
-  const dictionary = {
+  const bibleDictionaryCache = {};
+  let websterDictionaryCache = null;
 
-    love:
-      "A strong affection, goodwill, or devoted concern. Biblical love often includes selfless commitment to God and others.",
+  function escapeStudyText(value) {
+    return String(value || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
 
-    faith:
-      "Trust, confidence, and reliance upon God and His promises.",
+  function normalizeDictionaryWord(value) {
+    return String(value || "")
+      .trim()
+      .toUpperCase()
+      .replace(/[^A-Z0-9]/g, "");
+  }
 
-    grace:
-      "God's undeserved favor and kindness toward people.",
+  async function loadBibleDictionaryLetter(letter) {
+    const key = letter.toLowerCase();
 
-    mercy:
-      "Compassion and withholding deserved judgment.",
+    if (bibleDictionaryCache[key]) {
+      return bibleDictionaryCache[key];
+    }
 
-    salvation:
-      "Deliverance from sin and its consequences, and reconciliation with God.",
+    const url =
+      "https://raw.githubusercontent.com/neuu-org/bible-dictionary-dataset/main/data/01_parsed/" +
+      key +
+      ".json";
 
-    sin:
-      "Disobedience to God's will or falling short of His righteous standard.",
+    const response = await fetch(url);
 
-    righteousness:
-      "Right standing or conduct according to God's righteous standard.",
+    if (!response.ok) {
+      throw new Error(
+        "Bible dictionary data could not be loaded."
+      );
+    }
 
-    holiness:
-      "Being set apart for God and characterized by moral purity.",
+    const data = await response.json();
+    bibleDictionaryCache[key] = data;
+    return data;
+  }
 
-    repentance:
-      "Turning away from sin and turning toward God.",
+  async function searchBibleDictionaries(word) {
+    const firstLetter =
+      word.trim().charAt(0).toLowerCase();
 
-    gospel:
-      "The good news concerning Jesus Christ, His death, resurrection, and salvation.",
+    if (!/[a-z]/.test(firstLetter)) {
+      return null;
+    }
 
-    covenant:
-      "A solemn relationship or agreement established between God and people.",
+    const data =
+      await loadBibleDictionaryLetter(
+        firstLetter
+      );
 
-    prayer:
-      "Communication with God that may include worship, confession, thanksgiving, and requests.",
+    const wanted =
+      normalizeDictionaryWord(word);
 
-    wisdom:
-      "The ability to live rightly and make godly decisions according to truth."
-  };
+    const exactKey =
+      Object.keys(data).find(
+        function(key) {
+          return (
+            normalizeDictionaryWord(key) ===
+            wanted
+          );
+        }
+      );
 
+    if (exactKey) {
+      return data[exactKey];
+    }
+
+    const partialKey =
+      Object.keys(data).find(
+        function(key) {
+          return normalizeDictionaryWord(key)
+            .startsWith(wanted);
+        }
+      );
+
+    return partialKey
+      ? data[partialKey]
+      : null;
+  }
 
   dictionaryButton.addEventListener(
     "click",
-    function() {
+    async function() {
 
       const word =
-        dictionaryInput.value
-          .trim()
-          .toLowerCase();
+        dictionaryInput.value.trim();
+
+      dictionaryResult.innerHTML = "";
 
       if (!word) {
-
-        dictionaryResult.innerHTML =
-          "";
-
-        return;
-      }
-
-      const definition =
-        dictionary[word];
-
-      if (!definition) {
-
-        dictionaryResult.innerHTML =
-          '<div class="dictionary-entry">' +
-          "<strong>" +
-          word +
-          "</strong><br><br>" +
-          "No built-in dictionary entry was found for this word yet." +
-          "</div>";
-
         return;
       }
 
       dictionaryResult.innerHTML =
         '<div class="dictionary-entry">' +
-        '<div class="dictionary-word">' +
-        word +
-        "</div>" +
-        "<div>" +
-        definition +
-        "</div>" +
-        '<div class="dictionary-source">' +
-        "BibleMastrey study dictionary" +
-        "</div>" +
+        "Searching Easton’s and Smith’s..." +
         "</div>";
+
+      try {
+        const entry =
+          await searchBibleDictionaries(word);
+
+        if (!entry) {
+          dictionaryResult.innerHTML =
+            '<div class="dictionary-entry">' +
+            '<div class="dictionary-word">' +
+            escapeStudyText(word) +
+            "</div>" +
+            "No Easton’s or Smith’s entry was found for this exact term." +
+            "</div>";
+          return;
+        }
+
+        const selectedSource =
+          dictionarySource.value;
+
+        const allowedSources =
+          selectedSource === "easton"
+            ? ["EAS"]
+            : selectedSource === "smith"
+              ? ["SMI"]
+              : ["EAS", "SMI"];
+
+        const definitions =
+          (entry.definitions || [])
+            .filter(function(definition) {
+              return allowedSources.includes(
+                definition.source
+              );
+            });
+
+        if (!definitions.length) {
+          dictionaryResult.innerHTML =
+            '<div class="dictionary-entry">' +
+            '<div class="dictionary-word">' +
+            escapeStudyText(entry.name || word) +
+            "</div>" +
+            "This term is not included in the selected Bible dictionary." +
+            "</div>";
+          return;
+        }
+
+        dictionaryResult.innerHTML =
+          definitions
+            .map(function(definition) {
+              const sourceName =
+                definition.source === "EAS"
+                  ? "Easton’s Bible Dictionary (1897)"
+                  : "Smith’s Bible Dictionary (1863)";
+
+              return (
+                '<div class="dictionary-entry">' +
+                '<div class="dictionary-word">' +
+                escapeStudyText(entry.name || word) +
+                "</div>" +
+                "<p>" +
+                escapeStudyText(definition.text) +
+                "</p>" +
+                '<div class="dictionary-source">' +
+                sourceName +
+                " — Public-domain work; dataset CC BY 4.0 (NEUU)" +
+                "</div>" +
+                "</div>"
+              );
+            })
+            .join("");
+
+      } catch (error) {
+        console.error(
+          "Bible dictionary error:",
+          error
+        );
+
+        dictionaryResult.innerHTML =
+          '<div class="dictionary-entry">' +
+          "Bible dictionary could not be loaded right now." +
+          "</div>";
+      }
+    }
+  );
+
+  async function loadWebsterDictionary() {
+    if (websterDictionaryCache) {
+      return websterDictionaryCache;
+    }
+
+    const response = await fetch(
+      "https://raw.githubusercontent.com/adambom/dictionary/master/dictionary.json"
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        "Webster dictionary data could not be loaded."
+      );
+    }
+
+    websterDictionaryCache =
+      await response.json();
+
+    return websterDictionaryCache;
+  }
+
+  async function searchFreeEnglishDictionary(word) {
+    const response = await fetch(
+      "https://api.dictionaryapi.dev/api/v2/entries/en/" +
+      encodeURIComponent(word)
+    );
+
+    if (!response.ok) {
+      return [];
+    }
+
+    return response.json();
+  }
+
+  regularDictionaryButton.addEventListener(
+    "click",
+    async function() {
+
+      const word =
+        regularDictionaryInput.value.trim();
+
+      regularDictionaryResult.innerHTML = "";
+
+      if (!word) {
+        return;
+      }
+
+      regularDictionaryResult.innerHTML =
+        '<div class="dictionary-entry">' +
+        "Searching English dictionary..." +
+        "</div>";
+
+      try {
+        if (
+          regularDictionarySource.value ===
+          "webster"
+        ) {
+          const data =
+            await loadWebsterDictionary();
+
+          const exactKey =
+            Object.keys(data).find(
+              function(key) {
+                return key.toLowerCase() ===
+                  word.toLowerCase();
+              }
+            );
+
+          if (!exactKey) {
+            regularDictionaryResult.innerHTML =
+              '<div class="dictionary-entry">' +
+              "No Webster’s 1913 entry was found for this word." +
+              "</div>";
+            return;
+          }
+
+          regularDictionaryResult.innerHTML =
+            '<div class="dictionary-entry">' +
+            '<div class="dictionary-word">' +
+            escapeStudyText(exactKey) +
+            "</div>" +
+            "<p>" +
+            escapeStudyText(data[exactKey]) +
+            "</p>" +
+            '<div class="dictionary-source">' +
+            "Webster’s Unabridged Dictionary (1913) — public-domain text" +
+            "</div>" +
+            "</div>";
+
+          return;
+        }
+
+        const entries =
+          await searchFreeEnglishDictionary(
+            word
+          );
+
+        if (!entries.length) {
+          regularDictionaryResult.innerHTML =
+            '<div class="dictionary-entry">' +
+            "No entry was found for this word." +
+            "</div>";
+          return;
+        }
+
+        const meanings = [];
+
+        entries.forEach(function(entry) {
+          (entry.meanings || []).forEach(
+            function(meaning) {
+              (meaning.definitions || [])
+                .slice(0, 3)
+                .forEach(function(item) {
+                  meanings.push({
+                    partOfSpeech:
+                      meaning.partOfSpeech || "",
+                    definition:
+                      item.definition || ""
+                  });
+                });
+            }
+          );
+        });
+
+        regularDictionaryResult.innerHTML =
+          '<div class="dictionary-entry">' +
+          '<div class="dictionary-word">' +
+          escapeStudyText(
+            entries[0].word || word
+          ) +
+          "</div>" +
+          meanings
+            .slice(0, 8)
+            .map(function(item) {
+              return (
+                "<p>" +
+                (item.partOfSpeech
+                  ? "<strong>" +
+                    escapeStudyText(
+                      item.partOfSpeech
+                    ) +
+                    ":</strong> "
+                  : "") +
+                escapeStudyText(
+                  item.definition
+                ) +
+                "</p>"
+              );
+            })
+            .join("") +
+          '<div class="dictionary-source">' +
+          "Free English Dictionary service" +
+          "</div>" +
+          "</div>";
+
+      } catch (error) {
+        console.error(
+          "English dictionary error:",
+          error
+        );
+
+        regularDictionaryResult.innerHTML =
+          '<div class="dictionary-entry">' +
+          "English dictionary could not be loaded right now." +
+          "</div>";
+      }
     }
   );
 
@@ -3756,64 +4359,359 @@ async function startBible() {
   };
 
 
+  let thayerLexiconCache = null;
+  let bdbIndexCache = null;
+  let bdbLexiconCache = null;
+
+  async function loadThayerLexicon() {
+    if (thayerLexiconCache) {
+      return thayerLexiconCache;
+    }
+
+    const response = await fetch(
+      "https://raw.githubusercontent.com/nigelmsipa/thayers-greek-lexicon-dataset/master/data/thayer_lexicon.json"
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        "Thayer’s lexicon data could not be loaded."
+      );
+    }
+
+    thayerLexiconCache =
+      await response.json();
+
+    return thayerLexiconCache;
+  }
+
+  async function findThayerEntry(key) {
+    const data =
+      await loadThayerLexicon();
+
+    const normalized =
+      key.trim().toUpperCase();
+
+    return (
+      data.find(function(entry) {
+        return (
+          String(entry.id || "").toUpperCase() ===
+            normalized ||
+          (entry.strongs || [])
+            .map(function(value) {
+              return String(value).toUpperCase();
+            })
+            .includes(normalized)
+        );
+      }) || null
+    );
+  }
+
+  async function loadBdbData() {
+    if (
+      bdbIndexCache &&
+      bdbLexiconCache
+    ) {
+      return;
+    }
+
+    const responses =
+      await Promise.all([
+        fetch(
+          "https://raw.githubusercontent.com/openscriptures/HebrewLexicon/master/LexicalIndex.xml"
+        ),
+        fetch(
+          "https://raw.githubusercontent.com/openscriptures/HebrewLexicon/master/BrownDriverBriggs.xml"
+        )
+      ]);
+
+    if (
+      !responses[0].ok ||
+      !responses[1].ok
+    ) {
+      throw new Error(
+        "BDB lexicon data could not be loaded."
+      );
+    }
+
+    const parser = new DOMParser();
+
+    bdbIndexCache =
+      parser.parseFromString(
+        await responses[0].text(),
+        "application/xml"
+      );
+
+    bdbLexiconCache =
+      parser.parseFromString(
+        await responses[1].text(),
+        "application/xml"
+      );
+  }
+
+  async function findBdbEntry(key) {
+    await loadBdbData();
+
+    const strongNumber =
+      String(key)
+        .trim()
+        .toUpperCase()
+        .replace(/^H/, "")
+        .replace(/^0+/, "");
+
+    if (!/^\d+$/.test(strongNumber)) {
+      return null;
+    }
+
+    const xrefs =
+      Array.from(
+        bdbIndexCache
+          .getElementsByTagNameNS(
+            "*",
+            "xref"
+          )
+      );
+
+    const xref =
+      xrefs.find(function(node) {
+        return (
+          String(
+            node.getAttribute("strong") ||
+            ""
+          ).replace(/^0+/, "") ===
+          strongNumber
+        );
+      });
+
+    if (!xref) {
+      return null;
+    }
+
+    const bdbId =
+      xref.getAttribute("bdb");
+
+    if (!bdbId) {
+      return null;
+    }
+
+    const indexEntry =
+      xref.parentElement;
+
+    const wordNode =
+      indexEntry
+        ? indexEntry.getElementsByTagNameNS(
+            "*",
+            "w"
+          )[0]
+        : null;
+
+    const shortDefNode =
+      indexEntry
+        ? indexEntry.getElementsByTagNameNS(
+            "*",
+            "def"
+          )[0]
+        : null;
+
+    const bdbEntries =
+      Array.from(
+        bdbLexiconCache
+          .getElementsByTagNameNS(
+            "*",
+            "entry"
+          )
+      );
+
+    const bdbEntry =
+      bdbEntries.find(function(node) {
+        return node.getAttribute("id") ===
+          bdbId;
+      });
+
+    return {
+      strong: "H" + strongNumber,
+      word:
+        wordNode
+          ? wordNode.textContent.trim()
+          : "",
+      transliteration:
+        wordNode
+          ? (wordNode.getAttribute("xlit") || "")
+          : "",
+      shortDefinition:
+        shortDefNode
+          ? shortDefNode.textContent.trim()
+          : "",
+      text:
+        bdbEntry
+          ? bdbEntry.textContent
+              .replace(/\s+/g, " ")
+              .trim()
+          : ""
+    };
+  }
+
   originalWordButton.addEventListener(
     "click",
-    function() {
+    async function() {
 
       const key =
         originalWordInput.value
           .trim()
           .toUpperCase();
 
-      originalWordResult.innerHTML =
-        "";
+      originalWordResult.innerHTML = "";
 
       if (!key) {
         return;
       }
 
-      const entry =
-        strongs[key];
+      originalWordResult.innerHTML =
+        '<div class="original-word-entry">' +
+        "Searching lexicons..." +
+        "</div>";
 
-      if (!entry) {
+      try {
+        const source =
+          lexiconSource.value;
+
+        const sections = [];
+        const strongEntry = strongs[key];
+
+        if (
+          (source === "auto" ||
+           source === "strongs") &&
+          strongEntry
+        ) {
+          sections.push(
+            '<div class="original-word-entry">' +
+            '<div class="dictionary-word">' +
+            escapeStudyText(strongEntry.word) +
+            "</div>" +
+            "<strong>Strong's:</strong> " +
+            escapeStudyText(key) +
+            "<br><br>" +
+            "<strong>Transliteration:</strong> " +
+            escapeStudyText(
+              strongEntry.transliteration
+            ) +
+            "<br><br>" +
+            "<strong>Meaning:</strong> " +
+            escapeStudyText(
+              strongEntry.definition
+            ) +
+            '<div class="original-word-source">' +
+            "Strong's reference lookup" +
+            "</div>" +
+            "</div>"
+          );
+        }
+
+        if (
+          key.startsWith("H") &&
+          (source === "auto" ||
+           source === "bdb")
+        ) {
+          const bdb =
+            await findBdbEntry(key);
+
+          if (bdb) {
+            sections.push(
+              '<div class="original-word-entry">' +
+              '<div class="dictionary-word">' +
+              escapeStudyText(
+                bdb.word || key
+              ) +
+              "</div>" +
+              "<strong>BDB / Strong's:</strong> " +
+              escapeStudyText(bdb.strong) +
+              (bdb.transliteration
+                ? "<br><br><strong>Transliteration:</strong> " +
+                  escapeStudyText(
+                    bdb.transliteration
+                  )
+                : "") +
+              (bdb.shortDefinition
+                ? "<br><br><strong>Gloss:</strong> " +
+                  escapeStudyText(
+                    bdb.shortDefinition
+                  )
+                : "") +
+              (bdb.text
+                ? "<p>" +
+                  escapeStudyText(bdb.text) +
+                  "</p>"
+                : "") +
+              '<div class="original-word-source">' +
+              "Brown–Driver–Briggs Hebrew Lexicon — public-domain text; Open Scriptures data CC BY 4.0" +
+              "</div>" +
+              "</div>"
+            );
+          }
+        }
+
+        if (
+          key.startsWith("G") &&
+          (source === "auto" ||
+           source === "thayer")
+        ) {
+          const thayer =
+            await findThayerEntry(key);
+
+          if (thayer) {
+            sections.push(
+              '<div class="original-word-entry">' +
+              '<div class="dictionary-word">' +
+              escapeStudyText(
+                thayer.lemma || key
+              ) +
+              "</div>" +
+              "<strong>Thayer / Strong's:</strong> " +
+              escapeStudyText(key) +
+              (thayer.grammar
+                ? "<br><br><strong>Grammar:</strong> " +
+                  escapeStudyText(
+                    thayer.grammar
+                  )
+                : "") +
+              "<p>" +
+              escapeStudyText(
+                thayer.text ||
+                (thayer.paragraphs || [])
+                  .join(" ")
+              ) +
+              "</p>" +
+              '<div class="original-word-source">' +
+              "Thayer’s Greek-English Lexicon (1889) — public domain / dataset CC0" +
+              "</div>" +
+              "</div>"
+            );
+          }
+        }
+
+        if (!sections.length) {
+          originalWordResult.innerHTML =
+            '<div class="original-word-entry">' +
+            "No matching entry was found in the selected Strong’s / BDB / Thayer resource." +
+            "</div>";
+          return;
+        }
+
+        originalWordResult.innerHTML =
+          sections.join("");
+
+      } catch (error) {
+        console.error(
+          "Lexicon error:",
+          error
+        );
 
         originalWordResult.innerHTML =
           '<div class="original-word-entry">' +
-          "<strong>" +
-          key +
-          "</strong><br><br>" +
-          "Strong's entry not found in the current built-in lookup." +
+          "The lexicon could not be loaded right now." +
           "</div>";
-
-        return;
       }
-
-      originalWordResult.innerHTML =
-        '<div class="original-word-entry">' +
-
-        '<div class="dictionary-word">' +
-        entry.word +
-        "</div>" +
-
-        "<strong>Strong's:</strong> " +
-        key +
-        "<br><br>" +
-
-        "<strong>Transliteration:</strong> " +
-        entry.transliteration +
-        "<br><br>" +
-
-        "<strong>Meaning:</strong> " +
-        entry.definition +
-
-        '<div class="original-word-source">' +
-        "Strong's reference lookup" +
-        "</div>" +
-
-        "</div>";
     }
   );
-
 
   /* =========================
      ACCOUNT
