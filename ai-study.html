@@ -642,6 +642,84 @@
       padding: 18px;
     }
   }
+
+  .reader-commentary-layout {
+    display: grid;
+    grid-template-columns: minmax(250px, .72fr) minmax(0, 1.55fr);
+    gap: 18px;
+    align-items: start;
+  }
+
+  .commentary-picker-panel {
+    background: rgba(8,15,29,.38);
+    border: 1px solid var(--soft-line);
+    border-radius: 11px;
+    padding: 16px;
+  }
+
+  .reader-commentary-results {
+    min-height: 300px;
+    max-height: 650px;
+    overflow-y: auto;
+  }
+
+  .parallel-tool {
+    grid-column: 1 / -1;
+  }
+
+  .parallel-controls {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 14px;
+  }
+
+  .parallel-location {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 14px;
+  }
+
+  .parallel-results {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    margin-top: 16px;
+  }
+
+  .parallel-card {
+    background: rgba(8,15,29,.42);
+    border: 1px solid rgba(216,185,106,.24);
+    border-radius: 11px;
+    padding: 16px;
+    min-height: 180px;
+  }
+
+  .parallel-card h4 {
+    color: var(--gold);
+    margin: 0 0 10px;
+  }
+
+  .parallel-verse-text {
+    line-height: 1.72;
+    color: #eeeae2;
+  }
+
+  @media (max-width: 1000px) {
+    .reader-commentary-layout,
+    .parallel-results {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .parallel-controls,
+    .parallel-location {
+      grid-template-columns: 1fr;
+    }
+  }
+
 </style>
 
 </head>
@@ -730,176 +808,13 @@
     </div>
 
 
+
     <div class="workspace-section">
-
-      <h2>Study Tools</h2>
-
+      <h2>📖 Bible Reader</h2>
+      <p class="workspace-intro">
+        Read any passage while you study. Changing translations keeps you on the same book, chapter, and verse.
+      </p>
       <div class="workspace-grid">
-
-
-        <div class="tool-box">
-
-          <h3>📘 Bible Dictionaries</h3>
-
-          <p>
-            Search Easton’s and Smith’s Bible dictionaries.
-          </p>
-
-          <label for="dictionarySource">Dictionary</label>
-          <select id="dictionarySource" class="commentary-select">
-            <option value="both" selected>Easton’s + Smith’s</option>
-            <option value="easton">Easton’s Bible Dictionary</option>
-            <option value="smith">Smith’s Bible Dictionary</option>
-          </select>
-
-          <div class="search-row" style="margin-top:10px">
-
-            <input
-              type="text"
-              id="dictionarySearch"
-              class="search-input"
-              placeholder="Example: covenant"
-            >
-
-            <button
-              class="search-button"
-              id="dictionaryButton"
-            >
-              Search
-            </button>
-
-          </div>
-
-          <div
-            id="dictionaryResults"
-            class="results-box"
-          ></div>
-
-        </div>
-
-
-        <div class="tool-box">
-
-          <h3>📗 English Dictionary</h3>
-
-          <p>
-            Look up regular English words separately from Bible dictionary terms.
-          </p>
-
-          <label for="englishDictionarySource">Dictionary</label>
-          <select id="englishDictionarySource" class="commentary-select">
-            <option value="webster" selected>Webster’s 1913</option>
-            <option value="free">Free English Dictionary</option>
-          </select>
-
-          <div class="search-row" style="margin-top:10px">
-
-            <input
-              type="text"
-              id="englishDictionarySearch"
-              class="search-input"
-              placeholder="Example: redemption"
-            >
-
-            <button
-              class="search-button"
-              id="englishDictionaryButton"
-            >
-              Search
-            </button>
-
-          </div>
-
-          <div
-            id="englishDictionaryResults"
-            class="results-box"
-          ></div>
-
-        </div>
-
-
-        <div class="tool-box">
-
-          <h3>🔎 Concordance</h3>
-
-          <p>
-            Search the entire Bible for a word
-            or phrase.
-          </p>
-
-          <div class="search-row">
-
-            <input
-              type="text"
-              id="concordanceSearch"
-              class="search-input"
-              placeholder="Example: forgive"
-            >
-
-            <button
-              class="search-button"
-              id="concordanceButton"
-            >
-              Search
-            </button>
-
-          </div>
-
-          <div
-            id="concordanceResults"
-            class="results-box"
-          ></div>
-
-        </div>
-
-
-        <div class="tool-box">
-
-          <h3>🔤 Hebrew & Greek Word Lookup</h3>
-
-          <p>
-            Search Strong’s, Brown–Driver–Briggs (BDB), and Thayer’s Greek-English Lexicon.
-          </p>
-
-          <label for="lexiconSource">Lexicon</label>
-          <select id="lexiconSource" class="commentary-select">
-            <option value="auto" selected>Strong’s + BDB / Thayer’s</option>
-            <option value="strongs">Strong’s</option>
-            <option value="bdb">BDB Hebrew Lexicon</option>
-            <option value="thayer">Thayer’s Greek Lexicon</option>
-          </select>
-
-          <div class="search-row" style="margin-top:10px">
-
-            <input
-              type="text"
-              id="wordSearch"
-              class="search-input"
-              placeholder="Example: G26 or H2617"
-            >
-
-            <button
-              class="search-button"
-              id="wordButton"
-            >
-              Search
-            </button>
-
-          </div>
-
-          <div
-            id="wordResults"
-            class="results-box"
-          ></div>
-
-          <div class="small-note">
-            For BDB and Thayer’s, search by Strong’s number such as H2617 or G26.
-          </div>
-
-        </div>
-
-
-
         <div class="tool-box bible-reader-tool">
 
           <h3>📖 Bible Reader</h3>
@@ -972,95 +887,311 @@
 
         </div>
 
-        <div class="tool-box">
 
-          <h3>📖 Bible Commentary</h3>
+      </div>
+    </div>
 
-          <p>
-            Choose a commentary. The commentary
-            will automatically appear beside the
-            Bible verses below.
-          </p>
+    <div class="workspace-section">
+      <h2>📖 Bible Commentary</h2>
+      <p class="workspace-intro">
+        Commentary follows the passage in the Bible Reader. Change the commentary and the new one loads automatically.
+      </p>
 
-          <label for="commentarySelect">
-            Choose Commentary
-          </label>
-
-          <select
-            id="commentarySelect"
-            class="commentary-select"
-          >
-
-            <option value="matthew-henry-complete" selected>
-              Matthew Henry — Complete
-            </option>
-
-            <option value="john-gill">
-              John Gill — Exposition
-            </option>
-
-            <option value="jfb">
-              Jamieson-Fausset-Brown
-            </option>
-
-            <option value="adam-clarke">
-              Adam Clarke
-            </option>
-
-            <option value="john-calvin">
-              John Calvin — Commentaries
-            </option>
-
-            <option value="keil-delitzsch">
-              Keil & Delitzsch — Old Testament
-            </option>
-
-            <option value="tyndale">
-              Tyndale — Open Study Notes
-            </option>
-
+      <div class="reader-commentary-layout">
+        <div class="commentary-picker-panel">
+          <label for="commentarySelect">Choose Commentary</label>
+          <select id="commentarySelect" class="commentary-select">
+            <option value="matthew-henry-complete" selected>Matthew Henry — Complete</option>
+            <option value="john-gill">John Gill — Exposition</option>
+            <option value="jfb">Jamieson-Fausset-Brown</option>
+            <option value="adam-clarke">Adam Clarke</option>
+            <option value="john-calvin">John Calvin — Commentaries</option>
+            <option value="keil-delitzsch">Keil & Delitzsch — Old Testament</option>
+            <option value="tyndale">Tyndale — Open Study Notes</option>
           </select>
 
-          <br><br>
+          <div id="commentaryStatus" class="small-note">
+            Choose a book and chapter in the Bible Reader above.
+          </div>
+        </div>
 
-          <button
-            id="commentaryButton"
-            class="commentary-button"
-          >
-            Load Commentary
-          </button>
+        <aside id="commentaryColumn">
+          <div class="commentary-header">
+            <h3 id="commentaryHeading">📖 Matthew Henry — Complete</h3>
+            <p id="commentarySubheading">Commentary will follow the Bible Reader.</p>
+          </div>
+          <div id="commentaryContent" class="commentary-content reader-commentary-results">
+            <div class="commentary-empty">
+              Choose a book and chapter in the Bible Reader above.
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <div class="workspace-section">
+      <h2>Bible Tools</h2>
+      <div class="workspace-grid">
+        <div class="tool-box">
+
+          <h3>📘 Bible Dictionaries</h3>
+
+          <p>
+            Search Easton’s and Smith’s Bible dictionaries.
+          </p>
+
+          <label for="dictionarySource">Dictionary</label>
+          <select id="dictionarySource" class="commentary-select">
+            <option value="both" selected>Easton’s + Smith’s</option>
+            <option value="easton">Easton’s Bible Dictionary</option>
+            <option value="smith">Smith’s Bible Dictionary</option>
+          </select>
+
+          <div class="search-row" style="margin-top:10px">
+
+            <input
+              type="text"
+              id="dictionarySearch"
+              class="search-input"
+              placeholder="Example: covenant"
+            >
+
+            <button
+              class="search-button"
+              id="dictionaryButton"
+            >
+              Search
+            </button>
+
+          </div>
 
           <div
-            id="commentaryStatus"
-            class="small-note"
-          >
-            Choose a commentary and click Load Commentary.
+            id="dictionaryResults"
+            class="results-box"
+          ></div>
+
+        </div>
+
+
+
+        <div class="tool-box">
+
+          <h3>📗 English Dictionary</h3>
+
+          <p>
+            Look up regular English words separately from Bible dictionary terms.
+          </p>
+
+          <label for="englishDictionarySource">Dictionary</label>
+          <select id="englishDictionarySource" class="commentary-select">
+            <option value="webster" selected>Webster’s 1913</option>
+            <option value="free">Free English Dictionary</option>
+          </select>
+
+          <div class="search-row" style="margin-top:10px">
+
+            <input
+              type="text"
+              id="englishDictionarySearch"
+              class="search-input"
+              placeholder="Example: redemption"
+            >
+
+            <button
+              class="search-button"
+              id="englishDictionaryButton"
+            >
+              Search
+            </button>
+
+          </div>
+
+          <div
+            id="englishDictionaryResults"
+            class="results-box"
+          ></div>
+
+        </div>
+
+
+
+        <div class="tool-box">
+
+          <h3>🔎 Concordance</h3>
+
+          <p>
+            Search the entire Bible for a word
+            or phrase.
+          </p>
+
+          <div class="search-row">
+
+            <input
+              type="text"
+              id="concordanceSearch"
+              class="search-input"
+              placeholder="Example: forgive"
+            >
+
+            <button
+              class="search-button"
+              id="concordanceButton"
+            >
+              Search
+            </button>
+
+          </div>
+
+          <div
+            id="concordanceResults"
+            class="results-box"
+          ></div>
+
+        </div>
+
+
+
+        <div class="tool-box">
+
+          <h3>🔤 Hebrew & Greek Word Lookup</h3>
+
+          <p>
+            Search Strong’s, Brown–Driver–Briggs (BDB), and Thayer’s Greek-English Lexicon.
+          </p>
+
+          <label for="lexiconSource">Lexicon</label>
+          <select id="lexiconSource" class="commentary-select">
+            <option value="auto" selected>Strong’s + BDB / Thayer’s</option>
+            <option value="strongs">Strong’s</option>
+            <option value="bdb">BDB Hebrew Lexicon</option>
+            <option value="thayer">Thayer’s Greek Lexicon</option>
+          </select>
+
+          <div class="search-row" style="margin-top:10px">
+
+            <input
+              type="text"
+              id="wordSearch"
+              class="search-input"
+              placeholder="Example: G26 or H2617"
+            >
+
+            <button
+              class="search-button"
+              id="wordButton"
+            >
+              Search
+            </button>
+
+          </div>
+
+          <div
+            id="wordResults"
+            class="results-box"
+          ></div>
+
+          <div class="small-note">
+            For BDB and Thayer’s, search by Strong’s number such as H2617 or G26.
           </div>
 
         </div>
 
-      </div>
 
+
+
+
+        <div class="tool-box parallel-tool">
+          <h3>📚 Parallel Bible</h3>
+          <p>
+            Compare the same verse in three Bible translations at once. Choose any three of the Bible versions available in BibleMastery.
+          </p>
+
+          <div class="parallel-location">
+            <div>
+              <label for="parallelBookSelect">Book</label>
+              <select id="parallelBookSelect" class="reader-select">
+                <option value="">Choose a book</option>
+              </select>
+            </div>
+            <div>
+              <label for="parallelChapterSelect">Chapter</label>
+              <select id="parallelChapterSelect" class="reader-select">
+                <option value="">Choose a chapter</option>
+              </select>
+            </div>
+            <div>
+              <label for="parallelVerseSelect">Verse</label>
+              <select id="parallelVerseSelect" class="reader-select">
+                <option value="">Choose a verse</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="parallel-controls">
+            <div>
+              <label for="parallelTranslation1">Version 1</label>
+              <select id="parallelTranslation1" class="reader-select">
+                <option value="KJV">King James Version (KJV)</option>
+<option value="KJV1611">King James Version 1611</option>
+<option value="KJVPLUS">King James Version Plus (KJV+)</option>
+<option value="YLT">Young's Literal Translation</option>
+<option value="WEB">World English Bible</option>
+<option value="ASV">American Standard Version</option>
+<option value="GENEVA1599">Geneva Bible 1599</option>
+<option value="DRA">Douay-Rheims American Edition</option>
+<option value="BSB">Berean Standard Bible</option>
+<option value="MSB">Majority Standard Bible</option>
+              </select>
+            </div>
+            <div>
+              <label for="parallelTranslation2">Version 2</label>
+              <select id="parallelTranslation2" class="reader-select">
+                <option value="KJV">King James Version (KJV)</option>
+<option value="KJV1611">King James Version 1611</option>
+<option value="KJVPLUS">King James Version Plus (KJV+)</option>
+<option value="YLT">Young's Literal Translation</option>
+<option value="WEB">World English Bible</option>
+<option value="ASV">American Standard Version</option>
+<option value="GENEVA1599">Geneva Bible 1599</option>
+<option value="DRA">Douay-Rheims American Edition</option>
+<option value="BSB">Berean Standard Bible</option>
+<option value="MSB">Majority Standard Bible</option>
+              </select>
+            </div>
+            <div>
+              <label for="parallelTranslation3">Version 3</label>
+              <select id="parallelTranslation3" class="reader-select">
+                <option value="KJV">King James Version (KJV)</option>
+<option value="KJV1611">King James Version 1611</option>
+<option value="KJVPLUS">King James Version Plus (KJV+)</option>
+<option value="YLT">Young's Literal Translation</option>
+<option value="WEB">World English Bible</option>
+<option value="ASV">American Standard Version</option>
+<option value="GENEVA1599">Geneva Bible 1599</option>
+<option value="DRA">Douay-Rheims American Edition</option>
+<option value="BSB">Berean Standard Bible</option>
+<option value="MSB">Majority Standard Bible</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="parallel-results">
+            <div id="parallelResult1" class="parallel-card"><div class="reader-placeholder">Choose a book, chapter, and verse.</div></div>
+            <div id="parallelResult2" class="parallel-card"><div class="reader-placeholder">Choose a book, chapter, and verse.</div></div>
+            <div id="parallelResult3" class="parallel-card"><div class="reader-placeholder">Choose a book, chapter, and verse.</div></div>
+          </div>
+        </div>
+
+      </div>
     </div>
 
-
     <div class="workspace-section">
-
-      <h2>📖 Bible Verses</h2>
+      <h2>📖 Topic Bible Verses</h2>
 
       <div class="bible-controls">
-
         <div class="translation-control">
-
-          <label for="translationSelect">
-            Translation
-          </label>
-
-          <select
-            id="translationSelect"
-            class="translation-select"
-          >
-
+          <label for="translationSelect">Translation</label>
+          <select id="translationSelect" class="translation-select">
             <option value="KJV">King James Version (KJV)</option>
             <option value="KJV1611">King James Version 1611</option>
             <option value="KJVPLUS">King James Version Plus (KJV+)</option>
@@ -1071,78 +1202,22 @@
             <option value="DRA">Douay-Rheims American Edition</option>
             <option value="BSB">Berean Standard Bible</option>
             <option value="MSB">Majority Standard Bible</option>
-
           </select>
-
         </div>
-
       </div>
 
-
-      <div class="study-columns">
-
-
-        <div
-          class="verses-column"
-          id="verseResults"
-        >
-
-          <div class="status-message">
-            Enter a topic above to begin your study.
-          </div>
-
+      <div class="verses-column" id="verseResults">
+        <div class="status-message">
+          Enter a topic above when you want BibleMastery to build a guided topical study.
         </div>
-
-
-        <aside
-          class="commentary-column"
-          id="commentaryColumn"
-        >
-
-          <div class="commentary-header">
-
-            <h3 id="commentaryHeading">
-              📖 Bible Commentary
-            </h3>
-
-            <p id="commentarySubheading">
-              Choose a commentary above.
-            </p>
-
-          </div>
-
-          <div
-            id="commentaryContent"
-            class="commentary-content"
-          >
-
-            <div class="commentary-empty">
-              Select a commentary above and click
-              <strong>Load Commentary</strong>.
-              The notes will appear here beside
-              the Bible verses.
-            </div>
-
-          </div>
-
-        </aside>
-
-
       </div>
-
 
       <div class="study-note">
-
         <strong>Remember:</strong>
-
-        These verses and study tools are a
-        starting point. Read the surrounding
-        passage and study the Scriptures for
-        yourself.
-
+        These verses and study tools are a starting point. Read the surrounding passage and study the Scriptures for yourself.
       </div>
-
     </div>
+
 
 
   </div>
@@ -1203,8 +1278,6 @@
   const commentarySelect =
     document.getElementById("commentarySelect");
 
-  const commentaryButton =
-    document.getElementById("commentaryButton");
 
   const commentaryStatus =
     document.getElementById("commentaryStatus");
@@ -1217,6 +1290,70 @@
 
   const commentaryContent =
     document.getElementById("commentaryContent");
+
+
+
+  /* =========================================
+     BIBLE DATA SHAPE HELPERS
+  ========================================= */
+
+  function getBibleBooks(data) {
+    if (!data) return [];
+    if (Array.isArray(data)) return data;
+    if (Array.isArray(data.books)) return data.books;
+    if (data.books && typeof data.books === "object") return Object.values(data.books);
+    if (Array.isArray(data.Books)) return data.Books;
+    return [];
+  }
+
+  function getBibleChapters(book) {
+    if (!book) return [];
+    if (Array.isArray(book.chapters)) return book.chapters;
+    if (book.chapters && typeof book.chapters === "object") return Object.values(book.chapters);
+    if (Array.isArray(book.Chapters)) return book.Chapters;
+    return [];
+  }
+
+  function getBibleVerses(chapter) {
+    if (!chapter) return [];
+    if (Array.isArray(chapter.verses)) return chapter.verses;
+    if (chapter.verses && typeof chapter.verses === "object") return Object.values(chapter.verses);
+    if (Array.isArray(chapter.Verses)) return chapter.Verses;
+    if (Array.isArray(chapter.content)) {
+      return chapter.content.filter(function(item) {
+        return item && (item.type === "verse" || item.number !== undefined || item.verse !== undefined);
+      });
+    }
+    if (chapter.chapter && Array.isArray(chapter.chapter.content)) {
+      return chapter.chapter.content.filter(function(item) {
+        return item && (item.type === "verse" || item.number !== undefined || item.verse !== undefined);
+      });
+    }
+    return [];
+  }
+
+  function getBibleChapterNumber(chapter, index) {
+    if (!chapter) return index + 1;
+    if (chapter.chapter && typeof chapter.chapter === "object" && chapter.chapter.number) {
+      return chapter.chapter.number;
+    }
+    const value = chapter.chapter || chapter.number || chapter.id;
+    return (typeof value === "string" || typeof value === "number") ? value : (index + 1);
+  }
+
+  function normalizeBibleForReader(data) {
+    return {
+      books: getBibleBooks(data).map(function(book) {
+        return Object.assign({}, book, {
+          chapters: getBibleChapters(book).map(function(chapter) {
+            return Object.assign({}, chapter, {
+              verses: getBibleVerses(chapter)
+            });
+          })
+        });
+      })
+    };
+  }
 
 
   /* =========================================
@@ -1366,26 +1503,65 @@
   }
 
 
-  async function loadIndependentBible() {
+  async function loadIndependentBible(
+    preserveLocation
+  ) {
+
+    const oldBookIndex = readerBookIndex;
+    const oldChapterIndex = readerChapterIndex;
+    const oldVerse = readerVerseSelect.value;
 
     readerDisplay.innerHTML =
       "<div class='reader-placeholder'>Loading Bible...</div>";
 
     try {
 
-      readerBible =
+      const rawBible =
         await loadBibleTranslation(
           readerTranslationSelect.value
         );
 
+      readerBible =
+        normalizeBibleForReader(
+          rawBible
+        );
+
       if (
         !readerBible ||
-        !Array.isArray(readerBible.books)
+        !Array.isArray(readerBible.books) ||
+        !readerBible.books.length
       ) {
         throw new Error("Bible data was not returned.");
       }
 
       populateReaderBooks();
+
+      if (
+        preserveLocation &&
+        oldBookIndex >= 0 &&
+        oldBookIndex < readerBible.books.length
+      ) {
+        readerBookIndex = oldBookIndex;
+        readerBookSelect.value = String(oldBookIndex);
+        populateReaderChapters();
+
+        const chapters =
+          readerBible.books[oldBookIndex].chapters || [];
+
+        if (
+          oldChapterIndex >= 0 &&
+          oldChapterIndex < chapters.length
+        ) {
+          readerChapterIndex = oldChapterIndex;
+          readerChapterSelect.value = String(oldChapterIndex);
+          renderReaderChapter();
+
+          if (oldVerse !== "") {
+            readerVerseSelect.value = oldVerse;
+            scrollToReaderVerse();
+          }
+        }
+      }
 
     } catch (error) {
 
@@ -1485,8 +1661,10 @@
           index;
 
         option.textContent =
-          chapter.chapter ||
-          (index + 1);
+          getBibleChapterNumber(
+            chapter,
+            index
+          );
 
         readerChapterSelect.appendChild(
           option
@@ -1571,8 +1749,10 @@
       getBookName(book);
 
     const chapterNumber =
-      chapter.chapter ||
-      (readerChapterIndex + 1);
+      getBibleChapterNumber(
+        chapter,
+        readerChapterIndex
+      );
 
     let content =
       "<h3 id='readerTitle' class='reader-title'>" +
@@ -1612,6 +1792,8 @@
 
     populateReaderVerses();
     updateReaderNavButtons();
+
+    loadReaderCommentary();
   }
 
 
@@ -1745,7 +1927,9 @@
 
   readerTranslationSelect.addEventListener(
     "change",
-    loadIndependentBible
+    function() {
+      loadIndependentBible(true);
+    }
   );
 
 
@@ -1813,7 +1997,289 @@
   );
 
 
-  loadIndependentBible();
+  loadIndependentBible(false);
+
+
+
+  /* =========================================
+     PARALLEL BIBLE — THREE VERSIONS
+  ========================================= */
+
+  const parallelBookSelect =
+    document.getElementById("parallelBookSelect");
+
+  const parallelChapterSelect =
+    document.getElementById("parallelChapterSelect");
+
+  const parallelVerseSelect =
+    document.getElementById("parallelVerseSelect");
+
+  const parallelTranslationSelects = [
+    document.getElementById("parallelTranslation1"),
+    document.getElementById("parallelTranslation2"),
+    document.getElementById("parallelTranslation3")
+  ];
+
+  const parallelResults = [
+    document.getElementById("parallelResult1"),
+    document.getElementById("parallelResult2"),
+    document.getElementById("parallelResult3")
+  ];
+
+  let parallelBaseBible = null;
+
+  parallelTranslationSelects[0].value = "KJV";
+  parallelTranslationSelects[1].value = "WEB";
+  parallelTranslationSelects[2].value = "ASV";
+
+  async function initializeParallelBible() {
+
+    try {
+      parallelBaseBible =
+        normalizeBibleForReader(
+          await loadBibleTranslation("KJV")
+        );
+
+      parallelBookSelect.innerHTML =
+        '<option value="">Choose a book</option>';
+
+      parallelBaseBible.books.forEach(
+        function(book, index) {
+          const option =
+            document.createElement("option");
+
+          option.value = index;
+          option.textContent =
+            getBookName(book);
+
+          parallelBookSelect.appendChild(option);
+        }
+      );
+
+    } catch (error) {
+      console.error("Parallel Bible setup error:", error);
+    }
+  }
+
+  function populateParallelChapters() {
+
+    parallelChapterSelect.innerHTML =
+      '<option value="">Choose a chapter</option>';
+
+    parallelVerseSelect.innerHTML =
+      '<option value="">Choose a verse</option>';
+
+    const bookIndex =
+      Number(parallelBookSelect.value);
+
+    if (
+      parallelBookSelect.value === "" ||
+      !parallelBaseBible ||
+      !parallelBaseBible.books[bookIndex]
+    ) {
+      return;
+    }
+
+    const chapters =
+      parallelBaseBible.books[bookIndex].chapters || [];
+
+    chapters.forEach(
+      function(chapter, index) {
+        const option =
+          document.createElement("option");
+
+        option.value = index;
+        option.textContent =
+          getBibleChapterNumber(
+            chapter,
+            index
+          );
+
+        parallelChapterSelect.appendChild(option);
+      }
+    );
+  }
+
+  function populateParallelVerses() {
+
+    parallelVerseSelect.innerHTML =
+      '<option value="">Choose a verse</option>';
+
+    if (
+      parallelBookSelect.value === "" ||
+      parallelChapterSelect.value === ""
+    ) {
+      return;
+    }
+
+    const bookIndex =
+      Number(parallelBookSelect.value);
+
+    const chapterIndex =
+      Number(parallelChapterSelect.value);
+
+    const chapter =
+      parallelBaseBible
+        .books[bookIndex]
+        .chapters[chapterIndex];
+
+    const verses =
+      getBibleVerses(chapter);
+
+    verses.forEach(
+      function(verse, index) {
+        const option =
+          document.createElement("option");
+
+        option.value = index;
+        option.textContent =
+          verse.number ||
+          verse.verse ||
+          (index + 1);
+
+        parallelVerseSelect.appendChild(option);
+      }
+    );
+  }
+
+  async function renderParallelBible() {
+
+    if (
+      parallelBookSelect.value === "" ||
+      parallelChapterSelect.value === "" ||
+      parallelVerseSelect.value === ""
+    ) {
+      return;
+    }
+
+    const bookIndex =
+      Number(parallelBookSelect.value);
+
+    const chapterIndex =
+      Number(parallelChapterSelect.value);
+
+    const verseIndex =
+      Number(parallelVerseSelect.value);
+
+    parallelResults.forEach(
+      function(result) {
+        result.innerHTML =
+          "<div class='reader-placeholder'>Loading verse...</div>";
+      }
+    );
+
+    await Promise.all(
+      parallelTranslationSelects.map(
+        async function(select, columnIndex) {
+
+          try {
+            const translation =
+              select.value;
+
+            const bible =
+              normalizeBibleForReader(
+                await loadBibleTranslation(
+                  translation
+                )
+              );
+
+            const book =
+              bible.books[bookIndex];
+
+            const chapter =
+              book &&
+              book.chapters[chapterIndex];
+
+            const verses =
+              getBibleVerses(chapter);
+
+            const verse =
+              verses[verseIndex];
+
+            if (!book || !chapter || !verse) {
+              throw new Error("Verse not found in this translation.");
+            }
+
+            const bookName =
+              getBookName(book);
+
+            const chapterNumber =
+              getBibleChapterNumber(
+                chapter,
+                chapterIndex
+              );
+
+            const verseNumber =
+              verse.number ||
+              verse.verse ||
+              (verseIndex + 1);
+
+            const translationName =
+              select.options[
+                select.selectedIndex
+              ].textContent;
+
+            parallelResults[columnIndex].innerHTML =
+              "<h4>" +
+              escapeHtml(translationName) +
+              "</h4>" +
+              "<div class='result-reference'>" +
+              escapeHtml(bookName) +
+              " " +
+              escapeHtml(String(chapterNumber)) +
+              ":" +
+              escapeHtml(String(verseNumber)) +
+              "</div>" +
+              "<div class='parallel-verse-text' style='margin-top:10px'>" +
+              escapeHtml(
+                getReaderVerseText(
+                  verse,
+                  bookIndex,
+                  translation
+                )
+              ) +
+              "</div>";
+
+          } catch (error) {
+
+            console.error(
+              "Parallel Bible column error:",
+              error
+            );
+
+            parallelResults[columnIndex].innerHTML =
+              "<div class='error-message'>This verse could not be loaded in the selected translation.</div>";
+          }
+        }
+      )
+    );
+  }
+
+  parallelBookSelect.addEventListener(
+    "change",
+    populateParallelChapters
+  );
+
+  parallelChapterSelect.addEventListener(
+    "change",
+    populateParallelVerses
+  );
+
+  parallelVerseSelect.addEventListener(
+    "change",
+    renderParallelBible
+  );
+
+  parallelTranslationSelects.forEach(
+    function(select) {
+      select.addEventListener(
+        "change",
+        renderParallelBible
+      );
+    }
+  );
+
+  initializeParallelBible();
 
 
   /* =========================================
@@ -2007,8 +2473,6 @@
       await loadStudyBible();
 
       displayTopicVerses();
-
-      await loadSelectedCommentary();
 
     }
     catch (error) {
@@ -3390,17 +3854,7 @@
      COMMENTARY BUTTON
   ========================================= */
 
-  commentaryButton.addEventListener(
-    "click",
-    async function() {
 
-      selectedCommentary =
-        commentarySelect.value;
-
-      await loadSelectedCommentary();
-
-    }
-  );
 
 
   commentarySelect.addEventListener(
@@ -3636,6 +4090,182 @@
 
     return null;
 
+  }
+
+
+
+  async function loadReaderCommentary() {
+
+    if (
+      !readerBible ||
+      readerBookIndex < 0 ||
+      readerChapterIndex < 0
+    ) {
+      commentaryContent.innerHTML =
+        "<div class='commentary-empty'>Choose a book and chapter in the Bible Reader above.</div>";
+      commentaryStatus.textContent =
+        "Choose a book and chapter in the Bible Reader above.";
+      return;
+    }
+
+    const commentaryName =
+      commentaryNames[selectedCommentary];
+
+    commentaryHeading.textContent =
+      "📖 " + commentaryName;
+
+    const book =
+      readerBible.books[readerBookIndex];
+
+    const bookName =
+      getBookName(book);
+
+    const bookId =
+      normalizeBookId(
+        getBookId(book),
+        bookName
+      );
+
+    const chapter =
+      book.chapters[readerChapterIndex];
+
+    const chapterNumber =
+      getBibleChapterNumber(
+        chapter,
+        readerChapterIndex
+      );
+
+    commentarySubheading.textContent =
+      bookName + " " + chapterNumber;
+
+    commentaryStatus.textContent =
+      "Loading " + commentaryName + "...";
+
+    commentaryContent.innerHTML =
+      "<div class='commentary-loading'>Loading commentary...</div>";
+
+    try {
+
+      const apiId =
+        commentaryIds[selectedCommentary];
+
+      const books =
+        await getCommentaryBooks(apiId);
+
+      const commentaryBookId =
+        resolveCommentaryBookId(
+          books,
+          {
+            bookId: bookId,
+            bookName: bookName
+          }
+        );
+
+      if (!commentaryBookId) {
+        throw new Error("Commentary book could not be matched.");
+      }
+
+      const cacheKey =
+        apiId + "|" +
+        commentaryBookId + "|" +
+        chapterNumber;
+
+      let chapterData =
+        commentaryCache[cacheKey];
+
+      if (!chapterData) {
+
+        const response =
+          await fetch(
+            COMMENTARY_API +
+            apiId + "/" +
+            encodeURIComponent(commentaryBookId) + "/" +
+            encodeURIComponent(chapterNumber) +
+            ".simple.json"
+          );
+
+        if (!response.ok) {
+          throw new Error(
+            "Commentary chapter request failed: " +
+            response.status
+          );
+        }
+
+        chapterData =
+          await response.json();
+
+        commentaryCache[cacheKey] =
+          chapterData;
+      }
+
+      let entries = [];
+
+      if (
+        selectedCommentary ===
+        "matthew-henry-complete"
+      ) {
+
+        entries.push({
+          book: bookName,
+          chapter: chapterNumber,
+          verse: "Chapter",
+          text: flattenWholeCommentaryChapter(
+            chapterData
+          )
+        });
+
+      } else {
+
+        const commentaryEntries =
+          extractCommentaryEntries(
+            chapterData
+          );
+
+        const verses =
+          getBibleVerses(chapter);
+
+        verses.forEach(
+          function(verse, index) {
+
+            const verseNumber =
+              verse.number ||
+              verse.verse ||
+              (index + 1);
+
+            entries.push({
+              book: bookName,
+              chapter: chapterNumber,
+              verse: verseNumber,
+              text: findCommentaryText(
+                commentaryEntries,
+                verseNumber
+              )
+            });
+          }
+        );
+      }
+
+      renderCommentary(
+        commentaryName,
+        entries
+      );
+
+      commentaryStatus.textContent =
+        commentaryName + " loaded automatically.";
+
+    } catch (error) {
+
+      console.error(
+        "Reader commentary error:",
+        error
+      );
+
+      commentaryContent.innerHTML =
+        "<div class='error-message'>This commentary could not be loaded for this chapter. Try another commentary.</div>";
+
+      commentaryStatus.textContent =
+        "Unable to load " + commentaryName + ".";
+    }
   }
 
 
