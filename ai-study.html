@@ -678,9 +678,7 @@
     </h2>
 
     <p class="study-description">
-      Enter a Bible topic and BibleMastery will
-      bring Scripture and study tools together
-      to help you study it for yourself.
+      Use the study tools below freely, or enter a topic when you want BibleMastery to build a guided topical study for you.
     </p>
 
     <label for="topicInput">
@@ -691,7 +689,7 @@
       type="text"
       id="topicInput"
       class="topic-input"
-      placeholder="Example: How to Forgive"
+      placeholder="Example: The 7 redemptive names of God"
       autocomplete="off"
     >
 
@@ -701,7 +699,7 @@
       id="startStudyButton"
       class="start-button"
     >
-      Start Study
+      Build Guided Study
     </button>
 
   </div>
@@ -709,7 +707,7 @@
 
   <div
     id="studyWorkspace"
-    class="workspace"
+    class="workspace visible"
   >
 
 
@@ -725,7 +723,9 @@
       <p
         id="topicIntro"
         class="workspace-intro"
-      ></p>
+      >Study freely with the tools below, or use “What would you like to study?” above to build a guided topical study.</p>
+
+      <div id="guidedStudyOverview"></div>
 
     </div>
 
@@ -739,20 +739,26 @@
 
         <div class="tool-box">
 
-          <h3>📘 Bible Dictionary</h3>
+          <h3>📘 Bible Dictionaries</h3>
 
           <p>
-            Search for the meaning of a Bible word
-            or important Bible topic.
+            Search Easton’s and Smith’s Bible dictionaries.
           </p>
 
-          <div class="search-row">
+          <label for="dictionarySource">Dictionary</label>
+          <select id="dictionarySource" class="commentary-select">
+            <option value="both" selected>Easton’s + Smith’s</option>
+            <option value="easton">Easton’s Bible Dictionary</option>
+            <option value="smith">Smith’s Bible Dictionary</option>
+          </select>
+
+          <div class="search-row" style="margin-top:10px">
 
             <input
               type="text"
               id="dictionarySearch"
               class="search-input"
-              placeholder="Example: grace"
+              placeholder="Example: covenant"
             >
 
             <button
@@ -766,6 +772,46 @@
 
           <div
             id="dictionaryResults"
+            class="results-box"
+          ></div>
+
+        </div>
+
+
+        <div class="tool-box">
+
+          <h3>📗 English Dictionary</h3>
+
+          <p>
+            Look up regular English words separately from Bible dictionary terms.
+          </p>
+
+          <label for="englishDictionarySource">Dictionary</label>
+          <select id="englishDictionarySource" class="commentary-select">
+            <option value="webster" selected>Webster’s 1913</option>
+            <option value="free">Free English Dictionary</option>
+          </select>
+
+          <div class="search-row" style="margin-top:10px">
+
+            <input
+              type="text"
+              id="englishDictionarySearch"
+              class="search-input"
+              placeholder="Example: redemption"
+            >
+
+            <button
+              class="search-button"
+              id="englishDictionaryButton"
+            >
+              Search
+            </button>
+
+          </div>
+
+          <div
+            id="englishDictionaryResults"
             class="results-box"
           ></div>
 
@@ -809,20 +855,27 @@
 
         <div class="tool-box">
 
-          <h3>🇬🇷 Hebrew & Greek Word Lookup</h3>
+          <h3>🔤 Hebrew & Greek Word Lookup</h3>
 
           <p>
-            Search Strong's Hebrew or Greek
-            words, meanings, and definitions.
+            Search Strong’s, Brown–Driver–Briggs (BDB), and Thayer’s Greek-English Lexicon.
           </p>
 
-          <div class="search-row">
+          <label for="lexiconSource">Lexicon</label>
+          <select id="lexiconSource" class="commentary-select">
+            <option value="auto" selected>Strong’s + BDB / Thayer’s</option>
+            <option value="strongs">Strong’s</option>
+            <option value="bdb">BDB Hebrew Lexicon</option>
+            <option value="thayer">Thayer’s Greek Lexicon</option>
+          </select>
+
+          <div class="search-row" style="margin-top:10px">
 
             <input
               type="text"
               id="wordSearch"
               class="search-input"
-              placeholder="Example: agape or G26"
+              placeholder="Example: G26 or H2617"
             >
 
             <button
@@ -840,8 +893,7 @@
           ></div>
 
           <div class="small-note">
-            Search by English meaning,
-            Greek/Hebrew word, or Strong's number.
+            For BDB and Thayer’s, search by Strong’s number such as H2617 or G26.
           </div>
 
         </div>
@@ -939,16 +991,12 @@
             class="commentary-select"
           >
 
-            <option value="matthew-henry-concise">
-              Matthew Henry Concise
-            </option>
-
-            <option value="matthew-henry-complete">
-              Matthew Henry Complete
+            <option value="matthew-henry-complete" selected>
+              Matthew Henry — Complete
             </option>
 
             <option value="john-gill">
-              John Gill
+              John Gill — Exposition
             </option>
 
             <option value="jfb">
@@ -959,8 +1007,16 @@
               Adam Clarke
             </option>
 
-            <option value="barnes">
-              Barnes' Notes
+            <option value="john-calvin">
+              John Calvin — Commentaries
+            </option>
+
+            <option value="keil-delitzsch">
+              Keil & Delitzsch — Old Testament
+            </option>
+
+            <option value="tyndale">
+              Tyndale — Open Study Notes
             </option>
 
           </select>
@@ -1112,7 +1168,7 @@
   let currentVerses = [];
 
   let selectedCommentary =
-    "matthew-henry-concise";
+    "matthew-henry-complete";
 
   let commentaryCache = {};
 
@@ -1205,40 +1261,26 @@
 
   const commentaryIds = {
 
-    "matthew-henry-complete":
-      "matthew-henry",
-
-    "john-gill":
-      "john-gill",
-
-    "jfb":
-      "jamieson-fausset-brown",
-
-    "adam-clarke":
-      "adam-clarke"
+    "matthew-henry-complete": "matthew-henry",
+    "john-gill": "john-gill",
+    "jfb": "jamieson-fausset-brown",
+    "adam-clarke": "adam-clarke",
+    "john-calvin": "john-calvin",
+    "keil-delitzsch": "keil-delitzsch",
+    "tyndale": "tyndale"
 
   };
 
 
   const commentaryNames = {
 
-    "matthew-henry-concise":
-      "Matthew Henry Concise",
-
-    "matthew-henry-complete":
-      "Matthew Henry Complete",
-
-    "john-gill":
-      "John Gill",
-
-    "jfb":
-      "Jamieson-Fausset-Brown",
-
-    "adam-clarke":
-      "Adam Clarke",
-
-    "barnes":
-      "Barnes' Notes"
+    "matthew-henry-complete": "Matthew Henry — Complete",
+    "john-gill": "John Gill — Exposition",
+    "jfb": "Jamieson-Fausset-Brown",
+    "adam-clarke": "Adam Clarke",
+    "john-calvin": "John Calvin — Commentaries",
+    "keil-delitzsch": "Keil & Delitzsch — Old Testament",
+    "tyndale": "Tyndale — Open Study Notes"
 
   };
 
@@ -1775,6 +1817,145 @@
 
 
   /* =========================================
+     ADVANCED GUIDED TOPIC STUDY
+  ========================================= */
+
+  const guidedStudyOverview =
+    document.getElementById("guidedStudyOverview");
+
+  const topicConcepts = {
+    forgive: ["forgive", "forgiven", "forgiveness", "mercy", "pardon"],
+    forgiveness: ["forgive", "forgiven", "forgiveness", "mercy", "pardon"],
+    faith: ["faith", "believe", "trust", "faithful"],
+    prayer: ["pray", "prayer", "ask", "supplication", "intercession"],
+    love: ["love", "charity", "loveth", "beloved"],
+    salvation: ["salvation", "save", "saved", "redeem", "redemption"],
+    grace: ["grace", "favor", "mercy"],
+    hope: ["hope", "trust", "expectation"],
+    wisdom: ["wisdom", "wise", "understanding", "knowledge"]
+  };
+
+  const sevenRedemptiveNames = [
+    {
+      name: "Jehovah-Jireh",
+      meaning: "The LORD will provide",
+      reference: "Genesis 22:14",
+      strong: "H3068",
+      focus: "God’s provision"
+    },
+    {
+      name: "Jehovah-Rapha",
+      meaning: "The LORD who heals",
+      reference: "Exodus 15:26",
+      strong: "H3068",
+      focus: "God’s healing"
+    },
+    {
+      name: "Jehovah-Nissi",
+      meaning: "The LORD is my banner",
+      reference: "Exodus 17:15",
+      strong: "H3068",
+      focus: "God’s victory and protection"
+    },
+    {
+      name: "Jehovah-M'Kaddesh",
+      meaning: "The LORD who sanctifies",
+      reference: "Leviticus 20:8",
+      strong: "H3068",
+      focus: "God’s sanctifying work"
+    },
+    {
+      name: "Jehovah-Shalom",
+      meaning: "The LORD is peace",
+      reference: "Judges 6:24",
+      strong: "H3068",
+      focus: "God’s peace"
+    },
+    {
+      name: "Jehovah-Tsidkenu",
+      meaning: "The LORD our righteousness",
+      reference: "Jeremiah 23:6",
+      strong: "H3068",
+      focus: "God’s righteousness"
+    },
+    {
+      name: "Jehovah-Rohi",
+      meaning: "The LORD my shepherd",
+      reference: "Psalm 23:1",
+      strong: "H3068",
+      focus: "God’s shepherding care"
+    }
+  ];
+
+  function isSevenRedemptiveNamesTopic(topic) {
+    const value = String(topic || "").toLowerCase();
+    return (
+      value.includes("7 redemptive names") ||
+      value.includes("seven redemptive names") ||
+      (value.includes("redemptive") && value.includes("names") && value.includes("god"))
+    );
+  }
+
+  function renderGuidedStudyOverview(topic) {
+    if (!guidedStudyOverview) return;
+
+    if (isSevenRedemptiveNamesTopic(topic)) {
+      guidedStudyOverview.innerHTML =
+        "<div class='study-note' style='margin-top:18px'>" +
+        "<h3 style='color:var(--gold);margin-top:0'>Guided Study Overview</h3>" +
+        "<p>This study brings together the seven names commonly taught as the redemptive names of God. Use the Scripture list below, then use Easton’s/Smith’s, BDB, the concordance, and the commentaries to go deeper.</p>" +
+        sevenRedemptiveNames.map(function(item, index) {
+          return (
+            "<div class='result-item'>" +
+            "<div class='result-reference'>" +
+            (index + 1) + ". " + escapeHtml(item.name) +
+            " — " + escapeHtml(item.meaning) +
+            "</div>" +
+            "<div><strong>Key Scripture:</strong> " + escapeHtml(item.reference) + "</div>" +
+            "<div><strong>Study focus:</strong> " + escapeHtml(item.focus) + "</div>" +
+            "<div class='small-note'>Hebrew covenant name: Strong’s H3068. Use the BDB lookup above for deeper Hebrew study.</div>" +
+            "</div>"
+          );
+        }).join("") +
+        "</div>";
+      return;
+    }
+
+    const clean = String(topic || "").trim();
+    guidedStudyOverview.innerHTML =
+      "<div class='study-note' style='margin-top:18px'>" +
+      "<h3 style='color:var(--gold);margin-top:0'>Guided Study Plan</h3>" +
+      "<p><strong>Topic:</strong> " + escapeHtml(clean) + "</p>" +
+      "<p>BibleMastery will gather related Scripture below. Then use the concordance for exact words, Bible dictionaries for background, Hebrew/Greek tools for original-language study, and commentaries for passage explanation.</p>" +
+      "</div>";
+  }
+
+  function getExpandedTopicSearches(topic) {
+    const lower = String(topic || "").toLowerCase();
+    const searches = [topic];
+
+    Object.keys(topicConcepts).forEach(function(key) {
+      if (lower.includes(key)) {
+        topicConcepts[key].forEach(function(term) {
+          if (!searches.includes(term)) searches.push(term);
+        });
+      }
+    });
+
+    if (isSevenRedemptiveNamesTopic(topic)) {
+      [
+        "provide", "heal", "banner", "sanctify",
+        "peace", "righteousness", "shepherd", "LORD"
+      ].forEach(function(term) {
+        if (!searches.includes(term)) searches.push(term);
+      });
+    }
+
+    return searches;
+  }
+
+
+  /* =========================================
      START STUDY
   ========================================= */
 
@@ -1801,9 +1982,11 @@
       "Study: " + topic;
 
     topicIntro.textContent =
-      "BibleMastery is helping you begin your study of \"" +
+      "BibleMastery is building a guided study of \"" +
       topic +
-      "\". Start with the Scriptures below, then use the study tools to explore the topic further.";
+      "\". Use the organized study overview, Scripture, dictionaries, lexicons, concordance, and commentaries together.";
+
+    renderGuidedStudyOverview(topic);
 
     studyWorkspace.classList.add(
       "visible"
@@ -2295,15 +2478,44 @@
 
     }
 
-    let matches =
-      searchBible(
-        studyBible,
+    const topicSearches =
+      getExpandedTopicSearches(
         currentTopic
       );
 
+    let matches = [];
+
+    topicSearches.forEach(
+      function(searchTerm) {
+        matches = matches.concat(
+          searchBible(
+            studyBible,
+            searchTerm
+          )
+        );
+      }
+    );
+
+    const uniqueMatches = [];
+    const seenReferences = new Set();
+
+    matches.forEach(
+      function(item) {
+        const key =
+          item.bookId + "|" +
+          item.chapter + "|" +
+          item.verse;
+
+        if (!seenReferences.has(key)) {
+          seenReferences.add(key);
+          uniqueMatches.push(item);
+        }
+      }
+    );
+
     let selected =
       selectVariedVerses(
-        matches
+        uniqueMatches
       );
 
     if (
@@ -3473,28 +3685,6 @@
 
     try {
 
-      if (
-        selectedCommentary ===
-        "matthew-henry-concise"
-      ) {
-
-        await loadMatthewHenryConcise();
-
-        return;
-
-      }
-
-
-      if (
-        selectedCommentary ===
-        "barnes"
-      ) {
-
-        await loadBarnesCommentary();
-
-        return;
-
-      }
 
 
       const apiId =
@@ -3635,33 +3825,61 @@
           );
 
 
-        group.verses.forEach(
-          function(verse) {
+        if (
+          selectedCommentary ===
+          "matthew-henry-complete"
+        ) {
 
-            const text =
-              findCommentaryText(
-                entries,
-                verse.verse
-              );
+          allCommentary.push({
 
-            allCommentary.push({
+            book:
+              group.bookName,
 
-              book:
-                verse.book,
+            chapter:
+              group.chapter,
 
-              chapter:
-                verse.chapter,
+            verse:
+              "Chapter",
 
-              verse:
-                verse.verse,
+            text:
+              flattenWholeCommentaryChapter(
+                chapterData
+              )
 
-              text:
-                text
+          });
 
-            });
+        }
+        else {
 
-          }
-        );
+          group.verses.forEach(
+            function(verse) {
+
+              const text =
+                findCommentaryText(
+                  entries,
+                  verse.verse
+                );
+
+              allCommentary.push({
+
+                book:
+                  verse.book,
+
+                chapter:
+                  verse.chapter,
+
+                verse:
+                  verse.verse,
+
+                text:
+                  text
+
+              });
+
+            }
+          );
+
+        }
 
       }
 
@@ -3950,6 +4168,28 @@
   }
 
 
+  function flattenWholeCommentaryChapter(data) {
+    if (!data) return "";
+
+    const content =
+      data.chapter && Array.isArray(data.chapter.content)
+        ? data.chapter.content
+        : (Array.isArray(data.content) ? data.content : []);
+
+    return content
+      .map(function(item) {
+        return flattenCommentaryText(
+          item.text ||
+          item.content ||
+          item
+        );
+      })
+      .filter(Boolean)
+      .join("\n\n")
+      .trim();
+  }
+
+
   /* =========================================
      RENDER COMMENTARY
   ========================================= */
@@ -3997,11 +4237,9 @@
 
 
         reference.textContent =
-          entry.book +
-          " " +
-          entry.chapter +
-          ":" +
-          entry.verse;
+          entry.verse === "Chapter"
+            ? entry.book + " " + entry.chapter
+            : entry.book + " " + entry.chapter + ":" + entry.verse;
 
 
         const body =
@@ -4047,584 +4285,6 @@
         "</div>";
 
     }
-
-  }
-
-
-  /* =========================================
-     MATTHEW HENRY CONCISE
-  ========================================= */
-
-  const conciseBookSlugs = {
-
-    "GENESIS": "genesis",
-    "EXODUS": "exodus",
-    "LEVITICUS": "leviticus",
-    "NUMBERS": "numbers",
-    "DEUTERONOMY": "deuteronomy",
-    "JOSHUA": "joshua",
-    "JUDGES": "judges",
-    "RUTH": "ruth",
-    "1 SAMUEL": "1-samuel",
-    "2 SAMUEL": "2-samuel",
-    "1 KINGS": "1-kings",
-    "2 KINGS": "2-kings",
-    "1 CHRONICLES": "1-chronicles",
-    "2 CHRONICLES": "2-chronicles",
-    "EZRA": "ezra",
-    "NEHEMIAH": "nehemiah",
-    "ESTHER": "esther",
-    "JOB": "job",
-    "PSALMS": "psalms",
-    "PROVERBS": "proverbs",
-    "ECCLESIASTES": "ecclesiastes",
-    "SONG OF SOLOMON": "song-of-solomon",
-    "ISAIAH": "isaiah",
-    "JEREMIAH": "jeremiah",
-    "LAMENTATIONS": "lamentations",
-    "EZEKIEL": "ezekiel",
-    "DANIEL": "daniel",
-    "HOSEA": "hosea",
-    "JOEL": "joel",
-    "AMOS": "amos",
-    "OBADIAH": "obadiah",
-    "JONAH": "jonah",
-    "MICAH": "micah",
-    "NAHUM": "nahum",
-    "HABAKKUK": "habakkuk",
-    "ZEPHANIAH": "zephaniah",
-    "HAGGAI": "haggai",
-    "ZECHARIAH": "zechariah",
-    "MALACHI": "malachi",
-
-    "MATTHEW": "matthew",
-    "MARK": "mark",
-    "LUKE": "luke",
-    "JOHN": "john",
-    "ACTS": "acts",
-    "ROMANS": "romans",
-    "1 CORINTHIANS": "1-corinthians",
-    "2 CORINTHIANS": "2-corinthians",
-    "GALATIANS": "galatians",
-    "EPHESIANS": "ephesians",
-    "PHILIPPIANS": "philippians",
-    "COLOSSIANS": "colossians",
-    "1 THESSALONIANS": "1-thessalonians",
-    "2 THESSALONIANS": "2-thessalonians",
-    "1 TIMOTHY": "1-timothy",
-    "2 TIMOTHY": "2-timothy",
-    "TITUS": "titus",
-    "PHILEMON": "philemon",
-    "HEBREWS": "hebrews",
-    "JAMES": "james",
-    "1 PETER": "1-peter",
-    "2 PETER": "2-peter",
-    "1 JOHN": "1-john",
-    "2 JOHN": "2-john",
-    "3 JOHN": "3-john",
-    "JUDE": "jude",
-    "REVELATION": "revelation"
-
-  };
-
-
-  const CONCISE_SOURCE =
-    "https://raw.githubusercontent.com/lyteword/mhenry-concise/main/";
-
-
-  function parseConciseMarkdown(
-    markdown
-  ) {
-
-    const entries = [];
-
-    const lines =
-      markdown.split(
-        /\r?\n/
-      );
-
-    let currentRange =
-      "";
-
-    let currentText =
-      [];
-
-    function saveCurrent() {
-
-      if (
-        currentRange &&
-        currentText.length
-      ) {
-
-        entries.push({
-
-          number:
-            currentRange,
-
-          text:
-            currentText
-              .join(" ")
-              .replace(
-                /\s+/g,
-                " "
-              )
-              .trim()
-
-        });
-
-      }
-
-      currentText = [];
-
-    }
-
-
-    lines.forEach(
-      function(line) {
-
-        const trimmed =
-          line.trim();
-
-        const headingMatch =
-          trimmed.match(
-            /^##\s+Verses?\s+(.+)$/i
-          );
-
-        if (
-          headingMatch
-        ) {
-
-          saveCurrent();
-
-          currentRange =
-            headingMatch[1]
-              .replace(
-                /[–—]/g,
-                "-"
-              )
-              .trim();
-
-          return;
-
-        }
-
-
-        if (
-          currentRange &&
-          trimmed &&
-          !trimmed.startsWith(
-            "#"
-          ) &&
-          !trimmed.startsWith(
-            "---"
-          )
-        ) {
-
-          currentText.push(
-            trimmed
-              .replace(
-                /^\s*[-*]\s+/,
-                ""
-              )
-          );
-
-        }
-
-      }
-    );
-
-
-    saveCurrent();
-
-    return entries;
-
-  }
-
-
-  async function loadMatthewHenryConcise() {
-
-    const entries = [];
-
-    const groups =
-      groupVersesByChapter(
-        currentVerses
-      );
-
-
-    for (
-      const group of groups
-    ) {
-
-      const bookName =
-        String(
-          group.bookName
-        )
-        .toUpperCase();
-
-      const slug =
-        conciseBookSlugs[
-          bookName
-        ];
-
-
-      if (
-        !slug
-      ) {
-
-        continue;
-
-      }
-
-
-      const url =
-        CONCISE_SOURCE +
-        slug +
-        "/chapter-" +
-        encodeURIComponent(
-          group.chapter
-        ) +
-        ".md";
-
-
-      try {
-
-        const response =
-          await fetch(
-            url
-          );
-
-
-        if (
-          !response.ok
-        ) {
-
-          continue;
-
-        }
-
-
-        const markdown =
-          await response.text();
-
-
-        const chapterEntries =
-          parseConciseMarkdown(
-            markdown
-          );
-
-
-        group.verses.forEach(
-          function(verse) {
-
-            const text =
-              findCommentaryText(
-                chapterEntries,
-                verse.verse
-              );
-
-
-            entries.push({
-
-              book:
-                verse.book,
-
-              chapter:
-                verse.chapter,
-
-              verse:
-                verse.verse,
-
-              text:
-                text
-
-            });
-
-          }
-        );
-
-      }
-      catch (error) {
-
-        console.log(
-          "Concise commentary chapter error:",
-          error
-        );
-
-      }
-
-    }
-
-
-    renderCommentary(
-      "Matthew Henry Concise",
-      entries
-    );
-
-
-    if (
-      entries.some(
-        function(entry) {
-
-          return !!entry.text;
-
-        }
-      )
-    ) {
-
-      commentaryStatus.textContent =
-        "Matthew Henry Concise loaded.";
-
-    }
-    else {
-
-      commentaryStatus.textContent =
-        "Matthew Henry Concise could not be loaded.";
-
-    }
-
-  }
-
-
-  /* =========================================
-     BARNES
-  ========================================= */
-
-  async function loadBarnesCommentary() {
-
-    commentaryHeading.textContent =
-      "📖 Barnes' Notes";
-
-    commentarySubheading.textContent =
-      "Barnes' Notes beside your selected verses";
-
-    commentaryContent.innerHTML =
-      "<div class='commentary-loading'>" +
-      "Loading Barnes' Notes..." +
-      "</div>";
-
-
-    const entries = [];
-
-    const groups =
-      groupVersesByChapter(
-        currentVerses
-      );
-
-
-    for (
-      const group of groups
-    ) {
-
-      if (
-        [
-          "GEN",
-          "EXO",
-          "LEV",
-          "NUM",
-          "DEU",
-          "JOS",
-          "JDG",
-          "RUT",
-          "1SA",
-          "2SA",
-          "1KI",
-          "2KI",
-          "1CH",
-          "2CH",
-          "EZR",
-          "NEH",
-          "EST",
-          "JOB",
-          "PSA",
-          "PRO",
-          "ECC",
-          "SNG",
-          "ISA",
-          "JER",
-          "LAM",
-          "EZK",
-          "DAN",
-          "HOS",
-          "JOL",
-          "AMO",
-          "OBA",
-          "JON",
-          "MIC",
-          "NAM",
-          "HAB",
-          "ZEP",
-          "HAG",
-          "ZEC",
-          "MAL"
-        ].includes(
-          group.bookId
-        )
-      ) {
-
-        continue;
-
-      }
-
-
-      try {
-
-        const url =
-          "https://www.sermonindex.net/commentary/barnes/" +
-          encodeURIComponent(
-            group.bookId
-          ) +
-          "/" +
-          encodeURIComponent(
-            group.chapter
-          ) +
-          "/";
-
-
-        const response =
-          await fetch(
-            url
-          );
-
-
-        if (
-          !response.ok
-        ) {
-
-          continue;
-
-        }
-
-
-        const html =
-          await response.text();
-
-
-        const parser =
-          new DOMParser();
-
-
-        const page =
-          parser.parseFromString(
-            html,
-            "text/html"
-          );
-
-
-        const paragraphs =
-          Array.from(
-            page.querySelectorAll(
-              "p"
-            )
-          );
-
-
-        const selectedNumbers =
-          new Set(
-            group.verses.map(
-              function(item) {
-
-                return String(
-                  item.verse
-                );
-
-              }
-            )
-          );
-
-
-        paragraphs.forEach(
-          function(paragraph) {
-
-            const text =
-              paragraph.textContent
-                .replace(
-                  /\s+/g,
-                  " "
-                )
-                .trim();
-
-
-            if (
-              !text
-            ) {
-
-              return;
-
-            }
-
-
-            const match =
-              text.match(
-                /^(\d+)\s*[\.\-:]\s*(.*)$/
-              );
-
-
-            if (
-              match &&
-              selectedNumbers.has(
-                match[1]
-              )
-            ) {
-
-              entries.push({
-
-                book:
-                  group.bookName,
-
-                chapter:
-                  group.chapter,
-
-                verse:
-                  match[1],
-
-                text:
-                  match[2]
-
-              });
-
-            }
-
-          }
-        );
-
-      }
-      catch (error) {
-
-        console.log(
-          "Barnes retrieval error:",
-          error
-        );
-
-      }
-
-    }
-
-
-    if (
-      !entries.length
-    ) {
-
-      commentaryContent.innerHTML =
-        "<div class='commentary-empty'>" +
-        "Barnes' Notes could not be retrieved directly by this browser. Barnes is a New Testament commentary, so Old Testament verses will not have Barnes notes here. We can connect a dedicated Barnes data source later if needed." +
-        "</div>";
-
-      commentaryStatus.textContent =
-        "Barnes' Notes could not be retrieved.";
-
-      return;
-
-    }
-
-
-    renderCommentary(
-      "Barnes' Notes",
-      entries
-    );
-
-
-    commentaryStatus.textContent =
-      "Barnes' Notes loaded.";
 
   }
 
@@ -4769,254 +4429,230 @@
 
 
   /* =========================================
-     BIBLE DICTIONARY
+     BIBLE DICTIONARIES — EASTON + SMITH
   ========================================= */
 
-  const simpleBibleDictionary = {
+  const bibleDictionaryCache = {};
+  let websterDictionaryCache = null;
 
-    grace:
-      "Grace is God's undeserved favor and kindness toward people. In Scripture it is closely connected with God's saving work, His mercy, and the strength He gives to believers.",
+  function normalizeDictionaryWord(value) {
+    return String(value || "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]/g, "");
+  }
 
-    faith:
-      "Faith involves trusting God and relying upon Him. Scripture connects faith with believing God's promises and trusting in Jesus Christ.",
+  async function loadBibleDictionaryLetter(letter) {
+    const key = String(letter || "").toLowerCase();
 
-    forgiveness:
-      "Forgiveness in Scripture involves releasing a person's debt or offense and is ultimately rooted in God's mercy and His forgiveness of sin.",
+    if (bibleDictionaryCache[key]) {
+      return bibleDictionaryCache[key];
+    }
 
-    love:
-      "Biblical love is more than emotion. Scripture describes love through devotion to God, love for others, sacrifice, obedience, and seeking another person's good.",
+    const response = await fetch(
+      "https://raw.githubusercontent.com/neuu-org/bible-dictionary-dataset/main/data/01_parsed/" +
+      key +
+      ".json"
+    );
 
-    salvation:
-      "Salvation refers to God's deliverance from sin and its consequences. The New Testament centers salvation in Jesus Christ.",
+    if (!response.ok) {
+      throw new Error("Bible dictionary data could not be loaded.");
+    }
 
-    repentance:
-      "Repentance means turning from sin toward God. Biblical repentance involves a change of heart and direction.",
+    const data = await response.json();
+    bibleDictionaryCache[key] = data;
+    return data;
+  }
 
-    mercy:
-      "Mercy is compassion shown toward someone who is suffering, guilty, or in need. Scripture repeatedly presents God as merciful.",
+  async function searchBibleDictionaries(word) {
+    const firstLetter = word.trim().charAt(0).toLowerCase();
 
-    prayer:
-      "Prayer is communication with God that includes worship, confession, thanksgiving, requests, intercession, and seeking God's will.",
+    if (!/[a-z]/.test(firstLetter)) {
+      return null;
+    }
 
-    hope:
-      "Biblical hope is confident expectation based on God and His promises rather than uncertain wishful thinking.",
+    const data = await loadBibleDictionaryLetter(firstLetter);
+    const wanted = normalizeDictionaryWord(word);
 
-    righteousness:
-      "Righteousness refers to what is right according to God's character and standard. Scripture also speaks of righteousness received through faith in Christ.",
+    const exactKey = Object.keys(data).find(function(key) {
+      return normalizeDictionaryWord(key) === wanted;
+    });
 
-    holiness:
-      "Holiness means being set apart for God and morally pure. Scripture calls God's people to live in holiness because God Himself is holy.",
+    if (exactKey) return data[exactKey];
 
-    wisdom:
-      "Biblical wisdom is the ability to live rightly according to God's truth. Proverbs especially connects wisdom with fearing the Lord.",
+    const partialKey = Object.keys(data).find(function(key) {
+      return normalizeDictionaryWord(key).startsWith(wanted);
+    });
 
-    covenant:
-      "A covenant is a binding relationship or agreement. The Bible describes several covenants through which God reveals His purposes and promises.",
+    return partialKey ? data[partialKey] : null;
+  }
 
-    disciple:
-      "A disciple is a learner and follower. Christian discipleship means following Jesus, learning from Him, obeying Him, and growing in faith.",
+  document.getElementById("dictionaryButton").addEventListener(
+    "click",
+    async function() {
+      const word = document.getElementById("dictionarySearch").value.trim();
+      const results = document.getElementById("dictionaryResults");
 
-    kingdom:
-      "The kingdom of God refers to God's rule and reign. Jesus taught extensively about the kingdom and called people to seek it.",
+      if (!word) {
+        results.innerHTML = "<div class='status-message'>Enter a Bible word or topic.</div>";
+        return;
+      }
 
-    gospel:
-      "The gospel is the good news concerning Jesus Christ, His death and resurrection, and God's saving work through Him."
+      results.innerHTML = "<div class='status-message'>Searching Easton’s and Smith’s...</div>";
 
-  };
+      try {
+        const entry = await searchBibleDictionaries(word);
 
-
-  document
-    .getElementById(
-      "dictionaryButton"
-    )
-    .addEventListener(
-      "click",
-      async function() {
-
-        const word =
-          document
-            .getElementById(
-              "dictionarySearch"
-            )
-            .value
-            .trim();
-
-        const results =
-          document.getElementById(
-            "dictionaryResults"
-          );
-
-
-        if (
-          !word
-        ) {
-
+        if (!entry) {
           results.innerHTML =
-            "<div class='status-message'>" +
-            "Enter a Bible word or topic." +
-            "</div>";
-
+            "<div class='status-message'>No Easton’s or Smith’s entry was found for this exact term.</div>";
           return;
-
         }
 
+        const source = document.getElementById("dictionarySource").value;
+        const allowed =
+          source === "easton" ? ["EAS"] :
+          source === "smith" ? ["SMI"] :
+          ["EAS", "SMI"];
 
-        const lower =
-          word.toLowerCase();
+        const definitions = (entry.definitions || []).filter(function(definition) {
+          return allowed.includes(definition.source);
+        });
 
-
-        if (
-          simpleBibleDictionary[
-            lower
-          ]
-        ) {
-
+        if (!definitions.length) {
           results.innerHTML =
+            "<div class='status-message'>This term is not included in the selected Bible dictionary.</div>";
+          return;
+        }
+
+        results.innerHTML = definitions.map(function(definition) {
+          const sourceName =
+            definition.source === "EAS"
+              ? "Easton’s Bible Dictionary (1897)"
+              : "Smith’s Bible Dictionary (1863)";
+
+          return (
             "<div class='result-item dictionary-definition'>" +
-            "<strong>" +
-            escapeHtml(
-              word
-            ) +
-            "</strong>" +
-            "<br><br>" +
-            escapeHtml(
-              simpleBibleDictionary[
-                lower
-              ]
-            ) +
-            "</div>";
+            "<div class='result-reference'>" +
+            escapeHtml(entry.name || word) +
+            "</div>" +
+            "<div style='margin-top:8px'>" +
+            escapeHtml(definition.text || "") +
+            "</div>" +
+            "<div class='small-note'>" +
+            sourceName +
+            "</div>" +
+            "</div>"
+          );
+        }).join("");
 
-          return;
-
-        }
-
-
+      } catch (error) {
+        console.error("Bible dictionary error:", error);
         results.innerHTML =
-          "<div class='status-message'>" +
-          "Searching dictionary..." +
-          "</div>";
+          "<div class='error-message'>Bible dictionary could not be loaded right now.</div>";
+      }
+    }
+  );
 
 
-        try {
+  /* =========================================
+     ENGLISH DICTIONARIES
+  ========================================= */
 
-          const response =
-            await fetch(
-              "https://api.dictionaryapi.dev/api/v2/entries/en/" +
-              encodeURIComponent(
-                word
-              )
-            );
+  async function loadWebsterDictionary() {
+    if (websterDictionaryCache) return websterDictionaryCache;
 
+    const response = await fetch(
+      "https://raw.githubusercontent.com/adambom/dictionary/master/dictionary.json"
+    );
 
-          if (
-            !response.ok
-          ) {
+    if (!response.ok) {
+      throw new Error("Webster dictionary data could not be loaded.");
+    }
 
-            throw new Error(
-              "Dictionary lookup failed."
-            );
+    websterDictionaryCache = await response.json();
+    return websterDictionaryCache;
+  }
 
+  document.getElementById("englishDictionaryButton").addEventListener(
+    "click",
+    async function() {
+      const word = document.getElementById("englishDictionarySearch").value.trim();
+      const results = document.getElementById("englishDictionaryResults");
+      const source = document.getElementById("englishDictionarySource").value;
+
+      if (!word) {
+        results.innerHTML =
+          "<div class='status-message'>Enter an English word.</div>";
+        return;
+      }
+
+      results.innerHTML =
+        "<div class='status-message'>Searching English dictionary...</div>";
+
+      try {
+        if (source === "webster") {
+          const data = await loadWebsterDictionary();
+          const key = Object.keys(data).find(function(item) {
+            return item.toLowerCase() === word.toLowerCase();
+          });
+
+          if (!key) {
+            results.innerHTML =
+              "<div class='status-message'>No Webster’s 1913 entry was found.</div>";
+            return;
           }
 
-
-          const data =
-            await response.json();
-
-
-          let html =
+          results.innerHTML =
             "<div class='result-item dictionary-definition'>" +
-            "<strong>" +
-            escapeHtml(
-              word
-            ) +
-            "</strong>";
-
-
-          data
-            .slice(
-              0,
-              2
-            )
-            .forEach(
-              function(entry) {
-
-                if (
-                  Array.isArray(
-                    entry.meanings
-                  )
-                ) {
-
-                  entry.meanings
-                    .slice(
-                      0,
-                      4
-                    )
-                    .forEach(
-                      function(meaning) {
-
-                        html +=
-                          "<br><br><strong>" +
-                          escapeHtml(
-                            meaning.partOfSpeech ||
-                            ""
-                          ) +
-                          "</strong>";
-
-
-                        if (
-                          Array.isArray(
-                            meaning.definitions
-                          )
-                        ) {
-
-                          meaning.definitions
-                            .slice(
-                              0,
-                              3
-                            )
-                            .forEach(
-                              function(definition) {
-
-                                html +=
-                                  "<br>• " +
-                                  escapeHtml(
-                                    definition.definition ||
-                                    ""
-                                  );
-
-                              }
-                            );
-
-                        }
-
-                      }
-                    );
-
-                }
-
-              }
-            );
-
-
-          html +=
+            "<div class='result-reference'>" + escapeHtml(key) + "</div>" +
+            "<div style='margin-top:8px'>" + escapeHtml(data[key]) + "</div>" +
+            "<div class='small-note'>Webster’s Unabridged Dictionary (1913)</div>" +
             "</div>";
-
-
-          results.innerHTML =
-            html;
-
-        }
-        catch (error) {
-
-          results.innerHTML =
-            "<div class='error-message'>" +
-            "No dictionary entry was found for this word. Try a common Bible word such as grace, faith, forgiveness, love, salvation, prayer, or mercy." +
-            "</div>";
-
+          return;
         }
 
+        const response = await fetch(
+          "https://api.dictionaryapi.dev/api/v2/entries/en/" +
+          encodeURIComponent(word)
+        );
+
+        if (!response.ok) throw new Error("English dictionary lookup failed.");
+
+        const data = await response.json();
+        const definitions = [];
+
+        data.forEach(function(entry) {
+          (entry.meanings || []).forEach(function(meaning) {
+            (meaning.definitions || []).slice(0, 3).forEach(function(item) {
+              definitions.push({
+                part: meaning.partOfSpeech || "",
+                definition: item.definition || ""
+              });
+            });
+          });
+        });
+
+        results.innerHTML =
+          "<div class='result-item dictionary-definition'>" +
+          "<div class='result-reference'>" +
+          escapeHtml((data[0] && data[0].word) || word) +
+          "</div>" +
+          definitions.slice(0, 8).map(function(item) {
+            return "<div style='margin-top:8px'>" +
+              (item.part ? "<strong>" + escapeHtml(item.part) + ":</strong> " : "") +
+              escapeHtml(item.definition) +
+              "</div>";
+          }).join("") +
+          "<div class='small-note'>Free English Dictionary service</div>" +
+          "</div>";
+
+      } catch (error) {
+        console.error("English dictionary error:", error);
+        results.innerHTML =
+          "<div class='error-message'>English dictionary could not be loaded right now.</div>";
       }
-    );
+    }
+  );
 
 
   /* =========================================
@@ -5375,221 +5011,198 @@
 
 
   /* =========================================
-     HEBREW / GREEK LOOKUP
+     BDB + THAYER LEXICONS
   ========================================= */
 
-  document
-    .getElementById(
-      "wordButton"
-    )
-    .addEventListener(
-      "click",
-      async function() {
+  let thayerLexiconCache = null;
+  let bdbIndexCache = null;
+  let bdbLexiconCache = null;
 
-        const word =
-          document
-            .getElementById(
-              "wordSearch"
-            )
-            .value
-            .trim();
+  async function loadThayerLexicon() {
+    if (thayerLexiconCache) return thayerLexiconCache;
 
-        const results =
-          document.getElementById(
-            "wordResults"
-          );
-
-
-        if (
-          !word
-        ) {
-
-          results.innerHTML =
-            "<div class='status-message'>" +
-            "Enter a Hebrew, Greek, English, or Strong's number." +
-            "</div>";
-
-          return;
-
-        }
-
-
-        const strongEntry =
-          findStrongEntry(
-            word
-          );
-
-
-        if (
-          strongEntry
-        ) {
-
-          results.innerHTML =
-            renderStrongEntry(
-              strongEntry
-            );
-
-          return;
-
-        }
-
-
-        results.innerHTML =
-          "<div class='status-message'>" +
-          "Searching original-language lexicons..." +
-          "</div>";
-
-
-        try {
-
-          const url =
-            "https://www.sefaria.org/api/words/" +
-            encodeURIComponent(
-              word
-            );
-
-
-          const response =
-            await fetch(
-              url
-            );
-
-
-          if (
-            !response.ok
-          ) {
-
-            throw new Error(
-              "Lexicon lookup failed."
-            );
-
-          }
-
-
-          const data =
-            await response.json();
-
-
-          if (
-            !Array.isArray(data) ||
-            !data.length
-          ) {
-
-            results.innerHTML =
-              "<div class='status-message'>" +
-              "No lexicon entry was found for \"" +
-              escapeHtml(
-                word
-              ) +
-              "\". Try the original Hebrew or Greek spelling, or a Strong's number such as G26." +
-              "</div>";
-
-            return;
-
-          }
-
-
-          results.innerHTML =
-            "";
-
-
-          data
-            .slice(
-              0,
-              8
-            )
-            .forEach(
-              function(entry) {
-
-                const item =
-                  document.createElement(
-                    "div"
-                  );
-
-                item.className =
-                  "result-item";
-
-
-                const headword =
-                  entry.headword ||
-                  entry.word ||
-                  word;
-
-
-                let definition =
-                  "";
-
-
-                if (
-                  entry.content
-                ) {
-
-                  definition =
-                    extractLexiconDefinition(
-                      entry.content
-                    );
-
-                }
-
-
-                if (
-                  !definition &&
-                  entry.definition
-                ) {
-
-                  definition =
-                    entry.definition;
-
-                }
-
-
-                item.innerHTML =
-                  "<div class='result-reference'>" +
-                  escapeHtml(
-                    headword
-                  ) +
-                  "</div>" +
-
-                  "<div class='small-note'>" +
-                  escapeHtml(
-                    entry.parent_lexicon ||
-                    ""
-                  ) +
-                  "</div>" +
-
-                  "<div style='margin-top:8px;line-height:1.6'>" +
-                  escapeHtml(
-                    definition ||
-                    "Lexicon entry found."
-                  ) +
-                  "</div>";
-
-
-                results.appendChild(
-                  item
-                );
-
-              }
-            );
-
-        }
-        catch (error) {
-
-          console.error(
-            "Word lookup error:",
-            error
-          );
-
-
-          results.innerHTML =
-            "<div class='error-message'>" +
-            "The original-language lookup could not be reached right now. Try a Strong's number such as G26 or search using the original Hebrew or Greek spelling." +
-            "</div>";
-
-        }
-
-      }
+    const response = await fetch(
+      "https://raw.githubusercontent.com/nigelmsipa/thayers-greek-lexicon-dataset/master/data/thayer_lexicon.json"
     );
+
+    if (!response.ok) throw new Error("Thayer’s lexicon data could not be loaded.");
+
+    thayerLexiconCache = await response.json();
+    return thayerLexiconCache;
+  }
+
+  async function findThayerEntry(key) {
+    const data = await loadThayerLexicon();
+    const normalized = String(key || "").trim().toUpperCase();
+
+    return data.find(function(entry) {
+      return (
+        String(entry.id || "").toUpperCase() === normalized ||
+        (entry.strongs || []).map(function(value) {
+          return String(value).toUpperCase();
+        }).includes(normalized)
+      );
+    }) || null;
+  }
+
+  async function loadBdbData() {
+    if (bdbIndexCache && bdbLexiconCache) return;
+
+    const responses = await Promise.all([
+      fetch("https://raw.githubusercontent.com/openscriptures/HebrewLexicon/master/LexicalIndex.xml"),
+      fetch("https://raw.githubusercontent.com/openscriptures/HebrewLexicon/master/BrownDriverBriggs.xml")
+    ]);
+
+    if (!responses[0].ok || !responses[1].ok) {
+      throw new Error("BDB lexicon data could not be loaded.");
+    }
+
+    const parser = new DOMParser();
+
+    bdbIndexCache = parser.parseFromString(
+      await responses[0].text(),
+      "application/xml"
+    );
+
+    bdbLexiconCache = parser.parseFromString(
+      await responses[1].text(),
+      "application/xml"
+    );
+  }
+
+  async function findBdbEntry(key) {
+    await loadBdbData();
+
+    const strongNumber = String(key || "")
+      .trim()
+      .toUpperCase()
+      .replace(/^H/, "")
+      .replace(/^0+/, "");
+
+    if (!/^\d+$/.test(strongNumber)) return null;
+
+    const xrefs = Array.from(
+      bdbIndexCache.getElementsByTagNameNS("*", "xref")
+    );
+
+    const xref = xrefs.find(function(node) {
+      return String(node.getAttribute("strong") || "")
+        .replace(/^0+/, "") === strongNumber;
+    });
+
+    if (!xref) return null;
+
+    const bdbId = xref.getAttribute("bdb");
+    if (!bdbId) return null;
+
+    const indexEntry = xref.parentElement;
+    const wordNode = indexEntry
+      ? indexEntry.getElementsByTagNameNS("*", "w")[0]
+      : null;
+    const shortDefNode = indexEntry
+      ? indexEntry.getElementsByTagNameNS("*", "def")[0]
+      : null;
+
+    const bdbEntries = Array.from(
+      bdbLexiconCache.getElementsByTagNameNS("*", "entry")
+    );
+
+    const bdbEntry = bdbEntries.find(function(node) {
+      return node.getAttribute("id") === bdbId;
+    });
+
+    return {
+      strong: "H" + strongNumber,
+      word: wordNode ? wordNode.textContent.trim() : "",
+      transliteration: wordNode ? (wordNode.getAttribute("xlit") || "") : "",
+      shortDefinition: shortDefNode ? shortDefNode.textContent.trim() : "",
+      text: bdbEntry
+        ? bdbEntry.textContent.replace(/\s+/g, " ").trim()
+        : ""
+    };
+  }
+
+  document.getElementById("wordButton").addEventListener(
+    "click",
+    async function() {
+      const key = normalizeStrongs(
+        document.getElementById("wordSearch").value
+      );
+      const results = document.getElementById("wordResults");
+      const source = document.getElementById("lexiconSource").value;
+
+      if (!key) {
+        results.innerHTML =
+          "<div class='status-message'>Enter a Strong’s number such as G26 or H2617.</div>";
+        return;
+      }
+
+      results.innerHTML =
+        "<div class='status-message'>Searching lexicons...</div>";
+
+      try {
+        const sections = [];
+        const strongEntry = findStrongEntry(key);
+
+        if ((source === "auto" || source === "strongs") && strongEntry) {
+          sections.push(renderStrongEntry(strongEntry));
+        }
+
+        if (key.startsWith("H") && (source === "auto" || source === "bdb")) {
+          const bdb = await findBdbEntry(key);
+
+          if (bdb) {
+            sections.push(
+              "<div class='result-item'>" +
+              "<div class='strongs-number'>" + escapeHtml(bdb.strong) + "</div>" +
+              "<div class='small-note'>Brown–Driver–Briggs Hebrew Lexicon</div>" +
+              "<div class='strongs-lemma'>" + escapeHtml(bdb.word || key) + "</div>" +
+              (bdb.transliteration
+                ? "<div style='margin-top:4px'>" + escapeHtml(bdb.transliteration) + "</div>"
+                : "") +
+              (bdb.shortDefinition
+                ? "<div class='strongs-definition'><strong>Gloss:</strong> " +
+                  escapeHtml(bdb.shortDefinition) + "</div>"
+                : "") +
+              (bdb.text
+                ? "<div class='strongs-definition'>" + escapeHtml(bdb.text) + "</div>"
+                : "") +
+              "</div>"
+            );
+          }
+        }
+
+        if (key.startsWith("G") && (source === "auto" || source === "thayer")) {
+          const thayer = await findThayerEntry(key);
+
+          if (thayer) {
+            sections.push(
+              "<div class='result-item'>" +
+              "<div class='strongs-number'>" + escapeHtml(key) + "</div>" +
+              "<div class='small-note'>Thayer’s Greek-English Lexicon</div>" +
+              "<div class='strongs-lemma'>" + escapeHtml(thayer.lemma || key) + "</div>" +
+              (thayer.grammar
+                ? "<div style='margin-top:4px'>" + escapeHtml(thayer.grammar) + "</div>"
+                : "") +
+              "<div class='strongs-definition'>" +
+              escapeHtml(thayer.text || (thayer.paragraphs || []).join(" ")) +
+              "</div>" +
+              "</div>"
+            );
+          }
+        }
+
+        results.innerHTML = sections.length
+          ? sections.join("")
+          : "<div class='status-message'>No matching entry was found in the selected Strong’s / BDB / Thayer resource.</div>";
+
+      } catch (error) {
+        console.error("Lexicon lookup error:", error);
+        results.innerHTML =
+          "<div class='error-message'>The selected lexicon could not be loaded right now.</div>";
+      }
+    }
+  );
 
 
   /* =========================================
