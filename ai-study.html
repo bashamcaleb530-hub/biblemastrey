@@ -3868,11 +3868,7 @@
       selectedCommentary =
         commentarySelect.value;
 
-      commentaryStatus.textContent =
-        commentaryNames[
-          selectedCommentary
-        ] +
-        " selected. Click Load Commentary.";
+      loadReaderCommentary();
 
     }
   );
@@ -5705,6 +5701,28 @@
   let bdbIndexCache = null;
   let bdbLexiconCache = null;
 
+  function normalizeGreekStrongsKey(
+    value
+  ) {
+
+    const raw =
+      String(value || "")
+      .trim()
+      .toUpperCase();
+
+    const match =
+      raw.match(/^G?0*(\d+)$/);
+
+    if (!match) {
+      return raw;
+    }
+
+    return "G" + String(
+      Number(match[1])
+    );
+  }
+
+
   async function loadThayerLexicon() {
 
     if (thayerLexiconMap) {
@@ -5747,11 +5765,9 @@
           function(entry) {
 
             const id =
-              String(
+              normalizeGreekStrongsKey(
                 entry.id || ""
-              )
-              .trim()
-              .toUpperCase();
+              );
 
             if (id) {
               thayerLexiconMap.set(
@@ -5769,9 +5785,9 @@
               function(value) {
 
                 const strongKey =
-                  String(value || "")
-                  .trim()
-                  .toUpperCase();
+                  normalizeGreekStrongsKey(
+                    value
+                  );
 
                 if (strongKey) {
                   thayerLexiconMap.set(
@@ -5803,11 +5819,54 @@
       await loadThayerLexicon();
 
     const normalized =
-      String(key || "")
-      .trim()
-      .toUpperCase();
+      normalizeGreekStrongsKey(
+        key
+      );
 
-    return map.get(normalized) || null;
+    const direct =
+      map.get(normalized);
+
+    if (direct) {
+      return direct;
+    }
+
+    /*
+      Fallback:
+      Some digitized Thayer entries may store the
+      Strong's number in a slightly different shape.
+      Check the original dataset once before reporting
+      that the entry is missing.
+    */
+    return (
+      thayerLexiconCache || []
+    ).find(
+      function(entry) {
+
+        const entryId =
+          normalizeGreekStrongsKey(
+            entry.id || ""
+          );
+
+        if (entryId === normalized) {
+          return true;
+        }
+
+        const strongs =
+          Array.isArray(entry.strongs)
+            ? entry.strongs
+            : [];
+
+        return strongs.some(
+          function(value) {
+            return (
+              normalizeGreekStrongsKey(
+                value
+              ) === normalized
+            );
+          }
+        );
+      }
+    ) || null;
   }
 
   async function loadBdbData() {
