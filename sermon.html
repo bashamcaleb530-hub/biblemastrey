@@ -1346,21 +1346,83 @@
   }
   const escapeHtml = escapeHTML;
 
-  async function getBibleByTranslation(translation) {
-    if (translation === "KJV1611") return await getKJV1611();
-    if (translation === "KJVPLUS") return await getKJVPLUS();
-    if (translation === "YLT") return await getYLT();
-    if (translation === "WEB") return await getWEB();
-    if (translation === "ASV") return await getASV();
-    if (translation === "GENEVA1599") return await getGENEVA1599();
-    if (translation === "DRA") return await getDRA();
-    if (translation === "BSB") return await getBSB();
-    if (translation === "MSB") return await getMSB();
-    return await getKJV();
+  /* =========================================
+     BIBLE DATA SHAPE HELPERS
+     Same proven normalization used by Personal Study
+  ========================================= */
+
+  function getBibleBooks(data) {
+    if (!data) return [];
+    if (Array.isArray(data)) return data;
+    if (Array.isArray(data.books)) return data.books;
+    if (data.books && typeof data.books === "object") return Object.values(data.books);
+    if (Array.isArray(data.Books)) return data.Books;
+    return [];
+  }
+
+  function getBibleChapters(book) {
+    if (!book) return [];
+    if (Array.isArray(book.chapters)) return book.chapters;
+    if (book.chapters && typeof book.chapters === "object") return Object.values(book.chapters);
+    if (Array.isArray(book.Chapters)) return book.Chapters;
+    return [];
+  }
+
+  function getBibleVerses(chapter) {
+    if (!chapter) return [];
+    if (Array.isArray(chapter.verses)) return chapter.verses;
+    if (chapter.verses && typeof chapter.verses === "object") return Object.values(chapter.verses);
+    if (Array.isArray(chapter.Verses)) return chapter.Verses;
+    if (Array.isArray(chapter.content)) {
+      return chapter.content.filter(function(item) {
+        return item && (item.type === "verse" || item.number !== undefined || item.verse !== undefined);
+      });
+    }
+    if (chapter.chapter && Array.isArray(chapter.chapter.content)) {
+      return chapter.chapter.content.filter(function(item) {
+        return item && (item.type === "verse" || item.number !== undefined || item.verse !== undefined);
+      });
+    }
+    return [];
   }
 
   function chapterNumber(chapter, index) {
-    return chapter && (chapter.chapter || chapter.number || chapter.chapterNumber) || (index + 1);
+    if (!chapter) return index + 1;
+    if (chapter.chapter && typeof chapter.chapter === "object" && chapter.chapter.number) {
+      return chapter.chapter.number;
+    }
+    const value = chapter.chapter || chapter.number || chapter.chapterNumber || chapter.id;
+    return (typeof value === "string" || typeof value === "number") ? value : (index + 1);
+  }
+
+  function normalizeBibleForReader(data) {
+    return {
+      books: getBibleBooks(data).map(function(book) {
+        return Object.assign({}, book, {
+          chapters: getBibleChapters(book).map(function(chapter) {
+            return Object.assign({}, chapter, {
+              verses: getBibleVerses(chapter)
+            });
+          })
+        });
+      })
+    };
+  }
+
+  async function getBibleByTranslation(translation) {
+    let rawBible;
+    if (translation === "KJV1611") rawBible = await getKJV1611();
+    else if (translation === "KJVPLUS") rawBible = await getKJVPLUS();
+    else if (translation === "YLT") rawBible = await getYLT();
+    else if (translation === "WEB") rawBible = await getWEB();
+    else if (translation === "ASV") rawBible = await getASV();
+    else if (translation === "GENEVA1599") rawBible = await getGENEVA1599();
+    else if (translation === "DRA") rawBible = await getDRA();
+    else if (translation === "BSB") rawBible = await getBSB();
+    else if (translation === "MSB") rawBible = await getMSB();
+    else rawBible = await getKJV();
+
+    return normalizeBibleForReader(rawBible);
   }
 
   function verseText(verse, translation, bookIndex) {
@@ -1660,27 +1722,78 @@
     return bookIdMap[String(name || "").trim().toUpperCase()] || "";
   }
 
-  function flattenCommentaryNode(node) {
-    if (node == null) return "";
-    if (typeof node === "string" || typeof node === "number") return String(node);
-    if (Array.isArray(node)) return node.map(flattenCommentaryNode).filter(Boolean).join(" ");
-    if (typeof node === "object") {
-      if (node.text) return flattenCommentaryNode(node.text);
-      if (node.content) return flattenCommentaryNode(node.content);
-      return Object.keys(node).filter(function(k){ return !["type","number","verse","verseNumber"].includes(k); }).map(function(k){ return flattenCommentaryNode(node[k]); }).filter(Boolean).join(" ");
+  function flattenCommentaryText(value) {
+    if (typeof value === "string") return value.trim();
+    if (typeof value === "number") return String(value);
+    if (Array.isArray(value)) return value.map(flattenCommentaryText).filter(Boolean).join(" ");
+    if (value && typeof value === "object") {
+      if (typeof value.text === "string") return value.text.trim();
+      if (Array.isArray(value.content)) return value.content.map(flattenCommentaryText).filter(Boolean).join(" ");
     }
     return "";
   }
 
   function extractCommentaryEntries(data) {
-    const content = data && data.chapter && Array.isArray(data.chapter.content) ? data.chapter.content : [];
-    const entries = [];
-    content.forEach(function(item){
-      const number = item && (item.number || item.verse || item.verseNumber);
-      const text = flattenCommentaryNode(item).replace(/\s+/g," ").trim();
-      if (text) entries.push({number:number, text:text});
+    if (!data) return [];
+    let content = [];
+    if (data.chapter && Array.isArray(data.chapter.content)) content = data.chapter.content;
+    else if (Array.isArray(data.content)) content = data.content;
+    return content.filter(function(item) {
+      return item && (item.type === "verse" || item.number !== undefined);
+    }).map(function(item) {
+      return {
+        number: item.number,
+        text: flattenCommentaryText(item.text || item.content || item)
+      };
     });
-    return entries;
+  }
+
+  function findCommentaryText(entries, number) {
+    const exact = entries.find(function(entry) { return String(entry.number) === String(number); });
+    if (exact && exact.text) return exact.text;
+    const numericVerse = Number(number);
+    for (let i = 0; i < entries.length; i++) {
+      const match = String(entries[i].number || "").match(/(\d+)\s*[-–]\s*(\d+)/);
+      if (match && numericVerse >= Number(match[1]) && numericVerse <= Number(match[2])) return entries[i].text;
+    }
+    return "";
+  }
+
+  function flattenWholeCommentaryChapter(data) {
+    if (!data) return "";
+    const content = data.chapter && Array.isArray(data.chapter.content)
+      ? data.chapter.content
+      : (Array.isArray(data.content) ? data.content : []);
+    return content.map(function(item) {
+      return flattenCommentaryText(item.text || item.content || item);
+    }).filter(Boolean).join("\n\n").trim();
+  }
+
+  async function fetchReaderCommentaryChapter(commentaryKey, bookName, ch) {
+    const apiId = commentaryIds[commentaryKey];
+    const bookId = commentaryBookId(bookName);
+    if (!apiId || !bookId) throw new Error("Commentary source or Bible book is not configured.");
+
+    const cacheKey = "reader-commentary|" + apiId + "|" + bookId + "|" + ch;
+    if (commentaryCache[cacheKey]) return commentaryCache[cacheKey];
+
+    const response = await fetch(COMMENTARY_API + apiId + "/" + bookId + "/" + ch + ".simple.json");
+    if (!response.ok) {
+      if (response.status === 404) return { unavailable:true, chapter:null };
+      throw new Error("Commentary request failed: " + response.status);
+    }
+
+    const data = await response.json();
+    const chapterData = data && data.chapter
+      ? data
+      : (data && data.data && data.data.chapter ? data.data : data);
+
+    if (!chapterData || !chapterData.chapter || !Array.isArray(chapterData.chapter.content)) {
+      throw new Error("Commentary response was invalid.");
+    }
+
+    commentaryCache[cacheKey] = chapterData;
+    return chapterData;
   }
 
   async function loadReaderCommentary() {
@@ -1690,46 +1803,54 @@
       commentaryStatus.textContent = "Choose a book and chapter in the Bible Reader above.";
       return;
     }
+
     const key = commentarySelect.value;
     const name = commentaryNames[key];
     const book = readerBible.books[readerBookIndex];
     const bookName = getBookName(book);
     const chapter = book.chapters[readerChapterIndex];
     const ch = chapterNumber(chapter, readerChapterIndex);
-    const bookId = commentaryBookId(bookName);
+
     commentaryHeading.textContent = "📖 " + name;
     commentarySubheading.textContent = bookName + " " + ch;
-    if (!bookId) { commentaryContent.innerHTML = "<div class='error-message'>This Bible book could not be matched to the commentary source.</div>"; return; }
     commentaryStatus.textContent = "Loading " + name + "...";
     commentaryContent.innerHTML = "<div class='status-message'>Loading commentary...</div>";
+
     try {
-      const cacheKey = key + "|" + bookId + "|" + ch;
-      let data = commentaryCache[cacheKey];
-      if (!data) {
-        const response = await fetch(COMMENTARY_API + commentaryIds[key] + "/" + bookId + "/" + ch + ".simple.json");
-        if (response.status === 404) {
-          if (requestId !== commentaryRequestId) return;
-          commentaryContent.innerHTML = "<div class='status-message'>This commentary does not have material for this chapter.</div>";
-          commentaryStatus.textContent = name + " has no entry for this chapter.";
-          return;
-        }
-        if (!response.ok) throw new Error("Commentary request failed: " + response.status);
-        data = await response.json();
-        commentaryCache[cacheKey] = data;
-      }
+      const chapterData = await fetchReaderCommentaryChapter(key, bookName, ch);
       if (requestId !== commentaryRequestId) return;
-      const entries = extractCommentaryEntries(data);
-      if (!entries.length) {
-        commentaryContent.innerHTML = "<div class='status-message'>No commentary was found for this chapter.</div>";
-      } else if (key === "matthew-henry-complete") {
-        commentaryContent.innerHTML = "<div class='result-item'><div class='result-reference'>" + escapeHTML(bookName + " " + ch) + "</div><div style='margin-top:8px'>" + escapeHTML(entries.map(function(e){return e.text;}).join(" ")) + "</div></div>";
-      } else {
-        commentaryContent.innerHTML = entries.map(function(e){ return "<div class='result-item'>" + (e.number ? "<div class='result-reference'>Verse " + escapeHTML(e.number) + "</div>" : "") + "<div style='margin-top:8px'>" + escapeHTML(e.text) + "</div></div>"; }).join("");
+
+      if (chapterData && chapterData.unavailable) {
+        commentaryContent.innerHTML = "<div class='status-message'>This commentary does not have material for " + escapeHTML(bookName + " " + ch) + ".</div>";
+        commentaryStatus.textContent = name + " has no entry for this chapter.";
+        return;
       }
+
+      if (key === "matthew-henry-complete") {
+        const whole = flattenWholeCommentaryChapter(chapterData);
+        commentaryContent.innerHTML = whole
+          ? "<div class='result-item'><div class='result-reference'>" + escapeHTML(bookName + " " + ch) + "</div><div style='margin-top:8px'>" + escapeHTML(whole) + "</div></div>"
+          : "<div class='status-message'>No commentary was found for this chapter.</div>";
+      } else {
+        const commentaryEntries = extractCommentaryEntries(chapterData);
+        const verses = getBibleVerses(chapter);
+        const rendered = [];
+        verses.forEach(function(verse, index) {
+          const num = verseNumber(verse, index);
+          const text = findCommentaryText(commentaryEntries, num);
+          if (text) {
+            rendered.push("<div class='result-item'><div class='result-reference'>Verse " + escapeHTML(num) + "</div><div style='margin-top:8px'>" + escapeHTML(text) + "</div></div>");
+          }
+        });
+        commentaryContent.innerHTML = rendered.length
+          ? rendered.join("")
+          : "<div class='status-message'>No commentary was found for this chapter.</div>";
+      }
+
       commentaryStatus.textContent = name + " loaded.";
     } catch (error) {
       if (requestId !== commentaryRequestId) return;
-      console.error("Commentary error:", error);
+      console.error("Reader commentary error:", error);
       commentaryContent.innerHTML = "<div class='error-message'>This commentary could not be loaded for this chapter. Try another commentary.</div>";
       commentaryStatus.textContent = "Unable to load " + name + ".";
     }
