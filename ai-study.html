@@ -1251,8 +1251,6 @@
 
   let readerCommentaryRequestId = 0;
 
-  let readerCommentaryPrefetchKey = "";
-
 
   /* =========================================
      ELEMENTS
@@ -4094,16 +4092,42 @@
 
 
 
+
+  function getReaderCommentaryBookId(
+    bookName
+  ) {
+
+    const key =
+      String(bookName || "")
+      .trim()
+      .toUpperCase();
+
+    return bookIdMap[key] || "";
+  }
+
+
   async function fetchReaderCommentaryChapter(
     commentaryKey,
-    bookId,
+    bookName,
     chapterNumber
   ) {
 
     const apiId =
       commentaryIds[commentaryKey];
 
+    const bookId =
+      getReaderCommentaryBookId(
+        bookName
+      );
+
+    if (!apiId || !bookId) {
+      throw new Error(
+        "Commentary source or Bible book is not configured."
+      );
+    }
+
     const cacheKey =
+      "reader-commentary|" +
       apiId + "|" +
       bookId + "|" +
       chapterNumber;
@@ -4112,62 +4136,61 @@
       return commentaryCache[cacheKey];
     }
 
+    const url =
+      COMMENTARY_API +
+      apiId + "/" +
+      bookId + "/" +
+      chapterNumber +
+      ".simple.json";
+
     const response =
-      await fetch(
-        COMMENTARY_API +
-        apiId + "/" +
-        encodeURIComponent(bookId) + "/" +
-        encodeURIComponent(chapterNumber) +
-        ".simple.json"
-      );
+      await fetch(url);
 
     if (!response.ok) {
+
+      if (response.status === 404) {
+        return {
+          unavailable: true,
+          chapter: null
+        };
+      }
+
       throw new Error(
-        "Commentary chapter request failed: " +
+        "Commentary request failed: " +
         response.status
       );
     }
 
-    const chapterData =
+    const data =
       await response.json();
+
+    const chapterData =
+      data && data.chapter
+        ? data
+        : (
+            data &&
+            data.data &&
+            data.data.chapter
+              ? data.data
+              : data
+          );
+
+    if (
+      !chapterData ||
+      !chapterData.chapter ||
+      !Array.isArray(
+        chapterData.chapter.content
+      )
+    ) {
+      throw new Error(
+        "Commentary response was invalid."
+      );
+    }
 
     commentaryCache[cacheKey] =
       chapterData;
 
     return chapterData;
-  }
-
-
-  function prefetchOtherReaderCommentaries(
-    bookId,
-    chapterNumber
-  ) {
-
-    const prefetchKey =
-      bookId + "|" + chapterNumber;
-
-    if (readerCommentaryPrefetchKey === prefetchKey) {
-      return;
-    }
-
-    readerCommentaryPrefetchKey =
-      prefetchKey;
-
-    Object.keys(commentaryIds)
-      .filter(function(key) {
-        return key !== selectedCommentary;
-      })
-      .forEach(function(key) {
-
-        fetchReaderCommentaryChapter(
-          key,
-          bookId,
-          chapterNumber
-        ).catch(function() {
-          /* Some commentaries do not cover every Bible book/chapter. */
-        });
-
-      });
   }
 
 
@@ -4203,12 +4226,6 @@
     const bookName =
       getBookName(book);
 
-    const bookId =
-      normalizeBookId(
-        getBookId(book),
-        bookName
-      );
-
     const chapter =
       book.chapters[readerChapterIndex];
 
@@ -4232,11 +4249,28 @@
       const chapterData =
         await fetchReaderCommentaryChapter(
           commentaryKey,
-          bookId,
+          bookName,
           chapterNumber
         );
 
       if (requestId !== readerCommentaryRequestId) {
+        return;
+      }
+
+      if (
+        chapterData &&
+        chapterData.unavailable
+      ) {
+
+        commentaryContent.innerHTML =
+          "<div class='commentary-empty'>This commentary does not have material for " +
+          escapeHtml(bookName + " " + chapterNumber) +
+          ".</div>";
+
+        commentaryStatus.textContent =
+          commentaryName +
+          " has no entry for this chapter.";
+
         return;
       }
 
@@ -4294,11 +4328,6 @@
 
       commentaryStatus.textContent =
         commentaryName + " loaded.";
-
-      prefetchOtherReaderCommentaries(
-        bookId,
-        chapterNumber
-      );
 
     } catch (error) {
 
@@ -5733,25 +5762,78 @@
       return thayerLexiconPromise;
     }
 
-    thayerLexiconPromise =
-      fetch(
-        "https://cdn.jsdelivr.net/gh/nigelmsipa/thayers-greek-lexicon-dataset@master/data/thayer_lexicon.json"
-      )
-      .then(function(response) {
+    const urls = [
+      "https://raw.githubusercontent.com/nigelmsipa/thayers-greek-lexicon-dataset/master/data/thayer_lexicon.json",
+      "https://cdn.jsdelivr.net/gh/nigelmsipa/thayers-greek-lexicon-dataset@master/data/thayer_lexicon.json"
+    ];
 
-        if (!response.ok) {
-          throw new Error(
-            "Thayer’s lexicon data could not be loaded."
-          );
+    thayerLexiconPromise =
+      (async function() {
+
+        let data = null;
+        let lastError = null;
+
+        for (
+          let i = 0;
+          i < urls.length;
+          i++
+        ) {
+
+          try {
+
+            const response =
+              await fetch(
+                urls[i],
+                { cache: "force-cache" }
+              );
+
+            if (!response.ok) {
+              throw new Error(
+                "Thayer source returned " +
+                response.status
+              );
+            }
+
+            const candidate =
+              await response.json();
+
+            if (Array.isArray(candidate)) {
+              data = candidate;
+            }
+            else if (
+              candidate &&
+              Array.isArray(candidate.entries)
+            ) {
+              data = candidate.entries;
+            }
+            else if (
+              candidate &&
+              Array.isArray(candidate.data)
+            ) {
+              data = candidate.data;
+            }
+
+            if (data && data.length) {
+              break;
+            }
+
+            throw new Error(
+              "Thayer data was not in the expected format."
+            );
+
+          } catch (error) {
+
+            lastError = error;
+            data = null;
+          }
         }
 
-        return response.json();
-      })
-      .then(function(data) {
-
-        if (!Array.isArray(data)) {
-          throw new Error(
-            "Thayer’s lexicon data was not in the expected format."
+        if (!data || !data.length) {
+          throw (
+            lastError ||
+            new Error(
+              "Thayer’s lexicon data could not be loaded."
+            )
           );
         }
 
@@ -5764,24 +5846,48 @@
         data.forEach(
           function(entry) {
 
-            const id =
-              normalizeGreekStrongsKey(
-                entry.id || ""
-              );
+            if (!entry || typeof entry !== "object") {
+              return;
+            }
 
-            if (id) {
-              thayerLexiconMap.set(
-                id,
-                entry
+            const possibleKeys = [];
+
+            [
+              entry.id,
+              entry.strong,
+              entry.strongsNumber,
+              entry.strongs_number
+            ].forEach(
+              function(value) {
+
+                if (
+                  value !== undefined &&
+                  value !== null &&
+                  value !== ""
+                ) {
+                  possibleKeys.push(value);
+                }
+              }
+            );
+
+            if (Array.isArray(entry.strongs)) {
+              entry.strongs.forEach(
+                function(value) {
+                  possibleKeys.push(value);
+                }
+              );
+            }
+            else if (
+              entry.strongs !== undefined &&
+              entry.strongs !== null &&
+              entry.strongs !== ""
+            ) {
+              possibleKeys.push(
+                entry.strongs
               );
             }
 
-            const strongs =
-              Array.isArray(entry.strongs)
-                ? entry.strongs
-                : [];
-
-            strongs.forEach(
+            possibleKeys.forEach(
               function(value) {
 
                 const strongKey =
@@ -5789,7 +5895,11 @@
                     value
                   );
 
-                if (strongKey) {
+                if (
+                  /^G\d+$/.test(
+                    strongKey
+                  )
+                ) {
                   thayerLexiconMap.set(
                     strongKey,
                     entry
@@ -5801,7 +5911,7 @@
         );
 
         return thayerLexiconMap;
-      })
+      })()
       .catch(function(error) {
 
         thayerLexiconPromise =
@@ -5813,15 +5923,20 @@
     return thayerLexiconPromise;
   }
 
-  async function findThayerEntry(key) {
 
-    const map =
-      await loadThayerLexicon();
+  async function findThayerEntry(key) {
 
     const normalized =
       normalizeGreekStrongsKey(
         key
       );
+
+    if (!/^G\d+$/.test(normalized)) {
+      return null;
+    }
+
+    const map =
+      await loadThayerLexicon();
 
     const direct =
       map.get(normalized);
@@ -5830,39 +5945,77 @@
       return direct;
     }
 
-    /*
-      Fallback:
-      Some digitized Thayer entries may store the
-      Strong's number in a slightly different shape.
-      Check the original dataset once before reporting
-      that the entry is missing.
-    */
+    const wantedNumber =
+      normalized.replace(/^G/, "");
+
     return (
       thayerLexiconCache || []
     ).find(
       function(entry) {
 
-        const entryId =
-          normalizeGreekStrongsKey(
-            entry.id || ""
-          );
-
-        if (entryId === normalized) {
-          return true;
+        if (!entry || typeof entry !== "object") {
+          return false;
         }
 
-        const strongs =
-          Array.isArray(entry.strongs)
-            ? entry.strongs
-            : [];
+        const values = [];
 
-        return strongs.some(
+        Object.keys(entry).forEach(
+          function(field) {
+
+            const value =
+              entry[field];
+
+            if (typeof value === "string") {
+              values.push(value);
+            }
+            else if (Array.isArray(value)) {
+              value.forEach(
+                function(item) {
+                  if (
+                    typeof item === "string" ||
+                    typeof item === "number"
+                  ) {
+                    values.push(
+                      String(item)
+                    );
+                  }
+                }
+              );
+            }
+            else if (
+              typeof value === "number"
+            ) {
+              values.push(
+                String(value)
+              );
+            }
+          }
+        );
+
+        return values.some(
           function(value) {
-            return (
+
+            const candidate =
               normalizeGreekStrongsKey(
                 value
-              ) === normalized
-            );
+              );
+
+            if (candidate === normalized) {
+              return true;
+            }
+
+            const embedded =
+              String(value)
+              .toUpperCase()
+              .match(
+                new RegExp(
+                  "(?:^|[^0-9])G?0*" +
+                  wantedNumber +
+                  "(?:[^0-9]|$)"
+                )
+              );
+
+            return Boolean(embedded);
           }
         );
       }
@@ -5969,6 +6122,17 @@
       if (!key) {
         results.innerHTML =
           "<div class='status-message'>Enter a Strong’s number such as G26 or H2617.</div>";
+        return;
+      }
+
+      if (
+        source === "thayer" &&
+        key.startsWith("H")
+      ) {
+
+        results.innerHTML =
+          "<div class='status-message'>Thayer’s is a Greek lexicon. Use a Greek Strong’s number beginning with G, such as G4561. For H numbers, choose BDB Hebrew Lexicon.</div>";
+
         return;
       }
 
