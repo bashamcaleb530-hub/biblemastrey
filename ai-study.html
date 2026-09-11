@@ -720,6 +720,37 @@
     }
   }
 
+
+  /* Main-page-style Personal Study dashboard */
+  .personal-study-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.55fr) minmax(330px, .85fr);
+    gap: 20px;
+    align-items: start;
+  }
+
+  .personal-study-primary,
+  .personal-study-tools {
+    min-width: 0;
+  }
+
+  .personal-study-layout .workspace-section {
+    margin-bottom: 20px;
+  }
+
+  .personal-study-tools .workspace-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .personal-study-tools .parallel-tool {
+    grid-column: auto;
+  }
+
+  @media (max-width: 1100px) {
+    .personal-study-layout {
+      grid-template-columns: 1fr;
+    }
+  }
 </style>
 
 </head>
@@ -809,6 +840,8 @@
 
 
 
+    <div class="personal-study-layout">
+      <div class="personal-study-primary">
     <div class="workspace-section">
       <h2>📖 Bible Reader</h2>
       <p class="workspace-intro">
@@ -929,6 +962,9 @@
       </div>
     </div>
 
+      </div>
+
+      <aside class="personal-study-tools">
     <div class="workspace-section">
       <h2>Bible Tools</h2>
       <div class="workspace-grid">
@@ -1183,6 +1219,9 @@
         </div>
 
       </div>
+    </div>
+
+      </aside>
     </div>
 
     <div class="workspace-section">
