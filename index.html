@@ -1472,6 +1472,54 @@ function getCommentaryName() {
 }
 
 
+function getExternalCommentaryResource() {
+  if (!commentarySelect) return null;
+  return externalCommentaryResources[commentarySelect.value] || null;
+}
+
+function renderExternalCommentaryResource(bookName, chapterNumber) {
+  const resource = getExternalCommentaryResource();
+  const output = document.getElementById("commentaryOutput");
+  if (!resource || !output) return false;
+  output.innerHTML = "";
+
+  const panel = document.createElement("div");
+  panel.className = "commentary-panel show chapter-commentary";
+
+  const title = document.createElement("div");
+  title.className = "commentary-title";
+  title.textContent = resource.name;
+
+  const reference = document.createElement("div");
+  reference.className = "commentary-reference";
+  reference.textContent = bookName + " " + chapterNumber;
+
+  const text = document.createElement("div");
+  text.className = "commentary-text";
+  text.textContent = "This is an existing commentary resource in " + resource.language + ". BibleMastery opens the original source instead of machine-translating or republishing its text.";
+
+  const link = document.createElement("a");
+  link.href = resource.url;
+  link.target = "_blank";
+  link.rel = "noopener noreferrer";
+  link.textContent = "Open " + resource.name;
+  link.style.display = "inline-block";
+  link.style.marginTop = "12px";
+  link.style.padding = "10px 14px";
+  link.style.borderRadius = "8px";
+  link.style.background = "var(--gold)";
+  link.style.color = "#101827";
+  link.style.fontWeight = "700";
+  link.style.textDecoration = "none";
+
+  panel.appendChild(title);
+  panel.appendChild(reference);
+  panel.appendChild(text);
+  panel.appendChild(link);
+  output.appendChild(panel);
+  return true;
+}
+
 /* =========================
    LOAD HELLOAO COMMENTARY
 ========================= */
@@ -1716,6 +1764,10 @@ async function loadSelectedCommentary(
  const selected =
   commentarySelect.value;
 
+  if (externalCommentaryResources[selected]) {
+    return { external: true };
+  }
+
 const commentaryId =
   commentaryApiIds[
     selected
@@ -1744,6 +1796,11 @@ async function populateCommentaryPanels(
 ) {
 
   if (!commentaryVisible) {
+    return;
+  }
+
+  if (externalCommentaryResources[commentarySelect.value]) {
+    renderExternalCommentaryResource(bookName, chapterNumber);
     return;
   }
 
@@ -2042,6 +2099,14 @@ async function loadChapter() {
     commentaryOutput.innerHTML = "";
   }
 
+  const hasExternalCommentary =
+    commentaryVisible &&
+    !!externalCommentaryResources[commentarySelect.value];
+
+  if (hasExternalCommentary) {
+    renderExternalCommentaryResource(bookName, chapterNumber);
+  }
+
   verseSelect.innerHTML =
     '<option value="">Choose a verse</option>';
 
@@ -2246,7 +2311,8 @@ verseContainer.appendChild(
       if (
         commentaryVisible &&
         commentarySelect.value !==
-          "matthew-henry-complete"
+          "matthew-henry-complete" &&
+        !externalCommentaryResources[commentarySelect.value]
       ) {
 
         const commentaryPanel =
@@ -5389,6 +5455,58 @@ if (helpSupportLink) {
     ]
   };
 
+  const languageCommentaryOptions = {
+    en: [
+      ["matthew-henry-complete", "Matthew Henry — Complete"],
+      ["john-gill", "John Gill — Exposition"],
+      ["jfb", "Jamieson-Fausset-Brown"],
+      ["adam-clarke", "Adam Clarke"],
+      ["john-calvin", "John Calvin — Commentaries"],
+      ["keil-delitzsch", "Keil & Delitzsch — Old Testament"],
+      ["tyndale", "Tyndale — Open Study Notes"]
+    ],
+    es: [
+      ["external-es-enduring-word", "David Guzik — Enduring Word (Español)"],
+      ["external-es-versiculario", "Versiculario — Comentarios clásicos"]
+    ],
+    fr: [
+      ["external-fr-enduring-word", "David Guzik — Enduring Word (Français)"],
+      ["external-fr-free-bible", "Bob Utley — Commentaire Biblique Gratuit"]
+    ],
+    de: [
+      ["external-de-bibelkommentar", "Bibelkommentar.com — Vers für Vers"],
+      ["external-de-free-bible", "Bob Utley — Bibelkommentar kostenlos"]
+    ],
+    pt: [
+      ["external-pt-enduring-word", "David Guzik — Enduring Word (Português)"],
+      ["external-pt-versiculario", "Versiculário — Comentários clássicos"]
+    ]
+  };
+
+  const externalCommentaryResources = {
+    "external-es-enduring-word": { name: "David Guzik — Enduring Word (Español)", url: "https://enduringword.com/commentary/es/", language: "Español" },
+    "external-es-versiculario": { name: "Versiculario — Comentarios clásicos", url: "https://versiculario.com/", language: "Español" },
+    "external-fr-enduring-word": { name: "David Guzik — Enduring Word (Français)", url: "https://fr.enduringword.com/", language: "Français" },
+    "external-fr-free-bible": { name: "Bob Utley — Commentaire Biblique Gratuit", url: "https://freebiblecommentary.org/french_bible_study.htm", language: "Français" },
+    "external-de-bibelkommentar": { name: "Bibelkommentar.com — Vers für Vers", url: "https://www.bibelkommentar.com/", language: "Deutsch" },
+    "external-de-free-bible": { name: "Bob Utley — Bibelkommentar kostenlos", url: "https://freebiblecommentary.org/german_bible_study.htm", language: "Deutsch" },
+    "external-pt-enduring-word": { name: "David Guzik — Enduring Word (Português)", url: "https://enduringword.com/commentary/pt/", language: "Português" },
+    "external-pt-versiculario": { name: "Versiculário — Comentários clássicos", url: "https://versiculario.com.br/", language: "Português" }
+  };
+
+  function rebuildCommentaryOptions(lang) {
+    if (!commentarySelect) return;
+    const options = languageCommentaryOptions[lang] || languageCommentaryOptions.en;
+    commentarySelect.innerHTML = "";
+    options.forEach(function(item, index) {
+      const option = document.createElement("option");
+      option.value = item[0];
+      option.textContent = item[1];
+      if (index === 0) option.selected = true;
+      commentarySelect.appendChild(option);
+    });
+  }
+
   const interfaceText = {
     en: {
       companion:"Your Bible Study Companion",
@@ -5847,6 +5965,7 @@ if (helpSupportLink) {
     );
 
     rebuildTranslationOptions(lang);
+    rebuildCommentaryOptions(lang);
     translateMainInterface();
 
     const t = currentUI();
@@ -5874,6 +5993,10 @@ if (helpSupportLink) {
       interfaceLanguage.value || "en";
 
     rebuildTranslationOptions(
+      initialLanguage
+    );
+
+    rebuildCommentaryOptions(
       initialLanguage
     );
 
