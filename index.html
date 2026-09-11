@@ -187,7 +187,8 @@
     padding:14px;
     background:#0d192b;
   }
-  .commentary-output { margin-top:16px; }
+  .commentary-inline-controls { margin-top:16px; }
+  .commentary-output { margin-top:12px; }
   .commentary-panel { display:none; background:#0d192b; border:1px solid var(--line); border-radius:11px; padding:14px; min-height:130px; max-height:540px; overflow-y:auto; }
   .commentary-panel.show { display:block; }
   .commentary-title { font-weight:800; color:var(--gold); margin-bottom:8px; }
@@ -403,6 +404,20 @@
           <h2 id="chapterTitle">Bible</h2>
           <p id="chapterIntro">Choose a book and chapter to begin reading.</p>
           <div id="verseContainer"></div>
+          <div class="study-controls commentary-inline-controls">
+            <button id="commentaryButton">📖 Bible Commentary</button>
+            <div id="commentarySelector" class="commentary-selector">
+              <select id="commentarySelect">
+                <option value="matthew-henry-complete" selected>Matthew Henry — Complete</option>
+                <option value="john-gill">John Gill — Exposition</option>
+                <option value="jfb">Jamieson-Fausset-Brown</option>
+                <option value="adam-clarke">Adam Clarke</option>
+                <option value="john-calvin">John Calvin — Commentaries</option>
+                <option value="keil-delitzsch">Keil & Delitzsch — Old Testament</option>
+                <option value="tyndale">Tyndale — Open Study Notes</option>
+              </select>
+            </div>
+          </div>
           <div id="commentaryOutput" class="commentary-output"></div>
 
           <div class="navigation">
@@ -474,20 +489,7 @@
           <div id="originalWordResult"></div>
         </div>
 
-        <div class="study-controls">
-          <button id="commentaryButton">📖 Bible Commentary</button>
-          <div id="commentarySelector" class="commentary-selector">
-            <select id="commentarySelect">
-              <option value="matthew-henry-complete" selected>Matthew Henry — Complete</option>
-              <option value="john-gill">John Gill — Exposition</option>
-              <option value="jfb">Jamieson-Fausset-Brown</option>
-              <option value="adam-clarke">Adam Clarke</optio
-              <option value="john-calvin">John Calvin — Commentaries</option>
-              <option value="keil-delitzsch">Keil & Delitzsch — Old Testament</option>
-              <option value="tyndale">Tyndale — Open Study Notes</option>
-            </select>
-          </div>
-        </div>
+
       </aside>
     </div>
   </main>
@@ -3344,6 +3346,25 @@ function getVerseText(verse) {
          "";
 }
 
+
+const remoteBibleCache = {};
+
+async function getRemoteBible(url) {
+  if (remoteBibleCache[url]) {
+    return remoteBibleCache[url];
+  }
+
+  const response = await fetch(url);
+
+  if (!response.ok) {
+    throw new Error("This Bible translation could not be loaded.");
+  }
+
+  const data = await response.json();
+  remoteBibleCache[url] = data;
+  return data;
+}
+
 async function startBible() {
 
   try {
@@ -3449,6 +3470,46 @@ async function startBible() {
 
       bibleData =
         await getYLT();
+
+    } else if (
+      selectedTranslation ===
+      "VALERA1909"
+    ) {
+
+      bibleData =
+        await getRemoteBible(
+          "https://api.getbible.net/v2/valera.json"
+        );
+
+    } else if (
+      selectedTranslation ===
+      "LSG1910"
+    ) {
+
+      bibleData =
+        await getRemoteBible(
+          "https://raw.githubusercontent.com/midvash/bible-data/main/versions/fr/lsg/lsg.json"
+        );
+
+    } else if (
+      selectedTranslation ===
+      "LUTH1912"
+    ) {
+
+      bibleData =
+        await getRemoteBible(
+          "https://raw.githubusercontent.com/midvash/bible-data/main/versions/de/luth1912/luth1912.json"
+        );
+
+    } else if (
+      selectedTranslation ===
+      "ALMEIDA1819"
+    ) {
+
+      bibleData =
+        await getRemoteBible(
+          "https://raw.githubusercontent.com/midvash/bible-data/main/versions/pt/almeida-livre/almeida-livre.json"
+        );
 
     } else {
 
@@ -3700,7 +3761,7 @@ async function startBible() {
         );
 
         commentaryButton.textContent =
-          "📖 Hide Bible Commentary";
+          currentUI().hideCommentary;
 
       } else {
 
@@ -3709,7 +3770,7 @@ async function startBible() {
         );
 
         commentaryButton.textContent =
-          "📖 Bible Commentary";
+          currentUI().commentary;
       }
 
       if (
@@ -5045,42 +5106,534 @@ if (helpSupportLink) {
 
 
   /* =========================
-     INTERFACE LANGUAGE
+     INTERFACE LANGUAGE + BIBLE LANGUAGE
   ========================= */
   const interfaceLanguage =
     document.getElementById("interfaceLanguage");
 
-  const interfaceText = {
-    en: { dashboard:"Bible Study Dashboard", intro:"Read Scripture, compare study resources, take notes, and build deeper studies in one workspace.", books:"📖 Books", chapter:"Chapter", verse:"Verse" },
-    es: { dashboard:"Panel de Estudio Bíblico", intro:"Lee las Escrituras, compara recursos de estudio, toma notas y profundiza en tu estudio.", books:"📖 Libros", chapter:"Capítulo", verse:"Versículo" },
-    fr: { dashboard:"Tableau d’étude biblique", intro:"Lisez les Écritures, comparez les ressources, prenez des notes et approfondissez votre étude.", books:"📖 Livres", chapter:"Chapitre", verse:"Verset" },
-    de: { dashboard:"Bibelstudium", intro:"Lies die Schrift, vergleiche Studienhilfen, mache Notizen und vertiefe dein Bibelstudium.", books:"📖 Bücher", chapter:"Kapitel", verse:"Vers" },
-    pt: { dashboard:"Painel de Estudo Bíblico", intro:"Leia as Escrituras, compare recursos de estudo, faça anotações e aprofunde seu estudo.", books:"📖 Livros", chapter:"Capítulo", verse:"Versículo" }
+  const languageBibleOptions = {
+    en: [
+      ["kjv", "King James Version (KJV)"],
+      ["KJV1611", "King James Version 1611"],
+      ["KJVPLUS", "King James Version Plus (KJV+)"],
+      ["YLT", "Young's Literal Translation"],
+      ["WEB", "World English Bible"],
+      ["ASV", "American Standard Version"],
+      ["GENEVA1599", "Geneva Bible 1599"],
+      ["DRA", "Douay-Rheims American Edition"],
+      ["BSB", "Berean Standard Bible"],
+      ["MSB", "Majority Standard Bible"]
+    ],
+    es: [
+      ["VALERA1909", "Reina-Valera 1909"]
+    ],
+    fr: [
+      ["LSG1910", "Louis Segond 1910"]
+    ],
+    de: [
+      ["LUTH1912", "Lutherbibel 1912"]
+    ],
+    pt: [
+      ["ALMEIDA1819", "Almeida 1819 (Bíblia Livre)"]
+    ]
   };
 
-  function applyInterfaceLanguage() {
-    if (!interfaceLanguage) return;
+  const interfaceText = {
+    en: {
+      companion:"Your Bible Study Companion",
+      account:"👤 Account",
+      accountTitle:"BibleMastery Account",
+      accountMessage:"Sign in or create your account.",
+      email:"Email address",
+      password:"Password",
+      stay:"Stay signed in",
+      login:"Log In",
+      signup:"Create Account",
+      workspace:"Study Workspace",
+      personal:"📖 Personal Bible Study",
+      personalDesc:"Study topics, verses, definitions, commentaries, and notes.",
+      help:"❓ Help & Support",
+      helpDesc:"Get help, contact BibleMastery, or report a problem.",
+      sermon:"🎤 Build a Sermon",
+      sermonDesc:"Prepare sermons with Scripture and study tools.",
+      group:"📚 Group Bible Study",
+      groupDesc:"Build complete studies with questions and explanations.",
+      desert:"⛪ Desert Springs",
+      desertDesc:"Private ministry sermon workspace.",
+      admin:"Admin / Owner",
+      dashboard:"Bible Study Dashboard",
+      intro:"Read Scripture, compare study resources, take notes, and build deeper studies in one workspace.",
+      center:"BibleMastery Study Center",
+      translation:"Translation",
+      language:"🌐 Language",
+      books:"📖 Books",
+      chooseBook:"Choose a book",
+      chapter:"Chapter",
+      chooseChapter:"Choose a chapter",
+      verse:"Verse",
+      chooseVerse:"Choose a verse",
+      bible:"Bible",
+      chooseStart:"Choose a book and chapter to begin reading.",
+      previous:"← Previous Chapter",
+      next:"Next Chapter →",
+      searchChapter:"Search This Chapter",
+      searchWord:"Search for a word...",
+      ai:"🤖 Ask BibleMastery AI",
+      bibleDictionary:"📖 Bible Dictionary",
+      bibleWord:"Search a Bible word...",
+      search:"Search",
+      englishDictionary:"📘 English Dictionary",
+      englishWord:"Search an English word...",
+      concordance:"🔎 Bible Concordance",
+      concordanceWord:"Search a word in the Bible...",
+      original:"🔤 Hebrew / Greek Word Lookup",
+      strongNumber:"Enter Strong's number (e.g. G26 or H2617)",
+      commentary:"📖 Bible Commentary",
+      hideCommentary:"📖 Hide Bible Commentary",
+      highlight:"🟨 Highlight",
+      bookmark:"🔖 Bookmark",
+      note:"📝 Note",
+      copy:"📋 Copy",
+      share:"📤 Share",
+      loading:"Loading Bible..."
+    },
+    es: {
+      companion:"Tu compañero de estudio bíblico",
+      account:"👤 Cuenta",
+      accountTitle:"Cuenta de BibleMastery",
+      accountMessage:"Inicia sesión o crea tu cuenta.",
+      email:"Correo electrónico",
+      password:"Contraseña",
+      stay:"Mantener sesión iniciada",
+      login:"Iniciar sesión",
+      signup:"Crear cuenta",
+      workspace:"Área de estudio",
+      personal:"📖 Estudio bíblico personal",
+      personalDesc:"Estudia temas, versículos, definiciones, comentarios y notas.",
+      help:"❓ Ayuda y soporte",
+      helpDesc:"Obtén ayuda, contacta BibleMastery o informa un problema.",
+      sermon:"🎤 Preparar un sermón",
+      sermonDesc:"Prepara sermones con las Escrituras y herramientas de estudio.",
+      group:"📚 Estudio bíblico en grupo",
+      groupDesc:"Crea estudios completos con preguntas y explicaciones.",
+      desert:"⛪ Desert Springs",
+      desertDesc:"Área privada de sermones del ministerio.",
+      admin:"Administrador / Propietario",
+      dashboard:"Panel de estudio bíblico",
+      intro:"Lee las Escrituras, compara recursos, toma notas y profundiza en tu estudio.",
+      center:"Centro de estudio BibleMastery",
+      translation:"Traducción",
+      language:"🌐 Idioma",
+      books:"📖 Libros",
+      chooseBook:"Elige un libro",
+      chapter:"Capítulo",
+      chooseChapter:"Elige un capítulo",
+      verse:"Versículo",
+      chooseVerse:"Elige un versículo",
+      bible:"Biblia",
+      chooseStart:"Elige un libro y un capítulo para comenzar a leer.",
+      previous:"← Capítulo anterior",
+      next:"Capítulo siguiente →",
+      searchChapter:"Buscar en este capítulo",
+      searchWord:"Buscar una palabra...",
+      ai:"🤖 Preguntar a BibleMastery AI",
+      bibleDictionary:"📖 Diccionario bíblico",
+      bibleWord:"Buscar una palabra bíblica...",
+      search:"Buscar",
+      englishDictionary:"📘 Diccionario de inglés",
+      englishWord:"Buscar una palabra en inglés...",
+      concordance:"🔎 Concordancia bíblica",
+      concordanceWord:"Buscar una palabra en la Biblia...",
+      original:"🔤 Consulta de palabras hebreas / griegas",
+      strongNumber:"Introduce un número Strong (ej. G26 o H2617)",
+      commentary:"📖 Comentario bíblico",
+      hideCommentary:"📖 Ocultar comentario bíblico",
+      highlight:"🟨 Resaltar",
+      bookmark:"🔖 Marcador",
+      note:"📝 Nota",
+      copy:"📋 Copiar",
+      share:"📤 Compartir",
+      loading:"Cargando Biblia..."
+    },
+    fr: {
+      companion:"Votre compagnon d’étude biblique",
+      account:"👤 Compte",
+      accountTitle:"Compte BibleMastery",
+      accountMessage:"Connectez-vous ou créez votre compte.",
+      email:"Adresse e-mail",
+      password:"Mot de passe",
+      stay:"Rester connecté",
+      login:"Se connecter",
+      signup:"Créer un compte",
+      workspace:"Espace d’étude",
+      personal:"📖 Étude biblique personnelle",
+      personalDesc:"Étudiez les thèmes, versets, définitions, commentaires et notes.",
+      help:"❓ Aide et assistance",
+      helpDesc:"Obtenez de l’aide, contactez BibleMastery ou signalez un problème.",
+      sermon:"🎤 Préparer un sermon",
+      sermonDesc:"Préparez des sermons avec l’Écriture et les outils d’étude.",
+      group:"📚 Étude biblique en groupe",
+      groupDesc:"Créez des études complètes avec questions et explications.",
+      desert:"⛪ Desert Springs",
+      desertDesc:"Espace privé de sermons du ministère.",
+      admin:"Admin / Propriétaire",
+      dashboard:"Tableau d’étude biblique",
+      intro:"Lisez les Écritures, comparez les ressources, prenez des notes et approfondissez votre étude.",
+      center:"Centre d’étude BibleMastery",
+      translation:"Traduction",
+      language:"🌐 Langue",
+      books:"📖 Livres",
+      chooseBook:"Choisir un livre",
+      chapter:"Chapitre",
+      chooseChapter:"Choisir un chapitre",
+      verse:"Verset",
+      chooseVerse:"Choisir un verset",
+      bible:"Bible",
+      chooseStart:"Choisissez un livre et un chapitre pour commencer.",
+      previous:"← Chapitre précédent",
+      next:"Chapitre suivant →",
+      searchChapter:"Rechercher dans ce chapitre",
+      searchWord:"Rechercher un mot...",
+      ai:"🤖 Demander à BibleMastery AI",
+      bibleDictionary:"📖 Dictionnaire biblique",
+      bibleWord:"Rechercher un mot biblique...",
+      search:"Rechercher",
+      englishDictionary:"📘 Dictionnaire anglais",
+      englishWord:"Rechercher un mot anglais...",
+      concordance:"🔎 Concordance biblique",
+      concordanceWord:"Rechercher un mot dans la Bible...",
+      original:"🔤 Recherche de mots hébreux / grecs",
+      strongNumber:"Saisissez un numéro Strong (ex. G26 ou H2617)",
+      commentary:"📖 Commentaire biblique",
+      hideCommentary:"📖 Masquer le commentaire biblique",
+      highlight:"🟨 Surligner",
+      bookmark:"🔖 Signet",
+      note:"📝 Note",
+      copy:"📋 Copier",
+      share:"📤 Partager",
+      loading:"Chargement de la Bible..."
+    },
+    de: {
+      companion:"Dein Begleiter fürs Bibelstudium",
+      account:"👤 Konto",
+      accountTitle:"BibleMastery-Konto",
+      accountMessage:"Melde dich an oder erstelle ein Konto.",
+      email:"E-Mail-Adresse",
+      password:"Passwort",
+      stay:"Angemeldet bleiben",
+      login:"Anmelden",
+      signup:"Konto erstellen",
+      workspace:"Studienbereich",
+      personal:"📖 Persönliches Bibelstudium",
+      personalDesc:"Studiere Themen, Verse, Definitionen, Kommentare und Notizen.",
+      help:"❓ Hilfe & Support",
+      helpDesc:"Hilfe erhalten, BibleMastery kontaktieren oder ein Problem melden.",
+      sermon:"🎤 Predigt erstellen",
+      sermonDesc:"Bereite Predigten mit Bibeltext und Studienwerkzeugen vor.",
+      group:"📚 Gruppen-Bibelstudium",
+      groupDesc:"Erstelle vollständige Studien mit Fragen und Erklärungen.",
+      desert:"⛪ Desert Springs",
+      desertDesc:"Privater Predigtbereich des Dienstes.",
+      admin:"Admin / Eigentümer",
+      dashboard:"Bibelstudium",
+      intro:"Lies die Schrift, vergleiche Hilfsmittel, mache Notizen und vertiefe dein Studium.",
+      center:"BibleMastery Studienzentrum",
+      translation:"Übersetzung",
+      language:"🌐 Sprache",
+      books:"📖 Bücher",
+      chooseBook:"Buch wählen",
+      chapter:"Kapitel",
+      chooseChapter:"Kapitel wählen",
+      verse:"Vers",
+      chooseVerse:"Vers wählen",
+      bible:"Bibel",
+      chooseStart:"Wähle ein Buch und Kapitel, um zu beginnen.",
+      previous:"← Vorheriges Kapitel",
+      next:"Nächstes Kapitel →",
+      searchChapter:"Dieses Kapitel durchsuchen",
+      searchWord:"Nach einem Wort suchen...",
+      ai:"🤖 BibleMastery AI fragen",
+      bibleDictionary:"📖 Bibellexikon",
+      bibleWord:"Biblisches Wort suchen...",
+      search:"Suchen",
+      englishDictionary:"📘 Englisch-Wörterbuch",
+      englishWord:"Englisches Wort suchen...",
+      concordance:"🔎 Bibelkonkordanz",
+      concordanceWord:"Ein Wort in der Bibel suchen...",
+      original:"🔤 Hebräisch / Griechisch Wortsuche",
+      strongNumber:"Strong-Nummer eingeben (z. B. G26 oder H2617)",
+      commentary:"📖 Bibelkommentar",
+      hideCommentary:"📖 Bibelkommentar ausblenden",
+      highlight:"🟨 Markieren",
+      bookmark:"🔖 Lesezeichen",
+      note:"📝 Notiz",
+      copy:"📋 Kopieren",
+      share:"📤 Teilen",
+      loading:"Bibel wird geladen..."
+    },
+    pt: {
+      companion:"Seu companheiro de estudo bíblico",
+      account:"👤 Conta",
+      accountTitle:"Conta BibleMastery",
+      accountMessage:"Entre ou crie sua conta.",
+      email:"Endereço de e-mail",
+      password:"Senha",
+      stay:"Permanecer conectado",
+      login:"Entrar",
+      signup:"Criar conta",
+      workspace:"Área de estudo",
+      personal:"📖 Estudo bíblico pessoal",
+      personalDesc:"Estude temas, versículos, definições, comentários e notas.",
+      help:"❓ Ajuda e suporte",
+      helpDesc:"Obtenha ajuda, fale com BibleMastery ou relate um problema.",
+      sermon:"🎤 Criar um sermão",
+      sermonDesc:"Prepare sermões com as Escrituras e ferramentas de estudo.",
+      group:"📚 Estudo bíblico em grupo",
+      groupDesc:"Crie estudos completos com perguntas e explicações.",
+      desert:"⛪ Desert Springs",
+      desertDesc:"Área privada de sermões do ministério.",
+      admin:"Admin / Proprietário",
+      dashboard:"Painel de estudo bíblico",
+      intro:"Leia as Escrituras, compare recursos, faça anotações e aprofunde seu estudo.",
+      center:"Centro de estudo BibleMastery",
+      translation:"Tradução",
+      language:"🌐 Idioma",
+      books:"📖 Livros",
+      chooseBook:"Escolha um livro",
+      chapter:"Capítulo",
+      chooseChapter:"Escolha um capítulo",
+      verse:"Versículo",
+      chooseVerse:"Escolha um versículo",
+      bible:"Bíblia",
+      chooseStart:"Escolha um livro e um capítulo para começar.",
+      previous:"← Capítulo anterior",
+      next:"Próximo capítulo →",
+      searchChapter:"Pesquisar neste capítulo",
+      searchWord:"Pesquisar uma palavra...",
+      ai:"🤖 Perguntar à BibleMastery AI",
+      bibleDictionary:"📖 Dicionário bíblico",
+      bibleWord:"Pesquisar uma palavra bíblica...",
+      search:"Pesquisar",
+      englishDictionary:"📘 Dicionário de inglês",
+      englishWord:"Pesquisar uma palavra em inglês...",
+      concordance:"🔎 Concordância bíblica",
+      concordanceWord:"Pesquisar uma palavra na Bíblia...",
+      original:"🔤 Consulta de palavras hebraicas / gregas",
+      strongNumber:"Digite um número Strong (ex. G26 ou H2617)",
+      commentary:"📖 Comentário bíblico",
+      hideCommentary:"📖 Ocultar comentário bíblico",
+      highlight:"🟨 Destacar",
+      bookmark:"🔖 Favorito",
+      note:"📝 Nota",
+      copy:"📋 Copiar",
+      share:"📤 Compartilhar",
+      loading:"Carregando Bíblia..."
+    }
+  };
+
+  function currentUI() {
+    const lang =
+      interfaceLanguage && interfaceLanguage.value
+        ? interfaceLanguage.value
+        : "en";
+    return interfaceText[lang] || interfaceText.en;
+  }
+
+  function setText(selector, value) {
+    const el = document.querySelector(selector);
+    if (el) el.textContent = value;
+  }
+
+  function setPlaceholder(selector, value) {
+    const el = document.querySelector(selector);
+    if (el) el.placeholder = value;
+  }
+
+  function rebuildTranslationOptions(lang) {
+    const options =
+      languageBibleOptions[lang] ||
+      languageBibleOptions.en;
+
+    translationSelect.innerHTML = "";
+
+    options.forEach(function(item) {
+      const option =
+        document.createElement("option");
+      option.value = item[0];
+      option.textContent = item[1];
+      translationSelect.appendChild(option);
+    });
+  }
+
+  function translateMainInterface() {
+    const t = currentUI();
     const lang = interfaceLanguage.value || "en";
-    const t = interfaceText[lang] || interfaceText.en;
-    const heroTitle = document.querySelector(".workspace-hero h2");
-    const heroIntro = document.querySelector(".workspace-hero p");
-    const bookLabel = document.querySelector('label[for="bookSelect"]');
-    const chapterLabel = document.querySelector('label[for="chapterSelect"]');
-    const verseLabel = document.querySelector('label[for="verseSelect"]');
-    if (heroTitle) heroTitle.textContent = t.dashboard;
-    if (heroIntro) heroIntro.textContent = t.intro;
-    if (bookLabel) bookLabel.textContent = t.books;
-    if (chapterLabel) chapterLabel.textContent = t.chapter;
-    if (verseLabel) verseLabel.textContent = t.verse;
-    localStorage.setItem("biblemastery-interface-language", lang);
+
+    document.documentElement.lang = lang;
+
+    setText(".brand-text p", t.companion);
+    setText("#accountButton", t.account);
+    setText(".account-box h2", t.accountTitle);
+
+    const accountMessage = document.getElementById("accountMessage");
+    if (accountMessage && !accountMessage.dataset.dynamicMessage) {
+      accountMessage.textContent = t.accountMessage;
+    }
+
+    setPlaceholder("#accountEmail", t.email);
+    setPlaceholder("#accountPassword", t.password);
+
+    const stayLabel = document.querySelector('label[for="staySignedIn"]');
+    if (stayLabel) {
+      stayLabel.childNodes.forEach(function(node) {
+        if (node.nodeType === Node.TEXT_NODE) {
+          node.textContent = " " + t.stay;
+        }
+      });
+    }
+
+    setText("#loginAccountButton", t.login);
+    setText("#signupAccountButton", t.signup);
+    setText(".sidebar-heading", t.workspace);
+
+    const links = document.querySelectorAll(".sidebar-link");
+    if (links[0]) {
+      const s = links[0].querySelector("strong");
+      const d = links[0].querySelector("span");
+      if (s) s.textContent = t.personal;
+      if (d) d.textContent = t.personalDesc;
+    }
+    if (links[1]) {
+      const s = links[1].querySelector("strong");
+      const d = links[1].querySelector("span");
+      if (s) s.textContent = t.help;
+      if (d) d.textContent = t.helpDesc;
+    }
+    if (links[2]) {
+      const s = links[2].querySelector("strong");
+      const d = links[2].querySelector("span");
+      if (s) s.textContent = t.sermon;
+      if (d) d.textContent = t.sermonDesc;
+    }
+    if (links[3]) {
+      const s = links[3].querySelector("strong");
+      const d = links[3].querySelector("span");
+      if (s) s.textContent = t.group;
+      if (d) d.textContent = t.groupDesc;
+    }
+    if (links[4]) {
+      const s = links[4].querySelector("strong");
+      const d = links[4].querySelector("span");
+      const a = links[4].querySelector(".admin-label");
+      if (s) s.textContent = t.desert;
+      if (d) d.textContent = t.desertDesc;
+      if (a) a.textContent = t.admin;
+    }
+
+    setText(".workspace-hero h2", t.dashboard);
+    setText(".workspace-hero p", t.intro);
+    setText(".hero-badge", t.center);
+    setText('label[for="translationSelect"]', t.translation);
+    setText('label[for="interfaceLanguage"]', t.language);
+    setText('label[for="bookSelect"]', t.books);
+    setText('label[for="chapterSelect"]', t.chapter);
+    setText('label[for="verseSelect"]', t.verse);
+
+    if (bookSelect.options.length && bookSelect.options[0].value === "") {
+      bookSelect.options[0].textContent = t.chooseBook;
+    }
+    if (chapterSelect.options.length && chapterSelect.options[0].value === "") {
+      chapterSelect.options[0].textContent = t.chooseChapter;
+    }
+    if (verseSelect.options.length && verseSelect.options[0].value === "") {
+      verseSelect.options[0].textContent = t.chooseVerse;
+    }
+
+    if (currentBookIndex < 0) {
+      chapterTitle.textContent = t.bible;
+      chapterIntro.textContent = t.chooseStart;
+    }
+
+    setText("#previousChapterButton", t.previous);
+    setText("#nextChapterButton", t.next);
+    setText(".search-box h3", t.searchChapter);
+    setPlaceholder("#searchInput", t.searchWord);
+    setText("#bibleMastreyAIButton", t.ai);
+    setText('label[for="dictionaryInput"]', t.bibleDictionary);
+    setPlaceholder("#dictionaryInput", t.bibleWord);
+    setText("#dictionaryButton", t.search);
+    setText('label[for="regularDictionaryInput"]', t.englishDictionary);
+    setPlaceholder("#regularDictionaryInput", t.englishWord);
+    setText("#regularDictionaryButton", t.search);
+    setText('label[for="concordanceInput"]', t.concordance);
+    setPlaceholder("#concordanceInput", t.concordanceWord);
+    setText("#concordanceButton", t.search);
+    setText('label[for="originalWordInput"]', t.original);
+    setPlaceholder("#originalWordInput", t.strongNumber);
+    setText("#originalWordButton", t.search);
+
+    commentaryButton.textContent =
+      commentaryVisible
+        ? t.hideCommentary
+        : t.commentary;
+
+    setText("#highlightVerseButton", t.highlight);
+    setText("#bookmarkVerseButton", t.bookmark);
+    setText("#noteVerseButton", t.note);
+    setText("#copyVerseButton", t.copy);
+    setText("#shareVerseButton", t.share);
+  }
+
+  async function changeInterfaceLanguage() {
+    if (!interfaceLanguage) return;
+
+    const lang =
+      interfaceLanguage.value || "en";
+
+    localStorage.setItem(
+      "biblemastery-interface-language",
+      lang
+    );
+
+    rebuildTranslationOptions(lang);
+    translateMainInterface();
+
+    const t = currentUI();
+    status.textContent = t.loading;
+
+    await startBible();
+
+    translateMainInterface();
   }
 
   if (interfaceLanguage) {
-    const saved = localStorage.getItem("biblemastery-interface-language");
-    if (saved && interfaceText[saved]) interfaceLanguage.value = saved;
-    interfaceLanguage.addEventListener("change", applyInterfaceLanguage);
-    applyInterfaceLanguage();
+    const saved =
+      localStorage.getItem(
+        "biblemastery-interface-language"
+      );
+
+    if (
+      saved &&
+      languageBibleOptions[saved]
+    ) {
+      interfaceLanguage.value = saved;
+    }
+
+    const initialLanguage =
+      interfaceLanguage.value || "en";
+
+    rebuildTranslationOptions(
+      initialLanguage
+    );
+
+    translateMainInterface();
+
+    interfaceLanguage.addEventListener(
+      "change",
+      changeInterfaceLanguage
+    );
   }
+
 
   /* =========================
      START BIBLEMASTREY
