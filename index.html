@@ -4458,50 +4458,301 @@ async function startBible() {
 
 
   let thayerLexiconCache = null;
+  let thayerLexiconMap = null;
+  let thayerLexiconPromise = null;
   let bdbIndexCache = null;
   let bdbLexiconCache = null;
 
-  async function loadThayerLexicon() {
-    if (thayerLexiconCache) {
-      return thayerLexiconCache;
+  function normalizeGreekStrongsKey(
+    value
+  ) {
+
+    const raw =
+      String(value || "")
+      .trim()
+      .toUpperCase();
+
+    const match =
+      raw.match(/^G?0*(\d+)$/);
+
+    if (!match) {
+      return raw;
     }
 
-    const response = await fetch(
-      "https://raw.githubusercontent.com/nigelmsipa/thayers-greek-lexicon-dataset/master/data/thayer_lexicon.json"
+    return "G" + String(
+      Number(match[1])
     );
-
-    if (!response.ok) {
-      throw new Error(
-        "Thayer’s lexicon data could not be loaded."
-      );
-    }
-
-    thayerLexiconCache =
-      await response.json();
-
-    return thayerLexiconCache;
   }
 
+
+  async function loadThayerLexicon() {
+
+    if (thayerLexiconMap) {
+      return thayerLexiconMap;
+    }
+
+    if (thayerLexiconPromise) {
+      return thayerLexiconPromise;
+    }
+
+    const urls = [
+      "https://raw.githubusercontent.com/nigelmsipa/thayers-greek-lexicon-dataset/master/data/thayer_lexicon.json",
+      "https://cdn.jsdelivr.net/gh/nigelmsipa/thayers-greek-lexicon-dataset@master/data/thayer_lexicon.json"
+    ];
+
+    thayerLexiconPromise =
+      (async function() {
+
+        let data = null;
+        let lastError = null;
+
+        for (
+          let i = 0;
+          i < urls.length;
+          i++
+        ) {
+
+          try {
+
+            const response =
+              await fetch(
+                urls[i],
+                { cache: "force-cache" }
+              );
+
+            if (!response.ok) {
+              throw new Error(
+                "Thayer source returned " +
+                response.status
+              );
+            }
+
+            const candidate =
+              await response.json();
+
+            if (Array.isArray(candidate)) {
+              data = candidate;
+            }
+            else if (
+              candidate &&
+              Array.isArray(candidate.entries)
+            ) {
+              data = candidate.entries;
+            }
+            else if (
+              candidate &&
+              Array.isArray(candidate.data)
+            ) {
+              data = candidate.data;
+            }
+
+            if (data && data.length) {
+              break;
+            }
+
+            throw new Error(
+              "Thayer data was not in the expected format."
+            );
+
+          } catch (error) {
+
+            lastError = error;
+            data = null;
+          }
+        }
+
+        if (!data || !data.length) {
+          throw (
+            lastError ||
+            new Error(
+              "Thayer’s lexicon data could not be loaded."
+            )
+          );
+        }
+
+        thayerLexiconCache =
+          data;
+
+        thayerLexiconMap =
+          new Map();
+
+        data.forEach(
+          function(entry) {
+
+            if (!entry || typeof entry !== "object") {
+              return;
+            }
+
+            const possibleKeys = [];
+
+            [
+              entry.id,
+              entry.strong,
+              entry.strongsNumber,
+              entry.strongs_number
+            ].forEach(
+              function(value) {
+
+                if (
+                  value !== undefined &&
+                  value !== null &&
+                  value !== ""
+                ) {
+                  possibleKeys.push(value);
+                }
+              }
+            );
+
+            if (Array.isArray(entry.strongs)) {
+              entry.strongs.forEach(
+                function(value) {
+                  possibleKeys.push(value);
+                }
+              );
+            }
+            else if (
+              entry.strongs !== undefined &&
+              entry.strongs !== null &&
+              entry.strongs !== ""
+            ) {
+              possibleKeys.push(
+                entry.strongs
+              );
+            }
+
+            possibleKeys.forEach(
+              function(value) {
+
+                const strongKey =
+                  normalizeGreekStrongsKey(
+                    value
+                  );
+
+                if (
+                  /^G\d+$/.test(
+                    strongKey
+                  )
+                ) {
+                  thayerLexiconMap.set(
+                    strongKey,
+                    entry
+                  );
+                }
+              }
+            );
+          }
+        );
+
+        return thayerLexiconMap;
+      })()
+      .catch(function(error) {
+
+        thayerLexiconPromise =
+          null;
+
+        throw error;
+      });
+
+    return thayerLexiconPromise;
+  }
+
+
   async function findThayerEntry(key) {
-    const data =
-      await loadThayerLexicon();
 
     const normalized =
-      key.trim().toUpperCase();
+      normalizeGreekStrongsKey(
+        key
+      );
+
+    if (!/^G\d+$/.test(normalized)) {
+      return null;
+    }
+
+    const map =
+      await loadThayerLexicon();
+
+    const direct =
+      map.get(normalized);
+
+    if (direct) {
+      return direct;
+    }
+
+    const wantedNumber =
+      normalized.replace(/^G/, "");
 
     return (
-      data.find(function(entry) {
-        return (
-          String(entry.id || "").toUpperCase() ===
-            normalized ||
-          (entry.strongs || [])
-            .map(function(value) {
-              return String(value).toUpperCase();
-            })
-            .includes(normalized)
+      thayerLexiconCache || []
+    ).find(
+      function(entry) {
+
+        if (!entry || typeof entry !== "object") {
+          return false;
+        }
+
+        const values = [];
+
+        Object.keys(entry).forEach(
+          function(field) {
+
+            const value =
+              entry[field];
+
+            if (typeof value === "string") {
+              values.push(value);
+            }
+            else if (Array.isArray(value)) {
+              value.forEach(
+                function(item) {
+                  if (
+                    typeof item === "string" ||
+                    typeof item === "number"
+                  ) {
+                    values.push(
+                      String(item)
+                    );
+                  }
+                }
+              );
+            }
+            else if (
+              typeof value === "number"
+            ) {
+              values.push(
+                String(value)
+              );
+            }
+          }
         );
-      }) || null
-    );
+
+        return values.some(
+          function(value) {
+
+            const candidate =
+              normalizeGreekStrongsKey(
+                value
+              );
+
+            if (candidate === normalized) {
+              return true;
+            }
+
+            const embedded =
+              String(value)
+              .toUpperCase()
+              .match(
+                new RegExp(
+                  "(?:^|[^0-9])G?0*" +
+                  wantedNumber +
+                  "(?:[^0-9]|$)"
+                )
+              );
+
+            return Boolean(embedded);
+          }
+        );
+      }
+    ) || null;
   }
 
   async function loadBdbData() {
