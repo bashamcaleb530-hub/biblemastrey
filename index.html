@@ -179,6 +179,15 @@
   .verse-note { width:100%; min-height:95px; resize:vertical; border:1px solid var(--line); border-radius:9px; padding:10px; font-size:14px; line-height:1.5; background:#0d192b; color:var(--text); }
   .note-status { display:block; margin-top:4px; color:var(--muted); font-size:11px; }
 
+  #verseContainer {
+    max-height:620px;
+    overflow-y:auto;
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:14px;
+    background:#0d192b;
+  }
+  .commentary-output { margin-top:16px; }
   .commentary-panel { display:none; background:#0d192b; border:1px solid var(--line); border-radius:11px; padding:14px; min-height:130px; max-height:540px; overflow-y:auto; }
   .commentary-panel.show { display:block; }
   .commentary-title { font-weight:800; color:var(--gold); margin-bottom:8px; }
@@ -359,6 +368,17 @@
         </div>
 
         <div class="control-group">
+          <label for="interfaceLanguage">🌐 Language</label>
+          <select id="interfaceLanguage">
+            <option value="en" selected>English</option>
+            <option value="es">Español</option>
+            <option value="fr">Français</option>
+            <option value="de">Deutsch</option>
+            <option value="pt">Português</option>
+          </select>
+        </div>
+
+        <div class="control-group">
           <label for="bookSelect">📖 Books</label>
           <select id="bookSelect"><option value="">Choose a book</option></select>
         </div>
@@ -383,6 +403,7 @@
           <h2 id="chapterTitle">Bible</h2>
           <p id="chapterIntro">Choose a book and chapter to begin reading.</p>
           <div id="verseContainer"></div>
+          <div id="commentaryOutput" class="commentary-output"></div>
 
           <div class="navigation">
             <button id="previousChapterButton" disabled>← Previous Chapter</button>
@@ -2013,6 +2034,12 @@ async function loadChapter() {
 
   verseContainer.innerHTML = "";
 
+  const commentaryOutput =
+    document.getElementById("commentaryOutput");
+  if (commentaryOutput) {
+    commentaryOutput.innerHTML = "";
+  }
+
   verseSelect.innerHTML =
     '<option value="">Choose a verse</option>';
 
@@ -2080,9 +2107,14 @@ async function loadChapter() {
       chapterCommentaryText
     );
 
-    verseContainer.appendChild(
-      chapterCommentaryPanel
-    );
+    const commentaryOutput =
+      document.getElementById("commentaryOutput");
+
+    if (commentaryOutput) {
+      commentaryOutput.appendChild(
+        chapterCommentaryPanel
+      );
+    }
   }
 
   verses.forEach(
@@ -2269,9 +2301,14 @@ verseContainer.appendChild(
           commentaryText
         );
 
-  verseRow.appendChild(
-  commentaryPanel
-);
+  const commentaryOutput =
+    document.getElementById("commentaryOutput");
+
+  if (commentaryOutput) {
+    commentaryOutput.appendChild(
+      commentaryPanel
+    );
+  }
 
 }
 
@@ -5005,6 +5042,45 @@ if (helpSupportLink) {
       }
     }
   );
+
+
+  /* =========================
+     INTERFACE LANGUAGE
+  ========================= */
+  const interfaceLanguage =
+    document.getElementById("interfaceLanguage");
+
+  const interfaceText = {
+    en: { dashboard:"Bible Study Dashboard", intro:"Read Scripture, compare study resources, take notes, and build deeper studies in one workspace.", books:"📖 Books", chapter:"Chapter", verse:"Verse" },
+    es: { dashboard:"Panel de Estudio Bíblico", intro:"Lee las Escrituras, compara recursos de estudio, toma notas y profundiza en tu estudio.", books:"📖 Libros", chapter:"Capítulo", verse:"Versículo" },
+    fr: { dashboard:"Tableau d’étude biblique", intro:"Lisez les Écritures, comparez les ressources, prenez des notes et approfondissez votre étude.", books:"📖 Livres", chapter:"Chapitre", verse:"Verset" },
+    de: { dashboard:"Bibelstudium", intro:"Lies die Schrift, vergleiche Studienhilfen, mache Notizen und vertiefe dein Bibelstudium.", books:"📖 Bücher", chapter:"Kapitel", verse:"Vers" },
+    pt: { dashboard:"Painel de Estudo Bíblico", intro:"Leia as Escrituras, compare recursos de estudo, faça anotações e aprofunde seu estudo.", books:"📖 Livros", chapter:"Capítulo", verse:"Versículo" }
+  };
+
+  function applyInterfaceLanguage() {
+    if (!interfaceLanguage) return;
+    const lang = interfaceLanguage.value || "en";
+    const t = interfaceText[lang] || interfaceText.en;
+    const heroTitle = document.querySelector(".workspace-hero h2");
+    const heroIntro = document.querySelector(".workspace-hero p");
+    const bookLabel = document.querySelector('label[for="bookSelect"]');
+    const chapterLabel = document.querySelector('label[for="chapterSelect"]');
+    const verseLabel = document.querySelector('label[for="verseSelect"]');
+    if (heroTitle) heroTitle.textContent = t.dashboard;
+    if (heroIntro) heroIntro.textContent = t.intro;
+    if (bookLabel) bookLabel.textContent = t.books;
+    if (chapterLabel) chapterLabel.textContent = t.chapter;
+    if (verseLabel) verseLabel.textContent = t.verse;
+    localStorage.setItem("biblemastery-interface-language", lang);
+  }
+
+  if (interfaceLanguage) {
+    const saved = localStorage.getItem("biblemastery-interface-language");
+    if (saved && interfaceText[saved]) interfaceLanguage.value = saved;
+    interfaceLanguage.addEventListener("change", applyInterfaceLanguage);
+    applyInterfaceLanguage();
+  }
 
   /* =========================
      START BIBLEMASTREY
