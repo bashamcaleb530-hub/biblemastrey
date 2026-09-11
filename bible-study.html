@@ -417,24 +417,48 @@
     max-height: 600px;
     overflow-y: auto;
   }
-  .parallel-tool { grid-column: 1 / -1; }
-  .parallel-location,
-  .parallel-controls,
+  .parallel-tool {
+    grid-column: 1 / -1;
+  }
+
+  .parallel-controls {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 14px;
+  }
+
+  .parallel-location {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 14px;
+  }
+
   .parallel-results {
     display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 14px;
+    margin-top: 16px;
   }
-  .parallel-location { grid-template-columns: repeat(3,minmax(0,1fr)); }
-  .parallel-controls { grid-template-columns: repeat(3,minmax(0,1fr)); margin-top: 14px; }
-  .parallel-results { grid-template-columns: repeat(3,minmax(0,1fr)); margin-top: 14px; }
+
   .parallel-card {
     background: rgba(8,15,29,.42);
-    border: 1px solid rgba(216,185,106,.22);
-    border-radius: 10px;
-    padding: 14px;
-    min-height: 160px;
+    border: 1px solid rgba(216,185,106,.24);
+    border-radius: 11px;
+    padding: 16px;
+    min-height: 180px;
   }
-  .parallel-card h4 { margin: 0 0 10px; color: var(--gold); }
+
+  .parallel-card h4 {
+    color: var(--gold);
+    margin: 0 0 10px;
+  }
+
+  .parallel-verse-text {
+    line-height: 1.72;
+    color: #eeeae2;
+  }
   .manual-sermon-area { min-height: 520px; line-height: 1.6; }
   .saved-sermon-row {
     display: grid;
@@ -496,7 +520,7 @@
   /* Personal-Study-style Bible Study Builder dashboard */
   .bible-study-layout {
     display: grid;
-    grid-template-columns: minmax(0, 3fr) minmax(260px, .8fr);
+    grid-template-columns: minmax(0, 1.55fr) minmax(330px, .85fr);
     gap: 20px;
     align-items: start;
   }
@@ -526,19 +550,9 @@
 
   .bible-study-primary .parallel-tool {
     grid-column: auto !important;
-    width: 100%;
   }
 
-  .bible-study-primary .parallel-card {
-    min-height: 210px;
-    padding: 18px;
-  }
-
-  .bible-study-primary .parallel-results {
-    width: 100%;
-  }
-
-  @media (max-width: 480px) {
+  @media (max-width: 1100px) {
     .bible-study-layout {
       grid-template-columns: 1fr;
     }
@@ -711,16 +725,20 @@
 
       <div class="tool-box">
         <h3>📗 English Dictionary</h3>
-        <p>Look up modern or Webster’s 1913 English definitions.</p>
+        <p>Look up regular English words separately from Bible dictionary terms.</p>
+
         <label for="englishDictionarySource">Dictionary</label>
         <select id="englishDictionarySource">
+          <option value="webster" selected>Webster’s 1913</option>
           <option value="free">Free English Dictionary</option>
-          <option value="webster">Webster’s 1913 Dictionary</option>
         </select>
+
         <label for="englishDictionarySearch">Search English Dictionary</label>
         <input id="englishDictionarySearch" type="text" placeholder="Example: redemption">
-        <button id="englishDictionaryButton" type="button">Search English Dictionary</button>
-        <div id="englishDictionaryResults" class="result">Search for an English word.</div>
+
+        <button id="englishDictionaryButton" type="button">Search</button>
+
+        <div id="englishDictionaryResults" class="result"></div>
       </div>
 
       <div class="tool-box">
@@ -1878,7 +1896,7 @@
   const parallelResults=[document.getElementById("parallelResult1"),document.getElementById("parallelResult2"),document.getElementById("parallelResult3")];
   let parallelBaseBible=null;
   parallelTranslations[0].value="KJV"; parallelTranslations[1].value="WEB"; parallelTranslations[2].value="ASV";
-  async function setupParallel(){ try { const baseTranslation=(parallelTranslations[0]&&parallelTranslations[0].value)||"KJV"; parallelBaseBible=await getBibleByTranslation(baseTranslation); parallelBook.innerHTML='<option value="">Choose a book</option>'; (parallelBaseBible.books||[]).forEach(function(book,index){const o=document.createElement("option");o.value=index;o.textContent=getBookName(book);parallelBook.appendChild(o);}); } catch(e){console.error("Parallel setup error:",e);} }
+  async function setupParallel(){ try { const baseTranslation=(parallelTranslations[0]&&parallelTranslations[0].value)||"KJV"; parallelBaseBible=await getBibleByTranslation(baseTranslation); parallelBook.innerHTML='<option value="">Choose a book</option>'; parallelChapter.innerHTML='<option value="">Choose a chapter</option>'; parallelVerse.innerHTML='<option value="">Choose a verse</option>'; (parallelBaseBible.books||[]).forEach(function(book,index){const o=document.createElement("option");o.value=index;o.textContent=getBookName(book);parallelBook.appendChild(o);}); parallelResults.forEach(function(r){r.innerHTML="Choose a book, chapter, and verse.";}); } catch(e){console.error("Parallel setup error:",e);} }
   function fillParallelChapters(){ parallelChapter.innerHTML='<option value="">Choose a chapter</option>'; parallelVerse.innerHTML='<option value="">Choose a verse</option>'; if(parallelBook.value===""||!parallelBaseBible)return; const bi=Number(parallelBook.value); (parallelBaseBible.books[bi].chapters||[]).forEach(function(ch,index){const o=document.createElement("option");o.value=index;o.textContent=chapterNumber(ch,index);parallelChapter.appendChild(o);}); renderParallel(); }
   function fillParallelVerses(){ parallelVerse.innerHTML='<option value="">Choose a verse</option>'; if(parallelBook.value===""||parallelChapter.value===""||!parallelBaseBible)return; const bi=Number(parallelBook.value),ci=Number(parallelChapter.value); (parallelBaseBible.books[bi].chapters[ci].verses||[]).forEach(function(v,index){const o=document.createElement("option");o.value=index;o.textContent=verseNumber(v,index);parallelVerse.appendChild(o);}); renderParallel(); }
   async function renderParallel(){ if(parallelBook.value===""||parallelChapter.value===""||parallelVerse.value===""){parallelResults.forEach(function(r){r.innerHTML="Choose a book, chapter, and verse.";});return;} const bi=Number(parallelBook.value),ci=Number(parallelChapter.value),vi=Number(parallelVerse.value); await Promise.all(parallelTranslations.map(async function(sel,index){parallelResults[index].innerHTML="Loading...";try{const bible=await getBibleByTranslation(sel.value);const book=bible.books[bi],chapter=book&&book.chapters?book.chapters[ci]:null,verse=chapter&&chapter.verses?chapter.verses[vi]:null;if(!book||!chapter||!verse)throw new Error("Verse unavailable");parallelResults[index].innerHTML="<h4>"+escapeHTML(sel.options[sel.selectedIndex].text)+"</h4><div class='small-note'>"+escapeHTML(getBookName(book)+" "+chapterNumber(chapter,ci)+":"+verseNumber(verse,vi))+"</div><div style='margin-top:10px'>"+escapeHTML(verseText(verse,sel.value,bi))+"</div>";}catch(e){console.error("Parallel column error:",e);parallelResults[index].innerHTML="<div class='error-message'>This verse could not be loaded in this translation.</div>";}})); }
@@ -2093,65 +2111,103 @@
   /* =========================================
      ENGLISH DICTIONARY
   ========================================= */
-  const englishDictionarySource = document.getElementById("englishDictionarySource");
-  const englishDictionarySearch = document.getElementById("englishDictionarySearch");
-  const englishDictionaryButton = document.getElementById("englishDictionaryButton");
-  const englishDictionaryResults = document.getElementById("englishDictionaryResults");
   let websterDictionaryCache = null;
 
   async function loadWebsterDictionary() {
     if (websterDictionaryCache) return websterDictionaryCache;
-    const response = await fetch("https://raw.githubusercontent.com/adambom/dictionary/master/dictionary.json");
-    if (!response.ok) throw new Error("Webster's dictionary could not be loaded.");
+
+    const response = await fetch(
+      "https://raw.githubusercontent.com/adambom/dictionary/master/dictionary.json"
+    );
+
+    if (!response.ok) {
+      throw new Error("Webster dictionary data could not be loaded.");
+    }
+
     websterDictionaryCache = await response.json();
     return websterDictionaryCache;
   }
 
-  async function searchEnglishDictionary() {
-    if (!englishDictionarySearch || !englishDictionaryResults) return;
-    const word = englishDictionarySearch.value.trim();
-    if (!word) {
-      englishDictionaryResults.textContent = "Enter an English word.";
-      return;
-    }
+  document.getElementById("englishDictionaryButton").addEventListener(
+    "click",
+    async function() {
+      const word = document.getElementById("englishDictionarySearch").value.trim();
+      const results = document.getElementById("englishDictionaryResults");
+      const source = document.getElementById("englishDictionarySource").value;
 
-    englishDictionaryResults.textContent = "Searching...";
+      if (!word) {
+        results.innerHTML =
+          "<div class='status-message'>Enter an English word.</div>";
+        return;
+      }
 
-    try {
-      if (englishDictionarySource && englishDictionarySource.value === "webster") {
-        const dictionary = await loadWebsterDictionary();
-        const key = Object.keys(dictionary).find(function(k) {
-          return k.toLowerCase() === word.toLowerCase();
-        });
-        englishDictionaryResults.textContent =
-          key ? dictionary[key] : "No Webster’s 1913 definition was found for that word.";
-      } else {
-        const response = await fetch("https://api.dictionaryapi.dev/api/v2/entries/en/" + encodeURIComponent(word));
-        if (!response.ok) throw new Error("Definition not found.");
+      results.innerHTML =
+        "<div class='status-message'>Searching English dictionary...</div>";
+
+      try {
+        if (source === "webster") {
+          const data = await loadWebsterDictionary();
+          const key = Object.keys(data).find(function(item) {
+            return item.toLowerCase() === word.toLowerCase();
+          });
+
+          if (!key) {
+            results.innerHTML =
+              "<div class='status-message'>No Webster’s 1913 entry was found.</div>";
+            return;
+          }
+
+          results.innerHTML =
+            "<div class='result-item dictionary-definition'>" +
+            "<div class='result-reference'>" + escapeHtml(key) + "</div>" +
+            "<div style='margin-top:8px'>" + escapeHtml(data[key]) + "</div>" +
+            "<div class='small-note'>Webster’s Unabridged Dictionary (1913)</div>" +
+            "</div>";
+          return;
+        }
+
+        const response = await fetch(
+          "https://api.dictionaryapi.dev/api/v2/entries/en/" +
+          encodeURIComponent(word)
+        );
+
+        if (!response.ok) throw new Error("English dictionary lookup failed.");
+
         const data = await response.json();
-        const meanings = [];
-        (data || []).forEach(function(entry) {
+        const definitions = [];
+
+        data.forEach(function(entry) {
           (entry.meanings || []).forEach(function(meaning) {
-            (meaning.definitions || []).slice(0, 4).forEach(function(def) {
-              meanings.push((meaning.partOfSpeech ? meaning.partOfSpeech + ": " : "") + def.definition);
+            (meaning.definitions || []).slice(0, 3).forEach(function(item) {
+              definitions.push({
+                part: meaning.partOfSpeech || "",
+                definition: item.definition || ""
+              });
             });
           });
         });
-        englishDictionaryResults.textContent =
-          meanings.length ? meanings.join("\n\n") : "No definition was found for that word.";
-      }
-    } catch (error) {
-      console.error("English dictionary error:", error);
-      englishDictionaryResults.textContent = "This English dictionary search could not be completed right now.";
-    }
-  }
 
-  if (englishDictionaryButton) englishDictionaryButton.addEventListener("click", searchEnglishDictionary);
-  if (englishDictionarySearch) {
-    englishDictionarySearch.addEventListener("keydown", function(event) {
-      if (event.key === "Enter") searchEnglishDictionary();
-    });
-  }
+        results.innerHTML =
+          "<div class='result-item dictionary-definition'>" +
+          "<div class='result-reference'>" +
+          escapeHtml((data[0] && data[0].word) || word) +
+          "</div>" +
+          definitions.slice(0, 8).map(function(item) {
+            return "<div style='margin-top:8px'>" +
+              (item.part ? "<strong>" + escapeHtml(item.part) + ":</strong> " : "") +
+              escapeHtml(item.definition) +
+              "</div>";
+          }).join("") +
+          "<div class='small-note'>Free English Dictionary service</div>" +
+          "</div>";
+
+      } catch (error) {
+        console.error("English dictionary error:", error);
+        results.innerHTML =
+          "<div class='error-message'>English dictionary could not be loaded right now.</div>";
+      }
+    }
+  );
 
 </script>
 </body>
