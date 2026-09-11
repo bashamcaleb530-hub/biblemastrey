@@ -526,6 +526,17 @@
     <p>Use the Bible study tools first, then write your sermon manually or use the guided sermon template.</p>
   </div>
 
+  <div class="section no-print" style="margin-top:18px;">
+    <label for="sermonLanguageSelect"><strong>Language</strong></label>
+    <select id="sermonLanguageSelect" style="max-width:320px; margin-top:8px;">
+      <option value="en">English</option>
+      <option value="es">Español</option>
+      <option value="fr">Français</option>
+      <option value="de">Deutsch</option>
+      <option value="pt">Português</option>
+    </select>
+  </div>
+
   <div class="choice-grid choice-grid-three no-print">
     <div class="choice-card" onclick="showSection('manualSermonSection')">
       <h2>✍️ Write Sermon Manually</h2>
@@ -1476,9 +1487,57 @@
     };
   }
 
+
+  const sermonRemoteBibleCache = {};
+
+  async function getSermonRemoteBible(url) {
+    if (sermonRemoteBibleCache[url]) return sermonRemoteBibleCache[url];
+
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error("This Bible translation could not be loaded.");
+    }
+
+    const data = await response.json();
+    sermonRemoteBibleCache[url] = data;
+    return data;
+  }
+
+  const sermonLanguageBibles = {
+    en: [
+      ["KJV", "King James Version (KJV)"],
+      ["KJV1611", "King James Version 1611"],
+      ["KJVPLUS", "King James Version Plus (KJV+)"],
+      ["YLT", "Young's Literal Translation"],
+      ["WEB", "World English Bible"],
+      ["ASV", "American Standard Version"],
+      ["GENEVA1599", "Geneva Bible 1599"],
+      ["DRA", "Douay-Rheims American Edition"],
+      ["BSB", "Berean Standard Bible"],
+      ["MSB", "Majority Standard Bible"]
+    ],
+    es: [["VALERA1909", "Reina-Valera 1909"]],
+    fr: [["LSG1910", "Louis Segond 1910"]],
+    de: [["LUTH1912", "Lutherbibel 1912"]],
+    pt: [["ALMEIDA1819", "Almeida 1819 (Bíblia Livre)"]]
+  };
+
   async function getBibleByTranslation(translation) {
     let rawBible;
-    if (translation === "KJV1611") rawBible = await getKJV1611();
+
+    if (translation === "VALERA1909") {
+      rawBible = await getSermonRemoteBible("https://api.getbible.net/v2/valera.json");
+    }
+    else if (translation === "LSG1910") {
+      rawBible = await getSermonRemoteBible("https://raw.githubusercontent.com/midvash/bible-data/main/versions/fr/lsg/lsg.json");
+    }
+    else if (translation === "LUTH1912") {
+      rawBible = await getSermonRemoteBible("https://raw.githubusercontent.com/midvash/bible-data/main/versions/de/luth1912/luth1912.json");
+    }
+    else if (translation === "ALMEIDA1819") {
+      rawBible = await getSermonRemoteBible("https://raw.githubusercontent.com/midvash/bible-data/main/versions/pt/almeida-livre/almeida-livre.json");
+    }
+    else if (translation === "KJV1611") rawBible = await getKJV1611();
     else if (translation === "KJVPLUS") rawBible = await getKJVPLUS();
     else if (translation === "YLT") rawBible = await getYLT();
     else if (translation === "WEB") rawBible = await getWEB();
@@ -2336,7 +2395,7 @@
   const parallelResults=[document.getElementById("parallelResult1"),document.getElementById("parallelResult2"),document.getElementById("parallelResult3")];
   let parallelBaseBible=null;
   parallelTranslations[0].value="KJV"; parallelTranslations[1].value="WEB"; parallelTranslations[2].value="ASV";
-  async function setupParallel(){ try { parallelBaseBible=await getBibleByTranslation("KJV"); parallelBook.innerHTML='<option value="">Choose a book</option>'; (parallelBaseBible.books||[]).forEach(function(book,index){const o=document.createElement("option");o.value=index;o.textContent=getBookName(book);parallelBook.appendChild(o);}); } catch(e){console.error("Parallel setup error:",e);} }
+  async function setupParallel(){ try { const baseTranslation=(parallelTranslations[0]&&parallelTranslations[0].value)||"KJV"; parallelBaseBible=await getBibleByTranslation(baseTranslation); parallelBook.innerHTML='<option value="">Choose a book</option>'; parallelChapter.innerHTML='<option value="">Choose a chapter</option>'; parallelVerse.innerHTML='<option value="">Choose a verse</option>'; (parallelBaseBible.books||[]).forEach(function(book,index){const o=document.createElement("option");o.value=index;o.textContent=getBookName(book);parallelBook.appendChild(o);}); parallelResults.forEach(function(r){r.innerHTML="Choose a book, chapter, and verse.";}); } catch(e){console.error("Parallel setup error:",e);} }
   function fillParallelChapters(){ parallelChapter.innerHTML='<option value="">Choose a chapter</option>'; parallelVerse.innerHTML='<option value="">Choose a verse</option>'; if(parallelBook.value===""||!parallelBaseBible)return; const bi=Number(parallelBook.value); (parallelBaseBible.books[bi].chapters||[]).forEach(function(ch,index){const o=document.createElement("option");o.value=index;o.textContent=chapterNumber(ch,index);parallelChapter.appendChild(o);}); renderParallel(); }
   function fillParallelVerses(){ parallelVerse.innerHTML='<option value="">Choose a verse</option>'; if(parallelBook.value===""||parallelChapter.value===""||!parallelBaseBible)return; const bi=Number(parallelBook.value),ci=Number(parallelChapter.value); (parallelBaseBible.books[bi].chapters[ci].verses||[]).forEach(function(v,index){const o=document.createElement("option");o.value=index;o.textContent=verseNumber(v,index);parallelVerse.appendChild(o);}); renderParallel(); }
   async function renderParallel(){ if(parallelBook.value===""||parallelChapter.value===""||parallelVerse.value===""){parallelResults.forEach(function(r){r.innerHTML="Choose a book, chapter, and verse.";});return;} const bi=Number(parallelBook.value),ci=Number(parallelChapter.value),vi=Number(parallelVerse.value); await Promise.all(parallelTranslations.map(async function(sel,index){parallelResults[index].innerHTML="Loading...";try{const bible=await getBibleByTranslation(sel.value);const book=bible.books[bi],chapter=book&&book.chapters?book.chapters[ci]:null,verse=chapter&&chapter.verses?chapter.verses[vi]:null;if(!book||!chapter||!verse)throw new Error("Verse unavailable");parallelResults[index].innerHTML="<h4>"+escapeHTML(sel.options[sel.selectedIndex].text)+"</h4><div class='small-note'>"+escapeHTML(getBookName(book)+" "+chapterNumber(chapter,ci)+":"+verseNumber(verse,vi))+"</div><div style='margin-top:10px'>"+escapeHTML(verseText(verse,sel.value,bi))+"</div>";}catch(e){console.error("Parallel column error:",e);parallelResults[index].innerHTML="<div class='error-message'>This verse could not be loaded in this translation.</div>";}})); }
@@ -2367,8 +2426,151 @@
   (function migrateLegacy(){if(getLocalSermons().length)return;const legacy=localStorage.getItem(LEGACY_KEY);if(!legacy)return;try{const fields=JSON.parse(legacy);const title=(fields.manualSermonTitle||fields.sermonTitle||"Saved Sermon").trim()||"Saved Sermon";localStorage.setItem(LOCAL_KEY,JSON.stringify([{title:title,fields:fields,updatedAt:new Date().toISOString()}]));}catch(e){}})();
   refreshSavedSermons(); loadCloudSermons();
 
-  setupParallel();
-  loadReaderBible(false);
+
+  /* =========================================
+     SERMON BUILDER LANGUAGE CONTROLLER
+     Commentary source text stays unchanged.
+  ========================================= */
+
+  const sermonLanguageSelect = document.getElementById("sermonLanguageSelect");
+  const sermonUiText = {"es": {"🎤 Build a Sermon": "🎤 Crear un sermón", "Study Scripture, prepare your message, and write your sermon your way.": "Estudia las Escrituras, prepara tu mensaje y escribe tu sermón a tu manera.", "← Back to BibleMastery": "← Volver a BibleMastery", "Build Your Sermon Your Way": "Crea tu sermón a tu manera", "Use the Bible study tools first, then write your sermon manually or use the guided sermon template.": "Usa primero las herramientas de estudio bíblico y luego escribe tu sermón manualmente o utiliza la plantilla guiada.", "Language": "Idioma", "✍️ Write Sermon Manually": "✍️ Escribir sermón manualmente", "📝 Guided Sermon Template": "📝 Plantilla guiada de sermón", "📖 Sermon Preparation Guide": "📖 Guía de preparación del sermón", "📖 Bible Reader": "📖 Lector de la Biblia", "Bible Reader": "Lector de la Biblia", "Translation": "Traducción", "Book": "Libro", "Chapter": "Capítulo", "Verse": "Versículo", "All verses": "Todos los versículos", "← Previous": "← Anterior", "Next →": "Siguiente →", "Choose a book": "Elige un libro", "Choose a chapter": "Elige un capítulo", "Choose a verse": "Elige un versículo", "📖 Bible Commentary": "📖 Comentario bíblico", "Choose Commentary": "Elegir comentario", "🧰 Bible Tools": "🧰 Herramientas bíblicas", "📘 Bible Dictionaries": "📘 Diccionarios bíblicos", "📗 English Dictionary": "📗 Diccionario de inglés", "🔎 Concordance": "🔎 Concordancia", "🔤 Hebrew & Greek Word Lookup": "🔤 Búsqueda de palabras hebreas y griegas", "📚 Parallel Bible": "📚 Biblia paralela", "Compare Bible Translations": "Comparar traducciones bíblicas", "Version 1": "Versión 1", "Version 2": "Versión 2", "Version 3": "Versión 3", "Search": "Buscar", "Search Bible Dictionaries": "Buscar en diccionarios bíblicos", "Search English Dictionary": "Buscar en diccionario de inglés", "Search Concordance": "Buscar concordancia", "Search Word": "Buscar palabra", "✍️ Manual Sermon": "✍️ Sermón manual", "📝 Guided Teaching Sermon Template": "📝 Plantilla guiada de sermón de enseñanza", "💾 Sermon Controls": "💾 Controles del sermón", "Save Sermon": "Guardar sermón", "Load Sermon": "Cargar sermón", "Clear Sermon": "Borrar sermón", "Delete Saved Sermon": "Eliminar sermón guardado", "Print Sermon": "Imprimir sermón"}, "fr": {"🎤 Build a Sermon": "🎤 Construire un sermon", "Study Scripture, prepare your message, and write your sermon your way.": "Étudiez les Écritures, préparez votre message et rédigez votre sermon à votre manière.", "← Back to BibleMastery": "← Retour à BibleMastery", "Build Your Sermon Your Way": "Construisez votre sermon à votre manière", "Use the Bible study tools first, then write your sermon manually or use the guided sermon template.": "Utilisez d’abord les outils d’étude biblique, puis rédigez votre sermon manuellement ou utilisez le modèle guidé.", "Language": "Langue", "✍️ Write Sermon Manually": "✍️ Écrire le sermon manuellement", "📝 Guided Sermon Template": "📝 Modèle de sermon guidé", "📖 Sermon Preparation Guide": "📖 Guide de préparation du sermon", "📖 Bible Reader": "📖 Lecteur de la Bible", "Bible Reader": "Lecteur de la Bible", "Translation": "Traduction", "Book": "Livre", "Chapter": "Chapitre", "Verse": "Verset", "All verses": "Tous les versets", "← Previous": "← Précédent", "Next →": "Suivant →", "Choose a book": "Choisir un livre", "Choose a chapter": "Choisir un chapitre", "Choose a verse": "Choisir un verset", "📖 Bible Commentary": "📖 Commentaire biblique", "Choose Commentary": "Choisir un commentaire", "🧰 Bible Tools": "🧰 Outils bibliques", "📘 Bible Dictionaries": "📘 Dictionnaires bibliques", "📗 English Dictionary": "📗 Dictionnaire anglais", "🔎 Concordance": "🔎 Concordance", "🔤 Hebrew & Greek Word Lookup": "🔤 Recherche de mots hébreux et grecs", "📚 Parallel Bible": "📚 Bible parallèle", "Compare Bible Translations": "Comparer les traductions bibliques", "Version 1": "Version 1", "Version 2": "Version 2", "Version 3": "Version 3", "Search": "Rechercher", "Search Bible Dictionaries": "Rechercher dans les dictionnaires bibliques", "Search English Dictionary": "Rechercher dans le dictionnaire anglais", "Search Concordance": "Rechercher dans la concordance", "Search Word": "Rechercher le mot", "✍️ Manual Sermon": "✍️ Sermon manuel", "📝 Guided Teaching Sermon Template": "📝 Modèle guidé de sermon d’enseignement", "💾 Sermon Controls": "💾 Commandes du sermon", "Save Sermon": "Enregistrer le sermon", "Load Sermon": "Charger le sermon", "Clear Sermon": "Effacer le sermon", "Delete Saved Sermon": "Supprimer le sermon enregistré", "Print Sermon": "Imprimer le sermon"}, "de": {"🎤 Build a Sermon": "🎤 Eine Predigt erstellen", "Study Scripture, prepare your message, and write your sermon your way.": "Studiere die Schrift, bereite deine Botschaft vor und schreibe deine Predigt auf deine Weise.", "← Back to BibleMastery": "← Zurück zu BibleMastery", "Build Your Sermon Your Way": "Erstelle deine Predigt auf deine Weise", "Use the Bible study tools first, then write your sermon manually or use the guided sermon template.": "Nutze zuerst die Bibelstudien-Werkzeuge und schreibe dann deine Predigt manuell oder mit der geführten Vorlage.", "Language": "Sprache", "✍️ Write Sermon Manually": "✍️ Predigt manuell schreiben", "📝 Guided Sermon Template": "📝 Geführte Predigtvorlage", "📖 Sermon Preparation Guide": "📖 Leitfaden zur Predigtvorbereitung", "📖 Bible Reader": "📖 Bibelleser", "Bible Reader": "Bibelleser", "Translation": "Übersetzung", "Book": "Buch", "Chapter": "Kapitel", "Verse": "Vers", "All verses": "Alle Verse", "← Previous": "← Zurück", "Next →": "Weiter →", "Choose a book": "Buch auswählen", "Choose a chapter": "Kapitel auswählen", "Choose a verse": "Vers auswählen", "📖 Bible Commentary": "📖 Bibelkommentar", "Choose Commentary": "Kommentar auswählen", "🧰 Bible Tools": "🧰 Bibelwerkzeuge", "📘 Bible Dictionaries": "📘 Bibelwörterbücher", "📗 English Dictionary": "📗 Englisches Wörterbuch", "🔎 Concordance": "🔎 Konkordanz", "🔤 Hebrew & Greek Word Lookup": "🔤 Hebräische & griechische Wörtersuche", "📚 Parallel Bible": "📚 Parallelbibel", "Compare Bible Translations": "Bibelübersetzungen vergleichen", "Version 1": "Version 1", "Version 2": "Version 2", "Version 3": "Version 3", "Search": "Suchen", "Search Bible Dictionaries": "Bibelwörterbücher durchsuchen", "Search English Dictionary": "Englisches Wörterbuch durchsuchen", "Search Concordance": "Konkordanz durchsuchen", "Search Word": "Wort suchen", "✍️ Manual Sermon": "✍️ Manuelle Predigt", "📝 Guided Teaching Sermon Template": "📝 Geführte Lehrpredigt-Vorlage", "💾 Sermon Controls": "💾 Predigtsteuerung", "Save Sermon": "Predigt speichern", "Load Sermon": "Predigt laden", "Clear Sermon": "Predigt leeren", "Delete Saved Sermon": "Gespeicherte Predigt löschen", "Print Sermon": "Predigt drucken"}, "pt": {"🎤 Build a Sermon": "🎤 Criar um sermão", "Study Scripture, prepare your message, and write your sermon your way.": "Estude as Escrituras, prepare sua mensagem e escreva seu sermão do seu jeito.", "← Back to BibleMastery": "← Voltar ao BibleMastery", "Build Your Sermon Your Way": "Crie seu sermão do seu jeito", "Use the Bible study tools first, then write your sermon manually or use the guided sermon template.": "Use primeiro as ferramentas de estudo bíblico e depois escreva seu sermão manualmente ou use o modelo guiado.", "Language": "Idioma", "✍️ Write Sermon Manually": "✍️ Escrever sermão manualmente", "📝 Guided Sermon Template": "📝 Modelo guiado de sermão", "📖 Sermon Preparation Guide": "📖 Guia de preparação do sermão", "📖 Bible Reader": "📖 Leitor da Bíblia", "Bible Reader": "Leitor da Bíblia", "Translation": "Tradução", "Book": "Livro", "Chapter": "Capítulo", "Verse": "Versículo", "All verses": "Todos os versículos", "← Previous": "← Anterior", "Next →": "Próximo →", "Choose a book": "Escolha um livro", "Choose a chapter": "Escolha um capítulo", "Choose a verse": "Escolha um versículo", "📖 Bible Commentary": "📖 Comentário bíblico", "Choose Commentary": "Escolher comentário", "🧰 Bible Tools": "🧰 Ferramentas bíblicas", "📘 Bible Dictionaries": "📘 Dicionários bíblicos", "📗 English Dictionary": "📗 Dicionário de inglês", "🔎 Concordance": "🔎 Concordância", "🔤 Hebrew & Greek Word Lookup": "🔤 Pesquisa de palavras hebraicas e gregas", "📚 Parallel Bible": "📚 Bíblia paralela", "Compare Bible Translations": "Comparar traduções bíblicas", "Version 1": "Versão 1", "Version 2": "Versão 2", "Version 3": "Versão 3", "Search": "Pesquisar", "Search Bible Dictionaries": "Pesquisar dicionários bíblicos", "Search English Dictionary": "Pesquisar dicionário de inglês", "Search Concordance": "Pesquisar concordância", "Search Word": "Pesquisar palavra", "✍️ Manual Sermon": "✍️ Sermão manual", "📝 Guided Teaching Sermon Template": "📝 Modelo guiado de sermão de ensino", "💾 Sermon Controls": "💾 Controles do sermão", "Save Sermon": "Salvar sermão", "Load Sermon": "Carregar sermão", "Clear Sermon": "Limpar sermão", "Delete Saved Sermon": "Excluir sermão salvo", "Print Sermon": "Imprimir sermão"}};
+  const sermonEnglishText = new WeakMap();
+
+  function translateSermonNode(node, lang) {
+    if (!node || node.nodeType !== Node.TEXT_NODE) return;
+
+    const original = sermonEnglishText.has(node)
+      ? sermonEnglishText.get(node)
+      : node.nodeValue;
+
+    if (!sermonEnglishText.has(node)) {
+      sermonEnglishText.set(node, original);
+    }
+
+    if (lang === "en") {
+      node.nodeValue = original;
+      return;
+    }
+
+    const trimmed = original.trim();
+    const translated = sermonUiText[lang] && sermonUiText[lang][trimmed];
+
+    if (translated) {
+      const leading = (original.match(/^\s*/) || [""])[0];
+      const trailing = (original.match(/\s*$/) || [""])[0];
+      node.nodeValue = leading + translated + trailing;
+    }
+  }
+
+  function translateSermonInterface(lang) {
+    document.documentElement.lang = lang;
+
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    const nodes = [];
+    let node;
+
+    while ((node = walker.nextNode())) nodes.push(node);
+
+    nodes.forEach(function(textNode) {
+      const parent = textNode.parentElement;
+      if (parent && parent.closest("#commentaryContent, .reader-commentary-results")) return;
+      translateSermonNode(textNode, lang);
+    });
+
+    const placeholders = {
+      es: {
+        dictionarySearch: "Ejemplo: pacto",
+        englishDictionarySearch: "Ejemplo: redención",
+        concordanceSearch: "Ejemplo: perdonar",
+        wordSearch: "Ejemplo: G26 o H2617"
+      },
+      fr: {
+        dictionarySearch: "Exemple : alliance",
+        englishDictionarySearch: "Exemple : rédemption",
+        concordanceSearch: "Exemple : pardonner",
+        wordSearch: "Exemple : G26 ou H2617"
+      },
+      de: {
+        dictionarySearch: "Beispiel: Bund",
+        englishDictionarySearch: "Beispiel: Erlösung",
+        concordanceSearch: "Beispiel: vergeben",
+        wordSearch: "Beispiel: G26 oder H2617"
+      },
+      pt: {
+        dictionarySearch: "Exemplo: aliança",
+        englishDictionarySearch: "Exemplo: redenção",
+        concordanceSearch: "Exemplo: perdoar",
+        wordSearch: "Exemplo: G26 ou H2617"
+      }
+    };
+
+    const originalPlaceholders = {
+      dictionarySearch: "Example: covenant",
+      englishDictionarySearch: "Example: redemption",
+      concordanceSearch: "Example: forgive",
+      wordSearch: "Example: G26 or H2617"
+    };
+
+    Object.keys(originalPlaceholders).forEach(function(id) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.placeholder =
+        lang === "en"
+          ? originalPlaceholders[id]
+          : ((placeholders[lang] && placeholders[lang][id]) || originalPlaceholders[id]);
+    });
+  }
+
+  function fillSermonTranslationSelect(select, options, selectedValue) {
+    if (!select) return;
+
+    select.innerHTML = "";
+
+    options.forEach(function(item) {
+      const option = document.createElement("option");
+      option.value = item[0];
+      option.textContent = item[1];
+      select.appendChild(option);
+    });
+
+    if (selectedValue && options.some(function(item) { return item[0] === selectedValue; })) {
+      select.value = selectedValue;
+    }
+  }
+
+  async function applySermonLanguage(lang) {
+    const options = sermonLanguageBibles[lang] || sermonLanguageBibles.en;
+    const defaultTranslation = options[0][0];
+
+    fillSermonTranslationSelect(readerTranslation, options, defaultTranslation);
+
+    parallelTranslations.forEach(function(select) {
+      fillSermonTranslationSelect(select, options, defaultTranslation);
+    });
+
+    translateSermonInterface(lang);
+
+    try {
+      await loadReaderBible(false);
+    } catch (error) {
+      console.error("Sermon language Bible reader error:", error);
+    }
+
+    try {
+      await setupParallel();
+    } catch (error) {
+      console.error("Sermon language Parallel Bible error:", error);
+    }
+  }
+
+  if (sermonLanguageSelect) {
+    sermonLanguageSelect.addEventListener("change", function() {
+      applySermonLanguage(sermonLanguageSelect.value);
+    });
+  }
+
+
+  applySermonLanguage('en');
 
 </script>
 </body>
