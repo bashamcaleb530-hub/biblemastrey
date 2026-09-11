@@ -496,7 +496,7 @@
   /* Personal-Study-style Bible Study Builder dashboard */
   .bible-study-layout {
     display: grid;
-    grid-template-columns: minmax(0, 2fr) minmax(300px, 1fr);
+    grid-template-columns: minmax(0, 3fr) minmax(260px, .8fr);
     gap: 20px;
     align-items: start;
   }
@@ -526,6 +526,16 @@
 
   .bible-study-primary .parallel-tool {
     grid-column: auto !important;
+    width: 100%;
+  }
+
+  .bible-study-primary .parallel-card {
+    min-height: 210px;
+    padding: 18px;
+  }
+
+  .bible-study-primary .parallel-results {
+    width: 100%;
   }
 
   @media (max-width: 480px) {
@@ -1549,9 +1559,27 @@
   async function loadBibleDictionaryLetter(letter) {
     const key = String(letter || "").toLowerCase();
     if (bibleDictionaryCache[key]) return bibleDictionaryCache[key];
-    const response = await fetch("https://raw.githubusercontent.com/neuu-org/bible-dictionary-dataset/main/data/01_parsed/" + key + ".json");
-    if (!response.ok) throw new Error("Bible dictionary data could not be loaded.");
-    const data = await response.json(); bibleDictionaryCache[key] = data; return data;
+
+    const urls = [
+      "https://raw.githubusercontent.com/neuu-org/bible-dictionary-dataset/main/data/01_parsed/" + key + ".json",
+      "https://cdn.jsdelivr.net/gh/neuu-org/bible-dictionary-dataset@main/data/01_parsed/" + key + ".json"
+    ];
+
+    let lastError = null;
+
+    for (const url of urls) {
+      try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("Bible dictionary source returned " + response.status + ".");
+        const data = await response.json();
+        bibleDictionaryCache[key] = data;
+        return data;
+      } catch (error) {
+        lastError = error;
+      }
+    }
+
+    throw lastError || new Error("Bible dictionary data could not be loaded.");
   }
   async function searchBibleDictionaries(word) {
     const firstLetter = word.trim().charAt(0).toLowerCase();
