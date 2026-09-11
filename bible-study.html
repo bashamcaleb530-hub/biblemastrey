@@ -572,6 +572,49 @@
     }
   }
 
+
+  /* BibleMastery Real AI */
+  .biblemastery-ai-box {
+    background: linear-gradient(135deg, rgba(18,30,51,.98), rgba(15,27,48,.98));
+    border: 1px solid rgba(216,185,106,.38);
+    border-radius: 15px;
+    padding: 22px;
+    margin: 20px 0 24px;
+    box-shadow: 0 14px 35px rgba(0,0,0,.25);
+  }
+
+  .biblemastery-ai-box h2 {
+    color: var(--gold);
+    margin-top: 0;
+  }
+
+  .biblemastery-ai-box textarea {
+    min-height: 115px;
+  }
+
+  .biblemastery-ai-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .biblemastery-ai-actions button {
+    margin: 0;
+  }
+
+  .biblemastery-ai-answer {
+    margin-top: 14px;
+    padding: 16px;
+    background: rgba(8,15,29,.5);
+    border: 1px solid rgba(216,185,106,.22);
+    border-radius: 10px;
+    min-height: 58px;
+    white-space: pre-wrap;
+    line-height: 1.65;
+    color: #e8e6df;
+  }
+
 </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -601,7 +644,20 @@
     </select>
   </div>
 
-  <div class="choice-grid study-choice-grid no-print">
+  
+  <div class="biblemastery-ai-box no-print">
+    <h2>✨ BibleMastery AI — Bible Study Assistant</h2>
+    <p>Ask for help preparing a group Bible study, explaining a passage, building teaching points, applications, discussion questions, or organizing your study.</p>
+    <label for="studyAiQuestion">What would you like AI to help with?</label>
+    <textarea id="studyAiQuestion" placeholder="Example: Help me prepare a Bible study on faith from Hebrews 11."></textarea>
+    <div class="biblemastery-ai-actions">
+      <button id="studyAiButton" type="button">Ask BibleMastery AI</button>
+      <button id="studyAiClear" class="secondary" type="button">Clear AI</button>
+    </div>
+    <div id="studyAiAnswer" class="biblemastery-ai-answer">AI is ready when you are.</div>
+  </div>
+
+<div class="choice-grid study-choice-grid no-print">
     <div class="choice-card" onclick="showSection('manualStudySection')">
       <h2>✍️ Write Bible Study Manually</h2>
       <p>Write your Bible study freely in one large workspace without using the guided template.</p>
@@ -2226,6 +2282,86 @@
       }
     }
   );
+
+
+  /* =========================================
+     BIBLEMASTERY REAL AI
+     Manual submit only — no automatic API calls
+  ========================================= */
+  const bibleMasteryAiEndpoint = "https://biblemastrey-ai.bashamcaleb530.workers.dev";
+  const bibleMasteryAiLanguages = {
+    en: "English",
+    es: "Spanish",
+    fr: "French",
+    de: "German",
+    pt: "Portuguese"
+  };
+
+  const bibleMasteryAiQuestion = document.getElementById("studyAiQuestion");
+  const bibleMasteryAiButton = document.getElementById("studyAiButton");
+  const bibleMasteryAiAnswer = document.getElementById("studyAiAnswer");
+  const bibleMasteryAiClear = document.getElementById("studyAiClear");
+  const bibleMasteryAiLanguage = document.getElementById("studyLanguageSelect");
+
+  async function askBibleMasteryRealAi() {
+    const userQuestion = bibleMasteryAiQuestion.value.trim();
+
+    if (!userQuestion) {
+      bibleMasteryAiAnswer.textContent = "Enter a question or request for BibleMastery AI.";
+      bibleMasteryAiQuestion.focus();
+      return;
+    }
+
+    const languageCode = bibleMasteryAiLanguage ? bibleMasteryAiLanguage.value : "en";
+    const answerLanguage = bibleMasteryAiLanguages[languageCode] || "English";
+
+    bibleMasteryAiButton.disabled = true;
+    bibleMasteryAiAnswer.textContent = "BibleMastery AI is thinking...";
+
+    try {
+      const question =
+        "You are helping prepare a group Bible study. " +
+        "Keep Scripture primary, clearly distinguish Scripture from explanation, and do not invent Bible quotations or references. " +
+        "Respond in " + answerLanguage + ".\n\nUser request: " + userQuestion;
+
+      const response = await fetch(
+        bibleMasteryAiEndpoint,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            question: question
+          })
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "AI request failed.");
+      }
+
+      bibleMasteryAiAnswer.textContent =
+        data.answer || "BibleMastery AI did not return an answer.";
+
+    } catch (error) {
+      console.error("BibleMastery AI error:", error);
+      bibleMasteryAiAnswer.textContent =
+        "BibleMastery AI could not answer right now. Please try again.";
+    } finally {
+      bibleMasteryAiButton.disabled = false;
+    }
+  }
+
+  bibleMasteryAiButton.addEventListener("click", askBibleMasteryRealAi);
+
+  bibleMasteryAiClear.addEventListener("click", function() {
+    bibleMasteryAiQuestion.value = "";
+    bibleMasteryAiAnswer.textContent = "AI is ready when you are.";
+    bibleMasteryAiQuestion.focus();
+  });
 
 </script>
 </body>
