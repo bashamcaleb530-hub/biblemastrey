@@ -790,6 +790,17 @@
       Use the study tools below freely, or enter a topic when you want BibleMastery to build a guided topical study for you.
     </p>
 
+    <div class="personal-language-control" style="margin:16px 0 18px;">
+      <label for="personalLanguageSelect">Language</label>
+      <select id="personalLanguageSelect" class="reader-select" style="max-width:320px;">
+        <option value="en">English</option>
+        <option value="es">Español</option>
+        <option value="fr">Français</option>
+        <option value="de">Deutsch</option>
+        <option value="pt">Português</option>
+      </select>
+    </div>
+
     <label for="topicInput">
       Bible Study Topic
     </label>
@@ -1465,12 +1476,78 @@
 
 
   /* =========================================
+     LANGUAGE BIBLE SOURCES
+  ========================================= */
+
+  const remoteBibleCache = {};
+
+  async function getRemoteBible(url) {
+    if (remoteBibleCache[url]) {
+      return remoteBibleCache[url];
+    }
+
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error("This Bible translation could not be loaded.");
+    }
+
+    const data = await response.json();
+    remoteBibleCache[url] = data;
+    return data;
+  }
+
+  const personalLanguageBibles = {
+    en: [
+      ["KJV", "King James Version (KJV)"],
+      ["KJV1611", "King James Version 1611"],
+      ["KJVPLUS", "King James Version Plus (KJV+)"],
+      ["YLT", "Young's Literal Translation"],
+      ["WEB", "World English Bible"],
+      ["ASV", "American Standard Version"],
+      ["GENEVA1599", "Geneva Bible 1599"],
+      ["DRA", "Douay-Rheims American Edition"],
+      ["BSB", "Berean Standard Bible"],
+      ["MSB", "Majority Standard Bible"]
+    ],
+    es: [["VALERA1909", "Reina-Valera 1909"]],
+    fr: [["LSG1910", "Louis Segond 1910"]],
+    de: [["LUTH1912", "Lutherbibel 1912"]],
+    pt: [["ALMEIDA1819", "Almeida 1819 (Bíblia Livre)"]]
+  };
+
+
+  /* =========================================
      LOAD ANY BIBLE TRANSLATION
   ========================================= */
 
   async function loadBibleTranslation(
     translation
   ) {
+
+    if (translation === "VALERA1909") {
+      return await getRemoteBible(
+        "https://api.getbible.net/v2/valera.json"
+      );
+    }
+
+    if (translation === "LSG1910") {
+      return await getRemoteBible(
+        "https://raw.githubusercontent.com/midvash/bible-data/main/versions/fr/lsg/lsg.json"
+      );
+    }
+
+    if (translation === "LUTH1912") {
+      return await getRemoteBible(
+        "https://raw.githubusercontent.com/midvash/bible-data/main/versions/de/luth1912/luth1912.json"
+      );
+    }
+
+    if (translation === "ALMEIDA1819") {
+      return await getRemoteBible(
+        "https://raw.githubusercontent.com/midvash/bible-data/main/versions/pt/almeida-livre/almeida-livre.json"
+      );
+    }
 
     if (translation === "KJV1611") {
       return await getKJV1611();
@@ -6414,6 +6491,315 @@
     startPersonalStudy();
 
   }
+
+
+  /* =========================================
+     PERSONAL STUDY LANGUAGE CONTROLLER
+     Commentary source text remains unchanged.
+  ========================================= */
+
+  const personalLanguageSelect =
+    document.getElementById("personalLanguageSelect");
+
+  const personalUiText = {
+    es: {
+      "Personal Bible Study":"Estudio Bíblico Personal",
+      "BibleMastery • Personal Study Workspace":"BibleMastery • Área de Estudio Personal",
+      "← Back to BibleMastery":"← Volver a BibleMastery",
+      "What would you like to study?":"¿Qué te gustaría estudiar?",
+      "Use the study tools below freely, or enter a topic when you want BibleMastery to build a guided topical study for you.":"Usa libremente las herramientas de estudio de abajo, o escribe un tema cuando quieras que BibleMastery prepare un estudio temático guiado.",
+      "Language":"Idioma",
+      "Bible Study Topic":"Tema de estudio bíblico",
+      "Build Guided Study":"Crear estudio guiado",
+      "Study freely with the tools below, or use “What would you like to study?” above to build a guided topical study.":"Estudia libremente con las herramientas de abajo, o usa «¿Qué te gustaría estudiar?» arriba para crear un estudio temático guiado.",
+      "📖 Bible Reader":"📖 Lector de la Biblia",
+      "Bible Reader":"Lector de la Biblia",
+      "Translation":"Traducción","📖 Book":"📖 Libro","Book":"Libro","Chapter":"Capítulo","Verse":"Versículo",
+      "All verses":"Todos los versículos","← Previous":"← Anterior","Next →":"Siguiente →",
+      "Choose a book":"Elige un libro","Choose a chapter":"Elige un capítulo","Choose a verse":"Elige un versículo",
+      "📖 Bible Commentary":"📖 Comentario bíblico","Choose Commentary":"Elegir comentario",
+      "🧰 Bible Study Tools":"🧰 Herramientas de estudio bíblico",
+      "📚 Bible Dictionary":"📚 Diccionario bíblico","Search":"Buscar",
+      "📘 English Dictionary":"📘 Diccionario de inglés","🔎 Concordance":"🔎 Concordancia",
+      "🔤 Hebrew & Greek Word Lookup":"🔤 Búsqueda de palabras hebreas y griegas",
+      "Lexicon Source":"Fuente del léxico","📚 Parallel Bible":"📚 Biblia paralela",
+      "Version 1":"Versión 1","Version 2":"Versión 2","Version 3":"Versión 3",
+      "📖 Topic Bible Verses":"📖 Versículos bíblicos del tema",
+      "Loading Bible...":"Cargando Biblia...","Loading Bible verses...":"Cargando versículos bíblicos...",
+      "Loading commentary...":"Cargando comentario...",
+      "Choose a book and chapter to read the Bible while you study.":"Elige un libro y un capítulo para leer la Biblia mientras estudias.",
+      "Choose a book and chapter in the Bible Reader above.":"Elige un libro y un capítulo en el Lector de la Biblia de arriba.",
+      "Personal Bible Study":"Estudio Bíblico Personal"
+    },
+    fr: {
+      "Personal Bible Study":"Étude biblique personnelle",
+      "BibleMastery • Personal Study Workspace":"BibleMastery • Espace d’étude personnelle",
+      "← Back to BibleMastery":"← Retour à BibleMastery",
+      "What would you like to study?":"Que souhaitez-vous étudier ?",
+      "Use the study tools below freely, or enter a topic when you want BibleMastery to build a guided topical study for you.":"Utilisez librement les outils d’étude ci-dessous, ou saisissez un sujet lorsque vous souhaitez que BibleMastery crée une étude thématique guidée.",
+      "Language":"Langue","Bible Study Topic":"Sujet d’étude biblique","Build Guided Study":"Créer une étude guidée",
+      "📖 Bible Reader":"📖 Lecteur de la Bible","Bible Reader":"Lecteur de la Bible",
+      "Translation":"Traduction","📖 Book":"📖 Livre","Book":"Livre","Chapter":"Chapitre","Verse":"Verset",
+      "All verses":"Tous les versets","← Previous":"← Précédent","Next →":"Suivant →",
+      "Choose a book":"Choisir un livre","Choose a chapter":"Choisir un chapitre","Choose a verse":"Choisir un verset",
+      "📖 Bible Commentary":"📖 Commentaire biblique","Choose Commentary":"Choisir un commentaire",
+      "🧰 Bible Study Tools":"🧰 Outils d’étude biblique","📚 Bible Dictionary":"📚 Dictionnaire biblique",
+      "Search":"Rechercher","📘 English Dictionary":"📘 Dictionnaire anglais","🔎 Concordance":"🔎 Concordance",
+      "🔤 Hebrew & Greek Word Lookup":"🔤 Recherche de mots hébreux et grecs","Lexicon Source":"Source du lexique",
+      "📚 Parallel Bible":"📚 Bible parallèle","Version 1":"Version 1","Version 2":"Version 2","Version 3":"Version 3",
+      "📖 Topic Bible Verses":"📖 Versets bibliques du sujet",
+      "Loading Bible...":"Chargement de la Bible...","Loading Bible verses...":"Chargement des versets bibliques...",
+      "Loading commentary...":"Chargement du commentaire...",
+      "Choose a book and chapter to read the Bible while you study.":"Choisissez un livre et un chapitre pour lire la Bible pendant votre étude.",
+      "Choose a book and chapter in the Bible Reader above.":"Choisissez un livre et un chapitre dans le Lecteur de la Bible ci-dessus."
+    },
+    de: {
+      "Personal Bible Study":"Persönliches Bibelstudium",
+      "BibleMastery • Personal Study Workspace":"BibleMastery • Persönlicher Studienbereich",
+      "← Back to BibleMastery":"← Zurück zu BibleMastery",
+      "What would you like to study?":"Was möchten Sie studieren?",
+      "Use the study tools below freely, or enter a topic when you want BibleMastery to build a guided topical study for you.":"Nutzen Sie die Studienwerkzeuge unten frei oder geben Sie ein Thema ein, wenn BibleMastery eine geführte Themenstudie erstellen soll.",
+      "Language":"Sprache","Bible Study Topic":"Bibelstudienthema","Build Guided Study":"Geführte Studie erstellen",
+      "📖 Bible Reader":"📖 Bibelleser","Bible Reader":"Bibelleser","Translation":"Übersetzung",
+      "📖 Book":"📖 Buch","Book":"Buch","Chapter":"Kapitel","Verse":"Vers","All verses":"Alle Verse",
+      "← Previous":"← Zurück","Next →":"Weiter →","Choose a book":"Buch auswählen",
+      "Choose a chapter":"Kapitel auswählen","Choose a verse":"Vers auswählen",
+      "📖 Bible Commentary":"📖 Bibelkommentar","Choose Commentary":"Kommentar auswählen",
+      "🧰 Bible Study Tools":"🧰 Bibelstudien-Werkzeuge","📚 Bible Dictionary":"📚 Bibellexikon",
+      "Search":"Suchen","📘 English Dictionary":"📘 Englisches Wörterbuch","🔎 Concordance":"🔎 Konkordanz",
+      "🔤 Hebrew & Greek Word Lookup":"🔤 Hebräische & griechische Wortsuche","Lexicon Source":"Lexikonquelle",
+      "📚 Parallel Bible":"📚 Parallelbibel","Version 1":"Version 1","Version 2":"Version 2","Version 3":"Version 3",
+      "📖 Topic Bible Verses":"📖 Bibelverse zum Thema","Loading Bible...":"Bibel wird geladen...",
+      "Loading Bible verses...":"Bibelverse werden geladen...","Loading commentary...":"Kommentar wird geladen...",
+      "Choose a book and chapter to read the Bible while you study.":"Wählen Sie ein Buch und Kapitel, um während des Studiums in der Bibel zu lesen.",
+      "Choose a book and chapter in the Bible Reader above.":"Wählen Sie oben im Bibelleser ein Buch und Kapitel."
+    },
+    pt: {
+      "Personal Bible Study":"Estudo Bíblico Pessoal",
+      "BibleMastery • Personal Study Workspace":"BibleMastery • Área de Estudo Pessoal",
+      "← Back to BibleMastery":"← Voltar ao BibleMastery",
+      "What would you like to study?":"O que você gostaria de estudar?",
+      "Use the study tools below freely, or enter a topic when you want BibleMastery to build a guided topical study for you.":"Use livremente as ferramentas de estudo abaixo ou digite um tema quando quiser que o BibleMastery crie um estudo temático guiado.",
+      "Language":"Idioma","Bible Study Topic":"Tema de estudo bíblico","Build Guided Study":"Criar estudo guiado",
+      "📖 Bible Reader":"📖 Leitor da Bíblia","Bible Reader":"Leitor da Bíblia","Translation":"Tradução",
+      "📖 Book":"📖 Livro","Book":"Livro","Chapter":"Capítulo","Verse":"Versículo","All verses":"Todos os versículos",
+      "← Previous":"← Anterior","Next →":"Próximo →","Choose a book":"Escolha um livro",
+      "Choose a chapter":"Escolha um capítulo","Choose a verse":"Escolha um versículo",
+      "📖 Bible Commentary":"📖 Comentário bíblico","Choose Commentary":"Escolher comentário",
+      "🧰 Bible Study Tools":"🧰 Ferramentas de estudo bíblico","📚 Bible Dictionary":"📚 Dicionário bíblico",
+      "Search":"Pesquisar","📘 English Dictionary":"📘 Dicionário de inglês","🔎 Concordance":"🔎 Concordância",
+      "🔤 Hebrew & Greek Word Lookup":"🔤 Pesquisa de palavras hebraicas e gregas","Lexicon Source":"Fonte do léxico",
+      "📚 Parallel Bible":"📚 Bíblia paralela","Version 1":"Versão 1","Version 2":"Versão 2","Version 3":"Versão 3",
+      "📖 Topic Bible Verses":"📖 Versículos bíblicos do tema","Loading Bible...":"Carregando Bíblia...",
+      "Loading Bible verses...":"Carregando versículos bíblicos...","Loading commentary...":"Carregando comentário...",
+      "Choose a book and chapter to read the Bible while you study.":"Escolha um livro e um capítulo para ler a Bíblia enquanto estuda.",
+      "Choose a book and chapter in the Bible Reader above.":"Escolha um livro e um capítulo no Leitor da Bíblia acima."
+    }
+  };
+
+  const personalEnglishText = new WeakMap();
+
+  function translatePersonalNode(node, lang) {
+    if (!node || node.nodeType !== Node.TEXT_NODE) return;
+
+    const original =
+      personalEnglishText.get(node) !== undefined
+        ? personalEnglishText.get(node)
+        : node.nodeValue;
+
+    if (!personalEnglishText.has(node)) {
+      personalEnglishText.set(node, original);
+    }
+
+    if (lang === "en") {
+      node.nodeValue = original;
+      return;
+    }
+
+    const trimmed = original.trim();
+    const translated =
+      personalUiText[lang] &&
+      personalUiText[lang][trimmed];
+
+    if (translated) {
+      const leading = original.match(/^\s*/)[0];
+      const trailing = original.match(/\s*$/)[0];
+      node.nodeValue = leading + translated + trailing;
+    }
+  }
+
+  function translatePersonalInterface(lang) {
+    document.documentElement.lang = lang;
+
+    const walker =
+      document.createTreeWalker(
+        document.body,
+        NodeFilter.SHOW_TEXT
+      );
+
+    const nodes = [];
+    let node;
+
+    while ((node = walker.nextNode())) {
+      nodes.push(node);
+    }
+
+    nodes.forEach(function(textNode) {
+      const parent = textNode.parentElement;
+
+      if (
+        parent &&
+        parent.closest(
+          "#commentaryContent, .reader-commentary-results"
+        )
+      ) {
+        return;
+      }
+
+      translatePersonalNode(textNode, lang);
+    });
+
+    const topicPlaceholder = {
+      en: "Example: The 7 redemptive names of God",
+      es: "Ejemplo: Los 7 nombres redentores de Dios",
+      fr: "Exemple : Les 7 noms rédempteurs de Dieu",
+      de: "Beispiel: Die 7 Erlösungsnamen Gottes",
+      pt: "Exemplo: Os 7 nomes redentores de Deus"
+    };
+
+    topicInput.placeholder =
+      topicPlaceholder[lang] ||
+      topicPlaceholder.en;
+
+    const wordInput =
+      document.getElementById("wordInput");
+
+    if (wordInput) {
+      wordInput.placeholder =
+        lang === "es" ? "Ejemplo: G26 o H2617" :
+        lang === "fr" ? "Exemple : G26 ou H2617" :
+        lang === "de" ? "Beispiel: G26 oder H2617" :
+        lang === "pt" ? "Exemplo: G26 ou H2617" :
+        "Example: G26 or H2617";
+    }
+  }
+
+  function fillPersonalTranslationSelect(
+    select,
+    options,
+    selectedValue
+  ) {
+    if (!select) return;
+
+    select.innerHTML = "";
+
+    options.forEach(function(item) {
+      const option =
+        document.createElement("option");
+
+      option.value = item[0];
+      option.textContent = item[1];
+      select.appendChild(option);
+    });
+
+    if (
+      selectedValue &&
+      options.some(function(item) {
+        return item[0] === selectedValue;
+      })
+    ) {
+      select.value = selectedValue;
+    }
+  }
+
+  async function applyPersonalLanguage(lang) {
+    const options =
+      personalLanguageBibles[lang] ||
+      personalLanguageBibles.en;
+
+    const defaultTranslation =
+      options[0][0];
+
+    fillPersonalTranslationSelect(
+      readerTranslationSelect,
+      options,
+      defaultTranslation
+    );
+
+    fillPersonalTranslationSelect(
+      translationSelect,
+      options,
+      defaultTranslation
+    );
+
+    parallelTranslationSelects.forEach(
+      function(select) {
+        fillPersonalTranslationSelect(
+          select,
+          options,
+          defaultTranslation
+        );
+      }
+    );
+
+    studyTranslation =
+      defaultTranslation;
+
+    translatePersonalInterface(lang);
+
+    try {
+      await loadIndependentBible(false);
+    }
+    catch (error) {
+      console.error(
+        "Language Bible reader error:",
+        error
+      );
+    }
+
+    try {
+      await loadStudyBible();
+
+      if (
+        currentTopic &&
+        typeof displayTopicVerses === "function"
+      ) {
+        displayTopicVerses();
+      }
+    }
+    catch (error) {
+      console.error(
+        "Language topic Bible error:",
+        error
+      );
+    }
+
+    if (
+      typeof initializeParallelBible === "function"
+    ) {
+      try {
+        await initializeParallelBible();
+      }
+      catch (error) {
+        console.error(
+          "Language Parallel Bible error:",
+          error
+        );
+      }
+    }
+  }
+
+  if (personalLanguageSelect) {
+    personalLanguageSelect.addEventListener(
+      "change",
+      function() {
+        applyPersonalLanguage(
+          personalLanguageSelect.value
+        );
+      }
+    );
+  }
+
 
 </script>
 
