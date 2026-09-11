@@ -466,6 +466,48 @@
     .saved-sermon-row { grid-template-columns: 1fr; }
   }
 
+
+  /* Personal-Study-style Sermon Builder dashboard */
+  .sermon-study-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(300px, 1fr);
+    gap: 20px;
+    align-items: start;
+  }
+
+  .sermon-study-primary,
+  .sermon-study-tools {
+    min-width: 0;
+  }
+
+  .sermon-study-layout .section {
+    margin-bottom: 20px;
+  }
+
+  .sermon-study-tools > .section {
+    margin-bottom: 0;
+  }
+
+  .sermon-study-tools .tool-grid {
+    display: grid;
+    grid-template-columns: 1fr !important;
+    gap: 18px;
+  }
+
+  .sermon-study-tools .tool-box {
+    grid-column: 1 !important;
+  }
+
+  .sermon-study-primary .parallel-tool {
+    grid-column: auto !important;
+  }
+
+  @media (max-width: 480px) {
+    .sermon-study-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
 </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -499,9 +541,12 @@
     </div>
   </div>
 
-  <div class="section tool-section no-print">
-    <h2>📚 Bible Study Tools</h2>
-    <p>Study the passage here before or while you write your sermon.</p>
+  
+  <div class="sermon-study-layout">
+    <div class="sermon-study-primary">
+<div class="section tool-section no-print">
+    <h2>📖 Bible Reader</h2>
+    <p>Read any passage before or while you write your sermon.</p>
 
     <div class="tool-grid">
       <div class="tool-box bible-reader-tool">
@@ -530,8 +575,7 @@
       </div>
     </div>
   </div>
-
-  <div class="section tool-section no-print">
+<div class="section tool-section no-print">
     <h2>📖 Bible Commentary</h2>
     <p>Commentary follows the passage in the Bible Reader. Change the commentary and it loads automatically.</p>
     <div class="commentary-layout">
@@ -555,53 +599,8 @@
       </div>
     </div>
   </div>
-
-  <div class="section tool-section no-print">
-    <h2>🧰 Bible Tools</h2>
-    <div class="tool-grid">
-      <div class="tool-box">
-        <h3>📘 Bible Dictionaries</h3>
-        <p>Search Easton’s and Smith’s Bible dictionaries.</p>
-        <label for="dictionarySource">Dictionary</label>
-        <select id="dictionarySource"><option value="both">Easton’s + Smith’s</option><option value="easton">Easton’s Bible Dictionary</option><option value="smith">Smith’s Bible Dictionary</option></select>
-        <label for="dictionarySearch">Search Dictionary</label>
-        <input id="dictionarySearch" type="text" placeholder="Example: grace">
-        <button id="dictionaryButton" type="button">Search Dictionary</button>
-        <div id="dictionaryResults" class="result">Search for a Bible word or topic.</div>
-      </div>
-
-      <div class="tool-box">
-        <h3>🔤 Hebrew & Greek Word Lookup</h3>
-        <p>Search Strong’s, Brown–Driver–Briggs (BDB), and Thayer’s Greek-English Lexicon.</p>
-        <label for="lexiconSource">Resource</label>
-        <select id="lexiconSource"><option value="auto">Strong’s + BDB / Thayer’s</option><option value="strongs">Strong’s</option><option value="bdb">BDB Hebrew Lexicon</option><option value="thayer">Thayer’s Greek Lexicon</option></select>
-        <label for="wordSearch">Strong's Number</label>
-        <input id="wordSearch" type="text" placeholder="Example: G26 or H2617">
-        <button id="wordButton" type="button">Look Up Word</button>
-        <div id="wordResults" class="result">Enter a Strong’s number.</div>
-      </div>
-
-      <div class="tool-box">
-        <h3>🔎 Concordance</h3>
-        <label for="concordanceTranslation">Translation</label>
-        <select id="concordanceTranslation">
-            <option value="KJV">King James Version (KJV)</option>
-            <option value="KJV1611">King James Version 1611</option>
-            <option value="KJVPLUS">King James Version Plus (KJV+)</option>
-            <option value="YLT">Young's Literal Translation</option>
-            <option value="WEB">World English Bible</option>
-            <option value="ASV">American Standard Version</option>
-            <option value="GENEVA1599">Geneva Bible 1599</option>
-            <option value="DRA">Douay-Rheims American Edition</option>
-            <option value="BSB">Berean Standard Bible</option>
-            <option value="MSB">Majority Standard Bible</option></select>
-        <label for="concordanceSearch">Search Word</label>
-        <input id="concordanceSearch" type="text" placeholder="Example: love">
-        <button id="concordanceButton" type="button">Search Concordance</button>
-        <div id="concordanceResults" class="result">Search for where a word appears in Scripture.</div>
-      </div>
-
-      <div class="tool-box parallel-tool">
+      <div class="section tool-section no-print">
+        <div class="tool-box parallel-tool">
         <h3>📚 Parallel Bible</h3>
         <p>Compare the same verse in three Bible translations.</p>
         <div class="parallel-location">
@@ -646,8 +645,76 @@
         </div>
         <div class="parallel-results"><div id="parallelResult1" class="parallel-card">Choose a verse.</div><div id="parallelResult2" class="parallel-card">Choose a verse.</div><div id="parallelResult3" class="parallel-card">Choose a verse.</div></div>
       </div>
+      </div>
+    </div>
+
+    <aside class="sermon-study-tools">
+<div class="section tool-section no-print">
+    <h2>🧰 Bible Tools</h2>
+    <div class="tool-grid">
+      <div class="tool-box">
+        <h3>📘 Bible Dictionaries</h3>
+        <p>Search Easton’s and Smith’s Bible dictionaries.</p>
+        <label for="dictionarySource">Dictionary</label>
+        <select id="dictionarySource"><option value="both">Easton’s + Smith’s</option><option value="easton">Easton’s Bible Dictionary</option><option value="smith">Smith’s Bible Dictionary</option></select>
+        <label for="dictionarySearch">Search Dictionary</label>
+        <input id="dictionarySearch" type="text" placeholder="Example: grace">
+        <button id="dictionaryButton" type="button">Search Dictionary</button>
+        <div id="dictionaryResults" class="result">Search for a Bible word or topic.</div>
+      </div>
+
+      <div class="tool-box">
+        <h3>📗 English Dictionary</h3>
+        <p>Look up regular English words separately from Bible dictionary terms.</p>
+        <label for="englishDictionarySource">Dictionary</label>
+        <select id="englishDictionarySource">
+          <option value="webster" selected>Webster’s 1913</option>
+          <option value="free">Free English Dictionary</option>
+        </select>
+        <label for="englishDictionarySearch">Search English Dictionary</label>
+        <input id="englishDictionarySearch" type="text" placeholder="Example: redemption">
+        <button id="englishDictionaryButton" type="button">Search English Dictionary</button>
+        <div id="englishDictionaryResults" class="result">Search for a regular English word.</div>
+      </div>
+
+
+      <div class="tool-box">
+        <h3>🔤 Hebrew & Greek Word Lookup</h3>
+        <p>Search Strong’s, Brown–Driver–Briggs (BDB), and Thayer’s Greek-English Lexicon.</p>
+        <label for="lexiconSource">Resource</label>
+        <select id="lexiconSource"><option value="auto">Strong’s + BDB / Thayer’s</option><option value="strongs">Strong’s</option><option value="bdb">BDB Hebrew Lexicon</option><option value="thayer">Thayer’s Greek Lexicon</option></select>
+        <label for="wordSearch">Strong's Number</label>
+        <input id="wordSearch" type="text" placeholder="Example: G26 or H2617">
+        <button id="wordButton" type="button">Look Up Word</button>
+        <div id="wordResults" class="result">Enter a Strong’s number.</div>
+      </div>
+
+      <div class="tool-box">
+        <h3>🔎 Concordance</h3>
+        <label for="concordanceTranslation">Translation</label>
+        <select id="concordanceTranslation">
+            <option value="KJV">King James Version (KJV)</option>
+            <option value="KJV1611">King James Version 1611</option>
+            <option value="KJVPLUS">King James Version Plus (KJV+)</option>
+            <option value="YLT">Young's Literal Translation</option>
+            <option value="WEB">World English Bible</option>
+            <option value="ASV">American Standard Version</option>
+            <option value="GENEVA1599">Geneva Bible 1599</option>
+            <option value="DRA">Douay-Rheims American Edition</option>
+            <option value="BSB">Berean Standard Bible</option>
+            <option value="MSB">Majority Standard Bible</option></select>
+        <label for="concordanceSearch">Search Word</label>
+        <input id="concordanceSearch" type="text" placeholder="Example: love">
+        <button id="concordanceButton" type="button">Search Concordance</button>
+        <div id="concordanceResults" class="result">Search for where a word appears in Scripture.</div>
+      </div>
+
+      
     </div>
   </div>
+    </aside>
+  </div>
+
 
   <div id="manualSermonSection" class="section">
     <h2>✍️ Write Sermon Manually</h2>
@@ -1892,6 +1959,111 @@
     } catch(error) { console.error("Bible dictionary error:", error); results.innerHTML = "<div class='error-message'>Bible dictionary could not be loaded right now.</div>"; }
   });
 
+
+    let websterDictionaryCache = null;
+
+  /* =========================================
+     ENGLISH DICTIONARIES
+  ========================================= */
+
+  async function loadWebsterDictionary() {
+    if (websterDictionaryCache) return websterDictionaryCache;
+
+    const response = await fetch(
+      "https://raw.githubusercontent.com/adambom/dictionary/master/dictionary.json"
+    );
+
+    if (!response.ok) {
+      throw new Error("Webster dictionary data could not be loaded.");
+    }
+
+    websterDictionaryCache = await response.json();
+    return websterDictionaryCache;
+  }
+
+  document.getElementById("englishDictionaryButton").addEventListener(
+    "click",
+    async function() {
+      const word = document.getElementById("englishDictionarySearch").value.trim();
+      const results = document.getElementById("englishDictionaryResults");
+      const source = document.getElementById("englishDictionarySource").value;
+
+      if (!word) {
+        results.innerHTML =
+          "<div class='status-message'>Enter an English word.</div>";
+        return;
+      }
+
+      results.innerHTML =
+        "<div class='status-message'>Searching English dictionary...</div>";
+
+      try {
+        if (source === "webster") {
+          const data = await loadWebsterDictionary();
+          const key = Object.keys(data).find(function(item) {
+            return item.toLowerCase() === word.toLowerCase();
+          });
+
+          if (!key) {
+            results.innerHTML =
+              "<div class='status-message'>No Webster’s 1913 entry was found.</div>";
+            return;
+          }
+
+          results.innerHTML =
+            "<div class='result-item dictionary-definition'>" +
+            "<div class='result-reference'>" + escapeHtml(key) + "</div>" +
+            "<div style='margin-top:8px'>" + escapeHtml(data[key]) + "</div>" +
+            "<div class='small-note'>Webster’s Unabridged Dictionary (1913)</div>" +
+            "</div>";
+          return;
+        }
+
+        const response = await fetch(
+          "https://api.dictionaryapi.dev/api/v2/entries/en/" +
+          encodeURIComponent(word)
+        );
+
+        if (!response.ok) throw new Error("English dictionary lookup failed.");
+
+        const data = await response.json();
+        const definitions = [];
+
+        data.forEach(function(entry) {
+          (entry.meanings || []).forEach(function(meaning) {
+            (meaning.definitions || []).slice(0, 3).forEach(function(item) {
+              definitions.push({
+                part: meaning.partOfSpeech || "",
+                definition: item.definition || ""
+              });
+            });
+          });
+        });
+
+        results.innerHTML =
+          "<div class='result-item dictionary-definition'>" +
+          "<div class='result-reference'>" +
+          escapeHtml((data[0] && data[0].word) || word) +
+          "</div>" +
+          definitions.slice(0, 8).map(function(item) {
+            return "<div style='margin-top:8px'>" +
+              (item.part ? "<strong>" + escapeHtml(item.part) + ":</strong> " : "") +
+              escapeHtml(item.definition) +
+              "</div>";
+          }).join("") +
+          "<div class='small-note'>Free English Dictionary service</div>" +
+          "</div>";
+
+      } catch (error) {
+        console.error("English dictionary error:", error);
+        results.innerHTML =
+          "<div class='error-message'>English dictionary could not be loaded right now.</div>";
+      }
+    }
+  );
+
+
+  
   const strongsGreek = {
 
     G1: {
