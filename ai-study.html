@@ -973,6 +973,88 @@
       </div>
     </div>
 
+        <div class="tool-box parallel-tool">
+          <h3>📚 Parallel Bible</h3>
+          <p>
+            Compare the same verse in three Bible translations at once. Choose any three of the Bible versions available in BibleMastery.
+          </p>
+
+          <div class="parallel-location">
+            <div>
+              <label for="parallelBookSelect">Book</label>
+              <select id="parallelBookSelect" class="reader-select">
+                <option value="">Choose a book</option>
+              </select>
+            </div>
+            <div>
+              <label for="parallelChapterSelect">Chapter</label>
+              <select id="parallelChapterSelect" class="reader-select">
+                <option value="">Choose a chapter</option>
+              </select>
+            </div>
+            <div>
+              <label for="parallelVerseSelect">Verse</label>
+              <select id="parallelVerseSelect" class="reader-select">
+                <option value="">Choose a verse</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="parallel-controls">
+            <div>
+              <label for="parallelTranslation1">Version 1</label>
+              <select id="parallelTranslation1" class="reader-select">
+                <option value="KJV">King James Version (KJV)</option>
+<option value="KJV1611">King James Version 1611</option>
+<option value="KJVPLUS">King James Version Plus (KJV+)</option>
+<option value="YLT">Young's Literal Translation</option>
+<option value="WEB">World English Bible</option>
+<option value="ASV">American Standard Version</option>
+<option value="GENEVA1599">Geneva Bible 1599</option>
+<option value="DRA">Douay-Rheims American Edition</option>
+<option value="BSB">Berean Standard Bible</option>
+<option value="MSB">Majority Standard Bible</option>
+              </select>
+            </div>
+            <div>
+              <label for="parallelTranslation2">Version 2</label>
+              <select id="parallelTranslation2" class="reader-select">
+                <option value="KJV">King James Version (KJV)</option>
+<option value="KJV1611">King James Version 1611</option>
+<option value="KJVPLUS">King James Version Plus (KJV+)</option>
+<option value="YLT">Young's Literal Translation</option>
+<option value="WEB">World English Bible</option>
+<option value="ASV">American Standard Version</option>
+<option value="GENEVA1599">Geneva Bible 1599</option>
+<option value="DRA">Douay-Rheims American Edition</option>
+<option value="BSB">Berean Standard Bible</option>
+<option value="MSB">Majority Standard Bible</option>
+              </select>
+            </div>
+            <div>
+              <label for="parallelTranslation3">Version 3</label>
+              <select id="parallelTranslation3" class="reader-select">
+                <option value="KJV">King James Version (KJV)</option>
+<option value="KJV1611">King James Version 1611</option>
+<option value="KJVPLUS">King James Version Plus (KJV+)</option>
+<option value="YLT">Young's Literal Translation</option>
+<option value="WEB">World English Bible</option>
+<option value="ASV">American Standard Version</option>
+<option value="GENEVA1599">Geneva Bible 1599</option>
+<option value="DRA">Douay-Rheims American Edition</option>
+<option value="BSB">Berean Standard Bible</option>
+<option value="MSB">Majority Standard Bible</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="parallel-results">
+            <div id="parallelResult1" class="parallel-card"><div class="reader-placeholder">Choose a book, chapter, and verse.</div></div>
+            <div id="parallelResult2" class="parallel-card"><div class="reader-placeholder">Choose a book, chapter, and verse.</div></div>
+            <div id="parallelResult3" class="parallel-card"><div class="reader-placeholder">Choose a book, chapter, and verse.</div></div>
+          </div>
+        </div>
+
       </div>
 
       <aside class="personal-study-tools">
@@ -1147,87 +1229,7 @@
 
 
 
-        <div class="tool-box parallel-tool">
-          <h3>📚 Parallel Bible</h3>
-          <p>
-            Compare the same verse in three Bible translations at once. Choose any three of the Bible versions available in BibleMastery.
-          </p>
-
-          <div class="parallel-location">
-            <div>
-              <label for="parallelBookSelect">Book</label>
-              <select id="parallelBookSelect" class="reader-select">
-                <option value="">Choose a book</option>
-              </select>
-            </div>
-            <div>
-              <label for="parallelChapterSelect">Chapter</label>
-              <select id="parallelChapterSelect" class="reader-select">
-                <option value="">Choose a chapter</option>
-              </select>
-            </div>
-            <div>
-              <label for="parallelVerseSelect">Verse</label>
-              <select id="parallelVerseSelect" class="reader-select">
-                <option value="">Choose a verse</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="parallel-controls">
-            <div>
-              <label for="parallelTranslation1">Version 1</label>
-              <select id="parallelTranslation1" class="reader-select">
-                <option value="KJV">King James Version (KJV)</option>
-<option value="KJV1611">King James Version 1611</option>
-<option value="KJVPLUS">King James Version Plus (KJV+)</option>
-<option value="YLT">Young's Literal Translation</option>
-<option value="WEB">World English Bible</option>
-<option value="ASV">American Standard Version</option>
-<option value="GENEVA1599">Geneva Bible 1599</option>
-<option value="DRA">Douay-Rheims American Edition</option>
-<option value="BSB">Berean Standard Bible</option>
-<option value="MSB">Majority Standard Bible</option>
-              </select>
-            </div>
-            <div>
-              <label for="parallelTranslation2">Version 2</label>
-              <select id="parallelTranslation2" class="reader-select">
-                <option value="KJV">King James Version (KJV)</option>
-<option value="KJV1611">King James Version 1611</option>
-<option value="KJVPLUS">King James Version Plus (KJV+)</option>
-<option value="YLT">Young's Literal Translation</option>
-<option value="WEB">World English Bible</option>
-<option value="ASV">American Standard Version</option>
-<option value="GENEVA1599">Geneva Bible 1599</option>
-<option value="DRA">Douay-Rheims American Edition</option>
-<option value="BSB">Berean Standard Bible</option>
-<option value="MSB">Majority Standard Bible</option>
-              </select>
-            </div>
-            <div>
-              <label for="parallelTranslation3">Version 3</label>
-              <select id="parallelTranslation3" class="reader-select">
-                <option value="KJV">King James Version (KJV)</option>
-<option value="KJV1611">King James Version 1611</option>
-<option value="KJVPLUS">King James Version Plus (KJV+)</option>
-<option value="YLT">Young's Literal Translation</option>
-<option value="WEB">World English Bible</option>
-<option value="ASV">American Standard Version</option>
-<option value="GENEVA1599">Geneva Bible 1599</option>
-<option value="DRA">Douay-Rheims American Edition</option>
-<option value="BSB">Berean Standard Bible</option>
-<option value="MSB">Majority Standard Bible</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="parallel-results">
-            <div id="parallelResult1" class="parallel-card"><div class="reader-placeholder">Choose a book, chapter, and verse.</div></div>
-            <div id="parallelResult2" class="parallel-card"><div class="reader-placeholder">Choose a book, chapter, and verse.</div></div>
-            <div id="parallelResult3" class="parallel-card"><div class="reader-placeholder">Choose a book, chapter, and verse.</div></div>
-          </div>
-        </div>
+        
 
       </div>
     </div>
