@@ -1,18 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<!DOCTYPE html>
-<html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link rel="manifest" href="manifest.json">
-  
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!--
+    BIBLEMASTERY FREE WEB APP
+    Production baseline for biblemastery.win.
+    Keep Advanced-only development in the separate Advanced repository/project.
+    Do not add unfinished Advanced features to this Free production file.
+  -->
 
   <link rel="manifest" href="manifest.json">
   
@@ -307,7 +305,7 @@
   <div class="account-box">
     <button id="closeAccountModal" class="account-close">×</button>
     <h2>BibleMastery Account</h2>
-     <p id="accountMessage">Sign in or create your account.</p>
+    <p id="accountMessage">Sign in or create your account.</p>
     <input type="email" id="accountEmail" placeholder="Email address" autocomplete="email">
     <input type="password" id="accountPassword" placeholder="Password" autocomplete="current-password">
     <label><input type="checkbox" id="staySignedIn"> Stay signed in</label>
@@ -440,7 +438,7 @@
 
       <aside class="tools-column">
         <div class="biblemastrey-ai-box">
-          <button id="bibleMastreyAIButton" type="button">🤖 Ask BibleMastrey AI</button>
+          <button id="bibleMastreyAIButton" type="button">🤖 Ask BibleMastery AI</button>
         </div>
 
         <div class="dictionary-search tool-card">
@@ -2952,7 +2950,7 @@ if (!notesArea) {
 
           await navigator.share({
             title:
-              "BibleMastrey",
+              "BibleMastery",
             text:
               text
           });
@@ -5184,16 +5182,6 @@ const staySignedIn =
     );
 
 
-  accountButton.addEventListener(
-    "click",
-    function() {
-
-      accountModal.style.display =
-        "flex";
-    }
-  );
-
-
   closeAccountModal.addEventListener(
     "click",
     function() {
@@ -5265,7 +5253,7 @@ await syncLocalBibleDataToCloud();
         "none";
 
       console.log(
-        "BibleMastrey user logged in:",
+        "BibleMastery user logged in:",
         data.user
       );
       if (
@@ -5351,7 +5339,7 @@ if (helpSupportLink) {
     );
 
   /* =========================
-     BIBLEMASTREY AI
+     BIBLEMASTERY AI
   ========================= */
 
   const bibleMastreyAIButton =
@@ -5365,7 +5353,7 @@ if (helpSupportLink) {
 
       const question =
         prompt(
-          "What would you like to ask BibleMastrey AI?"
+          "What would you like to ask BibleMastery AI?"
         );
 
       if (!question) {
@@ -5373,7 +5361,7 @@ if (helpSupportLink) {
       }
 
       status.textContent =
-        "BibleMastrey AI is thinking...";
+        "BibleMastery AI is thinking...";
 
       try {
 
@@ -5407,20 +5395,20 @@ if (helpSupportLink) {
         );
 
         status.textContent =
-          "BibleMastrey AI is ready.";
+          "BibleMastery AI is ready.";
 
       } catch (error) {
 
         console.error(
-          "BibleMastrey AI error:",
+          "BibleMastery AI error:",
           error
         );
 
         status.textContent =
-          "BibleMastrey AI could not connect.";
+          "BibleMastery AI could not connect.";
 
         alert(
-          "BibleMastrey AI could not connect right now."
+          "BibleMastery AI could not connect right now."
         );
       }
     }
@@ -6015,7 +6003,7 @@ if (helpSupportLink) {
 
 
   /* =========================
-     START BIBLEMASTREY
+     START BIBLEMASTERY
   ========================= */
 
   startBible();
