@@ -2791,6 +2791,10 @@
 
     currentTopic = topic;
 
+    if (typeof renderDiscussionQuestions === "function") {
+      renderDiscussionQuestions();
+    }
+
     topicTitle.textContent =
       "Study: " + topic;
 
@@ -2820,6 +2824,14 @@
       await loadStudyBible();
 
       displayTopicVerses();
+
+      if (typeof renderDiscussionQuestions === "function") {
+        renderDiscussionQuestions();
+      }
+
+      if (typeof renderCrossReferences === "function") {
+        renderCrossReferences();
+      }
 
     }
     catch (error) {
