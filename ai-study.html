@@ -804,6 +804,128 @@
     color: #e8e6df;
   }
 
+
+  /* =========================================
+     FREE PERSONAL STUDY ADDITIONS
+     Discussion Questions • Cross-References • Popup Definitions
+  ========================================= */
+  .free-study-additions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .discussion-question {
+    background: rgba(8,15,29,.38);
+    border: 1px solid rgba(216,185,106,.20);
+    border-radius: 9px;
+    padding: 13px;
+    margin-bottom: 12px;
+  }
+
+  .discussion-question:last-child {
+    margin-bottom: 0;
+  }
+
+  .discussion-question label {
+    line-height: 1.55;
+  }
+
+  .discussion-question textarea {
+    width: 100%;
+    min-height: 90px;
+    margin-top: 8px;
+    padding: 10px;
+    color: var(--text);
+    background: #0e192a;
+    border: 1px solid rgba(216,185,106,.30);
+    border-radius: 7px;
+    resize: vertical;
+  }
+
+  .discussion-save-status {
+    margin-top: 10px;
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  .cross-reference-item {
+    background: rgba(8,15,29,.38);
+    border: 1px solid rgba(216,185,106,.20);
+    border-radius: 9px;
+    padding: 13px;
+    margin-bottom: 10px;
+  }
+
+  .cross-reference-item:last-child {
+    margin-bottom: 0;
+  }
+
+  .definition-help {
+    margin-top: 16px;
+  }
+
+  .definition-word {
+    color: var(--gold);
+    font-weight: bold;
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+
+  .definition-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 18px;
+    background: rgba(3,8,16,.78);
+  }
+
+  .definition-overlay.visible {
+    display: flex;
+  }
+
+  .definition-popup {
+    width: min(620px, 100%);
+    max-height: 78vh;
+    overflow-y: auto;
+    background: #121e33;
+    border: 1px solid var(--gold);
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 20px 55px rgba(0,0,0,.48);
+  }
+
+  .definition-popup-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: start;
+  }
+
+  .definition-close {
+    background: #1b2b46;
+    color: var(--text);
+    border: 1px solid rgba(216,185,106,.35);
+    border-radius: 7px;
+    padding: 7px 10px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+  .definition-close:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  @media (max-width: 800px) {
+    .free-study-additions {
+      grid-template-columns: 1fr;
+    }
+  }
+
 </style>
 
 </head>
@@ -1333,6 +1455,45 @@
       <div class="study-note">
         <strong>Remember:</strong>
         These verses and study tools are a starting point. Read the surrounding passage and study the Scriptures for yourself.
+      </div>
+    </div>
+
+
+    <div class="workspace-section" id="freeStudyAdditions">
+      <h2>📝 Study Deeper</h2>
+      <p class="workspace-intro">
+        Use discussion questions and related cross-references to continue your personal study.
+      </p>
+
+      <div class="free-study-additions">
+        <div class="tool-box">
+          <h3>💬 Discussion Questions</h3>
+          <p>
+            Answer the questions in your own words as you study. Your answers are saved on this device for each topic.
+          </p>
+          <div id="discussionQuestions">
+            <div class="status-message">
+              Build a guided study above to create discussion questions for your topic.
+            </div>
+          </div>
+        </div>
+
+        <div class="tool-box">
+          <h3>🔗 Cross-References</h3>
+          <p>
+            Explore additional Bible passages related to the topic you are studying.
+          </p>
+          <div id="crossReferenceResults">
+            <div class="status-message">
+              Build a guided study above to find related cross-references.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="study-note definition-help">
+        <strong>📘 Popup Definitions:</strong>
+        Double-click a word in the Bible Reader or Topic Bible Verses to open its definition without leaving your study.
       </div>
     </div>
 
@@ -6948,6 +7109,562 @@
     bibleMasteryAiAnswer.textContent = "AI is ready when you are.";
     bibleMasteryAiQuestion.focus();
   });
+
+
+  /* =========================================
+     FREE PERSONAL STUDY ADDITIONS
+     Discussion Questions • Cross-References • Popup Definitions
+     Added without changing existing study tools.
+  ========================================= */
+
+  const discussionQuestionsBox =
+    document.getElementById("discussionQuestions");
+
+  const crossReferenceResults =
+    document.getElementById("crossReferenceResults");
+
+
+  function getDiscussionStorageKey(topic, index) {
+    return (
+      "biblemastery_personal_discussion_" +
+      String(topic || "")
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9]+/g, "_") +
+      "_" +
+      index
+    );
+  }
+
+
+  function buildDiscussionQuestions(topic) {
+    const cleanTopic = String(topic || "").trim();
+
+    return [
+      "What do these Scriptures teach you about " + cleanTopic + "?",
+      "What do these passages reveal about God, His character, or His ways?",
+      "Is there a promise, command, warning, example, or truth in these verses that stands out to you? Explain.",
+      "How do the passages in this study connect with one another?",
+      "How can you apply what you have learned about " + cleanTopic + " in your life, faith, prayer, or decisions?"
+    ];
+  }
+
+
+  function renderDiscussionQuestions() {
+    if (!discussionQuestionsBox) return;
+
+    if (!currentTopic) {
+      discussionQuestionsBox.innerHTML =
+        "<div class='status-message'>Build a guided study above to create discussion questions for your topic.</div>";
+      return;
+    }
+
+    const questions =
+      buildDiscussionQuestions(currentTopic);
+
+    discussionQuestionsBox.innerHTML = "";
+
+    questions.forEach(function(question, index) {
+      const wrapper =
+        document.createElement("div");
+
+      wrapper.className =
+        "discussion-question";
+
+      const label =
+        document.createElement("label");
+
+      label.textContent =
+        (index + 1) + ". " + question;
+
+      const textarea =
+        document.createElement("textarea");
+
+      textarea.placeholder =
+        "Write your answer or study thoughts here...";
+
+      textarea.value =
+        localStorage.getItem(
+          getDiscussionStorageKey(
+            currentTopic,
+            index
+          )
+        ) || "";
+
+      textarea.addEventListener(
+        "input",
+        function() {
+          localStorage.setItem(
+            getDiscussionStorageKey(
+              currentTopic,
+              index
+            ),
+            textarea.value
+          );
+
+          status.textContent =
+            "Saved";
+        }
+      );
+
+      const status =
+        document.createElement("div");
+
+      status.className =
+        "discussion-save-status";
+
+      status.textContent =
+        "Saved automatically on this device.";
+
+      wrapper.appendChild(label);
+      wrapper.appendChild(textarea);
+      wrapper.appendChild(status);
+
+      discussionQuestionsBox.appendChild(
+        wrapper
+      );
+    });
+  }
+
+
+  function getRelatedCrossReferences() {
+    if (
+      !studyBible ||
+      !currentTopic
+    ) {
+      return [];
+    }
+
+    const topicSearches =
+      getExpandedTopicSearches(
+        currentTopic
+      );
+
+    let matches = [];
+
+    topicSearches.forEach(
+      function(searchTerm) {
+        matches = matches.concat(
+          searchBible(
+            studyBible,
+            searchTerm
+          )
+        );
+      }
+    );
+
+    const currentReferenceKeys =
+      new Set(
+        currentVerses.map(
+          function(item) {
+            return (
+              item.bookId + "|" +
+              item.chapter + "|" +
+              item.verse
+            );
+          }
+        )
+      );
+
+    const unique = [];
+    const seen = new Set();
+
+    matches
+      .slice()
+      .sort(
+        function(a, b) {
+          return b.score - a.score;
+        }
+      )
+      .forEach(
+        function(item) {
+          const key =
+            item.bookId + "|" +
+            item.chapter + "|" +
+            item.verse;
+
+          if (
+            !seen.has(key) &&
+            !currentReferenceKeys.has(key)
+          ) {
+            seen.add(key);
+            unique.push(item);
+          }
+        }
+      );
+
+    return unique.slice(0, 8);
+  }
+
+
+  function renderCrossReferences() {
+    if (!crossReferenceResults) return;
+
+    if (!currentTopic) {
+      crossReferenceResults.innerHTML =
+        "<div class='status-message'>Build a guided study above to find related cross-references.</div>";
+      return;
+    }
+
+    const related =
+      getRelatedCrossReferences();
+
+    crossReferenceResults.innerHTML = "";
+
+    if (!related.length) {
+      crossReferenceResults.innerHTML =
+        "<div class='status-message'>No additional related passages were found for this topic in the selected translation.</div>";
+      return;
+    }
+
+    related.forEach(
+      function(item) {
+        const box =
+          document.createElement("div");
+
+        box.className =
+          "cross-reference-item";
+
+        const reference =
+          document.createElement("div");
+
+        reference.className =
+          "result-reference";
+
+        reference.textContent =
+          item.book +
+          " " +
+          item.chapter +
+          ":" +
+          item.verse;
+
+        const verseText =
+          document.createElement("div");
+
+        verseText.style.marginTop =
+          "7px";
+
+        verseText.style.lineHeight =
+          "1.6";
+
+        verseText.textContent =
+          item.text;
+
+        box.appendChild(reference);
+        box.appendChild(verseText);
+
+        crossReferenceResults.appendChild(
+          box
+        );
+      }
+    );
+  }
+
+
+  let freeStudyAdditionTimer = null;
+
+  function refreshFreeStudyAdditions() {
+    clearTimeout(
+      freeStudyAdditionTimer
+    );
+
+    freeStudyAdditionTimer =
+      setTimeout(
+        function() {
+          renderDiscussionQuestions();
+          renderCrossReferences();
+        },
+        120
+      );
+  }
+
+
+  if (verseResults) {
+    const freeStudyObserver =
+      new MutationObserver(
+        function() {
+          refreshFreeStudyAdditions();
+        }
+      );
+
+    freeStudyObserver.observe(
+      verseResults,
+      {
+        childList: true,
+        subtree: true
+      }
+    );
+  }
+
+
+  /* =========================================
+     POPUP WORD DEFINITIONS
+  ========================================= */
+
+  const definitionOverlay =
+    document.createElement("div");
+
+  definitionOverlay.className =
+    "definition-overlay";
+
+  definitionOverlay.innerHTML =
+    "<div class='definition-popup' role='dialog' aria-modal='true' aria-labelledby='definitionPopupWord'>" +
+      "<div class='definition-popup-header'>" +
+        "<div>" +
+          "<div class='small-note'>Word Definition</div>" +
+          "<div id='definitionPopupWord' class='definition-word'></div>" +
+        "</div>" +
+        "<button type='button' class='definition-close' id='definitionCloseButton'>Close</button>" +
+      "</div>" +
+      "<div id='definitionPopupContent' class='dictionary-definition'></div>" +
+    "</div>";
+
+  document.body.appendChild(
+    definitionOverlay
+  );
+
+  const definitionPopupWord =
+    document.getElementById(
+      "definitionPopupWord"
+    );
+
+  const definitionPopupContent =
+    document.getElementById(
+      "definitionPopupContent"
+    );
+
+  const definitionCloseButton =
+    document.getElementById(
+      "definitionCloseButton"
+    );
+
+
+  function closeDefinitionPopup() {
+    definitionOverlay.classList.remove(
+      "visible"
+    );
+  }
+
+
+  definitionCloseButton.addEventListener(
+    "click",
+    closeDefinitionPopup
+  );
+
+
+  definitionOverlay.addEventListener(
+    "click",
+    function(event) {
+      if (
+        event.target ===
+        definitionOverlay
+      ) {
+        closeDefinitionPopup();
+      }
+    }
+  );
+
+
+  document.addEventListener(
+    "keydown",
+    function(event) {
+      if (
+        event.key === "Escape" &&
+        definitionOverlay.classList.contains(
+          "visible"
+        )
+      ) {
+        closeDefinitionPopup();
+      }
+    }
+  );
+
+
+  function cleanDefinitionWord(value) {
+    return String(value || "")
+      .trim()
+      .replace(
+        /^[^A-Za-z'-]+|[^A-Za-z'-]+$/g,
+        ""
+      );
+  }
+
+
+  async function openDefinitionPopup(word) {
+    const cleanWord =
+      cleanDefinitionWord(word);
+
+    if (
+      !cleanWord ||
+      cleanWord.length < 2
+    ) {
+      return;
+    }
+
+    definitionPopupWord.textContent =
+      cleanWord;
+
+    definitionPopupContent.innerHTML =
+      "<div class='status-message'>Looking up definition...</div>";
+
+    definitionOverlay.classList.add(
+      "visible"
+    );
+
+    try {
+      const data =
+        await loadWebsterDictionary();
+
+      const key =
+        Object.keys(data).find(
+          function(item) {
+            return (
+              item.toLowerCase() ===
+              cleanWord.toLowerCase()
+            );
+          }
+        );
+
+      if (key) {
+        definitionPopupContent.innerHTML =
+          "<div>" +
+          escapeHtml(data[key]) +
+          "</div>" +
+          "<div class='small-note' style='margin-top:10px'>Webster’s Dictionary</div>";
+        return;
+      }
+
+      const response =
+        await fetch(
+          "https://api.dictionaryapi.dev/api/v2/entries/en/" +
+          encodeURIComponent(
+            cleanWord
+          )
+        );
+
+      if (!response.ok) {
+        throw new Error(
+          "No definition found."
+        );
+      }
+
+      const entries =
+        await response.json();
+
+      const meanings =
+        entries[0] &&
+        Array.isArray(
+          entries[0].meanings
+        )
+          ? entries[0].meanings
+          : [];
+
+      const definitions = [];
+
+      meanings.forEach(
+        function(meaning) {
+          const first =
+            Array.isArray(
+              meaning.definitions
+            )
+              ? meaning.definitions[0]
+              : null;
+
+          if (
+            first &&
+            first.definition
+          ) {
+            definitions.push({
+              part:
+                meaning.partOfSpeech ||
+                "",
+              text:
+                first.definition
+            });
+          }
+        }
+      );
+
+      if (!definitions.length) {
+        throw new Error(
+          "No definition found."
+        );
+      }
+
+      definitionPopupContent.innerHTML =
+        definitions
+          .slice(0, 4)
+          .map(
+            function(item) {
+              return (
+                "<div class='result-item'>" +
+                  (
+                    item.part
+                      ? "<div class='result-reference'>" +
+                        escapeHtml(item.part) +
+                        "</div>"
+                      : ""
+                  ) +
+                  "<div>" +
+                    escapeHtml(item.text) +
+                  "</div>" +
+                "</div>"
+              );
+            }
+          )
+          .join("");
+
+    } catch (error) {
+      definitionPopupContent.innerHTML =
+        "<div class='status-message'>No dictionary definition was found for this word.</div>";
+    }
+  }
+
+
+  function handleStudyWordDefinition(event) {
+    const selection =
+      window.getSelection();
+
+    const selectedText =
+      selection
+        ? selection.toString()
+        : "";
+
+    const word =
+      cleanDefinitionWord(
+        selectedText
+      );
+
+    if (
+      !word ||
+      word.includes(" ")
+    ) {
+      return;
+    }
+
+    openDefinitionPopup(
+      word
+    );
+  }
+
+
+  if (readerDisplay) {
+    readerDisplay.addEventListener(
+      "dblclick",
+      handleStudyWordDefinition
+    );
+  }
+
+  if (verseResults) {
+    verseResults.addEventListener(
+      "dblclick",
+      handleStudyWordDefinition
+    );
+  }
+
+
+  renderDiscussionQuestions();
+  renderCrossReferences();
 
 </script>
 
