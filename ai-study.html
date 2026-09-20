@@ -1568,6 +1568,128 @@
         <div class="ps-pro-card">
           <h3>🎯 Study Summary & Conclusions</h3><textarea id="psSummary" placeholder="What did I learn? What truth became clearer? What will I remember or apply?"></textarea><div class="ps-pro-actions"><button id="psSaveSummary" type="button">Save Summary</button></div><div id="psSummaryStatus" class="ps-pro-status"></div>
         </div>
+
+        <div class="ps-pro-card">
+          <h3>🕘 Study History</h3>
+          <p>Keep a dated record of studies you work on and reopen your recent study trail.</p>
+          <div class="ps-pro-actions"><button id="psAddHistory" type="button">Record Current Study</button><button id="psShowHistory" class="secondary" type="button">Show History</button></div>
+          <div id="psHistoryOutput" class="ps-pro-output"></div>
+        </div>
+
+        <div class="ps-pro-card">
+          <h3>🙏 Prayer & Scripture Journal</h3>
+          <input id="psPrayerTitle" placeholder="Prayer / Scripture focus">
+          <textarea id="psPrayerEntry" placeholder="Prayer, Scripture, what I am seeking, and later answers or reflections..."></textarea>
+          <div class="ps-pro-actions"><button id="psSavePrayer" type="button">Save Journal Entry</button><button id="psShowPrayers" class="secondary" type="button">Show Entries</button></div>
+          <div id="psPrayerOutput" class="ps-pro-output"></div>
+        </div>
+
+        <div class="ps-pro-card">
+          <h3>📂 Verse Collections / Custom Lists</h3>
+          <input id="psCollectionName" placeholder="Collection name, e.g. Faith, Healing, Promises">
+          <input id="psCollectionRef" placeholder="Verse reference (or leave blank to use selected Reader verse)">
+          <div class="ps-pro-actions"><button id="psAddCollectionVerse" type="button">Add Verse</button><button id="psShowCollections" class="secondary" type="button">Show Collections</button></div>
+          <div id="psCollectionsOutput" class="ps-pro-output"></div>
+        </div>
+
+        <div class="ps-pro-card">
+          <h3>🧵 Bible Theme Tracker</h3>
+          <input id="psThemeName" placeholder="Theme, e.g. righteousness">
+          <textarea id="psThemeNotes" placeholder="Passages, repeated ideas, development through Scripture, conclusions..."></textarea>
+          <div class="ps-pro-actions"><button id="psSaveTheme" type="button">Save Theme</button><button id="psShowThemes" class="secondary" type="button">Show Themes</button></div>
+          <div id="psThemesOutput" class="ps-pro-output"></div>
+        </div>
+
+        <div class="ps-pro-card">
+          <h3>👥 People • Places • Events</h3>
+          <input id="psPpeTitle" placeholder="Person, place, or event">
+          <select id="psPpeType"><option>Person</option><option>Place</option><option>Event</option></select>
+          <textarea id="psPpeNotes" placeholder="Related passages, background, connections, observations..."></textarea>
+          <div class="ps-pro-actions"><button id="psSavePpe" type="button">Save Connection</button><button id="psShowPpe" class="secondary" type="button">Show Connections</button></div>
+          <div id="psPpeOutput" class="ps-pro-output"></div>
+        </div>
+
+        <div class="ps-pro-card">
+          <h3>🗺️ Map & Location Study Notes</h3>
+          <input id="psMapPlace" placeholder="Biblical place or route">
+          <textarea id="psMapNotes" placeholder="Where is it? What happened there? Related passages, journeys, nearby locations, significance..."></textarea>
+          <div class="ps-pro-actions"><button id="psSaveMap" type="button">Save Location Study</button><button id="psShowMaps" class="secondary" type="button">Show Location Studies</button></div>
+          <div id="psMapsOutput" class="ps-pro-output"></div>
+        </div>
+
+        <div class="ps-pro-card">
+          <h3>⏳ Bible Timeline Study</h3>
+          <input id="psTimelineTitle" placeholder="Event / person / period">
+          <input id="psTimelineDate" placeholder="Approximate date or period (optional)">
+          <textarea id="psTimelineNotes" placeholder="Order of events, related books/passages, rulers, prophets, historical connections..."></textarea>
+          <div class="ps-pro-actions"><button id="psSaveTimeline" type="button">Add Timeline Entry</button><button id="psShowTimeline" class="secondary" type="button">Show Timeline</button></div>
+          <div id="psTimelineOutput" class="ps-pro-output"></div>
+        </div>
+
+        <div class="ps-pro-card">
+          <h3>🔎 Context Explorer</h3>
+          <p>Use the current Bible Reader location to capture what comes before and after and record speaker, audience, setting, and context.</p>
+          <textarea id="psContextNotes" placeholder="Who is speaking? To whom? What happened before? What follows? Historical/literary setting?"></textarea>
+          <div class="ps-pro-actions"><button id="psCaptureContext" type="button">Capture Current Context</button><button id="psShowContexts" class="secondary" type="button">Show Context Studies</button></div>
+          <div id="psContextOutput" class="ps-pro-output"></div>
+        </div>
+
+        <div class="ps-pro-card">
+          <h3>🔤 Original-Language Occurrence Study</h3>
+          <input id="psStrongOccurrence" placeholder="Strong’s number, e.g. G26 or H2617">
+          <p>Search the loaded KJV+ Bible for other occurrences of the same Strong’s number.</p>
+          <div class="ps-pro-actions"><button id="psFindOccurrences" type="button">Find Occurrences</button></div>
+          <div id="psOccurrenceOutput" class="ps-pro-output"></div>
+        </div>
+
+        <div class="ps-pro-card">
+          <h3>🔍 Exact Phrase Search</h3>
+          <input id="psPhraseSearch" placeholder='Exact phrase, e.g. "in Christ"'>
+          <div class="ps-pro-actions"><button id="psPhraseButton" type="button">Search Current Translation</button></div>
+          <div id="psPhraseOutput" class="ps-pro-output"></div>
+        </div>
+
+        <div class="ps-pro-card">
+          <h3>⛓️ Verse Chain Builder</h3>
+          <input id="psChainName" placeholder="Chain name">
+          <input id="psChainRef" placeholder="Reference (or leave blank for selected Reader verse)">
+          <textarea id="psChainNote" placeholder="Why does this verse connect to the next truth?"></textarea>
+          <div class="ps-pro-actions"><button id="psAddChainVerse" type="button">Add to Chain</button><button id="psShowChains" class="secondary" type="button">Show Chains</button></div>
+          <div id="psChainsOutput" class="ps-pro-output"></div>
+        </div>
+
+        <div class="ps-pro-card">
+          <h3>🧩 Study Templates</h3>
+          <select id="psTemplateSelect">
+            <option value="verse">Verse Study</option><option value="chapter">Chapter Study</option><option value="book">Book Study</option>
+            <option value="character">Character Study</option><option value="word">Word Study</option><option value="topic">Topical Study</option>
+          </select>
+          <div class="ps-pro-actions"><button id="psApplyTemplate" type="button">Load Template into Journal</button></div>
+          <div id="psTemplateStatus" class="ps-pro-status"></div>
+        </div>
+
+        <div class="ps-pro-card">
+          <h3>📅 Daily Study Mode</h3>
+          <input id="psDailyFocus" placeholder="Today's study focus">
+          <textarea id="psDailyNotes" placeholder="What I read, learned, questioned, prayed, or want to continue tomorrow..."></textarea>
+          <div class="ps-pro-actions"><button id="psSaveDaily" type="button">Save Today's Entry</button><button id="psShowDaily" class="secondary" type="button">Show Daily Entries</button></div>
+          <div id="psDailyOutput" class="ps-pro-output"></div>
+        </div>
+
+        <div class="ps-pro-card">
+          <h3>🧠 Study Connections</h3>
+          <p>See a quick index of the material you have collected across this Personal Study workspace.</p>
+          <div class="ps-pro-actions"><button id="psBuildConnections" type="button">Build Connections Index</button></div>
+          <div id="psConnectionsOutput" class="ps-pro-output"></div>
+        </div>
+
+        <div class="ps-pro-card ps-wide">
+          <h3>🖨️ Export / Print Study</h3>
+          <p>Build a clean printable study from your topic, journal, outline, conclusions, key verses, word studies, passage studies, questions, themes, and prayer entries.</p>
+          <div class="ps-pro-actions"><button id="psPrintStudy" type="button">Print / Save as PDF</button><button id="psCopyStudy" class="secondary" type="button">Copy Study Text</button></div>
+          <div id="psExportStatus" class="ps-pro-status"></div>
+        </div>
+
         <div class="ps-pro-card ps-wide">
           <h3>💾 Saved Personal Studies</h3><p>Save the current Personal Study workspace under a name and reopen it later.</p><input id="psStudyName" placeholder="Study name, e.g. Walking by Faith"><div class="ps-pro-actions"><button id="psSaveStudy" type="button">Save Current Study</button><button id="psLoadStudies" class="secondary" type="button">Refresh Saved Studies</button></div><div id="psSavedStudies" class="ps-pro-output"></div>
         </div>
@@ -7822,12 +7944,117 @@
   if(psEl("psSaveOutline")) psEl("psSaveOutline").addEventListener("click",function(){psWrite("outline",psEl("psOutline").value);psSetStatus("psOutlineStatus","Outline saved.");});
   if(psEl("psSaveSummary")) psEl("psSaveSummary").addEventListener("click",function(){psWrite("summary",psEl("psSummary").value);psSetStatus("psSummaryStatus","Study conclusions saved.");});
 
-  function psSnapshot(){return {topic:currentTopic||"",journal:psEl("psJournal")?psEl("psJournal").value:"",outline:psEl("psOutline")?psEl("psOutline").value:"",summary:psEl("psSummary")?psEl("psSummary").value:"",markups:psRead("markups",[]),keyVerses:psRead("keyVerses",[]),wordStudies:psRead("wordStudies",[]),passageStudies:psRead("passageStudies",[]),chapterStudies:psRead("chapterStudies",[]),bookStudies:psRead("bookStudies",[]),characterStudies:psRead("characterStudies",[]),questions:psRead("questions",[])};}
+  function psSnapshot(){return {topic:currentTopic||"",journal:psEl("psJournal")?psEl("psJournal").value:"",outline:psEl("psOutline")?psEl("psOutline").value:"",summary:psEl("psSummary")?psEl("psSummary").value:"",markups:psRead("markups",[]),keyVerses:psRead("keyVerses",[]),wordStudies:psRead("wordStudies",[]),passageStudies:psRead("passageStudies",[]),chapterStudies:psRead("chapterStudies",[]),bookStudies:psRead("bookStudies",[]),characterStudies:psRead("characterStudies",[]),questions:psRead("questions",[]),prayerJournal:psRead("prayerJournal",[]),verseCollections:psRead("verseCollections",[]),themes:psRead("themes",[]),peoplePlacesEvents:psRead("peoplePlacesEvents",[]),mapStudies:psRead("mapStudies",[]),timeline:psRead("timeline",[]),contexts:psRead("contexts",[]),verseChains:psRead("verseChains",[]),dailyStudies:psRead("dailyStudies",[]),history:psRead("history",[])};}
   function psRenderSavedStudies(){const studies=psRead("savedStudies",[]);psRenderItems("psSavedStudies",studies,x=>"<div class='ps-pro-item'><strong>"+escapeHtml(x.name)+"</strong><br><span class='small-note'>"+escapeHtml(new Date(x.savedAt).toLocaleString())+"</span><div class='ps-pro-actions'><button type='button' data-ps-load='"+x.id+"'>Open Study</button></div></div>");}
   if(psEl("psSaveStudy")) psEl("psSaveStudy").addEventListener("click",function(){const name=psText("psStudyName")||currentTopic||"Personal Study";const a=psRead("savedStudies",[]);a.unshift({id:Date.now(),name,savedAt:new Date().toISOString(),data:psSnapshot()});psWrite("savedStudies",a.slice(0,50));psRenderSavedStudies();});
   if(psEl("psLoadStudies")) psEl("psLoadStudies").addEventListener("click",psRenderSavedStudies);
-  if(psEl("psSavedStudies")) psEl("psSavedStudies").addEventListener("click",function(e){const b=e.target.closest("[data-ps-load]");if(!b)return;const s=psRead("savedStudies",[]).find(x=>String(x.id)===b.dataset.psLoad);if(!s)return;const d=s.data||{};if(psEl("psJournal"))psEl("psJournal").value=d.journal||"";if(psEl("psOutline"))psEl("psOutline").value=d.outline||"";if(psEl("psSummary"))psEl("psSummary").value=d.summary||"";["markups","keyVerses","wordStudies","passageStudies","chapterStudies","bookStudies","characterStudies","questions"].forEach(k=>psWrite(k,d[k]||[]));psWrite("journal",d.journal||"");psWrite("outline",d.outline||"");psWrite("summary",d.summary||"");if(d.topic&&topicInput){topicInput.value=d.topic;}psSetStatus("psJournalStatus","Saved study opened: "+s.name);});
+  if(psEl("psSavedStudies")) psEl("psSavedStudies").addEventListener("click",function(e){const b=e.target.closest("[data-ps-load]");if(!b)return;const s=psRead("savedStudies",[]).find(x=>String(x.id)===b.dataset.psLoad);if(!s)return;const d=s.data||{};if(psEl("psJournal"))psEl("psJournal").value=d.journal||"";if(psEl("psOutline"))psEl("psOutline").value=d.outline||"";if(psEl("psSummary"))psEl("psSummary").value=d.summary||"";["markups","keyVerses","wordStudies","passageStudies","chapterStudies","bookStudies","characterStudies","questions","prayerJournal","verseCollections","themes","peoplePlacesEvents","mapStudies","timeline","contexts","verseChains","dailyStudies","history"].forEach(k=>psWrite(k,d[k]||[]));psWrite("journal",d.journal||"");psWrite("outline",d.outline||"");psWrite("summary",d.summary||"");if(d.topic&&topicInput){topicInput.value=d.topic;}psSetStatus("psJournalStatus","Saved study opened: "+s.name);});
   psRenderSavedStudies();
+
+
+  /* =========================================
+     FINAL PERSONAL STUDY TOOLSET
+  ========================================= */
+  function psRenderRecords(outputId, kind, formatter) {
+    psRenderItems(outputId, psRead(kind, []), formatter);
+  }
+
+  if(psEl("psAddHistory")) psEl("psAddHistory").addEventListener("click", function(){
+    psSaveRecord("history",{topic:currentTopic||psText("psStudyName")||"Personal Study",location:(psCurrentReaderVerse()||{}).reference||"",translation:readerTranslationSelect?readerTranslationSelect.value:""});
+    psEl("psShowHistory").click();
+  });
+  if(psEl("psShowHistory")) psEl("psShowHistory").addEventListener("click", function(){
+    psRenderRecords("psHistoryOutput","history",x=>"<div class='ps-pro-item'><strong>"+escapeHtml(x.topic||"Personal Study")+"</strong><br><span class='small-note'>"+escapeHtml(new Date(x.savedAt).toLocaleString())+"</span></div>");
+  });
+
+  if(psEl("psSavePrayer")) psEl("psSavePrayer").addEventListener("click",function(){psSaveRecord("prayerJournal",{title:psText("psPrayerTitle"),entry:psText("psPrayerEntry")});psEl("psPrayerEntry").value="";psEl("psShowPrayers").click();});
+  if(psEl("psShowPrayers")) psEl("psShowPrayers").addEventListener("click",function(){psRenderRecords("psPrayerOutput","prayerJournal",x=>"<div class='ps-pro-item'><strong>"+escapeHtml(x.title||"Prayer & Scripture")+"</strong><br>"+escapeHtml(x.entry||"")+"</div>");});
+
+  if(psEl("psAddCollectionVerse")) psEl("psAddCollectionVerse").addEventListener("click",function(){
+    const v=psCurrentReaderVerse(), name=psText("psCollectionName")||"My Verses", manual=psText("psCollectionRef");
+    const ref=manual||(v?v.book+" "+v.chapter+":"+v.verse:""); if(!ref)return;
+    psSaveRecord("verseCollections",{name,reference:ref,text:manual?"":(v?v.text:"")}); psEl("psShowCollections").click();
+  });
+  if(psEl("psShowCollections")) psEl("psShowCollections").addEventListener("click",function(){psRenderRecords("psCollectionsOutput","verseCollections",x=>"<div class='ps-pro-item'><strong>"+escapeHtml(x.name)+" — "+escapeHtml(x.reference)+"</strong>"+(x.text?"<br>"+escapeHtml(x.text):"")+"</div>");});
+
+  if(psEl("psSaveTheme")) psEl("psSaveTheme").addEventListener("click",function(){psSaveRecord("themes",{name:psText("psThemeName"),notes:psText("psThemeNotes")});psEl("psShowThemes").click();});
+  if(psEl("psShowThemes")) psEl("psShowThemes").addEventListener("click",function(){psRenderRecords("psThemesOutput","themes",x=>"<div class='ps-pro-item'><strong>"+escapeHtml(x.name)+"</strong><br>"+escapeHtml(x.notes)+"</div>");});
+
+  if(psEl("psSavePpe")) psEl("psSavePpe").addEventListener("click",function(){psSaveRecord("peoplePlacesEvents",{title:psText("psPpeTitle"),type:psEl("psPpeType").value,notes:psText("psPpeNotes")});psEl("psShowPpe").click();});
+  if(psEl("psShowPpe")) psEl("psShowPpe").addEventListener("click",function(){psRenderRecords("psPpeOutput","peoplePlacesEvents",x=>"<div class='ps-pro-item'><strong>"+escapeHtml(x.type+" — "+x.title)+"</strong><br>"+escapeHtml(x.notes)+"</div>");});
+
+  if(psEl("psSaveMap")) psEl("psSaveMap").addEventListener("click",function(){psSaveRecord("mapStudies",{place:psText("psMapPlace"),notes:psText("psMapNotes")});psEl("psShowMaps").click();});
+  if(psEl("psShowMaps")) psEl("psShowMaps").addEventListener("click",function(){psRenderRecords("psMapsOutput","mapStudies",x=>"<div class='ps-pro-item'><strong>"+escapeHtml(x.place)+"</strong><br>"+escapeHtml(x.notes)+"</div>");});
+
+  if(psEl("psSaveTimeline")) psEl("psSaveTimeline").addEventListener("click",function(){psSaveRecord("timeline",{title:psText("psTimelineTitle"),period:psText("psTimelineDate"),notes:psText("psTimelineNotes")});psEl("psShowTimeline").click();});
+  if(psEl("psShowTimeline")) psEl("psShowTimeline").addEventListener("click",function(){psRenderRecords("psTimelineOutput","timeline",x=>"<div class='ps-pro-item'><strong>"+escapeHtml(x.title)+(x.period?" — "+escapeHtml(x.period):"")+"</strong><br>"+escapeHtml(x.notes)+"</div>");});
+
+  if(psEl("psCaptureContext")) psEl("psCaptureContext").addEventListener("click",function(){
+    const v=psCurrentReaderVerse(); if(!v){psEl("psContextOutput").innerHTML="<div class='ps-pro-status'>Select a Bible Reader verse first.</div>";return;}
+    const book=readerBible.books[readerBookIndex], ch=book.chapters[readerChapterIndex], verses=ch.verses||[], idx=Math.max(0,Number(readerVerseSelect.value||0));
+    const before=verses.slice(Math.max(0,idx-2),idx).map((z,i)=>getReaderVerseText(z,readerBookIndex,readerTranslationSelect.value)).join(" ");
+    const after=verses.slice(idx+1,idx+3).map(z=>getReaderVerseText(z,readerBookIndex,readerTranslationSelect.value)).join(" ");
+    psSaveRecord("contexts",{reference:v.book+" "+v.chapter+":"+v.verse,before,verse:v.text,after,notes:psText("psContextNotes")});
+    psEl("psShowContexts").click();
+  });
+  if(psEl("psShowContexts")) psEl("psShowContexts").addEventListener("click",function(){psRenderRecords("psContextOutput","contexts",x=>"<div class='ps-pro-item'><strong>"+escapeHtml(x.reference)+"</strong><br><em>Before:</em> "+escapeHtml(x.before||"")+"<br><em>Verse:</em> "+escapeHtml(x.verse||"")+"<br><em>After:</em> "+escapeHtml(x.after||"")+(x.notes?"<br><em>Notes:</em> "+escapeHtml(x.notes):"")+"</div>");});
+
+  if(psEl("psFindOccurrences")) psEl("psFindOccurrences").addEventListener("click",async function(){
+    const strong=psText("psStrongOccurrence").toUpperCase().replace(/\s+/g,""); if(!/^[HG]\d+$/.test(strong)){psEl("psOccurrenceOutput").innerHTML="<div class='ps-pro-status'>Enter a Strong’s number such as G26 or H2617.</div>";return;}
+    psEl("psOccurrenceOutput").innerHTML="<div class='ps-pro-status'>Searching KJV+...</div>";
+    try{
+      const data=normalizeBibleForReader(await loadBibleTranslation("KJVPLUS")), out=[];
+      data.books.forEach((b,bi)=>(b.chapters||[]).forEach((c,ci)=>(c.verses||[]).forEach((v,vi)=>{
+        const raw=String(v.text||v.content||v.verse||""); const prefix=bi<39?"H":"G";
+        const normalized=raw.replace(/<S>(\d+)<\/S>/g,prefix+"$1");
+        if(normalized.toUpperCase().includes(strong)) out.push({ref:getBookName(b)+" "+getBibleChapterNumber(c,ci)+":"+(v.number||vi+1),text:normalized});
+      })));
+      psRenderItems("psOccurrenceOutput",out.slice(0,100),x=>"<div class='ps-pro-item'><strong>"+escapeHtml(x.ref)+"</strong><br>"+escapeHtml(x.text)+"</div>");
+    }catch(e){psEl("psOccurrenceOutput").innerHTML="<div class='error-message'>KJV+ occurrence search could not be loaded.</div>";}
+  });
+
+  if(psEl("psPhraseButton")) psEl("psPhraseButton").addEventListener("click",function(){
+    const phrase=psText("psPhraseSearch").replace(/^["']|["']$/g,"").trim().toLowerCase(); if(!phrase||!readerBible)return;
+    const out=[]; readerBible.books.forEach((b,bi)=>(b.chapters||[]).forEach((c,ci)=>(c.verses||[]).forEach((v,vi)=>{
+      const t=getReaderVerseText(v,bi,readerTranslationSelect.value); if(t.toLowerCase().includes(phrase))out.push({ref:getBookName(b)+" "+getBibleChapterNumber(c,ci)+":"+(v.number||vi+1),text:t});
+    })));
+    psRenderItems("psPhraseOutput",out.slice(0,150),x=>"<div class='ps-pro-item'><strong>"+escapeHtml(x.ref)+"</strong><br>"+escapeHtml(x.text)+"</div>");
+  });
+
+  if(psEl("psAddChainVerse")) psEl("psAddChainVerse").addEventListener("click",function(){
+    const v=psCurrentReaderVerse(), ref=psText("psChainRef")||(v?v.book+" "+v.chapter+":"+v.verse:""); if(!ref)return;
+    psSaveRecord("verseChains",{name:psText("psChainName")||"Verse Chain",reference:ref,text:psText("psChainRef")?"":(v?v.text:""),note:psText("psChainNote")});psEl("psShowChains").click();
+  });
+  if(psEl("psShowChains")) psEl("psShowChains").addEventListener("click",function(){psRenderRecords("psChainsOutput","verseChains",x=>"<div class='ps-pro-item'><strong>"+escapeHtml(x.name)+" → "+escapeHtml(x.reference)+"</strong>"+(x.text?"<br>"+escapeHtml(x.text):"")+(x.note?"<br><em>"+escapeHtml(x.note)+"</em>":"")+"</div>");});
+
+  const psTemplates={
+    verse:"VERSE STUDY\nReference:\nTranslation:\nContext:\nKey words:\nWhat does the verse say?\nWhat does it reveal about God?\nCross-references:\nApplication:\nQuestions:",
+    chapter:"CHAPTER STUDY\nChapter:\nMain theme:\nOutline:\nRepeated words/ideas:\nKey verses:\nContext:\nQuestions:\nApplication:",
+    book:"BOOK STUDY\nBook:\nAuthor / audience / setting:\nPurpose:\nMajor themes:\nOutline:\nKey chapters:\nKey verses:\nQuestions and findings:",
+    character:"CHARACTER STUDY\nPerson:\nKey passages:\nBackground:\nChoices and actions:\nStrengths / failures / growth:\nWhat does Scripture teach through this person?\nApplication:",
+    word:"WORD STUDY\nWord / Strong’s number:\nHebrew/Greek:\nDefinition:\nOccurrences:\nImportant passages:\nContext observations:\nConclusion:",
+    topic:"TOPICAL STUDY\nTopic:\nMain Scriptures:\nDefinitions:\nCross-references:\nThemes and patterns:\nWhat Scripture teaches:\nQuestions:\nApplication / conclusion:"
+  };
+  if(psEl("psApplyTemplate")) psEl("psApplyTemplate").addEventListener("click",function(){const t=psTemplates[psEl("psTemplateSelect").value]||"";if(psEl("psJournal")){psEl("psJournal").value=(psEl("psJournal").value.trim()?psEl("psJournal").value+"\n\n":"")+t;psWrite("journal",psEl("psJournal").value);}psSetStatus("psTemplateStatus","Template added to Study Journal.");});
+
+  if(psEl("psSaveDaily")) psEl("psSaveDaily").addEventListener("click",function(){psSaveRecord("dailyStudies",{date:new Date().toLocaleDateString(),focus:psText("psDailyFocus"),notes:psText("psDailyNotes")});psEl("psShowDaily").click();});
+  if(psEl("psShowDaily")) psEl("psShowDaily").addEventListener("click",function(){psRenderRecords("psDailyOutput","dailyStudies",x=>"<div class='ps-pro-item'><strong>"+escapeHtml(x.date+" — "+(x.focus||"Daily Study"))+"</strong><br>"+escapeHtml(x.notes)+"</div>");});
+
+  function psConnectionCounts(){
+    const kinds=[["Key verses","keyVerses"],["Markups","markups"],["Word studies","wordStudies"],["Passage studies","passageStudies"],["Chapter studies","chapterStudies"],["Book studies","bookStudies"],["Character studies","characterStudies"],["Questions","questions"],["Prayer entries","prayerJournal"],["Verse collections","verseCollections"],["Themes","themes"],["People/places/events","peoplePlacesEvents"],["Map notes","mapStudies"],["Timeline entries","timeline"],["Context studies","contexts"],["Verse chains","verseChains"],["Daily studies","dailyStudies"]];
+    return kinds.map(x=>({name:x[0],count:psRead(x[1],[]).length}));
+  }
+  if(psEl("psBuildConnections")) psEl("psBuildConnections").addEventListener("click",function(){psRenderItems("psConnectionsOutput",psConnectionCounts().filter(x=>x.count),x=>"<div class='ps-pro-item'><strong>"+escapeHtml(x.name)+":</strong> "+x.count+"</div>");});
+
+  function psBuildExportText(){
+    const lines=["BIBLEMASTERY — PERSONAL BIBLE STUDY","", "Topic: "+(currentTopic||psText("psStudyName")||"Personal Study"),"","STUDY JOURNAL",psEl("psJournal")?psEl("psJournal").value:"","", "OUTLINE",psEl("psOutline")?psEl("psOutline").value:"","", "SUMMARY & CONCLUSIONS",psEl("psSummary")?psEl("psSummary").value:""];
+    const sections=[["KEY VERSES","keyVerses"],["WORD STUDIES","wordStudies"],["PASSAGE STUDIES","passageStudies"],["QUESTIONS","questions"],["PRAYER & SCRIPTURE JOURNAL","prayerJournal"],["THEMES","themes"],["VERSE CHAINS","verseChains"]];
+    sections.forEach(([title,key])=>{const a=psRead(key,[]);if(a.length){lines.push("",title);a.forEach(x=>lines.push(Object.entries(x).filter(([k])=>!["id","savedAt"].includes(k)).map(([k,v])=>k+": "+v).join(" | ")));}});
+    return lines.join("\n");
+  }
+  if(psEl("psCopyStudy")) psEl("psCopyStudy").addEventListener("click",async function(){try{await navigator.clipboard.writeText(psBuildExportText());psSetStatus("psExportStatus","Study copied to clipboard.");}catch(e){psSetStatus("psExportStatus","Copy was blocked by the browser. Use Print / Save as PDF instead.");}});
+  if(psEl("psPrintStudy")) psEl("psPrintStudy").addEventListener("click",function(){const w=window.open("","_blank");if(!w)return;w.document.write("<!doctype html><html><head><title>Personal Bible Study</title><style>body{font-family:Arial,sans-serif;max-width:900px;margin:40px auto;padding:0 24px;line-height:1.6;white-space:pre-wrap}h1{font-size:24px}</style></head><body><h1>BibleMastery — Personal Bible Study</h1>"+escapeHtml(psBuildExportText())+"</body></html>");w.document.close();w.focus();w.print();});
+
 
 
 </script>
