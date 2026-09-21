@@ -938,6 +938,10 @@
   .ps-pro-card p { color:var(--muted); line-height:1.55; }
   .ps-pro-card textarea, .ps-pro-card input, .ps-pro-card select { width:100%; padding:10px; color:var(--text); background:#0e192a; border:1px solid rgba(216,185,106,.30); border-radius:7px; margin-top:7px; }
   .ps-pro-card textarea { min-height:115px; resize:vertical; }
+  .ps-topic-passage-builder { margin-top:14px; padding:15px; border:1px solid rgba(216,185,106,.22); border-radius:10px; background:#0e192a; }
+  .ps-topic-passage-builder h4 { margin:0 0 6px; color:var(--gold); }
+  .ps-topic-passage-builder .small-note { display:block; margin-bottom:6px; }
+  #psTopicPassageBuilders:empty { display:none; }
   .ps-pro-actions { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
   .ps-pro-actions button { padding:9px 12px; border-radius:7px; border:1px solid var(--gold); background:var(--gold); color:var(--bg-mid); font-weight:bold; cursor:pointer; }
   .ps-pro-actions button.secondary { background:#1b2b46; color:var(--text); border-color:rgba(216,185,106,.35); }
@@ -1543,6 +1547,22 @@
         </div>
         <div class="ps-pro-card">
           <h3>📖 Passage Study Builder</h3><input id="psPassageRef" placeholder="Passage, e.g. Romans 8:1-4"><textarea id="psObservation" placeholder="Observation — What does the passage say?"></textarea><textarea id="psInterpretation" placeholder="Interpretation / context — What does it mean in context?"></textarea><textarea id="psApplication" placeholder="Application — How should this truth affect my life?"></textarea><div class="ps-pro-actions"><button id="psSavePassage" type="button">Save Passage Study</button></div><div id="psPassageStatus" class="ps-pro-status"></div>
+        </div>
+        <div class="ps-pro-card ps-wide">
+          <h3>🧭 Topic Study Builder</h3>
+          <p>Study one topic across many verses or passages. Enter one passage per line. BibleMastery will create one Passage Study section for every passage you enter.</p>
+          <input id="psTopicStudyTitle" placeholder="Topic of study, e.g. Freedom from Fear">
+          <textarea id="psTopicPassages" placeholder="Topic verses / passages — enter one per line, e.g.
+Psalm 34:4
+Isaiah 41:10
+2 Timothy 1:7
+Romans 8:31-39"></textarea>
+          <div class="ps-pro-actions">
+            <button id="psBuildTopicPassages" type="button">Build / Update Passage Studies</button>
+            <button id="psSaveTopicStudy" type="button">Save Whole Topic Study</button>
+          </div>
+          <div id="psTopicStudyStatus" class="ps-pro-status"></div>
+          <div id="psTopicPassageBuilders"></div>
         </div>
         <div class="ps-pro-card">
           <h3>📑 Chapter Study</h3><input id="psChapterRef" placeholder="Chapter, e.g. John 15"><textarea id="psChapterTheme" placeholder="Main theme / purpose"></textarea><textarea id="psChapterNotes" placeholder="Key verses, repeated words, observations, questions, applications..."></textarea><div class="ps-pro-actions"><button id="psSaveChapter" type="button">Save Chapter Study</button></div><div id="psChapterStatus" class="ps-pro-status"></div>
@@ -8118,6 +8138,187 @@
     }
   });
 
+  /* =========================================
+     TOPIC STUDY BUILDER
+     Creates one passage-study section for every topic passage entered.
+  ========================================= */
+  function psParseTopicPassages(value){
+    const seen = new Set();
+    return String(value || "")
+      .split(/\n|;/)
+      .map(function(ref){ return ref.trim(); })
+      .filter(function(ref){
+        const key = ref.toLowerCase();
+        if(!ref || seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
+  }
+
+  function psCaptureTopicBuilderNotes(){
+    const saved = {};
+    if(!psEl("psTopicPassageBuilders")) return saved;
+    psEl("psTopicPassageBuilders").querySelectorAll(".ps-topic-passage-builder").forEach(function(card){
+      const ref = card.dataset.reference || "";
+      saved[ref] = {
+        observation: (card.querySelector(".ps-topic-observation") || {}).value || "",
+        interpretation: (card.querySelector(".ps-topic-interpretation") || {}).value || "",
+        application: (card.querySelector(".ps-topic-application") || {}).value || ""
+      };
+    });
+    return saved;
+  }
+
+  function psRenderTopicPassageBuilders(){
+    const wrap = psEl("psTopicPassageBuilders");
+    if(!wrap) return;
+
+    const existing = psCaptureTopicBuilderNotes();
+    const refs = psParseTopicPassages(psText("psTopicPassages"));
+
+    if(!refs.length){
+      wrap.innerHTML = "";
+      psSetStatus("psTopicStudyStatus","Enter at least one topic verse or passage. Use one passage per line.");
+      return;
+    }
+
+    wrap.innerHTML = "";
+
+    refs.forEach(function(reference, index){
+      const previous = existing[reference] || {};
+      const card = document.createElement("div");
+      card.className = "ps-topic-passage-builder";
+      card.dataset.reference = reference;
+
+      const heading = document.createElement("h4");
+      heading.textContent = "Passage " + (index + 1) + " — " + reference;
+      card.appendChild(heading);
+
+      const note = document.createElement("span");
+      note.className = "small-note";
+      note.textContent = "Study this passage as part of the topic above.";
+      card.appendChild(note);
+
+      const observation = document.createElement("textarea");
+      observation.className = "ps-topic-observation";
+      observation.placeholder = "Observation — What does this passage say?";
+      observation.value = previous.observation || "";
+      card.appendChild(observation);
+
+      const interpretation = document.createElement("textarea");
+      interpretation.className = "ps-topic-interpretation";
+      interpretation.placeholder = "Interpretation / context — What does this passage mean in context?";
+      interpretation.value = previous.interpretation || "";
+      card.appendChild(interpretation);
+
+      const application = document.createElement("textarea");
+      application.className = "ps-topic-application";
+      application.placeholder = "Application — How does this passage apply to this topic and to my life?";
+      application.value = previous.application || "";
+      card.appendChild(application);
+
+      wrap.appendChild(card);
+    });
+
+    psSetStatus("psTopicStudyStatus", refs.length + (refs.length === 1 ? " passage study is" : " passage studies are") + " ready for this topic.");
+  }
+
+  function psCollectTopicStudy(){
+    const topic = psText("psTopicStudyTitle");
+    const passages = [];
+    const wrap = psEl("psTopicPassageBuilders");
+
+    if(wrap){
+      wrap.querySelectorAll(".ps-topic-passage-builder").forEach(function(card){
+        passages.push({
+          reference: card.dataset.reference || "",
+          observation: (card.querySelector(".ps-topic-observation") || {}).value || "",
+          interpretation: (card.querySelector(".ps-topic-interpretation") || {}).value || "",
+          application: (card.querySelector(".ps-topic-application") || {}).value || ""
+        });
+      });
+    }
+
+    return { topic: topic, passages: passages };
+  }
+
+  if(psEl("psBuildTopicPassages")){
+    psEl("psBuildTopicPassages").addEventListener("click", psRenderTopicPassageBuilders);
+  }
+
+  if(psEl("psTopicPassages")){
+    let psTopicBuildTimer = null;
+    psEl("psTopicPassages").addEventListener("input", function(){
+      clearTimeout(psTopicBuildTimer);
+      psTopicBuildTimer = setTimeout(psRenderTopicPassageBuilders, 350);
+    });
+  }
+
+  if(psEl("psSaveTopicStudy")) psEl("psSaveTopicStudy").addEventListener("click", async function(){
+    // Make sure the visible builders match the current passage list before saving.
+    psRenderTopicPassageBuilders();
+    const rec = psCollectTopicStudy();
+
+    if(!rec.topic){
+      psSetStatus("psTopicStudyStatus","Enter the topic of study before saving.");
+      return;
+    }
+
+    if(!rec.passages.length){
+      psSetStatus("psTopicStudyStatus","Enter at least one verse or passage for this topic before saving.");
+      return;
+    }
+
+    // Keep a full on-device backup of the topic and every passage section.
+    psSaveRecord("topicStudies", rec);
+
+    if(!personalStudySupabase){
+      psSetStatus("psTopicStudyStatus","Topic study saved on this device. Account saving is unavailable right now.");
+      return;
+    }
+
+    psSetStatus("psTopicStudyStatus","Saving the whole topic study to your BibleMastery account...");
+
+    try {
+      const { data: { session }, error: sessionError } =
+        await personalStudySupabase.auth.getSession();
+
+      if(sessionError) throw sessionError;
+
+      if(!session || !session.user){
+        psSetStatus("psTopicStudyStatus","Topic study saved on this device. Sign in to your BibleMastery account to save it to your account too.");
+        return;
+      }
+
+      const contentParts = ["Topic: " + rec.topic];
+
+      rec.passages.forEach(function(passage, index){
+        const section = ["Passage " + (index + 1) + ": " + passage.reference];
+        if(passage.observation) section.push("Observation — What does the passage say?\n" + passage.observation);
+        if(passage.interpretation) section.push("Interpretation / Context — What does it mean in context?\n" + passage.interpretation);
+        if(passage.application) section.push("Application — How does this passage apply to the topic and my life?\n" + passage.application);
+        contentParts.push(section.join("\n\n"));
+      });
+
+      const { error: saveError } = await personalStudySupabase
+        .from("saved_work")
+        .insert({
+          user_id: session.user.id,
+          work_type: "personal_study",
+          title: "Topic Study — " + rec.topic,
+          content: contentParts.join("\n\n----------------------------------------\n\n")
+        });
+
+      if(saveError) throw saveError;
+
+      psSetStatus("psTopicStudyStatus","Whole topic study saved to your BibleMastery account with " + rec.passages.length + (rec.passages.length === 1 ? " passage." : " passages."));
+    }
+    catch(error){
+      console.error("Topic Study account save failed:", error);
+      psSetStatus("psTopicStudyStatus","Topic study was saved on this device, but it could not be saved to your account. Please try again while signed in.");
+    }
+  });
+
   bindSimpleSave("psSaveChapter","chapterStudies",[["reference","psChapterRef"],["theme","psChapterTheme"],["notes","psChapterNotes"]],"psChapterStatus");
   bindSimpleSave("psSaveBook","bookStudies",[["book","psBookName"],["notes","psBookNotes"]],"psBookStatus");
   bindSimpleSave("psSaveCharacter","characterStudies",[["name","psCharacterName"],["notes","psCharacterNotes"]],"psCharacterStatus");
@@ -8132,11 +8333,11 @@
   if(psEl("psSaveOutline")) psEl("psSaveOutline").addEventListener("click",function(){psWrite("outline",psEl("psOutline").value);psSetStatus("psOutlineStatus","Outline saved.");});
   if(psEl("psSaveSummary")) psEl("psSaveSummary").addEventListener("click",function(){psWrite("summary",psEl("psSummary").value);psSetStatus("psSummaryStatus","Study conclusions saved.");});
 
-  function psSnapshot(){return {topic:currentTopic||"",journal:psEl("psJournal")?psEl("psJournal").value:"",outline:psEl("psOutline")?psEl("psOutline").value:"",summary:psEl("psSummary")?psEl("psSummary").value:"",markups:psRead("markups",[]),keyVerses:psRead("keyVerses",[]),wordStudies:psRead("wordStudies",[]),passageStudies:psRead("passageStudies",[]),chapterStudies:psRead("chapterStudies",[]),bookStudies:psRead("bookStudies",[]),characterStudies:psRead("characterStudies",[]),questions:psRead("questions",[]),prayerJournal:psRead("prayerJournal",[]),verseCollections:psRead("verseCollections",[]),themes:psRead("themes",[]),peoplePlacesEvents:psRead("peoplePlacesEvents",[]),mapStudies:psRead("mapStudies",[]),timeline:psRead("timeline",[]),contexts:psRead("contexts",[]),verseChains:psRead("verseChains",[]),dailyStudies:psRead("dailyStudies",[]),history:psRead("history",[])};}
+  function psSnapshot(){return {topic:currentTopic||"",journal:psEl("psJournal")?psEl("psJournal").value:"",outline:psEl("psOutline")?psEl("psOutline").value:"",summary:psEl("psSummary")?psEl("psSummary").value:"",markups:psRead("markups",[]),keyVerses:psRead("keyVerses",[]),wordStudies:psRead("wordStudies",[]),passageStudies:psRead("passageStudies",[]),topicStudies:psRead("topicStudies",[]),chapterStudies:psRead("chapterStudies",[]),bookStudies:psRead("bookStudies",[]),characterStudies:psRead("characterStudies",[]),questions:psRead("questions",[]),prayerJournal:psRead("prayerJournal",[]),verseCollections:psRead("verseCollections",[]),themes:psRead("themes",[]),peoplePlacesEvents:psRead("peoplePlacesEvents",[]),mapStudies:psRead("mapStudies",[]),timeline:psRead("timeline",[]),contexts:psRead("contexts",[]),verseChains:psRead("verseChains",[]),dailyStudies:psRead("dailyStudies",[]),history:psRead("history",[])};}
   function psRenderSavedStudies(){const studies=psRead("savedStudies",[]);psRenderItems("psSavedStudies",studies,x=>"<div class='ps-pro-item'><strong>"+escapeHtml(x.name)+"</strong><br><span class='small-note'>"+escapeHtml(new Date(x.savedAt).toLocaleString())+"</span><div class='ps-pro-actions'><button type='button' data-ps-load='"+x.id+"'>Open Study</button></div></div>");}
   if(psEl("psSaveStudy")) psEl("psSaveStudy").addEventListener("click",function(){const name=psText("psStudyName")||currentTopic||"Personal Study";const a=psRead("savedStudies",[]);a.unshift({id:Date.now(),name,savedAt:new Date().toISOString(),data:psSnapshot()});psWrite("savedStudies",a.slice(0,50));psRenderSavedStudies();});
   if(psEl("psLoadStudies")) psEl("psLoadStudies").addEventListener("click",psRenderSavedStudies);
-  if(psEl("psSavedStudies")) psEl("psSavedStudies").addEventListener("click",function(e){const b=e.target.closest("[data-ps-load]");if(!b)return;const s=psRead("savedStudies",[]).find(x=>String(x.id)===b.dataset.psLoad);if(!s)return;const d=s.data||{};if(psEl("psJournal"))psEl("psJournal").value=d.journal||"";if(psEl("psOutline"))psEl("psOutline").value=d.outline||"";if(psEl("psSummary"))psEl("psSummary").value=d.summary||"";["markups","keyVerses","wordStudies","passageStudies","chapterStudies","bookStudies","characterStudies","questions","prayerJournal","verseCollections","themes","peoplePlacesEvents","mapStudies","timeline","contexts","verseChains","dailyStudies","history"].forEach(k=>psWrite(k,d[k]||[]));psWrite("journal",d.journal||"");psWrite("outline",d.outline||"");psWrite("summary",d.summary||"");if(d.topic&&topicInput){topicInput.value=d.topic;}psSetStatus("psJournalStatus","Saved study opened: "+s.name);});
+  if(psEl("psSavedStudies")) psEl("psSavedStudies").addEventListener("click",function(e){const b=e.target.closest("[data-ps-load]");if(!b)return;const s=psRead("savedStudies",[]).find(x=>String(x.id)===b.dataset.psLoad);if(!s)return;const d=s.data||{};if(psEl("psJournal"))psEl("psJournal").value=d.journal||"";if(psEl("psOutline"))psEl("psOutline").value=d.outline||"";if(psEl("psSummary"))psEl("psSummary").value=d.summary||"";["markups","keyVerses","wordStudies","passageStudies","topicStudies","chapterStudies","bookStudies","characterStudies","questions","prayerJournal","verseCollections","themes","peoplePlacesEvents","mapStudies","timeline","contexts","verseChains","dailyStudies","history"].forEach(k=>psWrite(k,d[k]||[]));psWrite("journal",d.journal||"");psWrite("outline",d.outline||"");psWrite("summary",d.summary||"");if(d.topic&&topicInput){topicInput.value=d.topic;}psSetStatus("psJournalStatus","Saved study opened: "+s.name);});
   psRenderSavedStudies();
 
 
