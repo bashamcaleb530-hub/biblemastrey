@@ -2546,6 +2546,28 @@
   );
 
 
+  /* Allow a verse in the Bible Reader itself to become the selected verse. */
+  readerDisplay.addEventListener(
+    "click",
+    function(event) {
+      const verseElement = event.target.closest(".reader-verse");
+
+      if (!verseElement || !readerDisplay.contains(verseElement)) {
+        return;
+      }
+
+      const verseIndex = verseElement.getAttribute("data-reader-verse");
+
+      if (verseIndex === null) {
+        return;
+      }
+
+      readerVerseSelect.value = verseIndex;
+      scrollToReaderVerse();
+    }
+  );
+
+
   readerPreviousButton.addEventListener(
     "click",
     function() {
@@ -7927,14 +7949,100 @@
   function psSaveRecord(kind, record){ const a=psRead(kind,[]); a.unshift(Object.assign({id:Date.now(),savedAt:new Date().toISOString()},record)); psWrite(kind,a.slice(0,100)); }
   function psRenderItems(target, items, formatter){ const box=psEl(target); if(!box)return; box.innerHTML=items.length?items.map(formatter).join(""):"<div class='ps-pro-status'>Nothing saved yet.</div>"; }
 
-  if(psEl("psCrossRefBtn")) psEl("psCrossRefBtn").addEventListener("click",function(){
-    const v=psCurrentReaderVerse(); const out=psEl("psCrossRefOutput");
-    if(!v||!studyBible){ out.innerHTML="<div class='ps-pro-status'>Choose a Bible Reader passage first.</div>"; return; }
-    const stop=new Set(["the","and","that","with","from","this","shall","unto","have","were","which","their","they","them","your","for","not","but","his","her","our","you","was","are","who","all"]);
-    const words=[...new Set(v.text.toLowerCase().replace(/[^a-z' ]/g," ").split(/\s+/).filter(w=>w.length>4&&!stop.has(w)))].slice(0,6);
-    let found=[]; words.forEach(w=>{ try{found=found.concat(searchBible(studyBible,w));}catch(e){} });
-    const seen=new Set(), unique=[]; found.forEach(x=>{const k=x.bookId+"|"+x.chapter+"|"+x.verse;if(!seen.has(k)&&!(x.book===v.book&&String(x.chapter)===String(v.chapter)&&String(x.verse)===String(v.verse))){seen.add(k);unique.push(x);}});
-    psRenderItems("psCrossRefOutput",unique.slice(0,12),x=>"<div class='ps-pro-item'><strong>"+escapeHtml(x.book+" "+x.chapter+":"+x.verse)+"</strong><br>"+escapeHtml(x.text)+"</div>");
+  if(psEl("psCrossRefBtn")) psEl("psCrossRefBtn").addEventListener("click",async function(){
+    const out = psEl("psCrossRefOutput");
+    const v = psCurrentReaderVerse();
+
+    if (!v) {
+      out.innerHTML = "<div class='ps-pro-status'>Choose a book and chapter in the Bible Reader, then select a verse.</div>";
+      return;
+    }
+
+    let searchSource = readerBible;
+
+    if (!searchSource || !Array.isArray(searchSource.books) || !searchSource.books.length) {
+      out.innerHTML = "<div class='ps-pro-status'>Loading cross-references...</div>";
+
+      try {
+        const rawBible = await loadBibleTranslation(readerTranslationSelect.value);
+        searchSource = normalizeBibleForReader(rawBible);
+      }
+      catch (error) {
+        console.error("Cross-reference Bible load error:", error);
+        out.innerHTML = "<div class='ps-pro-status'>The Bible could not be loaded for cross-references. Please try again.</div>";
+        return;
+      }
+    }
+
+    const stop = new Set([
+      "the","and","that","with","from","this","shall","unto","have","were",
+      "which","their","they","them","your","for","not","but","his","her",
+      "our","you","was","are","who","all","into","upon","when","then",
+      "there","what","will","would","could","should","been","being","because"
+    ]);
+
+    const words = [...new Set(
+      v.text
+        .toLowerCase()
+        .replace(/[^a-z' ]/g, " ")
+        .split(/\s+/)
+        .filter(function(word) {
+          return word.length > 4 && !stop.has(word);
+        })
+    )].slice(0, 8);
+
+    if (!words.length) {
+      out.innerHTML = "<div class='ps-pro-status'>No strong search words were found in this verse.</div>";
+      return;
+    }
+
+    let found = [];
+
+    try {
+      found = searchBible(searchSource, words.join(" "));
+    }
+    catch (error) {
+      console.error("Cross-reference search error:", error);
+      out.innerHTML = "<div class='ps-pro-status'>Cross-references could not be searched. Please try again.</div>";
+      return;
+    }
+
+    const seen = new Set();
+    const unique = [];
+
+    found
+      .sort(function(a, b) {
+        return (b.score || 0) - (a.score || 0);
+      })
+      .forEach(function(item) {
+        const key = item.bookId + "|" + item.chapter + "|" + item.verse;
+        const isCurrentVerse =
+          item.book === v.book &&
+          String(item.chapter) === String(v.chapter) &&
+          String(item.verse) === String(v.verse);
+
+        if (!seen.has(key) && !isCurrentVerse) {
+          seen.add(key);
+          unique.push(item);
+        }
+      });
+
+    if (!unique.length) {
+      out.innerHTML = "<div class='ps-pro-status'>No related verses were found for this verse.</div>";
+      return;
+    }
+
+    psRenderItems(
+      "psCrossRefOutput",
+      unique.slice(0, 12),
+      function(item) {
+        return "<div class='ps-pro-item'><strong>" +
+          escapeHtml(item.book + " " + item.chapter + ":" + item.verse) +
+          "</strong><br>" +
+          escapeHtml(item.text) +
+          "</div>";
+      }
+    );
   });
 
   if(psEl("psInterlinearBtn")) psEl("psInterlinearBtn").addEventListener("click",async function(){
