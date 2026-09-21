@@ -229,6 +229,9 @@
 
     .support-reply-button,
     .support-delete-button,
+    .saved-edit-button,
+    .saved-save-button,
+    .saved-cancel-button,
     .saved-delete-button {
       padding: 9px 13px;
       border-radius: 8px;
@@ -247,6 +250,53 @@
     .saved-delete-button {
       background: #7a2630;
       color: white;
+    }
+
+    .saved-edit-button,
+    .saved-save-button {
+      background: #c9a94b;
+      color: #071426;
+    }
+
+    .saved-cancel-button {
+      background: #405675;
+      color: white;
+    }
+
+    .saved-item-editor {
+      margin-top: 12px;
+      padding: 12px;
+      border: 1px solid #405675;
+      border-radius: 9px;
+      background: #061220;
+    }
+
+    .saved-item-editor label {
+      margin-top: 0;
+    }
+
+    .saved-item-editor textarea {
+      width: 100%;
+      min-height: 150px;
+      resize: vertical;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #405675;
+      background: #071426;
+      color: white;
+      font: inherit;
+      line-height: 1.5;
+    }
+
+    .saved-item-editor input {
+      margin-bottom: 12px;
+    }
+
+    .saved-item-editor-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 10px;
     }
 
     .empty-message {
@@ -704,6 +754,529 @@ function createPermanentDeleteButton(options) {
 }
 
 
+async function permanentlyUpdateSavedRecord(options) {
+
+  const {
+    table,
+    item,
+    values,
+    includeUserId,
+    successMessage
+  } = options;
+
+
+  accountStatus.textContent =
+    "Saving changes...";
+
+
+  let updateQuery =
+    supabaseClient
+      .from(table)
+      .update(values)
+      .eq("id", item.id);
+
+
+  if (
+    includeUserId &&
+    item.user_id
+  ) {
+    updateQuery =
+      updateQuery.eq(
+        "user_id",
+        item.user_id
+      );
+  }
+
+
+  const {
+    data: updatedRows,
+    error
+  } =
+    await updateQuery
+      .select("*");
+
+
+  if (
+    error ||
+    !updatedRows ||
+    updatedRows.length === 0
+  ) {
+
+    if (error) {
+      console.error(error);
+    }
+
+    accountStatus.textContent =
+      "Your changes were not saved to the database. Check the Supabase UPDATE policy for " +
+      table +
+      ".";
+
+    return null;
+  }
+
+
+  Object.assign(
+    item,
+    updatedRows[0]
+  );
+
+
+  accountStatus.textContent =
+    successMessage ||
+    "Changes saved to your account.";
+
+
+  return updatedRows[0];
+}
+
+
+function createNoteEditButton(options) {
+
+  const {
+    item,
+    wrapper,
+    contentElement
+  } = options;
+
+
+  const button =
+    document.createElement("button");
+
+  button.type = "button";
+  button.className =
+    "saved-edit-button";
+  button.textContent = "Edit";
+
+
+  button.addEventListener(
+    "click",
+    function() {
+
+      const existing =
+        wrapper.querySelector(
+          ".saved-item-editor"
+        );
+
+      if (existing) {
+        existing.remove();
+        return;
+      }
+
+
+      const editor =
+        document.createElement("div");
+
+      editor.className =
+        "saved-item-editor";
+
+
+      const label =
+        document.createElement("label");
+
+      label.textContent =
+        "Edit note";
+
+
+      const textarea =
+        document.createElement("textarea");
+
+      textarea.value =
+        item.content || "";
+
+
+      const editorActions =
+        document.createElement("div");
+
+      editorActions.className =
+        "saved-item-editor-actions";
+
+
+      const saveButton =
+        document.createElement("button");
+
+      saveButton.type = "button";
+      saveButton.className =
+        "saved-save-button";
+      saveButton.textContent =
+        "Save Changes";
+
+
+      const cancelButton =
+        document.createElement("button");
+
+      cancelButton.type = "button";
+      cancelButton.className =
+        "saved-cancel-button";
+      cancelButton.textContent =
+        "Cancel";
+
+
+      saveButton.addEventListener(
+        "click",
+        async function() {
+
+          saveButton.disabled = true;
+          saveButton.textContent =
+            "Saving...";
+
+
+          const updated =
+            await permanentlyUpdateSavedRecord({
+              table: "bible_user_data",
+              item: item,
+              includeUserId: true,
+              values: {
+                content: textarea.value,
+                updated_at:
+                  new Date().toISOString()
+              },
+              successMessage:
+                "Note updated in your account."
+            });
+
+
+          if (!updated) {
+            saveButton.disabled = false;
+            saveButton.textContent =
+              "Save Changes";
+            return;
+          }
+
+
+          contentElement.textContent =
+            updated.content || "";
+
+          editor.remove();
+        }
+      );
+
+
+      cancelButton.addEventListener(
+        "click",
+        function() {
+          editor.remove();
+        }
+      );
+
+
+      editorActions.appendChild(
+        saveButton
+      );
+
+      editorActions.appendChild(
+        cancelButton
+      );
+
+
+      editor.appendChild(label);
+      editor.appendChild(textarea);
+      editor.appendChild(editorActions);
+
+
+      wrapper.appendChild(editor);
+      textarea.focus();
+    }
+  );
+
+
+  return button;
+}
+
+
+function savedWorkContentForEditing(item) {
+
+  if (
+    typeof item.content === "string"
+  ) {
+    return item.content;
+  }
+
+  if (!item.content) {
+    return "";
+  }
+
+  if (
+    Object.prototype.hasOwnProperty.call(
+      item.content,
+      "text"
+    )
+  ) {
+    return item.content.text || "";
+  }
+
+  if (
+    Object.prototype.hasOwnProperty.call(
+      item.content,
+      "content"
+    )
+  ) {
+    return item.content.content || "";
+  }
+
+  return JSON.stringify(
+    item.content,
+    null,
+    2
+  );
+}
+
+
+function savedWorkContentAfterEditing(
+  item,
+  editedText
+) {
+
+  if (
+    typeof item.content === "string" ||
+    !item.content
+  ) {
+    return editedText;
+  }
+
+  if (
+    Object.prototype.hasOwnProperty.call(
+      item.content,
+      "text"
+    )
+  ) {
+    return {
+      ...item.content,
+      text: editedText
+    };
+  }
+
+  if (
+    Object.prototype.hasOwnProperty.call(
+      item.content,
+      "content"
+    )
+  ) {
+    return {
+      ...item.content,
+      content: editedText
+    };
+  }
+
+  try {
+    return JSON.parse(editedText);
+  }
+  catch (error) {
+    throw new Error(
+      "This saved item uses structured data. Keep it as valid JSON when editing it."
+    );
+  }
+}
+
+
+function createSavedWorkEditButton(options) {
+
+  const {
+    item,
+    wrapper,
+    titleElement,
+    contentElement,
+    metaElement
+  } = options;
+
+
+  const button =
+    document.createElement("button");
+
+  button.type = "button";
+  button.className =
+    "saved-edit-button";
+  button.textContent = "Edit";
+
+
+  button.addEventListener(
+    "click",
+    function() {
+
+      const existing =
+        wrapper.querySelector(
+          ".saved-item-editor"
+        );
+
+      if (existing) {
+        existing.remove();
+        return;
+      }
+
+
+      const editor =
+        document.createElement("div");
+
+      editor.className =
+        "saved-item-editor";
+
+
+      const titleLabel =
+        document.createElement("label");
+
+      titleLabel.textContent =
+        "Title";
+
+
+      const titleInput =
+        document.createElement("input");
+
+      titleInput.type = "text";
+      titleInput.value =
+        item.title || "";
+
+
+      const contentLabel =
+        document.createElement("label");
+
+      contentLabel.textContent =
+        "Saved notes / content";
+
+
+      const textarea =
+        document.createElement("textarea");
+
+      textarea.value =
+        savedWorkContentForEditing(item);
+
+
+      const editorActions =
+        document.createElement("div");
+
+      editorActions.className =
+        "saved-item-editor-actions";
+
+
+      const saveButton =
+        document.createElement("button");
+
+      saveButton.type = "button";
+      saveButton.className =
+        "saved-save-button";
+      saveButton.textContent =
+        "Save Changes";
+
+
+      const cancelButton =
+        document.createElement("button");
+
+      cancelButton.type = "button";
+      cancelButton.className =
+        "saved-cancel-button";
+      cancelButton.textContent =
+        "Cancel";
+
+
+      saveButton.addEventListener(
+        "click",
+        async function() {
+
+          let updatedContent;
+
+          try {
+            updatedContent =
+              savedWorkContentAfterEditing(
+                item,
+                textarea.value
+              );
+          }
+          catch (error) {
+            accountStatus.textContent =
+              error.message;
+            return;
+          }
+
+
+          saveButton.disabled = true;
+          saveButton.textContent =
+            "Saving...";
+
+
+          const updated =
+            await permanentlyUpdateSavedRecord({
+              table: "saved_work",
+              item: item,
+              includeUserId: true,
+              values: {
+                title:
+                  titleInput.value.trim() ||
+                  "Untitled",
+                content: updatedContent,
+                updated_at:
+                  new Date().toISOString()
+              },
+              successMessage:
+                "Saved work updated in your account."
+            });
+
+
+          if (!updated) {
+            saveButton.disabled = false;
+            saveButton.textContent =
+              "Save Changes";
+            return;
+          }
+
+
+          titleElement.textContent =
+            updated.title ||
+            "Untitled";
+
+          contentElement.textContent =
+            savedWorkContentForEditing(
+              updated
+            ) ||
+            "Saved work";
+
+          if (
+            metaElement &&
+            updated.updated_at
+          ) {
+            metaElement.textContent =
+              "Updated " +
+              new Date(
+                updated.updated_at
+              ).toLocaleString();
+          }
+
+          editor.remove();
+        }
+      );
+
+
+      cancelButton.addEventListener(
+        "click",
+        function() {
+          editor.remove();
+        }
+      );
+
+
+      editorActions.appendChild(
+        saveButton
+      );
+
+      editorActions.appendChild(
+        cancelButton
+      );
+
+
+      editor.appendChild(titleLabel);
+      editor.appendChild(titleInput);
+      editor.appendChild(contentLabel);
+      editor.appendChild(textarea);
+      editor.appendChild(editorActions);
+
+
+      wrapper.appendChild(editor);
+      titleInput.focus();
+    }
+  );
+
+
+  return button;
+}
+
+
 function createBibleItem(item) {
 
   const wrapper =
@@ -787,6 +1360,21 @@ function createBibleItem(item) {
       successMessage:
         "Deleted permanently from your account."
     });
+
+
+  if (item.item_type === "note") {
+    const editButton =
+      createNoteEditButton({
+        item: item,
+        wrapper: wrapper,
+        contentElement: content
+      });
+
+    actions.insertBefore(
+      editButton,
+      actions.firstChild
+    );
+  }
 
 
   wrapper.appendChild(title);
@@ -915,6 +1503,21 @@ function createSavedWorkItem(item) {
       successMessage:
         "Saved work deleted permanently."
     });
+
+
+  const editButton =
+    createSavedWorkEditButton({
+      item: item,
+      wrapper: wrapper,
+      titleElement: title,
+      contentElement: content,
+      metaElement: meta
+    });
+
+  actions.insertBefore(
+    editButton,
+    actions.firstChild
+  );
 
 
   wrapper.appendChild(title);
