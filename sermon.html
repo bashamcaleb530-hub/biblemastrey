@@ -551,6 +551,22 @@
     color: #e8e6df;
   }
 
+
+  /* FINAL ADVANCED SERMON WORKSPACE */
+  .sermon-advanced-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+  .sermon-advanced-card{background:var(--panel-2);border:1px solid rgba(216,185,106,.22);border-radius:10px;padding:17px;min-width:0}
+  .sermon-advanced-card h3{margin-top:0;color:var(--gold)}
+  .sermon-advanced-card textarea{min-height:130px}
+  .sermon-advanced-wide{grid-column:1/-1}
+  .sermon-mini-actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}
+  .sermon-mini-actions button{margin:0}
+  .sermon-output{margin-top:10px;max-height:330px;overflow:auto}
+  .sermon-item{padding:10px;margin:7px 0;background:#132039;border-left:3px solid var(--gold);border-radius:5px;white-space:pre-wrap}
+  .sermon-point-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+  .sermon-checklist label{display:flex;gap:9px;align-items:flex-start;color:var(--text);font-weight:normal}
+  .sermon-checklist input{width:auto;margin-top:3px}
+  @media(max-width:900px){.sermon-advanced-grid,.sermon-point-grid{grid-template-columns:1fr}.sermon-advanced-wide{grid-column:auto}}
+
 </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -1446,6 +1462,166 @@
 
   </div>
 
+
+
+  <div class="section no-print" id="advancedSermonWorkspace">
+    <h2>🔥 Advanced Sermon Building Workspace</h2>
+    <p>Research, develop, organize, preach, and preserve the sermon in one workspace. These tools supplement your existing manual sermon and 18-part guided template.</p>
+    <div class="sermon-advanced-grid">
+
+      <div class="sermon-advanced-card">
+        <h3>🎯 Sermon Vision</h3>
+        <label>Central Truth / Big Idea</label><textarea id="advBigIdea" placeholder="State the one central truth this sermon should communicate."></textarea>
+        <label>Audience</label><input id="advAudience" placeholder="Who am I preaching to?">
+        <label>Desired Response</label><textarea id="advDesiredResponse" placeholder="What should listeners understand, believe, receive, or do?"></textarea>
+      </div>
+
+      <div class="sermon-advanced-card">
+        <h3>🧭 Sermon Type & Direction</h3>
+        <label>Sermon Type</label><select id="advSermonType"><option>Expository</option><option>Textual</option><option>Topical</option><option>Doctrinal / Teaching</option><option>Evangelistic</option><option>Character Study</option><option>Special Occasion</option></select>
+        <label>Primary Passage</label><input id="advPrimaryPassage" placeholder="Example: Romans 8:1-4">
+        <label>Working Theme</label><input id="advTheme" placeholder="Grace, faith, healing, righteousness...">
+        <label>Estimated Preaching Time (minutes)</label><input id="advTargetMinutes" type="number" min="1" placeholder="35">
+      </div>
+
+      <div class="sermon-advanced-card sermon-advanced-wide">
+        <h3>🧱 Advanced Point Builder</h3>
+        <div class="sermon-point-grid">
+          <div><label>Point 1</label><input id="advPoint1" placeholder="Main point"><textarea id="advPoint1Work" placeholder="Exposition, supporting verses, illustration, application, transition..."></textarea></div>
+          <div><label>Point 2</label><input id="advPoint2" placeholder="Main point"><textarea id="advPoint2Work" placeholder="Exposition, supporting verses, illustration, application, transition..."></textarea></div>
+          <div><label>Point 3</label><input id="advPoint3" placeholder="Main point"><textarea id="advPoint3Work" placeholder="Exposition, supporting verses, illustration, application, transition..."></textarea></div>
+        </div>
+        <label>Additional Points / Subpoints</label><textarea id="advExtraPoints" placeholder="Add as many additional points and subpoints as needed."></textarea>
+      </div>
+
+      <div class="sermon-advanced-card">
+        <h3>🔬 Exegetical Research Notes</h3>
+        <textarea id="advExegetical" placeholder="Immediate context, grammar, repeated words, commands, promises, contrasts, historical setting, author/audience, observations..."></textarea>
+      </div>
+      <div class="sermon-advanced-card">
+        <h3>🔤 Hebrew / Greek Findings</h3>
+        <textarea id="advOriginalLanguage" placeholder="Strong’s numbers, lemmas, definitions, occurrences, and why the word matters in this passage..."></textarea>
+      </div>
+      <div class="sermon-advanced-card">
+        <h3>🔗 Cross-References & Verse Chain</h3>
+        <textarea id="advCrossRefs" placeholder="Build a Scripture chain and record how each passage supports or clarifies the sermon text."></textarea>
+      </div>
+      <div class="sermon-advanced-card">
+        <h3>📚 Commentary / Research Notes</h3>
+        <textarea id="advResearchNotes" placeholder="Commentary observations, Bible dictionary background, quotations, source notes, things to verify..."></textarea>
+      </div>
+
+      <div class="sermon-advanced-card">
+        <h3>🧵 Theme Tracker</h3>
+        <textarea id="advThemeTracker" placeholder="Trace the sermon theme through Scripture. Record patterns, development, and key passages."></textarea>
+      </div>
+      <div class="sermon-advanced-card">
+        <h3>👥 People • Places • Events</h3>
+        <textarea id="advPeoplePlaces" placeholder="People, places, events, cultural background, journeys, and historical connections relevant to the sermon."></textarea>
+      </div>
+      <div class="sermon-advanced-card">
+        <h3>🗺️ Map / Timeline Notes</h3>
+        <textarea id="advMapTimeline" placeholder="Locations, routes, chronology, rulers, prophets, dates/periods, and sequence of events."></textarea>
+      </div>
+      <div class="sermon-advanced-card">
+        <h3>🔎 Context Explorer</h3>
+        <textarea id="advContextExplorer" placeholder="What comes before and after? Who is speaking? To whom? Why? How does this fit the chapter and book?"></textarea>
+        <div class="sermon-mini-actions"><button id="advCaptureReaderContext" type="button">Capture Selected Reader Verse</button></div>
+      </div>
+
+      <div class="sermon-advanced-card">
+        <h3>💡 Illustrations & Examples Bank</h3>
+        <textarea id="advIllustrationBank" placeholder="Illustrations, examples, analogies, testimony notes, object lessons. Keep the biblical truth primary."></textarea>
+      </div>
+      <div class="sermon-advanced-card">
+        <h3>❤️ Application Builder</h3>
+        <textarea id="advApplicationBuilder" placeholder="How does this truth apply to belief, thinking, speech, choices, relationships, prayer, faith, and daily life?"></textarea>
+      </div>
+      <div class="sermon-advanced-card">
+        <h3>🌉 Transitions</h3>
+        <textarea id="advTransitions" placeholder="Introduction → text; point 1 → point 2; point 2 → point 3; final point → conclusion."></textarea>
+      </div>
+      <div class="sermon-advanced-card">
+        <h3>❓ Questions / Objections to Address</h3>
+        <textarea id="advQuestionsObjections" placeholder="Questions listeners may have, misunderstandings to clarify, objections to answer from Scripture."></textarea>
+      </div>
+
+      <div class="sermon-advanced-card">
+        <h3>🗣️ Invitation / Response</h3>
+        <textarea id="advInvitation" placeholder="How will you invite listeners to respond to the truth of Scripture?"></textarea>
+      </div>
+      <div class="sermon-advanced-card">
+        <h3>🙏 Prayer & Preparation Journal</h3>
+        <textarea id="advPrayerJournal" placeholder="Prayer, direction, Scriptures impressed on your heart, preparation reflections..."></textarea>
+      </div>
+      <div class="sermon-advanced-card">
+        <h3>🎙️ Speaker / Delivery Notes</h3>
+        <textarea id="advDeliveryNotes" placeholder="Pauses, emphasis, passages to read aloud, visual aids, pronunciation, reminders, places to slow down."></textarea>
+      </div>
+      <div class="sermon-advanced-card">
+        <h3>📝 Quotations / Source Notes</h3>
+        <textarea id="advSourceNotes" placeholder="Quotation, author/source, page/link/reference, and where it may fit."></textarea>
+      </div>
+
+      <div class="sermon-advanced-card sermon-advanced-wide">
+        <h3>📖 Sermon Research Library</h3>
+        <p>Save research items separately while developing the sermon.</p>
+        <div class="sermon-point-grid">
+          <div><label>Category</label><select id="advLibraryType"><option>Scripture</option><option>Word Study</option><option>Cross-Reference</option><option>Commentary</option><option>Illustration</option><option>Application</option><option>Question</option><option>Quote</option><option>People / Place / Event</option><option>Map / Timeline</option></select></div>
+          <div><label>Title / Reference</label><input id="advLibraryTitle" placeholder="Reference or short title"></div>
+          <div><label>Research</label><textarea id="advLibraryText" placeholder="Research note..."></textarea></div>
+        </div>
+        <div class="sermon-mini-actions"><button id="advSaveLibraryItem" type="button">Save Research Item</button><button id="advShowLibrary" class="secondary" type="button">Show Library</button></div>
+        <div id="advLibraryOutput" class="sermon-output"></div>
+      </div>
+
+      <div class="sermon-advanced-card">
+        <h3>📅 Sermon Preparation History</h3>
+        <div class="sermon-mini-actions"><button id="advRecordHistory" type="button">Record Current Session</button><button id="advShowHistory" class="secondary" type="button">Show History</button></div>
+        <div id="advHistoryOutput" class="sermon-output"></div>
+      </div>
+      <div class="sermon-advanced-card">
+        <h3>📂 Scripture Collections</h3>
+        <input id="advCollectionName" placeholder="Collection name">
+        <textarea id="advCollectionVerses" placeholder="Verses / references for this collection"></textarea>
+        <div class="sermon-mini-actions"><button id="advSaveCollection" type="button">Save Collection</button><button id="advShowCollections" class="secondary" type="button">Show Collections</button></div>
+        <div id="advCollectionsOutput" class="sermon-output"></div>
+      </div>
+
+      <div class="sermon-advanced-card">
+        <h3>🧩 Sermon Templates</h3>
+        <select id="advTemplatePreset"><option value="expository">Expository</option><option value="topical">Topical</option><option value="doctrinal">Doctrinal / Teaching</option><option value="evangelistic">Evangelistic</option><option value="character">Character Study</option></select>
+        <div class="sermon-mini-actions"><button id="advApplyPreset" type="button">Load Template into Manual Sermon</button></div>
+      </div>
+      <div class="sermon-advanced-card">
+        <h3>⏱️ Preaching Time Estimator</h3>
+        <p>Estimate delivery time from the words currently written in the manual sermon.</p>
+        <label>Speaking speed</label><select id="advSpeakingRate"><option value="110">Slow / teaching — 110 wpm</option><option value="130" selected>Measured — 130 wpm</option><option value="150">Conversational — 150 wpm</option><option value="170">Fast — 170 wpm</option></select>
+        <div class="sermon-mini-actions"><button id="advEstimateTime" type="button">Estimate Time</button></div><div id="advTimeOutput" class="result"></div>
+      </div>
+
+      <div class="sermon-advanced-card sermon-advanced-wide">
+        <h3>✅ Final Sermon Review</h3>
+        <div class="sermon-checklist">
+          <label><input type="checkbox" id="reviewScripture"> Main teaching is supported by Scripture.</label>
+          <label><input type="checkbox" id="reviewContext"> Primary text is handled in context.</label>
+          <label><input type="checkbox" id="reviewTruth"> Central truth is clear and consistent.</label>
+          <label><input type="checkbox" id="reviewPoints"> Main points support the central truth.</label>
+          <label><input type="checkbox" id="reviewApplication"> Applications follow from the biblical teaching.</label>
+          <label><input type="checkbox" id="reviewReferences"> Scripture references and quotations have been checked.</label>
+          <label><input type="checkbox" id="reviewClarity"> Introduction, transitions, and conclusion are clear.</label>
+          <label><input type="checkbox" id="reviewResponse"> The listener knows what response the sermon calls for.</label>
+        </div>
+      </div>
+
+      <div class="sermon-advanced-card sermon-advanced-wide">
+        <h3>🖨️ Advanced Export / Copy</h3>
+        <p>Build a complete sermon-development document containing the sermon and advanced preparation notes.</p>
+        <div class="sermon-mini-actions"><button id="advCopyFullSermon" type="button">Copy Full Sermon Package</button><button id="advPrintFullSermon" class="secondary" type="button">Print / Save as PDF</button></div>
+        <div id="advExportStatus" class="small-note"></div>
+      </div>
+    </div>
+  </div>
 
   <div class="section no-print">
     <h2>💾 Sermon Controls</h2>
@@ -2462,13 +2638,13 @@
   function updateProgress(){ if(!lessons.length)return; let current=1; const top=window.scrollY; lessons.forEach(function(lesson,index){const pos=lesson.getBoundingClientRect().top+window.scrollY;if(top>=pos-200)current=index+1;}); progressBar.style.width=((current/lessons.length)*100)+"%"; progressText.textContent="Lesson "+current+" of "+lessons.length; }
   window.addEventListener("scroll",updateProgress); updateProgress();
 
-  const sermonFields=["manualSermonTitle","manualSermon","sermonTitle","mainScripture","sermonTopic","sermonPurpose","mainTruth","introduction","readScripture","context","templateMainTruth","point1Title","point1Explanation","point1Scripture","point1Application","point2Title","point2Explanation","point2Scripture","point2Application","point3Title","point3Explanation","point3Scripture","point3Application","additionalScriptures","illustrations","practicalApplication","conclusion","response","closingPrayer"];
+  const sermonFields=["manualSermonTitle","manualSermon","sermonTitle","mainScripture","sermonTopic","sermonPurpose","mainTruth","introduction","readScripture","context","templateMainTruth","point1Title","point1Explanation","point1Scripture","point1Application","point2Title","point2Explanation","point2Scripture","point2Application","point3Title","point3Explanation","point3Scripture","point3Application","additionalScriptures","illustrations","practicalApplication","conclusion","response","closingPrayer","advBigIdea","advAudience","advDesiredResponse","advSermonType","advPrimaryPassage","advTheme","advTargetMinutes","advPoint1","advPoint1Work","advPoint2","advPoint2Work","advPoint3","advPoint3Work","advExtraPoints","advExegetical","advOriginalLanguage","advCrossRefs","advResearchNotes","advThemeTracker","advPeoplePlaces","advMapTimeline","advContextExplorer","advIllustrationBank","advApplicationBuilder","advTransitions","advQuestionsObjections","advInvitation","advPrayerJournal","advDeliveryNotes","advSourceNotes","reviewScripture","reviewContext","reviewTruth","reviewPoints","reviewApplication","reviewReferences","reviewClarity","reviewResponse"];
   const LOCAL_KEY="bibleMasterySavedSermons"; const LEGACY_KEY="bibleMastreySermon"; let cloudSermons=[];
   const savedSermonSelect=document.getElementById("savedSermonSelect"), saveStatus=document.getElementById("saveStatus");
   const SUPABASE_URL="https://pjkkxvntssvukulxipfr.supabase.co"; const SUPABASE_PUBLISHABLE_KEY="sb_publishable_1kehaIywv1Wb9Iwj2OPGdg_aFosOSwK";
   const supabaseClient=(window.supabase&&window.supabase.createClient)?window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY):null;
-  function collectSermon(){const fields={};sermonFields.forEach(function(id){const e=document.getElementById(id);if(e)fields[id]=e.value;});const title=(fields.manualSermonTitle||fields.sermonTitle||"Untitled Sermon").trim()||"Untitled Sermon";return {title:title,fields:fields,updatedAt:new Date().toISOString()};}
-  function applySermon(data){const fields=data&&data.fields?data.fields:data;sermonFields.forEach(function(id){const e=document.getElementById(id);if(e)e.value=(fields&&fields[id])||"";});}
+  function collectSermon(){const fields={};sermonFields.forEach(function(id){const e=document.getElementById(id);if(e)fields[id]=(e.type==="checkbox"?e.checked:e.value);});const title=(fields.manualSermonTitle||fields.sermonTitle||"Untitled Sermon").trim()||"Untitled Sermon";return {title:title,fields:fields,updatedAt:new Date().toISOString()};}
+  function applySermon(data){const fields=data&&data.fields?data.fields:data;sermonFields.forEach(function(id){const e=document.getElementById(id);if(e){if(e.type==="checkbox")e.checked=!!(fields&&fields[id]);else e.value=(fields&&fields[id])||"";}});}
   function getLocalSermons(){try{const value=JSON.parse(localStorage.getItem(LOCAL_KEY)||"[]");return Array.isArray(value)?value:[];}catch(e){return[];}}
   function saveLocalSermon(sermon){const list=getLocalSermons();const idx=list.findIndex(function(x){return x.title.toLowerCase()===sermon.title.toLowerCase();});if(idx>=0)list[idx]=sermon;else list.unshift(sermon);localStorage.setItem(LOCAL_KEY,JSON.stringify(list));return sermon;}
   function refreshSavedSermons(){const local=getLocalSermons();savedSermonSelect.innerHTML='<option value="">Choose a saved sermon</option>';local.forEach(function(item,index){const o=document.createElement("option");o.value="local:"+index;o.textContent=item.title+" — on this device";savedSermonSelect.appendChild(o);});cloudSermons.forEach(function(item,index){const o=document.createElement("option");o.value="cloud:"+index;o.textContent=(item.title||"Untitled Sermon")+" — account";savedSermonSelect.appendChild(o);});}
@@ -2476,7 +2652,7 @@
   async function saveCloudSermon(sermon){if(!supabaseClient)return false;const sessionResult=await supabaseClient.auth.getSession();const user=sessionResult.data&&sessionResult.data.session&&sessionResult.data.session.user;if(!user)return false;const existing=await supabaseClient.from("saved_work").select("id").eq("user_id",user.id).eq("work_type","sermon").eq("title",sermon.title).limit(1);if(existing.error)throw existing.error;const content={text:sermon.fields.manualSermon||sermon.fields.introduction||"Saved sermon",fields:sermon.fields};let result;if(existing.data&&existing.data.length){result=await supabaseClient.from("saved_work").update({content:content,updated_at:new Date().toISOString()}).eq("id",existing.data[0].id);}else{result=await supabaseClient.from("saved_work").insert({user_id:user.id,work_type:"sermon",title:sermon.title,content:content,updated_at:new Date().toISOString()});}if(result.error)throw result.error;await loadCloudSermons();return true;}
   async function saveSermon(){const sermon=collectSermon();saveLocalSermon(sermon);localStorage.setItem(LEGACY_KEY,JSON.stringify(sermon.fields));refreshSavedSermons();let cloud=false;try{cloud=await saveCloudSermon(sermon);}catch(e){console.error("Cloud sermon save error:",e);}saveStatus.textContent=cloud?"Sermon saved on this device and to your BibleMastery account.":"Sermon saved on this device.";}
   function loadSermon(){const value=savedSermonSelect.value;if(!value){saveStatus.textContent="Choose a saved sermon first.";return;}const parts=value.split(":");if(parts[0]==="local"){const item=getLocalSermons()[Number(parts[1])];if(item)applySermon(item);}else{const item=cloudSermons[Number(parts[1])];if(item){const content=item.content&&item.content.fields?item.content:item.content||{};applySermon(content);}}saveStatus.textContent="Saved sermon loaded.";}
-  function clearSermon(){if(!confirm("Are you sure you want to clear the sermon fields? Your saved sermons will remain available."))return;sermonFields.forEach(function(id){const e=document.getElementById(id);if(e)e.value="";});saveStatus.textContent="Sermon fields cleared.";}
+  function clearSermon(){if(!confirm("Are you sure you want to clear the sermon fields? Your saved sermons will remain available."))return;sermonFields.forEach(function(id){const e=document.getElementById(id);if(e){if(e.type==="checkbox")e.checked=false;else e.value="";}});saveStatus.textContent="Sermon fields cleared.";}
   async function deleteSavedSermon(){const value=savedSermonSelect.value;if(!value){saveStatus.textContent="Choose a saved sermon first.";return;}if(!confirm("Delete this saved sermon?"))return;const parts=value.split(":");if(parts[0]==="local"){const list=getLocalSermons();list.splice(Number(parts[1]),1);localStorage.setItem(LOCAL_KEY,JSON.stringify(list));}else{const item=cloudSermons[Number(parts[1])];if(item&&supabaseClient){const result=await supabaseClient.from("saved_work").delete().eq("id",item.id);if(result.error){console.error(result.error);saveStatus.textContent="The cloud sermon could not be deleted.";return;}await loadCloudSermons();}}refreshSavedSermons();savedSermonSelect.value="";saveStatus.textContent="Saved sermon deleted.";}
   document.getElementById("saveSermonButton").addEventListener("click",saveSermon);document.getElementById("loadSermonButton").addEventListener("click",loadSermon);document.getElementById("clearSermonButton").addEventListener("click",clearSermon);document.getElementById("deleteSermonButton").addEventListener("click",deleteSavedSermon);
   (function migrateLegacy(){if(getLocalSermons().length)return;const legacy=localStorage.getItem(LEGACY_KEY);if(!legacy)return;try{const fields=JSON.parse(legacy);const title=(fields.manualSermonTitle||fields.sermonTitle||"Saved Sermon").trim()||"Saved Sermon";localStorage.setItem(LOCAL_KEY,JSON.stringify([{title:title,fields:fields,updatedAt:new Date().toISOString()}]));}catch(e){}})();
@@ -2706,6 +2882,106 @@
     bibleMasteryAiQuestion.value = "";
     bibleMasteryAiAnswer.textContent = "AI is ready when you are.";
     bibleMasteryAiQuestion.focus();
+  });
+
+
+  /* =========================================
+     FINAL ADVANCED SERMON TOOLS
+  ========================================= */
+  const ADV_SERMON_PREFIX="bibleMasterySermonAdvanced:";
+  function advEl(id){return document.getElementById(id);}
+  function advVal(id){const e=advEl(id);return e?e.value.trim():"";}
+  function advRead(key,fallback){try{const v=JSON.parse(localStorage.getItem(ADV_SERMON_PREFIX+key));return v==null?fallback:v;}catch(e){return fallback;}}
+  function advWrite(key,v){localStorage.setItem(ADV_SERMON_PREFIX+key,JSON.stringify(v));}
+  function advAdd(key,obj){const a=advRead(key,[]);a.unshift(Object.assign({id:Date.now(),savedAt:new Date().toISOString()},obj));advWrite(key,a);return a;}
+  function advRender(id,items,fn){const out=advEl(id);if(!out)return;out.innerHTML=items.length?items.map(fn).join(""):"<div class='small-note'>Nothing saved yet.</div>";}
+  function advCurrentReader(){
+    try{
+      if(!readerBible||readerBook.value===""||readerChapter.value==="")return null;
+      const bi=Number(readerBook.value),ci=Number(readerChapter.value),vi=readerVerse.value===""?0:Number(readerVerse.value);
+      const b=readerBible.books[bi],c=b.chapters[ci],v=c.verses[vi];
+      return {reference:getBookName(b)+" "+chapterNumber(c,ci)+":"+verseNumber(v,vi),text:verseText(v,readerTranslation.value,bi)};
+    }catch(e){return null;}
+  }
+
+  if(advEl("advCaptureReaderContext"))advEl("advCaptureReaderContext").addEventListener("click",function(){
+    const v=advCurrentReader();if(!v){advEl("advContextExplorer").value+="\nSelect a verse in the Bible Reader first.";return;}
+    const stamp="\n\n"+v.reference+"\n"+v.text+"\nContext notes:\n";
+    advEl("advContextExplorer").value+=stamp;
+  });
+
+  if(advEl("advSaveLibraryItem"))advEl("advSaveLibraryItem").addEventListener("click",function(){
+    const title=advVal("advLibraryTitle"),text=advVal("advLibraryText");if(!title&&!text)return;
+    advAdd("library",{type:advEl("advLibraryType").value,title,text});advEl("advLibraryTitle").value="";advEl("advLibraryText").value="";advEl("advShowLibrary").click();
+  });
+  if(advEl("advShowLibrary"))advEl("advShowLibrary").addEventListener("click",function(){
+    advRender("advLibraryOutput",advRead("library",[]),x=>"<div class='sermon-item'><strong>"+escapeHTML(x.type+" — "+(x.title||"Research"))+"</strong><br>"+escapeHTML(x.text||"")+"</div>");
+  });
+
+  if(advEl("advRecordHistory"))advEl("advRecordHistory").addEventListener("click",function(){
+    advAdd("history",{title:advVal("manualSermonTitle")||advVal("sermonTitle")||"Untitled Sermon",passage:advVal("advPrimaryPassage")||advVal("mainScripture")});advEl("advShowHistory").click();
+  });
+  if(advEl("advShowHistory"))advEl("advShowHistory").addEventListener("click",function(){
+    advRender("advHistoryOutput",advRead("history",[]),x=>"<div class='sermon-item'><strong>"+escapeHTML(x.title)+"</strong>"+(x.passage?" — "+escapeHTML(x.passage):"")+"<br><span class='small-note'>"+escapeHTML(new Date(x.savedAt).toLocaleString())+"</span></div>");
+  });
+
+  if(advEl("advSaveCollection"))advEl("advSaveCollection").addEventListener("click",function(){
+    if(!advVal("advCollectionName")&&!advVal("advCollectionVerses"))return;advAdd("collections",{name:advVal("advCollectionName")||"Scripture Collection",verses:advVal("advCollectionVerses")});advEl("advShowCollections").click();
+  });
+  if(advEl("advShowCollections"))advEl("advShowCollections").addEventListener("click",function(){
+    advRender("advCollectionsOutput",advRead("collections",[]),x=>"<div class='sermon-item'><strong>"+escapeHTML(x.name)+"</strong><br>"+escapeHTML(x.verses||"")+"</div>");
+  });
+
+  const advPresets={
+    expository:"EXPOSITORY SERMON\n\nTitle:\nPrimary Passage:\nCentral Truth:\nPurpose:\n\nINTRODUCTION\n\nCONTEXT\n\nPOINT 1\nExplanation:\nSupporting Scripture:\nIllustration:\nApplication:\nTransition:\n\nPOINT 2\nExplanation:\nSupporting Scripture:\nIllustration:\nApplication:\nTransition:\n\nPOINT 3\nExplanation:\nSupporting Scripture:\nIllustration:\nApplication:\nTransition:\n\nCONCLUSION\n\nRESPONSE / INVITATION\n\nCLOSING PRAYER",
+    topical:"TOPICAL SERMON\n\nTitle:\nTopic:\nCentral Biblical Truth:\nPrimary Scriptures:\nPurpose:\n\nINTRODUCTION\n\nWHAT SCRIPTURE TEACHES\n\nPOINT 1:\nScriptures:\nExplanation:\nApplication:\n\nPOINT 2:\nScriptures:\nExplanation:\nApplication:\n\nPOINT 3:\nScriptures:\nExplanation:\nApplication:\n\nCONCLUSION / RESPONSE",
+    doctrinal:"DOCTRINAL / TEACHING SERMON\n\nDoctrine / Truth:\nPrimary Text:\nDefinition:\nBiblical Foundation:\nOld Testament Witness:\nNew Testament Witness:\nImportant Words:\nCommon Questions / Misunderstandings:\nPoint 1:\nPoint 2:\nPoint 3:\nApplication:\nConclusion:",
+    evangelistic:"EVANGELISTIC SERMON\n\nTitle:\nPrimary Text:\nCentral Gospel Truth:\nThe Need:\nWhat Christ Has Done:\nGrace / Faith:\nSupporting Scriptures:\nInvitation to Respond:\nConclusion / Prayer:",
+    character:"BIBLICAL CHARACTER SERMON\n\nPerson:\nPrimary Passages:\nHistorical Setting:\nKey Choices / Events:\nWhat Scripture Reveals:\nPoint 1:\nPoint 2:\nPoint 3:\nApplication:\nConclusion:"
+  };
+  if(advEl("advApplyPreset"))advEl("advApplyPreset").addEventListener("click",function(){
+    const t=advPresets[advEl("advTemplatePreset").value]||"";const e=advEl("manualSermon");e.value=(e.value.trim()?e.value+"\n\n":"")+t;e.scrollIntoView({behavior:"smooth",block:"center"});
+  });
+
+  if(advEl("advEstimateTime"))advEl("advEstimateTime").addEventListener("click",function(){
+    const words=advVal("manualSermon").split(/\s+/).filter(Boolean).length,rate=Number(advEl("advSpeakingRate").value)||130,min=words/rate;
+    advEl("advTimeOutput").textContent=words?words.toLocaleString()+" words ≈ "+min.toFixed(1)+" minutes at "+rate+" words/minute.":"Write or paste the sermon in the Manual Sermon area first.";
+  });
+
+  function advFullPackage(){
+    const lines=["BIBLEMASTERY — SERMON DEVELOPMENT PACKAGE","",
+      "TITLE: "+(advVal("manualSermonTitle")||advVal("sermonTitle")||"Untitled Sermon"),
+      "PRIMARY PASSAGE: "+(advVal("advPrimaryPassage")||advVal("mainScripture")),
+      "SERMON TYPE: "+advVal("advSermonType"),"THEME: "+advVal("advTheme"),"AUDIENCE: "+advVal("advAudience"),
+      "CENTRAL TRUTH / BIG IDEA:",advVal("advBigIdea")||advVal("mainTruth"),"",
+      "DESIRED RESPONSE:",advVal("advDesiredResponse"),"",
+      "EXEGETICAL RESEARCH:",advVal("advExegetical"),"",
+      "HEBREW / GREEK FINDINGS:",advVal("advOriginalLanguage"),"",
+      "CROSS-REFERENCES / VERSE CHAIN:",advVal("advCrossRefs"),"",
+      "COMMENTARY / RESEARCH:",advVal("advResearchNotes"),"",
+      "THEME TRACKER:",advVal("advThemeTracker"),"",
+      "PEOPLE / PLACES / EVENTS:",advVal("advPeoplePlaces"),"",
+      "MAP / TIMELINE:",advVal("advMapTimeline"),"",
+      "CONTEXT:",advVal("advContextExplorer"),"",
+      "POINT 1: "+advVal("advPoint1"),advVal("advPoint1Work"),"",
+      "POINT 2: "+advVal("advPoint2"),advVal("advPoint2Work"),"",
+      "POINT 3: "+advVal("advPoint3"),advVal("advPoint3Work"),"",
+      "ADDITIONAL POINTS:",advVal("advExtraPoints"),"",
+      "ILLUSTRATIONS:",advVal("advIllustrationBank"),"",
+      "APPLICATION:",advVal("advApplicationBuilder"),"",
+      "TRANSITIONS:",advVal("advTransitions"),"",
+      "QUESTIONS / OBJECTIONS:",advVal("advQuestionsObjections"),"",
+      "INVITATION / RESPONSE:",advVal("advInvitation"),"",
+      "PRAYER / PREPARATION:",advVal("advPrayerJournal"),"",
+      "DELIVERY NOTES:",advVal("advDeliveryNotes"),"",
+      "SOURCE NOTES:",advVal("advSourceNotes"),"",
+      "FULL SERMON:",advVal("manualSermon")];
+    return lines.join("\n");
+  }
+  if(advEl("advCopyFullSermon"))advEl("advCopyFullSermon").addEventListener("click",async function(){try{await navigator.clipboard.writeText(advFullPackage());advEl("advExportStatus").textContent="Full sermon package copied.";}catch(e){advEl("advExportStatus").textContent="Browser blocked clipboard access. Use Print / Save as PDF.";}});
+
+  if(advEl("advPrintFullSermon"))advEl("advPrintFullSermon").addEventListener("click",function(){
+    const w=window.open("","_blank");if(!w)return;w.document.write("<!doctype html><html><head><title>Sermon Package</title><style>body{font-family:Arial,sans-serif;max-width:900px;margin:40px auto;padding:0 24px;line-height:1.6;white-space:pre-wrap}h1{font-size:24px}</style></head><body><h1>BibleMastery — Sermon Development Package</h1>"+escapeHTML(advFullPackage())+"</body></html>");w.document.close();w.focus();w.print();
   });
 
 </script>
