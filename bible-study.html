@@ -615,6 +615,22 @@
     color: #e8e6df;
   }
 
+
+  /* FINAL ADVANCED BIBLE STUDY BUILDER */
+  .study-advanced-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+  .study-advanced-card{background:var(--panel-2);border:1px solid rgba(216,185,106,.22);border-radius:10px;padding:17px;min-width:0}
+  .study-advanced-card h3{margin-top:0;color:var(--gold)}
+  .study-advanced-card textarea{min-height:130px}
+  .study-advanced-wide{grid-column:1/-1}
+  .study-mini-actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}
+  .study-mini-actions button{margin:0}
+  .study-output{margin-top:10px;max-height:340px;overflow:auto}
+  .study-item{padding:10px;margin:7px 0;background:#132039;border-left:3px solid var(--gold);border-radius:5px;white-space:pre-wrap}
+  .study-three-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+  .study-checklist label{display:flex;gap:9px;align-items:flex-start;color:var(--text);font-weight:normal}
+  .study-checklist input{width:auto;margin-top:3px}
+  @media(max-width:900px){.study-advanced-grid,.study-three-grid{grid-template-columns:1fr}.study-advanced-wide{grid-column:auto}}
+
 </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -1055,6 +1071,167 @@
           <div class="field-group"><label for="finalReview">Final Review Notes</label><textarea id="finalReview" placeholder="Check biblical accuracy, context, clarity, teaching flow, and application..."></textarea></div>
         </div>
       </div>
+  </div>
+
+
+  <div class="section no-print" id="advancedBibleStudyWorkspace">
+    <h2>🔥 Advanced Bible Study Building Workspace</h2>
+    <p>Research Scripture deeply, organize your teaching, prepare group discussion, build single-session or multi-session studies, and preserve the complete study in one workspace.</p>
+    <div class="study-advanced-grid">
+      <div class="study-advanced-card">
+        <h3>🎯 Study Vision</h3>
+        <label>Central Truth / Big Idea</label><textarea id="advStudyBigIdea" placeholder="What is the central biblical truth this study should communicate?"></textarea>
+        <label>Audience / Group</label><input id="advStudyAudience" placeholder="Adults, youth, new believers, small group...">
+        <label>Desired Outcome</label><textarea id="advStudyOutcome" placeholder="What should participants understand, believe, discuss, or apply?"></textarea>
+      </div>
+      <div class="study-advanced-card">
+        <h3>🧭 Study Direction</h3>
+        <label>Study Type</label><select id="advStudyType"><option>Passage / Expository</option><option>Topical</option><option>Doctrinal / Teaching</option><option>Book Study</option><option>Chapter Study</option><option>Character Study</option><option>Word Study</option><option>Life Application</option></select>
+        <label>Primary Passage</label><input id="advStudyPrimaryPassage" placeholder="Example: Ephesians 2:1-10">
+        <label>Theme</label><input id="advStudyTheme" placeholder="Grace, faith, righteousness...">
+        <label>Target Length (minutes)</label><input id="advStudyMinutes" type="number" min="1" placeholder="60">
+      </div>
+
+      <div class="study-advanced-card">
+        <h3>🙏 Leader Preparation</h3><textarea id="advLeaderPrep" placeholder="Prayer, personal preparation, what to review beforehand, supplies/resources, passages to reread..."></textarea>
+      </div>
+      <div class="study-advanced-card">
+        <h3>🔬 Exegetical Research</h3><textarea id="advStudyExegesis" placeholder="Immediate context, repeated words, commands, promises, contrasts, historical setting, author/audience, observations..."></textarea>
+      </div>
+      <div class="study-advanced-card">
+        <h3>🔤 Hebrew / Greek Findings</h3><textarea id="advStudyOriginalLanguage" placeholder="Strong’s numbers, definitions, occurrences, word-study findings and why they matter..."></textarea>
+      </div>
+      <div class="study-advanced-card">
+        <h3>🔗 Cross-References & Verse Chain</h3><textarea id="advStudyCrossRefs" placeholder="Related Scriptures and how each passage clarifies or supports the study."></textarea>
+      </div>
+      <div class="study-advanced-card">
+        <h3>📚 Commentary / Research Notes</h3><textarea id="advStudyResearch" placeholder="Commentary observations, dictionary background, research notes, quotations, things to verify..."></textarea>
+      </div>
+      <div class="study-advanced-card">
+        <h3>🧵 Theme Tracker</h3><textarea id="advStudyThemeTracker" placeholder="Trace the theme through Scripture and record patterns, development, and key passages."></textarea>
+      </div>
+      <div class="study-advanced-card">
+        <h3>👥 People • Places • Events</h3><textarea id="advStudyPpe" placeholder="People, places, events, cultural setting, journeys, historical connections..."></textarea>
+      </div>
+      <div class="study-advanced-card">
+        <h3>🗺️ Map / Timeline Notes</h3><textarea id="advStudyMapTimeline" placeholder="Locations, routes, chronology, rulers, prophets, periods, and sequence of events..."></textarea>
+      </div>
+      <div class="study-advanced-card study-advanced-wide">
+        <h3>🔎 Context Explorer</h3>
+        <textarea id="advStudyContext" placeholder="What comes before and after? Who is speaking? To whom? Why? How does the passage fit the chapter and book?"></textarea>
+        <div class="study-mini-actions"><button id="advStudyCaptureReader" type="button">Capture Selected Reader Verse</button></div>
+      </div>
+
+      <div class="study-advanced-card">
+        <h3>🚪 Opening / Icebreaker Questions</h3><textarea id="advOpeningQuestions" placeholder="Questions that help the group engage with the subject without replacing Scripture."></textarea>
+      </div>
+      <div class="study-advanced-card">
+        <h3>👀 Observation Questions</h3><textarea id="advObservationQuestions" placeholder="What does the text actually say? What words, people, actions, commands, promises, contrasts, or repetitions do you notice?"></textarea>
+      </div>
+      <div class="study-advanced-card">
+        <h3>🧠 Interpretation Questions</h3><textarea id="advInterpretationQuestions" placeholder="What does this mean in context? Why is this said? How do related Scriptures clarify it?"></textarea>
+      </div>
+      <div class="study-advanced-card">
+        <h3>❤️ Application Questions</h3><textarea id="advApplicationQuestions" placeholder="How should this truth affect belief, thinking, speech, choices, relationships, prayer, faith, and daily life?"></textarea>
+      </div>
+      <div class="study-advanced-card">
+        <h3>💬 Discussion Questions</h3><textarea id="advDiscussionQuestions" placeholder="Open-ended group questions that keep the discussion anchored in Scripture."></textarea>
+      </div>
+      <div class="study-advanced-card">
+        <h3>↪️ Follow-up Questions</h3><textarea id="advFollowupQuestions" placeholder="Questions to deepen the discussion when an answer needs clarification or further Scripture study."></textarea>
+      </div>
+
+      <div class="study-advanced-card">
+        <h3>👨‍🏫 Teaching / Explanation Notes</h3><textarea id="advTeachingNotes" placeholder="What the leader needs to explain clearly before or during discussion."></textarea>
+      </div>
+      <div class="study-advanced-card">
+        <h3>📝 Expected Discussion Points</h3><textarea id="advExpectedDiscussion" placeholder="Likely answers, important truths to surface, Scriptures to return to, and places where the group may need clarification."></textarea>
+      </div>
+      <div class="study-advanced-card">
+        <h3>❓ Difficult Questions</h3><textarea id="advDifficultQuestions" placeholder="Hard questions that may arise, what needs further study, and Scriptures/resources to examine."></textarea>
+      </div>
+      <div class="study-advanced-card">
+        <h3>🤝 Group Activities</h3><textarea id="advGroupActivities" placeholder="Reading assignments, pair discussion, Scripture comparison, reflection exercise, whiteboard work, prayer activity..."></textarea>
+      </div>
+      <div class="study-advanced-card">
+        <h3>🏠 Take-Home Application</h3><textarea id="advTakeHome" placeholder="A practical Scripture-centered action, reflection, reading, or question for participants to continue after the meeting."></textarea>
+      </div>
+      <div class="study-advanced-card">
+        <h3>🙏 Prayer & Reflection</h3><textarea id="advStudyPrayer" placeholder="Opening/closing prayer notes, reflection prompts, Scriptures for prayer, and follow-up prayer focus."></textarea>
+      </div>
+
+      <div class="study-advanced-card study-advanced-wide">
+        <h3>📚 Multi-Session / Series Builder</h3>
+        <div class="study-three-grid">
+          <div><label>Series Title</label><input id="advSeriesTitle" placeholder="Series title"><label>Session Number</label><input id="advSessionNumber" type="number" min="1" placeholder="1"></div>
+          <div><label>Session Title</label><input id="advSessionTitle" placeholder="Session title"><label>Session Passage</label><input id="advSessionPassage" placeholder="Primary passage"></div>
+          <div><label>Session Goal</label><textarea id="advSessionGoal" placeholder="Main truth and goal for this session"></textarea></div>
+        </div>
+        <label>Session Plan</label><textarea id="advSessionPlan" placeholder="Opening, reading, teaching, questions, activity, application, prayer, homework..."></textarea>
+        <div class="study-mini-actions"><button id="advSaveSession" type="button">Save Session to Series</button><button id="advShowSessions" class="secondary" type="button">Show Series Sessions</button></div>
+        <div id="advSessionsOutput" class="study-output"></div>
+      </div>
+
+      <div class="study-advanced-card">
+        <h3>👨‍🏫 Leader Notes</h3><textarea id="advLeaderNotes" placeholder="Private leader-only reminders, answers, cautions, timing, follow-up, and teaching notes."></textarea>
+      </div>
+      <div class="study-advanced-card">
+        <h3>👥 Participant Handout</h3><textarea id="advParticipantHandout" placeholder="Material participants should receive: title, passage, key points, questions, blanks, notes, application, homework..."></textarea>
+      </div>
+
+      <div class="study-advanced-card study-advanced-wide">
+        <h3>📖 Study Research Library</h3>
+        <div class="study-three-grid">
+          <div><label>Category</label><select id="advStudyLibraryType"><option>Scripture</option><option>Word Study</option><option>Cross-Reference</option><option>Commentary</option><option>Theme</option><option>Person / Place / Event</option><option>Map / Timeline</option><option>Question</option><option>Application</option><option>Quote / Source</option></select></div>
+          <div><label>Title / Reference</label><input id="advStudyLibraryTitle" placeholder="Reference or title"></div>
+          <div><label>Research</label><textarea id="advStudyLibraryText" placeholder="Research note..."></textarea></div>
+        </div>
+        <div class="study-mini-actions"><button id="advSaveStudyLibrary" type="button">Save Research Item</button><button id="advShowStudyLibrary" class="secondary" type="button">Show Library</button></div>
+        <div id="advStudyLibraryOutput" class="study-output"></div>
+      </div>
+
+      <div class="study-advanced-card">
+        <h3>🕘 Study History</h3><div class="study-mini-actions"><button id="advRecordStudyHistory" type="button">Record Current Session</button><button id="advShowStudyHistory" class="secondary" type="button">Show History</button></div><div id="advStudyHistoryOutput" class="study-output"></div>
+      </div>
+      <div class="study-advanced-card">
+        <h3>📂 Scripture Collections</h3><input id="advStudyCollectionName" placeholder="Collection name"><textarea id="advStudyCollectionVerses" placeholder="Verses / references"></textarea><div class="study-mini-actions"><button id="advSaveStudyCollection" type="button">Save Collection</button><button id="advShowStudyCollections" class="secondary" type="button">Show Collections</button></div><div id="advStudyCollectionsOutput" class="study-output"></div>
+      </div>
+
+      <div class="study-advanced-card">
+        <h3>🧩 Study Templates</h3>
+        <select id="advStudyTemplate"><option value="passage">Passage / Expository</option><option value="topical">Topical</option><option value="book">Book Study</option><option value="chapter">Chapter Study</option><option value="character">Character Study</option><option value="word">Word Study</option></select>
+        <div class="study-mini-actions"><button id="advApplyStudyTemplate" type="button">Load Template into Manual Study</button></div>
+      </div>
+      <div class="study-advanced-card">
+        <h3>📅 Daily / Preparation Journal</h3><textarea id="advStudyJournal" placeholder="What I studied today, questions, discoveries, prayer, and what to continue next..."></textarea>
+      </div>
+
+      <div class="study-advanced-card study-advanced-wide">
+        <h3>🔗 Study Connections</h3>
+        <p>Build an index of the research, sessions, Scripture collections, and study-development material saved in this Bible Study Builder.</p>
+        <div class="study-mini-actions"><button id="advBuildStudyConnections" type="button">Build Connections Index</button></div><div id="advStudyConnectionsOutput" class="study-output"></div>
+      </div>
+
+      <div class="study-advanced-card study-advanced-wide">
+        <h3>✅ Final Bible Study Review</h3>
+        <div class="study-checklist">
+          <label><input type="checkbox" id="studyReviewScripture"> Main teaching is supported by Scripture.</label>
+          <label><input type="checkbox" id="studyReviewContext"> Primary passage is handled in context.</label>
+          <label><input type="checkbox" id="studyReviewTruth"> Central truth is clear.</label>
+          <label><input type="checkbox" id="studyReviewQuestions"> Questions lead participants back to Scripture.</label>
+          <label><input type="checkbox" id="studyReviewApplication"> Application follows from the biblical teaching.</label>
+          <label><input type="checkbox" id="studyReviewLeader"> Leader notes and difficult questions are prepared.</label>
+          <label><input type="checkbox" id="studyReviewParticipant"> Participant material is clear and usable.</label>
+          <label><input type="checkbox" id="studyReviewFlow"> Opening, teaching, discussion, application, and prayer have a clear flow.</label>
+        </div>
+      </div>
+
+      <div class="study-advanced-card study-advanced-wide">
+        <h3>🖨️ Leader / Participant Export</h3>
+        <div class="study-mini-actions"><button id="advCopyLeaderStudy" type="button">Copy Leader Version</button><button id="advPrintLeaderStudy" class="secondary" type="button">Print Leader Version</button><button id="advCopyParticipantStudy" type="button">Copy Participant Version</button><button id="advPrintParticipantStudy" class="secondary" type="button">Print Participant Version</button></div>
+        <div id="advStudyExportStatus" class="small-note"></div>
+      </div>
+    </div>
   </div>
 
   <div class="section no-print">
@@ -1981,7 +2158,7 @@
   function updateProgress(){ if(!lessons.length)return; let current=1; const top=window.scrollY; lessons.forEach(function(lesson,index){const pos=lesson.getBoundingClientRect().top+window.scrollY;if(top>=pos-200)current=index+1;}); progressBar.style.width=((current/lessons.length)*100)+"%"; progressText.textContent="Step "+current+" of "+lessons.length; }
   window.addEventListener("scroll",updateProgress); updateProgress();
 
-  const studyFields=["manualStudyTitle","manualStudy","studyTitle","studyPassage","studyTopic","studyPurpose","mainTruth","studyIntroduction","scriptureReading","context","observation","meaning","translationNotes","commentaryNotes","point1","point2","point3","explanationNotes","additionalScriptures","illustrations","application","discussion","conclusion","response","closingPrayer","finalReview"];
+  const studyFields=["manualStudyTitle","manualStudy","studyTitle","studyPassage","studyTopic","studyPurpose","mainTruth","studyIntroduction","scriptureReading","context","observation","meaning","translationNotes","commentaryNotes","point1","point2","point3","explanationNotes","additionalScriptures","illustrations","application","discussion","conclusion","response","closingPrayer","finalReview","advStudyBigIdea","advStudyAudience","advStudyOutcome","advStudyType","advStudyPrimaryPassage","advStudyTheme","advStudyMinutes","advLeaderPrep","advStudyExegesis","advStudyOriginalLanguage","advStudyCrossRefs","advStudyResearch","advStudyThemeTracker","advStudyPpe","advStudyMapTimeline","advStudyContext","advOpeningQuestions","advObservationQuestions","advInterpretationQuestions","advApplicationQuestions","advDiscussionQuestions","advFollowupQuestions","advTeachingNotes","advExpectedDiscussion","advDifficultQuestions","advGroupActivities","advTakeHome","advStudyPrayer","advSeriesTitle","advSessionNumber","advSessionTitle","advSessionPassage","advSessionGoal","advSessionPlan","advLeaderNotes","advParticipantHandout","advStudyJournal","studyReviewScripture","studyReviewContext","studyReviewTruth","studyReviewQuestions","studyReviewApplication","studyReviewLeader","studyReviewParticipant","studyReviewFlow"];
   const LOCAL_KEY="bibleMasterySavedBibleStudies"; let cloudStudies=[];
   const savedStudySelect=document.getElementById("savedStudySelect"), saveStatus=document.getElementById("saveStatus");
   const SUPABASE_URL="https://pjkkxvntssvukulxipfr.supabase.co"; const SUPABASE_PUBLISHABLE_KEY="sb_publishable_1kehaIywv1Wb9Iwj2OPGdg_aFosOSwK";
@@ -1989,13 +2166,13 @@
 
   function collectStudy(){
     const fields={};
-    studyFields.forEach(function(id){const e=document.getElementById(id);if(e)fields[id]=e.value;});
+    studyFields.forEach(function(id){const e=document.getElementById(id);if(e)fields[id]=(e.type==="checkbox"?e.checked:e.value);});
     const title=(fields.manualStudyTitle||fields.studyTitle||"Untitled Bible Study").trim()||"Untitled Bible Study";
     return {title:title,fields:fields,updatedAt:new Date().toISOString()};
   }
   function applyStudy(data){
     const fields=data&&data.fields?data.fields:data;
-    studyFields.forEach(function(id){const e=document.getElementById(id);if(e)e.value=(fields&&fields[id])||"";});
+    studyFields.forEach(function(id){const e=document.getElementById(id);if(e){if(e.type==="checkbox")e.checked=!!(fields&&fields[id]);else e.value=(fields&&fields[id])||"";}});
   }
   function getLocalStudies(){try{const value=JSON.parse(localStorage.getItem(LOCAL_KEY)||"[]");return Array.isArray(value)?value:[];}catch(e){return[];}}
   function saveLocalStudy(study){
@@ -2362,6 +2539,95 @@
     bibleMasteryAiAnswer.textContent = "AI is ready when you are.";
     bibleMasteryAiQuestion.focus();
   });
+
+
+  /* =========================================
+     FINAL ADVANCED BIBLE STUDY TOOLS
+  ========================================= */
+  const ADV_STUDY_PREFIX="bibleMasteryAdvancedStudy:";
+  function asEl(id){return document.getElementById(id);}
+  function asVal(id){const e=asEl(id);return e?e.value.trim():"";}
+  function asRead(k,f){try{const v=JSON.parse(localStorage.getItem(ADV_STUDY_PREFIX+k));return v==null?f:v;}catch(e){return f;}}
+  function asWrite(k,v){localStorage.setItem(ADV_STUDY_PREFIX+k,JSON.stringify(v));}
+  function asAdd(k,o){const a=asRead(k,[]);a.unshift(Object.assign({id:Date.now(),savedAt:new Date().toISOString()},o));asWrite(k,a);return a;}
+  function asRender(id,a,fn){const o=asEl(id);if(!o)return;o.innerHTML=a.length?a.map(fn).join(""):"<div class='small-note'>Nothing saved yet.</div>";}
+  function asCurrentReader(){try{if(!readerBible||readerBook.value===""||readerChapter.value==="")return null;const bi=Number(readerBook.value),ci=Number(readerChapter.value),vi=readerVerse.value===""?0:Number(readerVerse.value),b=readerBible.books[bi],c=b.chapters[ci],v=c.verses[vi];return{reference:getBookName(b)+" "+chapterNumber(c,ci)+":"+verseNumber(v,vi),text:verseText(v,readerTranslation.value,bi)};}catch(e){return null;}}
+
+  if(asEl("advStudyCaptureReader"))asEl("advStudyCaptureReader").addEventListener("click",function(){const v=asCurrentReader();if(!v){asEl("advStudyContext").value+="\nSelect a Bible Reader verse first.";return;}asEl("advStudyContext").value+="\n\n"+v.reference+"\n"+v.text+"\nContext notes:\n";});
+
+  if(asEl("advSaveSession"))asEl("advSaveSession").addEventListener("click",function(){asAdd("sessions",{series:asVal("advSeriesTitle"),number:asVal("advSessionNumber"),title:asVal("advSessionTitle"),passage:asVal("advSessionPassage"),goal:asVal("advSessionGoal"),plan:asVal("advSessionPlan")});asEl("advShowSessions").click();});
+  if(asEl("advShowSessions"))asEl("advShowSessions").addEventListener("click",function(){asRender("advSessionsOutput",asRead("sessions",[]),x=>"<div class='study-item'><strong>"+escapeHTML((x.series||"Study Series")+" — Session "+(x.number||"?")+(x.title?" — "+x.title:""))+"</strong>"+(x.passage?"<br>"+escapeHTML(x.passage):"")+(x.goal?"<br><em>Goal:</em> "+escapeHTML(x.goal):"")+(x.plan?"<br>"+escapeHTML(x.plan):"")+"</div>");});
+
+  if(asEl("advSaveStudyLibrary"))asEl("advSaveStudyLibrary").addEventListener("click",function(){const title=asVal("advStudyLibraryTitle"),text=asVal("advStudyLibraryText");if(!title&&!text)return;asAdd("library",{type:asEl("advStudyLibraryType").value,title,text});asEl("advStudyLibraryTitle").value="";asEl("advStudyLibraryText").value="";asEl("advShowStudyLibrary").click();});
+  if(asEl("advShowStudyLibrary"))asEl("advShowStudyLibrary").addEventListener("click",function(){asRender("advStudyLibraryOutput",asRead("library",[]),x=>"<div class='study-item'><strong>"+escapeHTML(x.type+" — "+(x.title||"Research"))+"</strong><br>"+escapeHTML(x.text||"")+"</div>");});
+
+  if(asEl("advRecordStudyHistory"))asEl("advRecordStudyHistory").addEventListener("click",function(){asAdd("history",{title:asVal("manualStudyTitle")||asVal("studyTitle")||"Untitled Bible Study",passage:asVal("advStudyPrimaryPassage")||asVal("studyPassage")});asEl("advShowStudyHistory").click();});
+  if(asEl("advShowStudyHistory"))asEl("advShowStudyHistory").addEventListener("click",function(){asRender("advStudyHistoryOutput",asRead("history",[]),x=>"<div class='study-item'><strong>"+escapeHTML(x.title)+"</strong>"+(x.passage?" — "+escapeHTML(x.passage):"")+"<br><span class='small-note'>"+escapeHTML(new Date(x.savedAt).toLocaleString())+"</span></div>");});
+
+  if(asEl("advSaveStudyCollection"))asEl("advSaveStudyCollection").addEventListener("click",function(){if(!asVal("advStudyCollectionName")&&!asVal("advStudyCollectionVerses"))return;asAdd("collections",{name:asVal("advStudyCollectionName")||"Scripture Collection",verses:asVal("advStudyCollectionVerses")});asEl("advShowStudyCollections").click();});
+  if(asEl("advShowStudyCollections"))asEl("advShowStudyCollections").addEventListener("click",function(){asRender("advStudyCollectionsOutput",asRead("collections",[]),x=>"<div class='study-item'><strong>"+escapeHTML(x.name)+"</strong><br>"+escapeHTML(x.verses||"")+"</div>");});
+
+  const asTemplates={
+    passage:"PASSAGE BIBLE STUDY\n\nTitle:\nPrimary Passage:\nCentral Truth:\nContext:\nObservation:\nImportant Words:\nInterpretation:\nCross-References:\nTeaching Points:\nDiscussion Questions:\nApplication:\nPrayer / Response:",
+    topical:"TOPICAL BIBLE STUDY\n\nTopic:\nCentral Biblical Truth:\nPrimary Scriptures:\nDefinitions:\nTheme Through Scripture:\nTeaching Point 1:\nTeaching Point 2:\nTeaching Point 3:\nDiscussion Questions:\nApplication:",
+    book:"BOOK BIBLE STUDY\n\nBook:\nAuthor / Audience / Setting:\nPurpose:\nMajor Themes:\nOutline:\nKey Chapters:\nKey Verses:\nSession Plan:\nDiscussion / Application:",
+    chapter:"CHAPTER BIBLE STUDY\n\nChapter:\nContext:\nMain Theme:\nOutline:\nRepeated Words / Ideas:\nKey Verses:\nQuestions:\nApplication:",
+    character:"CHARACTER BIBLE STUDY\n\nPerson:\nKey Passages:\nBackground:\nChoices / Events:\nWhat Scripture Reveals:\nDiscussion Questions:\nApplication:",
+    word:"WORD BIBLE STUDY\n\nWord / Strong’s Number:\nHebrew / Greek:\nDefinition:\nOccurrences:\nImportant Passages:\nContext Observations:\nDiscussion:\nConclusion / Application:"
+  };
+  if(asEl("advApplyStudyTemplate"))asEl("advApplyStudyTemplate").addEventListener("click",function(){const e=asEl("manualStudy"),t=asTemplates[asEl("advStudyTemplate").value]||"";e.value=(e.value.trim()?e.value+"\n\n":"")+t;e.scrollIntoView({behavior:"smooth",block:"center"});});
+
+  if(asEl("advBuildStudyConnections"))asEl("advBuildStudyConnections").addEventListener("click",function(){const rows=[["Research library",asRead("library",[]).length],["Series sessions",asRead("sessions",[]).length],["Scripture collections",asRead("collections",[]).length],["History entries",asRead("history",[]).length]].filter(x=>x[1]);asRender("advStudyConnectionsOutput",rows,x=>"<div class='study-item'><strong>"+escapeHTML(x[0])+":</strong> "+x[1]+"</div>");});
+
+  function asLeaderPackage(){
+    return ["BIBLEMASTERY — LEADER BIBLE STUDY","",
+      "TITLE: "+(asVal("manualStudyTitle")||asVal("studyTitle")||"Untitled Bible Study"),
+      "PRIMARY PASSAGE: "+(asVal("advStudyPrimaryPassage")||asVal("studyPassage")),
+      "TYPE: "+asVal("advStudyType"),"THEME: "+asVal("advStudyTheme"),"AUDIENCE: "+asVal("advStudyAudience"),
+      "CENTRAL TRUTH:",asVal("advStudyBigIdea")||asVal("mainTruth"),"",
+      "DESIRED OUTCOME:",asVal("advStudyOutcome"),"",
+      "LEADER PREPARATION:",asVal("advLeaderPrep"),"",
+      "EXEGETICAL RESEARCH:",asVal("advStudyExegesis"),"",
+      "HEBREW / GREEK:",asVal("advStudyOriginalLanguage"),"",
+      "CROSS-REFERENCES:",asVal("advStudyCrossRefs"),"",
+      "RESEARCH:",asVal("advStudyResearch"),"",
+      "CONTEXT:",asVal("advStudyContext"),"",
+      "OPENING QUESTIONS:",asVal("advOpeningQuestions"),"",
+      "OBSERVATION QUESTIONS:",asVal("advObservationQuestions"),"",
+      "INTERPRETATION QUESTIONS:",asVal("advInterpretationQuestions"),"",
+      "APPLICATION QUESTIONS:",asVal("advApplicationQuestions"),"",
+      "DISCUSSION QUESTIONS:",asVal("advDiscussionQuestions"),"",
+      "FOLLOW-UP QUESTIONS:",asVal("advFollowupQuestions"),"",
+      "TEACHING NOTES:",asVal("advTeachingNotes"),"",
+      "EXPECTED DISCUSSION:",asVal("advExpectedDiscussion"),"",
+      "DIFFICULT QUESTIONS:",asVal("advDifficultQuestions"),"",
+      "GROUP ACTIVITIES:",asVal("advGroupActivities"),"",
+      "TAKE-HOME APPLICATION:",asVal("advTakeHome"),"",
+      "PRAYER / REFLECTION:",asVal("advStudyPrayer"),"",
+      "LEADER NOTES:",asVal("advLeaderNotes"),"",
+      "FULL MANUAL STUDY:",asVal("manualStudy")].join("\n");
+  }
+  function asParticipantPackage(){
+    return ["BIBLEMASTERY — PARTICIPANT BIBLE STUDY","",
+      "TITLE: "+(asVal("manualStudyTitle")||asVal("studyTitle")||"Bible Study"),
+      "PRIMARY PASSAGE: "+(asVal("advStudyPrimaryPassage")||asVal("studyPassage")),
+      "THEME: "+asVal("advStudyTheme"),"",
+      "CENTRAL TRUTH:",asVal("advStudyBigIdea")||asVal("mainTruth"),"",
+      "PARTICIPANT HANDOUT:",asVal("advParticipantHandout"),"",
+      "OPENING QUESTIONS:",asVal("advOpeningQuestions"),"",
+      "OBSERVATION QUESTIONS:",asVal("advObservationQuestions"),"",
+      "INTERPRETATION QUESTIONS:",asVal("advInterpretationQuestions"),"",
+      "APPLICATION QUESTIONS:",asVal("advApplicationQuestions"),"",
+      "DISCUSSION QUESTIONS:",asVal("advDiscussionQuestions"),"",
+      "TAKE-HOME APPLICATION:",asVal("advTakeHome"),"",
+      "PRAYER / REFLECTION:",asVal("advStudyPrayer")].join("\n");
+  }
+  async function asCopy(text,msg){try{await navigator.clipboard.writeText(text);asEl("advStudyExportStatus").textContent=msg;}catch(e){asEl("advStudyExportStatus").textContent="Browser blocked clipboard access. Use Print instead.";}}
+  function asPrint(title,text){const w=window.open("","_blank");if(!w)return;w.document.write("<!doctype html><html><head><title>"+escapeHTML(title)+"</title><style>body{font-family:Arial,sans-serif;max-width:900px;margin:40px auto;padding:0 24px;line-height:1.6;white-space:pre-wrap}h1{font-size:24px}</style></head><body><h1>"+escapeHTML(title)+"</h1>"+escapeHTML(text)+"</body></html>");w.document.close();w.focus();w.print();}
+  if(asEl("advCopyLeaderStudy"))asEl("advCopyLeaderStudy").addEventListener("click",()=>asCopy(asLeaderPackage(),"Leader version copied."));
+  if(asEl("advPrintLeaderStudy"))asEl("advPrintLeaderStudy").addEventListener("click",()=>asPrint("BibleMastery — Leader Bible Study",asLeaderPackage()));
+  if(asEl("advCopyParticipantStudy"))asEl("advCopyParticipantStudy").addEventListener("click",()=>asCopy(asParticipantPackage(),"Participant version copied."));
+  if(asEl("advPrintParticipantStudy"))asEl("advPrintParticipantStudy").addEventListener("click",()=>asPrint("BibleMastery — Participant Bible Study",asParticipantPackage()));
 
 </script>
 </body>
