@@ -219,7 +219,8 @@
       font-size: 12px;
     }
 
-    .support-message-actions {
+    .support-message-actions,
+    .saved-item-actions {
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
@@ -227,7 +228,8 @@
     }
 
     .support-reply-button,
-    .support-delete-button {
+    .support-delete-button,
+    .saved-delete-button {
       padding: 9px 13px;
       border-radius: 8px;
       font-weight: bold;
@@ -241,7 +243,8 @@
       display: inline-block;
     }
 
-    .support-delete-button {
+    .support-delete-button,
+    .saved-delete-button {
       background: #7a2630;
       color: white;
     }
@@ -561,6 +564,146 @@ function formatBibleLocation(item) {
 }
 
 
+async function permanentlyDeleteSavedRecord(options) {
+
+  const {
+    table,
+    item,
+    wrapper,
+    button,
+    emptyMessage,
+    confirmMessage,
+    successMessage,
+    includeUserId
+  } = options;
+
+
+  const confirmed =
+    window.confirm(
+      confirmMessage ||
+      "Delete this saved item permanently?"
+    );
+
+  if (!confirmed) {
+    return false;
+  }
+
+
+  button.disabled = true;
+  button.textContent = "Deleting...";
+  accountStatus.textContent = "Deleting...";
+
+
+  let deleteQuery =
+    supabaseClient
+      .from(table)
+      .delete()
+      .eq("id", item.id);
+
+
+  if (
+    includeUserId &&
+    item.user_id
+  ) {
+    deleteQuery =
+      deleteQuery.eq(
+        "user_id",
+        item.user_id
+      );
+  }
+
+
+  const {
+    data: deletedRows,
+    error
+  } =
+    await deleteQuery
+      .select("id");
+
+
+  if (
+    error ||
+    !deletedRows ||
+    deletedRows.length === 0
+  ) {
+
+    if (error) {
+      console.error(error);
+    }
+
+    accountStatus.textContent =
+      "This item was not deleted from the database. Check the Supabase DELETE policy for " +
+      table +
+      ".";
+
+    button.disabled = false;
+    button.textContent = "Delete";
+
+    return false;
+  }
+
+
+  const list = wrapper.parentElement;
+
+  wrapper.remove();
+
+
+  if (
+    list &&
+    !list.querySelector(".saved-item")
+  ) {
+    setEmpty(
+      list,
+      emptyMessage ||
+      "No saved items yet."
+    );
+  }
+
+
+  accountStatus.textContent =
+    successMessage ||
+    "Deleted permanently.";
+
+  return true;
+}
+
+
+function createPermanentDeleteButton(options) {
+
+  const actions =
+    document.createElement("div");
+
+  actions.className =
+    "saved-item-actions";
+
+
+  const button =
+    document.createElement("button");
+
+  button.type = "button";
+  button.className =
+    "saved-delete-button";
+  button.textContent = "Delete";
+
+
+  button.addEventListener(
+    "click",
+    async function() {
+
+      await permanentlyDeleteSavedRecord({
+        ...options,
+        button: button
+      });
+    }
+  );
+
+
+  actions.appendChild(button);
+
+  return actions;
+}
+
+
 function createBibleItem(item) {
 
   const wrapper =
@@ -607,8 +750,48 @@ function createBibleItem(item) {
   }
 
 
+  let emptyMessage =
+    "No saved items yet.";
+
+  if (item.item_type === "note") {
+    emptyMessage =
+      "No saved notes yet.";
+  }
+
+  else if (
+    item.item_type === "highlight"
+  ) {
+    emptyMessage =
+      "No saved highlights yet.";
+  }
+
+  else if (
+    item.item_type === "bookmark"
+  ) {
+    emptyMessage =
+      "No saved bookmarks yet.";
+  }
+
+
+  const actions =
+    createPermanentDeleteButton({
+      table: "bible_user_data",
+      item: item,
+      wrapper: wrapper,
+      includeUserId: true,
+      emptyMessage: emptyMessage,
+      confirmMessage:
+        "Delete this saved " +
+        (item.item_type || "Bible item") +
+        " permanently?",
+      successMessage:
+        "Deleted permanently from your account."
+    });
+
+
   wrapper.appendChild(title);
   wrapper.appendChild(content);
+  wrapper.appendChild(actions);
 
   return wrapper;
 }
@@ -695,12 +878,53 @@ function createSavedWorkItem(item) {
   }
 
 
+  let emptyMessage =
+    "No saved work yet.";
+
+  if (
+    item.work_type === "sermon"
+  ) {
+    emptyMessage =
+      "No saved sermons yet.";
+  }
+
+  else if (
+    item.work_type === "personal_study"
+  ) {
+    emptyMessage =
+      "No saved personal studies yet.";
+  }
+
+  else if (
+    item.work_type === "group_study"
+  ) {
+    emptyMessage =
+      "No saved group studies yet.";
+  }
+
+
+  const actions =
+    createPermanentDeleteButton({
+      table: "saved_work",
+      item: item,
+      wrapper: wrapper,
+      includeUserId: true,
+      emptyMessage: emptyMessage,
+      confirmMessage:
+        "Delete this saved work permanently?",
+      successMessage:
+        "Saved work deleted permanently."
+    });
+
+
   wrapper.appendChild(title);
   wrapper.appendChild(content);
 
   if (meta.textContent) {
     wrapper.appendChild(meta);
   }
+
+  wrapper.appendChild(actions);
 
   return wrapper;
 }
@@ -819,78 +1043,25 @@ function createSupportMessageItem(item) {
     "click",
     async function() {
 
-      const confirmed =
-        window.confirm(
-          "Delete this support message?"
-        );
+      const deleted =
+        await permanentlyDeleteSavedRecord({
+          table: "support_messages",
+          item: item,
+          wrapper: wrapper,
+          button: deleteButton,
+          includeUserId: false,
+          emptyMessage:
+            "No support messages yet.",
+          confirmMessage:
+            "Delete this support message permanently?",
+          successMessage:
+            "Support message deleted permanently."
+        });
 
-      if (!confirmed) {
+
+      if (!deleted) {
         return;
       }
-
-
-      deleteButton.disabled =
-        true;
-
-      deleteButton.textContent =
-        "Deleting...";
-
-
-      const {
-        error
-      } =
-        await supabaseClient
-          .from(
-            "support_messages"
-          )
-          .delete()
-          .eq(
-            "id",
-            item.id
-          );
-
-
-      if (error) {
-
-        console.error(error);
-
-        accountStatus.textContent =
-          "Support message could not be deleted.";
-
-        deleteButton.disabled =
-          false;
-
-        deleteButton.textContent =
-          "Delete";
-
-        return;
-      }
-
-
-      wrapper.remove();
-
-
-      const list =
-        document.getElementById(
-          "supportMessagesList"
-        );
-
-
-      if (
-        list &&
-        !list.querySelector(
-          ".saved-item"
-        )
-      ) {
-        setEmpty(
-          list,
-          "No support messages yet."
-        );
-      }
-
-
-      accountStatus.textContent =
-        "Support message deleted.";
     }
   );
 
