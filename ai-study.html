@@ -1702,6 +1702,7 @@
 </div>
 
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="bible.js"></script>
 
 
@@ -1727,6 +1728,25 @@
   let commentaryBooksCache = {};
 
   let readerCommentaryRequestId = 0;
+
+
+  /* =========================================
+     BIBLEMASTERY ACCOUNT / SUPABASE
+  ========================================= */
+
+  const PERSONAL_STUDY_SUPABASE_URL =
+    "https://pjkkxvntssvukulxipfr.supabase.co";
+
+  const PERSONAL_STUDY_SUPABASE_PUBLISHABLE_KEY =
+    "sb_publishable_1kehaIywv1Wb9Iwj2OPGdg_aFosOSwK";
+
+  const personalStudySupabase =
+    window.supabase && window.supabase.createClient
+      ? window.supabase.createClient(
+          PERSONAL_STUDY_SUPABASE_URL,
+          PERSONAL_STUDY_SUPABASE_PUBLISHABLE_KEY
+        )
+      : null;
 
 
   /* =========================================
@@ -7929,7 +7949,67 @@
 
   function bindSimpleSave(btn,kind,fields,status){ if(!psEl(btn))return; psEl(btn).addEventListener("click",function(){const rec={};fields.forEach(f=>rec[f[0]]=psText(f[1]));psSaveRecord(kind,rec);psSetStatus(status,"Saved to Personal Study on this device.");}); }
   bindSimpleSave("psSaveWordStudy","wordStudies",[["title","psWordTitle"],["notes","psWordNotes"]],"psWordStatus");
-  bindSimpleSave("psSavePassage","passageStudies",[["reference","psPassageRef"],["observation","psObservation"],["interpretation","psInterpretation"],["application","psApplication"]],"psPassageStatus");
+
+  /* Save every Passage Study locally AND as a separate signed-in account record. */
+  if(psEl("psSavePassage")) psEl("psSavePassage").addEventListener("click", async function(){
+    const rec = {
+      reference: psText("psPassageRef"),
+      observation: psText("psObservation"),
+      interpretation: psText("psInterpretation"),
+      application: psText("psApplication")
+    };
+
+    if(!rec.reference && !rec.observation && !rec.interpretation && !rec.application){
+      psSetStatus("psPassageStatus","Enter a passage or notes before saving.");
+      return;
+    }
+
+    // Keep the existing on-device copy as a backup.
+    psSaveRecord("passageStudies", rec);
+
+    if(!personalStudySupabase){
+      psSetStatus("psPassageStatus","Saved on this device. Account saving is unavailable right now.");
+      return;
+    }
+
+    psSetStatus("psPassageStatus","Saving passage study to your BibleMastery account...");
+
+    try {
+      const { data: { session }, error: sessionError } =
+        await personalStudySupabase.auth.getSession();
+
+      if(sessionError) throw sessionError;
+
+      if(!session || !session.user){
+        psSetStatus("psPassageStatus","Saved on this device. Sign in to your BibleMastery account to save it to your account too.");
+        return;
+      }
+
+      const contentParts = [];
+      if(rec.reference) contentParts.push("Passage: " + rec.reference);
+      if(rec.observation) contentParts.push("Observation — What does the passage say?\n" + rec.observation);
+      if(rec.interpretation) contentParts.push("Interpretation / Context — What does it mean in context?\n" + rec.interpretation);
+      if(rec.application) contentParts.push("Application — How should this truth affect my life?\n" + rec.application);
+
+      const { error: saveError } = await personalStudySupabase
+        .from("saved_work")
+        .insert({
+          user_id: session.user.id,
+          work_type: "personal_study",
+          title: rec.reference ? "Passage Study — " + rec.reference : "Passage Study",
+          content: contentParts.join("\n\n")
+        });
+
+      if(saveError) throw saveError;
+
+      psSetStatus("psPassageStatus","Passage study saved to your BibleMastery account. Your earlier passage studies are still kept.");
+    }
+    catch(error){
+      console.error("Passage Study account save failed:", error);
+      psSetStatus("psPassageStatus","Saved on this device, but it could not be saved to your account. Please try again while signed in.");
+    }
+  });
+
   bindSimpleSave("psSaveChapter","chapterStudies",[["reference","psChapterRef"],["theme","psChapterTheme"],["notes","psChapterNotes"]],"psChapterStatus");
   bindSimpleSave("psSaveBook","bookStudies",[["book","psBookName"],["notes","psBookNotes"]],"psBookStatus");
   bindSimpleSave("psSaveCharacter","characterStudies",[["name","psCharacterName"],["notes","psCharacterNotes"]],"psCharacterStatus");
