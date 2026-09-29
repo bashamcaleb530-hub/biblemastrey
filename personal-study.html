@@ -2201,15 +2201,18 @@
     const selected =
       readerVerseSelect.value;
 
-    readerDisplay
-      .querySelectorAll(".reader-verse")
-      .forEach(
-        function(element) {
-          element.classList.remove(
-            "active-reader-verse"
-          );
-        }
+    const verseElements =
+      Array.from(
+        readerDisplay.querySelectorAll(".reader-verse")
       );
+
+    verseElements.forEach(
+      function(element) {
+        element.classList.remove(
+          "active-reader-verse"
+        );
+      }
+    );
 
     if (selected === "") {
       readerDisplay.scrollTop = 0;
@@ -2223,17 +2226,23 @@
         "']"
       );
 
-    if (verseElement) {
-
-      verseElement.classList.add(
-        "active-reader-verse"
-      );
-
-      verseElement.scrollIntoView({
-        behavior: "smooth",
-        block: "center"
-      });
+    if (!verseElement) {
+      return;
     }
+
+    verseElement.classList.add(
+      "active-reader-verse"
+    );
+
+    const targetTop =
+      verseElement.offsetTop -
+      readerDisplay.offsetTop -
+      80;
+
+    readerDisplay.scrollTo({
+      top: Math.max(0, targetTop),
+      behavior: "smooth"
+    });
   }
 
 
@@ -2374,6 +2383,11 @@
 
   readerVerseSelect.addEventListener(
     "change",
+    scrollToReaderVerse
+  );
+
+  readerVerseSelect.addEventListener(
+    "input",
     scrollToReaderVerse
   );
 
