@@ -734,6 +734,24 @@
     font-size: 16px;
   }
 
+  .verse-teaching-link {
+    display: inline-flex;
+    margin-top: 13px;
+    padding: 8px 11px;
+    border: 1px solid rgba(216,185,106,.34);
+    border-radius: 7px;
+    background: rgba(216,185,106,.10);
+    color: var(--gold-light);
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: bold;
+  }
+
+  .verse-teaching-link:hover {
+    background: rgba(216,185,106,.20);
+    border-color: var(--gold);
+  }
+
   .verse-actions {
     display: none;
     flex-wrap: wrap;
@@ -3298,6 +3316,28 @@
     text.textContent =
       result.text;
 
+    const verseTeachingLink =
+      document.createElement("button");
+
+    verseTeachingLink.type =
+      "button";
+
+    verseTeachingLink.className =
+      "verse-teaching-link";
+
+    verseTeachingLink.textContent =
+      "📖 Study this verse through the Seven Redemptive Names";
+
+    verseTeachingLink.addEventListener(
+      "click",
+      function(event) {
+
+        event.stopPropagation();
+        openRedemptiveVersePage(index);
+
+      }
+    );
+
 
     const actions =
       document.createElement(
@@ -3710,6 +3750,10 @@
 
     card.appendChild(
       text
+    );
+
+    card.appendChild(
+      verseTeachingLink
     );
 
     card.appendChild(
