@@ -240,6 +240,7 @@
       return String(value || "")
         .toLowerCase()
         .replace(/[’']/g, "")
+        .replace(/^psalms\s+/, "psalm ")
         .replace(/\s+/g, " ")
         .trim();
     }
@@ -252,7 +253,8 @@
     // Add more verse mappings here whenever a verse has teaching connections
     // that are broader than the words that happen to appear in the verse text.
     const curatedConnections = {
-      "psalm 34:4": ["shammah", "raah", "shalom", "nissi"]
+      "psalm 34:4": ["shammah", "raah", "shalom", "nissi"],
+      "psalms 34:4": ["shammah", "raah", "shalom", "nissi"]
     };
 
     function findProfiles(result) {
