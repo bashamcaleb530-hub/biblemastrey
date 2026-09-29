@@ -3326,7 +3326,7 @@
       "verse-teaching-link";
 
     verseTeachingLink.textContent =
-      "📖 Open Seven Redemptive Names teaching page";
+      "📖 Study this verse through the Seven Redemptive Names";
 
     verseTeachingLink.addEventListener(
       "click",
@@ -3654,7 +3654,7 @@
             await navigator.share({
 
               title:
-                "BibleMastrey",
+                "BibleMastery",
 
               text:
                 shareText
@@ -6701,18 +6701,8 @@
       console.error("Could not save the verse teaching state.", error);
     }
 
-    const selectedVerse = currentVerses[safeIndex] || {};
-    const params = new URLSearchParams({
-      index: String(safeIndex),
-      book: selectedVerse.book || "",
-      chapter: String(selectedVerse.chapter || ""),
-      verse: String(selectedVerse.verse || ""),
-      text: selectedVerse.text || "",
-      translation: studyTranslation || "KJV",
-      topic: currentTopic || ""
-    });
-
-    window.location.assign("redemptive-verse.html?" + params.toString());
+    window.location.href =
+      "redemptive-verse.html?index=" + encodeURIComponent(safeIndex);
   }
 
   function closeRedemptiveVersePage() {
