@@ -942,6 +942,19 @@
       width: 100%;
     }
   }
+
+  .verse-direct-link {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .verse-direct-link:hover,
+  .verse-direct-link:focus {
+    text-decoration: underline;
+    outline: none;
+  }
 </style>
 
 </head>
@@ -3305,22 +3318,48 @@
       studyTranslation +
       ")";
 
+    const verseTeachingUrl =
+      "redemptive-verse.html?" +
+      new URLSearchParams({
+        book: result.book || "",
+        chapter: String(result.chapter || ""),
+        verse: String(result.verse || ""),
+        text: result.text || "",
+        translation: studyTranslation || "KJV",
+        topic: currentTopic || ""
+      }).toString();
+
     const text =
       document.createElement(
-        "div"
+        "a"
       );
 
     text.className =
-      "verse-text";
+      "verse-text verse-direct-link";
+
+    text.href =
+      verseTeachingUrl;
 
     text.textContent =
       result.text;
 
-    const verseTeachingLink =
-      document.createElement("button");
+    text.setAttribute(
+      "aria-label",
+      "Open teaching for " + result.book + " " + result.chapter + ":" + result.verse
+    );
 
-    verseTeachingLink.type =
-      "button";
+    text.addEventListener(
+      "click",
+      function() {
+        saveRedemptiveVerseState(index);
+      }
+    );
+
+    const verseTeachingLink =
+      document.createElement("a");
+
+    verseTeachingLink.href =
+      verseTeachingUrl;
 
     verseTeachingLink.className =
       "verse-teaching-link";
@@ -3330,11 +3369,8 @@
 
     verseTeachingLink.addEventListener(
       "click",
-      function(event) {
-
-        event.stopPropagation();
-        openRedemptiveVersePage(index);
-
+      function() {
+        saveRedemptiveVerseState(index);
       }
     );
 
@@ -3722,23 +3758,6 @@
           block: "start"
         });
         runDeepReferences(reference);
-
-      }
-    );
-
-
-    card.addEventListener(
-      "click",
-      function(event) {
-
-        if (
-          event.target.closest("textarea") ||
-          event.target.closest("button")
-        ) {
-          return;
-        }
-
-        openRedemptiveVersePage(index);
 
       }
     );
@@ -6682,7 +6701,7 @@
     redemptiveNextButton.disabled = redemptiveVerseIndex >= redemptiveVerseList.length - 1;
   }
 
-  function openRedemptiveVersePage(index) {
+  function saveRedemptiveVerseState(index) {
     if (!Array.isArray(currentVerses) || !currentVerses.length) return;
 
     const safeIndex = Math.max(0, Math.min(index, currentVerses.length - 1));
@@ -6698,11 +6717,29 @@
         })
       );
     } catch (error) {
-      console.error("Could not save the verse teaching state.", error);
+      console.error("Could not save verse navigation state.", error);
     }
+  }
 
+  function openRedemptiveVersePage(index) {
+    if (!Array.isArray(currentVerses) || !currentVerses.length) return;
+
+    const safeIndex = Math.max(0, Math.min(index, currentVerses.length - 1));
+
+    saveRedemptiveVerseState(safeIndex);
+
+    const result = currentVerses[safeIndex];
     window.location.href =
-      "redemptive-verse.html?index=" + encodeURIComponent(safeIndex);
+      "redemptive-verse.html?" +
+      new URLSearchParams({
+        book: result.book || "",
+        chapter: String(result.chapter || ""),
+        verse: String(result.verse || ""),
+        text: result.text || "",
+        translation: studyTranslation || "KJV",
+        topic: currentTopic || "",
+        index: String(safeIndex)
+      }).toString();
   }
 
   function closeRedemptiveVersePage() {
