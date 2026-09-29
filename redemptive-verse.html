@@ -82,6 +82,23 @@
       border-radius: 13px;
       padding: 22px;
     }
+    .verse-card {
+      margin-bottom: 18px;
+    }
+    .connections {
+      display: grid;
+      gap: 16px;
+    }
+    .connection-card {
+      background: linear-gradient(145deg, #14233d, #101b2e);
+      border: 1px solid rgba(216,185,106,.30);
+      border-radius: 13px;
+      padding: 22px;
+    }
+    .connection-card h3 {
+      margin: 0 0 12px;
+      color: var(--gold);
+    }
     .badge {
       display: inline-block;
       padding: 8px 12px;
@@ -133,17 +150,12 @@
 
       <div id="notice" class="notice"></div>
 
-      <article class="teaching-card">
-        <div id="badge" class="badge">Seven Redemptive Names of God</div>
-        <h3 id="meaning">Teaching connection</h3>
-        <div id="teaching" class="teaching-text"></div>
-
-        <h3>Verse</h3>
+      <article class="teaching-card verse-card">
+        <div class="badge">Bible Verse</div>
         <div id="verse" class="verse-text"></div>
-
-        <h3>Use this in your study</h3>
-        <div id="direction" class="teaching-text"></div>
       </article>
+
+      <div id="connections" class="connections"></div>
 
       <div class="navigation">
         <button id="previous" class="reader-nav-button" type="button">← Previous Verse</button>
@@ -155,6 +167,7 @@
   <script>
     const profiles = [
       {
+        id: "jireh",
         name: "Jehovah-Jireh",
         meaning: "The LORD will provide",
         references: ["genesis 22:14", "philippians 4:19", "2 corinthians 9:8", "matthew 6:31-33"],
@@ -163,6 +176,7 @@
         direction: "Ask: What need am I bringing to the Father? What has He already provided in Christ? What truth and direction do I need to receive and apply today?"
       },
       {
+        id: "rapha",
         name: "Jehovah-Rapha",
         meaning: "The LORD who heals",
         references: ["exodus 15:26", "psalm 103:2-3", "isaiah 53:5", "james 5:15"],
@@ -171,6 +185,7 @@
         direction: "Ask: What part of my life needs the Father's healing? What truth is He showing me? How can I continue seeking Him and walking in the help He provides?"
       },
       {
+        id: "nissi",
         name: "Jehovah-Nissi",
         meaning: "The LORD is my banner",
         references: ["exodus 17:15", "romans 8:37", "1 corinthians 15:57", "2 corinthians 2:14", "ephesians 6:10"],
@@ -179,6 +194,7 @@
         direction: "Ask: Where am I trying to fight in my own strength? What victory has Christ already provided? What truth must I believe and practice in this battle?"
       },
       {
+        id: "shalom",
         name: "Jehovah-Shalom",
         meaning: "The LORD is peace",
         references: ["judges 6:24", "romans 5:1", "philippians 4:6-7", "isaiah 26:3", "john 14:27"],
@@ -187,6 +203,7 @@
         direction: "Ask: What is disturbing my peace? What does right standing with God mean for this situation? What should I bring to the Father with thanksgiving and faith?"
       },
       {
+        id: "raah",
         name: "Jehovah-Ra’ah / Jehovah-Rohi",
         meaning: "The LORD is my shepherd",
         references: ["psalm 23:1", "psalm 23:2-4", "john 10:11", "john 10:27-28", "1 peter 2:25"],
@@ -195,6 +212,7 @@
         direction: "Ask: What decision or battle needs the Shepherd's direction? Am I willing to follow the truth He gives, even when the whole path is not yet visible?"
       },
       {
+        id: "tsidkenu",
         name: "Jehovah-Tsidkenu",
         meaning: "The LORD our righteousness",
         references: ["jeremiah 23:6", "romans 5:1", "2 corinthians 5:21", "hebrews 4:16", "ephesians 6:10"],
@@ -203,6 +221,7 @@
         direction: "Ask: Am I approaching God from condemnation or from the right standing Christ has provided? What would it look like to come boldly, receive mercy and help, and obey the truth He gives?"
       },
       {
+        id: "shammah",
         name: "Jehovah-Shammah",
         meaning: "The LORD is there",
         references: ["ezekiel 48:35", "matthew 28:20", "hebrews 13:5-6", "psalm 46:1", "deuteronomy 31:8"],
@@ -229,35 +248,99 @@
       return [result.book, result.chapter + ":" + result.verse].join(" ");
     }
 
-    function findProfile(result) {
+    // Curated verse-to-name connections based on Caleb's teaching.
+    // Add more verse mappings here whenever a verse has teaching connections
+    // that are broader than the words that happen to appear in the verse text.
+    const curatedConnections = {
+      "psalm 34:4": ["shammah", "raah", "shalom", "nissi"]
+    };
+
+    function findProfiles(result) {
       const reference = normalize(verseReference(result));
-      const exact = profiles.find(profile => profile.references.some(item => normalize(item) === reference));
-      if (exact) return exact;
       const text = normalize(result.text);
-      return profiles.find(profile => profile.keywords.some(keyword => text.includes(normalize(keyword)))) || null;
+      const matchedIds = new Set(curatedConnections[reference] || []);
+
+      profiles.forEach(function(profile) {
+        const exactReferenceMatch = profile.references.some(function(item) {
+          return normalize(item) === reference;
+        });
+
+        const keywordMatch = profile.keywords.some(function(keyword) {
+          return text.includes(normalize(keyword));
+        });
+
+        if (exactReferenceMatch || keywordMatch) {
+          matchedIds.add(profile.id);
+        }
+      });
+
+      return profiles.filter(function(profile) {
+        return matchedIds.has(profile.id);
+      });
+    }
+
+    function renderConnectionCard(profile) {
+      const card = document.createElement("article");
+      card.className = "connection-card";
+
+      const badge = document.createElement("div");
+      badge.className = "badge";
+      badge.textContent = profile.name;
+
+      const meaning = document.createElement("h3");
+      meaning.textContent = profile.meaning;
+
+      const teaching = document.createElement("div");
+      teaching.className = "teaching-text";
+      teaching.textContent = profile.teaching;
+
+      const directionHeading = document.createElement("h3");
+      directionHeading.textContent = "Use this connection in your study";
+
+      const direction = document.createElement("div");
+      direction.className = "teaching-text";
+      direction.textContent = profile.direction;
+
+      card.appendChild(badge);
+      card.appendChild(meaning);
+      card.appendChild(teaching);
+      card.appendChild(directionHeading);
+      card.appendChild(direction);
+      return card;
     }
 
     function render() {
       const result = verses[index];
       if (!result) return showError("No verse was supplied. Return to Personal Study and click a verse again.");
 
-      const profile = findProfile(result);
-      document.title = verseReference(result) + " - BibleMastery";
-      document.getElementById("reference").textContent = verseReference(result) + " • " + (state.translation || "KJV");
-      document.getElementById("verse").textContent = result.text || "The verse text is not available.";
+      const matches = findProfiles(result);
+      const connections = document.getElementById("connections");
 
-      if (profile) {
-        document.getElementById("badge").textContent = profile.name;
-        document.getElementById("meaning").textContent = profile.meaning;
-        document.getElementById("notice").textContent = "This verse matches the " + profile.name + " teaching connection in your Seven Redemptive Names of God study.";
-        document.getElementById("teaching").textContent = profile.teaching;
-        document.getElementById("direction").textContent = profile.direction;
+      document.title = verseReference(result) + " - BibleMastery";
+      document.getElementById("reference").textContent = verseReference(result) + " • " + ((state && state.translation) || "KJV");
+      document.getElementById("verse").textContent = result.text || "The verse text is not available.";
+      connections.innerHTML = "";
+
+      if (matches.length) {
+        document.getElementById("notice").textContent =
+          "This verse connects with " + matches.length +
+          (matches.length === 1 ? " Redemptive Name" : " Redemptive Names") +
+          " in your Seven Redemptive Names of God teaching.";
+
+        matches.forEach(function(profile) {
+          connections.appendChild(renderConnectionCard(profile));
+        });
       } else {
-        document.getElementById("badge").textContent = "No direct match found";
-        document.getElementById("meaning").textContent = "This verse is shown without forcing a connection";
-        document.getElementById("notice").textContent = "This verse does not directly match one of the seven redemptive-name teaching connections currently defined in BibleMastery. It is still shown so you can continue or go back.";
-        document.getElementById("teaching").textContent = "Continue reading the surrounding passage and seek the Father's direction. BibleMastery will only apply one of the seven names when the verse has a direct reference or teaching connection; it will not force an interpretation onto the text.";
-        document.getElementById("direction").textContent = "Use Back to Personal Study, or use Next Verse to continue through the verses gathered for this topic.";
+        document.getElementById("notice").textContent =
+          "No direct Redemptive Name connection is currently defined for this verse. BibleMastery will not force a connection that is not part of your teaching.";
+
+        const card = document.createElement("article");
+        card.className = "connection-card";
+        card.innerHTML =
+          '<div class="badge">No direct match found</div>' +
+          '<h3>Continue studying the passage</h3>' +
+          '<div class="teaching-text">Continue reading the surrounding passage and seek the Father\'s direction. When this verse has a clear connection in your teaching, it can be added to the curated verse connections.</div>';
+        connections.appendChild(card);
       }
 
       document.getElementById("previous").disabled = index <= 0;
@@ -270,6 +353,8 @@
     function showError(message) {
       document.getElementById("reference").textContent = "Verse teaching unavailable";
       document.getElementById("notice").innerHTML = "<div class=\"error\">" + message + "</div>";
+      const connections = document.getElementById("connections");
+      if (connections) connections.innerHTML = "";
       document.getElementById("previous").disabled = true;
       document.getElementById("next").disabled = true;
     }
