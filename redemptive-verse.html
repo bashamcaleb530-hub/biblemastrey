@@ -257,6 +257,110 @@
       "psalms 34:4": ["shammah", "raah", "shalom", "nissi"]
     };
 
+    /*
+      These are verse-specific explanations from Caleb's teaching.
+      Each connection has two parts:
+      1. How the Redemptive Name connects to the verse.
+      2. What that truth means for the person reading the verse.
+    */
+    const curatedVerseTeaching = {
+      "psalm 34:4": {
+        shammah: {
+          verse:
+            "David says, “I sought the LORD.” This connects with Jehovah-Shammah because David turns toward the Lord as One who is present and available to him. He does not face his fears as though God were absent; he seeks the Lord in fellowship.",
+          reader:
+            "When you are afraid, do not live as though you are alone. Turn to the Father instead of hiding. Stay in fellowship with Him, seek Him, and remember that His presence is part of how you face the fear rather than being ruled by it."
+        },
+        raah: {
+          verse:
+            "David’s response to fear is to seek the LORD. This connects with Jehovah-Ra’ah / Jehovah-Rohi because the Shepherd is the One David looks to for help, direction, and the way forward instead of depending only on himself.",
+          reader:
+            "When you do not know what to do with fear or another battle, look to the Lord as your Shepherd. Seek His direction in His Word, listen for the truth He is showing you, and follow the next step He makes clear."
+        },
+        shalom: {
+          verse:
+            "Fear is the problem named in this verse, and David’s seeking of the LORD ends in deliverance from those fears. This connects with Jehovah-Shalom because fellowship with God and receiving His truth moves the believer out of fear and into the peace He supplies.",
+          reader:
+            "If fear is disturbing your peace, bring it to the Father instead of letting fear control your thoughts and words. Continue seeking Him and receiving His truth until that truth becomes established in you and you are walking in His peace."
+        },
+        nissi: {
+          verse:
+            "The words “He delivered me from all my fears” show the victory in this verse. This connects with Jehovah-Nissi because the LORD is David’s source of deliverance. David does not present himself as the source of the victory; the Lord delivered him.",
+          reader:
+            "When you are facing fear, do not depend only on your own strength to defeat it. Draw strength from the Lord and the power of His might. Receive the truth He gives you, believe it, apply it, and learn to walk in the victory He has provided."
+        }
+      }
+    };
+
+    function matchedKeywordsFor(profile, result) {
+      const verseText = normalize(result.text);
+      return profile.keywords.filter(function(keyword) {
+        return verseText.includes(normalize(keyword));
+      });
+    }
+
+    function buildVerseConnection(profile, result) {
+      const reference = normalize(verseReference(result));
+      const curated =
+        curatedVerseTeaching[reference] &&
+        curatedVerseTeaching[reference][profile.id];
+
+      if (curated) return curated.verse;
+
+      const keywords = matchedKeywordsFor(profile, result);
+      const exactReference = profile.references.some(function(item) {
+        return normalize(item) === reference;
+      });
+
+      if (keywords.length) {
+        return (
+          "This verse contains the theme “" + keywords[0] + ",” which connects with " +
+          profile.name + " — " + profile.meaning + ". The connection comes from what this verse is actually saying, not merely from the name being placed beside it."
+        );
+      }
+
+      if (exactReference) {
+        return (
+          verseReference(result) + " is one of the passages directly connected with " +
+          profile.name + " — " + profile.meaning +
+          ". Read the verse in its setting and notice how its message expresses that part of the Lord’s redemptive provision."
+        );
+      }
+
+      return (
+        "This verse connects with " + profile.name + " — " + profile.meaning +
+        " through the teaching theme found in this passage."
+      );
+    }
+
+    function buildReaderApplication(profile, result) {
+      const reference = normalize(verseReference(result));
+      const curated =
+        curatedVerseTeaching[reference] &&
+        curatedVerseTeaching[reference][profile.id];
+
+      if (curated) return curated.reader;
+
+      const applications = {
+        jireh:
+          "As you read this verse, identify the need before you and bring it to the Father. Look to what He has provided in Christ, remain in His Word, and follow the direction He gives instead of letting the need become the only thing you see.",
+        rapha:
+          "As you read this verse, bring the area that needs healing to the Father instead of hiding it. Continue in fellowship with Him, receive truth from His Word, and keep following His direction even when the result is not immediate.",
+        nissi:
+          "As you read this verse, ask where you have been trying to fight in your own strength. Draw strength from the Lord, receive the truth He gives you, believe it, apply it, and walk in the victory Christ has provided.",
+        shalom:
+          "As you read this verse, notice what is disturbing your peace. Come to the Father from your right standing in Christ, bring the matter to Him with thanksgiving and faith, receive His direction, and let His truth govern your thoughts instead of fear.",
+        raah:
+          "As you read this verse, look to the Lord as your Shepherd. You may not see the whole path yet, but you can stay in fellowship with Him, remain in His Word, listen for His direction, and obey the next step He makes clear.",
+        tsidkenu:
+          "As you read this verse, remember that your approach to the Father is not based on self-condemnation or your own performance. Come boldly because of what Christ has provided, receive mercy and help, and then walk in the truth He shows you.",
+        shammah:
+          "As you read this verse, remember that you are not facing the situation as though God were absent. Turn toward the Father instead of hiding, remain in fellowship with Him, and draw on the strength and help He has already provided."
+      };
+
+      return applications[profile.id] || profile.direction;
+    }
+
     function findProfiles(result) {
       const reference = normalize(verseReference(result));
       const text = normalize(result.text);
@@ -281,7 +385,7 @@
       });
     }
 
-    function renderConnectionCard(profile) {
+    function renderConnectionCard(profile, result) {
       const card = document.createElement("article");
       card.className = "connection-card";
 
@@ -292,22 +396,35 @@
       const meaning = document.createElement("h3");
       meaning.textContent = profile.meaning;
 
-      const teaching = document.createElement("div");
-      teaching.className = "teaching-text";
-      teaching.textContent = profile.teaching;
+      const verseHeading = document.createElement("h3");
+      verseHeading.textContent = "How this name connects to this verse";
 
-      const directionHeading = document.createElement("h3");
-      directionHeading.textContent = "Use this connection in your study";
+      const verseConnection = document.createElement("div");
+      verseConnection.className = "teaching-text";
+      verseConnection.textContent = buildVerseConnection(profile, result);
 
-      const direction = document.createElement("div");
-      direction.className = "teaching-text";
-      direction.textContent = profile.direction;
+      const readerHeading = document.createElement("h3");
+      readerHeading.textContent = "What this means for you";
+
+      const readerApplication = document.createElement("div");
+      readerApplication.className = "teaching-text";
+      readerApplication.textContent = buildReaderApplication(profile, result);
+
+      const reflectionHeading = document.createElement("h3");
+      reflectionHeading.textContent = "Consider this as you seek the Father";
+
+      const reflection = document.createElement("div");
+      reflection.className = "teaching-text";
+      reflection.textContent = profile.direction;
 
       card.appendChild(badge);
       card.appendChild(meaning);
-      card.appendChild(teaching);
-      card.appendChild(directionHeading);
-      card.appendChild(direction);
+      card.appendChild(verseHeading);
+      card.appendChild(verseConnection);
+      card.appendChild(readerHeading);
+      card.appendChild(readerApplication);
+      card.appendChild(reflectionHeading);
+      card.appendChild(reflection);
       return card;
     }
 
@@ -327,10 +444,10 @@
         document.getElementById("notice").textContent =
           "This verse connects with " + matches.length +
           (matches.length === 1 ? " Redemptive Name" : " Redemptive Names") +
-          " in your Seven Redemptive Names of God teaching.";
+          ". Each section below explains how the name connects to this verse and what that truth means for you as you read it.";
 
         matches.forEach(function(profile) {
-          connections.appendChild(renderConnectionCard(profile));
+          connections.appendChild(renderConnectionCard(profile, result));
         });
       } else {
         document.getElementById("notice").textContent =
