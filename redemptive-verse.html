@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verse Teaching - BibleMastery</title>
+  <style>
+    * { box-sizing: border-box; }
+    :root {
+      --bg-deep: #080f1d;
+      --bg-mid: #0d1628;
+      --panel: #121e33;
+      --gold: #d8b96a;
+      --gold-light: #e7ca7d;
+      --text: #f5f1e8;
+      --muted: #b8bfcb;
+      --line: rgba(216,185,106,.30);
+    }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: radial-gradient(circle at top, #17233b 0%, #0d1628 45%, #080f1d 100%);
+      color: var(--text);
+    }
+    header {
+      padding: 24px 20px;
+      text-align: center;
+      background: linear-gradient(135deg, #111c32, #182742);
+      border-bottom: 1px solid var(--gold);
+      box-shadow: 0 8px 25px rgba(0,0,0,.30);
+    }
+    header h1 { margin: 0 0 7px; color: var(--gold); font-size: 30px; }
+    header p { margin: 0; color: #d6d9e0; }
+    .container { max-width: 1000px; margin: 0 auto; padding: 24px 20px 40px; }
+    .back-button, .reader-nav-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 11px 15px;
+      border: 1px solid var(--gold);
+      border-radius: 8px;
+      font: inherit;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .back-button {
+      margin-bottom: 18px;
+      color: var(--gold);
+      background: rgba(18,30,51,.92);
+    }
+    .back-button:hover { background: #172640; }
+    .redemptive-page {
+      background: rgba(18,30,51,.97);
+      border: 1px solid rgba(231,202,125,.50);
+      border-radius: 16px;
+      padding: 26px;
+      box-shadow: 0 14px 35px rgba(0,0,0,.30);
+    }
+    .page-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+    .page-header h2 { margin: 0; color: var(--gold); }
+    .page-header p { margin: 6px 0 0; color: var(--muted); }
+    .notice {
+      padding: 13px 15px;
+      margin-bottom: 16px;
+      border-left: 4px solid var(--gold);
+      background: rgba(216,185,106,.10);
+      color: #eeeae2;
+      line-height: 1.65;
+    }
+    .teaching-card {
+      background: linear-gradient(145deg, #14233d, #101b2e);
+      border: 1px solid rgba(216,185,106,.30);
+      border-radius: 13px;
+      padding: 22px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 8px 12px;
+      margin-bottom: 12px;
+      color: var(--bg-mid);
+      background: var(--gold);
+      border-radius: 999px;
+      font-weight: bold;
+    }
+    h3 { color: var(--gold); margin-top: 0; }
+    h3:not(:first-of-type) { margin-top: 24px; }
+    .teaching-text { color: #e5e7ec; line-height: 1.8; }
+    .verse-text {
+      padding: 16px;
+      background: rgba(8,15,29,.50);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 10px;
+      color: #f4eee2;
+      line-height: 1.8;
+      font-size: 17px;
+    }
+    .navigation { display: flex; justify-content: space-between; gap: 12px; margin-top: 18px; }
+    .reader-nav-button { min-width: 150px; color: var(--bg-mid); background: var(--gold); }
+    .reader-nav-button:disabled { cursor: not-allowed; opacity: .45; }
+    .error { color: #ffd7d7; line-height: 1.7; }
+    @media (max-width: 650px) {
+      .redemptive-page { padding: 18px; }
+      .navigation { flex-direction: column; }
+      .reader-nav-button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>BibleMastery</h1>
+    <p>Seven Redemptive Names of God — Verse Teaching</p>
+  </header>
+
+  <main class="container">
+    <button id="backButton" class="back-button" type="button">← Back to Personal Study</button>
+
+    <section class="redemptive-page" aria-live="polite">
+      <div class="page-header">
+        <div>
+          <h2 id="title">Verse Teaching</h2>
+          <p id="reference">Loading verse…</p>
+        </div>
+      </div>
+
+      <div id="notice" class="notice"></div>
+
+      <article class="teaching-card">
+        <div id="badge" class="badge">Seven Redemptive Names of God</div>
+        <h3 id="meaning">Teaching connection</h3>
+        <div id="teaching" class="teaching-text"></div>
+
+        <h3>Verse</h3>
+        <div id="verse" class="verse-text"></div>
+
+        <h3>Use this in your study</h3>
+        <div id="direction" class="teaching-text"></div>
+      </article>
+
+      <div class="navigation">
+        <button id="previous" class="reader-nav-button" type="button">← Previous Verse</button>
+        <button id="next" class="reader-nav-button" type="button">Next Verse →</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const profiles = [
+      {
+        name: "Jehovah-Jireh",
+        meaning: "The LORD will provide",
+        references: ["genesis 22:14", "philippians 4:19", "2 corinthians 9:8", "matthew 6:31-33"],
+        keywords: ["provide", "provided", "provision", "need", "abundant life", "richly supplies"],
+        teaching: "This verse connects with Jehovah-Jireh: the LORD will provide. Bring the need to the Father and seek His direction in His Word. His provision is part of the life He has provided in Christ; this is not a promise that every answer must appear immediately, but it is a call to trust Him and continue in fellowship while you seek and obey His direction.",
+        direction: "Ask: What need am I bringing to the Father? What has He already provided in Christ? What truth and direction do I need to receive and apply today?"
+      },
+      {
+        name: "Jehovah-Rapha",
+        meaning: "The LORD who heals",
+        references: ["exodus 15:26", "psalm 103:2-3", "isaiah 53:5", "james 5:15"],
+        keywords: ["heal", "healed", "healing", "health", "sickness", "disease", "wounds", "brokenhearted"],
+        teaching: "This verse connects with Jehovah-Rapha: the LORD who heals. Healing may concern the body, the emotions, or the inward wounds of life. Bring the need to the Father instead of hiding, stay in fellowship with Him, receive truth from His Word, and follow the direction He gives. Do not measure God's faithfulness only by how quickly the result appears.",
+        direction: "Ask: What part of my life needs the Father's healing? What truth is He showing me? How can I continue seeking Him and walking in the help He provides?"
+      },
+      {
+        name: "Jehovah-Nissi",
+        meaning: "The LORD is my banner",
+        references: ["exodus 17:15", "romans 8:37", "1 corinthians 15:57", "2 corinthians 2:14", "ephesians 6:10"],
+        keywords: ["victory", "overcome", "overcometh", "triumph", "strong in the lord", "mighty", "deliver", "battle"],
+        teaching: "This verse connects with Jehovah-Nissi: the LORD is my banner. The believer's victory is in Christ. We do not try to create a victory that God has not provided; we learn to reign in the victory of Christ, draw strength from the Lord and the power of His might, receive truth, believe it, and apply it.",
+        direction: "Ask: Where am I trying to fight in my own strength? What victory has Christ already provided? What truth must I believe and practice in this battle?"
+      },
+      {
+        name: "Jehovah-Shalom",
+        meaning: "The LORD is peace",
+        references: ["judges 6:24", "romans 5:1", "philippians 4:6-7", "isaiah 26:3", "john 14:27"],
+        keywords: ["peace", "quietness", "rest", "calm", "anxiety", "troubled", "fear not"],
+        teaching: "This verse connects with Jehovah-Shalom: the LORD is peace. In your teaching, peace is connected with right standing before God and with bringing prayer to Him. Because of what Christ has provided, the believer can come to the Father instead of hiding, give thanks, receive direction, and walk in the peace God supplies.",
+        direction: "Ask: What is disturbing my peace? What does right standing with God mean for this situation? What should I bring to the Father with thanksgiving and faith?"
+      },
+      {
+        name: "Jehovah-Ra’ah / Jehovah-Rohi",
+        meaning: "The LORD is my shepherd",
+        references: ["psalm 23:1", "psalm 23:2-4", "john 10:11", "john 10:27-28", "1 peter 2:25"],
+        keywords: ["shepherd", "guide", "guideth", "led", "leadeth", "path", "ways", "voice", "pasture"],
+        teaching: "This verse connects with Jehovah-Ra’ah, also written Jehovah-Rohi: the LORD is my shepherd. The Shepherd guides, leads, and cares for His people. When you do not know what to do, continue in fellowship with the Father, remain in His Word, listen for His direction, and follow the next step He makes clear.",
+        direction: "Ask: What decision or battle needs the Shepherd's direction? Am I willing to follow the truth He gives, even when the whole path is not yet visible?"
+      },
+      {
+        name: "Jehovah-Tsidkenu",
+        meaning: "The LORD our righteousness",
+        references: ["jeremiah 23:6", "romans 5:1", "2 corinthians 5:21", "hebrews 4:16", "ephesians 6:10"],
+        keywords: ["righteousness", "justified", "justification", "right standing", "boldly", "mercy", "grace", "come boldly"],
+        teaching: "This verse connects with Jehovah-Tsidkenu: the LORD our righteousness. This is foundational to understanding the other names. Our right standing is not produced by hiding, self-condemnation, or our own performance. Through Jesus, the believer can come boldly to the Father in faith for mercy and help, receive what Christ has provided, and then walk in the truth instead of remaining under condemnation.",
+        direction: "Ask: Am I approaching God from condemnation or from the right standing Christ has provided? What would it look like to come boldly, receive mercy and help, and obey the truth He gives?"
+      },
+      {
+        name: "Jehovah-Shammah",
+        meaning: "The LORD is there",
+        references: ["ezekiel 48:35", "matthew 28:20", "hebrews 13:5-6", "psalm 46:1", "deuteronomy 31:8"],
+        keywords: ["with you", "with thee", "never leave", "never forsake", "presence", "there", "near", "refuge"],
+        teaching: "This verse connects with Jehovah-Shammah: the LORD is there. God is present with His people. In temptation, fear, discouragement, or a repeated struggle, run to God instead of hiding. Continue in fellowship, remain under His care, and draw on the strength He has already provided rather than treating the battle as if you are alone.",
+        direction: "Ask: Where am I acting as though I am alone? How does the Father's presence change my next choice, my words, and the way I respond to this battle?"
+      }
+    ];
+
+    const stateKey = "biblemasteryRedemptiveVerseState";
+    let state = null;
+    let verses = [];
+    let index = 0;
+
+    function normalize(value) {
+      return String(value || "")
+        .toLowerCase()
+        .replace(/[’']/g, "")
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    function verseReference(result) {
+      return [result.book, result.chapter + ":" + result.verse].join(" ");
+    }
+
+    function findProfile(result) {
+      const reference = normalize(verseReference(result));
+      const exact = profiles.find(profile => profile.references.some(item => normalize(item) === reference));
+      if (exact) return exact;
+      const text = normalize(result.text);
+      return profiles.find(profile => profile.keywords.some(keyword => text.includes(normalize(keyword)))) || null;
+    }
+
+    function render() {
+      const result = verses[index];
+      if (!result) return showError("No verse was supplied. Return to Personal Study and click a verse again.");
+
+      const profile = findProfile(result);
+      document.title = verseReference(result) + " - BibleMastery";
+      document.getElementById("reference").textContent = verseReference(result) + " • " + (state.translation || "KJV");
+      document.getElementById("verse").textContent = result.text || "The verse text is not available.";
+
+      if (profile) {
+        document.getElementById("badge").textContent = profile.name;
+        document.getElementById("meaning").textContent = profile.meaning;
+        document.getElementById("notice").textContent = "This verse matches the " + profile.name + " teaching connection in your Seven Redemptive Names of God study.";
+        document.getElementById("teaching").textContent = profile.teaching;
+        document.getElementById("direction").textContent = profile.direction;
+      } else {
+        document.getElementById("badge").textContent = "No direct match found";
+        document.getElementById("meaning").textContent = "This verse is shown without forcing a connection";
+        document.getElementById("notice").textContent = "This verse does not directly match one of the seven redemptive-name teaching connections currently defined in BibleMastery. It is still shown so you can continue or go back.";
+        document.getElementById("teaching").textContent = "Continue reading the surrounding passage and seek the Father's direction. BibleMastery will only apply one of the seven names when the verse has a direct reference or teaching connection; it will not force an interpretation onto the text.";
+        document.getElementById("direction").textContent = "Use Back to Personal Study, or use Next Verse to continue through the verses gathered for this topic.";
+      }
+
+      document.getElementById("previous").disabled = index <= 0;
+      document.getElementById("next").disabled = index >= verses.length - 1;
+      history.replaceState(null, "", "redemptive-verse.html?index=" + index);
+    }
+
+    function showError(message) {
+      document.getElementById("reference").textContent = "Verse teaching unavailable";
+      document.getElementById("notice").innerHTML = "<div class=\"error\">" + message + "</div>";
+      document.getElementById("previous").disabled = true;
+      document.getElementById("next").disabled = true;
+    }
+
+    function goBack() {
+      if (document.referrer && document.referrer.includes("personal-study.html")) {
+        history.back();
+      } else {
+        window.location.href = "personal-study.html";
+      }
+    }
+
+    try {
+      state = JSON.parse(localStorage.getItem(stateKey) || "null");
+      verses = state && Array.isArray(state.verses) ? state.verses : [];
+      const requestedIndex = Number(new URLSearchParams(window.location.search).get("index"));
+      index = Number.isInteger(requestedIndex) ? requestedIndex : (state && Number.isInteger(state.index) ? state.index : 0);
+      index = Math.max(0, Math.min(index, Math.max(0, verses.length - 1)));
+    } catch (error) {
+      showError("The saved verse information could not be read. Return to Personal Study and click a verse again.");
+    }
+
+    document.getElementById("backButton").addEventListener("click", goBack);
+    document.getElementById("previous").addEventListener("click", function() {
+      if (index > 0) { index--; render(); window.scrollTo({top: 0, behavior: "smooth"}); }
+    });
+    document.getElementById("next").addEventListener("click", function() {
+      if (index < verses.length - 1) { index++; render(); window.scrollTo({top: 0, behavior: "smooth"}); }
+    });
+    render();
+  </script>
+</body>
+</html>
