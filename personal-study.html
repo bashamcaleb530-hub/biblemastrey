@@ -273,7 +273,16 @@
     line-height: 1.6;
   }
 
+  .reader-click-note {
+    color: var(--muted);
+    font-size: 13px;
+    margin: -4px 0 10px;
+  }
+
   .reader-verse {
+    display: block;
+    text-decoration: none;
+    cursor: pointer;
     padding: 9px 8px;
     line-height: 1.72;
     border-bottom: 1px solid rgba(255,255,255,.06);
@@ -2081,36 +2090,106 @@
       escapeHtml(bookName) +
       " " +
       escapeHtml(String(chapterNumber)) +
-      "</h3>";
+      "</h3>" +
+      "<div class='reader-click-note'>Click any verse to open the Seven Redemptive Names teaching.</div>";
 
     verses.forEach(
       function(verse, index) {
 
+        const verseNumber =
+          verse.number ||
+          (index + 1);
+
+        const verseText =
+          getReaderVerseText(
+            verse,
+            readerBookIndex,
+            readerTranslationSelect.value
+          );
+
+        const verseHref =
+          "redemptive-verse.html?book=" +
+          encodeURIComponent(bookName) +
+          "&chapter=" +
+          encodeURIComponent(String(chapterNumber)) +
+          "&verse=" +
+          encodeURIComponent(String(verseNumber)) +
+          "&text=" +
+          encodeURIComponent(verseText) +
+          "&translation=" +
+          encodeURIComponent(readerTranslationSelect.value) +
+          "&index=" +
+          encodeURIComponent(String(index));
+
         content +=
-          "<div class='reader-verse' data-reader-verse='" +
+          "<a class='reader-verse' data-reader-verse='" +
           index +
-          "'>" +
+          "' href='" +
+          escapeHtml(verseHref) +
+          "' title='Open Seven Redemptive Names teaching for this verse'>" +
           "<span class='reader-verse-number'>" +
-          escapeHtml(
-            String(
-              verse.number ||
-              (index + 1)
-            )
-          ) +
+          escapeHtml(String(verseNumber)) +
           "</span>" +
-          escapeHtml(
-            getReaderVerseText(
-              verse,
-              readerBookIndex,
-              readerTranslationSelect.value
-            )
-          ) +
-          "</div>";
+          escapeHtml(verseText) +
+          "</a>";
       }
     );
 
     readerDisplay.innerHTML =
       content;
+
+    /*
+      Save the full chapter before navigation so the
+      teaching page can move to Previous / Next Verse.
+      The href itself still works as a normal browser link.
+    */
+    const redemptiveChapterVerses =
+      verses.map(
+        function(verse, index) {
+          return {
+            book: bookName,
+            chapter: chapterNumber,
+            verse: verse.number || (index + 1),
+            text: getReaderVerseText(
+              verse,
+              readerBookIndex,
+              readerTranslationSelect.value
+            )
+          };
+        }
+      );
+
+    readerDisplay
+      .querySelectorAll("a.reader-verse")
+      .forEach(
+        function(link) {
+          link.addEventListener(
+            "click",
+            function() {
+              const clickedIndex =
+                Number(link.dataset.readerVerse) || 0;
+
+              try {
+                localStorage.setItem(
+                  "biblemasteryRedemptiveVerseState",
+                  JSON.stringify({
+                    verses: redemptiveChapterVerses,
+                    index: clickedIndex,
+                    translation: readerTranslationSelect.value,
+                    topic: currentTopic || "Bible Reader"
+                  })
+                );
+              }
+              catch (error) {
+                console.error(
+                  "Could not save the verse teaching state.",
+                  error
+                );
+              }
+            }
+          );
+        }
+      );
 
     populateReaderVerses();
     updateReaderNavButtons();
