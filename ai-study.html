@@ -3326,7 +3326,7 @@
       "verse-teaching-link";
 
     verseTeachingLink.textContent =
-      "📖 Study this verse through the Seven Redemptive Names";
+      "📖 Open Seven Redemptive Names teaching page";
 
     verseTeachingLink.addEventListener(
       "click",
@@ -6685,14 +6685,34 @@
   function openRedemptiveVersePage(index) {
     if (!Array.isArray(currentVerses) || !currentVerses.length) return;
 
-    redemptiveVerseList = currentVerses.slice();
-    redemptiveVerseIndex = Math.max(0, Math.min(index, redemptiveVerseList.length - 1));
+    const safeIndex = Math.max(0, Math.min(index, currentVerses.length - 1));
 
-    document.getElementById("topicBox").style.display = "none";
-    studyWorkspace.style.display = "none";
-    redemptiveVersePage.classList.add("visible");
-    renderRedemptiveVersePage();
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    try {
+      localStorage.setItem(
+        "biblemasteryRedemptiveVerseState",
+        JSON.stringify({
+          verses: currentVerses,
+          index: safeIndex,
+          translation: studyTranslation,
+          topic: currentTopic
+        })
+      );
+    } catch (error) {
+      console.error("Could not save the verse teaching state.", error);
+    }
+
+    const selectedVerse = currentVerses[safeIndex] || {};
+    const params = new URLSearchParams({
+      index: String(safeIndex),
+      book: selectedVerse.book || "",
+      chapter: String(selectedVerse.chapter || ""),
+      verse: String(selectedVerse.verse || ""),
+      text: selectedVerse.text || "",
+      translation: studyTranslation || "KJV",
+      topic: currentTopic || ""
+    });
+
+    window.location.assign("redemptive-verse.html?" + params.toString());
   }
 
   function closeRedemptiveVersePage() {
