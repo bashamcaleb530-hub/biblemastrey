@@ -250,15 +250,15 @@
     }
 
     // Curated verse-to-name connections based on Caleb's teaching.
-    // Add more verse mappings here whenever a verse has teaching connections
-    // that are broader than the words that happen to appear in the verse text.
+    // For any verse listed here, these hand-taught connections are authoritative.
+    // That means the page will NOT add extra names just because a keyword happens
+    // to appear in the English verse text.
     const curatedConnections = {
-      "psalm 34:4": ["shammah", "raah", "shalom", "nissi"],
-      "psalms 34:4": ["shammah", "raah", "shalom", "nissi"]
+      "psalm 34:4": ["shammah", "raah", "shalom", "nissi"]
     };
 
     /*
-      These are verse-specific explanations from Caleb's teaching.
+      Verse-specific explanations from Caleb's teaching.
       Each connection has two parts:
       1. How the Redemptive Name connects to the verse.
       2. What that truth means for the person reading the verse.
@@ -291,6 +291,414 @@
         }
       }
     };
+
+    function registerTeaching(reference, names, teaching) {
+      const ref = normalize(reference);
+      curatedConnections[ref] = Array.isArray(names) ? names.slice() : [];
+      curatedVerseTeaching[ref] = teaching || {};
+    }
+
+    function registerRange(chapter, startVerse, endVerse, names, teachingBuilder) {
+      for (let verseNumber = startVerse; verseNumber <= endVerse; verseNumber += 1) {
+        const ref = "genesis " + chapter + ":" + verseNumber;
+        registerTeaching(
+          ref,
+          typeof names === "function" ? names(verseNumber) : names,
+          typeof teachingBuilder === "function" ? teachingBuilder(verseNumber) : teachingBuilder
+        );
+      }
+    }
+
+    function pair(verse, reader) {
+      return { verse: verse, reader: reader };
+    }
+
+    const creationOrderActions = {
+      6: "God established the firmament and divided the waters, putting creation into the order He intended.",
+      7: "God made the firmament and separated the waters according to His design.",
+      8: "God named the firmament Heaven and continued establishing order in creation.",
+      9: "God gathered the waters together and caused the dry land to appear, showing that He knows where everything belongs.",
+      10: "God named the dry land Earth and the gathered waters Seas, and He saw that it was good.",
+      11: "God commanded the earth to bring forth grass, herbs, and fruit trees, each according to its proper kind.",
+      12: "The earth brought forth vegetation according to God’s order, and God saw that it was good.",
+      13: "The third day was completed according to the order God had established.",
+      14: "God appointed lights in the firmament to divide day from night and to mark signs, seasons, days, and years.",
+      15: "God appointed the lights to give light upon the earth, giving them a clear purpose.",
+      16: "God made the greater light, the lesser light, and the stars, giving each its place and function.",
+      17: "God set the lights in the firmament of heaven to give light upon the earth.",
+      18: "God gave the lights rule over day and night and used them to divide light from darkness, and He saw that it was good.",
+      19: "The fourth day was completed according to God’s order.",
+      20: "God commanded the waters to bring forth living creatures and the heavens to be filled with birds.",
+      21: "God created the great sea creatures, every living thing in the waters, and every winged bird according to its kind, and He saw that it was good.",
+      22: "God blessed the living creatures and gave them the ability and command to multiply.",
+      23: "The fifth day was completed according to God’s order.",
+      24: "God commanded the earth to bring forth living creatures according to their kinds.",
+      25: "God made the animals according to their kinds and saw that His work was good."
+    };
+
+    function creationOrderTeaching(verseNumber) {
+      const action = creationOrderActions[verseNumber] ||
+        "God continued ordering His creation according to His righteous purpose.";
+
+      return {
+        tsidkenu: pair(
+          action + " This connects with Jehovah-Tsidkenu because God is righteous, good, wise, and all-powerful. He knows the proper order, purpose, and place of what He creates.",
+          "God is righteous and all-powerful, so there is nothing impossible for Him. When something in your life seems confused, out of order, or beyond your ability to change, you can trust Him to know what belongs where and what needs to happen. Stay in fellowship with Him, remain in His Word, and let His truth guide you as He brings His order into your thinking, decisions, and circumstances."
+        )
+      };
+    }
+
+    function closingCreationTeaching(verseNumber) {
+      return {
+        tsidkenu: pair(
+          "This verse is part of the closing section of creation where God makes mankind in His image, gives mankind purpose and stewardship, and declares His creation good. It connects with Jehovah-Tsidkenu because God is righteous and created mankind according to His good design, with responsibility to rule and steward what He made.",
+          "Your life has purpose. God is righteous, and the responsibilities He places in your hands matter. You can trust Him to show you how to handle your work, relationships, possessions, ministry, animals, and other responsibilities in a way that reflects His righteousness."
+        ),
+        jireh: pair(
+          "This verse stands in the section where God provided mankind with the earth, its fruitfulness, food, and everything needed for life. It connects with Jehovah-Jireh because God did not create people and then leave them without provision.",
+          "God knows what you need. You can look to Him as your Provider rather than living as though everything depends entirely on you. Follow His direction and use wisely what He places in your hands."
+        ),
+        rapha: pair(
+          "This verse belongs to the creation account before sickness, disease, and corruption had entered human experience. It connects with Jehovah-Rapha because God’s original creation was whole and good, with nothing that needed healing.",
+          "This shows that sickness and disease were not part of the goodness seen in God’s original creation. You can look to Jehovah-Rapha as the One whose character and provision are connected with healing and wholeness, continuing in fellowship with Him even when healing is a process."
+        ),
+        shalom: pair(
+          "This verse is part of a creation that God would soon call very good. Mankind had provision, purpose, relationship with God, and an ordered world. This connects with Jehovah-Shalom because there was wholeness and peace in God’s good design.",
+          "God’s peace is more than a calm feeling. It is connected with wholeness and with trusting Him while He is present, guiding, and providing. Even when your present circumstances are not perfect, you can have peace through faith because God is with you and remains your Shepherd."
+        ),
+        shammah: pair(
+          "God was there with mankind in this creation account. He did not create people from a distance and disappear. This connects with Jehovah-Shammah because His presence was part of mankind’s life from the beginning.",
+          "God has not abandoned you. You can seek Him because He is present. Whatever responsibility or situation you face, you do not have to approach it as though God is absent."
+        ),
+        raah: pair(
+          "God gave mankind responsibility over the earth, but mankind still needed God’s direction to know how to live and steward what He had made. This connects with Jehovah-Ra’ah / Jehovah-Rohi because the Shepherd is present to lead and guide.",
+          "Having responsibility does not mean you are supposed to know everything on your own. Stay in fellowship with God, listen to His Word and direction, and allow Him to show you how to handle what He has placed in your care."
+        )
+      };
+    }
+
+    // -------------------------
+    // GENESIS 1 — Caleb's teaching
+    // -------------------------
+
+    registerTeaching("genesis 1:1", ["tsidkenu", "shammah"], {
+      tsidkenu: pair(
+        "God is righteous, and everything He created was made right and good according to His perfect nature. Nothing wrong, corrupt, or defective came from Him. Creation began according to His righteous design.",
+        "When you look at God as Creator, begin with the truth that He is righteous, good, and all-powerful. What He does is right. You can trust Him, His Word, and His purposes even when you do not yet understand everything."
+      ),
+      shammah: pair(
+        "The words “In the beginning God” show that God was already there. He did not arrive later. He was present before creation and remains present now.",
+        "The God who was there in the beginning is still present with you now. He does not leave or disappear. Whatever you face, you can turn to Him, seek Him, and remain in fellowship with Him because He is always present."
+      )
+    });
+
+    registerTeaching("genesis 1:2", ["shammah", "raah", "shalom"], {
+      shammah: pair(
+        "The Spirit of God moved upon the face of the waters. Even in darkness and before the earth had been brought into order, God was there and His presence was active.",
+        "When your situation feels dark, empty, confused, or without direction, God has not disappeared. He can be present and working even before you see what He is doing. Remain in fellowship with Him instead of assuming darkness means He is absent."
+      ),
+      raah: pair(
+        "The Spirit of God was moving, brooding, and hovering over the waters. This connects with Jehovah-Ra’ah / Jehovah-Rohi because God does nothing without His Spirit, and the Shepherd leads and directs what He is bringing about.",
+        "You do not have to direct your life entirely by your own understanding. Look to God for direction, stay close to Him, remain in His Word, listen for His leading, and follow the next step He makes clear."
+      ),
+      shalom: pair(
+        "Darkness was upon the face of the deep, yet the Spirit of God was hovering over the waters. God’s presence was there in the middle of the darkness, which connects with Jehovah-Shalom.",
+        "You can have peace through faith because God is there and because He is your Shepherd, even before the darkness changes. His presence and guidance give you peace while He is still working."
+      )
+    });
+
+    registerTeaching("genesis 1:3", ["tsidkenu", "nissi", "shalom"], {
+      tsidkenu: pair(
+        "God brought light into the midst of darkness. This shows His righteousness because what comes from Him is right and good, and it shows His power because darkness did not prevent Him from bringing light.",
+        "When you face darkness, confusion, or something that seems wrong, remember that God is righteous and all-powerful. His Word brings truth and light, and there is no situation beyond His ability to change."
+      ),
+      nissi: pair(
+        "There was darkness, but when God spoke, there was light. Darkness did not have the final word. This connects with Jehovah-Nissi because where darkness existed, God brought victory through light.",
+        "Do not treat darkness as though it has already won. Look to the Lord as your victory. His truth can bring light into what is dark, and you can learn to walk in the victory He provides rather than being ruled by the darkness."
+      ),
+      shalom: pair(
+        "This is a different expression of peace from Genesis 1:2. There, peace came from God being present and shepherding in the middle of darkness. Here, peace also comes because light has entered the darkness and victory is being seen.",
+        "God is always there and always present, so through faith you can have peace because He is with you. You also have peace because He is your Shepherd and is leading you. When victory comes, there is another expression of that peace: peace in the victory itself. You can rest in His presence, His guidance, and what His light has changed."
+      )
+    });
+
+    registerTeaching("genesis 1:4", ["tsidkenu"], {
+      tsidkenu: pair(
+        "God saw that the light was good and separated the light from the darkness. This shows His goodness and righteousness. He knows what is good, what is right, and what belongs in its proper place, and He has the power to make that distinction.",
+        "God is righteous, good, and all-powerful. He does not merely recognize the difference between light and darkness; He has the authority to separate them. That means nothing is impossible for Him. Whatever situation you face is not greater than God. He can bring change into situations that look dark, confused, impossible, or beyond your ability to fix. Because He is righteous, you can trust both His power and the way He works. Stay in fellowship with Him and let His truth show you what is right."
+      )
+    });
+
+    registerTeaching("genesis 1:5", ["tsidkenu"], {
+      tsidkenu: pair(
+        "God called the light Day and the darkness Night and established the order of evening and morning. This connects with Jehovah-Tsidkenu because in His righteousness God knows the proper order things should be in.",
+        "God is righteous, wise, and orderly. He knows the right order for every part of your life even when things feel confused or out of place. Stay in fellowship with Him, remain in His Word, and allow Him to show you what needs to come first, what needs to change, and what belongs where."
+      )
+    });
+
+    registerRange(1, 6, 25, ["tsidkenu"], creationOrderTeaching);
+    registerRange(1, 26, 31,
+      ["tsidkenu", "jireh", "rapha", "shalom", "shammah", "raah"],
+      closingCreationTeaching
+    );
+
+    // -------------------------
+    // GENESIS 2 — Caleb's teaching
+    // -------------------------
+
+    registerTeaching("genesis 2:1", ["tsidkenu", "nissi"], {
+      tsidkenu: pair(
+        "The heavens and the earth were finished according to God’s design. This connects with Jehovah-Tsidkenu because God is righteous, good, and all-powerful. Everything He created was completed according to the right order and purpose He intended.",
+        "God is righteous and powerful enough to complete what He purposes. When something looks unfinished in your life, do not assume nothing more can happen. Trust His goodness, righteousness, and ability as you continue following Him."
+      ),
+      nissi: pair(
+        "Creation was finished. God had accomplished what He set out to do. This connects with Jehovah-Nissi because there is victory in completion: the work God intended to accomplish was accomplished.",
+        "God is your victory. You may be in the middle of something and not yet see the finished result, but this verse shows a God who completes His work. Draw strength from Him, follow His direction, and trust His power to bring you through what you are facing."
+      )
+    });
+
+    registerTeaching("genesis 2:2", ["shalom", "nissi"], {
+      shalom: pair(
+        "God finished the work He had done and rested. This connects with Jehovah-Shalom because there is peace in completed work. Nothing remained that required striving or confusion.",
+        "You can rest in what God has finished. Resting in His finished work does not mean doing nothing; it means living from faith and peace instead of fear and pressure."
+      ),
+      nissi: pair(
+        "God finished His work, so He could rest. This connects with Jehovah-Nissi because completion shows victory. The work was accomplished.",
+        "Victory brings rest. You do not have to create the victory yourself. Trust God, follow His direction, and learn to walk from the victory He has provided rather than constantly struggling to earn it."
+      )
+    });
+
+    registerTeaching("genesis 2:3", ["shalom"], {
+      shalom: pair(
+        "God blessed the seventh day because His work was finished and He rested. This connects with Jehovah-Shalom because completed work brought rest and peace.",
+        "You can have peace while God leads you through a process, even when that process takes time. Some things may not change all at once. Continue fellowshipping with the Father, staying in His Word, listening to Him, and allowing Him to guide you step by step. Peace does not mean every situation has already reached its finished result; you can have peace during the process because God is with you and guiding you, and you can also have peace and rest when the work is accomplished."
+      )
+    });
+
+    registerTeaching("genesis 2:4", ["tsidkenu", "shammah"], {
+      tsidkenu: pair(
+        "This verse looks back at what God created and made. It connects with Jehovah-Tsidkenu because God is righteous, good, and all-powerful. Creation came from Him and was established according to His wisdom, order, and purpose.",
+        "The God who created the heavens and the earth is powerful enough to work in your life. Nothing you face is greater than Him. Because He is righteous, you can trust not only His power but His character and His direction."
+      ),
+      shammah: pair(
+        "God was there when the heavens and the earth were created. He was present from the beginning and has never stopped being present.",
+        "God’s presence is not temporary. He was there in the beginning, and He is present with you now. You can seek Him, fellowship with Him, and depend on His presence because He does not leave you."
+      )
+    });
+
+    registerTeaching("genesis 2:5", ["tsidkenu"], {
+      tsidkenu: pair(
+        "There had not yet been rain upon the earth, yet God’s creation was not beyond His ability to sustain. This connects with Jehovah-Tsidkenu because His righteousness, goodness, wisdom, and power are not limited to one method.",
+        "God is not limited to the way you think something has to happen. You may not see the normal way for a need to be met, but that does not mean God has no answer. Stay in fellowship with Him instead of deciding ahead of time how He must work."
+      )
+    });
+
+    registerTeaching("genesis 2:6", ["tsidkenu"], {
+      tsidkenu: pair(
+        "A mist went up from the earth and watered the whole face of the ground. It had not rained, yet God still had water for what He created. This shows His righteousness, goodness, wisdom, and power.",
+        "The normal method may be unavailable and God can still have another way. A situation may look impossible because you cannot see the answer, but that does not mean He has no answer. He is righteous, good, wise, and all-powerful. Let Him guide you rather than limiting Him to the method you expected."
+      )
+    });
+
+    registerTeaching("genesis 2:7", ["tsidkenu"], {
+      tsidkenu: pair(
+        "God formed man from the dust and breathed life into him. This shows Jehovah-Tsidkenu because God is righteous, powerful, and intentional in creating life according to His design.",
+        "Your life comes from God and has purpose because He made mankind intentionally. Nothing about your existence is outside His knowledge or power. You can trust the righteous Creator with the life He gave you."
+      )
+    });
+
+    registerTeaching("genesis 2:8", ["tsidkenu"], {
+      tsidkenu: pair(
+        "God planted the garden and placed the man there. This shows His righteous order and care: He created a place suited for Adam and put him where he was meant to be.",
+        "God understands where you belong, what you need, and how to guide you according to His purpose. When you do not know where you fit, stay in fellowship with Him and let the righteous Shepherd of your life direct your steps."
+      )
+    });
+
+    registerTeaching("genesis 2:9", ["tsidkenu", "jireh", "shalom"], {
+      tsidkenu: pair(
+        "God caused the trees to grow, and they were pleasant to look at and good for food. This shows His righteousness, goodness, wisdom, and order. He made what was needed, and He made it good.",
+        "Because God is righteous and good, you can trust that His design is not careless. He knows what is needed and how things should function. Trust His wisdom and His ability even when you do not understand how everything will work out."
+      ),
+      jireh: pair(
+        "God provided food before Adam had to go searching for it. The trees were already there and were good for food. This shows God as Jehovah-Jireh, the Provider.",
+        "God knows what you need before you do. His provision may already be prepared before you recognize the need. Look to Him as your Provider, follow His direction, and use wisely what He puts in your hands."
+      ),
+      shalom: pair(
+        "God had already provided what Adam needed. There was no lack or struggle for survival. His provision created an environment where Adam could live in peace.",
+        "There is peace in knowing that God is your Provider. When you trust Him as Jehovah-Jireh and recognize that He knows what you need, you do not have to live controlled by fear over provision. Peace comes from knowing the Provider is with you, guiding you, and caring for you."
+      )
+    });
+
+    registerTeaching("genesis 2:10", ["tsidkenu"], {
+      tsidkenu: pair(
+        "A river went out of Eden to water the garden and then divided into four heads. This connects with Jehovah-Tsidkenu because it shows God’s righteousness, goodness, wisdom, and order in supplying what the garden needed.",
+        "God is righteous and good, and He knows how to bring order and provision into a situation. You may not always understand how everything connects, but He sees the whole picture and is able to arrange what is needed."
+      )
+    });
+
+    registerRange(2, 11, 14, ["tsidkenu"], function(verseNumber) {
+      return {
+        tsidkenu: pair(
+          "This verse continues describing the rivers, lands, and resources God placed within His creation. It connects with Jehovah-Tsidkenu because God’s creation was ordered, purposeful, and filled with the details He chose to establish.",
+          "God is righteous and purposeful. He knows where things belong and how they should function. You can trust Him with the details of your life and follow His direction even when you cannot yet see how everything fits together."
+        )
+      };
+    });
+
+    registerTeaching("genesis 2:15", ["tsidkenu"], {
+      tsidkenu: pair(
+        "God put Adam in the garden and gave him work to dress it and keep it. This shows God’s righteous order because Adam was given purpose, responsibility, and stewardship over what God had made.",
+        "God created you with purpose. Be faithful with what He places in your hands—your work, responsibilities, possessions, relationships, ministry, animals, and the part of His creation entrusted to you. Stay in fellowship with Him and let Him show you how to steward it well."
+      )
+    });
+
+    registerTeaching("genesis 2:16", ["jireh"], {
+      jireh: pair(
+        "God told Adam that he could freely eat from every tree of the garden except the one He restricted. This shows Jehovah-Jireh because God had already provided abundance. Adam was not surrounded by lack.",
+        "God’s provision is not stingy. Do not focus so much on the one thing God says no to that you overlook everything He has already provided. Recognize His provision, trust His goodness, and use what He gives you wisely."
+      )
+    });
+
+    registerTeaching("genesis 2:17", ["tsidkenu", "raah"], {
+      tsidkenu: pair(
+        "God gave Adam a clear command not to eat from the tree of the knowledge of good and evil and warned him of the consequence. This connects with Jehovah-Tsidkenu because God is righteous, His command was right, and disobedience has real consequences.",
+        "God’s commands are not random. Because He is righteous, what He tells you is right and for your good. Take His Word seriously even when you do not yet understand every reason behind a boundary."
+      ),
+      raah: pair(
+        "A shepherd does not only lead by saying where to go; sometimes he also says where not to go. God was guiding Adam by giving him a boundary and warning him away from something that would bring death.",
+        "There will be times when God leads you by saying, “Do not do this,” “Do not go there,” or “Do not take that path.” That is still His shepherding. He sees what you cannot see, so trust His direction and His warnings."
+      )
+    });
+
+    registerTeaching("genesis 2:18", ["shammah"], {
+      shammah: pair(
+        "God was already personally present with Adam, but He saw that it was not good for Adam to be alone and prepared Eve for him. Because mankind was created to reflect God, Eve could reflect something of God’s character, care, companionship, and presence to Adam without replacing God Himself.",
+        "God can be present with you personally and can also show His care through people He places in your life. People do not take God’s place, but because we are created to reflect Him, another person can become one of the ways His love, help, care, and companionship are expressed to you."
+      )
+    });
+
+    registerTeaching("genesis 2:19", ["tsidkenu"], {
+      tsidkenu: pair(
+        "God gave Adam real authority and responsibility by bringing the animals to him and allowing him to name them. Adam was reflecting God’s righteousness by exercising the order, wisdom, and authority God had given him.",
+        "God created people to reflect Him, and part of that reflection is our ability to create, invent, design, build, organize, and develop things from what He has already made. People have developed things such as electric lights, electrical systems, phones, cars, buildings, tools, medicines, and technology. Use the gifts, ideas, wisdom, and abilities God gives you under His direction and for good purposes."
+      )
+    });
+
+    registerTeaching("genesis 2:20", ["tsidkenu"], {
+      tsidkenu: pair(
+        "Adam continued naming the animals, exercising the authority and responsibility God had given him. This shows Adam reflecting God’s righteousness through order, stewardship, and purposeful work.",
+        "The abilities God gives you are meant to be used. You can reflect your Creator by responsibly creating, organizing, solving problems, building, and caring for what He entrusts to you. Your authority and creativity should remain under God’s authority and direction."
+      )
+    });
+
+    registerTeaching("genesis 2:21", ["tsidkenu", "shammah"], {
+      tsidkenu: pair(
+        "God caused Adam to fall into a deep sleep and took from Adam in order to form Eve. This shows how great, wise, powerful, and righteous God is. His work was intentional and according to His good design.",
+        "God is wise enough to know what is needed in your life and powerful enough to act according to His purpose. Even when you do not understand what He is doing, you can trust His righteousness and goodness."
+      ),
+      shammah: pair(
+        "God was personally involved in creating Eve. Because mankind was made to reflect God, Eve would become another person through whom Adam could experience companionship, help, and something of God’s character and care.",
+        "God can show His care and presence to you directly and can also reflect His goodness through the people He places in your life. People are not God, but God can use relationships to show something of His character and care."
+      )
+    });
+
+    registerTeaching("genesis 2:22", ["tsidkenu", "shammah"], {
+      tsidkenu: pair(
+        "God made the woman and brought her to Adam. This shows His righteousness, wisdom, power, and intentional design. Eve was not an accident; God created her with purpose.",
+        "You can trust that God is wise enough to know what is needed and powerful enough to bring about what is right. His ways are not careless, so stay in fellowship with Him rather than trying to force your own outcome."
+      ),
+      shammah: pair(
+        "God brought Eve into Adam’s life. Because mankind reflects God, her companionship and help could reflect something of the God who was already present with Adam.",
+        "God may show His care through relationships He brings into your life. A spouse or another person does not replace God, but can become one of the ways His love, help, wisdom, and companionship are expressed."
+      )
+    });
+
+    registerTeaching("genesis 2:23", ["shammah", "raah"], {
+      shammah: pair(
+        "Adam recognized Eve as uniquely connected to him. This continues the truth that God’s care and presence can be reflected through the relationship He provided.",
+        "God can show His presence and care through relationships. A spouse does not replace God, but marriage can become one of the ways His love, companionship, help, and faithfulness are expressed in your life."
+      ),
+      raah: pair(
+        "God had been involved in bringing Eve to Adam. This connects with Jehovah-Ra’ah because the Shepherd leads and guides, including in relationships and major life decisions.",
+        "You do not have to rush ahead or depend only on your own judgment in relationships. Stay in fellowship with God, listen to His direction, and trust Him to guide you toward the person who is right for you rather than forcing something because you are afraid of being alone."
+      )
+    });
+
+    registerTeaching("genesis 2:24", ["shammah", "raah"], {
+      shammah: pair(
+        "This verse establishes the pattern of a man and woman joining together as one. The relationship continues the companionship and help God provided, reflecting something of His care without replacing His own presence.",
+        "God can use marriage and other relationships to express companionship, help, and care. People do not take God’s place, but relationships can reflect something of His character when they are lived according to His design."
+      ),
+      raah: pair(
+        "The marriage relationship is not something you have to navigate apart from God. This connects with Jehovah-Ra’ah because the Shepherd guides people in relationships and in the covenant responsibilities that follow.",
+        "Let God shepherd your relationships. He can guide you toward the right person, warn you away from the wrong path, and continue guiding you after marriage in how to love, serve, and walk together."
+      )
+    });
+
+    registerTeaching("genesis 2:25", ["shalom", "tsidkenu"], {
+      shalom: pair(
+        "Adam and Eve were naked and were not ashamed. There was no fear, guilt, insecurity, hiding, or brokenness between them. They were at peace with how God had made them and at peace with one another.",
+        "God’s peace includes freedom from shame and the need to hide. Shame makes people withdraw and fear being seen, but peace allows you to live honestly before God and receive the truth of who He created you to be. Stay in fellowship with Him and let His truth bring peace into areas where shame or insecurity have tried to control you."
+      ),
+      tsidkenu: pair(
+        "At this point Adam and Eve were still in the condition God originally created them to be. There was no sin, guilt, or corruption. Their lack of shame reflected the righteousness and goodness of God’s original creation.",
+        "Shame was not part of God’s original design for mankind. God is righteous, and His purpose is not for you to live dominated by condemnation and hiding. Through the right standing He provides, you can come to Him openly, receive mercy and help, and learn to live from His truth instead of shame."
+      )
+    });
+
+    // -------------------------
+    // GENESIS 3 — Caleb's teaching
+    // -------------------------
+    // Caleb has not assigned a Redemptive Name to verses 1–13 or 20–21.
+    // Registering them with an empty array prevents the keyword fallback from
+    // inventing a connection that is not part of his teaching.
+    registerRange(3, 1, 13, [], {});
+    registerRange(3, 20, 21, [], {});
+
+    registerRange(3, 14, 19, ["tsidkenu"], function(verseNumber) {
+      return {
+        tsidkenu: pair(
+          "This verse is part of God’s judgment after mankind’s disobedience. It connects with Jehovah-Tsidkenu because God is righteous and just. He does not ignore sin or pretend disobedience has no consequences; His judgments are according to what is right.",
+          "God’s righteousness means He does not call evil good or overlook sin as though it does not matter. You can trust that His judgment is right because His character is righteous. Take His Word seriously and remember that disobedience has real consequences."
+        )
+      };
+    });
+
+    registerTeaching("genesis 3:15", ["tsidkenu", "shalom", "nissi"], {
+      tsidkenu: pair(
+        "This verse stands within God’s righteous judgment of sin, but it also points forward to the One who would deal with sin. God is just and righteous, and His answer to the fall would ultimately be fulfilled through Jesus.",
+        "God does not ignore sin, but His righteousness also includes the way He has provided for mankind to be made right with Him through Jesus. You can come to the Father from the right standing Christ provides instead of living under condemnation."
+      ),
+      shalom: pair(
+        "In Caleb’s teaching, this verse points forward to Jesus dying for our sins and making a way for mankind to be made righteous again. Sin broke fellowship with God, but Christ would restore peace with God.",
+        "Peace with God comes from what Jesus accomplished, not from pretending sin never happened. Because Christ dealt with sin and made a way for you to be made righteous before God, you can come to the Father without hiding in condemnation and live in restored peace with Him."
+      ),
+      nissi: pair(
+        "The promise that the serpent’s head would be crushed points forward to Jesus and His victory over sin and the enemy. This connects with Jehovah-Nissi because Christ’s work is the decisive victory.",
+        "Your victory is not something you have to create by yourself. Jesus has already won the decisive victory. When you face sin, temptation, fear, or the enemy’s attacks, look to Christ and learn to walk in the victory He has provided."
+      )
+    });
+
+    registerTeaching("genesis 3:22", ["tsidkenu"], {
+      tsidkenu: pair(
+        "Adam and Eve now knew good and evil. In Caleb’s teaching, mankind was never created to live forever in that fallen condition. Because God is righteous, He would not allow them to take from the tree of life and remain forever in the condition produced by disobedience.",
+        "God’s righteousness means He sees consequences farther ahead than you do. A restriction from Him may be protection from something you cannot yet see. Trust that a righteous God knows what is good and what would ultimately harm you."
+      )
+    });
+
+    registerTeaching("genesis 3:23", ["tsidkenu"], {
+      tsidkenu: pair(
+        "God sent Adam and Eve out of the garden after their disobedience. This connects with Jehovah-Tsidkenu because God is righteous and would not allow mankind to continue as though nothing had changed.",
+        "God’s boundaries and consequences are not random. He knows what is right and what is necessary after disobedience. Even when a door closes, trust His righteousness and let the consequence turn you back toward His truth rather than away from Him."
+      )
+    });
+
+    registerTeaching("genesis 3:24", ["tsidkenu"], {
+      tsidkenu: pair(
+        "God placed cherubim and a flaming sword to guard the way to the tree of life. This connects with Jehovah-Tsidkenu because, after mankind knew good and evil, God acted righteously to prevent them from living forever in that fallen condition.",
+        "Sometimes God’s righteousness is seen in a guarded door. What feels like restriction can be protection. He sees what a path would produce farther ahead than you can, so trust His wisdom and His boundaries even when you do not yet understand them."
+      )
+    });
 
     function matchedKeywordsFor(profile, result) {
       const verseText = normalize(result.text);
@@ -363,8 +771,21 @@
 
     function findProfiles(result) {
       const reference = normalize(verseReference(result));
+
+      // Once Caleb has taught a verse, his curated list is authoritative.
+      // This also allows an intentionally empty list for verses where he does
+      // not see a genuine Redemptive Name connection.
+      if (Object.prototype.hasOwnProperty.call(curatedConnections, reference)) {
+        const curatedIds = new Set(curatedConnections[reference] || []);
+        return profiles.filter(function(profile) {
+          return curatedIds.has(profile.id);
+        });
+      }
+
+      // Untaught verses can still use the older reference/keyword fallback
+      // until Caleb reaches them in the verse-by-verse study.
       const text = normalize(result.text);
-      const matchedIds = new Set(curatedConnections[reference] || []);
+      const matchedIds = new Set();
 
       profiles.forEach(function(profile) {
         const exactReferenceMatch = profile.references.some(function(item) {
