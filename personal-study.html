@@ -877,6 +877,85 @@
     margin-top: 10px;
   }
 
+
+  /* =========================================
+     BIBLEMASTERY AI — PERSONAL STUDY
+  ========================================= */
+  .personal-ai-box {
+    border-color: rgba(231,202,125,.46);
+    background:
+      linear-gradient(145deg, rgba(22,36,60,.98), rgba(12,23,42,.98));
+  }
+
+  .personal-ai-box h2 {
+    margin-bottom: 8px;
+  }
+
+  .personal-ai-question {
+    width: 100%;
+    min-height: 130px;
+    resize: vertical;
+    padding: 14px;
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--text);
+    background: var(--panel-2);
+    border: 1px solid rgba(216,185,106,.35);
+    border-radius: 9px;
+  }
+
+  .personal-ai-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+
+  .personal-ai-actions button {
+    padding: 11px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+  .personal-ai-ask {
+    border: 1px solid var(--gold);
+    background: var(--gold);
+    color: var(--bg-mid);
+  }
+
+  .personal-ai-ask:hover {
+    background: var(--gold-light);
+    border-color: var(--gold-light);
+  }
+
+  .personal-ai-clear {
+    border: 1px solid rgba(216,185,106,.35);
+    background: #1b2b46;
+    color: var(--text);
+  }
+
+  .personal-ai-clear:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  .personal-ai-answer {
+    margin-top: 16px;
+    padding: 16px;
+    min-height: 70px;
+    white-space: pre-wrap;
+    line-height: 1.7;
+    color: #e5e7ec;
+    background: rgba(8,15,29,.48);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 10px;
+  }
+
+  .legacy-guided-study-controls {
+    display: none !important;
+  }
+
   @media (max-width: 1000px) {
     .reader-shell,
     .study-columns {
@@ -990,39 +1069,57 @@
   </a>
 
 
-  <div
-    class="study-box"
-    id="topicBox"
-  >
+  <div class="study-box personal-ai-box" id="topicBox">
 
-    <h2>
-      What would you like to study?
-    </h2>
+    <h2>✨ BibleMastery AI</h2>
 
     <p class="study-description">
-      Use the study tools below freely, or enter a topic when you want BibleMastery to build a guided topical study for you.
+      Ask for help while you study Scripture. BibleMastery AI is here when you need extra explanation, help connecting passages, or direction for deeper study.
     </p>
 
-    <label for="topicInput">
-      Bible Study Topic
-    </label>
+    <label for="personalAiQuestion">What would you like help with?</label>
 
-    <input
-      type="text"
-      id="topicInput"
-      class="topic-input"
-      placeholder="Example: The 7 redemptive names of God"
-      autocomplete="off"
-    >
+    <textarea
+      id="personalAiQuestion"
+      class="personal-ai-question"
+      placeholder="Example: Help me understand Romans 5:1-5, or show me passages about God's provision."
+    ></textarea>
 
-    <br><br>
+    <div class="personal-ai-actions">
+      <button id="personalAiAskButton" class="personal-ai-ask" type="button">
+        Ask BibleMastery AI
+      </button>
 
-    <button
-      id="startStudyButton"
-      class="start-button"
-    >
-      Build Guided Study
-    </button>
+      <button id="personalAiClearButton" class="personal-ai-clear" type="button">
+        Clear
+      </button>
+    </div>
+
+    <div id="personalAiAnswer" class="personal-ai-answer" aria-live="polite">
+      BibleMastery AI is ready when you are.
+    </div>
+
+    <!--
+      Keep the original guided-study controls available to the existing
+      JavaScript and URL-topic workflow without showing them in the page.
+    -->
+    <div class="legacy-guided-study-controls" aria-hidden="true">
+      <input
+        type="text"
+        id="topicInput"
+        class="topic-input"
+        autocomplete="off"
+        tabindex="-1"
+      >
+      <button
+        id="startStudyButton"
+        class="start-button"
+        type="button"
+        tabindex="-1"
+      >
+        Build Guided Study
+      </button>
+    </div>
 
   </div>
 
@@ -1045,7 +1142,7 @@
       <p
         id="topicIntro"
         class="workspace-intro"
-      >Study freely with the tools below, or use “What would you like to study?” above to build a guided topical study.</p>
+      >Study freely with the tools below, and use BibleMastery AI above whenever you want extra help while you study.</p>
 
       <div id="guidedStudyOverview"></div>
 
@@ -1728,6 +1825,134 @@
 
   const commentaryContent =
     document.getElementById("commentaryContent");
+
+
+  /* =========================================
+     BIBLEMASTERY AI — PERSONAL STUDY
+     Manual submit only — no automatic API calls
+  ========================================= */
+
+  const personalAiEndpoint =
+    "https://biblemastrey-ai.bashamcaleb530.workers.dev";
+
+  const personalAiQuestion =
+    document.getElementById("personalAiQuestion");
+
+  const personalAiAskButton =
+    document.getElementById("personalAiAskButton");
+
+  const personalAiClearButton =
+    document.getElementById("personalAiClearButton");
+
+  const personalAiAnswer =
+    document.getElementById("personalAiAnswer");
+
+
+  async function askPersonalBibleMasteryAI() {
+
+    const userQuestion =
+      personalAiQuestion.value.trim();
+
+    if (!userQuestion) {
+      personalAiAnswer.textContent =
+        "Enter a Bible study question for BibleMastery AI.";
+      personalAiQuestion.focus();
+      return;
+    }
+
+    personalAiAskButton.disabled = true;
+
+    personalAiAnswer.textContent =
+      "BibleMastery AI is thinking...";
+
+    try {
+
+      const question =
+        "You are helping someone with personal Bible study. " +
+        "Keep Scripture primary, clearly distinguish Scripture from explanation, " +
+        "and do not invent Bible quotations or references. " +
+        "Help the person understand the Bible and point them back to Scripture.\\n\\n" +
+        "User question: " + userQuestion;
+
+      const response =
+        await fetch(
+          personalAiEndpoint,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              question: question
+            })
+          }
+        );
+
+      const data =
+        await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.error ||
+          "AI request failed."
+        );
+      }
+
+      personalAiAnswer.textContent =
+        data.answer ||
+        "BibleMastery AI did not return an answer.";
+
+    } catch (error) {
+
+      console.error(
+        "BibleMastery Personal Study AI error:",
+        error
+      );
+
+      personalAiAnswer.textContent =
+        "BibleMastery AI could not answer right now. Please try again.";
+
+    } finally {
+
+      personalAiAskButton.disabled = false;
+    }
+  }
+
+
+  personalAiAskButton.addEventListener(
+    "click",
+    askPersonalBibleMasteryAI
+  );
+
+
+  personalAiClearButton.addEventListener(
+    "click",
+    function() {
+
+      personalAiQuestion.value = "";
+
+      personalAiAnswer.textContent =
+        "BibleMastery AI is ready when you are.";
+
+      personalAiQuestion.focus();
+    }
+  );
+
+
+  personalAiQuestion.addEventListener(
+    "keydown",
+    function(event) {
+
+      if (
+        event.key === "Enter" &&
+        (event.ctrlKey || event.metaKey)
+      ) {
+        event.preventDefault();
+        askPersonalBibleMasteryAI();
+      }
+    }
+  );
+
 
 
   /* =========================================
