@@ -2,10 +2,24 @@
   "id": "/",
   "name": "BibleMastery",
   "short_name": "BibleMastery",
-  "description": "Bible reading, Personal Study, deep study tools, Gospel chronology, maps, and theology books.",
+  "description": "Bible reading, Personal Study, deep study tools, Gospel chronology, maps, theology books, and sermon study tools.",
   "start_url": "/personal-study.html",
   "scope": "/",
   "display": "standalone",
   "background_color": "#fff9ec",
-  "theme_color": "#7a0d12"
+  "theme_color": "#7a0d12",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
 }
