@@ -11238,12 +11238,51 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
     }
   ];
   const getBooks=()=>Array.isArray(window.BIBLEMASTERY_THEOLOGY_BOOKS)?window.BIBLEMASTERY_THEOLOGY_BOOKS:builtInBooks;
+
+  // Smart-book connections only search resources that are actually in this user's library.
+  // This owner build starts with the two physical books the user has confirmed owning,
+  // plus the public-domain books that BibleMastery includes legally.
+  const bmDefaultOwnedBooks=new Set([
+    "The Believer's Authority",
+    "Christ the Healer"
+  ]);
+  const bmIncludedPublicDomainBooks=new Set([
+    "Christ the Healer",
+    "Ever-Increasing Faith",
+    "The Wonderful Name of Jesus",
+    "The Gospel of Healing",
+    "Divine Healing",
+    "The Ministry of Healing"
+  ]);
+  function bmStoredOwnedBooks(){
+    try{
+      const raw=localStorage.getItem('biblemastery_owned_books');
+      if(!raw)return new Set(bmDefaultOwnedBooks);
+      const arr=JSON.parse(raw);
+      return new Set(Array.isArray(arr)?arr:[...bmDefaultOwnedBooks]);
+    }catch(e){return new Set(bmDefaultOwnedBooks);}
+  }
+  function bmLibraryAccess(book){
+    const title=book?.title||'';
+    const owned=bmStoredOwnedBooks().has(title);
+    const included=bmIncludedPublicDomainBooks.has(title);
+    if(owned)return {allowed:true,type:'owned',label:'Owned'};
+    if(included)return {allowed:true,type:'included',label:'Included'};
+    return {allowed:false,type:'unavailable',label:'Not in My Library'};
+  }
+  window.BibleMasterySetBookOwned=function(title,isOwned=true){
+    const set=bmStoredOwnedBooks();
+    if(isOwned)set.add(title);else set.delete(title);
+    try{localStorage.setItem('biblemastery_owned_books',JSON.stringify([...set]));}catch(e){}
+    if(typeof renderPassageBookConnections==='function')renderPassageBookConnections();
+    if(typeof renderBooks==='function')renderBooks(document.getElementById('theologyBookSearch')?.value||'');
+  };
   let bookIndex=0, chapterIndex=0;
   function esc(s){return String(s??'').replace(/[&<>\"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[c]));}
   function renderBooks(filter=''){
     const list=$('theologyBookLibrary'); if(!list)return; const books=getBooks(); const f=filter.toLowerCase();
     if(!books.length){list.innerHTML='<div class="bm-empty-library"><div class="bm-empty-library-icon">📚</div><strong>No theology books added yet</strong><span>The library is ready for the first books.</span></div>'; renderBookReader(); return;}
-    list.innerHTML=books.map((b,i)=>({b,i})).filter(x=>!f||((x.b.title||'')+' '+(x.b.author||'')+' '+(x.b.chapters||[]).map(c=>c.title||'').join(' ')).toLowerCase().includes(f)).map(x=>'<button type="button" class="bm-theology-book-item '+(x.i===bookIndex?'active':'')+'" data-book-index="'+x.i+'"><strong>'+esc(x.b.title)+'</strong><div class="small-note">'+esc(x.b.author||'')+'</div></button>').join('')||'<div class="small-note">No matching books.</div>';
+    list.innerHTML=books.map((b,i)=>({b,i,access:bmLibraryAccess(b)})).filter(x=>!f||((x.b.title||'')+' '+(x.b.author||'')+' '+(x.b.chapters||[]).map(c=>c.title||'').join(' ')).toLowerCase().includes(f)).map(x=>'<button type="button" class="bm-theology-book-item '+(x.i===bookIndex?'active':'')+'" data-book-index="'+x.i+'"><strong>'+esc(x.b.title)+'</strong><div class="small-note">'+esc(x.b.author||'')+' • '+esc(x.access.label)+'</div></button>').join('')||'<div class="small-note">No matching books.</div>';
     list.querySelectorAll('[data-book-index]').forEach(b=>b.addEventListener('click',()=>{bookIndex=Number(b.dataset.bookIndex)||0;chapterIndex=0;renderBooks($('theologyBookSearch')?.value||'');renderBookReader();}));
     renderBookReader();
   }
@@ -11445,13 +11484,15 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
 
   function bestBooksForPassage(ref){
     const themes=passageThemes(ref); const books=getBooks();
-    const scored=books.map((book,index)=>{
-      const p=bookProfiles[book.title]||{}; let score=0; const matched=[];
-      Object.entries(themes).forEach(([theme,w])=>{if(p[theme]){score+=w*p[theme];matched.push(theme)}});
-      // useful defaults when a passage has no special rule yet
-      if(!Object.keys(themes).length){score=(p.faith||0)+(p.identity||0)*.4+(p.healing||0)*.25;}
-      return {book,index,score,matched:[...new Set(matched)]};
-    }).sort((a,b)=>b.score-a.score||a.index-b.index);
+    const scored=books.map((book,index)=>({book,index,access:bmLibraryAccess(book)}))
+      .filter(x=>x.access.allowed)
+      .map(({book,index,access})=>{
+        const p=bookProfiles[book.title]||{}; let score=0; const matched=[];
+        Object.entries(themes).forEach(([theme,w])=>{if(p[theme]){score+=w*p[theme];matched.push(theme)}});
+        // useful defaults when a passage has no special rule yet
+        if(!Object.keys(themes).length){score=(p.faith||0)+(p.identity||0)*.4+(p.healing||0)*.25;}
+        return {book,index,score,matched:[...new Set(matched)],access};
+      }).sort((a,b)=>b.score-a.score||a.index-b.index);
     return scored.slice(0,2);
   }
 
@@ -11463,9 +11504,10 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
   function renderPassageBookConnections(){
     const ref=currentReaderRef(),refEl=$('bmPassageBookReference'),out=$('bmPassageBookResults'); if(!out||!refEl)return;
     if(!ref.book||!ref.chapter){refEl.textContent='Choose a Bible book and chapter to see the strongest book connections.';out.innerHTML='<div class="small-note">The recommendations will update automatically as you read.</div>';return;}
-    refEl.textContent='Best matches for '+ref.book+' '+ref.chapter+(ref.verse?(':'+ref.verse):'')+' • start with the most relevant section, then open the full book only when you want it.';
+    refEl.textContent='Best matches for '+ref.book+' '+ref.chapter+(ref.verse?(':'+ref.verse):'')+' • searching only books you own or public-domain books included in BibleMastery.';
     const picks=bestBooksForPassage(ref);
-    out.innerHTML=picks.map((x,i)=>{const start=bestStartForBook(x.book,x.matched);return '<article class="bm-passage-book-card"><div class="bm-eyebrow">MATCH '+(i+1)+'</div><h4>'+esc(x.book.title)+'</h4><div class="small-note">'+esc(x.book.author||'')+'</div><div class="bm-start-here"><strong>Start here:</strong> '+esc(start.section)+'</div><p class="bm-match-reason">Connected through '+esc(themeLabel(x.matched)||'faith and Christian life')+'.</p><div class="bm-passage-book-actions"><button type="button" class="search-button" data-open-book-context="'+x.index+'">Read from Here</button><button type="button" class="reader-nav-button" data-open-library-book="'+esc(x.book.title)+'">Full Book in Library</button></div></article>'}).join('');
+    if(!picks.length){out.innerHTML='<div class="small-note">No matching books are currently available in My Library.</div>';return;}
+    out.innerHTML=picks.map((x,i)=>{const start=bestStartForBook(x.book,x.matched);return '<article class="bm-passage-book-card"><div class="bm-eyebrow">MATCH '+(i+1)+' • '+esc(x.access?.label||'My Library')+'</div><h4>'+esc(x.book.title)+'</h4><div class="small-note">'+esc(x.book.author||'')+'</div><div class="bm-start-here"><strong>Start here:</strong> '+esc(start.section)+'</div><p class="bm-match-reason">Connected through '+esc(themeLabel(x.matched)||'faith and Christian life')+'.</p><div class="bm-passage-book-actions"><button type="button" class="search-button" data-open-book-context="'+x.index+'">Read from Here</button><button type="button" class="reader-nav-button" data-open-library-book="'+esc(x.book.title)+'">Full Book in Library</button></div></article>'}).join('');
   }
 
   let bmBookContextState=null;
