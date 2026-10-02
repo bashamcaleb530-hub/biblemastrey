@@ -1928,6 +1928,34 @@ button,a,input,select,textarea{min-height:38px}
 }
 </style>
 
+
+<style id="biblemastery-library-connections-style">
+.bm-library-card{grid-column:1/-1;scroll-margin-top:80px}
+.bm-library-head,.bm-passage-books-head{display:flex;gap:16px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}
+.bm-library-head h2,.bm-passage-books-head h3{margin:.15rem 0 .35rem}
+.bm-library-head .search-input{width:min(360px,100%)}
+.bm-library-layout{display:grid;grid-template-columns:minmax(230px,310px) minmax(0,1fr);gap:14px;margin-top:14px}
+.bm-library-shelf,.bm-library-reader,.bm-passage-books{border:1px solid rgba(216,185,106,.28);border-radius:14px;background:rgba(255,255,255,.035)}
+.bm-library-shelf{padding:10px;max-height:760px;overflow:auto}
+.bm-library-list{display:flex;flex-direction:column;gap:8px}
+.bm-library-book{width:100%;text-align:left;border:1px solid rgba(216,185,106,.24);border-radius:11px;padding:11px;background:rgba(17,30,50,.78);color:inherit;cursor:pointer}
+.bm-library-book:hover,.bm-library-book.active{border-color:var(--gold);background:rgba(122,13,18,.38)}
+.bm-library-book strong{display:block;color:var(--gold-light);margin-bottom:3px}
+.bm-library-reader{padding:12px;min-width:0}
+.bm-library-reader-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;margin-bottom:10px}
+.bm-library-reader-head h3{margin:.2rem 0}
+.bm-library-status{padding:10px 12px;border-radius:10px;background:rgba(216,185,106,.10);margin-bottom:10px;line-height:1.5}
+.bm-library-frame{width:100%;height:72vh;min-height:620px;border:1px solid rgba(216,185,106,.25);border-radius:12px;background:#fff}
+.bm-passage-books{padding:14px;margin-bottom:14px}
+.bm-passage-book-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}
+.bm-passage-book-card{border:1px solid rgba(216,185,106,.25);border-radius:12px;padding:12px;background:rgba(17,30,50,.72)}
+.bm-passage-book-card h4{margin:0 0 5px;color:var(--gold-light)}
+.bm-passage-book-card p{margin:5px 0 10px;line-height:1.5}
+.bm-passage-book-card .bm-match-reason{font-size:12px;color:var(--muted)}
+.bm-passage-book-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.bm-passage-book-actions button{font-size:13px}
+@media(max-width:900px){.bm-library-layout{grid-template-columns:1fr}.bm-library-shelf{max-height:300px}.bm-library-frame{min-height:520px;height:68vh}.bm-passage-book-grid{grid-template-columns:1fr}}
+</style>
 </head>
 <body class="bm-layout-dashboard" data-default-view="personal-study">
 
@@ -1959,6 +1987,7 @@ button,a,input,select,textarea{min-height:38px}
 <button data-bm-target="bmDeepCard" type="button">♨ <span>Deep Study</span></button>
 <button data-bm-target="bmGospelCard" type="button">✚ <span>Gospel Chronology</span></button>
 <button data-bm-target="bmMapCard" type="button">● <span>Maps</span></button>
+<button data-bm-target="bmLibraryCard" type="button">📚 <span>Library</span></button>
 <button data-bm-open-extra="masteryNotebook" type="button">▤ <span>Notebook</span></button>
 <button data-deep-shortcut="saved" type="button">▰ <span>Saved Studies</span></button>
 <button id="bmSettingsButton" type="button">⚙ <span>Settings</span></button>
@@ -2188,6 +2217,17 @@ button,a,input,select,textarea{min-height:38px}
 </div>
 </div>
 </div><div class="deep-study-panel" id="deepStudyBooksPanel">
+<div class="bm-passage-books" id="bmPassageBookConnections">
+  <div class="bm-passage-books-head">
+    <div>
+      <div class="bm-eyebrow">CONNECTED TO THE BIBLE READER</div>
+      <h3>2 Best Books for This Passage</h3>
+      <p id="bmPassageBookReference">Choose a Bible book and chapter to see the strongest book connections.</p>
+    </div>
+    <button class="reader-nav-button" id="bmOpenLibraryFromBooks" type="button">Open Library</button>
+  </div>
+  <div class="bm-passage-book-grid" id="bmPassageBookResults"></div>
+</div>
 <div class="bm-theology-layout">
 <aside class="bm-theology-library">
 <div class="bm-theology-library-head">
@@ -2296,9 +2336,38 @@ button,a,input,select,textarea{min-height:38px}
 <button data-deep-shortcut="entities" type="button">● <span>People &amp; Places</span></button>
 <button data-deep-shortcut="topics" type="button">▦ <span>Topics</span></button>
 <button data-bm-target="bmMapCard" type="button">◉ <span>Maps</span></button>
+<button data-bm-target="bmLibraryCard" type="button">📚 <span>Library</span></button>
 <button data-bm-open-extra="masteryNotebook" type="button">□ <span>Save to Notebook</span></button>
 </div>
 </div>
+</section>
+
+<section class="bm-card bm-library-card" id="bmLibraryCard">
+  <div class="bm-library-head">
+    <div>
+      <div class="bm-eyebrow">BIBLEMASTERY LIBRARY</div>
+      <h2>📚 Library</h2>
+      <p>Choose a book and read it here. Public-domain editions open inside BibleMastery; copyrighted ministry resources open from the official source.</p>
+    </div>
+    <input class="search-input" id="bmLibrarySearch" type="search" placeholder="Search the library..." />
+  </div>
+  <div class="bm-library-layout">
+    <aside class="bm-library-shelf">
+      <div class="bm-library-list" id="bmLibraryList"></div>
+    </aside>
+    <article class="bm-library-reader">
+      <div class="bm-library-reader-head">
+        <div>
+          <div class="bm-eyebrow" id="bmLibraryType">LIBRARY READER</div>
+          <h3 id="bmLibraryTitle">Choose a book</h3>
+          <div class="small-note" id="bmLibraryAuthor"></div>
+        </div>
+        <a class="reader-nav-button bm-library-open-external" id="bmLibraryExternal" href="#" target="_blank" rel="noopener" hidden>Open Source ↗</a>
+      </div>
+      <div class="bm-library-status" id="bmLibraryStatus">Choose a book from the shelf.</div>
+      <iframe id="bmLibraryFrame" class="bm-library-frame" title="BibleMastery Library reader" loading="lazy" allowfullscreen></iframe>
+    </article>
+  </div>
 </section>
 <section class="bm-card bm-gospel-card" id="bmGospelCard"><div id="bmGospelHost"><div class="deep-study-panel" id="deepStudyGospelsPanel">
 <div class="deep-study-card full-width">
@@ -11004,6 +11073,10 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
     title.textContent=b.title||'Untitled';author.textContent=b.author||'';tabs.innerHTML=chapters.map((c,i)=>'<button type="button" class="'+(i===chapterIndex?'active':'')+'" data-chapter-index="'+i+'">'+esc(c.title||('Chapter '+(i+1)))+'</button>').join('');
     tabs.querySelectorAll('[data-chapter-index]').forEach(x=>x.addEventListener('click',()=>{chapterIndex=Number(x.dataset.chapterIndex)||0;renderBookReader();}));
     const c=chapters[chapterIndex];reader.innerHTML=c?'<h3>'+esc(c.title||'')+'</h3><div class="bm-book-content">'+(c.html||('<p>'+esc(c.text||'')+'</p>'))+'</div>':'<div class="small-note">No chapters have been added to this book yet.</div>';
+    if(b && typeof window.BibleMasteryOpenLibraryBook==='function'){
+      const wrap=document.createElement('div');wrap.className='bm-passage-book-actions';wrap.style.marginTop='14px';
+      const btn=document.createElement('button');btn.type='button';btn.className='search-button';btn.textContent='📚 Read Full Book in Library';btn.addEventListener('click',()=>window.BibleMasteryOpenLibraryBook(b.title));wrap.appendChild(btn);reader.appendChild(wrap);
+    }
   }
   $('theologyBookSearch')?.addEventListener('input',e=>renderBooks(e.target.value));
   $('theologyPrevChapter')?.addEventListener('click',()=>{if(chapterIndex>0){chapterIndex--;renderBookReader();}});
@@ -11026,6 +11099,157 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
       deepTabsStrip.scrollLeft+=e.deltaY;
     }
   },{passive:false});
+
+
+
+  // =========================================
+  // BIBLEMASTERY LIBRARY + PASSAGE BOOK CONNECTIONS
+  // =========================================
+  const librarySources={
+    "The Believer's Authority":{
+      mode:"external",label:"Official AWMI resource",url:"https://www.awmi.net/authority/",
+      note:"This copyrighted book remains on Andrew Wommack Ministries' official site."
+    },
+    "Christ the Healer":{
+      mode:"embed",label:"Public-domain 1924 edition",url:"https://archive.org/embed/christhealerserm0000fred",
+      external:"https://archive.org/details/christhealerserm0000fred",
+      note:"Original 1924 public-domain edition."
+    },
+    "Ever-Increasing Faith":{
+      mode:"embed",label:"Public-domain 1924 edition",url:"https://archive.org/embed/everincreasingfa00wigg_0",
+      external:"https://archive.org/details/everincreasingfa00wigg_0",
+      note:"Original 1924 public-domain edition."
+    },
+    "Faith That Prevails":{
+      mode:"external",label:"Publisher resource",url:"https://gospelpublishinghouse.com/shop/product/faith-that-prevails",
+      note:"BibleMastery does not host the full text while copyright status of the edition in use remains uncertain."
+    },
+    "The Wonderful Name of Jesus":{
+      mode:"embed",label:"1927 work — external full-text reader",url:"https://guidances.nl/the-wonderful-name-of-jesus/",
+      external:"https://guidances.nl/the-wonderful-name-of-jesus/",
+      note:"The original work dates to 1927. This reader is served by the external source."
+    },
+    "The Gospel of Healing":{
+      mode:"embed",label:"Public-domain 1915 edition",url:"https://archive.org/embed/gospelofhealing00simp",
+      external:"https://archive.org/details/gospelofhealing00simp",
+      note:"Public-domain 1915 edition."
+    },
+    "Divine Healing":{
+      mode:"embed",label:"Public-domain Andrew Murray edition",url:"https://archive.org/embed/DivineHealingByAndrewMurrayBroughtByPeter-johnParisisfounderOfThe",
+      external:"https://archive.org/details/DivineHealingByAndrewMurrayBroughtByPeter-johnParisisfounderOfThe",
+      note:"Public-domain work by Andrew Murray."
+    },
+    "The Ministry of Healing":{
+      mode:"embed",label:"Public-domain 1882 edition",url:"https://archive.org/embed/ministryofhealin00gordiala",
+      external:"https://archive.org/details/ministryofhealin00gordiala",
+      note:"Public-domain 1882 edition."
+    }
+  };
+
+  const bookProfiles={
+    "The Believer's Authority":{authority:6,identity:6,warfare:6,faith:3,prayer:2},
+    "Christ the Healer":{healing:7,redemption:6,faith:4,compassion:4,covenant:4,prayer:2},
+    "Ever-Increasing Faith":{faith:7,healing:4,authority:4,spirit:5,gifts:5,prayer:3},
+    "Faith That Prevails":{faith:7,spirit:4,healing:3,prayer:3},
+    "The Wonderful Name of Jesus":{name:7,authority:7,identity:5,prayer:5,warfare:4,faith:3},
+    "The Gospel of Healing":{healing:7,faith:4,compassion:3,covenant:3,evangelism:2},
+    "Divine Healing":{healing:7,prayer:7,faith:5,holiness:3,redemption:3},
+    "The Ministry of Healing":{healing:5,evangelism:5,missions:5,history:4,compassion:3}
+  };
+
+  function currentReaderRef(){
+    const bookSel=$('readerBookSelect'),chSel=$('readerChapterSelect'),vSel=$('readerVerseSelect');
+    const book=bookSel?.selectedIndex>0?bookSel.options[bookSel.selectedIndex].textContent.trim():'';
+    const chapter=chSel?.selectedIndex>0?chSel.options[chSel.selectedIndex].textContent.trim():'';
+    const verse=vSel?.selectedIndex>0?vSel.options[vSel.selectedIndex].textContent.trim():'';
+    return {book,chapter:Number(chapter)||0,verse:Number(verse)||0,text:[book,chapter,verse?(':'+verse):''].join(' ').trim()};
+  }
+
+  function passageThemes(ref){
+    const t={}; const add=(name,n=1)=>t[name]=(t[name]||0)+n;
+    const b=(ref.book||'').toLowerCase(),c=ref.chapter||0;
+    if(!b)return t;
+    if(['matthew','mark','luke','john'].includes(b)){add('faith',2);add('healing',2);add('compassion',1);add('authority',1)}
+    if(b==='acts'){add('spirit',3);add('evangelism',3);add('authority',2);add('healing',2);add('gifts',2)}
+    if(b.includes('corinthians') && c>=12 && c<=14){add('spirit',5);add('gifts',6);add('faith',1)}
+    if(b==='james' && c===5){add('healing',7);add('prayer',6);add('faith',4)}
+    if(b==='exodus' && c===15){add('healing',7);add('covenant',6);add('redemption',2)}
+    if(b==='isaiah' && c===53){add('healing',7);add('redemption',7);add('faith',2)}
+    if((b==='psalms'||b==='psalm') && c===103){add('healing',6);add('redemption',5);add('compassion',3)}
+    if(b==='mark' && c===11){add('faith',7);add('prayer',6);add('authority',2)}
+    if(b==='matthew' && [8,9,10].includes(c)){add('healing',5);add('authority',4);add('evangelism',2)}
+    if(b==='luke' && c===10){add('authority',7);add('evangelism',4);add('warfare',4)}
+    if(b==='john' && [14,15,16].includes(c)){add('name',6);add('prayer',6);add('authority',4);add('identity',2)}
+    if(b==='philippians' && c===2){add('name',7);add('authority',5);add('identity',2)}
+    if(b==='ephesians' && [1,2,6].includes(c)){add('authority',6);add('identity',6);add('warfare',c===6?7:3);add('faith',2)}
+    if(b==='colossians' && [1,2].includes(c)){add('identity',6);add('authority',5);add('redemption',3)}
+    if(b==='romans' && [3,4,5,6,8,10].includes(c)){add('faith',4);add('identity',4);add('redemption',4)}
+    if(b==='galatians' && c===3){add('faith',6);add('redemption',4);add('covenant',3)}
+    if(b==='hebrews' && c===11){add('faith',8)}
+    if(b==='1 peter' && c===2){add('healing',4);add('redemption',5);add('identity',3)}
+    if(['matthew','mark','luke','acts'].includes(b) && ([10,16,28].includes(c)||b==='acts')){add('evangelism',3);add('missions',2)}
+    return t;
+  }
+
+  function bestBooksForPassage(ref){
+    const themes=passageThemes(ref); const books=getBooks();
+    const scored=books.map((book,index)=>{
+      const p=bookProfiles[book.title]||{}; let score=0; const matched=[];
+      Object.entries(themes).forEach(([theme,w])=>{if(p[theme]){score+=w*p[theme];matched.push(theme)}});
+      // useful defaults when a passage has no special rule yet
+      if(!Object.keys(themes).length){score=(p.faith||0)+(p.identity||0)*.4+(p.healing||0)*.25;}
+      return {book,index,score,matched:[...new Set(matched)]};
+    }).sort((a,b)=>b.score-a.score||a.index-b.index);
+    return scored.slice(0,2);
+  }
+
+  function themeLabel(themes){
+    const labels={healing:'healing',redemption:'redemption',faith:'faith',compassion:'Christ’s compassion',covenant:'covenant',authority:'authority in Christ',identity:'identity in Christ',warfare:'spiritual warfare',prayer:'prayer',name:'the Name of Jesus',spirit:'Holy Spirit',gifts:'spiritual gifts',evangelism:'evangelism',missions:'missions',holiness:'holiness'};
+    return themes.slice(0,4).map(x=>labels[x]||x).join(', ');
+  }
+
+  function renderPassageBookConnections(){
+    const ref=currentReaderRef(),refEl=$('bmPassageBookReference'),out=$('bmPassageBookResults'); if(!out||!refEl)return;
+    if(!ref.book||!ref.chapter){refEl.textContent='Choose a Bible book and chapter to see the strongest book connections.';out.innerHTML='<div class="small-note">The recommendations will update automatically as you read.</div>';return;}
+    refEl.textContent='Best matches for '+ref.book+' '+ref.chapter+(ref.verse?(':'+ref.verse):'');
+    const picks=bestBooksForPassage(ref);
+    out.innerHTML=picks.map((x,i)=>'<article class="bm-passage-book-card"><div class="bm-eyebrow">MATCH '+(i+1)+'</div><h4>'+esc(x.book.title)+'</h4><div class="small-note">'+esc(x.book.author||'')+'</div><p class="bm-match-reason">Connected through '+esc(themeLabel(x.matched)||'faith and Christian life')+'.</p><div class="bm-passage-book-actions"><button type="button" class="search-button" data-open-library-book="'+esc(x.book.title)+'">Read in Library</button><button type="button" class="reader-nav-button" data-open-theology-book="'+x.index+'">Open Study Entry</button></div></article>').join('');
+  }
+
+  let libraryCurrentTitle='';
+  function renderLibraryList(filter=''){
+    const list=$('bmLibraryList');if(!list)return;const books=getBooks(),f=String(filter||'').toLowerCase();
+    list.innerHTML=books.map((b,i)=>({b,i})).filter(x=>!f||((x.b.title||'')+' '+(x.b.author||'')).toLowerCase().includes(f)).map(x=>'<button type="button" class="bm-library-book '+(x.b.title===libraryCurrentTitle?'active':'')+'" data-library-title="'+esc(x.b.title)+'"><strong>'+esc(x.b.title)+'</strong><span class="small-note">'+esc(x.b.author||'')+'</span></button>').join('')||'<div class="small-note">No matching books.</div>';
+  }
+
+  function openLibraryBook(title){
+    const books=getBooks(),book=books.find(b=>b.title===title),source=librarySources[title]; if(!book||!source)return;
+    libraryCurrentTitle=title; renderLibraryList($('bmLibrarySearch')?.value||'');
+    $('bmLibraryTitle').textContent=book.title; $('bmLibraryAuthor').textContent=book.author||''; $('bmLibraryType').textContent=source.label||'LIBRARY READER';
+    const frame=$('bmLibraryFrame'),status=$('bmLibraryStatus'),external=$('bmLibraryExternal');
+    external.hidden=false;external.href=source.external||source.url;external.textContent=source.mode==='external'?'Open Official Resource ↗':'Open Full View ↗';
+    status.textContent=source.note||'';
+    if(source.mode==='embed'){
+      frame.hidden=false;frame.src=source.url;
+    }else{
+      frame.src='about:blank';frame.hidden=true;
+      status.innerHTML='<strong>'+esc(source.note||'This resource opens from its official source.')+'</strong><br><br><a class="search-button bm-book-link" href="'+esc(source.url)+'" target="_blank" rel="noopener">Open '+esc(book.title)+' ↗</a>';
+    }
+    $('bmLibraryCard')?.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+  window.BibleMasteryOpenLibraryBook=openLibraryBook;
+
+  $('bmLibrarySearch')?.addEventListener('input',e=>renderLibraryList(e.target.value));
+  $('bmLibraryList')?.addEventListener('click',e=>{const b=e.target.closest('[data-library-title]');if(b)openLibraryBook(b.dataset.libraryTitle)});
+  $('bmPassageBookResults')?.addEventListener('click',e=>{
+    const lb=e.target.closest('[data-open-library-book]');if(lb){openLibraryBook(lb.dataset.openLibraryBook);return;}
+    const tb=e.target.closest('[data-open-theology-book]');if(tb){bookIndex=Number(tb.dataset.openTheologyBook)||0;chapterIndex=0;activate('books');renderBooks($('theologyBookSearch')?.value||'');renderBookReader();$('bmDeepCard')?.scrollIntoView({behavior:'smooth',block:'start'});}
+  });
+  $('bmOpenLibraryFromBooks')?.addEventListener('click',()=>{$('bmLibraryCard')?.scrollIntoView({behavior:'smooth',block:'start'})});
+  ['readerBookSelect','readerChapterSelect','readerVerseSelect','readerTranslationSelect'].forEach(id=>$(id)?.addEventListener('change',()=>setTimeout(renderPassageBookConnections,20)));
+  const readerObs=$('readerDisplay');if(readerObs)new MutationObserver(()=>renderPassageBookConnections()).observe(readerObs,{childList:true,subtree:true});
+  renderLibraryList();renderPassageBookConnections();
+
 
   // Global search: references open in the Bible Reader; other terms open Concordance.
   function runGlobal(){const q=($('bmGlobalSearch')?.value||'').trim(); if(!q)return; const looksRef=/^[1-3]?\s*[A-Za-z]+(?:\s+[A-Za-z]+)*\s+\d+(?::\d+)?/.test(q); if(looksRef){const inp=$('deepStudyReference');if(inp)inp.value=q; if(typeof window.openDeepReferenceInReader==='function'){window.openDeepReferenceInReader(q);} else {$('deepReferenceInput').value=q; activate('references');} scrollToId('bmReaderCard');}else{const ci=$('deepConcordanceInput');if(ci)ci.value=q;activate('concordance');setTimeout(()=>$('deepConcordanceButton')?.click(),60);}}
