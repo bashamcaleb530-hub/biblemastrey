@@ -438,6 +438,11 @@
             <option value="DRA">Douay-Rheims American Edition</option>
             <option value="BSB">Berean Standard Bible</option>
             <option value="MSB">Majority Standard Bible</option>
+            <option value="BBE">Bible in Basic English (BBE)</option>
+            <option value="DBY">Darby Translation (DBY)</option>
+            <option value="WEBSTER">Noah Webster Bible</option>
+            <option value="WMB">World Messianic Bible (WMB)</option>
+            <option value="RV">Revised Version (RV)</option>
           </select>
         </div>
 
@@ -3629,6 +3634,46 @@ async function startBible() {
 
     } else if (
       selectedTranslation ===
+      "BBE"
+    ) {
+
+      bibleData =
+        await getBBE();
+
+    } else if (
+      selectedTranslation ===
+      "DBY"
+    ) {
+
+      bibleData =
+        await getDBY();
+
+    } else if (
+      selectedTranslation ===
+      "WEBSTER"
+    ) {
+
+      bibleData =
+        await getWEBSTER();
+
+    } else if (
+      selectedTranslation ===
+      "WMB"
+    ) {
+
+      bibleData =
+        await getWMB();
+
+    } else if (
+      selectedTranslation ===
+      "RV"
+    ) {
+
+      bibleData =
+        await getRV();
+
+    } else if (
+      selectedTranslation ===
       "VALERA1909"
     ) {
 
@@ -5454,7 +5499,12 @@ if (helpSupportLink) {
       ["GENEVA1599", "Geneva Bible 1599"],
       ["DRA", "Douay-Rheims American Edition"],
       ["BSB", "Berean Standard Bible"],
-      ["MSB", "Majority Standard Bible"]
+      ["MSB", "Majority Standard Bible"],
+      ["BBE", "Bible in Basic English (BBE)"],
+      ["DBY", "Darby Translation (DBY)"],
+      ["WEBSTER", "Noah Webster Bible"],
+      ["WMB", "World Messianic Bible (WMB)"],
+      ["RV", "Revised Version (RV)"]
     ],
     es: [
       ["VALERA1909", "Reina-Valera 1909"]
