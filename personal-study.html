@@ -11181,7 +11181,7 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
   document.querySelectorAll('[data-bm-layout]').forEach(b=>b.addEventListener('click',()=>{setLayout(b.dataset.bmLayout); const p=$('bmSettingsPanel'); if(p)p.hidden=true;}));
 
   // Owner gets Layouts 1, 2, 3. Members and signed-out users get Layouts 2 and 3 only.
-  const OWNER_CACHE='biblemastery.personalStudy.ownerLayoutAccess.v1';
+  const OWNER_CACHE='biblemastery.personalStudy.ownerLayoutAccess.v1'; // persists verified owner access on this device
   function applyLayoutAccess(isOwner){
     document.documentElement.classList.toggle('bm-owner-layout-access',!!isOwner);
     document.querySelectorAll('[data-owner-layout="true"]').forEach(btn=>{btn.hidden=!isOwner;btn.setAttribute('aria-hidden',isOwner?'false':'true');});
@@ -11204,7 +11204,13 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
       const client=window.supabase.createClient('https://pjkkxvntssvukulxipfr.supabase.co','sb_publishable_1kehaIywv1Wb9Iwj2OPGdg_aFosOSwK');
       const sessionResult=await client.auth.getSession();
       const user=sessionResult?.data?.session?.user;
-      if(!user){try{localStorage.setItem(OWNER_CACHE,'false')}catch(e){} applyLayoutAccess(false);return;}
+      // If this device was already verified as the owner/admin, do not revoke Layout 1
+      // just because the auth session is temporarily missing, slow, or unavailable.
+      // A verified signed-in non-admin account below can still revoke owner access.
+      if(!user){
+        applyLayoutAccess(cached);
+        return;
+      }
       const profileResult=await client.from('profiles').select('role').eq('id',user.id).maybeSingle();
       if(profileResult.error)throw profileResult.error;
       const isOwner=String(profileResult?.data?.role||'').toLowerCase()==='admin';
