@@ -1,4 +1,4 @@
-const CACHE_NAME = "biblemastery-personal-study-2026-10-02-v1";
+const CACHE_NAME = "biblemastery-personal-study-2026-10-02-v2";
 
 self.addEventListener("install", () => self.skipWaiting());
 
