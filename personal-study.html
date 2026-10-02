@@ -2062,6 +2062,14 @@ button,a,input,select,textarea{min-height:38px}
 </div>
 <button class="search-button" id="deepStudyStartButton" type="button">Open Deep Study</button>
 </div>
+<div class="bm-deep-tab-nav" aria-label="Deep Study tool navigation">
+  <strong>Study Tools</strong>
+  <span class="small-note">Use arrows to see every tool</span>
+  <div class="bm-deep-tab-nav-buttons">
+    <button id="deepTabsPrev" class="bm-deep-tab-arrow" type="button" aria-label="Show previous Deep Study tools">←</button>
+    <button id="deepTabsNext" class="bm-deep-tab-arrow" type="button" aria-label="Show more Deep Study tools">→</button>
+  </div>
+</div>
 <div aria-label="Deep Study tools" class="deep-study-tabs" role="tablist"><button class="deep-study-tab active" data-deep-tab="commentaries" type="button">Commentaries</button><button class="deep-study-tab" data-deep-tab="references" type="button">Cross-References</button><button class="deep-study-tab" data-deep-tab="strongs" type="button">Strong’s</button><button class="deep-study-tab" data-deep-tab="language" type="button">Lexicons</button><button class="deep-study-tab" data-deep-tab="topics" type="button">Topics</button><button class="deep-study-tab" data-deep-tab="entities" type="button">People &amp; Places</button><button class="deep-study-tab" data-deep-tab="books" type="button">Theology Books</button><button class="deep-study-tab bm-classic-only-tab" data-deep-tab="concordance" type="button">Concordance</button><button class="deep-study-tab bm-classic-only-tab" data-deep-tab="context" type="button">Timeline &amp; Text</button><button class="deep-study-tab bm-classic-only-tab" data-deep-tab="saved" type="button">My Study</button><button class="deep-study-tab bm-classic-only-tab" data-deep-tab="gospels" type="button">Gospel Chronology</button><button class="deep-study-tab bm-classic-only-tab" data-deep-tab="maps" type="button">Interactive Maps</button></div><div class="deep-study-panel active" id="deepStudyCommentariesPanel">
 <div class="deep-study-card bm-compact-study-card">
 <div class="bm-deep-panel-head">
@@ -10749,6 +10757,87 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
             </div>`
         }
       ]
+    },
+    {
+      title:"Ever-Increasing Faith",
+      author:"Smith Wigglesworth",
+      resourceType:"Public-domain 1924 edition",
+      officialUrl:"https://www.loc.gov/item/24022022/",
+      chapters:[
+        {
+          title:"Read 1924 Edition",
+          html:`
+            <div class="bm-public-domain-book">
+              <div class="bm-public-domain-badge">PUBLIC DOMAIN • 1924 EDITION</div>
+              <h3>Ever-Increasing Faith</h3>
+              <p><strong>Author:</strong> Smith Wigglesworth</p>
+              <p>The Library of Congress identifies this 1924 edition as public domain with no known restrictions and no copyright renewal found. BibleMastery links the original digitized edition rather than a later revised printing.</p>
+              <div class="bm-book-source-actions">
+                <a class="search-button bm-book-link" href="https://www.loc.gov/item/24022022/" target="_blank" rel="noopener">Library of Congress Edition ↗</a>
+                <a class="reader-nav-button bm-book-link" href="https://archive.org/details/everincreasingfa00wigg_0" target="_blank" rel="noopener">Open Full Scan ↗</a>
+              </div>
+              <iframe class="bm-book-scan-frame" src="https://archive.org/embed/everincreasingfa00wigg_0" title="Ever-Increasing Faith by Smith Wigglesworth, 1924 edition" loading="lazy" allowfullscreen></iframe>
+              <p class="small-note">The scan is served by Internet Archive and needs internet access unless we later package a local offline copy.</p>
+            </div>`
+        },
+        {
+          title:"Study Guide",
+          html:`
+            <div class="bm-public-domain-book">
+              <div class="bm-public-domain-badge">BIBLEMASTERY STUDY GUIDE</div>
+              <h3>Ever-Increasing Faith — Study Focus</h3>
+              <div class="bm-book-study-grid">
+                <div class="bm-book-study-box"><h4>Faith in God</h4><p>Trace how Wigglesworth connects believing God's Word with action, perseverance, and receiving from God.</p></div>
+                <div class="bm-book-study-box"><h4>Healing</h4><p>Compare his healing teaching with the Gospel accounts and the redemptive name Jehovah-Rapha.</p></div>
+                <div class="bm-book-study-box"><h4>Name of Jesus</h4><p>Study his emphasis on Christ's authority and the believer's use of Jesus' name.</p></div>
+                <div class="bm-book-study-box"><h4>Holy Spirit & Gifts</h4><p>Follow the chapters on Spirit baptism, spiritual gifts, healing, miracles, prophecy, discernment, and tongues.</p></div>
+              </div>
+              <h4>1924 chapter sequence</h4>
+              <ol>
+                <li>Have Faith in God</li><li>Deliverance to the Captives</li><li>The Power of the Name</li><li>Wilt Thou Be Made Whole?</li><li>I Am the Lord That Healeth Thee</li><li>Himself Took Our Infirmities</li><li>Our Risen Christ</li><li>Righteousness</li><li>The Words of This Life</li><li>Life in the Spirit</li><li>Full of the Spirit</li><li>Baptism of the Spirit</li><li>Concerning Spiritual Gifts</li><li>The Word of Knowledge and of Faith</li><li>The Gift of Healings and Miracles</li><li>The Gift of Prophecy</li><li>The Discerning of Spirits</li><li>The Gift of Tongues</li>
+              </ol>
+            </div>`
+        }
+      ]
+    },
+    {
+      title:"Faith That Prevails",
+      author:"Smith Wigglesworth",
+      resourceType:"Publisher resource / copyright-cautious entry",
+      officialUrl:"https://gospelpublishinghouse.com/shop/product/faith-that-prevails",
+      chapters:[
+        {
+          title:"Book Information",
+          html:`
+            <div class="bm-official-book-card">
+              <div class="bm-official-book-badge">OFFICIAL PUBLISHER RESOURCE</div>
+              <h3>Faith That Prevails</h3>
+              <p><strong>Author:</strong> Smith Wigglesworth</p>
+              <p>This classic focuses on faith, spiritual power, Pentecost, receiving power from the Holy Spirit, keeping spiritual vision, and living in God's present blessing.</p>
+              <p class="small-note">BibleMastery is not copying the full book text here. The Gospel Publishing House archive catalogs a 1938 copyrighted edition, and the publisher still sells the work today. This entry therefore links to the publisher while giving you a BibleMastery study guide.</p>
+              <div class="bm-official-book-actions">
+                <a class="search-button bm-book-link" href="https://gospelpublishinghouse.com/shop/product/faith-that-prevails" target="_blank" rel="noopener">Open Gospel Publishing House ↗</a>
+              </div>
+            </div>`
+        },
+        {
+          title:"Study Guide",
+          html:`
+            <div class="bm-public-domain-book">
+              <div class="bm-public-domain-badge">BIBLEMASTERY STUDY GUIDE</div>
+              <h3>Faith That Prevails — Study Focus</h3>
+              <p>The commonly published contents center on seven themes. Use these as a Bible study outline while keeping the copyrighted text on the publisher's site.</p>
+              <div class="bm-book-study-grid">
+                <div class="bm-book-study-box"><h4>God-Given Faith</h4><p>Compare Wigglesworth's faith emphasis with Hebrews 11 and Jesus' teaching on believing God.</p></div>
+                <div class="bm-book-study-box"><h4>Like Precious Faith</h4><p>Study the shared faith believers receive and how it grows through God's Word.</p></div>
+                <div class="bm-book-study-box"><h4>Spiritual Power</h4><p>Trace New Testament teaching on power, witness, holiness, and dependence on the Holy Spirit.</p></div>
+                <div class="bm-book-study-box"><h4>Pentecost & Power</h4><p>Compare Acts 1–2 with the book's emphasis on receiving power and Spirit-filled ministry.</p></div>
+              </div>
+              <h4>Chapter themes</h4>
+              <ol><li>God-Given Faith</li><li>Like Precious Faith</li><li>Spiritual Power</li><li>Paul's Pentecost</li><li>Ye Shall Receive Power</li><li>Keeping the Vision</li><li>Present-Time Blessings</li></ol>
+            </div>`
+        }
+      ]
     }
   ];
   const getBooks=()=>Array.isArray(window.BIBLEMASTERY_THEOLOGY_BOOKS)?window.BIBLEMASTERY_THEOLOGY_BOOKS:builtInBooks;
@@ -10773,6 +10862,23 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
   $('theologyPrevChapter')?.addEventListener('click',()=>{if(chapterIndex>0){chapterIndex--;renderBookReader();}});
   $('theologyNextChapter')?.addEventListener('click',()=>{const b=getBooks()[bookIndex];if(b&&chapterIndex<(b.chapters?.length||0)-1){chapterIndex++;renderBookReader();}});
   renderBooks();
+
+  // Deep Study tab strip navigation. Keep every tool accessible in Dashboard View.
+  const deepTabsStrip=document.querySelector('#deepStudyCenter > .deep-study-tabs');
+  const deepTabsPrev=$('deepTabsPrev'), deepTabsNext=$('deepTabsNext');
+  function scrollDeepTabs(direction){
+    if(!deepTabsStrip)return;
+    const amount=Math.max(260,Math.min(520,deepTabsStrip.clientWidth*.72));
+    deepTabsStrip.scrollBy({left:direction*amount,behavior:'smooth'});
+  }
+  deepTabsPrev?.addEventListener('click',()=>scrollDeepTabs(-1));
+  deepTabsNext?.addEventListener('click',()=>scrollDeepTabs(1));
+  deepTabsStrip?.addEventListener('wheel',e=>{
+    if(Math.abs(e.deltaY)>Math.abs(e.deltaX)){
+      e.preventDefault();
+      deepTabsStrip.scrollLeft+=e.deltaY;
+    }
+  },{passive:false});
 
   // Global search: references open in the Bible Reader; other terms open Concordance.
   function runGlobal(){const q=($('bmGlobalSearch')?.value||'').trim(); if(!q)return; const looksRef=/^[1-3]?\s*[A-Za-z]+(?:\s+[A-Za-z]+)*\s+\d+(?::\d+)?/.test(q); if(looksRef){const inp=$('deepStudyReference');if(inp)inp.value=q; if(typeof window.openDeepReferenceInReader==='function'){window.openDeepReferenceInReader(q);} else {$('deepReferenceInput').value=q; activate('references');} scrollToId('bmReaderCard');}else{const ci=$('deepConcordanceInput');if(ci)ci.value=q;activate('concordance');setTimeout(()=>$('deepConcordanceButton')?.click(),60);}}
@@ -10914,6 +11020,16 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
 .bm-book-study-box{border:1px solid #e1cda7;border-radius:8px;background:#fffaf0;padding:11px}
 .bm-book-study-box h4{margin:0 0 6px;color:#73131a}
 @media(max-width:760px){.bm-book-scan-frame{height:560px}.bm-book-study-grid{grid-template-columns:1fr}}
+
+/* Deep Study horizontal tool navigator — all tools stay reachable in Dashboard View. */
+.bm-deep-tab-nav{display:flex;align-items:center;gap:8px;margin:0 0 6px;padding:5px 7px;border:1px solid #dfc99d;border-radius:7px;background:#fff9ed;color:#661017}
+.bm-deep-tab-nav>strong{font-size:12px;white-space:nowrap}.bm-deep-tab-nav>.small-note{margin-right:auto}
+.bm-deep-tab-nav-buttons{display:flex;gap:5px}.bm-deep-tab-arrow{min-width:38px;height:34px;border:1px solid #c79d45;border-radius:7px;background:#7a0d12;color:#fff;font-size:19px;font-weight:900;line-height:1;cursor:pointer}.bm-deep-tab-arrow:hover{background:#971821}
+#deepStudyCenter>.deep-study-tabs{scroll-behavior:smooth;overscroll-behavior-x:contain;scrollbar-width:thin;scrollbar-color:#b98e3e #f5ead3}
+#deepStudyCenter>.deep-study-tabs::-webkit-scrollbar{height:8px}#deepStudyCenter>.deep-study-tabs::-webkit-scrollbar-thumb{background:#b98e3e;border-radius:99px}#deepStudyCenter>.deep-study-tabs::-webkit-scrollbar-track{background:#f5ead3;border-radius:99px}
+/* Dashboard used to hide the later tabs. Keep them visible inside the scroll strip now. */
+.bm-layout-dashboard #deepStudyCenter .bm-classic-only-tab{display:inline-flex!important}
+@media(max-width:720px){.bm-deep-tab-nav>.small-note{display:none}.bm-deep-tab-nav{position:sticky;top:0;z-index:3}.bm-deep-tab-arrow{min-width:44px}}
 </style>
 <button id="bmInstallAppButton" type="button" aria-label="Install BibleMastery on this computer">⬇ Install BibleMastery</button>
 <script id="biblemastery-desktop-install-script">
