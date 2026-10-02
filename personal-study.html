@@ -10704,6 +10704,43 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
   @media (max-width: 700px) {
     #bmInstallAppButton { right: 12px; bottom: 12px; font-size:14px; padding:11px 15px; }
   }
+
+/* === BibleMastery reader layout fix: controls above, Bible text below === */
+.reader-shell,
+#bibleReaderSection .reader-shell,
+.bm-reader-card .reader-shell {
+  display: block !important;
+  grid-template-columns: 1fr !important;
+}
+
+#bibleReaderSection .reader-controls,
+.bm-reader-card .reader-controls {
+  position: static !important;
+  width: 100% !important;
+  margin-bottom: 10px !important;
+}
+
+#bibleReaderSection .reader-display,
+.bm-reader-card .reader-display {
+  width: 100% !important;
+  clear: both !important;
+}
+
+/* Keep the selector row readable while leaving the Bible underneath it. */
+.bm-reader-card .reader-controls {
+  display: grid !important;
+  grid-template-columns: minmax(220px,1.4fr) minmax(150px,1fr) minmax(120px,.75fr) !important;
+  gap: 8px !important;
+}
+
+@media (max-width: 720px) {
+  .bm-reader-card .reader-controls {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  .bm-reader-card .reader-control:first-child {
+    grid-column: 1 / -1 !important;
+  }
+}
 </style>
 <button id="bmInstallAppButton" type="button" aria-label="Install BibleMastery on this computer">⬇ Install BibleMastery</button>
 <script id="biblemastery-desktop-install-script">
