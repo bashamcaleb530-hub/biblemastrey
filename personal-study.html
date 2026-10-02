@@ -1991,6 +1991,7 @@ button,a,input,select,textarea{min-height:38px}
   border:2px solid #c5912e;border-radius:999px;background:#fff8e5;
   box-shadow:0 2px 7px rgba(85,49,16,.12)
 }
+.bm-top-layout-switch button[hidden],.bm-layout-switch button[hidden]{display:none!important}
 .bm-top-layout-switch button{
   width:34px;min-width:34px;height:34px;min-height:34px;padding:0;border:0;
   border-radius:999px;background:transparent;color:#6b1116;font-weight:900;
@@ -2176,6 +2177,71 @@ body.bm-layout-dashboard [data-bm-layout="dashboard"]{font-weight:900!important}
 }
 </style>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style id="bm-three-layouts-and-book-reader-fix-2026">
+/* Layout 3 — regular-user default: passage first, visibly different from owner Layout 1. */
+.bm-regular-study-card,.bm-regular-more-tools{display:none}
+body.bm-layout-regular{background:#fff8e9!important;color:#2d221b!important}
+body.bm-layout-regular .bm-shell{display:block!important;min-height:calc(100vh - 64px)!important}
+body.bm-layout-regular .bm-sidebar{display:none!important}
+body.bm-layout-regular .bm-main{max-width:1540px!important;margin:0 auto!important;padding:18px 22px 34px!important;width:100%!important}
+body.bm-layout-regular .bm-dashboard-grid{display:grid!important;grid-template-columns:minmax(0,1.7fr) minmax(350px,.78fr)!important;gap:20px!important;align-items:start!important}
+body.bm-layout-regular .bm-reader-card{grid-column:1!important;grid-row:1!important;margin:0!important;border:1px solid #d8bd82!important;border-radius:16px!important;background:#fffdf7!important;overflow:hidden!important}
+body.bm-layout-regular .bm-reader-card #bibleReaderSection{padding:20px!important;background:#fffdf7!important;color:#34271e!important}
+body.bm-layout-regular .bm-reader-card #bibleReaderSection>p{display:none!important}
+body.bm-layout-regular .bm-reader-card h3{color:#741116!important;font-size:22px!important;margin:0 0 12px!important}
+body.bm-layout-regular .bm-reader-card .reader-controls{grid-template-columns:minmax(210px,1.25fr) minmax(190px,1fr)!important;gap:12px!important}
+body.bm-layout-regular .bm-reader-card .reader-display{min-height:600px!important;max-height:72vh!important;overflow:auto!important;background:#fff!important;border:1px solid #ead9b7!important;border-radius:10px!important;padding:20px!important;font-size:18px!important;line-height:1.75!important;color:#2b251f!important}
+body.bm-layout-regular .bm-reader-card .reader-verse{color:#2b251f!important;border-bottom-color:#eee1c9!important}
+body.bm-layout-regular .bm-reader-card .active-reader-verse{background:#fff0c9!important;color:#651015!important}
+body.bm-layout-regular .bm-regular-study-card{display:block!important;grid-column:1!important;grid-row:2!important;margin:0!important;padding:18px!important;border:1px solid #d8bd82!important;border-radius:16px!important;background:#fffaf0!important;color:#34271e!important}
+.bm-regular-study-head h2{margin:3px 0 5px;color:#741116;font-size:23px}.bm-regular-study-head p{margin:0;color:#6e5b4d}
+.bm-regular-study-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px;margin-top:15px}
+.bm-regular-study-grid button{display:flex;flex-direction:column;gap:5px;min-height:106px;text-align:left;padding:15px;border:1px solid #dec692;border-radius:12px;background:#fff;color:#34271e;cursor:pointer;box-shadow:0 2px 7px rgba(91,55,25,.07)}
+.bm-regular-study-grid button:hover,.bm-regular-study-grid button:focus-visible{border-color:#b7832d;background:#fff4d8;outline:none;transform:translateY(-1px)}
+.bm-regular-study-grid strong{color:#741116;font-size:15px}.bm-regular-study-grid span{font-size:12.5px;line-height:1.45;color:#745f50}
+body.bm-layout-regular .bm-deep-card{grid-column:2!important;grid-row:1/3!important;margin:0!important;border:1px solid #d8bd82!important;border-radius:16px!important;background:#fffdf7!important;overflow:visible!important;position:sticky!important;top:78px!important;max-height:calc(100vh - 92px)!important;overflow-y:auto!important}
+body.bm-layout-regular #deepStudyCenter{display:flex!important;flex-direction:column!important;padding:16px!important;background:#fffdf7!important;color:#34271e!important}
+body.bm-layout-regular #deepStudyCenter>h2{order:-10!important;color:#741116!important;font-size:21px!important;margin:0 0 10px!important}
+body.bm-layout-regular #deepStudyCenter>.deep-study-intro{display:none!important}
+body.bm-layout-regular #deepStudyCenter>.deep-study-controls{order:-9!important;display:grid!important;grid-template-columns:1fr!important;gap:9px!important;padding:12px!important;margin:0 0 12px!important;border:1px solid #e3cca0!important;border-radius:10px!important;background:#fff5df!important}
+body.bm-layout-regular #deepStudyCenter>.deep-study-controls button{width:100%!important}
+body.bm-layout-regular #deepStudyCenter>.bm-connected-books-shell{order:-8!important;display:block!important;margin:0 0 12px!important}
+body.bm-layout-regular #deepStudyCenter>.bm-deep-tab-nav,body.bm-layout-regular #deepStudyCenter>.deep-study-tabs{display:none!important}
+body.bm-layout-regular #deepStudyCenter>.deep-study-panel{order:-6!important;display:none!important;margin:0 0 12px!important;padding:0!important;border:0!important;background:transparent!important;min-height:0!important}
+body.bm-layout-regular #deepStudyCenter>.deep-study-panel.active{display:block!important}
+body.bm-layout-regular #deepStudyCenter .deep-study-card{padding:12px!important;border:1px solid #e6d4b0!important;border-radius:10px!important;background:#fff!important;color:#34271e!important}
+body.bm-layout-regular #deepStudyCenter .deep-study-output{max-height:330px!important;overflow:auto!important;background:#fff!important;color:#34271e!important;border:1px solid #eee1c9!important}
+body.bm-layout-regular .bm-connected-books-shell .bm-passage-books{padding:13px!important;border:1px solid #d5b56c!important;border-radius:11px!important;background:#fff7df!important;box-shadow:none!important}
+body.bm-layout-regular .bm-passage-books-head{display:block!important}.bm-layout-regular .bm-passage-books-head h3{font-size:19px!important;color:#741116!important;margin:3px 0!important}.bm-layout-regular .bm-passage-books-head p{font-size:12px!important;line-height:1.45!important;color:#725c49!important}.bm-layout-regular #bmOpenLibraryFromBooks{display:none!important}
+body.bm-layout-regular .bm-passage-book-grid{grid-template-columns:1fr!important;gap:10px!important;margin-top:10px!important}
+body.bm-layout-regular .bm-passage-book-card{padding:12px!important;background:#fff!important;border:1px solid #e3cf9f!important;border-radius:9px!important;color:#33271f!important}
+body.bm-layout-regular .bm-passage-book-card h4{color:#741116!important;font-size:16px!important;margin:4px 0!important}
+body.bm-layout-regular .bm-passage-book-actions{display:grid!important;grid-template-columns:1fr!important;gap:7px!important}
+body.bm-layout-regular .bm-regular-more-tools{display:block!important;order:-5!important;margin-top:0!important;padding:12px!important;border:1px solid #e3cca0!important;border-radius:10px!important;background:#fffaf0!important}
+.bm-regular-more-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:9px}.bm-regular-more-grid button{border:1px solid #dec692;border-radius:8px;background:#fff;color:#651015;padding:9px 8px;font-weight:800;font-size:12px;cursor:pointer}.bm-regular-more-grid button:hover{background:#fff0ca}
+body.bm-layout-regular .bm-ai-area{margin:0 14px 14px!important}.bm-layout-regular .bm-quick-tools{display:none!important}
+body.bm-layout-regular .bm-library-card,body.bm-layout-regular .bm-gospel-card,body.bm-layout-regular .bm-map-card{display:none!important;grid-column:1/-1!important;margin:0!important}
+body.bm-layout-regular .bm-library-card.bm-regular-open,body.bm-layout-regular .bm-gospel-card.bm-regular-open,body.bm-layout-regular .bm-map-card.bm-regular-open{display:block!important}
+body.bm-layout-regular .bm-library-card{background:#fffdf7!important;color:#34271e!important}
+body.bm-layout-regular .bm-gospel-card,body.bm-layout-regular .bm-map-card{background:#fffdf7!important;color:#34271e!important}
+
+/* Better Best Books cards in every layout. */
+.bm-passage-book-card{min-width:0!important;overflow-wrap:anywhere}.bm-passage-book-card .bm-book-scripture-anchor{margin:8px 0;padding:8px 10px;border-left:4px solid #d1a647;border-radius:7px;background:rgba(244,210,130,.14);font-size:12.5px;line-height:1.45}.bm-passage-book-card .bm-book-scripture-anchor strong{color:#8a5714}
+.bm-passage-book-actions{align-items:stretch}.bm-passage-book-actions button{white-space:normal!important;line-height:1.25!important;min-height:42px!important}
+
+/* Connected book reader: non-blocking right-side drawer; the rest of BibleMastery remains clickable. */
+.bm-book-context-modal{position:fixed!important;inset:0!important;z-index:10050!important;background:transparent!important;display:flex!important;justify-content:flex-end!important;align-items:stretch!important;padding:78px 16px 16px!important;pointer-events:none!important}
+.bm-book-context-modal[hidden]{display:none!important}
+.bm-book-context-dialog{pointer-events:auto!important;width:min(560px,94vw)!important;max-height:calc(100vh - 94px)!important;overflow:auto!important;background:#fffaf0!important;color:#2f2430!important;border:2px solid #c69a45!important;border-radius:18px!important;box-shadow:0 20px 65px rgba(51,22,17,.3)!important;padding:20px!important;overscroll-behavior:contain!important}
+.bm-book-context-study,.bm-book-context-preview{margin:14px 0;padding:13px;border:1px solid #e3ca94;border-radius:11px;background:#fffef8}
+.bm-book-context-label{font-size:10px;letter-spacing:.12em;font-weight:900;color:#9b6c19;margin-bottom:5px}.bm-book-context-study strong{display:block;color:#741116;font-size:16px;margin-bottom:6px}.bm-book-context-bible-text{font-family:Georgia,'Times New Roman',serif;font-size:15px;line-height:1.65;color:#3b3028}.bm-book-context-preview #bmBookContextPreview{font-size:14px;line-height:1.65;color:#3c3129}
+.bm-book-context-start{margin:13px 0!important}.bm-book-context-reason{font-size:14px;line-height:1.62}.bm-book-context-actions{display:grid!important;grid-template-columns:1fr 1fr!important;gap:8px!important}.bm-book-context-actions button{width:100%!important;white-space:normal!important}.bm-book-context-close-bottom{grid-column:1/-1!important}
+@media(max-width:1180px){body.bm-layout-regular .bm-dashboard-grid{grid-template-columns:1fr!important}.bm-layout-regular .bm-reader-card,.bm-layout-regular .bm-regular-study-card,.bm-layout-regular .bm-deep-card{grid-column:1!important;grid-row:auto!important}.bm-layout-regular .bm-deep-card{position:relative!important;top:auto!important;max-height:none!important}.bm-regular-study-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){body.bm-layout-regular .bm-main{padding:10px!important}.bm-regular-study-grid{grid-template-columns:1fr}.bm-book-context-modal{padding:62px 7px 7px!important}.bm-book-context-dialog{width:100%!important;max-height:calc(100vh - 70px)!important;border-radius:14px!important;padding:15px!important}.bm-book-context-actions{grid-template-columns:1fr!important}.bm-book-context-close-bottom{grid-column:auto!important}.bm-refresh-label{display:none}}
+</style>
+
 </head>
 <body class="bm-layout-dashboard" data-default-view="personal-study">
 
@@ -2193,8 +2259,9 @@ body.bm-layout-dashboard [data-bm-layout="dashboard"]{font-weight:900!important}
 </div>
 <div class="bm-top-actions">
 <div class="bm-top-layout-switch" aria-label="Choose Personal Study layout" role="group">
-  <button class="active" data-bm-layout="dashboard" type="button" title="Current layout">1</button>
-  <button data-bm-layout="classic" type="button" title="Alternative Study Center layout">2</button>
+  <button class="active" data-bm-layout="dashboard" data-owner-layout="true" type="button" title="Owner main layout">1</button>
+  <button data-bm-layout="classic" type="button" title="Study Center layout">2</button>
+  <button data-bm-layout="regular" type="button" title="Regular user default layout">3</button>
 </div>
 <button class="bm-refresh-button" id="bmRefreshButton" type="button" title="Refresh Personal Study" aria-label="Refresh Personal Study"><span class="bm-refresh-icon" aria-hidden="true">↻</span><span class="bm-refresh-label">Refresh</span></button>
 <button class="bm-icon-button" title="Notifications" type="button">♧</button>
@@ -2231,8 +2298,9 @@ body.bm-layout-dashboard [data-bm-layout="dashboard"]{font-weight:900!important}
 <span>Your Bible, study tools, maps, and books in one workspace.</span>
 </div>
 <div aria-label="Choose Personal Study layout" class="bm-layout-switch" role="group">
-<button class="active" data-bm-layout="dashboard" type="button">Layout 1 · Current</button>
+<button class="active" data-bm-layout="dashboard" data-owner-layout="true" type="button">Layout 1 · Owner Main</button>
 <button data-bm-layout="classic" type="button">Layout 2 · Study Center</button>
+<button data-bm-layout="regular" type="button">Layout 3 · Passage First</button>
 </div>
 </div>
 <div class="bm-dashboard-grid">
@@ -2299,6 +2367,23 @@ body.bm-layout-dashboard [data-bm-layout="dashboard"]{font-weight:900!important}
 </div>
 </div>
 </div></div></section>
+<section class="bm-card bm-regular-study-card" id="bmRegularStudyCard" aria-label="Study this passage">
+  <div class="bm-regular-study-head">
+    <div>
+      <div class="bm-eyebrow">PASSAGE-FIRST STUDY</div>
+      <h2>Study This Passage</h2>
+      <p>Choose one focused tool. BibleMastery keeps the Bible open and brings the study result beside it.</p>
+    </div>
+  </div>
+  <div class="bm-regular-study-grid">
+    <button type="button" data-regular-deep="commentaries"><strong>📖 Commentaries</strong><span>Read trusted commentary beside the passage.</span></button>
+    <button type="button" data-regular-deep="references"><strong>🔗 Cross-References</strong><span>Find the strongest matching verses across Scripture.</span></button>
+    <button type="button" data-regular-deep="language"><strong>ΑΩ Word Study</strong><span>Open Greek/Hebrew, Strong’s, and lexicon tools.</span></button>
+    <button type="button" data-regular-deep="topics"><strong>▦ Topics</strong><span>Follow the doctrine or theme through Scripture.</span></button>
+    <button type="button" data-regular-deep="entities"><strong>● People &amp; Places</strong><span>Study the people and locations in the passage.</span></button>
+    <button type="button" data-regular-deep="context"><strong>◫ Maps &amp; Timeline</strong><span>Compare translations and place the passage in context.</span></button>
+  </div>
+</section>
 <section class="bm-card bm-deep-card" id="bmDeepCard">
 <div id="bmDeepHost"><div class="workspace-section deep-study-center" id="deepStudyCenter">
 <h2>🧭 BibleMastery Deep Study Center</h2>
@@ -2523,6 +2608,17 @@ body.bm-layout-dashboard [data-bm-layout="dashboard"]{font-weight:900!important}
   </div>
 </div>
 
+<div class="bm-regular-more-tools" id="bmRegularMoreTools">
+  <div class="bm-eyebrow">MORE STUDY TOOLS</div>
+  <div class="bm-regular-more-grid">
+    <button type="button" data-regular-deep="concordance">Concordance</button>
+    <button type="button" data-regular-deep="strongs">Strong’s</button>
+    <button type="button" data-regular-deep="books">Theology Books</button>
+    <button type="button" data-regular-open-card="bmLibraryCard">Library</button>
+    <button type="button" data-regular-open-card="bmGospelCard">Gospel Chronology</button>
+    <button type="button" data-regular-open-card="bmMapCard">Interactive Maps</button>
+  </div>
+</div>
 
 </div></div>
 <div class="bm-ai-area" id="bmAiArea"><div class="study-box personal-ai-box" id="topicBox">
@@ -2977,10 +3073,11 @@ body.bm-layout-dashboard [data-bm-layout="dashboard"]{font-weight:900!important}
 <button class="bm-settings-close" id="bmSettingsClose" type="button">×</button>
 <h2>Personal Study Layout</h2>
 <p>Choose the layout you want to use. Your choice is saved on this device.</p>
-<button data-bm-layout="dashboard" type="button">Use Dashboard View</button>
-<button data-bm-layout="classic" type="button">Use Classic View</button>
+<button data-bm-layout="dashboard" data-owner-layout="true" type="button">Use Owner Main Layout</button>
+<button data-bm-layout="classic" type="button">Use Study Center Layout</button>
+<button data-bm-layout="regular" type="button">Use Passage-First Layout</button>
 <hr/>
-<p><strong>Dashboard View</strong> is the full workspace layout. <strong>Classic View</strong> is the simpler second option for regular users.</p>
+<p><strong>Owner Main</strong> is available only to the administrator. Regular users can choose <strong>Study Center</strong> or <strong>Passage-First</strong>; Passage-First is their default.</p>
 </div>
 </div>
 </div><div class="container">
@@ -11066,17 +11163,71 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
   const body=document.body;
   const $=id=>document.getElementById(id);
   function setLayout(layout){
-    layout=layout==='classic'?'classic':'dashboard';
+    layout=['dashboard','classic','regular'].includes(layout)?layout:'regular';
     body.classList.toggle('bm-layout-dashboard',layout==='dashboard');
     body.classList.toggle('bm-layout-classic',layout==='classic');
+    body.classList.toggle('bm-layout-regular',layout==='regular');
     document.querySelectorAll('[data-bm-layout]').forEach(b=>b.classList.toggle('active',b.dataset.bmLayout===layout));
+    const heading=document.querySelector('#deepStudyCenter>h2');
+    if(heading)heading.textContent=layout==='regular'?'📖 Passage Guide':'🧭 BibleMastery Deep Study Center';
+    if(layout!=='regular')document.querySelectorAll('.bm-regular-open').forEach(el=>el.classList.remove('bm-regular-open'));
     try{localStorage.setItem(STORAGE,layout)}catch(e){}
     setTimeout(()=>{ if(window.bibleLeafletMap && typeof window.bibleLeafletMap.invalidateSize==='function') window.bibleLeafletMap.invalidateSize(); },120);
   }
-  // Layout 1 is the current Personal Study layout. The classic key now powers the alternative Study Center layout while you compare them.
-  let saved='dashboard'; try{saved=localStorage.getItem(STORAGE)||'dashboard'}catch(e){}
+  window.BibleMasterySetPersonalStudyLayout=setLayout;
+  // Layout 1 remains the owner's main layout. Layout 3 is the default for regular users once account role is resolved.
+  let saved='regular'; try{saved=localStorage.getItem(STORAGE)||'regular'}catch(e){}
   setLayout(saved);
   document.querySelectorAll('[data-bm-layout]').forEach(b=>b.addEventListener('click',()=>{setLayout(b.dataset.bmLayout); const p=$('bmSettingsPanel'); if(p)p.hidden=true;}));
+
+  // Owner gets Layouts 1, 2, 3. Members and signed-out users get Layouts 2 and 3 only.
+  const OWNER_CACHE='biblemastery.personalStudy.ownerLayoutAccess.v1';
+  function applyLayoutAccess(isOwner){
+    document.documentElement.classList.toggle('bm-owner-layout-access',!!isOwner);
+    document.querySelectorAll('[data-owner-layout="true"]').forEach(btn=>{btn.hidden=!isOwner;btn.setAttribute('aria-hidden',isOwner?'false':'true');});
+    let current=body.classList.contains('bm-layout-dashboard')?'dashboard':body.classList.contains('bm-layout-classic')?'classic':'regular';
+    let stored=''; try{stored=localStorage.getItem(STORAGE)||''}catch(e){}
+    if(isOwner){
+      const wanted=['dashboard','classic','regular'].includes(stored)?stored:'dashboard';
+      if(current!==wanted)setLayout(wanted);
+    }else{
+      const wanted=['classic','regular'].includes(stored)?stored:'regular';
+      if(current!==wanted)setLayout(wanted);
+    }
+  }
+  async function resolveLayoutAccess(){
+    let cached=false; try{cached=localStorage.getItem(OWNER_CACHE)==='true'}catch(e){}
+    // Cached owner status prevents the owner's layout disappearing during a temporary network problem.
+    if(cached)applyLayoutAccess(true);
+    try{
+      if(!window.supabase)throw new Error('Supabase client unavailable');
+      const client=window.supabase.createClient('https://pjkkxvntssvukulxipfr.supabase.co','sb_publishable_1kehaIywv1Wb9Iwj2OPGdg_aFosOSwK');
+      const sessionResult=await client.auth.getSession();
+      const user=sessionResult?.data?.session?.user;
+      if(!user){try{localStorage.setItem(OWNER_CACHE,'false')}catch(e){} applyLayoutAccess(false);return;}
+      const profileResult=await client.from('profiles').select('role').eq('id',user.id).maybeSingle();
+      if(profileResult.error)throw profileResult.error;
+      const isOwner=String(profileResult?.data?.role||'').toLowerCase()==='admin';
+      try{localStorage.setItem(OWNER_CACHE,isOwner?'true':'false')}catch(e){}
+      applyLayoutAccess(isOwner);
+    }catch(error){
+      if(!cached)applyLayoutAccess(false);
+      console.warn('BibleMastery layout role check:',error);
+    }
+  }
+  resolveLayoutAccess();
+
+  document.querySelectorAll('[data-regular-deep]').forEach(btn=>btn.addEventListener('click',()=>{
+    const name=btn.dataset.regularDeep;
+    const tab=document.querySelector('.deep-study-tab[data-deep-tab="'+name+'"]');
+    if(tab)tab.click();
+    const card=$('bmDeepCard');if(card)card.scrollIntoView({behavior:'smooth',block:'start'});
+  }));
+  document.querySelectorAll('[data-regular-open-card]').forEach(btn=>btn.addEventListener('click',()=>{
+    const el=$(btn.dataset.regularOpenCard);if(!el)return;el.classList.add('bm-regular-open');
+    setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),20);
+    setTimeout(()=>{if(window.bibleLeafletMap&&typeof window.bibleLeafletMap.invalidateSize==='function')window.bibleLeafletMap.invalidateSize();},180);
+  }));
 
   // In-app refresh: reloads Personal Study without requiring the installed app/window to be closed.
   $('bmRefreshButton')?.addEventListener('click',()=>{
@@ -11854,47 +12005,90 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
     return {book,chapter:Number(chapter)||0,verse:Number(verse)||0,text:[book,chapter,verse?(':'+verse):''].join(' ').trim()};
   }
 
-  function passageThemes(ref){
+  function keywordThemes(query){
     const t={}; const add=(name,n=1)=>t[name]=(t[name]||0)+n;
-    const b=(ref.book||'').toLowerCase(),c=ref.chapter||0;
-    if(!b)return t;
-    if(['matthew','mark','luke','john'].includes(b)){add('faith',2);add('healing',2);add('compassion',1);add('authority',1)}
-    if(b==='acts'){add('spirit',3);add('evangelism',3);add('authority',2);add('healing',2);add('gifts',2)}
-    if(b.includes('corinthians') && c>=12 && c<=14){add('spirit',5);add('gifts',6);add('faith',1)}
-    if(b==='james' && c===5){add('healing',7);add('prayer',6);add('faith',4)}
-    if(b==='exodus' && c===15){add('healing',7);add('covenant',6);add('redemption',2)}
-    if(b==='isaiah' && c===53){add('healing',7);add('redemption',7);add('faith',2)}
-    if((b==='psalms'||b==='psalm') && c===103){add('healing',6);add('redemption',5);add('compassion',3)}
-    if(b==='mark' && c===11){add('faith',7);add('prayer',6);add('authority',2)}
-    if(b==='matthew' && [8,9,10].includes(c)){add('healing',5);add('authority',4);add('evangelism',2)}
-    if(b==='luke' && c===10){add('authority',7);add('evangelism',4);add('warfare',4)}
-    if(b==='john' && [14,15,16].includes(c)){add('name',6);add('prayer',6);add('authority',4);add('identity',2)}
-    if(b==='philippians' && c===2){add('name',7);add('authority',5);add('identity',2)}
-    if(b==='ephesians' && [1,2].includes(c)){add('authority',5);add('identity',7);add('redemption',3);add('faith',3)}
-    if(b==='ephesians' && c===6){add('identity',7);add('truth',8);add('righteousness',8);add('faith',8);add('prayer',7);add('rest',6);add('authority',3);add('warfare',2)}
-    if(b==='colossians' && [1,2].includes(c)){add('identity',6);add('authority',5);add('redemption',3)}
-    if(b==='romans' && [3,4,5,6,8,10].includes(c)){add('faith',4);add('identity',4);add('redemption',4)}
-    if(b==='galatians' && c===3){add('faith',6);add('redemption',4);add('covenant',3)}
-    if(b==='hebrews' && c===11){add('faith',8)}
-    if(b==='1 peter' && c===2){add('healing',4);add('redemption',5);add('identity',3)}
-    if(['matthew','mark','luke','acts'].includes(b) && ([10,16,28].includes(c)||b==='acts')){add('evangelism',3);add('missions',2)}
-    if((b==='psalms'||b==='psalm') && c===23){add('shepherd',9);add('provision',7);add('peace',7);add('presence',8);add('protection',6);add('faith',2)}
-    if(b==='genesis' && c===22){add('provision',9);add('covenant',5);add('faith',5)}
-    if(b==='exodus' && c===17){add('victory',8);add('faith',4);add('prayer',3)}
-    if(b==='judges' && c===6){add('peace',8);add('presence',5);add('victory',4);add('faith',3)}
-    if(b==='jeremiah' && c===23){add('righteousness',9);add('redemption',4);add('identity',2)}
-    if(b==='ezekiel' && c===48){add('presence',9);add('covenant',3)}
+    const q=String(query||'').toLowerCase().replace(/[’]/g,"'");
+    if(!q.trim())return t;
+    const has=(...words)=>words.some(w=>q.includes(w));
+    if(has('heal','healing','sick','rapha')){add('healing',8);add('redemption',4);add('faith',4);add('compassion',3);add('covenant',3)}
+    if(has('righteous','righteousness','tsidkenu')){add('righteousness',9);add('identity',6);add('redemption',3)}
+    if(has('peace','anxiety','fear','shalom')){add('peace',8);add('rest',7);add('presence',4);add('faith',3);add('prayer',3)}
+    if(has('shepherd','guidance','guide','rohi','raah')){add('shepherd',9);add('presence',5);add('provision',5);add('protection',4)}
+    if(has('provide','provision','jireh','need','needs')){add('provision',9);add('faith',5);add('covenant',4)}
+    if(has('presence','shammah','with me','with us')){add('presence',9);add('rest',4);add('peace',3)}
+    if(has('banner','nissi','victory','overcome')){add('victory',8);add('faith',5);add('authority',3)}
+    if(has('armor','armour','devil','satan','spiritual warfare','warfare')){add('truth',9);add('righteousness',9);add('faith',9);add('prayer',8);add('identity',8);add('rest',7);add('authority',4);add('warfare',2)}
+    if(has('authority','power','dominion')){add('authority',8);add('identity',6);add('faith',4)}
+    if(has('name of jesus','jesus name','name of god','jehovah')){add('name',9);add('authority',6);add('prayer',4);add('covenant',3)}
+    if(has('prayer','pray')){add('prayer',8);add('faith',5)}
+    if(has('holy spirit','spirit','gifts')){add('spirit',8);add('gifts',6);add('faith',3)}
+    if(has('evangel','gospel','mission','witness')){add('evangelism',8);add('missions',6);add('authority',2)}
+    if(has('truth'))add('truth',8);
+    if(has('holy','holiness','sanctif')){add('holiness',8);add('righteousness',5);add('identity',4)}
+    if(has('faith','believe','believing'))add('faith',8);
+    if(has('redemption','redeem','salvation','saved')){add('redemption',8);add('identity',4);add('faith',3)}
+    if(has('rest','finished work','stand in christ','standing in christ')){add('rest',8);add('identity',6);add('faith',4)}
+    if(has('covenant'))add('covenant',8);
     return t;
   }
 
-  function bestBooksForPassage(ref){
-    const themes=passageThemes(ref); const books=getBooks();
+  function passageThemes(ref,query=''){
+    const t={}; const add=(name,n=1)=>t[name]=(t[name]||0)+n;
+    const b=(ref?.book||'').toLowerCase(),c=ref?.chapter||0;
+    if(b){
+      if(['matthew','mark','luke','john'].includes(b)){add('faith',2);add('healing',2);add('compassion',1);add('authority',1)}
+      if(b==='acts'){add('spirit',3);add('evangelism',3);add('authority',2);add('healing',2);add('gifts',2)}
+      if(b.includes('corinthians') && c>=12 && c<=14){add('spirit',5);add('gifts',6);add('faith',1)}
+      if(b==='james' && c===5){add('healing',7);add('prayer',6);add('faith',4)}
+      if(b==='exodus' && c===15){add('healing',7);add('covenant',6);add('redemption',2)}
+      if(b==='isaiah' && c===53){add('healing',7);add('redemption',7);add('faith',2)}
+      if((b==='psalms'||b==='psalm') && c===103){add('healing',6);add('redemption',5);add('compassion',3)}
+      if(b==='mark' && c===11){add('faith',7);add('prayer',6);add('authority',2)}
+      if(b==='matthew' && [8,9,10].includes(c)){add('healing',5);add('authority',4);add('evangelism',2)}
+      if(b==='luke' && c===10){add('authority',7);add('evangelism',4);add('warfare',3)}
+      if(b==='john' && [14,15,16].includes(c)){add('name',6);add('prayer',6);add('authority',4);add('identity',2)}
+      if(b==='philippians' && c===2){add('name',7);add('authority',5);add('identity',2)}
+      if(b==='ephesians' && [1,2].includes(c)){add('authority',5);add('identity',7);add('redemption',3);add('faith',3)}
+      if(b==='ephesians' && c===6){add('identity',8);add('truth',9);add('righteousness',9);add('faith',9);add('prayer',8);add('rest',7);add('authority',4);add('warfare',2)}
+      if(b==='colossians' && [1,2].includes(c)){add('identity',6);add('authority',5);add('redemption',3)}
+      if(b==='romans' && [3,4,5,6,8,10].includes(c)){add('faith',4);add('identity',4);add('redemption',4)}
+      if(b==='galatians' && c===3){add('faith',6);add('redemption',4);add('covenant',3)}
+      if(b==='hebrews' && c===11){add('faith',8)}
+      if(b==='1 peter' && c===2){add('healing',4);add('redemption',5);add('identity',3)}
+      if(['matthew','mark','luke','acts'].includes(b) && ([10,16,28].includes(c)||b==='acts')){add('evangelism',3);add('missions',2)}
+      if((b==='psalms'||b==='psalm') && c===23){add('shepherd',9);add('provision',7);add('peace',7);add('presence',8);add('protection',6);add('faith',2)}
+      if(b==='genesis' && c===22){add('provision',9);add('covenant',5);add('faith',5)}
+      if(b==='exodus' && c===17){add('victory',8);add('faith',4);add('prayer',3)}
+      if(b==='judges' && c===6){add('peace',8);add('presence',5);add('victory',4);add('faith',3)}
+      if(b==='jeremiah' && c===23){add('righteousness',9);add('redemption',4);add('identity',2)}
+      if(b==='ezekiel' && c===48){add('presence',9);add('covenant',3)}
+    }
+    const qt=keywordThemes(query);Object.entries(qt).forEach(([name,n])=>add(name,n));
+    return t;
+  }
+
+  function currentBookStudyContext(){
+    const ref=currentReaderRef();
+    const active=document.querySelector('#deepStudyCenter>.deep-study-panel.active');
+    let query='';
+    if(active?.id==='deepStudyTopicsPanel')query=$('deepTopicInput')?.value||'';
+    else if(active?.id==='deepStudyLanguagePanel')query=$('deepLanguageInput')?.value||$('deepStudyWord')?.value||'';
+    else if(active?.id==='deepStudyConcordancePanel')query=$('deepConcordanceInput')?.value||$('deepStudyWord')?.value||'';
+    else if(active?.id==='deepStudyStrongsPanel')query=$('deepStudyWord')?.value||'';
+    else query=$('topicInput')?.value||$('deepTopicInput')?.value||$('deepStudyWord')?.value||'';
+    const deepRef=String($('deepStudyReference')?.value||'').trim();
+    const refLabel=ref.book&&ref.chapter ? ref.book+' '+ref.chapter+(ref.verse?(':'+ref.verse):'') : deepRef;
+    const label=[refLabel,query?('Topic / word: '+query):''].filter(Boolean).join(' • ');
+    return {ref,query:String(query||'').trim(),deepRef,label:label||'Current study'};
+  }
+
+  function bestBooksForPassage(ref,query=''){
+    const themes=passageThemes(ref,query); const books=getBooks();
     const scored=books.map((book,index)=>({book,index,access:bmLibraryAccess(book)}))
       .filter(x=>x.access.allowed)
       .map(({book,index,access})=>{
         const p=bookProfiles[book.title]||{}; let score=0; const matched=[];
         Object.entries(themes).forEach(([theme,w])=>{if(p[theme]){score+=w*p[theme];matched.push(theme)}});
-        // useful defaults when a passage has no special rule yet
         if(!Object.keys(themes).length){score=(p.faith||0)+(p.identity||0)*.4+(p.healing||0)*.25;}
         return {book,index,score,matched:[...new Set(matched)],access};
       }).sort((a,b)=>b.score-a.score||a.index-b.index);
@@ -11902,39 +12096,110 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
   }
 
   function themeLabel(themes){
-    const labels={healing:'healing',redemption:'redemption',faith:'faith',compassion:'Christ’s compassion',covenant:'covenant',authority:'authority in Christ',identity:'identity in Christ',warfare:'spiritual opposition',prayer:'prayer',name:'the Name of God/Jesus',spirit:'Holy Spirit',gifts:'spiritual gifts',evangelism:'evangelism',missions:'missions',holiness:'holiness',shepherd:'the Lord our Shepherd',provision:'God’s provision',peace:'God’s peace',presence:'God’s presence',protection:'God’s protection',righteousness:'righteousness in Christ',truth:'truth',rest:'resting/standing in Christ',victory:'victory in God'};
-    return themes.slice(0,4).map(x=>labels[x]||x).join(', ');
+    const labels={healing:'healing',redemption:'redemption',faith:'faith',compassion:'Christ’s compassion',covenant:'covenant',authority:'authority in Christ',identity:'identity in Christ',warfare:'resisting spiritual opposition',prayer:'prayer',name:'the Name of God/Jesus',spirit:'Holy Spirit',gifts:'spiritual gifts',evangelism:'evangelism',missions:'missions',holiness:'holiness',shepherd:'the Lord our Shepherd',provision:'God’s provision',peace:'God’s peace',presence:'God’s presence',protection:'God’s protection',righteousness:'righteousness in Christ',truth:'truth',rest:'resting/standing in Christ',victory:'victory in God'};
+    return (themes||[]).slice(0,4).map(x=>labels[x]||x).join(', ');
+  }
+
+  function scriptureAnchorForThemes(themes,ctx){
+    if(ctx?.ref?.book&&ctx?.ref?.chapter)return ctx.ref.book+' '+ctx.ref.chapter+(ctx.ref.verse?(':'+ctx.ref.verse):'');
+    const set=new Set(themes||[]);
+    if(set.has('healing'))return 'Isaiah 53:4–5; 1 Peter 2:24';
+    if(set.has('righteousness'))return '2 Corinthians 5:21; Romans 5:17';
+    if(set.has('truth')||set.has('warfare'))return 'Ephesians 6:10–18';
+    if(set.has('authority'))return 'Luke 10:19; Ephesians 1:19–23';
+    if(set.has('shepherd'))return 'Psalm 23:1–4';
+    if(set.has('provision'))return 'Genesis 22:14; Philippians 4:19';
+    if(set.has('peace'))return 'John 14:27; Philippians 4:6–7';
+    if(set.has('presence'))return 'Hebrews 13:5; Ezekiel 48:35';
+    if(set.has('name'))return 'Philippians 2:9–11; John 16:23';
+    if(set.has('prayer'))return 'Mark 11:24; James 5:15';
+    if(set.has('spirit'))return 'Acts 1:8; 1 Corinthians 12:4–11';
+    if(set.has('evangelism'))return 'Matthew 28:18–20';
+    if(set.has('rest'))return 'Hebrews 4:9–11';
+    if(set.has('faith'))return 'Mark 11:22–24; Hebrews 11:1';
+    return ctx?.deepRef||'Romans 10:17';
   }
 
   function renderPassageBookConnections(){
-    const ref=currentReaderRef(),refEl=$('bmPassageBookReference'),out=$('bmPassageBookResults'); if(!out||!refEl)return;
-    if(!ref.book||!ref.chapter){refEl.textContent='Choose a Bible book and chapter to see the strongest book connections.';out.innerHTML='<div class="small-note">The recommendations will update automatically as you read.</div>';return;}
-    refEl.textContent='Best matches for '+ref.book+' '+ref.chapter+(ref.verse?(':'+ref.verse):'')+' • searching only books you own or public-domain books included in BibleMastery.';
-    const picks=bestBooksForPassage(ref);
+    const ctx=currentBookStudyContext(),refEl=$('bmPassageBookReference'),out=$('bmPassageBookResults'); if(!out||!refEl)return;
+    if((!ctx.ref.book||!ctx.ref.chapter)&&!ctx.query&&!ctx.deepRef){refEl.textContent='Choose a Bible passage, topic, or study word to see the strongest book connections.';out.innerHTML='<div class="small-note">The recommendations update automatically as you study.</div>';return;}
+    refEl.textContent='Best matches for '+ctx.label+' • searching only books you own or public-domain books included in BibleMastery.';
+    const picks=bestBooksForPassage(ctx.ref,ctx.query||ctx.deepRef);
     if(!picks.length){out.innerHTML='<div class="small-note">No matching books are currently available in My Library.</div>';return;}
-    out.innerHTML=picks.map((x,i)=>{const start=bestStartForBook(x.book,x.matched);return '<article class="bm-passage-book-card"><div class="bm-eyebrow">MATCH '+(i+1)+' • '+esc(x.access?.label||'My Library')+'</div><h4>'+esc(x.book.title)+'</h4><div class="small-note">'+esc(x.book.author||'')+'</div><div class="bm-start-here"><strong>Start here:</strong> '+esc(start.section)+'</div><p class="bm-match-reason">Connected through '+esc(themeLabel(x.matched)||'faith and Christian life')+'.</p><div class="bm-passage-book-actions"><button type="button" class="search-button" data-open-book-context="'+x.index+'">Read from Here</button><button type="button" class="reader-nav-button" data-open-library-book="'+esc(x.book.title)+'">Full Book in Library</button></div></article>'}).join('');
+    out.innerHTML=picks.map((x,i)=>{const start=bestStartForBook(x.book,x.matched);const anchor=scriptureAnchorForThemes(x.matched,ctx);return '<article class="bm-passage-book-card"><div class="bm-eyebrow">MATCH '+(i+1)+' • '+esc(x.access?.label||'My Library')+'</div><h4>'+esc(x.book.title)+'</h4><div class="small-note">'+esc(x.book.author||'')+'</div><div class="bm-start-here"><strong>Start here:</strong> '+esc(start.section)+'</div><div class="bm-book-scripture-anchor"><strong>Scripture connection:</strong> '+esc(anchor)+'</div><p class="bm-match-reason">Why it matches: '+esc(themeLabel(x.matched)||'faith and Christian life')+'.</p><div class="bm-passage-book-actions"><button type="button" class="search-button" data-open-book-context="'+x.index+'">Read from Here</button><button type="button" class="reader-nav-button" data-open-library-book="'+esc(x.book.title)+'">Full Book in Library</button></div></article>'}).join('');
+  }
+
+  function cleanReaderVerseText(el){
+    if(!el)return'';const copy=el.cloneNode(true);copy.querySelectorAll('.reader-verse-number').forEach(n=>n.remove());return String(copy.textContent||'').replace(/\s+/g,' ').trim();
+  }
+  function currentStudyPassage(ctx){
+    const ref=ctx?.ref||currentReaderRef();
+    const verses=[...document.querySelectorAll('#readerDisplay .reader-verse')];
+    if(ref.book&&ref.chapter&&verses.length){
+      if(ref.verse){const idx=Number($('readerVerseSelect')?.value);const el=Number.isFinite(idx)?verses[idx]:document.querySelector('#readerDisplay .active-reader-verse');return {label:ref.book+' '+ref.chapter+':'+ref.verse,text:cleanReaderVerseText(el)};}
+      const sample=verses.slice(0,3).map((el,i)=>{const n=el.querySelector('.reader-verse-number')?.textContent?.trim()||String(i+1);return n+' '+cleanReaderVerseText(el)}).join('  ');
+      return {label:ref.book+' '+ref.chapter,text:sample};
+    }
+    const themes=passageThemes(ref,ctx?.query||ctx?.deepRef||'');
+    return {label:ctx?.label||'Current study',text:'Scripture anchor: '+scriptureAnchorForThemes(Object.keys(themes),ctx)+'. Open the Scripture connection below to read the biblical passage tied to this recommendation.'};
+  }
+
+  function localBookPreview(book,start){
+    const chapters=Array.isArray(book?.chapters)?book.chapters:[];
+    const holder=document.createElement('div');
+    holder.innerHTML=chapters.map(c=>c?.html||c?.text||'').join(' ');
+    let plain=String(holder.textContent||'').replace(/\s+/g,' ').trim();
+    const section=String(start?.section||'').trim();
+    let snippet='';
+    if(section&&plain){
+      const idx=plain.toLowerCase().indexOf(section.toLowerCase());
+      if(idx>=0){const from=Math.max(0,idx-180),to=Math.min(plain.length,idx+760);snippet=plain.slice(from,to);}
+    }
+    if(!snippet){
+      const guide=chapters.find(c=>/study guide|study connections|book information/i.test(c?.title||''));
+      if(guide){holder.innerHTML=guide.html||guide.text||'';snippet=String(holder.textContent||'').replace(/\s+/g,' ').trim().slice(0,900);}
+    }
+    if(!snippet)snippet=(start?.note||'This section is the strongest match for the current study.')+' Open the full Library resource to continue reading from the source.';
+    snippet=snippet.replace(/Open Full Scan ↗|Open Library Record ↗|Read \/ Get Free PDF from AWMI ↗|Open Believer's Authority Teaching ↗/g,'').replace(/\s+/g,' ').trim();
+    if(snippet.length>950)snippet=snippet.slice(0,947).replace(/\s+\S*$/,'')+'…';
+    return snippet;
   }
 
   let bmBookContextState=null;
   function openBookContext(bookIndexValue,matchedThemes=[]){
     const books=getBooks(),index=Number(bookIndexValue)||0,book=books[index]; if(!book)return;
+    const ctx=currentBookStudyContext();
     const start=bestStartForBook(book,matchedThemes);
-    bmBookContextState={book,index,matched:matchedThemes,start};
+    const passage=currentStudyPassage(ctx);
+    const anchor=scriptureAnchorForThemes(matchedThemes,ctx);
+    bmBookContextState={book,index,matched:matchedThemes,start,ctx,anchor};
     const modal=$('bmBookContextModal'); if(!modal)return;
     $('bmBookContextTitle').textContent=book.title;
-    $('bmBookContextAuthor').textContent=book.author||'';
+    $('bmBookContextAuthor').textContent=(book.author||'')+' • '+(bmLibraryAccess(book).label||'My Library');
+    $('bmBookContextStudyRef').textContent=passage.label||ctx.label||'Current study';
+    $('bmBookContextBibleText').textContent=passage.text||('Scripture anchor: '+anchor);
     $('bmBookContextSection').textContent=start.section;
-    $('bmBookContextReason').textContent=start.note+' This recommendation is based on the current Bible passage or study topic, so you can begin with the most relevant part instead of opening the whole book first.';
-    $('bmBookContextThemes').innerHTML=(matchedThemes.length?matchedThemes:['faith']).slice(0,5).map(t=>'<span class="bm-book-context-chip">'+esc(themeLabel([t])||t)+'</span>').join('');
+    $('bmBookContextReason').textContent=start.note+' It was selected because this section overlaps the current study through '+(themeLabel(matchedThemes)||'the same biblical theme')+'.';
+    $('bmBookContextThemes').innerHTML=(matchedThemes.length?matchedThemes:['faith']).slice(0,6).map(t=>'<span class="bm-book-context-chip">'+esc(themeLabel([t])||t)+'</span>').join('');
     const src=librarySources[book.title];
-    $('bmBookContextRead').textContent=src&&src.mode==='external'?'Open Official Reading':'Open at This Starting Point';
-    modal.hidden=false; modal.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden';
+    $('bmBookContextPreviewLabel').textContent=src?.mode==='external'?'BIBLEMASTERY STUDY PREVIEW':'CONNECTED READING PREVIEW';
+    $('bmBookContextPreview').textContent=localBookPreview(book,start);
+    $('bmBookContextRead').textContent=src?.mode==='external'?'Continue at Official Resource':'Continue at This Section';
+    $('bmBookContextOpenBible').textContent='Open '+anchor;
+    modal.hidden=false; modal.setAttribute('aria-hidden','false');
+    setTimeout(()=>$('bmBookContextClose')?.focus(),0);
   }
-  function closeBookContext(){const modal=$('bmBookContextModal');if(!modal)return;modal.hidden=true;modal.setAttribute('aria-hidden','true');document.body.style.overflow='';}
-  function openContextInLibrary(fullOnly=false){
-    if(!bmBookContextState)return;
-    const {book,start}=bmBookContextState; closeBookContext();
-    openLibraryBook(book.title,fullOnly?'':start.section,fullOnly?'':start.note);
+  function closeBookContext(){const modal=$('bmBookContextModal');if(!modal)return;modal.hidden=true;modal.setAttribute('aria-hidden','true');}
+  function libraryPageUrl(fullOnly=false){
+    if(!bmBookContextState)return 'library.html';
+    const {book,start,ctx}=bmBookContextState;
+    const p=new URLSearchParams();p.set('book',book.title);if(!fullOnly&&start?.section)p.set('section',start.section);if(ctx?.label)p.set('from',ctx.label);return 'library.html?'+p.toString();
+  }
+  function openContextInLibrary(fullOnly=false){if(!bmBookContextState)return;const url=libraryPageUrl(fullOnly);closeBookContext();window.location.href=url;}
+  function openScriptureConnection(){
+    if(!bmBookContextState)return;const ref=bmBookContextState.anchor||bmBookContextState.ctx?.deepRef||'';closeBookContext();
+    if(ref&&typeof window.openDeepReferenceInReader==='function'){window.openDeepReferenceInReader(ref.split(';')[0].trim());setTimeout(()=>$('bmReaderCard')?.scrollIntoView({behavior:'smooth',block:'start'}),80);}
+    else {const input=$('deepStudyReference');if(input)input.value=ref;setTimeout(()=>$('bmReaderCard')?.scrollIntoView({behavior:'smooth',block:'start'}),50);}
   }
   window.BibleMasteryOpenBookContext=function(title,themes=[]){const books=getBooks(),i=books.findIndex(b=>b.title===title);if(i>=0)openBookContext(i,themes)};
 
@@ -11967,19 +12232,23 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
   $('bmLibrarySearch')?.addEventListener('input',e=>renderLibraryList(e.target.value));
   $('bmLibraryList')?.addEventListener('click',e=>{const b=e.target.closest('[data-library-title]');if(b)openLibraryBook(b.dataset.libraryTitle)});
   $('bmPassageBookResults')?.addEventListener('click',e=>{
-    const ctx=e.target.closest('[data-open-book-context]');
-    if(ctx){const picks=bestBooksForPassage(currentReaderRef());const idx=Number(ctx.dataset.openBookContext)||0;const match=picks.find(x=>x.index===idx);openBookContext(idx,match?.matched||[]);return;}
-    const lb=e.target.closest('[data-open-library-book]');if(lb){openLibraryBook(lb.dataset.openLibraryBook);return;}
+    const ctxBtn=e.target.closest('[data-open-book-context]');
+    if(ctxBtn){const study=currentBookStudyContext();const picks=bestBooksForPassage(study.ref,study.query||study.deepRef);const idx=Number(ctxBtn.dataset.openBookContext)||0;const match=picks.find(x=>x.index===idx);openBookContext(idx,match?.matched||[]);return;}
+    const lb=e.target.closest('[data-open-library-book]');if(lb){window.location.href='library.html?book='+encodeURIComponent(lb.dataset.openLibraryBook);return;}
     const tb=e.target.closest('[data-open-theology-book]');if(tb){bookIndex=Number(tb.dataset.openTheologyBook)||0;chapterIndex=0;activate('books');renderBooks($('theologyBookSearch')?.value||'');renderBookReader();$('bmDeepCard')?.scrollIntoView({behavior:'smooth',block:'start'});}
   });
   $('bmBookContextClose')?.addEventListener('click',closeBookContext);
-  $('bmBookContextModal')?.addEventListener('click',e=>{if(e.target?.id==='bmBookContextModal')closeBookContext()});
+  $('bmBookContextCloseBottom')?.addEventListener('click',closeBookContext);
+  document.addEventListener('click',e=>{const modal=$('bmBookContextModal'),dialog=modal?.querySelector('.bm-book-context-dialog');if(!modal||modal.hidden||!dialog)return;if(!dialog.contains(e.target)&&!e.target.closest('[data-open-book-context]'))closeBookContext();},true);
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('bmBookContextModal')?.hidden)closeBookContext()});
   $('bmBookContextRead')?.addEventListener('click',()=>openContextInLibrary(false));
+  $('bmBookContextOpenBible')?.addEventListener('click',openScriptureConnection);
   $('bmBookContextLibrary')?.addEventListener('click',()=>openContextInLibrary(true));
   $('bmBookContextStudy')?.addEventListener('click',()=>{if(!bmBookContextState)return;bookIndex=bmBookContextState.index;chapterIndex=0;closeBookContext();activate('books');renderBooks($('theologyBookSearch')?.value||'');renderBookReader();$('bmDeepCard')?.scrollIntoView({behavior:'smooth',block:'start'});});
-  $('bmOpenLibraryFromBooks')?.addEventListener('click',()=>{$('bmLibraryCard')?.scrollIntoView({behavior:'smooth',block:'start'})});
+  $('bmOpenLibraryFromBooks')?.addEventListener('click',()=>{window.location.href='library.html'});
   ['readerBookSelect','readerChapterSelect','readerVerseSelect','readerTranslationSelect'].forEach(id=>$(id)?.addEventListener('change',()=>setTimeout(renderPassageBookConnections,20)));
+  ['deepTopicInput','deepLanguageInput','deepConcordanceInput','deepStudyWord','deepStudyReference','topicInput'].forEach(id=>$(id)?.addEventListener('input',()=>setTimeout(renderPassageBookConnections,40)));
+  document.querySelectorAll('.deep-study-tab').forEach(tab=>tab.addEventListener('click',()=>setTimeout(renderPassageBookConnections,60)));
   const readerObs=$('readerDisplay');if(readerObs)new MutationObserver(()=>renderPassageBookConnections()).observe(readerObs,{childList:true,subtree:true});
   renderLibraryList();renderPassageBookConnections();
 
@@ -12257,27 +12526,42 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
 
 
 <div class="bm-book-context-modal" id="bmBookContextModal" hidden aria-hidden="true">
-  <section class="bm-book-context-dialog" role="dialog" aria-modal="true" aria-labelledby="bmBookContextTitle">
+  <section class="bm-book-context-dialog" role="dialog" aria-modal="false" aria-labelledby="bmBookContextTitle">
     <div class="bm-book-context-top">
       <div>
         <div class="bm-eyebrow">CONNECTED BOOK READING</div>
         <h3 id="bmBookContextTitle">Book connection</h3>
         <div class="small-note" id="bmBookContextAuthor"></div>
       </div>
-      <button class="bm-book-context-close" id="bmBookContextClose" type="button" aria-label="Close book connection">×</button>
+      <button class="bm-book-context-close" id="bmBookContextClose" type="button" aria-label="Close connected book reader">×</button>
     </div>
+
+    <div class="bm-book-context-study">
+      <div class="bm-book-context-label">CURRENT STUDY</div>
+      <strong id="bmBookContextStudyRef">Current passage</strong>
+      <div id="bmBookContextBibleText" class="bm-book-context-bible-text"></div>
+    </div>
+
     <div class="bm-book-context-start">
-      <strong>Start here</strong>
+      <strong>Best matching section</strong>
       <span id="bmBookContextSection"></span>
     </div>
     <p class="bm-book-context-reason" id="bmBookContextReason"></p>
     <div class="bm-book-context-themes" id="bmBookContextThemes"></div>
-    <div class="bm-book-context-actions">
-      <button class="search-button" id="bmBookContextRead" type="button">Open at This Starting Point</button>
-      <button class="reader-nav-button" id="bmBookContextStudy" type="button">Open Study Entry</button>
-      <button class="reader-nav-button" id="bmBookContextLibrary" type="button">Open Full Book in Library</button>
+
+    <div class="bm-book-context-preview">
+      <div class="bm-book-context-label" id="bmBookContextPreviewLabel">CONNECTED READING PREVIEW</div>
+      <div id="bmBookContextPreview"></div>
     </div>
-    <p class="small-note" style="margin-top:12px">Deep Study gives you the best place to begin. The complete book stays in the Library.</p>
+
+    <div class="bm-book-context-actions">
+      <button class="search-button" id="bmBookContextRead" type="button">Continue at This Section</button>
+      <button class="reader-nav-button" id="bmBookContextOpenBible" type="button">Open Scripture Connection</button>
+      <button class="reader-nav-button" id="bmBookContextStudy" type="button">Open Study Entry</button>
+      <button class="reader-nav-button" id="bmBookContextLibrary" type="button">Open Full Book</button>
+      <button class="reader-nav-button bm-book-context-close-bottom" id="bmBookContextCloseBottom" type="button">Close</button>
+    </div>
+    <p class="small-note" style="margin-top:12px">The connected preview is BibleMastery study material unless the Library contains local public-domain text. Full copyrighted text remains at its official source.</p>
   </section>
 </div>
 </body>
