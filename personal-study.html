@@ -2199,8 +2199,8 @@ button,a,input,select,textarea{min-height:38px}
 </div>
 <div class="deep-study-panel" id="deepStudyReferencesPanel">
 <div class="deep-study-card">
-<h3>Ranked Cross-References</h3>
-<p>Use the current reference to find related verses in the same chapter, the same book, and the wider Bible. Stronger source-backed cross-reference sets can be added without changing this interface.</p>
+<h3>Best-Matching Cross-References Across the Whole Bible</h3>
+<p>BibleMastery compares the selected verse with Scripture from Genesis through Revelation and ranks the strongest matches first by shared wording, biblical themes, direct connections, prophecy/fulfillment patterns, and parallel teaching.</p>
 <div class="search-row">
 <input class="search-input" id="deepReferenceInput" placeholder="Example: John 3:16" type="text"/>
 <button class="search-button" id="deepReferenceButton" type="button">Find Related Verses</button>
@@ -2236,17 +2236,6 @@ button,a,input,select,textarea{min-height:38px}
 </div>
 </div>
 </div><div class="deep-study-panel" id="deepStudyBooksPanel">
-<div class="bm-passage-books" id="bmPassageBookConnections">
-  <div class="bm-passage-books-head">
-    <div>
-      <div class="bm-eyebrow">CONNECTED TO THE BIBLE READER</div>
-      <h3>2 Best Books for This Passage</h3>
-      <p id="bmPassageBookReference">Choose a Bible book and chapter to see the strongest book connections.</p>
-    </div>
-    <button class="reader-nav-button" id="bmOpenLibraryFromBooks" type="button">Open Library</button>
-  </div>
-  <div class="bm-passage-book-grid" id="bmPassageBookResults"></div>
-</div>
 <div class="bm-theology-layout">
 <aside class="bm-theology-library">
 <div class="bm-theology-library-head">
@@ -2312,6 +2301,20 @@ button,a,input,select,textarea{min-height:38px}
 <div class="deep-study-output" id="deepStudyHistoryOutput"></div>
 </div>
 </div>
+</div>
+
+<div class="bm-connected-books-shell" aria-label="Recommended theology books">
+  <div class="bm-passage-books" id="bmPassageBookConnections">
+    <div class="bm-passage-books-head">
+      <div>
+        <div class="bm-eyebrow">CONNECTED TO THE CURRENT STUDY</div>
+        <h3>📚 2 Best Books for This Passage</h3>
+        <p id="bmPassageBookReference">Choose a Bible book and chapter to see the strongest book connections.</p>
+      </div>
+      <button class="reader-nav-button" id="bmOpenLibraryFromBooks" type="button">Open Library</button>
+    </div>
+    <div class="bm-passage-book-grid" id="bmPassageBookResults"></div>
+  </div>
 </div>
 
 
@@ -7373,6 +7376,12 @@ button,a,input,select,textarea{min-height:38px}
           }
         }
       }
+      if (typeof renderPassageBookConnections === "function") {
+        window.setTimeout(renderPassageBookConnections, 30);
+      }
+      if (document.getElementById("deepStudyReferencesPanel")?.classList.contains("active")) {
+        window.setTimeout(function(){ runDeepReferences(deepReferenceLabel(item)); }, 80);
+      }
     } catch (error) {
       console.error("Could not open reference in reader:", error);
     }
@@ -7656,59 +7665,212 @@ button,a,input,select,textarea{min-height:38px}
   }
 
   const deepCrossReferenceSeeds = {
-    "john 3:16": ["Romans 5:8", "1 John 4:9-10", "Ephesians 2:4-5", "John 3:17"],
-    "romans 5:17": ["Romans 3:24", "Romans 6:14", "Ephesians 2:8-9", "2 Corinthians 5:21"],
-    "psalm 23:1": ["John 10:11", "John 10:14", "1 Peter 2:25", "Hebrews 13:20"],
-    "ephesians 6:10": ["2 Corinthians 12:9", "Philippians 4:13", "Isaiah 40:31", "Psalm 28:7"]
+    "john 3:16": ["Romans 5:8", "1 John 4:9", "1 John 4:10", "1 John 4:14", "Ephesians 2:4", "Ephesians 2:5", "John 3:17", "Romans 8:32"],
+    "romans 5:17": ["Romans 3:24", "Romans 6:14", "Ephesians 2:8-9", "2 Corinthians 5:21", "Romans 5:21"],
+    "psalm 23:1": ["John 10:11", "John 10:14", "1 Peter 2:25", "Hebrews 13:20", "Ezekiel 34:11-16"],
+    "ephesians 6:10": ["2 Corinthians 12:9", "Philippians 4:13", "Isaiah 40:31", "Psalm 28:7", "Zechariah 4:6"],
+    "isaiah 53:5": ["1 Peter 2:24", "Matthew 8:16", "Matthew 8:17", "Psalm 103:2", "Psalm 103:3", "Exodus 15:26"],
+    "1 peter 2:24": ["Isaiah 53:4", "Isaiah 53:5", "Matthew 8:16", "Matthew 8:17", "Psalm 103:2", "Psalm 103:3", "Galatians 3:13"],
+    "mark 11:24": ["Matthew 21:21", "Matthew 21:22", "James 1:5", "James 1:6", "1 John 5:14", "1 John 5:15", "Hebrews 11:1"],
+    "luke 10:19": ["Mark 16:17", "Mark 16:18", "Ephesians 6:10", "Ephesians 6:11", "Ephesians 6:12", "James 4:7", "Colossians 2:15"],
+    "philippians 4:19": ["Matthew 6:31", "Matthew 6:32", "Matthew 6:33", "2 Corinthians 9:8", "Psalm 23:1", "Psalm 34:10"],
+    "2 corinthians 5:21": ["Romans 3:21", "Romans 3:22", "Romans 3:24", "Romans 5:17", "Romans 5:18", "Romans 5:19", "1 Corinthians 1:30", "Philippians 3:9"]
   };
+
+  const bmCrossRefStopWords = new Set([
+    "the","and","that","this","with","from","unto","into","upon","shall","will","would","should","could","have","hath","has","had","were","was","are","is","be","been","being","for","but","not","you","your","ye","thy","thee","thou","his","her","their","they","them","our","ours","who","whom","which","what","when","where","there","here","then","than","also","all","any","some","one","two","him","she","he","we","us","it","its","of","to","in","on","at","by","as","or","if","so","a","an","i","me","my","mine","do","did","does","done","let","may","might","can","because","therefore","thus","said","saying","say","came","come","go","went","make","made"
+  ]);
+
+  const bmCrossRefConcepts = {
+    healing:["heal","healed","healing","sick","sickness","disease","diseases","infirmity","infirmities","wound","wounds","whole","health"],
+    faith:["faith","believe","believed","believeth","believing","trust","trusted","confidence"],
+    love:["love","loved","loveth","charity","compassion","mercy"],
+    salvation:["save","saved","salvation","redeem","redeemed","redemption","deliver","delivered","deliverance"],
+    righteousness:["righteous","righteousness","justified","justification","justify"],
+    grace:["grace","gift","freely","favor","favour"],
+    authority:["authority","power","dominion","subject","subjection","name","command"],
+    spirit:["spirit","holy","ghost","spiritual","anointed","anointing"],
+    prayer:["pray","prayer","ask","asking","petition","supplication"],
+    peace:["peace","rest","quiet","comfort","troubled","anxious","care"],
+    provision:["provide","provision","need","needs","supply","bread","food","riches"],
+    shepherd:["shepherd","pasture","flock","sheep","lead","guide"],
+    presence:["presence","with you","with thee","forsake","leave thee","dwelleth","dwell"],
+    victory:["victory","overcome","overcometh","conquer","triumph","enemy","enemies"],
+    resurrection:["resurrection","raised","risen","rise again","dead","death","alive"],
+    eternalLife:["eternal life","everlasting life","life eternal","shall not perish"],
+    forgiveness:["forgive","forgiven","forgiveness","remission","sins","iniquity"],
+    covenant:["covenant","promise","promises","oath","testament"],
+    wisdom:["wisdom","understanding","knowledge","wise","discern"],
+    protection:["shield","refuge","fortress","protect","protection","deliver","safety"],
+    identity:["in christ","with christ","new creature","sons of god","children of god","adoption"]
+  };
+
+  const bmCrossRefConceptLabels = {
+    healing:"healing",faith:"faith",love:"God's love",salvation:"salvation/redemption",righteousness:"righteousness",grace:"grace",authority:"authority",spirit:"Holy Spirit",prayer:"prayer",peace:"peace",provision:"provision",shepherd:"shepherding/guidance",presence:"God's presence",victory:"victory",resurrection:"resurrection",eternalLife:"eternal life",forgiveness:"forgiveness",covenant:"covenant/promise",wisdom:"wisdom",protection:"protection",identity:"identity in Christ"
+  };
+
+  let bmCrossRefIndexCache = null;
+
+  function bmCrossRefNormalizeWord(word) {
+    let w = String(word || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+    const aliases = {
+      believeth:"believe",believed:"believe",believing:"believe",
+      loveth:"love",loved:"love",loving:"love",
+      healeth:"heal",healed:"heal",healing:"heal",
+      saved:"save",saving:"save",redeemed:"redeem",
+      giveth:"give",given:"give",giving:"give",
+      liveth:"live",living:"live",raised:"raise",
+      prayeth:"pray",prayed:"pray",praying:"pray",
+      righteous:"righteousness",justified:"justify"
+    };
+    return aliases[w] || w;
+  }
+
+  function bmCrossRefTokens(text) {
+    return String(text || "")
+      .replace(/<[^>]*>/g, " ")
+      .toLowerCase()
+      .split(/[^a-z0-9]+/)
+      .map(bmCrossRefNormalizeWord)
+      .filter(function(w) { return w.length >= 3 && !bmCrossRefStopWords.has(w) && !/^\d+$/.test(w); });
+  }
+
+  function bmCrossRefBigrams(tokens) {
+    const out = [];
+    for (let i = 0; i < tokens.length - 1; i++) out.push(tokens[i] + " " + tokens[i + 1]);
+    return out;
+  }
+
+  function bmCrossRefConceptSet(text) {
+    const lower = " " + String(text || "").toLowerCase().replace(/[^a-z0-9]+/g, " ") + " ";
+    const found = [];
+    Object.keys(bmCrossRefConcepts).forEach(function(name) {
+      if (bmCrossRefConcepts[name].some(function(term) {
+        const t = String(term).toLowerCase();
+        return t.includes(" ") ? lower.includes(" " + t + " ") : new RegExp("\\b" + t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\b", "i").test(lower);
+      })) found.push(name);
+    });
+    return found;
+  }
+
+  function bmCrossRefBuildIndex(source) {
+    if (!source || !Array.isArray(source.books)) return null;
+    if (bmCrossRefIndexCache && bmCrossRefIndexCache.source === source) return bmCrossRefIndexCache;
+    const rows = [], df = new Map();
+    source.books.forEach(function(book, bookIndex) {
+      (book.chapters || []).forEach(function(chapter) {
+        (chapter.verses || []).forEach(function(verse) {
+          const verseText = String(verse.text || verse.content || "").replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+          if (!verseText) return;
+          const tokens = bmCrossRefTokens(verseText);
+          const unique = Array.from(new Set(tokens));
+          unique.forEach(function(token) { df.set(token, (df.get(token) || 0) + 1); });
+          rows.push({
+            reference:getBookName(book) + " " + chapter.chapter + ":" + verse.number,
+            book:getBookName(book),bookId:normalizeBookId(getBookName(book), book),bookIndex:bookIndex,
+            chapter:Number(chapter.chapter)||0,verse:Number(verse.number)||0,text:verseText,
+            tokens:tokens,tokenSet:new Set(unique),bigrams:new Set(bmCrossRefBigrams(tokens)),concepts:bmCrossRefConceptSet(verseText)
+          });
+        });
+      });
+    });
+    bmCrossRefIndexCache = { source:source, rows:rows, df:df, total:rows.length };
+    return bmCrossRefIndexCache;
+  }
+
+  function bmCrossRefIdf(index, token) {
+    const docs = index.df.get(token) || 0;
+    return Math.log((index.total + 1) / (docs + 1)) + 1;
+  }
+
+  function bmCrossRefReason(baseRow, candidate, sharedTokens, sharedConcepts, direct) {
+    const reasons = [];
+    if (direct) reasons.push("Direct Scripture connection");
+    if (sharedConcepts.length) reasons.push("Shared theme: " + sharedConcepts.slice(0,2).map(function(x){return bmCrossRefConceptLabels[x] || x;}).join(" + "));
+    if (sharedTokens.length) reasons.push("Shared wording: " + sharedTokens.slice(0,3).join(", "));
+    if (baseRow.bookId !== candidate.bookId && baseRow.bookIndex < 39 && candidate.bookIndex >= 39) reasons.push("Old Testament → New Testament connection");
+    if (baseRow.bookId !== candidate.bookId && baseRow.bookIndex >= 39 && candidate.bookIndex < 39) reasons.push("New Testament → Old Testament connection");
+    if (!reasons.length) reasons.push("Strong whole-Bible wording match");
+    return reasons.slice(0,3);
+  }
 
   async function runDeepReferences(value) {
     const input = String(value || deepStudyReference.value || "").trim();
+    if (!studyBible) await loadStudyBible();
     const base = await findDeepReference(input, studyBible);
-    if (!base) {
-      deepSetOutput(deepReferenceOutput, "<div class='status-message'>Enter a reference such as John 3:16.</div>");
+    if (!base || !base.rawVerse) {
+      deepSetOutput(deepReferenceOutput, "<div class='status-message'>Enter a verse reference such as John 3:16.</div>");
       return;
     }
 
-    const suggestions = [];
-    const seen = new Set();
-    function add(reference, reason) {
-      const key = reference.toLowerCase();
-      if (!seen.has(key) && key !== input.toLowerCase()) {
-        seen.add(key);
-        suggestions.push({ reference: reference, reason: reason });
-      }
+    deepSetOutput(deepReferenceOutput, "<div class='status-message'>Comparing this verse with the whole Bible...</div>");
+    const index = bmCrossRefBuildIndex(studyBible);
+    if (!index) {
+      deepSetOutput(deepReferenceOutput, "<div class='error-message'>The whole-Bible verse index could not be built.</div>");
+      return;
     }
 
-    const seedKey = deepReferenceLabel(base).toLowerCase();
-    (deepCrossReferenceSeeds[seedKey] || []).forEach(function(reference) {
-      add(reference, "BibleMastery study connection");
-    });
+    const baseReference = deepReferenceLabel(base);
+    const baseTokens = bmCrossRefTokens(base.text);
+    const baseTokenSet = new Set(baseTokens);
+    const baseBigrams = new Set(bmCrossRefBigrams(baseTokens));
+    const baseConcepts = bmCrossRefConceptSet(base.text);
+    const directRefs = new Set((deepCrossReferenceSeeds[baseReference.toLowerCase()] || []).map(function(r){ return r.toLowerCase(); }));
+    const baseRow = {
+      reference:baseReference,book:base.book,bookId:base.bookId,bookIndex:base.bookIndex,
+      chapter:Number(base.chapter)||0,verse:Number(base.verse)||0,text:base.text,
+      tokenSet:baseTokenSet,bigrams:baseBigrams,concepts:baseConcepts
+    };
 
-    (base.chapterData.verses || []).forEach(function(verse) {
-      const number = Number(verse.number);
-      const target = Number(base.verse);
-      if (base.verse && Math.abs(number - target) <= 2 && number !== target) {
-        add(base.book + " " + base.chapter + ":" + verse.number, "Nearby context");
+    const baseWeight = Array.from(baseTokenSet).reduce(function(sum, token){ return sum + bmCrossRefIdf(index, token); }, 0) || 1;
+    const ranked = [];
+
+    index.rows.forEach(function(candidate) {
+      if (candidate.reference.toLowerCase() === baseReference.toLowerCase()) return;
+      const shared = [];
+      let lexical = 0;
+      baseTokenSet.forEach(function(token) {
+        if (candidate.tokenSet.has(token)) {
+          const weight = bmCrossRefIdf(index, token);
+          lexical += weight;
+          if (weight > 2.1) shared.push({token:token,weight:weight});
+        }
+      });
+      const sharedBigrams = [];
+      baseBigrams.forEach(function(bg){ if(candidate.bigrams.has(bg)) sharedBigrams.push(bg); });
+      const sharedConcepts = baseConcepts.filter(function(c){ return candidate.concepts.includes(c); });
+      const direct = directRefs.has(candidate.reference.toLowerCase());
+
+      let score = (lexical / baseWeight) * 28;
+      score += sharedBigrams.length * 4.5;
+      score += sharedConcepts.length * 6;
+      if (direct) score += 35;
+      if (candidate.bookId === base.bookId) score += 1.5;
+      if (candidate.bookId === base.bookId && candidate.chapter === Number(base.chapter)) score -= 3;
+      if ((base.bookIndex < 39) !== (candidate.bookIndex < 39) && (sharedConcepts.length || sharedBigrams.length)) score += 2.5;
+
+      if (score >= 7.5 || direct) {
+        shared.sort(function(a,b){return b.weight-a.weight;});
+        ranked.push({candidate:candidate,score:score,direct:direct,sharedTokens:shared.slice(0,4).map(function(x){return x.token;}),sharedConcepts:sharedConcepts});
       }
     });
 
-    if (studyBible && base.text) {
-      searchBible(studyBible, base.text.split(/\s+/).slice(0, 5).join(" "))
-        .slice(0, 15)
-        .forEach(function(item) {
-          add(item.book + " " + item.chapter + ":" + item.verse, "Related wording");
-        });
-    }
+    ranked.sort(function(a,b){ return b.score-a.score; });
+    const top = ranked.slice(0,24);
+    const sourceCount = index.total.toLocaleString ? index.total.toLocaleString() : String(index.total);
+    const html = "<div class='bm-crossref-summary'><strong>Whole-Bible matching:</strong> compared " + escapeHtml(sourceCount) + " verses and ranked the strongest connections to <strong>" + escapeHtml(baseReference) + "</strong>. Best matches appear first.</div>" +
+      (top.length ? top.map(function(item, i) {
+        const c = item.candidate;
+        const reasons = bmCrossRefReason(baseRow,c,item.sharedTokens,item.sharedConcepts,item.direct);
+        return "<div class='result-item bm-crossref-item'>" +
+          "<div class='bm-crossref-head'><span class='bm-crossref-rank'>" + (i+1) + "</span><div class='result-reference'>" + escapeHtml(c.reference) + "</div></div>" +
+          "<div class='bm-crossref-text'>" + escapeHtml(c.text) + "</div>" +
+          "<div class='bm-crossref-reasons'>" + reasons.map(function(reason){return "<span class='bm-crossref-chip'>" + escapeHtml(reason) + "</span>";}).join("") + "</div>" +
+          deepOpenReferenceButton(c.reference) + "</div>";
+      }).join("") : "<div class='status-message'>No strong whole-Bible matches were found for this verse.</div>");
 
-    deepSetOutput(deepReferenceOutput, suggestions.length
-      ? suggestions.map(function(item) {
-          return "<div class='result-item'><div class='result-reference'>" +
-            escapeHtml(item.reference) + "</div><div class='small-note'>" +
-            escapeHtml(item.reason) + "</div>" + deepOpenReferenceButton(item.reference) + "</div>";
-        }).join("")
-      : "<div class='status-message'>No related verses were found in the current data.</div>");
-    recordAdvancedStudy("Cross-references", input, String(suggestions.length) + " suggestions");
+    deepSetOutput(deepReferenceOutput, html);
+    recordAdvancedStudy("Whole-Bible cross-references", baseReference, String(top.length) + " ranked matches from " + sourceCount + " verses");
   }
 
   const deepEntityProfiles = {
@@ -11301,7 +11463,7 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
   function renderPassageBookConnections(){
     const ref=currentReaderRef(),refEl=$('bmPassageBookReference'),out=$('bmPassageBookResults'); if(!out||!refEl)return;
     if(!ref.book||!ref.chapter){refEl.textContent='Choose a Bible book and chapter to see the strongest book connections.';out.innerHTML='<div class="small-note">The recommendations will update automatically as you read.</div>';return;}
-    refEl.textContent='Best matches for '+ref.book+' '+ref.chapter+(ref.verse?(':'+ref.verse):'');
+    refEl.textContent='Best matches for '+ref.book+' '+ref.chapter+(ref.verse?(':'+ref.verse):'')+' • start with the most relevant section, then open the full book only when you want it.';
     const picks=bestBooksForPassage(ref);
     out.innerHTML=picks.map((x,i)=>{const start=bestStartForBook(x.book,x.matched);return '<article class="bm-passage-book-card"><div class="bm-eyebrow">MATCH '+(i+1)+'</div><h4>'+esc(x.book.title)+'</h4><div class="small-note">'+esc(x.book.author||'')+'</div><div class="bm-start-here"><strong>Start here:</strong> '+esc(start.section)+'</div><p class="bm-match-reason">Connected through '+esc(themeLabel(x.matched)||'faith and Christian life')+'.</p><div class="bm-passage-book-actions"><button type="button" class="search-button" data-open-book-context="'+x.index+'">Read from Here</button><button type="button" class="reader-nav-button" data-open-library-book="'+esc(x.book.title)+'">Full Book in Library</button></div></article>'}).join('');
   }
@@ -11525,6 +11687,76 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
 /* Dashboard used to hide the later tabs. Keep them visible inside the scroll strip now. */
 .bm-layout-dashboard #deepStudyCenter .bm-classic-only-tab{display:inline-flex!important}
 @media(max-width:720px){.bm-deep-tab-nav>.small-note{display:none}.bm-deep-tab-nav{position:sticky;top:0;z-index:3}.bm-deep-tab-arrow{min-width:44px}}
+
+
+/* BibleMastery spacious Deep Study workspace — one clear box per active tool. */
+.bm-layout-dashboard #deepStudyCenter > .deep-study-panel{
+  max-height:none!important;
+  min-height:330px;
+  overflow:visible!important;
+  margin:0 0 14px!important;
+  padding:14px!important;
+  border:1px solid #dfc99d!important;
+  border-radius:10px!important;
+  background:#fffef9!important;
+  box-shadow:0 5px 16px rgba(100,55,20,.07)!important;
+}
+.bm-layout-dashboard #deepStudyCenter > .deep-study-panel:not(.active){display:none!important}
+.bm-layout-dashboard #deepStudyCenter .deep-study-card{
+  border:1px solid #ead9b9!important;
+  border-radius:9px!important;
+  background:#fff!important;
+  padding:14px!important;
+}
+.bm-layout-dashboard #deepStudyCenter .deep-study-output{
+  max-height:390px!important;
+  overflow:auto!important;
+  padding:9px!important;
+  border:1px solid #eee1c8!important;
+  border-radius:8px!important;
+  background:#fff!important;
+}
+.bm-layout-dashboard #deepStudyReferencesPanel .deep-study-output{max-height:520px!important}
+.bm-layout-dashboard #deepStudyBooksPanel .bm-theology-layout{min-height:430px}
+.bm-connected-books-shell{
+  margin-top:12px;
+  padding-top:2px;
+}
+.bm-connected-books-shell .bm-passage-books{
+  margin:0!important;
+  padding:14px!important;
+  border:1px solid #dfc99d!important;
+  border-radius:10px!important;
+  background:#fffef9!important;
+  box-shadow:0 5px 16px rgba(100,55,20,.07)!important;
+}
+.bm-connected-books-shell .bm-passage-book-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+.bm-connected-books-shell .bm-passage-book-card{
+  background:#fff!important;
+  border:1px solid #e5cfaa!important;
+  color:#33241c!important;
+  min-height:190px;
+  padding:14px!important;
+}
+.bm-connected-books-shell .bm-passage-book-card h4{color:#781219!important;font-size:17px!important}
+.bm-connected-books-shell .bm-passage-book-card .bm-start-here{
+  background:#fff4d8!important;
+  border-color:#e3bd62!important;
+  color:#4b321e!important;
+}
+.bm-connected-books-shell .bm-passage-book-card .bm-start-here strong{color:#781219!important}
+.bm-connected-books-shell .bm-passage-book-card .bm-match-reason{color:#66584c!important}
+.bm-crossref-rank{display:inline-flex;align-items:center;justify-content:center;min-width:28px;height:28px;border-radius:999px;background:#7a0d12;color:#fff;font-weight:900;font-size:12px;margin-right:8px}
+.bm-crossref-head{display:flex;align-items:center;gap:4px;margin-bottom:5px}
+.bm-crossref-reasons{display:flex;flex-wrap:wrap;gap:5px;margin:7px 0}
+.bm-crossref-chip{display:inline-flex;padding:4px 7px;border-radius:999px;background:#fff3d4;border:1px solid #e2c172;color:#6f151a;font-size:10px;font-weight:800}
+.bm-crossref-text{font-family:Georgia,'Times New Roman',serif;font-size:15px;line-height:1.55;color:#2f2924}
+.bm-crossref-summary{padding:8px 10px;margin-bottom:8px;border-radius:8px;background:#fff5de;border:1px solid #e5c984;color:#5d421f;font-size:12px}
+@media(max-width:900px){
+  .bm-connected-books-shell .bm-passage-book-grid{grid-template-columns:1fr!important}
+  .bm-layout-dashboard #deepStudyCenter > .deep-study-panel{min-height:260px}
+}
+
 </style>
 <button id="bmInstallAppButton" type="button" aria-label="Install BibleMastery on this computer">⬇ Install BibleMastery</button>
 <script id="biblemastery-desktop-install-script">
