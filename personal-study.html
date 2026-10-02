@@ -1446,6 +1446,294 @@
 #mn-review-answer[hidden]{display:none}#mn-library{min-width:230px;flex:1}
 @media(max-width:650px){#masteryNotebook{padding:15px}#masteryNotebook .mn-grid{grid-template-columns:1fr}.mn-row>*{flex-grow:1}}
 </style>
+
+<style id="personalStudyLayout2026">
+/* =========================================
+   PERSONAL STUDY DASHBOARD LAYOUT
+   Layout-only overrides. Existing tool IDs and logic are preserved.
+========================================= */
+:root {
+  --layout-max: 1540px;
+  --layout-radius: 18px;
+  --layout-gap: 22px;
+  --layout-nav-h: 58px;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  background:
+    radial-gradient(circle at 18% 0%, rgba(55,79,121,.28), transparent 34%),
+    radial-gradient(circle at 88% 8%, rgba(216,185,106,.10), transparent 26%),
+    linear-gradient(180deg, #0d1628 0%, #080f1d 58%, #070c16 100%);
+}
+
+header {
+  padding: 18px 20px 16px;
+  position: relative;
+  z-index: 30;
+}
+header h1 { font-size: clamp(25px, 3vw, 34px); }
+header p { font-size: 14px; }
+
+.study-dashboard-nav {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  background: rgba(8,15,29,.93);
+  border-bottom: 1px solid rgba(216,185,106,.28);
+  box-shadow: 0 10px 24px rgba(0,0,0,.24);
+}
+.study-dashboard-nav-inner {
+  max-width: var(--layout-max);
+  margin: 0 auto;
+  min-height: var(--layout-nav-h);
+  padding: 8px 18px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+.study-dashboard-nav button {
+  flex: 0 0 auto;
+  border: 1px solid rgba(216,185,106,.25);
+  background: rgba(18,30,51,.82);
+  color: var(--text);
+  border-radius: 999px;
+  padding: 9px 13px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.study-dashboard-nav button:hover,
+.study-dashboard-nav button:focus-visible {
+  color: var(--bg-mid);
+  background: var(--gold-light);
+  border-color: var(--gold-light);
+  outline: none;
+}
+
+.container {
+  max-width: var(--layout-max);
+  padding: 20px 18px 50px;
+}
+.back-button { margin-bottom: 14px; }
+
+#topicBox,
+#studyWorkspace > .workspace-section,
+#masteryNotebook,
+#deepStudyCenter,
+#masterToolSuite {
+  scroll-margin-top: calc(var(--layout-nav-h) + 18px);
+}
+
+#topicBox.personal-ai-box {
+  border-radius: var(--layout-radius);
+  padding: 22px;
+  background:
+    linear-gradient(135deg, rgba(20,34,57,.98), rgba(12,22,39,.98));
+  border: 1px solid rgba(231,202,125,.42);
+  box-shadow: 0 16px 38px rgba(0,0,0,.28);
+}
+#topicBox h2 {
+  text-align: left;
+  margin-bottom: 6px;
+}
+#topicBox .study-description {
+  max-width: none;
+  text-align: left;
+  margin: 0 0 16px;
+}
+#topicBox .personal-ai-question {
+  min-height: 92px;
+  resize: vertical;
+}
+#topicBox .personal-ai-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+#studyWorkspace {
+  gap: 0;
+}
+#studyWorkspace > .workspace-section,
+#masteryNotebook,
+#deepStudyCenter,
+#masterToolSuite {
+  border-radius: var(--layout-radius);
+  margin-bottom: var(--layout-gap);
+}
+
+/* Make section headings feel like dashboard modules. */
+.workspace-section > h2:first-child,
+#masteryNotebook > h2:first-child,
+#deepStudyCenter > h2:first-child,
+#masterToolSuite > h2:first-child {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(216,185,106,.18);
+}
+
+/* Study tool cards: three columns on wide screens; Bible Reader remains full width. */
+#studyToolsSection .workspace-grid {
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: 14px;
+}
+#studyToolsSection .tool-box {
+  border-radius: 14px;
+  box-shadow: 0 8px 20px rgba(0,0,0,.16);
+}
+#bibleReaderSection {
+  grid-column: 1 / -1;
+  border-color: rgba(231,202,125,.42);
+  background: linear-gradient(145deg, rgba(19,32,57,.98), rgba(10,19,34,.98));
+}
+#bibleReaderSection .reader-shell {
+  grid-template-columns: minmax(210px, 290px) minmax(0,1fr);
+}
+#bibleReaderSection .reader-controls {
+  position: sticky;
+  top: calc(var(--layout-nav-h) + 12px);
+  align-self: start;
+}
+#bibleReaderSection .reader-display {
+  min-height: 520px;
+  max-height: 72vh;
+}
+
+/* Bible verses/commentary gets more reading width. */
+#bibleVersesSection .study-columns {
+  grid-template-columns: minmax(0,1.45fr) minmax(300px,.75fr);
+  gap: 18px;
+}
+#bibleVersesSection .commentary-column {
+  position: sticky;
+  top: calc(var(--layout-nav-h) + 12px);
+  align-self: start;
+  max-height: 75vh;
+  overflow: auto;
+}
+
+/* Deep Study: cleaner tabs with horizontal scrolling instead of wrapping into a wall. */
+#deepStudyCenter .deep-study-tabs {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px 2px 10px;
+  scrollbar-width: thin;
+}
+#deepStudyCenter .deep-study-tab {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  border-radius: 999px;
+}
+#deepStudyCenter .deep-study-panel {
+  border-radius: 15px;
+}
+
+/* Gospel chronology: left event list + large reader. */
+.gospel-chronology-layout {
+  grid-template-columns: minmax(270px, 340px) minmax(0,1fr);
+}
+.gospel-event-sidebar {
+  position: sticky;
+  top: calc(var(--layout-nav-h) + 12px);
+}
+.gospel-reading-pane { min-height: 560px; }
+
+/* Maps get a larger canvas. */
+.bible-map-layout {
+  grid-template-columns: minmax(250px, 320px) minmax(0,1fr);
+}
+#bibleInteractiveMap {
+  height: min(68vh, 700px);
+  min-height: 480px;
+  border-radius: 13px;
+  overflow: hidden;
+}
+
+/* Master tools: balanced cards; passage guide can breathe. */
+#masterToolSuite .master-tool-grid {
+  grid-template-columns: repeat(3, minmax(0,1fr));
+}
+#masterToolSuite .master-tool-card {
+  border-radius: 14px;
+}
+#masterToolSuite .master-tool-card.full { grid-column: 1 / -1; }
+
+/* Notebook spacing. */
+#masteryNotebook { padding: 22px; }
+#masteryNotebook .mn-grid { gap: 14px; }
+
+/* Consistent controls. */
+.search-input, .translation-select, .commentary-select, .reader-select,
+input, select, textarea {
+  border-radius: 10px;
+}
+.search-button, .commentary-button, .reader-nav-button, button {
+  transition: transform .14s ease, background-color .14s ease, border-color .14s ease;
+}
+.search-button:hover, .commentary-button:hover, .reader-nav-button:hover {
+  transform: translateY(-1px);
+}
+
+@media (max-width: 1100px) {
+  #studyToolsSection .workspace-grid,
+  #masterToolSuite .master-tool-grid {
+    grid-template-columns: repeat(2, minmax(0,1fr));
+  }
+  #bibleVersesSection .study-columns {
+    grid-template-columns: 1fr;
+  }
+  #bibleVersesSection .commentary-column {
+    position: static;
+    max-height: none;
+  }
+}
+
+@media (max-width: 820px) {
+  .container { padding: 14px 12px 36px; }
+  .study-dashboard-nav-inner { padding-inline: 10px; }
+  #studyToolsSection .workspace-grid,
+  #masterToolSuite .master-tool-grid {
+    grid-template-columns: 1fr;
+  }
+  #bibleReaderSection { grid-column: auto; }
+  #bibleReaderSection .reader-shell,
+  .gospel-chronology-layout,
+  .bible-map-layout {
+    grid-template-columns: 1fr;
+  }
+  #bibleReaderSection .reader-controls,
+  .gospel-event-sidebar { position: static; }
+  #bibleReaderSection .reader-display {
+    min-height: 420px;
+    max-height: none;
+  }
+  #bibleInteractiveMap {
+    height: 480px;
+    min-height: 420px;
+  }
+}
+
+@media (max-width: 560px) {
+  header { padding: 14px 12px; }
+  .study-box, .workspace-section, #masteryNotebook, #deepStudyCenter, #masterToolSuite {
+    padding: 16px;
+    border-radius: 14px;
+  }
+  #topicBox.personal-ai-box { padding: 16px; }
+  .study-dashboard-nav button { padding: 8px 11px; font-size: 13px; }
+  #bibleInteractiveMap { height: 390px; min-height: 360px; }
+}
+</style>
+
 </head>
 
 
@@ -1458,6 +1746,19 @@
   <p>BibleMastery • Personal Study Workspace</p>
 
 </header>
+  <nav class="study-dashboard-nav" aria-label="Personal Study navigation">
+    <div class="study-dashboard-nav-inner">
+      <button type="button" data-study-scroll="topicBox">✨ AI</button>
+      <button type="button" data-study-scroll="bibleReaderSection">📖 Bible Reader</button>
+      <button type="button" data-study-scroll="studyToolsSection">🧰 Study Tools</button>
+      <button type="button" data-study-scroll="deepStudyCenter">🧭 Deep Study</button>
+      <button type="button" data-study-scroll="masteryNotebook">📝 Notebook</button>
+      <button type="button" data-study-scroll="masterToolSuite">⚡ Master Tools</button>
+      <button type="button" data-deep-open="gospels">📜 Gospel Order</button>
+      <button type="button" data-deep-open="maps">🗺 Maps</button>
+    </div>
+  </nav>
+
 
 
 <div class="container">
@@ -1906,7 +2207,7 @@
       </div>
 
 
-    <div class="workspace-section">
+    <div class="workspace-section layout-section" id="studyToolsSection">
 
       <h2>Study Tools</h2>
 
@@ -2076,7 +2377,7 @@
 
 
 
-        <div class="tool-box bible-reader-tool">
+        <div class="tool-box bible-reader-tool" id="bibleReaderSection">
 
           <h3>📖 Bible Reader</h3>
 
@@ -2220,7 +2521,7 @@
     </div>
 
 
-    <div class="workspace-section">
+    <div class="workspace-section layout-section" id="bibleVersesSection">
 
       <h2>📖 Bible Verses</h2>
 
@@ -10203,6 +10504,31 @@ document.querySelectorAll('[data-mn-tool]').forEach(b=>b.onclick=()=>{const name
 window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
 })();
 </script>
+
+<script id="personalStudyLayoutNav2026">
+(function(){
+  function smoothTo(id){
+    const el=document.getElementById(id);
+    if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+
+  document.querySelectorAll('[data-study-scroll]').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      smoothTo(btn.getAttribute('data-study-scroll'));
+    });
+  });
+
+  document.querySelectorAll('[data-deep-open]').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      const tabName=btn.getAttribute('data-deep-open');
+      const tab=document.querySelector('.deep-study-tab[data-deep-tab="'+tabName+'"]');
+      if(tab) tab.click();
+      window.setTimeout(function(){ smoothTo('deepStudyCenter'); }, 40);
+    });
+  });
+})();
+</script>
+
 </body>
 
 </html>
