@@ -1496,7 +1496,8 @@ header p { font-size: 14px; }
   overflow-x: auto;
   scrollbar-width: thin;
 }
-.study-dashboard-nav button {
+.study-dashboard-nav button,
+.study-dashboard-main-link {
   flex: 0 0 auto;
   border: 1px solid rgba(216,185,106,.25);
   background: rgba(18,30,51,.82);
@@ -1506,9 +1507,13 @@ header p { font-size: 14px; }
   font-weight: 700;
   cursor: pointer;
   white-space: nowrap;
+  text-decoration: none;
+  line-height: normal;
 }
 .study-dashboard-nav button:hover,
-.study-dashboard-nav button:focus-visible {
+.study-dashboard-nav button:focus-visible,
+.study-dashboard-main-link:hover,
+.study-dashboard-main-link:focus-visible {
   color: var(--bg-mid);
   background: var(--gold-light);
   border-color: var(--gold-light);
@@ -1729,7 +1734,7 @@ input, select, textarea {
     border-radius: 14px;
   }
   #topicBox.personal-ai-box { padding: 16px; }
-  .study-dashboard-nav button { padding: 8px 11px; font-size: 13px; }
+  .study-dashboard-nav button, .study-dashboard-main-link { padding: 8px 11px; font-size: 13px; }
   #bibleInteractiveMap { height: 390px; min-height: 360px; }
 }
 </style>
@@ -1737,7 +1742,7 @@ input, select, textarea {
 </head>
 
 
-<body>
+<body data-default-view="personal-study">
 
 <header>
 
@@ -1748,6 +1753,7 @@ input, select, textarea {
 </header>
   <nav class="study-dashboard-nav" aria-label="Personal Study navigation">
     <div class="study-dashboard-nav-inner">
+      <a href="index.html" class="study-dashboard-main-link" aria-label="Open BibleMastery main page">🏠 Main Page</a>
       <button type="button" data-study-scroll="topicBox">✨ AI</button>
       <button type="button" data-study-scroll="bibleReaderSection">📖 Bible Reader</button>
       <button type="button" data-study-scroll="studyToolsSection">🧰 Study Tools</button>
@@ -1762,13 +1768,6 @@ input, select, textarea {
 
 
 <div class="container">
-
-  <a
-    href="index.html"
-    class="back-button"
-  >
-    ← Back to BibleMastery
-  </a>
 
 
   <div class="study-box personal-ai-box" id="topicBox">
