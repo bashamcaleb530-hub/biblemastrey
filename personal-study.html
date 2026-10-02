@@ -5,6 +5,8 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Personal Bible Study - BibleMastery</title>
+<link rel="manifest" href="manifest.json"/>
+<meta name="theme-color" content="#7a0d12"/>
 <!-- Interactive Bible maps: Leaflet + OpenStreetMap -->
 <link crossorigin="" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" rel="stylesheet"/>
 <style>
@@ -1753,22 +1755,190 @@ body>.container>#studyWorkspace{display:none!important}
 body.bm-layout-classic .bm-sidebar{display:none}.bm-layout-classic .bm-shell{grid-template-columns:1fr}.bm-layout-classic .bm-main{max-width:1450px;width:100%;margin:auto;padding:18px}.bm-layout-classic .bm-dashboard-grid{display:block}.bm-layout-classic .bm-card{margin-bottom:14px;border-radius:10px}.bm-layout-classic #deepStudyCenter>.deep-study-intro,.bm-layout-classic #deepStudyCenter>.deep-study-controls{display:block}.bm-layout-classic #deepStudyCenter>.deep-study-tabs{flex-wrap:wrap}.bm-layout-classic .bm-classic-only-tab{display:inline-block!important}.bm-layout-classic #deepStudyCenter>.deep-study-panel{max-height:none}.bm-layout-classic .bm-reader-card .reader-display{max-height:none;min-height:520px}.bm-layout-classic .bm-gospel-card #deepStudyGospelsPanel,.bm-layout-classic .bm-map-card #deepStudyMapsPanel{padding:14px!important}.bm-layout-classic .bm-gospel-card .gospel-chronology-layout{grid-template-columns:minmax(260px,.8fr) minmax(0,1.7fr)!important}.bm-layout-classic .bm-map-card .bible-map-layout{grid-template-columns:minmax(230px,.55fr) minmax(0,1.45fr)!important}.bm-layout-classic .bm-quick-grid{grid-template-columns:repeat(4,1fr)}
 @media(max-width:1120px){.bm-shell{grid-template-columns:64px 1fr}.bm-sidebar-nav span{display:none}.bm-sidebar-nav button,.bm-sidebar-nav a{justify-content:center;font-size:18px;padding:11px 4px}.bm-brand{min-width:160px}.bm-dashboard-grid{grid-template-columns:1fr}.bm-reader-card,.bm-deep-card,.bm-gospel-card,.bm-map-card{grid-column:1;grid-row:auto}.bm-quick-grid{grid-template-columns:repeat(4,1fr)}}
 @media(max-width:720px){.bm-topbar{gap:8px;padding:0 9px}.bm-mobile-menu{display:block}.bm-brand{min-width:0}.bm-brand span:last-child{display:none}.bm-top-actions .bm-icon-button,.bm-main-page-link span{display:none}.bm-shell{display:block}.bm-sidebar{display:none;position:fixed;z-index:700;left:0;top:58px;width:220px}.bm-sidebar.open{display:block}.bm-sidebar-nav span{display:inline}.bm-sidebar-nav button,.bm-sidebar-nav a{justify-content:flex-start;font-size:14px}.bm-main{padding:7px}.bm-viewbar{align-items:flex-start;flex-direction:column}.bm-viewbar>div:first-child{flex-direction:column;gap:2px}.bm-dashboard-grid{display:block}.bm-card{margin-bottom:7px}.bm-reader-card .reader-controls{grid-template-columns:1fr 1fr!important}.bm-reader-card .reader-control:first-child{grid-column:1/-1}.bm-quick-grid{grid-template-columns:repeat(2,1fr)}.bm-gospel-card .gospel-chronology-layout,.bm-layout-classic .bm-gospel-card .gospel-chronology-layout{grid-template-columns:1fr!important}.bm-theology-layout{grid-template-columns:1fr}.bm-map-card .bible-map-layout,.bm-layout-classic .bm-map-card .bible-map-layout{grid-template-columns:1fr!important}.bm-map-card .bible-map-sidebar{order:1}.bm-map-card .bible-map-shell{order:2}.bm-layout-switch{width:100%}.bm-layout-switch button{flex:1}}
-</style></head>
+</style>
+<style id="seven-names-bright-theme">
+:root{
+  --bm-bg:#fff9ec!important;
+  --bm-panel:#fffef9!important;
+  --bm-text:#24160f!important;
+  --bm-muted:#66554a!important;
+  --bm-line:#e3c68b!important;
+  --bm-maroon:#7a0d12;
+  --bm-maroon-dark:#56070b;
+  --bm-maroon-deep:#3f0508;
+  --bm-gold:#c68a00;
+  --bm-gold-dark:#976500;
+  --bm-gold-soft:#f8e5ad;
+  --bm-cream:#fff7df;
+  --bm-cream-2:#fffdf7;
+  --bm-focus:#005fcc;
+}
+html{background:#fff9ec}
+body{
+  background:
+    radial-gradient(circle at 78% 0%,rgba(255,224,133,.55) 0,rgba(255,224,133,0) 24%),
+    linear-gradient(180deg,#fff9ec 0,#fffdf8 48%,#fff5dc 100%)!important;
+  color:var(--bm-text)!important;
+  font-size:16px!important;
+}
+body>.container{background:transparent!important}
+
+/* Sunrise / desert-inspired top bar, bright enough for low-vision use. */
+.bm-topbar{
+  min-height:84px!important;height:84px!important;
+  padding:0 18px!important;
+  background:
+    radial-gradient(circle at 76% 16%,#fff8c7 0 8%,rgba(255,239,163,.75) 9%,rgba(255,239,163,0) 28%),
+    linear-gradient(180deg,#fff9e8 0%,#f6d89b 52%,#d89a51 100%)!important;
+  border-bottom:2px solid var(--bm-gold)!important;
+  box-shadow:0 5px 16px rgba(82,41,12,.2)!important;
+  position:sticky!important;
+  color:var(--bm-maroon-dark)!important;
+  isolation:isolate;
+}
+.bm-topbar::before{
+  content:"";position:absolute;inset:auto 0 0 0;height:31px;z-index:-1;opacity:.28;
+  background:
+    linear-gradient(155deg,transparent 0 8%,#7f4a2b 8.5% 15%,transparent 15.5% 26%,#9a5b33 26.5% 35%,transparent 35.5% 48%,#764126 48.5% 58%,transparent 58.5% 70%,#9b6039 70.5% 78%,transparent 78.5%);
+}
+.bm-topbar::after{
+  content:"✝";position:absolute;right:20.5%;bottom:9px;z-index:-1;
+  color:#9b4e12;font-size:38px;font-family:Georgia,serif;font-weight:700;line-height:1;
+  text-shadow:0 0 12px #fff4aa,0 0 24px #fff4aa;
+}
+.bm-brand{min-width:300px!important;color:var(--bm-maroon-dark)!important;gap:10px!important}
+.bm-brand-mark{font-family:Georgia,serif!important;font-size:42px!important;line-height:1!important;color:var(--bm-gold-dark)!important;text-shadow:0 1px 0 #fff!important}
+.bm-brand-copy{display:flex;flex-direction:column;line-height:1.02}
+.bm-brand-copy strong{font-family:Georgia,"Times New Roman",serif;font-size:30px;color:var(--bm-maroon-dark);letter-spacing:.1px}
+.bm-brand-copy small{margin-top:5px;color:#8b3b1c;font-weight:800;font-size:10px;letter-spacing:2.1px}
+.bm-global-search-wrap{border:2px solid #d1aa5c!important;border-radius:8px!important;box-shadow:0 2px 7px rgba(85,49,16,.13)!important}
+.bm-global-search-wrap input{font-size:15px!important;color:#2c1d15!important;background:#fff!important;padding:11px 13px!important}
+.bm-global-search-wrap button{background:var(--bm-maroon)!important;color:#fff!important;font-weight:800!important}
+.bm-icon-button{color:var(--bm-maroon)!important;font-size:23px!important}
+.bm-profile-button{background:var(--bm-maroon)!important;color:#fff!important;border:2px solid #fff5d6!important;width:39px!important;height:39px!important}
+.bm-main-page-link{background:#fff8e5!important;color:var(--bm-maroon-dark)!important;border:2px solid #c5912e!important;font-weight:800!important;padding:9px 14px!important}
+.bm-main-page-link:hover,.bm-main-page-link:focus-visible{background:#ffe9ae!important;color:#4e090b!important}
+.bm-mobile-menu{color:var(--bm-maroon)!important}
+
+/* Burgundy sidebar with gold selected state. */
+.bm-shell{grid-template-columns:205px minmax(0,1fr)!important;min-height:calc(100vh - 84px)!important}
+.bm-sidebar{
+  top:84px!important;height:calc(100vh - 84px)!important;
+  background:linear-gradient(180deg,#6e0b10 0%,#5b080d 52%,#3f0508 100%)!important;
+  border-right:2px solid #d1a247!important;padding:10px 8px!important;
+}
+.bm-sidebar-nav{gap:5px!important}
+.bm-sidebar-nav button,.bm-sidebar-nav a{
+  color:#fff9ed!important;font-size:15px!important;font-weight:650!important;
+  border:1px solid transparent!important;border-radius:7px!important;padding:12px 11px!important;
+}
+.bm-sidebar-nav button:hover,.bm-sidebar-nav a:hover{background:#8e151b!important;border-color:#c78e38!important}
+.bm-sidebar-nav button.active{
+  background:linear-gradient(90deg,#f6c95f,#ffeaa6)!important;
+  color:#4b070a!important;border-color:#ffe4a1!important;box-shadow:0 2px 9px rgba(0,0,0,.18)!important;
+}
+.bm-sidebar-nav a:last-child{border-top:1px solid rgba(255,232,177,.36)!important}
+.bm-sidebar-motto{margin-top:14px;padding:14px 8px 18px;text-align:center;color:#ffe7a7;border-top:1px solid rgba(255,231,167,.28);font-family:Georgia,"Times New Roman",serif}
+.bm-sidebar-crown{font-size:31px;line-height:1;color:#f4c859;margin-bottom:6px}
+.bm-sidebar-motto strong{display:block;font-size:16px;line-height:1.16;letter-spacing:.6px}
+.bm-sidebar-motto span{display:block;margin-top:8px;font-family:Arial,sans-serif;font-size:9px;font-weight:800;line-height:1.45;letter-spacing:.7px;color:#fff4cf}
+
+/* Workspace and cards. */
+.bm-main{background:transparent!important;padding:10px!important}
+.bm-viewbar{background:#fff7df!important;border:1px solid #e2c78f!important;color:#4b2c1d!important}
+.bm-layout-dashboard .bm-viewbar{display:none!important}
+.bm-card{
+  background:var(--bm-panel)!important;border:1px solid #e2c78f!important;border-radius:10px!important;
+  box-shadow:0 2px 8px rgba(93,54,18,.09)!important;
+}
+.bm-card .workspace-section,.bm-card .study-box,.bm-card .tool-box,.bm-card .deep-study-center,.bm-card .deep-study-card{background:#fffef9!important;color:var(--bm-text)!important}
+.bm-card h2,.bm-card h3,.bm-card h4{color:var(--bm-maroon)!important;font-family:Georgia,"Times New Roman",serif!important}
+.bm-card p,.bm-card label,.bm-card .small-note{color:var(--bm-muted)!important}
+.reader-select,.commentary-select,.search-input,textarea,select,input{
+  color:#261913!important;background:#fff!important;border-color:#d9c39a!important;
+}
+.reader-select:focus,.commentary-select:focus,.search-input:focus,textarea:focus,select:focus,input:focus,button:focus-visible,a:focus-visible{outline:3px solid var(--bm-focus)!important;outline-offset:2px!important}
+.reader-display{border-color:#e3d3b2!important;background:#fffef9!important}
+.bm-reader-card .reader-verse,.bm-reader-card .verse-text,.bm-reader-card .bible-verse{color:#241913!important;background:#fffef9!important}
+.bm-reader-card .reader-verse:hover{background:#fff2c8!important;color:#4b070a!important}
+.bm-reader-card .reader-verse.selected{background:#ffedaa!important;color:#3d0709!important;box-shadow:inset 4px 0 0 var(--bm-gold)!important}
+.reader-nav-button,.search-button,.personal-ai-ask{
+  background:var(--bm-maroon)!important;color:#fff!important;border:1px solid var(--bm-maroon-dark)!important;
+  border-radius:7px!important;font-weight:800!important;
+}
+.reader-nav-button:hover,.search-button:hover,.personal-ai-ask:hover{background:#97171d!important}
+
+/* Deep Study: burgundy active tabs, warm cards. */
+.bm-layout-dashboard #deepStudyCenter>.deep-study-tabs{border-color:#dfc99d!important;background:#fffdf7!important}
+.bm-layout-dashboard #deepStudyCenter>.deep-study-tabs .deep-study-tab{
+  background:#fffdf7!important;color:#3e2b22!important;border-right:1px solid #eadabd!important;font-size:12.5px!important;
+}
+.bm-layout-dashboard #deepStudyCenter>.deep-study-tabs .deep-study-tab.active{
+  background:linear-gradient(180deg,#9f171e,#7a0d12)!important;color:#fff!important;
+  box-shadow:inset 0 -3px 0 #efc45d!important;
+}
+.bm-layout-dashboard #deepStudyCenter>.deep-study-panel{border-color:#e1cda7!important;background:#fffef9!important}
+.bm-layout-dashboard #deepStudyCenter .result-item{color:#33241c!important;border-bottom-color:#ecdfc5!important}
+.deep-study-attribution a{color:#7a0d12!important;font-weight:700!important}
+.bm-eyebrow{color:#9a6712!important;font-weight:900!important;letter-spacing:1.4px!important}
+.bm-theology-library,.bm-theology-reader{background:#fffdf8!important;border-color:#e2c99b!important}
+.bm-empty-library{background:#fff7df!important;border-color:#e1bd70!important;color:#5a3a20!important}
+
+/* AI and quick tools. */
+.bm-ai-area,.bm-quick-tools{background:#fffef9!important;border-color:#e3c88e!important}
+.bm-ai-area h2,.bm-quick-tools h3{color:var(--bm-maroon)!important}
+.bm-quick-tool{border:1px solid #ead8b8!important;box-shadow:none!important;font-weight:700!important}
+.bm-quick-tool:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(100,55,15,.12)!important}
+.personal-ai-answer{background:#fff8e7!important;color:#33251e!important;border-color:#e3c88e!important}
+
+/* Chronology and maps. */
+.bm-gospel-card .gospel-event-sidebar,.bm-gospel-card .gospel-reading-pane,.bm-map-card .bible-map-sidebar{background:#fffef9!important;border-color:#e2cda7!important}
+.bm-gospel-card .gospel-event-button{background:#fffef9!important;color:#3a2a22!important;border-bottom-color:#efe0c5!important}
+.bm-gospel-card .gospel-event-button.active{background:#f6c85e!important;color:#4d0a0c!important;border-left-color:#9a151b!important;font-weight:800!important}
+.bm-gospel-card .deep-study-output{background:#fffef9!important;color:#2f211a!important;border-color:#e3cfaa!important}
+.bm-map-card .bible-map-place-button{background:#fffef9!important;color:#4a2c1d!important;border-color:#e5d3b4!important}
+.bm-map-card .bible-map-place-button.active{background:#ffe9aa!important;color:#5a090c!important;border-color:#c99124!important}
+
+/* Classic view gets the same accessible palette. */
+body.bm-layout-classic{background:#fff9ec!important}
+.bm-layout-classic .bm-card{background:#fffef9!important;border-color:#e2c78f!important}
+.bm-layout-classic .deep-study-tab.active{background:#7a0d12!important;color:#fff!important;border-color:#7a0d12!important}
+
+/* Readability improvements. */
+.reader-display,.deep-study-output,.gospel-reading-pane,.bm-book-reader-output{font-size:16px!important;line-height:1.58!important}
+.reader-display{font-family:Georgia,"Times New Roman",serif!important}
+button,a,input,select,textarea{min-height:38px}
+::selection{background:#f3d16f;color:#3b090b}
+
+@media(max-width:1120px){
+  .bm-brand{min-width:205px!important}.bm-brand-copy strong{font-size:23px}.bm-brand-copy small{font-size:8px;letter-spacing:1.4px}
+  .bm-shell{grid-template-columns:68px 1fr!important}.bm-topbar::after{display:none}.bm-sidebar-motto{display:none}
+}
+@media(max-width:720px){
+  .bm-topbar{height:66px!important;min-height:66px!important;padding:0 8px!important}.bm-brand{min-width:0!important}.bm-brand-copy strong{font-size:20px}.bm-brand-copy small{display:none}.bm-brand-mark{font-size:30px!important}
+  .bm-sidebar{top:66px!important;height:calc(100vh - 66px)!important}.bm-shell{min-height:calc(100vh - 66px)!important}.bm-main{padding:6px!important}
+}
+</style>
+
+</head>
 <body class="bm-layout-dashboard" data-default-view="personal-study">
 
 
 <div class="bm-app" id="bmApp">
 <header class="bm-topbar">
 <div aria-label="Toggle navigation" class="bm-mobile-menu" id="bmMobileMenu">☰</div>
-<div class="bm-brand"><span class="bm-brand-mark">📖</span><span>BibleMastery</span></div>
+<div class="bm-brand">
+<span class="bm-brand-mark" aria-hidden="true">♛</span>
+<span class="bm-brand-copy"><strong>BibleMastery</strong><small>SEVEN NAMES ONE REDEEMER</small></span>
+</div>
 <div class="bm-global-search-wrap">
 <input id="bmGlobalSearch" placeholder="Search Bible (e.g. John 3:16, faith, salvation, parables...)" type="search"/>
 <button aria-label="Search" id="bmGlobalSearchButton" type="button">⌕</button>
 </div>
 <div class="bm-top-actions">
 <button class="bm-icon-button" title="Notifications" type="button">♧</button>
-<a class="bm-main-page-link" href="index.html">⌂ <span>Main Page</span></a>
-<button class="bm-profile-button" id="bmProfileButton" title="Account" type="button">●</button>
+<a class="bm-main-page-link" href="main.html">⌂ <span>Main Page</span></a>
+<button class="bm-profile-button" id="bmProfileButton" title="Account" type="button" onclick="window.location.href='account.html'">●</button>
 </div>
 </header>
 <div class="bm-shell">
@@ -1784,8 +1954,13 @@ body.bm-layout-classic .bm-sidebar{display:none}.bm-layout-classic .bm-shell{gri
 <button data-bm-open-extra="masteryNotebook" type="button">▤ <span>Notebook</span></button>
 <button data-deep-shortcut="saved" type="button">▰ <span>Saved Studies</span></button>
 <button id="bmSettingsButton" type="button">⚙ <span>Settings</span></button>
-<a href="index.html">⌂ <span>Main Page</span></a>
+<a href="main.html">⌂ <span>Main Page</span></a>
 </nav>
+<div class="bm-sidebar-motto" aria-label="Seven Redemptive Names of God theme">
+  <div class="bm-sidebar-crown" aria-hidden="true">♛</div>
+  <strong>SEVEN<br>REDEMPTIVE<br>NAMES OF GOD</strong>
+  <span>KNOW HIM · WALK IN HIM<br>MAKE HIM KNOWN</span>
+</div>
 </aside>
 <main class="bm-main" id="bmDashboardTop">
 <div class="bm-viewbar">
