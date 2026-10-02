@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>BibleMastery Account</title>
+  <meta name="theme-color" content="#7a0d12">
+  <link rel="manifest" href="manifest.json">
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -219,8 +221,7 @@
       font-size: 12px;
     }
 
-    .support-message-actions,
-    .saved-item-actions {
+    .support-message-actions {
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
@@ -228,11 +229,7 @@
     }
 
     .support-reply-button,
-    .support-delete-button,
-    .saved-edit-button,
-    .saved-save-button,
-    .saved-cancel-button,
-    .saved-delete-button {
+    .support-delete-button {
       padding: 9px 13px;
       border-radius: 8px;
       font-weight: bold;
@@ -246,57 +243,9 @@
       display: inline-block;
     }
 
-    .support-delete-button,
-    .saved-delete-button {
+    .support-delete-button {
       background: #7a2630;
       color: white;
-    }
-
-    .saved-edit-button,
-    .saved-save-button {
-      background: #c9a94b;
-      color: #071426;
-    }
-
-    .saved-cancel-button {
-      background: #405675;
-      color: white;
-    }
-
-    .saved-item-editor {
-      margin-top: 12px;
-      padding: 12px;
-      border: 1px solid #405675;
-      border-radius: 9px;
-      background: #061220;
-    }
-
-    .saved-item-editor label {
-      margin-top: 0;
-    }
-
-    .saved-item-editor textarea {
-      width: 100%;
-      min-height: 150px;
-      resize: vertical;
-      padding: 12px;
-      border-radius: 8px;
-      border: 1px solid #405675;
-      background: #071426;
-      color: white;
-      font: inherit;
-      line-height: 1.5;
-    }
-
-    .saved-item-editor input {
-      margin-bottom: 12px;
-    }
-
-    .saved-item-editor-actions {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-top: 10px;
     }
 
     .empty-message {
@@ -350,7 +299,7 @@
     </div>
   </div>
 
-  <a class="home-button" href="/">← Bible Dashboard</a>
+  <a class="home-button" href="personal-study.html">← Personal Study</a>
 </header>
 
 <main class="page">
@@ -485,17 +434,11 @@
         </div>
 
 
-        <div
-          id="supportMessagesSection"
-          class="saved-section hidden"
-        >
+        <div id="supportMessagesSection" class="saved-section hidden">
           <div class="saved-section-header">
             <h3>📨 Support Messages</h3>
           </div>
-          <div
-            id="supportMessagesList"
-            class="saved-list"
-          ></div>
+          <div id="supportMessagesList" class="saved-list"></div>
         </div>
 
 
@@ -614,676 +557,12 @@ function formatBibleLocation(item) {
 }
 
 
-async function permanentlyDeleteSavedRecord(options) {
-
-  const {
-    table,
-    item,
-    wrapper,
-    button,
-    emptyMessage,
-    confirmMessage,
-    successMessage,
-    includeUserId
-  } = options;
-
-
-  const confirmed =
-    window.confirm(
-      confirmMessage ||
-      "Delete this saved item permanently?"
-    );
-
-  if (!confirmed) {
-    return false;
-  }
-
-
-  button.disabled = true;
-  button.textContent = "Deleting...";
-  accountStatus.textContent = "Deleting...";
-
-
-  let deleteQuery =
-    supabaseClient
-      .from(table)
-      .delete()
-      .eq("id", item.id);
-
-
-  if (
-    includeUserId &&
-    item.user_id
-  ) {
-    deleteQuery =
-      deleteQuery.eq(
-        "user_id",
-        item.user_id
-      );
-  }
-
-
-  const {
-    data: deletedRows,
-    error
-  } =
-    await deleteQuery
-      .select("id");
-
-
-  if (
-    error ||
-    !deletedRows ||
-    deletedRows.length === 0
-  ) {
-
-    if (error) {
-      console.error(error);
-    }
-
-    accountStatus.textContent =
-      "This item was not deleted from the database. Check the Supabase DELETE policy for " +
-      table +
-      ".";
-
-    button.disabled = false;
-    button.textContent = "Delete";
-
-    return false;
-  }
-
-
-  const list = wrapper.parentElement;
-
-  wrapper.remove();
-
-
-  if (
-    list &&
-    !list.querySelector(".saved-item")
-  ) {
-    setEmpty(
-      list,
-      emptyMessage ||
-      "No saved items yet."
-    );
-  }
-
-
-  accountStatus.textContent =
-    successMessage ||
-    "Deleted permanently.";
-
-  return true;
-}
-
-
-function createPermanentDeleteButton(options) {
-
-  const actions =
-    document.createElement("div");
-
-  actions.className =
-    "saved-item-actions";
-
-
-  const button =
-    document.createElement("button");
-
-  button.type = "button";
-  button.className =
-    "saved-delete-button";
-  button.textContent = "Delete";
-
-
-  button.addEventListener(
-    "click",
-    async function() {
-
-      await permanentlyDeleteSavedRecord({
-        ...options,
-        button: button
-      });
-    }
-  );
-
-
-  actions.appendChild(button);
-
-  return actions;
-}
-
-
-async function permanentlyUpdateSavedRecord(options) {
-
-  const {
-    table,
-    item,
-    values,
-    includeUserId,
-    successMessage
-  } = options;
-
-
-  accountStatus.textContent =
-    "Saving changes...";
-
-
-  let updateQuery =
-    supabaseClient
-      .from(table)
-      .update(values)
-      .eq("id", item.id);
-
-
-  if (
-    includeUserId &&
-    item.user_id
-  ) {
-    updateQuery =
-      updateQuery.eq(
-        "user_id",
-        item.user_id
-      );
-  }
-
-
-  const {
-    data: updatedRows,
-    error
-  } =
-    await updateQuery
-      .select("*");
-
-
-  if (
-    error ||
-    !updatedRows ||
-    updatedRows.length === 0
-  ) {
-
-    if (error) {
-      console.error(error);
-    }
-
-    accountStatus.textContent =
-      "Your changes were not saved to the database. Check the Supabase UPDATE policy for " +
-      table +
-      ".";
-
-    return null;
-  }
-
-
-  Object.assign(
-    item,
-    updatedRows[0]
-  );
-
-
-  accountStatus.textContent =
-    successMessage ||
-    "Changes saved to your account.";
-
-
-  return updatedRows[0];
-}
-
-
-function createNoteEditButton(options) {
-
-  const {
-    item,
-    wrapper,
-    contentElement
-  } = options;
-
-
-  const button =
-    document.createElement("button");
-
-  button.type = "button";
-  button.className =
-    "saved-edit-button";
-  button.textContent = "Edit";
-
-
-  button.addEventListener(
-    "click",
-    function() {
-
-      const existing =
-        wrapper.querySelector(
-          ".saved-item-editor"
-        );
-
-      if (existing) {
-        existing.remove();
-        return;
-      }
-
-
-      const editor =
-        document.createElement("div");
-
-      editor.className =
-        "saved-item-editor";
-
-
-      const label =
-        document.createElement("label");
-
-      label.textContent =
-        "Edit note";
-
-
-      const textarea =
-        document.createElement("textarea");
-
-      textarea.value =
-        item.content || "";
-
-
-      const editorActions =
-        document.createElement("div");
-
-      editorActions.className =
-        "saved-item-editor-actions";
-
-
-      const saveButton =
-        document.createElement("button");
-
-      saveButton.type = "button";
-      saveButton.className =
-        "saved-save-button";
-      saveButton.textContent =
-        "Save Changes";
-
-
-      const cancelButton =
-        document.createElement("button");
-
-      cancelButton.type = "button";
-      cancelButton.className =
-        "saved-cancel-button";
-      cancelButton.textContent =
-        "Cancel";
-
-
-      saveButton.addEventListener(
-        "click",
-        async function() {
-
-          saveButton.disabled = true;
-          saveButton.textContent =
-            "Saving...";
-
-
-          const updated =
-            await permanentlyUpdateSavedRecord({
-              table: "bible_user_data",
-              item: item,
-              includeUserId: true,
-              values: {
-                content: textarea.value,
-                updated_at:
-                  new Date().toISOString()
-              },
-              successMessage:
-                "Note updated in your account."
-            });
-
-
-          if (!updated) {
-            saveButton.disabled = false;
-            saveButton.textContent =
-              "Save Changes";
-            return;
-          }
-
-
-          contentElement.textContent =
-            updated.content || "";
-
-          editor.remove();
-        }
-      );
-
-
-      cancelButton.addEventListener(
-        "click",
-        function() {
-          editor.remove();
-        }
-      );
-
-
-      editorActions.appendChild(
-        saveButton
-      );
-
-      editorActions.appendChild(
-        cancelButton
-      );
-
-
-      editor.appendChild(label);
-      editor.appendChild(textarea);
-      editor.appendChild(editorActions);
-
-
-      wrapper.appendChild(editor);
-      textarea.focus();
-    }
-  );
-
-
-  return button;
-}
-
-
-function savedWorkContentForEditing(item) {
-
-  if (
-    typeof item.content === "string"
-  ) {
-    return item.content;
-  }
-
-  if (!item.content) {
-    return "";
-  }
-
-  if (
-    Object.prototype.hasOwnProperty.call(
-      item.content,
-      "text"
-    )
-  ) {
-    return item.content.text || "";
-  }
-
-  if (
-    Object.prototype.hasOwnProperty.call(
-      item.content,
-      "content"
-    )
-  ) {
-    return item.content.content || "";
-  }
-
-  return JSON.stringify(
-    item.content,
-    null,
-    2
-  );
-}
-
-
-function savedWorkContentAfterEditing(
-  item,
-  editedText
-) {
-
-  if (
-    typeof item.content === "string" ||
-    !item.content
-  ) {
-    return editedText;
-  }
-
-  if (
-    Object.prototype.hasOwnProperty.call(
-      item.content,
-      "text"
-    )
-  ) {
-    return {
-      ...item.content,
-      text: editedText
-    };
-  }
-
-  if (
-    Object.prototype.hasOwnProperty.call(
-      item.content,
-      "content"
-    )
-  ) {
-    return {
-      ...item.content,
-      content: editedText
-    };
-  }
-
-  try {
-    return JSON.parse(editedText);
-  }
-  catch (error) {
-    throw new Error(
-      "This saved item uses structured data. Keep it as valid JSON when editing it."
-    );
-  }
-}
-
-
-function createSavedWorkEditButton(options) {
-
-  const {
-    item,
-    wrapper,
-    titleElement,
-    contentElement,
-    metaElement
-  } = options;
-
-
-  const button =
-    document.createElement("button");
-
-  button.type = "button";
-  button.className =
-    "saved-edit-button";
-  button.textContent = "Edit";
-
-
-  button.addEventListener(
-    "click",
-    function() {
-
-      const existing =
-        wrapper.querySelector(
-          ".saved-item-editor"
-        );
-
-      if (existing) {
-        existing.remove();
-        return;
-      }
-
-
-      const editor =
-        document.createElement("div");
-
-      editor.className =
-        "saved-item-editor";
-
-
-      const titleLabel =
-        document.createElement("label");
-
-      titleLabel.textContent =
-        "Title";
-
-
-      const titleInput =
-        document.createElement("input");
-
-      titleInput.type = "text";
-      titleInput.value =
-        item.title || "";
-
-
-      const contentLabel =
-        document.createElement("label");
-
-      contentLabel.textContent =
-        "Saved notes / content";
-
-
-      const textarea =
-        document.createElement("textarea");
-
-      textarea.value =
-        savedWorkContentForEditing(item);
-
-
-      const editorActions =
-        document.createElement("div");
-
-      editorActions.className =
-        "saved-item-editor-actions";
-
-
-      const saveButton =
-        document.createElement("button");
-
-      saveButton.type = "button";
-      saveButton.className =
-        "saved-save-button";
-      saveButton.textContent =
-        "Save Changes";
-
-
-      const cancelButton =
-        document.createElement("button");
-
-      cancelButton.type = "button";
-      cancelButton.className =
-        "saved-cancel-button";
-      cancelButton.textContent =
-        "Cancel";
-
-
-      saveButton.addEventListener(
-        "click",
-        async function() {
-
-          let updatedContent;
-
-          try {
-            updatedContent =
-              savedWorkContentAfterEditing(
-                item,
-                textarea.value
-              );
-          }
-          catch (error) {
-            accountStatus.textContent =
-              error.message;
-            return;
-          }
-
-
-          saveButton.disabled = true;
-          saveButton.textContent =
-            "Saving...";
-
-
-          const updated =
-            await permanentlyUpdateSavedRecord({
-              table: "saved_work",
-              item: item,
-              includeUserId: true,
-              values: {
-                title:
-                  titleInput.value.trim() ||
-                  "Untitled",
-                content: updatedContent,
-                updated_at:
-                  new Date().toISOString()
-              },
-              successMessage:
-                "Saved work updated in your account."
-            });
-
-
-          if (!updated) {
-            saveButton.disabled = false;
-            saveButton.textContent =
-              "Save Changes";
-            return;
-          }
-
-
-          titleElement.textContent =
-            updated.title ||
-            "Untitled";
-
-          contentElement.textContent =
-            savedWorkContentForEditing(
-              updated
-            ) ||
-            "Saved work";
-
-          if (
-            metaElement &&
-            updated.updated_at
-          ) {
-            metaElement.textContent =
-              "Updated " +
-              new Date(
-                updated.updated_at
-              ).toLocaleString();
-          }
-
-          editor.remove();
-        }
-      );
-
-
-      cancelButton.addEventListener(
-        "click",
-        function() {
-          editor.remove();
-        }
-      );
-
-
-      editorActions.appendChild(
-        saveButton
-      );
-
-      editorActions.appendChild(
-        cancelButton
-      );
-
-
-      editor.appendChild(titleLabel);
-      editor.appendChild(titleInput);
-      editor.appendChild(contentLabel);
-      editor.appendChild(textarea);
-      editor.appendChild(editorActions);
-
-
-      wrapper.appendChild(editor);
-      titleInput.focus();
-    }
-  );
-
-
-  return button;
-}
-
-
 function createBibleItem(item) {
 
   const wrapper =
     document.createElement("div");
 
-  wrapper.className =
-    "saved-item";
+  wrapper.className = "saved-item";
 
 
   const title =
@@ -1323,63 +602,8 @@ function createBibleItem(item) {
   }
 
 
-  let emptyMessage =
-    "No saved items yet.";
-
-  if (item.item_type === "note") {
-    emptyMessage =
-      "No saved notes yet.";
-  }
-
-  else if (
-    item.item_type === "highlight"
-  ) {
-    emptyMessage =
-      "No saved highlights yet.";
-  }
-
-  else if (
-    item.item_type === "bookmark"
-  ) {
-    emptyMessage =
-      "No saved bookmarks yet.";
-  }
-
-
-  const actions =
-    createPermanentDeleteButton({
-      table: "bible_user_data",
-      item: item,
-      wrapper: wrapper,
-      includeUserId: true,
-      emptyMessage: emptyMessage,
-      confirmMessage:
-        "Delete this saved " +
-        (item.item_type || "Bible item") +
-        " permanently?",
-      successMessage:
-        "Deleted permanently from your account."
-    });
-
-
-  if (item.item_type === "note") {
-    const editButton =
-      createNoteEditButton({
-        item: item,
-        wrapper: wrapper,
-        contentElement: content
-      });
-
-    actions.insertBefore(
-      editButton,
-      actions.firstChild
-    );
-  }
-
-
   wrapper.appendChild(title);
   wrapper.appendChild(content);
-  wrapper.appendChild(actions);
 
   return wrapper;
 }
@@ -1390,8 +614,7 @@ function createSavedWorkItem(item) {
   const wrapper =
     document.createElement("div");
 
-  wrapper.className =
-    "saved-item";
+  wrapper.className = "saved-item";
 
 
   const title =
@@ -1417,8 +640,7 @@ function createSavedWorkItem(item) {
   if (
     typeof item.content === "string"
   ) {
-    contentText =
-      item.content;
+    contentText = item.content;
   }
 
   else if (item.content) {
@@ -1466,60 +688,6 @@ function createSavedWorkItem(item) {
   }
 
 
-  let emptyMessage =
-    "No saved work yet.";
-
-  if (
-    item.work_type === "sermon"
-  ) {
-    emptyMessage =
-      "No saved sermons yet.";
-  }
-
-  else if (
-    item.work_type === "personal_study"
-  ) {
-    emptyMessage =
-      "No saved personal studies yet.";
-  }
-
-  else if (
-    item.work_type === "group_study"
-  ) {
-    emptyMessage =
-      "No saved group studies yet.";
-  }
-
-
-  const actions =
-    createPermanentDeleteButton({
-      table: "saved_work",
-      item: item,
-      wrapper: wrapper,
-      includeUserId: true,
-      emptyMessage: emptyMessage,
-      confirmMessage:
-        "Delete this saved work permanently?",
-      successMessage:
-        "Saved work deleted permanently."
-    });
-
-
-  const editButton =
-    createSavedWorkEditButton({
-      item: item,
-      wrapper: wrapper,
-      titleElement: title,
-      contentElement: content,
-      metaElement: meta
-    });
-
-  actions.insertBefore(
-    editButton,
-    actions.firstChild
-  );
-
-
   wrapper.appendChild(title);
   wrapper.appendChild(content);
 
@@ -1527,173 +695,94 @@ function createSavedWorkItem(item) {
     wrapper.appendChild(meta);
   }
 
-  wrapper.appendChild(actions);
-
   return wrapper;
 }
 
 
 function createSupportMessageItem(item) {
+  const wrapper = document.createElement("div");
+  wrapper.className = "saved-item";
 
-  const wrapper =
-    document.createElement("div");
-
-  wrapper.className =
-    "saved-item";
-
-
-  const title =
-    document.createElement("div");
-
-  title.className =
-    "saved-item-title";
-
+  const title = document.createElement("div");
+  title.className = "saved-item-title";
 
   const typeLabel =
     item.message_type === "problem"
       ? "Report a Problem"
-      : (
-          item.message_type === "suggestion"
-            ? "Suggestion or Feedback"
-            : "General Question"
-        );
-
+      : (item.message_type === "suggestion"
+          ? "Suggestion or Feedback"
+          : "General Question");
 
   title.textContent =
-    typeLabel +
-    " — " +
-    (item.name || "Unknown sender");
+    typeLabel + " — " + (item.name || "Unknown sender");
 
+  const content = document.createElement("div");
+  content.className = "saved-item-content";
+  content.textContent = item.message || "";
 
-  const content =
-    document.createElement("div");
-
-  content.className =
-    "saved-item-content";
-
-  content.textContent =
-    item.message || "";
-
-
-  const meta =
-    document.createElement("div");
-
-  meta.className =
-    "saved-item-meta";
-
-
-  let metaText =
-    item.email ||
-    "No email provided";
-
+  const meta = document.createElement("div");
+  meta.className = "saved-item-meta";
+  let metaText = item.email || "No email provided";
 
   if (item.created_at) {
-
-    const date =
-      new Date(item.created_at);
-
-    metaText +=
-      " • " +
-      date.toLocaleString();
+    metaText += " • " + new Date(item.created_at).toLocaleString();
   }
 
+  meta.textContent = metaText;
 
-  meta.textContent =
-    metaText;
+  const actions = document.createElement("div");
+  actions.className = "support-message-actions";
 
-
-  const actions =
-    document.createElement("div");
-
-  actions.className =
-    "support-message-actions";
-
-
-  const replyLink =
-    document.createElement("a");
-
-  replyLink.className =
-    "support-reply-button";
-
-  replyLink.textContent =
-    "Reply";
-
+  const replyLink = document.createElement("a");
+  replyLink.className = "support-reply-button";
+  replyLink.textContent = "Reply";
   replyLink.href =
-    "mailto:" +
-    encodeURIComponent(
-      item.email || ""
-    ) +
-    "?subject=" +
-    encodeURIComponent(
-      "BibleMastery Support Reply"
-    );
+    "mailto:" + encodeURIComponent(item.email || "") +
+    "?subject=" + encodeURIComponent("BibleMastery Support Reply");
 
+  const deleteButton = document.createElement("button");
+  deleteButton.type = "button";
+  deleteButton.className = "support-delete-button";
+  deleteButton.textContent = "Delete";
 
-  const deleteButton =
-    document.createElement("button");
+  deleteButton.addEventListener("click", async function() {
+    const confirmed = window.confirm("Delete this support message?");
+    if (!confirmed) return;
 
-  deleteButton.type =
-    "button";
+    deleteButton.disabled = true;
+    deleteButton.textContent = "Deleting...";
 
-  deleteButton.className =
-    "support-delete-button";
+    const { error } =
+      await supabaseClient
+        .from("support_messages")
+        .delete()
+        .eq("id", item.id);
 
-  deleteButton.textContent =
-    "Delete";
-
-
-  deleteButton.addEventListener(
-    "click",
-    async function() {
-
-      const deleted =
-        await permanentlyDeleteSavedRecord({
-          table: "support_messages",
-          item: item,
-          wrapper: wrapper,
-          button: deleteButton,
-          includeUserId: false,
-          emptyMessage:
-            "No support messages yet.",
-          confirmMessage:
-            "Delete this support message permanently?",
-          successMessage:
-            "Support message deleted permanently."
-        });
-
-
-      if (!deleted) {
-        return;
-      }
+    if (error) {
+      console.error(error);
+      accountStatus.textContent =
+        "Support message could not be deleted.";
+      deleteButton.disabled = false;
+      deleteButton.textContent = "Delete";
+      return;
     }
-  );
 
+    wrapper.remove();
 
-  actions.appendChild(
-    replyLink
-  );
+    const list = document.getElementById("supportMessagesList");
+    if (list && !list.querySelector(".saved-item")) {
+      setEmpty(list, "No support messages yet.");
+    }
 
-  actions.appendChild(
-    deleteButton
-  );
+    accountStatus.textContent = "Support message deleted.";
+  });
 
-
-  wrapper.appendChild(
-    title
-  );
-
-  wrapper.appendChild(
-    content
-  );
-
-  wrapper.appendChild(
-    meta
-  );
-
-  wrapper.appendChild(
-    actions
-  );
-
+  actions.appendChild(replyLink);
+  actions.appendChild(deleteButton);
+  wrapper.appendChild(title);
+  wrapper.appendChild(content);
+  wrapper.appendChild(meta);
+  wrapper.appendChild(actions);
 
   return wrapper;
 }
@@ -1702,19 +791,13 @@ function createSupportMessageItem(item) {
 async function loadBibleUserData(user) {
 
   const notesList =
-    document.getElementById(
-      "notesList"
-    );
+    document.getElementById("notesList");
 
   const highlightsList =
-    document.getElementById(
-      "highlightsList"
-    );
+    document.getElementById("highlightsList");
 
   const bookmarksList =
-    document.getElementById(
-      "bookmarksList"
-    );
+    document.getElementById("bookmarksList");
 
 
   setEmpty(
@@ -1738,19 +821,12 @@ async function loadBibleUserData(user) {
     error
   } =
     await supabaseClient
-      .from(
-        "bible_user_data"
-      )
+      .from("bible_user_data")
       .select("*")
-      .eq(
-        "user_id",
-        user.id
-      )
+      .eq("user_id", user.id)
       .order(
         "updated_at",
-        {
-          ascending: false
-        }
+        { ascending: false }
       );
 
 
@@ -1763,78 +839,55 @@ async function loadBibleUserData(user) {
   const notes =
     data.filter(
       item =>
-        item.item_type ===
-        "note"
+        item.item_type === "note"
     );
-
 
   const highlights =
     data.filter(
       item =>
-        item.item_type ===
-        "highlight"
+        item.item_type === "highlight"
     );
-
 
   const bookmarks =
     data.filter(
       item =>
-        item.item_type ===
-        "bookmark"
+        item.item_type === "bookmark"
     );
 
 
   if (notes.length) {
 
-    notesList.innerHTML =
-      "";
+    notesList.innerHTML = "";
 
-    notes.forEach(
-      item => {
-
-        notesList.appendChild(
-          createBibleItem(
-            item
-          )
-        );
-      }
-    );
+    notes.forEach(item => {
+      notesList.appendChild(
+        createBibleItem(item)
+      );
+    });
   }
 
 
   if (highlights.length) {
 
-    highlightsList.innerHTML =
-      "";
+    highlightsList.innerHTML = "";
 
-    highlights.forEach(
-      item => {
-
-        highlightsList.appendChild(
-          createBibleItem(
-            item
-          )
-        );
-      }
-    );
+    highlights.forEach(item => {
+      highlightsList.appendChild(
+        createBibleItem(item)
+      );
+    });
   }
 
 
   if (bookmarks.length) {
 
-    bookmarksList.innerHTML =
-      "";
+    bookmarksList.innerHTML = "";
 
-    bookmarks.forEach(
-      item => {
-
-        bookmarksList.appendChild(
-          createBibleItem(
-            item
-          )
-        );
-      }
-    );
+    bookmarks.forEach(item => {
+      bookmarksList.appendChild(
+        createBibleItem(item)
+      );
+    });
   }
 }
 
@@ -1842,303 +895,147 @@ async function loadBibleUserData(user) {
 async function loadSavedWork(user) {
 
   const sermonsList =
-    document.getElementById(
-      "sermonsList"
-    );
-
+    document.getElementById("sermonsList");
 
   const personalStudiesList =
     document.getElementById(
       "personalStudiesList"
     );
 
-
   const groupStudiesList =
     document.getElementById(
       "groupStudiesList"
     );
-
 
   const supportMessagesSection =
     document.getElementById(
       "supportMessagesSection"
     );
 
-
   const supportMessagesList =
     document.getElementById(
       "supportMessagesList"
     );
 
+  setEmpty(sermonsList, "No saved sermons yet.");
+  setEmpty(personalStudiesList, "No saved personal studies yet.");
+  setEmpty(groupStudiesList, "No saved group studies yet.");
 
-  setEmpty(
-    sermonsList,
-    "No saved sermons yet."
-  );
-
-
-  setEmpty(
-    personalStudiesList,
-    "No saved personal studies yet."
-  );
-
-
-  setEmpty(
-    groupStudiesList,
-    "No saved group studies yet."
-  );
-
-
-  const {
-    data,
-    error
-  } =
+  const { data, error } =
     await supabaseClient
-      .from(
-        "saved_work"
-      )
+      .from("saved_work")
       .select("*")
-      .eq(
-        "user_id",
-        user.id
-      )
-      .order(
-        "updated_at",
-        {
-          ascending: false
-        }
-      );
-
+      .eq("user_id", user.id)
+      .order("updated_at", { ascending: false });
 
   if (error) {
-
     console.error(error);
-
     accountStatus.textContent =
       "Saved work could not be loaded.";
-
     return;
   }
 
-
   const sermons =
-    data.filter(
-      item =>
-        item.work_type ===
-        "sermon"
-    );
-
+    data.filter(item => item.work_type === "sermon");
 
   const personalStudies =
-    data.filter(
-      item =>
-        item.work_type ===
-        "personal_study"
-    );
-
+    data.filter(item => item.work_type === "personal_study");
 
   const groupStudies =
-    data.filter(
-      item =>
-        item.work_type ===
-        "group_study"
-    );
-
+    data.filter(item => item.work_type === "group_study");
 
   if (sermons.length) {
-
-    sermonsList.innerHTML =
-      "";
-
-    sermons.forEach(
-      item => {
-
-        sermonsList.appendChild(
-          createSavedWorkItem(
-            item
-          )
-        );
-      }
-    );
+    sermonsList.innerHTML = "";
+    sermons.forEach(item => {
+      sermonsList.appendChild(createSavedWorkItem(item));
+    });
   }
-
 
   if (personalStudies.length) {
-
-    personalStudiesList.innerHTML =
-      "";
-
-    personalStudies.forEach(
-      item => {
-
-        personalStudiesList.appendChild(
-          createSavedWorkItem(
-            item
-          )
-        );
-      }
-    );
+    personalStudiesList.innerHTML = "";
+    personalStudies.forEach(item => {
+      personalStudiesList.appendChild(createSavedWorkItem(item));
+    });
   }
-
 
   if (groupStudies.length) {
-
-    groupStudiesList.innerHTML =
-      "";
-
-    groupStudies.forEach(
-      item => {
-
-        groupStudiesList.appendChild(
-          createSavedWorkItem(
-            item
-          )
-        );
-      }
-    );
+    groupStudiesList.innerHTML = "";
+    groupStudies.forEach(item => {
+      groupStudiesList.appendChild(createSavedWorkItem(item));
+    });
   }
 
-
-  if (
-    user.email ===
-    ADMIN_EMAIL
-  ) {
-
-    supportMessagesSection
-      .classList
-      .remove(
-        "hidden"
-      );
-
-
-    setEmpty(
-      supportMessagesList,
-      "No support messages yet."
-    );
-
+  if (user.email === ADMIN_EMAIL) {
+    supportMessagesSection.classList.remove("hidden");
+    setEmpty(supportMessagesList, "No support messages yet.");
 
     const {
       data: supportMessages,
       error: supportError
     } =
       await supabaseClient
-        .from(
-          "support_messages"
-        )
+        .from("support_messages")
         .select("*")
-        .order(
-          "created_at",
-          {
-            ascending: false
-          }
-        );
-
+        .order("created_at", { ascending: false });
 
     if (supportError) {
-
-      console.error(
-        supportError
-      );
-
+      console.error(supportError);
       accountStatus.textContent =
         "Support messages could not be loaded.";
-
       return;
     }
 
-
-    if (
-      supportMessages.length
-    ) {
-
-      supportMessagesList.innerHTML =
-        "";
-
-
-      supportMessages.forEach(
-        item => {
-
-          supportMessagesList
-            .appendChild(
-              createSupportMessageItem(
-                item
-              )
-            );
-        }
-      );
+    if (supportMessages.length) {
+      supportMessagesList.innerHTML = "";
+      supportMessages.forEach(item => {
+        supportMessagesList.appendChild(
+          createSupportMessageItem(item)
+        );
+      });
     }
-  }
-
-  else {
-
-    supportMessagesSection
-      .classList
-      .add(
-        "hidden"
-      );
+  } else {
+    supportMessagesSection.classList.add("hidden");
   }
 }
 
-
 async function showSignedIn(user) {
 
-  signedOutArea
-    .classList
-    .add(
-      "hidden"
-    );
+  signedOutArea.classList.add(
+    "hidden"
+  );
 
-
-  signedInArea
-    .classList
-    .remove(
-      "hidden"
-    );
-
+  signedInArea.classList.remove(
+    "hidden"
+  );
 
   accountEmail.textContent =
-    user.email ||
-    "Signed-in user";
-
+    user.email || "Signed-in user";
 
   accountStatus.textContent =
     "Loading saved work...";
 
 
   await Promise.all([
-    loadBibleUserData(
-      user
-    ),
-
-    loadSavedWork(
-      user
-    )
+    loadBibleUserData(user),
+    loadSavedWork(user)
   ]);
 
 
-  accountStatus.textContent =
-    "";
+  accountStatus.textContent = "";
 }
 
 
 function showSignedOut() {
 
-  signedOutArea
-    .classList
-    .remove(
-      "hidden"
-    );
+  signedOutArea.classList.remove(
+    "hidden"
+  );
 
+  signedInArea.classList.add(
+    "hidden"
+  );
 
-  signedInArea
-    .classList
-    .add(
-      "hidden"
-    );
-
-
-  accountEmail.textContent =
-    "";
+  accountEmail.textContent = "";
 }
 
 
@@ -2149,32 +1046,26 @@ async function checkAccount() {
       session
     }
   } =
-    await supabaseClient
-      .auth
-      .getSession();
+    await supabaseClient.auth.getSession();
 
 
   if (
     session &&
     session.user
   ) {
-
     await showSignedIn(
       session.user
     );
   }
 
   else {
-
     showSignedOut();
   }
 }
 
 
 document
-  .getElementById(
-    "loginButton"
-  )
+  .getElementById("loginButton")
   .addEventListener(
     "click",
     async function() {
@@ -2204,10 +1095,8 @@ document
         !email ||
         !password
       ) {
-
         authStatus.textContent =
           "Enter your email and password.";
-
         return;
       }
 
@@ -2225,17 +1114,13 @@ document
 
 
       if (error) {
-
         authStatus.textContent =
           error.message;
-
         return;
       }
 
 
-      authStatus.textContent =
-        "";
-
+      authStatus.textContent = "";
 
       await showSignedIn(
         data.user
@@ -2245,9 +1130,7 @@ document
 
 
 document
-  .getElementById(
-    "signupButton"
-  )
+  .getElementById("signupButton")
   .addEventListener(
     "click",
     async function() {
@@ -2277,10 +1160,8 @@ document
         !email ||
         !password
       ) {
-
         authStatus.textContent =
           "Enter an email and password.";
-
         return;
       }
 
@@ -2288,10 +1169,8 @@ document
       if (
         password.length < 6
       ) {
-
         authStatus.textContent =
           "Password must be at least 6 characters.";
-
         return;
       }
 
@@ -2309,10 +1188,8 @@ document
 
 
       if (error) {
-
         authStatus.textContent =
           error.message;
-
         return;
       }
 
@@ -2322,9 +1199,7 @@ document
         data.user
       ) {
 
-        authStatus.textContent =
-          "";
-
+        authStatus.textContent = "";
 
         await showSignedIn(
           data.user
@@ -2332,7 +1207,6 @@ document
       }
 
       else {
-
         authStatus.textContent =
           "Account created. Check your email if confirmation is required, then sign in.";
       }
@@ -2341,9 +1215,7 @@ document
 
 
 document
-  .getElementById(
-    "logoutButton"
-  )
+  .getElementById("logoutButton")
   .addEventListener(
     "click",
     async function() {
@@ -2352,9 +1224,7 @@ document
         .auth
         .signOut();
 
-
       showSignedOut();
-
 
       authStatus.textContent =
         "You are signed out.";
@@ -2365,16 +1235,11 @@ document
 supabaseClient
   .auth
   .onAuthStateChange(
-    function(
-      event,
-      session
-    ) {
+    function(event, session) {
 
       if (
-        event ===
-        "SIGNED_OUT"
+        event === "SIGNED_OUT"
       ) {
-
         showSignedOut();
       }
     }
