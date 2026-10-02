@@ -11231,15 +11231,16 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
     }
     layoutStatus('Checking your account for Layout 1…');
     try{
-      const result=await layoutClient.from('profiles').select('role').eq('id',userId).maybeSingle();
+      // Match account.html's owner identity, using a server-verified auth user.
+      const result=await layoutClient.auth.getUser();
       if(generation!==checkGeneration)return;
       if(result.error)throw result.error;
-      const role=String(result.data?.role||'').trim().toLowerCase();
-      if(!role){
-        layoutStatus('Your account has no profile role available. Layout access could not be confirmed.');
+      const confirmedUser=result.data?.user;
+      if(!confirmedUser || confirmedUser.id!==userId){
+        layoutStatus('Your account changed during verification. Retry the account check.');
         return;
       }
-      verifiedOwner=role==='admin';
+      verifiedOwner=String(confirmedUser.email||'').trim().toLowerCase()==='bashamcaleb530@gmail.com';
       setOwnerButtonsVisible(verifiedOwner);
       let preference=readPreference(activeLayoutKey);
       if(verifiedOwner){
@@ -11250,7 +11251,7 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
       }else{
         if(!validLayout(preference)||preference==='dashboard')preference='regular';
         setLayout(preference);
-        layoutStatus('Your signed-in profile reports “'+role+'”, not administrator. Layouts 2 and 3 are available.');
+        layoutStatus('Signed in as '+(confirmedUser.email||'a regular account')+'. Layouts 2 and 3 are available. Use Account to switch to your owner account.');
       }
     }catch(error){
       if(generation!==checkGeneration)return;
