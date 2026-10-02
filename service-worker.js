@@ -1,6 +1,24 @@
-const CACHE_NAME = "biblemastery-personal-study-2026-10-02-v2";
+const CACHE_NAME = "biblemastery-personal-study-2026-10-02-v3-icons";
+const CORE_ASSETS = [
+  "/personal-study.html",
+  "/main.html",
+  "/manifest.json",
+  "/icon-192.png",
+  "/icon-512.png"
+];
 
-self.addEventListener("install", () => self.skipWaiting());
+self.addEventListener("install", event => {
+  event.waitUntil((async () => {
+    const cache = await caches.open(CACHE_NAME);
+    await Promise.all(CORE_ASSETS.map(async url => {
+      try {
+        const response = await fetch(url, { cache: "reload" });
+        if (response.ok) await cache.put(url, response);
+      } catch (e) {}
+    }));
+    await self.skipWaiting();
+  })());
+});
 
 self.addEventListener("activate", event => {
   event.waitUntil((async () => {
