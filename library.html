@@ -29,6 +29,8 @@ a{color:inherit} button,input,select{font:inherit}
 .section-list{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px} .section-btn{border:1px solid var(--line);background:#fff;padding:8px 10px;border-radius:9px;cursor:pointer} .section-btn:hover{border-color:var(--gold)}
 .empty{padding:80px 20px;text-align:center;color:var(--muted)}
 @media(max-width:900px){.page{grid-template-columns:1fr;padding:12px}.shelf{position:relative;top:auto;max-height:none}.intro{grid-template-columns:1fr}.topbar{align-items:flex-start;flex-wrap:wrap}.top-actions{margin-left:0}.reader-frame{height:65vh;min-height:480px}}
+
+.offline-controls{margin:16px 0;background:#fff8e8}.offline-actions{display:flex;flex-wrap:wrap;align-items:center;gap:9px;margin:10px 0}.offline-actions input{min-width:0;flex:1;padding:10px;border:1px solid var(--line);border-radius:8px}.offline-actions .btn{border-color:#caa467}.offline-text{white-space:pre-wrap;overflow-wrap:anywhere;font:18px/1.8 Georgia,serif;padding:22px;border:1px solid var(--line);border-radius:12px;background:#fffdf8;max-height:75vh;overflow:auto}.badge.offline{background:#f4e5bb;color:#602b11}button:disabled{opacity:.55;cursor:not-allowed}button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid #a97724;outline-offset:3px}[hidden]{display:none!important}
 </style>
 </head>
 <body>
@@ -36,7 +38,7 @@ a{color:inherit} button,input,select{font:inherit}
   <div class="brand"><img src="biblemastery-logo.png" alt="BibleMastery logo"><div><strong>BibleMastery Library</strong><small>Seven Names One Redeemer</small></div></div>
   <div class="top-actions">
     <a class="btn" href="personal-study.html">← Personal Study</a>
-    <a class="btn alt" href="main.html">Main Page</a>
+
   </div>
 </header>
 <main class="page">
@@ -49,6 +51,7 @@ a{color:inherit} button,input,select{font:inherit}
       <button class="filter" data-filter="owned">Owned</button>
       <button class="filter" data-filter="included">Included</button>
       <button class="filter" data-filter="external">Other resources</button>
+      <button class="filter" data-filter="offline">Offline</button>
     </div>
     <div id="bookList" class="book-list"></div>
   </aside>
@@ -65,6 +68,22 @@ a{color:inherit} button,input,select{font:inherit}
           <div class="box"><h3>Good places to start</h3><div id="sections" class="section-list"></div></div>
         </div>
         <div id="startPanel" class="start-panel" hidden><div class="eyebrow">RECOMMENDED STARTING POINT</div><h3 id="startTitle"></h3><p id="startNote"></p></div>
+        <section class="box offline-controls" aria-label="Offline reading">
+          <h3>Read without internet</h3>
+          <div class="offline-actions">
+            <button id="downloadOffline" class="btn" type="button">Download for Offline Reading</button>
+            <button id="importOffline" class="btn" type="button">Import TXT/PDF</button>
+            <button id="offlineRead" class="btn" type="button">Read saved copy</button>
+            <button id="removeOffline" class="btn" type="button">Remove download</button>
+            <input id="offlineFile" type="file" accept=".txt,.pdf,text/plain,application/pdf" hidden>
+          </div>
+          <p id="offlineStatus" role="status" aria-live="polite">Checking saved copies…</p>
+          <p class="sub">Downloads stay on this browser and device. Clearing site data can remove them. Import only a copy you are allowed to store; your imported file stays on this device. External websites still need internet.</p>
+        </section>
+        <div id="offlineTextTools" hidden>
+          <form id="offlineSearchForm" class="offline-actions"><input id="offlineSearch" type="search" aria-label="Search saved book text" placeholder="Search saved text…"><button class="btn" type="submit">Find next</button></form>
+          <div class="offline-actions"><button id="offlinePrevious" class="btn" type="button">Previous</button><span id="offlinePageLabel" role="status"></span><button id="offlineNext" class="btn" type="button">Next</button></div>
+        </div>
         <div id="readerContent"></div>
       </div>
     </div>
@@ -84,12 +103,13 @@ function accessLabel(b){
 function badge(b){
   const cls=b.access==='owned'?'owned':(b.access==='included'?'':'external');
   const text=b.access==='owned'?'Owned':(b.access==='included'?'Included':'Resource');
-  return `<span class="badge ${cls}">${text}</span>`;
+  return `<span class="badge ${cls}">${text}</span>${offlineTitles.has(b.title)?'<span class="badge offline">Available offline</span>':''}`;
 }
 function renderList(){
   const q=$('search').value.trim().toLowerCase();
   const list=BOOKS.filter(b=>{
-    if(activeFilter!=='all' && b.access!==activeFilter) return false;
+    if(activeFilter==='offline'){if(!offlineTitles.has(b.title))return false;}
+    else if(activeFilter!=='all' && b.access!==activeFilter) return false;
     const hay=[b.title,b.author,b.summary,...b.topics,...b.starts].join(' ').toLowerCase();
     return !q || hay.includes(q);
   });
@@ -110,15 +130,175 @@ function openBook(title, section='', note=''){
   if(b.mode==='embed'){content.innerHTML=`<iframe class="reader-frame" src="${escapeAttr(b.url)}" title="${escapeAttr(b.title)}"></iframe>`;}
   else{content.innerHTML=`<div class="external-wrap"><div><div class="eyebrow">OFFICIAL / EXTERNAL RESOURCE</div><h3>${escapeHtml(b.title)}</h3><p>${escapeHtml(b.summary)}</p><p><a class="btn" href="${escapeAttr(b.url)}" target="_blank" rel="noopener">Open to Read ↗</a></p></div></div>`;}
   const newUrl=new URL(location.href);newUrl.searchParams.set('book',b.title);if(section)newUrl.searchParams.set('section',section);else newUrl.searchParams.delete('section');history.replaceState(null,'',newUrl);
+  refreshOfflineSelection(section);
 }
 function showStart(section,note=''){
   if(!section){$('startPanel').hidden=true;return;}
   $('startPanel').hidden=false;$('startTitle').textContent=section;$('startNote').textContent=note||'This is the section BibleMastery recommends as the best place to begin for the study that sent you here.';
 }
 $('bookList').addEventListener('click',e=>{const b=e.target.closest('[data-title]');if(b)openBook(b.dataset.title);});
-$('sections').addEventListener('click',e=>{const b=e.target.closest('[data-section]');if(b)showStart(b.dataset.section);});
+$('sections').addEventListener('click',e=>{const b=e.target.closest('[data-section]');if(b)openBook(currentTitle,b.dataset.section);});
 $('search').addEventListener('input',renderList);
 document.querySelectorAll('.filter').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('.filter').forEach(x=>x.classList.remove('active'));btn.classList.add('active');activeFilter=btn.dataset.filter;renderList();}));
+// Full book files stay on this device in IndexedDB; no imported file is uploaded.
+const offlineTitles=new Set();
+let offlineDB, bookOpenGeneration=0, activeBlobURL='', offlineRecord=null, offlinePage=0, offlineBusy=false;
+const PAGE_SIZE=9000;
+function db(){
+ if(!offlineDB)offlineDB=new Promise((resolve,reject)=>{
+  const req=indexedDB.open('BibleMasteryOfflineBooks',1);
+  req.onupgradeneeded=()=>req.result.createObjectStore('books',{keyPath:'title'});
+  req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error);
+ });
+ return offlineDB;
+}
+async function bookStore(mode,operation){
+ const database=await db();
+ return new Promise((resolve,reject)=>{
+  const tx=database.transaction('books',mode);const request=operation(tx.objectStore('books'));let value;
+  request.onsuccess=()=>{value=request.result};
+  tx.oncomplete=()=>resolve(value);tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error||new Error('Storage operation cancelled.'));
+ });
+}
+function offlineMessage(text){$('offlineStatus').textContent=text;}
+function selectedBook(){return BOOKS.find(b=>b.title===currentTitle);}
+function syncOfflineButtons(){
+ const b=selectedBook(),saved=offlineTitles.has(currentTitle);
+ $('downloadOffline').disabled=offlineBusy||!b||b.access!=='included'||b.mode!=='embed';
+ $('importOffline').disabled=offlineBusy||!b||b.access==='external';
+ $('removeOffline').disabled=offlineBusy||!saved;
+ $('offlineRead').disabled=offlineBusy||!saved;
+ $('downloadOffline').textContent=saved?'Download fresh copy':'Download for Offline Reading';
+}
+async function fetchChecked(url){
+ const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),45000);
+ try{const response=await fetch(url,{signal:controller.signal,credentials:'omit'});if(!response.ok)throw new Error('Source returned '+response.status);return response;}finally{clearTimeout(timer)}
+}
+async function saveLibraryShell(){
+ if(!('caches' in window))throw new Error('Offline page storage is unavailable in this browser.');
+ const url=new URL('library.html',location.href);
+ const response=await fetch(url,{cache:'reload'});
+ if(!response.ok||!(response.headers.get('content-type')||'').includes('text/html'))throw new Error('The Library page could not be saved.');
+ const cache=await caches.open('biblemastery-offline-shell-v1');await cache.put(url.pathname,response);
+}
+async function persistBook(record){
+ await bookStore('readwrite',store=>store.put(record));offlineTitles.add(record.title);renderList();
+ let pageReady=true;
+ try{await saveLibraryShell()}catch(e){pageReady=false}
+ try{if(navigator.storage?.persist)await navigator.storage.persist()}catch(e){}
+ return pageReady;
+}
+async function downloadOffline(){
+ const b=selectedBook();if(!b||offlineBusy||b.access!=='included'||b.mode!=='embed')return;
+ offlineBusy=true;syncOfflineButtons();offlineMessage('Downloading the full book text…');
+ try{
+  const source=new URL(b.url);const id=source.hostname==='archive.org'?source.pathname.split('/')[2]:'';
+  if(!id)throw new Error('No supported download source for this book.');
+  const metadata=await (await fetchChecked('https://archive.org/metadata/'+encodeURIComponent(id))).json();
+  const restricted=metadata.metadata?.['access-restricted-item'];
+  if(metadata.is_dark||String(restricted).toLowerCase()==='true')throw new Error('This source does not offer an unrestricted download.');
+  const year=Number(String(metadata.metadata?.date||'').match(/\d{4}/)?.[0]);
+  if(!year||year>1930)throw new Error('An eligible early edition was not confirmed. Import a permitted copy instead.');
+  const file=(metadata.files||[]).find(f=>f.name?.endsWith('_djvu.txt')&&!f.private);
+  if(!file)throw new Error('This source has no downloadable plain-text edition.');
+  if(Number(file.size)>10000000)throw new Error('This text is too large for the built-in download.');
+  const url='https://archive.org/download/'+encodeURIComponent(id)+'/'+file.name.split('/').map(encodeURIComponent).join('/');
+  const text=await (await fetchChecked(url)).text();
+  if(text.length<500||text.length>10000000||/^\s*(<!doctype|<html)/i.test(text))throw new Error('The source did not return usable book text.');
+  const ready=await persistBook({title:b.title,kind:'text',text,source:url,savedAt:Date.now(),bytes:new Blob([text]).size});
+  if(currentTitle===b.title){await loadOfflineBook(b.title,$('startPanel').hidden?'':$('startTitle').textContent);offlineMessage(ready?'Saved on this device. Text comes from the scanned edition and may contain scanning errors.':'Book saved, but the offline Library page could not be saved. Reconnect and reopen Library before going offline.');}
+ }catch(error){offlineMessage('Download failed: '+error.message+' You can use Import TXT/PDF with a copy you are allowed to store.');}
+ finally{offlineBusy=false;syncOfflineButtons()}
+}
+async function importBook(file){
+ const b=selectedBook();if(!file||!b||offlineBusy)return;
+ offlineBusy=true;syncOfflineButtons();offlineMessage('Saving your book on this device…');
+ try{
+  if(file.size>40*1024*1024)throw new Error('Choose a file smaller than 40 MB.');
+  const pdf=/\.pdf$/i.test(file.name),txt=/\.txt$/i.test(file.name);
+  if(!pdf&&!txt)throw new Error('Choose a TXT or PDF file.');
+  let record={title:b.title,kind:pdf?'pdf':'text',source:'Imported: '+file.name,savedAt:Date.now(),bytes:file.size};
+  if(pdf){if(!(await file.slice(0,1024).text()).includes('%PDF-'))throw new Error('This file is not a readable PDF.');record.blob=new Blob([file],{type:'application/pdf'});}
+  else{record.text=await file.text();if(!record.text.trim()||record.text.length>10000000)throw new Error('Choose a non-empty TXT file smaller than 10 MB.');}
+  const ready=await persistBook(record);
+  if(currentTitle===b.title){await loadOfflineBook(b.title);offlineMessage(ready?'Saved on this device for offline reading.':'Book saved. Reconnect and reopen Library to finish saving its offline page.');}
+ }catch(error){offlineMessage('Could not save: '+error.message)}
+ finally{offlineBusy=false;$('offlineFile').value='';syncOfflineButtons()}
+}
+function resetOfflineView(){
+ if(activeBlobURL){URL.revokeObjectURL(activeBlobURL);activeBlobURL=''}
+ offlineRecord=null;offlinePage=0;$('offlineTextTools').hidden=true;
+}
+function renderOfflineText(){
+ if(!offlineRecord?.text)return;
+ const text=offlineRecord.text,total=Math.ceil(text.length/PAGE_SIZE);
+ offlinePage=Math.max(0,Math.min(offlinePage,total-1));
+ const pre=document.createElement('div');pre.className='offline-text';pre.tabIndex=0;pre.textContent=text.slice(offlinePage*PAGE_SIZE,(offlinePage+1)*PAGE_SIZE);
+ $('readerContent').replaceChildren(pre);$('offlinePageLabel').textContent='Part '+(offlinePage+1)+' of '+total;
+ $('offlinePrevious').disabled=offlinePage===0;$('offlineNext').disabled=offlinePage===total-1;
+ $('offlineTextTools').hidden=false;
+}
+function findOfflineText(query,from=0){
+ if(!offlineRecord?.text||!query.trim())return false;
+ const i=offlineRecord.text.toLowerCase().indexOf(query.trim().toLowerCase(),from);
+ if(i<0)return false;
+ offlinePage=Math.floor(i/PAGE_SIZE);renderOfflineText();return true;
+}
+async function loadOfflineBook(title,section='',generation=bookOpenGeneration){
+ const record=await bookStore('readonly',store=>store.get(title));
+ if(generation!==bookOpenGeneration||title!==currentTitle)return false;
+ if(!record)return false;
+ resetOfflineView();offlineRecord=record;
+ if(record.kind==='pdf'){
+  activeBlobURL=URL.createObjectURL(record.blob);
+  const link=document.createElement('a');link.href=activeBlobURL;link.target='_blank';link.rel='noopener';link.className='btn';link.textContent='Open saved PDF in a new tab';
+  const frame=document.createElement('iframe');frame.className='reader-frame';frame.title=title+' — saved PDF';frame.src=activeBlobURL;
+  $('readerContent').replaceChildren(link,frame);
+  offlineMessage('Reading your saved PDF. Use its page/search controls to locate a section.');
+ }else{
+  renderOfflineText();
+  if(section){const found=findOfflineText(section);offlineMessage(found?'Reading the saved text at the first match for this section.':'Saved text opened. The recommended heading was not found exactly; use Search saved text to locate it.');}
+  else offlineMessage('Reading the full saved text — available offline on this device.');
+ }
+ return true;
+}
+async function refreshOfflineSelection(section=''){
+ const generation=++bookOpenGeneration;resetOfflineView();syncOfflineButtons();
+ try{
+  const found=await loadOfflineBook(currentTitle,section,generation);
+  if(generation!==bookOpenGeneration)return;
+  if(!found){
+   offlineMessage(navigator.onLine?'Not saved offline. Download a supported book, or import a permitted TXT/PDF copy.':'This book is not saved on this device. Reconnect to download it.');
+   if(!navigator.onLine)$('readerContent').textContent='No saved copy available.';
+  }
+ }catch(error){if(generation===bookOpenGeneration)offlineMessage('Offline storage is unavailable: '+error.message)}
+}
+$('downloadOffline').addEventListener('click',downloadOffline);
+$('importOffline').addEventListener('click',()=>{$('offlineFile').click()});
+$('offlineFile').addEventListener('change',e=>importBook(e.target.files[0]));
+$('offlineRead').addEventListener('click',()=>refreshOfflineSelection($('startPanel').hidden?'':$('startTitle').textContent));
+$('removeOffline').addEventListener('click',async()=>{
+ const title=currentTitle;if(offlineBusy||!confirm('Remove the saved offline copy of '+title+' from this device?'))return;
+ try{await bookStore('readwrite',store=>store.delete(title));offlineTitles.delete(title);if(currentTitle===title)openBook(title);else renderList();}catch(error){offlineMessage('Could not remove saved copy: '+error.message)}
+});
+$('offlinePrevious').addEventListener('click',()=>{offlinePage--;renderOfflineText()});
+$('offlineNext').addEventListener('click',()=>{offlinePage++;renderOfflineText()});
+let lastSearch='',lastSearchPosition=-1;
+$('offlineSearchForm').addEventListener('submit',e=>{
+ e.preventDefault();const query=$('offlineSearch').value.trim();if(!query||!offlineRecord?.text)return;
+ const text=offlineRecord.text.toLowerCase();let i=text.indexOf(query.toLowerCase(),query===lastSearch?lastSearchPosition+1:0);
+ if(i<0&&query===lastSearch)i=text.indexOf(query.toLowerCase());
+ lastSearch=query;lastSearchPosition=i;
+ if(i<0){offlineMessage('No matching text found. Try a shorter phrase.');return;}
+ offlinePage=Math.floor(i/PAGE_SIZE);renderOfflineText();offlineMessage('Match found in part '+(offlinePage+1)+'. Choose Find next for another occurrence.');
+});
+bookStore('readonly',store=>store.getAllKeys()).then(keys=>{keys.forEach(k=>offlineTitles.add(k));renderList();syncOfflineButtons()}).catch(()=>offlineMessage('Offline storage is unavailable. Check browser storage settings.'));
+window.addEventListener('online',()=>syncOfflineButtons());
+window.addEventListener('offline',()=>{if(!offlineRecord)refreshOfflineSelection()});
+
+if('serviceWorker' in navigator && location.protocol!=='file:'){
+ navigator.serviceWorker.register('/service-worker.js').catch(()=>offlineMessage('The offline app could not start. Check that service-worker.js was updated, then reload.'));
+}
 renderList();
 const qBook=params.get('book'),qSection=params.get('section'),qNote=params.get('note');
 if(qBook && BOOKS.some(b=>b.title===qBook)) openBook(qBook,qSection||'',qNote||'');
