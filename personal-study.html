@@ -1761,6 +1761,7 @@ body>.container>#studyWorkspace{display:none!important}
 /* Classic: second option for regular users. Same tools/data, simpler stacked layout. */
 body.bm-layout-classic .bm-sidebar{display:none}.bm-layout-classic .bm-shell{grid-template-columns:1fr}.bm-layout-classic .bm-main{max-width:1450px;width:100%;margin:auto;padding:18px}.bm-layout-classic .bm-dashboard-grid{display:block}.bm-layout-classic .bm-card{margin-bottom:14px;border-radius:10px}.bm-layout-classic #deepStudyCenter>.deep-study-intro,.bm-layout-classic #deepStudyCenter>.deep-study-controls{display:block}.bm-layout-classic #deepStudyCenter>.deep-study-tabs{flex-wrap:wrap}.bm-layout-classic .bm-classic-only-tab{display:inline-block!important}.bm-layout-classic #deepStudyCenter>.deep-study-panel{max-height:none}.bm-layout-classic .bm-reader-card .reader-display{max-height:none;min-height:520px}.bm-layout-classic .bm-gospel-card #deepStudyGospelsPanel,.bm-layout-classic .bm-map-card #deepStudyMapsPanel{padding:14px!important}.bm-layout-classic .bm-gospel-card .gospel-chronology-layout{grid-template-columns:minmax(260px,.8fr) minmax(0,1.7fr)!important}.bm-layout-classic .bm-map-card .bible-map-layout{grid-template-columns:minmax(230px,.55fr) minmax(0,1.45fr)!important}.bm-layout-classic .bm-quick-grid{grid-template-columns:repeat(4,1fr)}
 @media(max-width:1120px){.bm-shell{grid-template-columns:64px 1fr}.bm-sidebar-nav span{display:none}.bm-sidebar-nav button,.bm-sidebar-nav a{justify-content:center;font-size:18px;padding:11px 4px}.bm-brand{min-width:160px}.bm-dashboard-grid{grid-template-columns:1fr}.bm-reader-card,.bm-deep-card,.bm-gospel-card,.bm-map-card{grid-column:1;grid-row:auto}.bm-quick-grid{grid-template-columns:repeat(4,1fr)}}
+.bm-official-book-card{padding:8px 2px}.bm-official-book-badge{display:inline-block;background:#7a0d12;color:#fff3cf;border:1px solid #c69a45;border-radius:999px;padding:4px 8px;font-size:10px;font-weight:800;letter-spacing:.08em;margin-bottom:8px}.bm-official-book-actions{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}.bm-book-link{display:inline-flex!important;align-items:center;justify-content:center;text-decoration:none!important;min-height:38px}.bm-official-book-card ul{padding-left:20px;line-height:1.55}.bm-official-book-card hr{border:0;border-top:1px solid #e2c99b;margin:14px 0}
 @media(max-width:720px){.bm-topbar{gap:8px;padding:0 9px}.bm-mobile-menu{display:block}.bm-brand{min-width:0}.bm-brand span:last-child{display:none}.bm-top-actions .bm-icon-button,.bm-main-page-link span{display:none}.bm-shell{display:block}.bm-sidebar{display:none;position:fixed;z-index:700;left:0;top:58px;width:220px}.bm-sidebar.open{display:block}.bm-sidebar-nav span{display:inline}.bm-sidebar-nav button,.bm-sidebar-nav a{justify-content:flex-start;font-size:14px}.bm-main{padding:7px}.bm-viewbar{align-items:flex-start;flex-direction:column}.bm-viewbar>div:first-child{flex-direction:column;gap:2px}.bm-dashboard-grid{display:block}.bm-card{margin-bottom:7px}.bm-reader-card .reader-controls{grid-template-columns:1fr 1fr!important}.bm-reader-card .reader-control:first-child{grid-column:1/-1}.bm-quick-grid{grid-template-columns:repeat(2,1fr)}.bm-gospel-card .gospel-chronology-layout,.bm-layout-classic .bm-gospel-card .gospel-chronology-layout{grid-template-columns:1fr!important}.bm-theology-layout{grid-template-columns:1fr}.bm-map-card .bible-map-layout,.bm-layout-classic .bm-map-card .bible-map-layout{grid-template-columns:1fr!important}.bm-map-card .bible-map-sidebar{order:1}.bm-map-card .bible-map-shell{order:2}.bm-layout-switch{width:100%}.bm-layout-switch button{flex:1}}
 </style>
 <style id="seven-names-bright-theme">
@@ -10648,8 +10649,42 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
   strongBtn?.addEventListener('click',()=>{const q=(strongIn?.value||'').trim(); if(!q)return; if(langSource)langSource.value='strongs'; if(langIn)langIn.value=q; langBtn?.click(); setTimeout(()=>{if(strongOut&&langOut)strongOut.innerHTML=langOut.innerHTML},120);});
   if(langOut&&strongOut)new MutationObserver(()=>{if(document.querySelector('.deep-study-tab[data-deep-tab="strongs"]')?.classList.contains('active'))strongOut.innerHTML=langOut.innerHTML}).observe(langOut,{childList:true,subtree:true,characterData:true});
 
-  // Theology Books: future-ready in both layouts. Add books later to this array or assign window.BIBLEMASTERY_THEOLOGY_BOOKS before this script runs.
-  const builtInBooks=[];
+  // Theology Books library. Public-domain books may be hosted directly here.
+  // Copyrighted books are listed as official resources and open from the publisher/ministry site.
+  const builtInBooks=[
+    {
+      title:"The Believer's Authority",
+      author:"Andrew Wommack",
+      resourceType:"Official free ministry resource",
+      officialUrl:"https://www.awmi.net/authority/",
+      chapters:[
+        {
+          title:"Book Information",
+          html:`
+            <div class="bm-official-book-card">
+              <div class="bm-official-book-badge">OFFICIAL AWMI RESOURCE</div>
+              <h3>The Believer's Authority</h3>
+              <p><strong>Author:</strong> Andrew Wommack</p>
+              <p>This teaching focuses on the authority believers have in Christ, resisting the devil, spiritual warfare, faith, and using the authority Jesus has delegated to believers.</p>
+              <p class="small-note">BibleMastery does not host the copyrighted book text. Andrew Wommack Ministries currently offers an official free PDF/resource through its own site.</p>
+              <div class="bm-official-book-actions">
+                <a class="search-button bm-book-link" href="https://www.awmi.net/authority/" target="_blank" rel="noopener">Read / Get Free PDF from AWMI ↗</a>
+                <a class="reader-nav-button bm-book-link" href="https://www.awmi.net/browse-teaching/believers-authority/" target="_blank" rel="noopener">Open Believer's Authority Teaching ↗</a>
+              </div>
+              <hr>
+              <h4>Study focus in BibleMastery</h4>
+              <ul>
+                <li>Authority delegated to believers through Jesus Christ</li>
+                <li>Identity and position in Christ</li>
+                <li>Resisting Satan rather than passively accepting defeat</li>
+                <li>The relationship between faith, God's Word, and spiritual authority</li>
+                <li>Applying biblical authority to everyday Christian life</li>
+              </ul>
+            </div>`
+        }
+      ]
+    }
+  ];
   const getBooks=()=>Array.isArray(window.BIBLEMASTERY_THEOLOGY_BOOKS)?window.BIBLEMASTERY_THEOLOGY_BOOKS:builtInBooks;
   let bookIndex=0, chapterIndex=0;
   function esc(s){return String(s??'').replace(/[&<>\"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[c]));}
