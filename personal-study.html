@@ -1,25 +1,12 @@
 <!DOCTYPE html>
+
 <html lang="en">
-
 <head>
-
-  <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
-  <title>Personal Bible Study - BibleMastery</title>
-
-    <!-- Interactive Bible maps: Leaflet + OpenStreetMap -->
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-    crossorigin=""
-  >
-
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Personal Bible Study - BibleMastery</title>
+<!-- Interactive Bible maps: Leaflet + OpenStreetMap -->
+<link crossorigin="" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" rel="stylesheet"/>
 <style>
   * {
     box-sizing: border-box;
@@ -1427,7 +1414,6 @@
     }
   }
 </style>
-
 <style>
 #masteryNotebook {border:1px solid var(--gold);border-radius:16px;padding:24px;margin-bottom:28px;background:var(--panel)}
 #masteryNotebook h2,#masteryNotebook h3{color:var(--gold)}
@@ -1446,7 +1432,6 @@
 #mn-review-answer[hidden]{display:none}#mn-library{min-width:230px;flex:1}
 @media(max-width:650px){#masteryNotebook{padding:15px}#masteryNotebook .mn-grid{grid-template-columns:1fr}.mn-row>*{flex-grow:1}}
 </style>
-
 <style id="personalStudyLayout2026">
 /* =========================================
    PERSONAL STUDY DASHBOARD LAYOUT
@@ -1738,878 +1723,740 @@ input, select, textarea {
   #bibleInteractiveMap { height: 390px; min-height: 360px; }
 }
 </style>
+<style id="bmDashboardLayout2026">
+/* ==========================================================
+   BIBLEMASTERY DASHBOARD LAYOUT 2026
+   Primary: Dashboard View | Secondary: Classic View
+   ========================================================== */
+:root{
+  --bm-navy:#0b2948;--bm-navy2:#123b63;--bm-blue:#1473e6;--bm-blue2:#0d63cc;
+  --bm-bg:#f4f7fb;--bm-card:#ffffff;--bm-line:#dce5ef;--bm-text:#12233a;--bm-muted:#64748b;
+  --bm-soft:#eef5ff;--bm-green:#e5f7ec;--bm-red:#fdebec;--bm-orange:#fff0dc;--bm-purple:#efe8ff;--bm-teal:#e1f7f7;
+}
+html{scroll-behavior:smooth}
+body{margin:0!important;background:var(--bm-bg)!important;color:var(--bm-text)!important;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif!important}
+body>.container{max-width:none!important;margin:0!important;padding:0!important;background:transparent!important}
+body>.container>#studyWorkspace{display:none!important}
+.bm-app{min-height:100vh;background:var(--bm-bg);color:var(--bm-text)}
+.bm-topbar{position:sticky;top:0;z-index:500;height:58px;display:flex;align-items:center;gap:18px;padding:0 18px;background:linear-gradient(90deg,#0a2744,#12395f);border-bottom:1px solid #315a7d;box-shadow:0 2px 8px rgba(11,41,72,.18)}
+.bm-brand{min-width:205px;display:flex;align-items:center;gap:9px;color:#fff;font-weight:800;font-size:21px}.bm-brand-mark{font-size:25px}.bm-global-search-wrap{flex:1;max-width:700px;margin:auto;display:flex;background:#fff;border-radius:5px;overflow:hidden;border:1px solid #bccbd9}.bm-global-search-wrap input{flex:1;border:0;outline:0;padding:10px 12px;font-size:14px;color:#1e293b;background:#fff}.bm-global-search-wrap button{width:44px;border:0;background:#fff;color:#0b2948;font-size:22px;cursor:pointer}.bm-top-actions{display:flex;align-items:center;gap:10px}.bm-icon-button,.bm-profile-button{border:0;background:transparent;color:#fff;font-size:20px;cursor:pointer}.bm-profile-button{width:35px;height:35px;border-radius:50%;background:#fff;color:#173553;font-size:14px}.bm-main-page-link{display:flex;gap:7px;align-items:center;text-decoration:none;color:#fff;border:1px solid #41698a;border-radius:6px;padding:8px 13px;font-size:14px}.bm-main-page-link:hover{background:#163f66}.bm-mobile-menu{display:none;color:#fff;font-size:22px;cursor:pointer}
+.bm-shell{display:grid;grid-template-columns:185px minmax(0,1fr);min-height:calc(100vh - 58px)}.bm-sidebar{background:linear-gradient(180deg,#0d3153,#0a2947);padding:8px 7px;position:sticky;top:58px;height:calc(100vh - 58px);overflow:auto}.bm-sidebar-nav{display:flex;flex-direction:column;gap:4px}.bm-sidebar-nav button,.bm-sidebar-nav a{width:100%;display:flex;align-items:center;gap:11px;border:0;border-radius:5px;background:transparent;color:#f7fbff;text-decoration:none;padding:12px 12px;font-size:14px;text-align:left;cursor:pointer}.bm-sidebar-nav button:hover,.bm-sidebar-nav a:hover,.bm-sidebar-nav button.active{background:#1677ef}.bm-sidebar-nav a:last-child{margin-top:8px;border-top:1px solid rgba(255,255,255,.16);border-radius:0;padding-top:17px}
+.bm-main{min-width:0;padding:10px 12px 14px}.bm-viewbar{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:9px}.bm-viewbar>div:first-child{display:flex;align-items:baseline;gap:10px}.bm-viewbar strong{font-size:18px;color:#0b2948}.bm-viewbar span{color:var(--bm-muted);font-size:12px}.bm-layout-switch{display:flex;border:1px solid #c9d5e2;border-radius:7px;background:#fff;padding:2px}.bm-layout-switch button{border:0;border-radius:5px;padding:7px 10px;background:transparent;color:#475569;cursor:pointer;font-size:12px}.bm-layout-switch button.active{background:#0f6ee6;color:#fff}
+.bm-dashboard-grid{display:grid;grid-template-columns:minmax(360px,.78fr) minmax(560px,1.65fr);gap:9px;align-items:start}.bm-card{background:#fff;border:1px solid #d6e0ea;border-radius:6px;box-shadow:0 1px 2px rgba(15,23,42,.04);overflow:hidden;min-width:0}.bm-reader-card{grid-column:1;grid-row:1}.bm-deep-card{grid-column:2;grid-row:1}.bm-gospel-card{grid-column:1;grid-row:2}.bm-map-card{grid-column:2;grid-row:2}.bm-card .workspace-section,.bm-card .study-box,.bm-card .tool-box,.bm-card .deep-study-center,.bm-card .deep-study-card{margin:0!important;border:0!important;border-radius:0!important;box-shadow:none!important;background:#fff!important;color:var(--bm-text)!important}.bm-card h2,.bm-card h3{color:#102a4a!important}.bm-card p,.bm-card label,.bm-card .small-note{color:#5f6f82!important}.bm-reader-card #bibleReaderSection{padding:10px!important}.bm-reader-card #bibleReaderSection>p{display:none}.bm-reader-card #bibleReaderSection h3{font-size:18px;margin:0 0 9px}.bm-reader-card .reader-shell{background:#fff!important;border:0!important;padding:0!important}.bm-reader-card .reader-controls{display:grid!important;grid-template-columns:1fr .7fr .55fr!important;gap:7px!important;padding:0 0 8px!important}.bm-reader-card .reader-control:nth-of-type(4),.bm-reader-card .reader-nav{display:none!important}.bm-reader-card .reader-select,.bm-card .commentary-select,.bm-card .search-input{background:#fff!important;color:#1e293b!important;border:1px solid #cfd9e5!important;border-radius:5px!important}.bm-reader-card .reader-display{min-height:430px!important;max-height:510px!important;overflow:auto!important;background:#fff!important;color:#172033!important;border:1px solid #e0e7ef!important;border-radius:4px!important;padding:6px!important}.bm-reader-card .reader-title{display:none}.bm-reader-card .reader-verse,.bm-reader-card .verse-text,.bm-reader-card .bible-verse{color:#1d2530!important;background:#fff!important}.bm-reader-card .reader-verse:hover,.bm-reader-card .reader-verse.selected{background:#dceeff!important;color:#0a4ea8!important}
+#deepStudyCenter{padding:9px 10px 3px!important}.bm-layout-dashboard #deepStudyCenter>h2{font-size:18px;margin:0 0 8px}.bm-layout-dashboard #deepStudyCenter>h2::first-letter{font-size:0}.bm-layout-dashboard #deepStudyCenter>.deep-study-intro,.bm-layout-dashboard #deepStudyCenter>.deep-study-controls{display:none!important}.bm-layout-dashboard #deepStudyCenter>.deep-study-tabs{display:flex;gap:0;flex-wrap:nowrap;overflow-x:auto;margin:0 0 6px!important;padding:0!important;background:#fff!important;border:1px solid #e0e7ef!important;border-radius:5px 5px 0 0!important}.bm-layout-dashboard #deepStudyCenter>.deep-study-tabs .deep-study-tab{white-space:nowrap;border:0!important;border-right:1px solid #e5ebf1!important;border-radius:0!important;background:#fff!important;color:#34455b!important;padding:9px 11px!important;font-size:12px!important}.bm-layout-dashboard #deepStudyCenter>.deep-study-tabs .deep-study-tab.active{background:#fff!important;color:#075fd2!important;box-shadow:inset 0 -3px 0 #1377ef!important}.bm-layout-dashboard .bm-classic-only-tab{display:none!important}.bm-layout-dashboard #deepStudyCenter>.deep-study-panel{max-height:270px;overflow:auto;border:1px solid #e0e7ef;border-top:0;border-radius:0 0 5px 5px}.bm-layout-dashboard #deepStudyCenter>.deep-study-panel .deep-study-card{padding:8px 10px!important}.bm-layout-dashboard #deepStudyCenter>.deep-study-panel h3{font-size:14px;margin:3px 0 4px}.bm-layout-dashboard #deepStudyCenter>.deep-study-panel p{font-size:12px;margin:3px 0 8px}.bm-layout-dashboard #deepStudyCenter .deep-study-output{background:#fff!important;color:#27364a!important;border:0!important;max-height:190px;overflow:auto;padding:5px!important}.bm-layout-dashboard #deepStudyCenter .result-item{background:#fff!important;color:#27364a!important;border:0!important;border-bottom:1px solid #e7edf3!important;border-radius:0!important;padding:7px 2px!important;margin:0!important}.bm-deep-panel-head{display:flex;justify-content:space-between;align-items:start;gap:10px}.bm-inline-controls{display:flex;align-items:center;gap:6px}.bm-inline-controls select{min-width:160px}.bm-commentary-preview{min-height:130px}
+.bm-ai-area{padding:6px 10px 7px}.bm-ai-area #topicBox{padding:8px!important;background:#fff!important;border:1px solid #e0e7ef!important;border-radius:5px!important}.bm-ai-area #topicBox h2{font-size:15px;margin:0 0 5px}.bm-ai-area #topicBox .study-description,.bm-ai-area #topicBox label{display:none}.bm-ai-area #personalAiQuestion{min-height:38px!important;height:38px!important;resize:none!important;background:#fff!important;color:#25364a!important;border:1px solid #d2dce7!important;padding:9px!important}.bm-ai-area .personal-ai-actions{margin-top:5px!important}.bm-ai-area #personalAiAskButton{padding:8px 18px!important}.bm-ai-area #personalAiClearButton{display:none}.bm-ai-area #personalAiAnswer{max-height:85px;overflow:auto;background:#f8fbff!important;color:#34455b!important;border:1px solid #e3eaf2!important;margin-top:5px!important;padding:7px!important;font-size:12px!important}.bm-quick-tools{border-top:1px solid #e0e7ef;padding:7px 10px 9px}.bm-quick-title{font-weight:800;color:#102a4a;margin-bottom:5px;font-size:13px}.bm-quick-grid{display:grid;grid-template-columns:repeat(8,minmax(78px,1fr));gap:5px}.bm-quick-grid button{min-height:54px;border:0;border-radius:5px;padding:5px;background:#e4f0ff;color:#0759b3;font-weight:700;cursor:pointer;font-size:17px}.bm-quick-grid button span{display:block;margin-top:3px;font-size:10px;line-height:1.15;color:#174a7b}.bm-quick-grid button:nth-child(2){background:var(--bm-green)}.bm-quick-grid button:nth-child(3){background:var(--bm-red)}.bm-quick-grid button:nth-child(4){background:var(--bm-orange)}.bm-quick-grid button:nth-child(5){background:#e7edff}.bm-quick-grid button:nth-child(6){background:var(--bm-purple)}.bm-quick-grid button:nth-child(7){background:var(--bm-teal)}
+.bm-gospel-card #deepStudyGospelsPanel,.bm-map-card #deepStudyMapsPanel{display:block!important;padding:7px!important;background:#fff!important;color:var(--bm-text)!important;border:0!important}.bm-gospel-card .deep-study-card,.bm-map-card .deep-study-card{padding:0!important}.bm-gospel-card .deep-study-card>p,.bm-map-card .deep-study-card>p{display:none}.bm-gospel-card h3,.bm-map-card h3{font-size:17px!important;margin:0 0 7px!important}.bm-gospel-card .gospel-event-controls{grid-template-columns:1fr 130px!important;gap:6px!important;margin-bottom:6px!important}.bm-gospel-card .gospel-progress-bar,.bm-gospel-card #gospelChronologyProgressText,.bm-gospel-card .gospel-source-note{display:none!important}.bm-gospel-card .gospel-chronology-layout{grid-template-columns:205px minmax(0,1fr)!important;gap:7px!important;margin-top:6px!important}.bm-gospel-card .gospel-event-sidebar,.bm-gospel-card .gospel-reading-pane{background:#fff!important;border:1px solid #dfe7ef!important;border-radius:4px!important;padding:5px!important}.bm-gospel-card .gospel-event-list{max-height:275px!important;gap:1px!important}.bm-gospel-card .gospel-event-button{background:#fff!important;color:#23364c!important;border:0!important;border-bottom:1px solid #edf1f5!important;border-radius:0!important;padding:6px!important;font-size:11px!important}.bm-gospel-card .gospel-event-button.active{background:#e6f1ff!important;color:#075fc7!important;border-left:3px solid #1473e6!important}.bm-gospel-card .gospel-reading-pane{max-height:330px;overflow:auto}.bm-gospel-card .gospel-reading-header{gap:5px!important}.bm-gospel-card .gospel-reading-actions{gap:4px!important}.bm-gospel-card .reader-nav-button{font-size:10px!important;padding:6px 8px!important}.bm-gospel-card .deep-study-output{background:#fff!important;color:#25364a!important;border:1px solid #e0e7ef!important;padding:7px!important;font-size:12px!important}.bm-map-card .bible-map-layout{grid-template-columns:minmax(0,1fr) 185px!important;gap:7px!important}.bm-map-card .bible-map-sidebar{order:2;background:#fff!important;border:1px solid #dfe7ef!important;padding:7px!important;max-height:330px;overflow:auto}.bm-map-card .bible-map-shell{order:1;background:#fff!important;border:0!important;padding:0!important}.bm-map-card #bibleInteractiveMap{height:310px!important;min-height:310px!important;border-radius:4px!important}.bm-map-card .bible-map-place-list{max-height:250px!important}.bm-map-card .bible-map-place-button{background:#fff!important;color:#23415f!important;border:1px solid #e2e8f0!important}.bm-map-card .bible-map-place-button.active{background:#e6f1ff!important;color:#075fc7!important;border-color:#7fb2ee!important}
+.bm-theology-layout{display:grid;grid-template-columns:230px 1fr;gap:8px;padding:8px}.bm-theology-library,.bm-theology-reader{border:1px solid #e0e7ef;border-radius:5px;background:#fff;padding:8px}.bm-theology-library-head h3,.bm-theology-reader-head h3{margin:0 0 3px}.bm-theology-library-head p{margin:0 0 7px!important}.bm-theology-book-list{display:flex;flex-direction:column;gap:5px;margin-top:7px;max-height:200px;overflow:auto}.bm-theology-book-item{border:1px solid #e2e8f0;border-radius:5px;padding:7px;background:#fff;cursor:pointer}.bm-theology-book-item.active{border-color:#4f93e5;background:#eef6ff}.bm-theology-reader-head{display:flex;justify-content:space-between;gap:8px;align-items:start}.bm-eyebrow{font-size:9px;font-weight:800;letter-spacing:.12em;color:#5e82a6}.bm-theology-chapters{display:flex;gap:5px;overflow:auto;padding:7px 0}.bm-theology-chapters button{border:1px solid #d8e2ec;background:#fff;color:#34506d;border-radius:4px;padding:5px 8px;white-space:nowrap}.bm-theology-chapters button.active{background:#1473e6;color:#fff;border-color:#1473e6}.bm-book-reader-output{min-height:150px}.bm-empty-library{min-height:140px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;color:#5d6d7f}.bm-empty-library-icon{font-size:30px}
+.bm-extras{display:none;margin-top:10px;background:#fff;border:1px solid #d7e0ea;border-radius:6px;padding:10px}.bm-extras.open{display:block}.bm-extras-head{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #e4e9ef;padding:0 0 8px;margin-bottom:8px}.bm-extras-head>div{display:flex;gap:8px;align-items:baseline}.bm-extras-head strong{color:#0b2948}.bm-extras-head span{font-size:12px;color:#64748b}.bm-extras-head button{border:1px solid #cad5e0;background:#fff;border-radius:5px;padding:6px 9px;cursor:pointer}.bm-extras .workspace-section,.bm-extras .master-tool-suite{background:#fff!important;color:#1e293b!important;border:0!important;box-shadow:none!important}.bm-default-note{margin-top:7px;border:1px solid #cfe0f6;background:#eef6ff;color:#1d5b9a;border-radius:5px;padding:6px 10px;text-align:center;font-size:11px}
+.bm-settings-panel{position:fixed;inset:0;background:rgba(3,18,32,.55);z-index:900;display:grid;place-items:center;padding:20px}.bm-settings-panel[hidden]{display:none}.bm-settings-card{position:relative;width:min(480px,100%);background:#fff;color:#23364a;border-radius:10px;padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.25)}.bm-settings-card h2{color:#0b2948}.bm-settings-card>button:not(.bm-settings-close){width:100%;margin:5px 0;border:1px solid #cbd8e5;background:#f7fbff;color:#124d84;border-radius:6px;padding:10px;cursor:pointer;font-weight:700}.bm-settings-close{position:absolute;right:10px;top:8px;border:0;background:transparent;font-size:25px;cursor:pointer}
+/* Classic: second option for regular users. Same tools/data, simpler stacked layout. */
+body.bm-layout-classic .bm-sidebar{display:none}.bm-layout-classic .bm-shell{grid-template-columns:1fr}.bm-layout-classic .bm-main{max-width:1450px;width:100%;margin:auto;padding:18px}.bm-layout-classic .bm-dashboard-grid{display:block}.bm-layout-classic .bm-card{margin-bottom:14px;border-radius:10px}.bm-layout-classic #deepStudyCenter>.deep-study-intro,.bm-layout-classic #deepStudyCenter>.deep-study-controls{display:block}.bm-layout-classic #deepStudyCenter>.deep-study-tabs{flex-wrap:wrap}.bm-layout-classic .bm-classic-only-tab{display:inline-block!important}.bm-layout-classic #deepStudyCenter>.deep-study-panel{max-height:none}.bm-layout-classic .bm-reader-card .reader-display{max-height:none;min-height:520px}.bm-layout-classic .bm-gospel-card #deepStudyGospelsPanel,.bm-layout-classic .bm-map-card #deepStudyMapsPanel{padding:14px!important}.bm-layout-classic .bm-gospel-card .gospel-chronology-layout{grid-template-columns:minmax(260px,.8fr) minmax(0,1.7fr)!important}.bm-layout-classic .bm-map-card .bible-map-layout{grid-template-columns:minmax(230px,.55fr) minmax(0,1.45fr)!important}.bm-layout-classic .bm-quick-grid{grid-template-columns:repeat(4,1fr)}
+@media(max-width:1120px){.bm-shell{grid-template-columns:64px 1fr}.bm-sidebar-nav span{display:none}.bm-sidebar-nav button,.bm-sidebar-nav a{justify-content:center;font-size:18px;padding:11px 4px}.bm-brand{min-width:160px}.bm-dashboard-grid{grid-template-columns:1fr}.bm-reader-card,.bm-deep-card,.bm-gospel-card,.bm-map-card{grid-column:1;grid-row:auto}.bm-quick-grid{grid-template-columns:repeat(4,1fr)}}
+@media(max-width:720px){.bm-topbar{gap:8px;padding:0 9px}.bm-mobile-menu{display:block}.bm-brand{min-width:0}.bm-brand span:last-child{display:none}.bm-top-actions .bm-icon-button,.bm-main-page-link span{display:none}.bm-shell{display:block}.bm-sidebar{display:none;position:fixed;z-index:700;left:0;top:58px;width:220px}.bm-sidebar.open{display:block}.bm-sidebar-nav span{display:inline}.bm-sidebar-nav button,.bm-sidebar-nav a{justify-content:flex-start;font-size:14px}.bm-main{padding:7px}.bm-viewbar{align-items:flex-start;flex-direction:column}.bm-viewbar>div:first-child{flex-direction:column;gap:2px}.bm-dashboard-grid{display:block}.bm-card{margin-bottom:7px}.bm-reader-card .reader-controls{grid-template-columns:1fr 1fr!important}.bm-reader-card .reader-control:first-child{grid-column:1/-1}.bm-quick-grid{grid-template-columns:repeat(2,1fr)}.bm-gospel-card .gospel-chronology-layout,.bm-layout-classic .bm-gospel-card .gospel-chronology-layout{grid-template-columns:1fr!important}.bm-theology-layout{grid-template-columns:1fr}.bm-map-card .bible-map-layout,.bm-layout-classic .bm-map-card .bible-map-layout{grid-template-columns:1fr!important}.bm-map-card .bible-map-sidebar{order:1}.bm-map-card .bible-map-shell{order:2}.bm-layout-switch{width:100%}.bm-layout-switch button{flex:1}}
+</style></head>
+<body class="bm-layout-dashboard" data-default-view="personal-study">
 
-</head>
 
-
-<body data-default-view="personal-study">
-
-<header>
-
-  <h1>Personal Bible Study</h1>
-
-  <p>BibleMastery • Personal Study Workspace</p>
-
+<div class="bm-app" id="bmApp">
+<header class="bm-topbar">
+<div aria-label="Toggle navigation" class="bm-mobile-menu" id="bmMobileMenu">☰</div>
+<div class="bm-brand"><span class="bm-brand-mark">📖</span><span>BibleMastery</span></div>
+<div class="bm-global-search-wrap">
+<input id="bmGlobalSearch" placeholder="Search Bible (e.g. John 3:16, faith, salvation, parables...)" type="search"/>
+<button aria-label="Search" id="bmGlobalSearchButton" type="button">⌕</button>
+</div>
+<div class="bm-top-actions">
+<button class="bm-icon-button" title="Notifications" type="button">♧</button>
+<a class="bm-main-page-link" href="index.html">⌂ <span>Main Page</span></a>
+<button class="bm-profile-button" id="bmProfileButton" title="Account" type="button">●</button>
+</div>
 </header>
-  <nav class="study-dashboard-nav" aria-label="Personal Study navigation">
-    <div class="study-dashboard-nav-inner">
-      <a href="index.html" class="study-dashboard-main-link" aria-label="Open BibleMastery main page">🏠 Main Page</a>
-      <button type="button" data-study-scroll="topicBox">✨ AI</button>
-      <button type="button" data-study-scroll="bibleReaderSection">📖 Bible Reader</button>
-      <button type="button" data-study-scroll="studyToolsSection">🧰 Study Tools</button>
-      <button type="button" data-study-scroll="deepStudyCenter">🧭 Deep Study</button>
-      <button type="button" data-study-scroll="masteryNotebook">📝 Notebook</button>
-      <button type="button" data-study-scroll="masterToolSuite">⚡ Master Tools</button>
-      <button type="button" data-deep-open="gospels">📜 Gospel Order</button>
-      <button type="button" data-deep-open="maps">🗺 Maps</button>
-    </div>
-  </nav>
-
-
-
-<div class="container">
-
-
-  <div class="study-box personal-ai-box" id="topicBox">
-
-    <h2>✨ BibleMastery AI</h2>
-
-    <p class="study-description">
-      Ask for help while you study Scripture. BibleMastery AI is here when you need extra explanation, help connecting passages, or direction for deeper study.
-    </p>
-
-    <label for="personalAiQuestion">What would you like help with?</label>
-
-    <textarea
-      id="personalAiQuestion"
-      class="personal-ai-question"
-      placeholder="Example: Help me understand Romans 5:1-5, or show me passages about God's provision."
-    ></textarea>
-
-    <div class="personal-ai-actions">
-      <button id="personalAiAskButton" class="personal-ai-ask" type="button">
-        Ask BibleMastery AI
-      </button>
-
-      <button id="personalAiClearButton" class="personal-ai-clear" type="button">
-        Clear
-      </button>
-    </div>
-
-    <div id="personalAiAnswer" class="personal-ai-answer" aria-live="polite">
-      BibleMastery AI is ready when you are.
-    </div>
-
-    <!--
-      Keep the original guided-study controls available to the existing
-      JavaScript and URL-topic workflow without showing them in the page.
-    -->
-    <div class="legacy-guided-study-controls" aria-hidden="true">
-      <input
-        type="text"
-        id="topicInput"
-        class="topic-input"
-        autocomplete="off"
-        tabindex="-1"
-      >
-      <button
-        id="startStudyButton"
-        class="start-button"
-        type="button"
-        tabindex="-1"
-      >
-        Build Guided Study
-      </button>
-    </div>
-
-  </div>
-
-
-  <div
-    id="studyWorkspace"
-    class="workspace visible"
-  >
-
-
-    <div class="workspace-section">
-
-      <h2
-        id="topicTitle"
-        class="topic-title"
-      >
-        Personal Bible Study
-      </h2>
-
-      <p
-        id="topicIntro"
-        class="workspace-intro"
-      >Study freely with the tools below, and use BibleMastery AI above whenever you want extra help while you study.</p>
-
-      <div id="guidedStudyOverview"></div>
-
-    </div>
-
-
-<section id="masteryNotebook" aria-labelledby="mn-heading">
-<h2 id="mn-heading">Deep Study Notebook</h2>
-<p>Understand the passage. Investigate your questions. Build an explanation you can teach.</p>
-<div class="mn-row"><select id="mn-library" aria-label="Saved studies"></select><button id="mn-new" type="button">New study</button><button id="mn-save" type="button">Save checkpoint</button></div>
-<p>Notes save on this browser and device. Download a backup to keep a separate copy or move studies to another device.</p>
-<div id="mn-status" role="status" aria-live="polite"></div>
-<div class="mn-grid"><div><label for="mn-title">Study title</label><input id="mn-title" placeholder="God’s provision in creation"></div><div><label for="mn-reference">Passage</label><input id="mn-reference" placeholder="Genesis 1:1–5"></div></div>
-<div class="mn-row"><button type="button" data-mn-tool="reader">Bible reader</button><button type="button" data-mn-tool="language">Language</button><button type="button" data-mn-tool="references">Cross-references</button><button type="button" data-mn-tool="topics">Topics</button><button type="button" data-mn-tool="entities">People &amp; places</button><button type="button" data-mn-tool="context">Timeline &amp; translations</button><button type="button" data-mn-tool="commentary">Commentaries</button></div>
-<div id="mn-progress"></div><nav id="mn-nav" aria-label="Study steps"></nav><div id="mn-panel"></div>
-<div class="mn-row"><button id="mn-back" type="button">Previous step</button><button id="mn-next" type="button">Next step</button><button id="mn-coach" type="button">Help Me Study</button><button id="mn-explain" type="button">Help Me Explain</button></div>
-<p>AI buttons prepare a question using this study’s notes. Review it above, then choose Ask BibleMastery AI to send it.</p>
-<details><summary>Search, backups &amp; revision history</summary>
-<label for="mn-search">Search all notebook studies</label><input id="mn-search" type="search" placeholder="Search a passage, word, source, or explanation"><div id="mn-search-results"></div>
-<div class="mn-row"><button id="mn-export" type="button">Download all studies (backup)</button><button id="mn-import" type="button">Import backup as copies</button><input id="mn-file" type="file" accept=".json,application/json" hidden><button id="mn-notes-export" type="button">Download this study’s notes</button></div>
-<label for="mn-history">Saved checkpoints (last 20 per study)</label><div class="mn-row"><select id="mn-history"></select><button id="mn-restore" type="button">Restore checkpoint as new study</button></div>
-</details></section>
-    <div class="workspace-section deep-study-center" id="deepStudyCenter">
-
-      <h2>🧭 BibleMastery Deep Study Center</h2>
-
-      <p class="deep-study-intro">
-        This is the advanced research area for Personal Study. Start with a Bible reference or an original-language word, then move between language study, lemma/concordance searching, topics, cross-references, people and places, timelines, text comparison, and your saved study history.
-      </p>
-
-      <div class="deep-study-controls">
-        <div>
-          <label for="deepStudyReference">Bible reference</label>
-          <input id="deepStudyReference" class="search-input" type="text" placeholder="Example: Romans 5:17">
-        </div>
-        <div>
-          <label for="deepStudyWord">Word or Strong’s number</label>
-          <input id="deepStudyWord" class="search-input" type="text" placeholder="Example: G1343 or righteousness">
-        </div>
-        <button id="deepStudyStartButton" class="search-button" type="button">Open Deep Study</button>
-      </div>
-
-      <div class="deep-study-tabs" role="tablist" aria-label="Deep Study tools">
-        <button class="deep-study-tab active" type="button" data-deep-tab="language">🔤 Language</button>
-        <button class="deep-study-tab" type="button" data-deep-tab="concordance">🔎 Concordance</button>
-        <button class="deep-study-tab" type="button" data-deep-tab="topics">🗂 Topics</button>
-        <button class="deep-study-tab" type="button" data-deep-tab="references">🔗 Cross-References</button>
-        <button class="deep-study-tab" type="button" data-deep-tab="entities">👤 People & Places</button>
-        <button class="deep-study-tab" type="button" data-deep-tab="context">🗺 Timeline & Text</button>
-        <button class="deep-study-tab" type="button" data-deep-tab="saved">💾 My Study</button>
-<button class="deep-study-tab" type="button" data-deep-tab="gospels">📜 Gospel Chronology</button>
-        <button class="deep-study-tab" type="button" data-deep-tab="maps">🗺 Interactive Maps</button>
-      </div>
-
-      <div class="deep-study-panel active" id="deepStudyLanguagePanel">
-        <div class="deep-study-grid">
-          <div class="deep-study-card">
-            <h3>Original-Language Word Study</h3>
-            <p>Search the current Strong’s, BDB, and Thayer tools, with a legal STEPBible extended-lexicon lookup when available.</p>
-            <label for="deepLexiconSource">Resource</label>
-            <select id="deepLexiconSource" class="commentary-select">
-              <option value="all" selected>All available resources</option>
-              <option value="step">STEPBible Extended Strong’s</option>
-              <option value="strongs">Strong’s</option>
-              <option value="bdb">BDB Hebrew</option>
-              <option value="thayer">Thayer’s Greek</option>
-            </select>
-            <div class="search-row" style="margin-top:10px">
-              <input id="deepLanguageInput" class="search-input" type="text" placeholder="G26, H2617, agapē, shalom">
-              <button id="deepLanguageButton" class="search-button" type="button">Study Word</button>
-            </div>
-            <div id="deepLanguageOutput" class="deep-study-output"></div>
-            <div class="deep-study-attribution">
-              STEPBible data is used as an extended study source with attribution. See the
-              <a href="https://github.com/STEPBible/STEPBible-Data" target="_blank" rel="noopener">STEPBible Data repository</a> for source and license information.
-            </div>
-          </div>
-
-          <div class="deep-study-card">
-            <h3>Morphology & Occurrences</h3>
-            <p>When a tagged KJV+ passage is available, BibleMastery can show Strong’s tags and count matching occurrences without crowding the regular reader.</p>
-            <button id="deepMorphologyButton" class="search-button" type="button">Analyze Current Reference</button>
-            <div id="deepMorphologyOutput" class="deep-study-output"></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="deep-study-panel" id="deepStudyConcordancePanel">
-        <div class="deep-study-card">
-          <h3>Lemma & Full Concordance</h3>
-          <p>Search the loaded Bible text for a word or phrase. A Strong’s number can also be used to inspect tagged KJV+ occurrences.</p>
-          <div class="search-row">
-            <input id="deepConcordanceInput" class="search-input" type="text" placeholder="Example: righteousness or G1343">
-            <button id="deepConcordanceButton" class="search-button" type="button">Search All Occurrences</button>
-          </div>
-          <div id="deepConcordanceOutput" class="deep-study-output"></div>
-        </div>
-      </div>
-
-      <div class="deep-study-panel" id="deepStudyTopicsPanel">
-        <div class="deep-study-card">
-          <h3>Topical Research</h3>
-          <p>Build a ranked topic list from the Bible text and the legal public-domain topic connections already planned for BibleMastery.</p>
-          <div class="search-row">
-            <input id="deepTopicInput" class="search-input" type="text" placeholder="Example: healing, righteousness, prayer">
-            <button id="deepTopicButton" class="search-button" type="button">Research Topic</button>
-          </div>
-          <div id="deepTopicOutput" class="deep-study-output"></div>
-          <div class="deep-study-attribution">Nave’s Topical Bible and Torrey’s Topical Textbook are public-domain reference works; their complete indexed text can be connected here as the topical library is expanded.</div>
-        </div>
-      </div>
-
-      <div class="deep-study-panel" id="deepStudyReferencesPanel">
-        <div class="deep-study-card">
-          <h3>Ranked Cross-References</h3>
-          <p>Use the current reference to find related verses in the same chapter, the same book, and the wider Bible. Stronger source-backed cross-reference sets can be added without changing this interface.</p>
-          <div class="search-row">
-            <input id="deepReferenceInput" class="search-input" type="text" placeholder="Example: John 3:16">
-            <button id="deepReferenceButton" class="search-button" type="button">Find Related Verses</button>
-          </div>
-          <div id="deepReferenceOutput" class="deep-study-output"></div>
-        </div>
-      </div>
-
-      <div class="deep-study-panel" id="deepStudyEntitiesPanel">
-        <div class="deep-study-grid">
-          <div class="deep-study-card">
-            <h3>People, Places & Family Links</h3>
-            <p>Search a biblical person or place and connect the name to Scripture occurrences and a concise study profile.</p>
-            <div class="search-row">
-              <input id="deepEntityInput" class="search-input" type="text" placeholder="Example: David, Jerusalem, Paul">
-              <button id="deepEntityButton" class="search-button" type="button">Find Entity</button>
-            </div>
-            <div id="deepEntityOutput" class="deep-study-output"></div>
-          </div>
-          <div class="deep-study-card">
-            <h3>Study Links</h3>
-            <p id="deepEntityLinkNote">Choose a person or place to see Bible occurrences and connected study links here.</p>
-            <div id="deepEntityLinks" class="deep-study-output"></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="deep-study-panel" id="deepStudyContextPanel">
-        <div class="deep-study-grid">
-          <div class="deep-study-card">
-            <h3>Bible Timeline</h3>
-            <p>Use the timeline as a study guide, then open the related references in the Bible reader.</p>
-            <button id="deepTimelineButton" class="search-button" type="button">Show Timeline</button>
-            <div id="deepTimelineOutput" class="deep-study-output"></div>
-          </div>
-          <div class="deep-study-card">
-            <h3>Translation Comparison</h3>
-            <p>Compare the selected reference in the translations already available to BibleMastery.</p>
-            <button id="deepComparisonButton" class="search-button" type="button">Compare KJV / WEB / ASV</button>
-            <div id="deepComparisonOutput" class="deep-study-output"></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="deep-study-panel" id="deepStudySavedPanel">
-        <div class="deep-study-grid">
-          <div class="deep-study-card">
-            <h3>Save This Study</h3>
-            <p>Keep the topic, reference, word, and notes together in this BibleMastery study workspace.</p>
-            <label for="deepStudyNotes">Study notes</label>
-            <textarea id="deepStudyNotes" class="search-input" rows="6" placeholder="Write observations, questions, applications, or prayer notes..."></textarea>
-            <button id="deepSaveStudyButton" class="search-button" type="button" style="margin-top:10px">Save Study Session</button>
-            <button id="deepExportStudyButton" class="reader-nav-button" type="button" style="margin-top:10px">Export Saved Sessions</button>
-          </div>
-          <div class="deep-study-card">
-            <h3>Study History</h3>
-            <div id="deepStudyHistoryOutput" class="deep-study-output"></div>
-          </div>
-        </div>
-      </div>
-
-
-<div class="deep-study-panel" id="deepStudyGospelsPanel">
-        <div class="deep-study-card full-width">
-          <h3>📜 Read the Gospels in Chronological Order</h3>
-          <p>
-            Follow the life and ministry of Jesus as one continuous reading journey. Parallel accounts are grouped together,
-            so you can read Matthew, Mark, Luke, and John at the same point in the chronology instead of jumping around on your own.
-          </p>
-
-          <div class="gospel-event-controls">
-            <div>
-              <label for="gospelChronologySearch">Find an event</label>
-              <input id="gospelChronologySearch" class="search-input" type="search" placeholder="Example: Nicodemus, Lazarus, crucifixion">
-            </div>
-            <div>
-              <label for="gospelChronologyTranslation">Translation</label>
-              <select id="gospelChronologyTranslation" class="commentary-select">
-                <option value="KJV" selected>KJV</option>
-                <option value="WEB">WEB</option>
-                <option value="ASV">ASV</option>
-                <option value="YLT">YLT</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="gospel-progress-bar" aria-hidden="true">
-            <div id="gospelChronologyProgress" class="gospel-progress-fill"></div>
-          </div>
-          <div id="gospelChronologyProgressText" class="small-note"></div>
-
-          <div class="gospel-chronology-layout" style="margin-top:14px">
-            <aside class="gospel-event-sidebar">
-              <div id="gospelChronologyList" class="gospel-event-list"></div>
-            </aside>
-
-            <div class="gospel-reading-pane">
-              <div class="gospel-reading-header">
-                <div>
-                  <h3 id="gospelChronologyTitle">Choose an event</h3>
-                  <div id="gospelChronologyLocation" class="gospel-reading-location"></div>
-                </div>
-                <div class="gospel-reading-actions">
-                  <button id="gospelPreviousButton" class="reader-nav-button" type="button">← Previous</button>
-                  <button id="gospelNextButton" class="reader-nav-button" type="button">Next →</button>
-                  <button id="gospelOpenReaderButton" class="reader-nav-button" type="button">Open in Bible Reader</button>
-                  <button id="gospelShowMapButton" class="reader-nav-button" type="button">Show on Map</button>
-                </div>
-              </div>
-              <div id="gospelChronologyReading" class="deep-study-output">
-                <div class="status-message">Choose an event from the chronological list.</div>
-              </div>
-              <div class="gospel-source-note">
-                Chronological harmonies can differ on the placement of a few events. This reading sequence broadly follows the
-                classic public-domain harmony by A. T. Robertson while keeping the interface simple for Bible reading.
-                <a href="https://www.gutenberg.org/ebooks/36264" target="_blank" rel="noopener">View the public-domain source</a>.
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="deep-study-panel" id="deepStudyMapsPanel">
-        <div class="deep-study-card full-width">
-          <h3>🗺 Interactive Bible Maps</h3>
-          <p>
-            Explore biblical places on a real interactive map. The base map is OpenStreetMap; BibleMastery adds markers for important Gospel locations.
-            Ancient-site identifications that are debated are labeled approximate or traditional.
-          </p>
-
-          <div class="bible-map-layout">
-            <aside class="bible-map-sidebar">
-              <label for="bibleMapPreset">Map view</label>
-              <select id="bibleMapPreset" class="commentary-select">
-                <option value="all" selected>All Gospel places</option>
-                <option value="galilee">Galilee ministry</option>
-                <option value="judea">Judea & Jordan</option>
-                <option value="jerusalem">Jerusalem & Passion Week</option>
-                <option value="north">Northern journeys</option>
-              </select>
-              <button id="bibleMapResetButton" class="search-button" type="button" style="margin:10px 0 14px;width:100%">Show Map View</button>
-              <div id="bibleMapPlaceList" class="bible-map-place-list"></div>
-              <div class="map-legend-note">
-                Locations are shown on a modern map for geographic orientation. A marker does not claim that every archaeological identification is certain.
-              </div>
-            </aside>
-
-            <div class="bible-map-shell">
-              <div id="bibleInteractiveMap" role="region" aria-label="Interactive map of Gospel locations"></div>
-              <div id="bibleMapStatus" class="small-note" style="margin-top:10px">
-                Open this tab to load the interactive map.
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-
-<div class="workspace-section master-tool-suite" id="masterToolSuite">
-      <h2>🧰 BibleMastery Master Tool Suite</h2>
-      <p class="master-tool-intro">
-        These tools are built to keep the serious research work in Personal Study without crowding the regular Bible reader.
-        Use a passage guide, advanced Bible search, commentary comparison, book background, quick word research, and a source register from one place.
-      </p>
-
-      <div class="master-tool-grid">
-        <div class="master-tool-card">
-          <h3>⚡ One-Click Passage Guide</h3>
-          <p>Open the verse, nearby context, important repeated words, related study paths, and research shortcuts together.</p>
-          <div class="search-row">
-            <input id="masterPassageInput" class="search-input" type="text" placeholder="Example: Genesis 17:19">
-            <button id="masterPassageButton" class="search-button" type="button">Build Guide</button>
-          </div>
-          <div id="masterPassageOutput" class="master-tool-output"></div>
-        </div>
-
-        <div class="master-tool-card">
-          <h3>📚 Book Background</h3>
-          <p>Pull a Bible-dictionary background entry for a biblical book and combine it with the current Bible data.</p>
-          <div class="search-row">
-            <input id="masterBookInput" class="search-input" type="text" placeholder="Example: Romans or Genesis">
-            <button id="masterBookButton" class="search-button" type="button">Open Background</button>
-          </div>
-          <div id="masterBookOutput" class="master-tool-output"></div>
-        </div>
-
-        <div class="master-tool-card full">
-          <h3>🔎 Advanced Bible Search</h3>
-          <p>Search by exact phrase, all words, or any words and narrow the results to the Old Testament, New Testament, or a single book.</p>
-          <div class="master-search-controls">
-            <div>
-              <label for="masterSearchInput">Search</label>
-              <input id="masterSearchInput" class="search-input" type="text" placeholder="Example: covenant faith righteousness">
-            </div>
-            <div>
-              <label for="masterSearchMode">Match</label>
-              <select id="masterSearchMode" class="commentary-select">
-                <option value="all" selected>All words</option>
-                <option value="any">Any word</option>
-                <option value="exact">Exact phrase</option>
-              </select>
-            </div>
-            <div>
-              <label for="masterSearchScope">Scope</label>
-              <select id="masterSearchScope" class="commentary-select">
-                <option value="all" selected>Whole Bible</option>
-                <option value="ot">Old Testament</option>
-                <option value="nt">New Testament</option>
-              </select>
-            </div>
-            <button id="masterSearchButton" class="search-button" type="button">Search</button>
-          </div>
-          <div id="masterSearchOutput" class="master-tool-output"></div>
-        </div>
-
-        <div class="master-tool-card full">
-          <h3>📖 Commentary Comparison</h3>
-          <p>Compare the same passage across Matthew Henry, John Gill, and Jamieson-Fausset-Brown without changing the commentary beside your Bible.</p>
-          <div class="search-row">
-            <input id="masterCommentaryInput" class="search-input" type="text" placeholder="Example: John 3:16">
-            <button id="masterCommentaryButton" class="search-button" type="button">Compare Commentaries</button>
-          </div>
-          <div id="masterCommentaryOutput" class="master-tool-output"></div>
-        </div>
-
-        <div class="master-tool-card">
-          <h3>🔤 Quick Word Research</h3>
-          <p>Send an English word or Strong’s number directly into the Deep Study language tools. You can also select a word in the Bible reader and double-click it.</p>
-          <div class="search-row">
-            <input id="masterWordInput" class="search-input" type="text" placeholder="Example: righteousness or G1343">
-            <button id="masterWordButton" class="search-button" type="button">Research Word</button>
-          </div>
-          <div id="masterWordOutput" class="master-tool-output"></div>
-        </div>
-
-        <div class="master-tool-card">
-          <h3>🧾 Automatic Source Register</h3>
-          <p>See which BibleMastery sources are being used in this study area so you can keep Scripture, dictionaries, lexicons, commentaries, and study data clearly identified.</p>
-          <button id="masterSourcesButton" class="search-button" type="button">Show Sources</button>
-          <div id="masterSourcesOutput" class="master-tool-output"></div>
-        </div>
-      </div>
-
-
-    <div class="workspace-section layout-section" id="studyToolsSection">
-
-      <h2>Study Tools</h2>
-
-      <div class="workspace-grid">
-
-
-        <div class="tool-box">
-
-          <h3>📘 Bible Dictionaries</h3>
-
-          <p>
-            Search Easton’s and Smith’s Bible dictionaries.
-          </p>
-
-          <label for="dictionarySource">Dictionary</label>
-          <select id="dictionarySource" class="commentary-select">
-            <option value="both" selected>Easton’s + Smith’s</option>
-            <option value="easton">Easton’s Bible Dictionary</option>
-            <option value="smith">Smith’s Bible Dictionary</option>
-          </select>
-
-          <div class="search-row" style="margin-top:10px">
-
-            <input
-              type="text"
-              id="dictionarySearch"
-              class="search-input"
-              placeholder="Example: covenant"
-            >
-
-            <button
-              class="search-button"
-              id="dictionaryButton"
-            >
-              Search
-            </button>
-
-          </div>
-
-          <div
-            id="dictionaryResults"
-            class="results-box"
-          ></div>
-
-        </div>
-
-
-        <div class="tool-box">
-
-          <h3>📗 English Dictionary</h3>
-
-          <p>
-            Look up regular English words separately from Bible dictionary terms.
-          </p>
-
-          <label for="englishDictionarySource">Dictionary</label>
-          <select id="englishDictionarySource" class="commentary-select">
-            <option value="webster" selected>Webster’s 1913</option>
-            <option value="free">Free English Dictionary</option>
-          </select>
-
-          <div class="search-row" style="margin-top:10px">
-
-            <input
-              type="text"
-              id="englishDictionarySearch"
-              class="search-input"
-              placeholder="Example: redemption"
-            >
-
-            <button
-              class="search-button"
-              id="englishDictionaryButton"
-            >
-              Search
-            </button>
-
-          </div>
-
-          <div
-            id="englishDictionaryResults"
-            class="results-box"
-          ></div>
-
-        </div>
-
-
-        <div class="tool-box">
-
-          <h3>🔎 Concordance</h3>
-
-          <p>
-            Search the entire Bible for a word
-            or phrase.
-          </p>
-
-          <div class="search-row">
-
-            <input
-              type="text"
-              id="concordanceSearch"
-              class="search-input"
-              placeholder="Example: forgive"
-            >
-
-            <button
-              class="search-button"
-              id="concordanceButton"
-            >
-              Search
-            </button>
-
-          </div>
-
-          <div
-            id="concordanceResults"
-            class="results-box"
-          ></div>
-
-        </div>
-
-
-        <div class="tool-box">
-
-          <h3>🔤 Hebrew & Greek Word Lookup</h3>
-
-          <p>
-            Search Strong’s, Brown–Driver–Briggs (BDB), and Thayer’s Greek-English Lexicon.
-          </p>
-
-          <label for="lexiconSource">Lexicon</label>
-          <select id="lexiconSource" class="commentary-select">
-            <option value="auto" selected>Strong’s + BDB / Thayer’s</option>
-            <option value="strongs">Strong’s</option>
-            <option value="bdb">BDB Hebrew Lexicon</option>
-            <option value="thayer">Thayer’s Greek Lexicon</option>
-          </select>
-
-          <div class="search-row" style="margin-top:10px">
-
-            <input
-              type="text"
-              id="wordSearch"
-              class="search-input"
-              placeholder="Example: G26 or H2617"
-            >
-
-            <button
-              class="search-button"
-              id="wordButton"
-            >
-              Search
-            </button>
-
-          </div>
-
-          <div
-            id="wordResults"
-            class="results-box"
-          ></div>
-
-          <div class="small-note">
-            For BDB and Thayer’s, search by Strong’s number such as H2617 or G26.
-          </div>
-
-        </div>
-
-
-
-        <div class="tool-box bible-reader-tool" id="bibleReaderSection">
-
-          <h3>📖 Bible Reader</h3>
-
-          <p>
+<div class="bm-shell">
+<aside class="bm-sidebar" id="bmSidebar">
+<nav aria-label="Personal Study sections" class="bm-sidebar-nav">
+<button class="active" data-bm-target="bmDashboardTop" type="button">👤 <span>Personal Study</span></button>
+<button data-bm-target="bmReaderCard" type="button">📖 <span>Bible Reader</span></button>
+<button data-bm-target="bmAiArea" type="button">💬 <span>AI Assistant</span></button>
+<button data-bm-open-extra="studyToolsSection" type="button">✎ <span>Study Tools</span></button>
+<button data-bm-target="bmDeepCard" type="button">♨ <span>Deep Study</span></button>
+<button data-bm-target="bmGospelCard" type="button">✚ <span>Gospel Chronology</span></button>
+<button data-bm-target="bmMapCard" type="button">● <span>Maps</span></button>
+<button data-bm-open-extra="masteryNotebook" type="button">▤ <span>Notebook</span></button>
+<button data-deep-shortcut="saved" type="button">▰ <span>Saved Studies</span></button>
+<button id="bmSettingsButton" type="button">⚙ <span>Settings</span></button>
+<a href="index.html">⌂ <span>Main Page</span></a>
+</nav>
+</aside>
+<main class="bm-main" id="bmDashboardTop">
+<div class="bm-viewbar">
+<div>
+<strong>Personal Study</strong>
+<span>Your Bible, study tools, maps, and books in one workspace.</span>
+</div>
+<div aria-label="Choose Personal Study layout" class="bm-layout-switch" role="group">
+<button class="active" data-bm-layout="dashboard" type="button">Dashboard View</button>
+<button data-bm-layout="classic" type="button">Classic View</button>
+</div>
+</div>
+<div class="bm-dashboard-grid">
+<section class="bm-card bm-reader-card" id="bmReaderCard"><div id="bmReaderHost"><div class="tool-box bible-reader-tool" id="bibleReaderSection">
+<h3>📖 Bible Reader</h3>
+<p>
             Look up any Bible book, chapter, and verse while you study.
             This reader works independently from the topic verses below.
           </p>
-
-          <div class="reader-shell">
-
-            <div class="reader-controls">
-
-              <div class="reader-control">
-                <label for="readerTranslationSelect">Translation</label>
-                <select id="readerTranslationSelect" class="reader-select">
-                  <option value="KJV">King James Version (KJV)</option>
-                  <option value="KJV1611">King James Version 1611</option>
-                  <option value="KJVPLUS">King James Version Plus (KJV+)</option>
-                  <option value="YLT">Young's Literal Translation</option>
-                  <option value="WEB">World English Bible</option>
-                  <option value="ASV">American Standard Version</option>
-                  <option value="GENEVA1599">Geneva Bible 1599</option>
-                  <option value="DRA">Douay-Rheims American Edition</option>
-                  <option value="BSB">Berean Standard Bible</option>
-                  <option value="MSB">Majority Standard Bible</option>
-                </select>
-              </div>
-
-              <div class="reader-control">
-                <label for="readerBookSelect">📖 Book</label>
-                <select id="readerBookSelect" class="reader-select">
-                  <option value="">Choose a book</option>
-                </select>
-              </div>
-
-              <div class="reader-control">
-                <label for="readerChapterSelect">Chapter</label>
-                <select id="readerChapterSelect" class="reader-select">
-                  <option value="">Choose a chapter</option>
-                </select>
-              </div>
-
-              <div class="reader-control">
-                <label for="readerVerseSelect">Verse</label>
-                <select id="readerVerseSelect" class="reader-select">
-                  <option value="">All verses</option>
-                </select>
-              </div>
-
-              <div class="reader-nav">
-                <button id="readerPreviousButton" class="reader-nav-button" disabled>
+<div class="reader-shell">
+<div class="reader-controls">
+<div class="reader-control">
+<label for="readerTranslationSelect">Translation</label>
+<select class="reader-select" id="readerTranslationSelect">
+<option value="KJV">King James Version (KJV)</option>
+<option value="KJV1611">King James Version 1611</option>
+<option value="KJVPLUS">King James Version Plus (KJV+)</option>
+<option value="YLT">Young's Literal Translation</option>
+<option value="WEB">World English Bible</option>
+<option value="ASV">American Standard Version</option>
+<option value="GENEVA1599">Geneva Bible 1599</option>
+<option value="DRA">Douay-Rheims American Edition</option>
+<option value="BSB">Berean Standard Bible</option>
+<option value="MSB">Majority Standard Bible</option>
+</select>
+</div>
+<div class="reader-control">
+<label for="readerBookSelect">📖 Book</label>
+<select class="reader-select" id="readerBookSelect">
+<option value="">Choose a book</option>
+</select>
+</div>
+<div class="reader-control">
+<label for="readerChapterSelect">Chapter</label>
+<select class="reader-select" id="readerChapterSelect">
+<option value="">Choose a chapter</option>
+</select>
+</div>
+<div class="reader-control">
+<label for="readerVerseSelect">Verse</label>
+<select class="reader-select" id="readerVerseSelect">
+<option value="">All verses</option>
+</select>
+</div>
+<div class="reader-nav">
+<button class="reader-nav-button" disabled="" id="readerPreviousButton">
                   ← Previous
                 </button>
-                <button id="readerNextButton" class="reader-nav-button" disabled>
+<button class="reader-nav-button" disabled="" id="readerNextButton">
                   Next →
                 </button>
-              </div>
-
-            </div>
-
-            <div id="readerDisplay" class="reader-display">
-              <h3 id="readerTitle" class="reader-title">Bible Reader</h3>
-              <div class="reader-placeholder">
+</div>
+</div>
+<div class="reader-display" id="readerDisplay">
+<h3 class="reader-title" id="readerTitle">Bible Reader</h3>
+<div class="reader-placeholder">
                 Choose a book and chapter to read the Bible while you study.
               </div>
+</div>
+</div>
+</div></div></section>
+<section class="bm-card bm-deep-card" id="bmDeepCard">
+<div id="bmDeepHost"><div class="workspace-section deep-study-center" id="deepStudyCenter">
+<h2>🧭 BibleMastery Deep Study Center</h2>
+<p class="deep-study-intro">
+        This is the advanced research area for Personal Study. Start with a Bible reference or an original-language word, then move between language study, lemma/concordance searching, topics, cross-references, people and places, timelines, text comparison, and your saved study history.
+      </p>
+<div class="deep-study-controls">
+<div>
+<label for="deepStudyReference">Bible reference</label>
+<input class="search-input" id="deepStudyReference" placeholder="Example: Romans 5:17" type="text"/>
+</div>
+<div>
+<label for="deepStudyWord">Word or Strong’s number</label>
+<input class="search-input" id="deepStudyWord" placeholder="Example: G1343 or righteousness" type="text"/>
+</div>
+<button class="search-button" id="deepStudyStartButton" type="button">Open Deep Study</button>
+</div>
+<div aria-label="Deep Study tools" class="deep-study-tabs" role="tablist"><button class="deep-study-tab active" data-deep-tab="commentaries" type="button">Commentaries</button><button class="deep-study-tab" data-deep-tab="references" type="button">Cross-References</button><button class="deep-study-tab" data-deep-tab="strongs" type="button">Strong’s</button><button class="deep-study-tab" data-deep-tab="language" type="button">Lexicons</button><button class="deep-study-tab" data-deep-tab="topics" type="button">Topics</button><button class="deep-study-tab" data-deep-tab="entities" type="button">People &amp; Places</button><button class="deep-study-tab" data-deep-tab="books" type="button">Theology Books</button><button class="deep-study-tab bm-classic-only-tab" data-deep-tab="concordance" type="button">Concordance</button><button class="deep-study-tab bm-classic-only-tab" data-deep-tab="context" type="button">Timeline &amp; Text</button><button class="deep-study-tab bm-classic-only-tab" data-deep-tab="saved" type="button">My Study</button><button class="deep-study-tab bm-classic-only-tab" data-deep-tab="gospels" type="button">Gospel Chronology</button><button class="deep-study-tab bm-classic-only-tab" data-deep-tab="maps" type="button">Interactive Maps</button></div><div class="deep-study-panel active" id="deepStudyCommentariesPanel">
+<div class="deep-study-card bm-compact-study-card">
+<div class="bm-deep-panel-head">
+<div>
+<h3>Commentaries</h3>
+<p>Read commentary beside the passage you are studying.</p>
+</div>
+<div class="bm-inline-controls">
+<select class="commentary-select" id="deepCommentarySelect">
+<option value="matthew-henry-complete">Matthew Henry</option>
+<option value="john-gill">John Gill</option>
+<option value="jfb">Jamieson-Fausset-Brown</option>
+<option value="adam-clarke">Adam Clarke</option>
+<option value="john-calvin">John Calvin</option>
+<option value="keil-delitzsch">Keil &amp; Delitzsch</option>
+<option value="tyndale">Tyndale Open Study Notes</option>
+</select>
+<button class="search-button" id="deepCommentaryLoadButton" type="button">Load</button>
+</div>
+</div>
+<div class="deep-study-output bm-commentary-preview" id="deepCommentaryOutput">
+<div class="status-message">Choose a verse in the Bible Reader, then load a commentary.</div>
+</div>
+</div>
+</div>
+<div class="deep-study-panel" id="deepStudyLanguagePanel">
+<div class="deep-study-grid">
+<div class="deep-study-card">
+<h3>Original-Language Word Study</h3>
+<p>Search the current Strong’s, BDB, and Thayer tools, with a legal STEPBible extended-lexicon lookup when available.</p>
+<label for="deepLexiconSource">Resource</label>
+<select class="commentary-select" id="deepLexiconSource">
+<option selected="" value="all">All available resources</option>
+<option value="step">STEPBible Extended Strong’s</option>
+<option value="strongs">Strong’s</option>
+<option value="bdb">BDB Hebrew</option>
+<option value="thayer">Thayer’s Greek</option>
+</select>
+<div class="search-row" style="margin-top:10px">
+<input class="search-input" id="deepLanguageInput" placeholder="G26, H2617, agapē, shalom" type="text"/>
+<button class="search-button" id="deepLanguageButton" type="button">Study Word</button>
+</div>
+<div class="deep-study-output" id="deepLanguageOutput"></div>
+<div class="deep-study-attribution">
+              STEPBible data is used as an extended study source with attribution. See the
+              <a href="https://github.com/STEPBible/STEPBible-Data" rel="noopener" target="_blank">STEPBible Data repository</a> for source and license information.
             </div>
+</div>
+<div class="deep-study-card">
+<h3>Morphology &amp; Occurrences</h3>
+<p>When a tagged KJV+ passage is available, BibleMastery can show Strong’s tags and count matching occurrences without crowding the regular reader.</p>
+<button class="search-button" id="deepMorphologyButton" type="button">Analyze Current Reference</button>
+<div class="deep-study-output" id="deepMorphologyOutput"></div>
+</div>
+</div>
+</div>
+<div class="deep-study-panel" id="deepStudyConcordancePanel">
+<div class="deep-study-card">
+<h3>Lemma &amp; Full Concordance</h3>
+<p>Search the loaded Bible text for a word or phrase. A Strong’s number can also be used to inspect tagged KJV+ occurrences.</p>
+<div class="search-row">
+<input class="search-input" id="deepConcordanceInput" placeholder="Example: righteousness or G1343" type="text"/>
+<button class="search-button" id="deepConcordanceButton" type="button">Search All Occurrences</button>
+</div>
+<div class="deep-study-output" id="deepConcordanceOutput"></div>
+</div>
+</div>
+<div class="deep-study-panel" id="deepStudyTopicsPanel">
+<div class="deep-study-card">
+<h3>Topical Research</h3>
+<p>Build a ranked topic list from the Bible text and the legal public-domain topic connections already planned for BibleMastery.</p>
+<div class="search-row">
+<input class="search-input" id="deepTopicInput" placeholder="Example: healing, righteousness, prayer" type="text"/>
+<button class="search-button" id="deepTopicButton" type="button">Research Topic</button>
+</div>
+<div class="deep-study-output" id="deepTopicOutput"></div>
+<div class="deep-study-attribution">Nave’s Topical Bible and Torrey’s Topical Textbook are public-domain reference works; their complete indexed text can be connected here as the topical library is expanded.</div>
+</div>
+</div>
+<div class="deep-study-panel" id="deepStudyReferencesPanel">
+<div class="deep-study-card">
+<h3>Ranked Cross-References</h3>
+<p>Use the current reference to find related verses in the same chapter, the same book, and the wider Bible. Stronger source-backed cross-reference sets can be added without changing this interface.</p>
+<div class="search-row">
+<input class="search-input" id="deepReferenceInput" placeholder="Example: John 3:16" type="text"/>
+<button class="search-button" id="deepReferenceButton" type="button">Find Related Verses</button>
+</div>
+<div class="deep-study-output" id="deepReferenceOutput"></div>
+</div>
+</div><div class="deep-study-panel" id="deepStudyStrongsPanel">
+<div class="deep-study-card bm-compact-study-card">
+<h3>Strong’s Word Study</h3>
+<p>Search a Strong’s number or original-language word while keeping the Bible Reader open beside it.</p>
+<div class="search-row">
+<input class="search-input" id="dashboardStrongsInput" placeholder="Example: G26 or H2617" type="text"/>
+<button class="search-button" id="dashboardStrongsButton" type="button">Search Strong’s</button>
+</div>
+<div class="deep-study-output" id="dashboardStrongsOutput"></div>
+</div>
+</div>
+<div class="deep-study-panel" id="deepStudyEntitiesPanel">
+<div class="deep-study-grid">
+<div class="deep-study-card">
+<h3>People, Places &amp; Family Links</h3>
+<p>Search a biblical person or place and connect the name to Scripture occurrences and a concise study profile.</p>
+<div class="search-row">
+<input class="search-input" id="deepEntityInput" placeholder="Example: David, Jerusalem, Paul" type="text"/>
+<button class="search-button" id="deepEntityButton" type="button">Find Entity</button>
+</div>
+<div class="deep-study-output" id="deepEntityOutput"></div>
+</div>
+<div class="deep-study-card">
+<h3>Study Links</h3>
+<p id="deepEntityLinkNote">Choose a person or place to see Bible occurrences and connected study links here.</p>
+<div class="deep-study-output" id="deepEntityLinks"></div>
+</div>
+</div>
+</div><div class="deep-study-panel" id="deepStudyBooksPanel">
+<div class="bm-theology-layout">
+<aside class="bm-theology-library">
+<div class="bm-theology-library-head">
+<div>
+<h3>Theology Books</h3>
+<p>Books added to BibleMastery will appear here.</p>
+</div>
+<input class="search-input" id="theologyBookSearch" placeholder="Search books or chapters..." type="search"/>
+</div>
+<div class="bm-theology-book-list" id="theologyBookLibrary"></div>
+</aside>
+<article class="bm-theology-reader">
+<div class="bm-theology-reader-head">
+<div>
+<div class="bm-eyebrow">THEOLOGY LIBRARY</div>
+<h3 id="theologyBookTitle">Choose a theology book</h3>
+<div class="small-note" id="theologyBookAuthor">We will add the first books next.</div>
+</div>
+<div class="bm-inline-controls">
+<button class="reader-nav-button" id="theologyPrevChapter" type="button">← Previous</button>
+<button class="reader-nav-button" id="theologyNextChapter" type="button">Next →</button>
+</div>
+</div>
+<div class="bm-theology-chapters" id="theologyChapterTabs"></div>
+<div class="deep-study-output bm-book-reader-output" id="theologyBookReader">
+<div class="bm-empty-library">
+<div class="bm-empty-library-icon">📚</div>
+<strong>The theology shelf is ready.</strong>
+<span>When we add a book, its title, author, chapters, search, and reading text will open here inside Personal Study.</span>
+</div>
+</div>
+</article>
+</div>
+</div>
+<div class="deep-study-panel" id="deepStudyContextPanel">
+<div class="deep-study-grid">
+<div class="deep-study-card">
+<h3>Bible Timeline</h3>
+<p>Use the timeline as a study guide, then open the related references in the Bible reader.</p>
+<button class="search-button" id="deepTimelineButton" type="button">Show Timeline</button>
+<div class="deep-study-output" id="deepTimelineOutput"></div>
+</div>
+<div class="deep-study-card">
+<h3>Translation Comparison</h3>
+<p>Compare the selected reference in the translations already available to BibleMastery.</p>
+<button class="search-button" id="deepComparisonButton" type="button">Compare KJV / WEB / ASV</button>
+<div class="deep-study-output" id="deepComparisonOutput"></div>
+</div>
+</div>
+</div>
+<div class="deep-study-panel" id="deepStudySavedPanel">
+<div class="deep-study-grid">
+<div class="deep-study-card">
+<h3>Save This Study</h3>
+<p>Keep the topic, reference, word, and notes together in this BibleMastery study workspace.</p>
+<label for="deepStudyNotes">Study notes</label>
+<textarea class="search-input" id="deepStudyNotes" placeholder="Write observations, questions, applications, or prayer notes..." rows="6"></textarea>
+<button class="search-button" id="deepSaveStudyButton" style="margin-top:10px" type="button">Save Study Session</button>
+<button class="reader-nav-button" id="deepExportStudyButton" style="margin-top:10px" type="button">Export Saved Sessions</button>
+</div>
+<div class="deep-study-card">
+<h3>Study History</h3>
+<div class="deep-study-output" id="deepStudyHistoryOutput"></div>
+</div>
+</div>
+</div>
 
+
+</div></div>
+<div class="bm-ai-area" id="bmAiArea"><div class="study-box personal-ai-box" id="topicBox">
+<h2>✨ BibleMastery AI</h2>
+<p class="study-description">
+      Ask for help while you study Scripture. BibleMastery AI is here when you need extra explanation, help connecting passages, or direction for deeper study.
+    </p>
+<label for="personalAiQuestion">What would you like help with?</label>
+<textarea class="personal-ai-question" id="personalAiQuestion" placeholder="Example: Help me understand Romans 5:1-5, or show me passages about God's provision."></textarea>
+<div class="personal-ai-actions">
+<button class="personal-ai-ask" id="personalAiAskButton" type="button">
+        Ask BibleMastery AI
+      </button>
+<button class="personal-ai-clear" id="personalAiClearButton" type="button">
+        Clear
+      </button>
+</div>
+<div aria-live="polite" class="personal-ai-answer" id="personalAiAnswer">
+      BibleMastery AI is ready when you are.
+    </div>
+<!--
+      Keep the original guided-study controls available to the existing
+      JavaScript and URL-topic workflow without showing them in the page.
+    -->
+<div aria-hidden="true" class="legacy-guided-study-controls">
+<input autocomplete="off" class="topic-input" id="topicInput" tabindex="-1" type="text"/>
+<button class="start-button" id="startStudyButton" tabindex="-1" type="button">
+        Build Guided Study
+      </button>
+</div>
+</div></div>
+<div class="bm-quick-tools">
+<div class="bm-quick-title">Quick Tools</div>
+<div class="bm-quick-grid">
+<button data-deep-shortcut="context" type="button">▣ <span>Compare<br/>Translations</span></button>
+<button data-deep-shortcut="concordance" type="button">⌕ <span>Concordance<br/>Search</span></button>
+<button data-deep-shortcut="context" type="button">▣ <span>Timeline</span></button>
+<button data-deep-shortcut="strongs" type="button">⊕ <span>Word Study<br/>(Greek/Hebrew)</span></button>
+<button data-deep-shortcut="entities" type="button">● <span>People &amp; Places</span></button>
+<button data-deep-shortcut="topics" type="button">▦ <span>Topics</span></button>
+<button data-bm-target="bmMapCard" type="button">◉ <span>Maps</span></button>
+<button data-bm-open-extra="masteryNotebook" type="button">□ <span>Save to Notebook</span></button>
+</div>
+</div>
+</section>
+<section class="bm-card bm-gospel-card" id="bmGospelCard"><div id="bmGospelHost"><div class="deep-study-panel" id="deepStudyGospelsPanel">
+<div class="deep-study-card full-width">
+<h3>📜 Read the Gospels in Chronological Order</h3>
+<p>
+            Follow the life and ministry of Jesus as one continuous reading journey. Parallel accounts are grouped together,
+            so you can read Matthew, Mark, Luke, and John at the same point in the chronology instead of jumping around on your own.
+          </p>
+<div class="gospel-event-controls">
+<div>
+<label for="gospelChronologySearch">Find an event</label>
+<input class="search-input" id="gospelChronologySearch" placeholder="Example: Nicodemus, Lazarus, crucifixion" type="search"/>
+</div>
+<div>
+<label for="gospelChronologyTranslation">Translation</label>
+<select class="commentary-select" id="gospelChronologyTranslation">
+<option selected="" value="KJV">KJV</option>
+<option value="WEB">WEB</option>
+<option value="ASV">ASV</option>
+<option value="YLT">YLT</option>
+</select>
+</div>
+</div>
+<div aria-hidden="true" class="gospel-progress-bar">
+<div class="gospel-progress-fill" id="gospelChronologyProgress"></div>
+</div>
+<div class="small-note" id="gospelChronologyProgressText"></div>
+<div class="gospel-chronology-layout" style="margin-top:14px">
+<aside class="gospel-event-sidebar">
+<div class="gospel-event-list" id="gospelChronologyList"></div>
+</aside>
+<div class="gospel-reading-pane">
+<div class="gospel-reading-header">
+<div>
+<h3 id="gospelChronologyTitle">Choose an event</h3>
+<div class="gospel-reading-location" id="gospelChronologyLocation"></div>
+</div>
+<div class="gospel-reading-actions">
+<button class="reader-nav-button" id="gospelPreviousButton" type="button">← Previous</button>
+<button class="reader-nav-button" id="gospelNextButton" type="button">Next →</button>
+<button class="reader-nav-button" id="gospelOpenReaderButton" type="button">Open in Bible Reader</button>
+<button class="reader-nav-button" id="gospelShowMapButton" type="button">Show on Map</button>
+</div>
+</div>
+<div class="deep-study-output" id="gospelChronologyReading">
+<div class="status-message">Choose an event from the chronological list.</div>
+</div>
+<div class="gospel-source-note">
+                Chronological harmonies can differ on the placement of a few events. This reading sequence broadly follows the
+                classic public-domain harmony by A. T. Robertson while keeping the interface simple for Bible reading.
+                <a href="https://www.gutenberg.org/ebooks/36264" rel="noopener" target="_blank">View the public-domain source</a>.
+              </div>
+</div>
+</div>
+</div>
+</div></div></section>
+<section class="bm-card bm-map-card" id="bmMapCard"><div id="bmMapHost"><div class="deep-study-panel" id="deepStudyMapsPanel">
+<div class="deep-study-card full-width">
+<h3>🗺 Interactive Bible Maps</h3>
+<p>
+            Explore biblical places on a real interactive map. The base map is OpenStreetMap; BibleMastery adds markers for important Gospel locations.
+            Ancient-site identifications that are debated are labeled approximate or traditional.
+          </p>
+<div class="bible-map-layout">
+<aside class="bible-map-sidebar">
+<label for="bibleMapPreset">Map view</label>
+<select class="commentary-select" id="bibleMapPreset">
+<option selected="" value="all">All Gospel places</option>
+<option value="galilee">Galilee ministry</option>
+<option value="judea">Judea &amp; Jordan</option>
+<option value="jerusalem">Jerusalem &amp; Passion Week</option>
+<option value="north">Northern journeys</option>
+</select>
+<button class="search-button" id="bibleMapResetButton" style="margin:10px 0 14px;width:100%" type="button">Show Map View</button>
+<div class="bible-map-place-list" id="bibleMapPlaceList"></div>
+<div class="map-legend-note">
+                Locations are shown on a modern map for geographic orientation. A marker does not claim that every archaeological identification is certain.
+              </div>
+</aside>
+<div class="bible-map-shell">
+<div aria-label="Interactive map of Gospel locations" id="bibleInteractiveMap" role="region"></div>
+<div class="small-note" id="bibleMapStatus" style="margin-top:10px">
+                Open this tab to load the interactive map.
+              </div>
+</div>
+</div>
+</div>
+</div></div></section>
+</div>
+<section class="bm-extras" id="bmExtras">
+<div class="bm-extras-head"><div><strong id="bmExtrasTitle">Additional Study Tools</strong><span>Open only when you need them.</span></div><button id="bmCloseExtras" type="button">Close</button></div>
+<div id="bmExtrasHost"><div class="workspace-section layout-section" id="studyToolsSection">
+<h2>Study Tools</h2>
+<div class="workspace-grid">
+<div class="tool-box">
+<h3>📘 Bible Dictionaries</h3>
+<p>
+            Search Easton’s and Smith’s Bible dictionaries.
+          </p>
+<label for="dictionarySource">Dictionary</label>
+<select class="commentary-select" id="dictionarySource">
+<option selected="" value="both">Easton’s + Smith’s</option>
+<option value="easton">Easton’s Bible Dictionary</option>
+<option value="smith">Smith’s Bible Dictionary</option>
+</select>
+<div class="search-row" style="margin-top:10px">
+<input class="search-input" id="dictionarySearch" placeholder="Example: covenant" type="text"/>
+<button class="search-button" id="dictionaryButton">
+              Search
+            </button>
+</div>
+<div class="results-box" id="dictionaryResults"></div>
+</div>
+<div class="tool-box">
+<h3>📗 English Dictionary</h3>
+<p>
+            Look up regular English words separately from Bible dictionary terms.
+          </p>
+<label for="englishDictionarySource">Dictionary</label>
+<select class="commentary-select" id="englishDictionarySource">
+<option selected="" value="webster">Webster’s 1913</option>
+<option value="free">Free English Dictionary</option>
+</select>
+<div class="search-row" style="margin-top:10px">
+<input class="search-input" id="englishDictionarySearch" placeholder="Example: redemption" type="text"/>
+<button class="search-button" id="englishDictionaryButton">
+              Search
+            </button>
+</div>
+<div class="results-box" id="englishDictionaryResults"></div>
+</div>
+<div class="tool-box">
+<h3>🔎 Concordance</h3>
+<p>
+            Search the entire Bible for a word
+            or phrase.
+          </p>
+<div class="search-row">
+<input class="search-input" id="concordanceSearch" placeholder="Example: forgive" type="text"/>
+<button class="search-button" id="concordanceButton">
+              Search
+            </button>
+</div>
+<div class="results-box" id="concordanceResults"></div>
+</div>
+<div class="tool-box">
+<h3>🔤 Hebrew &amp; Greek Word Lookup</h3>
+<p>
+            Search Strong’s, Brown–Driver–Briggs (BDB), and Thayer’s Greek-English Lexicon.
+          </p>
+<label for="lexiconSource">Lexicon</label>
+<select class="commentary-select" id="lexiconSource">
+<option selected="" value="auto">Strong’s + BDB / Thayer’s</option>
+<option value="strongs">Strong’s</option>
+<option value="bdb">BDB Hebrew Lexicon</option>
+<option value="thayer">Thayer’s Greek Lexicon</option>
+</select>
+<div class="search-row" style="margin-top:10px">
+<input class="search-input" id="wordSearch" placeholder="Example: G26 or H2617" type="text"/>
+<button class="search-button" id="wordButton">
+              Search
+            </button>
+</div>
+<div class="results-box" id="wordResults"></div>
+<div class="small-note">
+            For BDB and Thayer’s, search by Strong’s number such as H2617 or G26.
           </div>
+</div>
 
-        </div>
-
-        <div class="tool-box">
-
-          <h3>📖 Bible Commentary</h3>
-
-          <p>
+<div class="tool-box">
+<h3>📖 Bible Commentary</h3>
+<p>
             Choose a commentary. The commentary
             will automatically appear beside the
             Bible verses below.
           </p>
-
-          <label for="commentarySelect">
+<label for="commentarySelect">
             Choose Commentary
           </label>
-
-          <select
-            id="commentarySelect"
-            class="commentary-select"
-          >
-
-            <option value="matthew-henry-complete" selected>
+<select class="commentary-select" id="commentarySelect">
+<option selected="" value="matthew-henry-complete">
               Matthew Henry — Complete
             </option>
-
-            <option value="john-gill">
+<option value="john-gill">
               John Gill — Exposition
             </option>
-
-            <option value="jfb">
+<option value="jfb">
               Jamieson-Fausset-Brown
             </option>
-
-            <option value="adam-clarke">
+<option value="adam-clarke">
               Adam Clarke
             </option>
-
-            <option value="john-calvin">
+<option value="john-calvin">
               John Calvin — Commentaries
             </option>
-
-            <option value="keil-delitzsch">
-              Keil & Delitzsch — Old Testament
+<option value="keil-delitzsch">
+              Keil &amp; Delitzsch — Old Testament
             </option>
-
-            <option value="tyndale">
+<option value="tyndale">
               Tyndale — Open Study Notes
             </option>
-
-          </select>
-
-          <br><br>
-
-          <button
-            id="commentaryButton"
-            class="commentary-button"
-          >
+</select>
+<br/><br/>
+<button class="commentary-button" id="commentaryButton">
             Load Commentary
           </button>
-
-          <div
-            id="commentaryStatus"
-            class="small-note"
-          >
+<div class="small-note" id="commentaryStatus">
             Choose a commentary and click Load Commentary.
           </div>
+</div>
+</div>
+</div><section aria-labelledby="mn-heading" id="masteryNotebook">
+<h2 id="mn-heading">Deep Study Notebook</h2>
+<p>Understand the passage. Investigate your questions. Build an explanation you can teach.</p>
+<div class="mn-row"><select aria-label="Saved studies" id="mn-library"></select><button id="mn-new" type="button">New study</button><button id="mn-save" type="button">Save checkpoint</button></div>
+<p>Notes save on this browser and device. Download a backup to keep a separate copy or move studies to another device.</p>
+<div aria-live="polite" id="mn-status" role="status"></div>
+<div class="mn-grid"><div><label for="mn-title">Study title</label><input id="mn-title" placeholder="God’s provision in creation"/></div><div><label for="mn-reference">Passage</label><input id="mn-reference" placeholder="Genesis 1:1–5"/></div></div>
+<div class="mn-row"><button data-mn-tool="reader" type="button">Bible reader</button><button data-mn-tool="language" type="button">Language</button><button data-mn-tool="references" type="button">Cross-references</button><button data-mn-tool="topics" type="button">Topics</button><button data-mn-tool="entities" type="button">People &amp; places</button><button data-mn-tool="context" type="button">Timeline &amp; translations</button><button data-mn-tool="commentary" type="button">Commentaries</button></div>
+<div id="mn-progress"></div><nav aria-label="Study steps" id="mn-nav"></nav><div id="mn-panel"></div>
+<div class="mn-row"><button id="mn-back" type="button">Previous step</button><button id="mn-next" type="button">Next step</button><button id="mn-coach" type="button">Help Me Study</button><button id="mn-explain" type="button">Help Me Explain</button></div>
+<p>AI buttons prepare a question using this study’s notes. Review it above, then choose Ask BibleMastery AI to send it.</p>
+<details><summary>Search, backups &amp; revision history</summary>
+<label for="mn-search">Search all notebook studies</label><input id="mn-search" placeholder="Search a passage, word, source, or explanation" type="search"/><div id="mn-search-results"></div>
+<div class="mn-row"><button id="mn-export" type="button">Download all studies (backup)</button><button id="mn-import" type="button">Import backup as copies</button><input accept=".json,application/json" hidden="" id="mn-file" type="file"/><button id="mn-notes-export" type="button">Download this study’s notes</button></div>
+<label for="mn-history">Saved checkpoints (last 20 per study)</label><div class="mn-row"><select id="mn-history"></select><button id="mn-restore" type="button">Restore checkpoint as new study</button></div>
+</details></section><div class="workspace-section master-tool-suite" id="masterToolSuite">
+<h2>🧰 BibleMastery Master Tool Suite</h2>
+<p class="master-tool-intro">
+        These tools are built to keep the serious research work in Personal Study without crowding the regular Bible reader.
+        Use a passage guide, advanced Bible search, commentary comparison, book background, quick word research, and a source register from one place.
+      </p>
+<div class="master-tool-grid">
+<div class="master-tool-card">
+<h3>⚡ One-Click Passage Guide</h3>
+<p>Open the verse, nearby context, important repeated words, related study paths, and research shortcuts together.</p>
+<div class="search-row">
+<input class="search-input" id="masterPassageInput" placeholder="Example: Genesis 17:19" type="text"/>
+<button class="search-button" id="masterPassageButton" type="button">Build Guide</button>
+</div>
+<div class="master-tool-output" id="masterPassageOutput"></div>
+</div>
+<div class="master-tool-card">
+<h3>📚 Book Background</h3>
+<p>Pull a Bible-dictionary background entry for a biblical book and combine it with the current Bible data.</p>
+<div class="search-row">
+<input class="search-input" id="masterBookInput" placeholder="Example: Romans or Genesis" type="text"/>
+<button class="search-button" id="masterBookButton" type="button">Open Background</button>
+</div>
+<div class="master-tool-output" id="masterBookOutput"></div>
+</div>
+<div class="master-tool-card full">
+<h3>🔎 Advanced Bible Search</h3>
+<p>Search by exact phrase, all words, or any words and narrow the results to the Old Testament, New Testament, or a single book.</p>
+<div class="master-search-controls">
+<div>
+<label for="masterSearchInput">Search</label>
+<input class="search-input" id="masterSearchInput" placeholder="Example: covenant faith righteousness" type="text"/>
+</div>
+<div>
+<label for="masterSearchMode">Match</label>
+<select class="commentary-select" id="masterSearchMode">
+<option selected="" value="all">All words</option>
+<option value="any">Any word</option>
+<option value="exact">Exact phrase</option>
+</select>
+</div>
+<div>
+<label for="masterSearchScope">Scope</label>
+<select class="commentary-select" id="masterSearchScope">
+<option selected="" value="all">Whole Bible</option>
+<option value="ot">Old Testament</option>
+<option value="nt">New Testament</option>
+</select>
+</div>
+<button class="search-button" id="masterSearchButton" type="button">Search</button>
+</div>
+<div class="master-tool-output" id="masterSearchOutput"></div>
+</div>
+<div class="master-tool-card full">
+<h3>📖 Commentary Comparison</h3>
+<p>Compare the same passage across Matthew Henry, John Gill, and Jamieson-Fausset-Brown without changing the commentary beside your Bible.</p>
+<div class="search-row">
+<input class="search-input" id="masterCommentaryInput" placeholder="Example: John 3:16" type="text"/>
+<button class="search-button" id="masterCommentaryButton" type="button">Compare Commentaries</button>
+</div>
+<div class="master-tool-output" id="masterCommentaryOutput"></div>
+</div>
+<div class="master-tool-card">
+<h3>🔤 Quick Word Research</h3>
+<p>Send an English word or Strong’s number directly into the Deep Study language tools. You can also select a word in the Bible reader and double-click it.</p>
+<div class="search-row">
+<input class="search-input" id="masterWordInput" placeholder="Example: righteousness or G1343" type="text"/>
+<button class="search-button" id="masterWordButton" type="button">Research Word</button>
+</div>
+<div class="master-tool-output" id="masterWordOutput"></div>
+</div>
+<div class="master-tool-card">
+<h3>🧾 Automatic Source Register</h3>
+<p>See which BibleMastery sources are being used in this study area so you can keep Scripture, dictionaries, lexicons, commentaries, and study data clearly identified.</p>
+<button class="search-button" id="masterSourcesButton" type="button">Show Sources</button>
+<div class="master-tool-output" id="masterSourcesOutput"></div>
+</div>
+</div>
 
-        </div>
 
-      </div>
-
-    </div>
-
-
-    <div class="workspace-section layout-section" id="bibleVersesSection">
-
-      <h2>📖 Bible Verses</h2>
-
-      <div class="bible-controls">
-
-        <div class="translation-control">
-
-          <label for="translationSelect">
+</div><div class="workspace-section layout-section" id="bibleVersesSection">
+<h2>📖 Bible Verses</h2>
+<div class="bible-controls">
+<div class="translation-control">
+<label for="translationSelect">
             Translation
           </label>
-
-          <select
-            id="translationSelect"
-            class="translation-select"
-          >
-
-            <option value="KJV">King James Version (KJV)</option>
-            <option value="KJV1611">King James Version 1611</option>
-            <option value="KJVPLUS">King James Version Plus (KJV+)</option>
-            <option value="YLT">Young's Literal Translation</option>
-            <option value="WEB">World English Bible</option>
-            <option value="ASV">American Standard Version</option>
-            <option value="GENEVA1599">Geneva Bible 1599</option>
-            <option value="DRA">Douay-Rheims American Edition</option>
-            <option value="BSB">Berean Standard Bible</option>
-            <option value="MSB">Majority Standard Bible</option>
-
-          </select>
-
-        </div>
-
-      </div>
-
-
-      <div class="study-columns">
-
-
-        <div
-          class="verses-column"
-          id="verseResults"
-        >
-
-          <div class="status-message">
+<select class="translation-select" id="translationSelect">
+<option value="KJV">King James Version (KJV)</option>
+<option value="KJV1611">King James Version 1611</option>
+<option value="KJVPLUS">King James Version Plus (KJV+)</option>
+<option value="YLT">Young's Literal Translation</option>
+<option value="WEB">World English Bible</option>
+<option value="ASV">American Standard Version</option>
+<option value="GENEVA1599">Geneva Bible 1599</option>
+<option value="DRA">Douay-Rheims American Edition</option>
+<option value="BSB">Berean Standard Bible</option>
+<option value="MSB">Majority Standard Bible</option>
+</select>
+</div>
+</div>
+<div class="study-columns">
+<div class="verses-column" id="verseResults">
+<div class="status-message">
             Enter a topic above to begin your study.
           </div>
-
-        </div>
-
-
-        <aside
-          class="commentary-column"
-          id="commentaryColumn"
-        >
-
-          <div class="commentary-header">
-
-            <h3 id="commentaryHeading">
+</div>
+<aside class="commentary-column" id="commentaryColumn">
+<div class="commentary-header">
+<h3 id="commentaryHeading">
               📖 Bible Commentary
             </h3>
-
-            <p id="commentarySubheading">
+<p id="commentarySubheading">
               Choose a commentary above.
             </p>
-
-          </div>
-
-          <div
-            id="commentaryContent"
-            class="commentary-content"
-          >
-
-            <div class="commentary-empty">
+</div>
+<div class="commentary-content" id="commentaryContent">
+<div class="commentary-empty">
               Select a commentary above and click
               <strong>Load Commentary</strong>.
               The notes will appear here beside
               the Bible verses.
             </div>
-
-          </div>
-
-        </aside>
-
-
-      </div>
-
-
-      <div class="study-note">
-
-        <strong>Remember:</strong>
+</div>
+</aside>
+</div>
+<div class="study-note">
+<strong>Remember:</strong>
 
         These verses and study tools are a
         starting point. Read the surrounding
@@ -2617,56 +2464,61 @@ input, select, textarea {
         yourself.
 
       </div>
+</div></div>
+</section>
+<div class="bm-default-note">ⓘ <strong>Personal Study opens first by default.</strong> The Main Page is always available from the top bar or sidebar.</div>
+</main>
+</div>
+<div class="bm-settings-panel" hidden="" id="bmSettingsPanel">
+<div class="bm-settings-card">
+<button class="bm-settings-close" id="bmSettingsClose" type="button">×</button>
+<h2>Personal Study Layout</h2>
+<p>Choose the layout you want to use. Your choice is saved on this device.</p>
+<button data-bm-layout="dashboard" type="button">Use Dashboard View</button>
+<button data-bm-layout="classic" type="button">Use Classic View</button>
+<hr/>
+<p><strong>Dashboard View</strong> is the full workspace layout. <strong>Classic View</strong> is the simpler second option for regular users.</p>
+</div>
+</div>
+</div><div class="container">
 
-    </div>
-
-  </div>
-
-
-    <section id="redemptiveVersePage" class="redemptive-verse-page" aria-live="polite">
-
-      <div class="redemptive-page-header">
-        <div>
-          <h2 id="redemptiveVerseTitle">Verse Teaching</h2>
-          <p id="redemptiveVerseReference">Seven Redemptive Names of God teaching connection</p>
-        </div>
-        <button id="redemptiveBackButton" class="back-button" type="button">← Back to Personal Study</button>
-      </div>
-
-      <div id="redemptiveMatchNotice" class="redemptive-match-notice"></div>
-
-      <article class="redemptive-teaching-card">
-        <div id="redemptiveNameBadge" class="redemptive-name-badge">Seven Redemptive Names of God</div>
-
-        <h3 id="redemptiveMeaningHeading">Teaching connection</h3>
-        <div id="redemptiveTeachingText" class="redemptive-teaching-text"></div>
-
-        <h3>Verse</h3>
-        <div id="redemptiveVerseText" class="redemptive-verse-text"></div>
-
-        <h3>Use this in your study</h3>
-        <div id="redemptiveStudyDirection" class="redemptive-teaching-text"></div>
-      </article>
-
-      <div class="redemptive-navigation">
-        <button id="redemptivePreviousButton" class="reader-nav-button" type="button">← Previous Verse</button>
-        <button id="redemptiveNextButton" class="reader-nav-button" type="button">Next Verse →</button>
-      </div>
-
-    </section>
-
-
+<div class="workspace visible" id="studyWorkspace">
+<div class="workspace-section">
+<h2 class="topic-title" id="topicTitle">
+        Personal Bible Study
+      </h2>
+<p class="workspace-intro" id="topicIntro">Study freely with the tools below, and use BibleMastery AI above whenever you want extra help while you study.</p>
+<div id="guidedStudyOverview"></div>
 </div>
 
 
+
+<section aria-live="polite" class="redemptive-verse-page" id="redemptiveVersePage">
+<div class="redemptive-page-header">
+<div>
+<h2 id="redemptiveVerseTitle">Verse Teaching</h2>
+<p id="redemptiveVerseReference">Seven Redemptive Names of God teaching connection</p>
+</div>
+<button class="back-button" id="redemptiveBackButton" type="button">← Back to Personal Study</button>
+</div>
+<div class="redemptive-match-notice" id="redemptiveMatchNotice"></div>
+<article class="redemptive-teaching-card">
+<div class="redemptive-name-badge" id="redemptiveNameBadge">Seven Redemptive Names of God</div>
+<h3 id="redemptiveMeaningHeading">Teaching connection</h3>
+<div class="redemptive-teaching-text" id="redemptiveTeachingText"></div>
+<h3>Verse</h3>
+<div class="redemptive-verse-text" id="redemptiveVerseText"></div>
+<h3>Use this in your study</h3>
+<div class="redemptive-teaching-text" id="redemptiveStudyDirection"></div>
+</article>
+<div class="redemptive-navigation">
+<button class="reader-nav-button" id="redemptivePreviousButton" type="button">← Previous Verse</button>
+<button class="reader-nav-button" id="redemptiveNextButton" type="button">Next Verse →</button>
+</div>
+</section>
+</div>
 <script src="bible.js"></script>
-
-<script
-  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-  integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-  crossorigin=""
-></script>
-
+<script crossorigin="" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 
   /* =========================================
@@ -10415,7 +10267,6 @@ input, select, textarea {
   updateGospelProgress();
 
 </script>
-
 <script>
 (function(){
 'use strict';
@@ -10503,7 +10354,6 @@ document.querySelectorAll('[data-mn-tool]').forEach(b=>b.onclick=()=>{const name
 window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
 })();
 </script>
-
 <script id="personalStudyLayoutNav2026">
 (function(){
   function smoothTo(id){
@@ -10527,7 +10377,92 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
   });
 })();
 </script>
+</div><script id="bmDashboardBehavior2026">
+(function(){
+  'use strict';
+  const STORAGE='biblemastery.personalStudy.layout.v2';
+  const body=document.body;
+  const $=id=>document.getElementById(id);
+  function setLayout(layout){
+    layout=layout==='classic'?'classic':'dashboard';
+    body.classList.toggle('bm-layout-dashboard',layout==='dashboard');
+    body.classList.toggle('bm-layout-classic',layout==='classic');
+    document.querySelectorAll('[data-bm-layout]').forEach(b=>b.classList.toggle('active',b.dataset.bmLayout===layout));
+    try{localStorage.setItem(STORAGE,layout)}catch(e){}
+    setTimeout(()=>{ if(window.bibleLeafletMap && typeof window.bibleLeafletMap.invalidateSize==='function') window.bibleLeafletMap.invalidateSize(); },120);
+  }
+  // Dashboard is the primary/default Personal Study layout. Classic is the optional second view.
+  let saved='dashboard'; try{saved=localStorage.getItem(STORAGE)||'dashboard'}catch(e){}
+  setLayout(saved);
+  document.querySelectorAll('[data-bm-layout]').forEach(b=>b.addEventListener('click',()=>{setLayout(b.dataset.bmLayout); const p=$('bmSettingsPanel'); if(p)p.hidden=true;}));
 
-</body>
+  function scrollToId(id){const el=$(id); if(el) el.scrollIntoView({behavior:'smooth',block:'start'});}
+  document.querySelectorAll('[data-bm-target]').forEach(b=>b.addEventListener('click',()=>{scrollToId(b.dataset.bmTarget); document.querySelectorAll('.bm-sidebar-nav button').forEach(x=>x.classList.remove('active')); b.classList.add('active');}));
+  function activate(name){
+    const tab=document.querySelector('.deep-study-tab[data-deep-tab="'+name+'"]');
+    if(tab) tab.click();
+    if(name==='gospels') scrollToId('bmGospelCard'); else if(name==='maps') scrollToId('bmMapCard'); else scrollToId('bmDeepCard');
+  }
+  document.querySelectorAll('[data-deep-shortcut]').forEach(b=>b.addEventListener('click',()=>activate(b.dataset.deepShortcut)));
 
+  const extras=$('bmExtras'), extrasHost=$('bmExtrasHost');
+  document.querySelectorAll('[data-bm-open-extra]').forEach(b=>b.addEventListener('click',()=>{
+    const id=b.dataset.bmOpenExtra, el=$(id); if(!el)return;
+    // All extra tools already live in the shared extras host; just reveal and scroll to the requested section.
+    extras.classList.add('open'); $('bmExtrasTitle').textContent=(el.querySelector('h2,h3')?.textContent||'Additional Study Tools').trim();
+    setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),20);
+  }));
+  $('bmCloseExtras')?.addEventListener('click',()=>extras.classList.remove('open'));
+
+  $('bmSettingsButton')?.addEventListener('click',()=>{$('bmSettingsPanel').hidden=false});
+  $('bmSettingsClose')?.addEventListener('click',()=>{$('bmSettingsPanel').hidden=true});
+  $('bmSettingsPanel')?.addEventListener('click',e=>{if(e.target===$('bmSettingsPanel'))$('bmSettingsPanel').hidden=true});
+  $('bmMobileMenu')?.addEventListener('click',()=> $('bmSidebar')?.classList.toggle('open'));
+
+  // Deep Study Commentaries mirrors the existing commentary engine.
+  const deepSel=$('deepCommentarySelect'), mainSel=$('commentarySelect'), mainBtn=$('commentaryButton'), mainOut=$('commentaryContent'), deepOut=$('deepCommentaryOutput');
+  function syncCommentary(){if(mainOut&&deepOut) deepOut.innerHTML=mainOut.innerHTML;}
+  if(deepSel&&mainSel) deepSel.value=mainSel.value;
+  $('deepCommentaryLoadButton')?.addEventListener('click',()=>{ if(deepSel&&mainSel) mainSel.value=deepSel.value; if(mainBtn) mainBtn.click(); setTimeout(syncCommentary,250); });
+  if(mainOut){new MutationObserver(syncCommentary).observe(mainOut,{childList:true,subtree:true,characterData:true}); syncCommentary();}
+
+  // Dedicated Strong's tab uses the already-working language engine.
+  const strongIn=$('dashboardStrongsInput'), strongBtn=$('dashboardStrongsButton'), strongOut=$('dashboardStrongsOutput'), langIn=$('deepLanguageInput'), langSource=$('deepLexiconSource'), langBtn=$('deepLanguageButton'), langOut=$('deepLanguageOutput');
+  strongBtn?.addEventListener('click',()=>{const q=(strongIn?.value||'').trim(); if(!q)return; if(langSource)langSource.value='strongs'; if(langIn)langIn.value=q; langBtn?.click(); setTimeout(()=>{if(strongOut&&langOut)strongOut.innerHTML=langOut.innerHTML},120);});
+  if(langOut&&strongOut)new MutationObserver(()=>{if(document.querySelector('.deep-study-tab[data-deep-tab="strongs"]')?.classList.contains('active'))strongOut.innerHTML=langOut.innerHTML}).observe(langOut,{childList:true,subtree:true,characterData:true});
+
+  // Theology Books: future-ready in both layouts. Add books later to this array or assign window.BIBLEMASTERY_THEOLOGY_BOOKS before this script runs.
+  const builtInBooks=[];
+  const getBooks=()=>Array.isArray(window.BIBLEMASTERY_THEOLOGY_BOOKS)?window.BIBLEMASTERY_THEOLOGY_BOOKS:builtInBooks;
+  let bookIndex=0, chapterIndex=0;
+  function esc(s){return String(s??'').replace(/[&<>\"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[c]));}
+  function renderBooks(filter=''){
+    const list=$('theologyBookLibrary'); if(!list)return; const books=getBooks(); const f=filter.toLowerCase();
+    if(!books.length){list.innerHTML='<div class="bm-empty-library"><div class="bm-empty-library-icon">📚</div><strong>No theology books added yet</strong><span>The library is ready for the first books.</span></div>'; renderBookReader(); return;}
+    list.innerHTML=books.map((b,i)=>({b,i})).filter(x=>!f||((x.b.title||'')+' '+(x.b.author||'')+' '+(x.b.chapters||[]).map(c=>c.title||'').join(' ')).toLowerCase().includes(f)).map(x=>'<button type="button" class="bm-theology-book-item '+(x.i===bookIndex?'active':'')+'" data-book-index="'+x.i+'"><strong>'+esc(x.b.title)+'</strong><div class="small-note">'+esc(x.b.author||'')+'</div></button>').join('')||'<div class="small-note">No matching books.</div>';
+    list.querySelectorAll('[data-book-index]').forEach(b=>b.addEventListener('click',()=>{bookIndex=Number(b.dataset.bookIndex)||0;chapterIndex=0;renderBooks($('theologyBookSearch')?.value||'');renderBookReader();}));
+    renderBookReader();
+  }
+  function renderBookReader(){
+    const books=getBooks(), title=$('theologyBookTitle'), author=$('theologyBookAuthor'), tabs=$('theologyChapterTabs'), reader=$('theologyBookReader'); if(!title||!reader)return;
+    if(!books.length){title.textContent='Choose a theology book';author.textContent='We will add the first books next.';tabs.innerHTML='';reader.innerHTML='<div class="bm-empty-library"><div class="bm-empty-library-icon">📚</div><strong>The theology shelf is ready.</strong><span>When we add a book, its title, author, chapters, search, and reading text will open here inside Personal Study.</span></div>';return;}
+    bookIndex=Math.max(0,Math.min(bookIndex,books.length-1));const b=books[bookIndex], chapters=Array.isArray(b.chapters)?b.chapters:[];chapterIndex=Math.max(0,Math.min(chapterIndex,Math.max(0,chapters.length-1)));
+    title.textContent=b.title||'Untitled';author.textContent=b.author||'';tabs.innerHTML=chapters.map((c,i)=>'<button type="button" class="'+(i===chapterIndex?'active':'')+'" data-chapter-index="'+i+'">'+esc(c.title||('Chapter '+(i+1)))+'</button>').join('');
+    tabs.querySelectorAll('[data-chapter-index]').forEach(x=>x.addEventListener('click',()=>{chapterIndex=Number(x.dataset.chapterIndex)||0;renderBookReader();}));
+    const c=chapters[chapterIndex];reader.innerHTML=c?'<h3>'+esc(c.title||'')+'</h3><div class="bm-book-content">'+(c.html||('<p>'+esc(c.text||'')+'</p>'))+'</div>':'<div class="small-note">No chapters have been added to this book yet.</div>';
+  }
+  $('theologyBookSearch')?.addEventListener('input',e=>renderBooks(e.target.value));
+  $('theologyPrevChapter')?.addEventListener('click',()=>{if(chapterIndex>0){chapterIndex--;renderBookReader();}});
+  $('theologyNextChapter')?.addEventListener('click',()=>{const b=getBooks()[bookIndex];if(b&&chapterIndex<(b.chapters?.length||0)-1){chapterIndex++;renderBookReader();}});
+  renderBooks();
+
+  // Global search: references open in the Bible Reader; other terms open Concordance.
+  function runGlobal(){const q=($('bmGlobalSearch')?.value||'').trim(); if(!q)return; const looksRef=/^[1-3]?\s*[A-Za-z]+(?:\s+[A-Za-z]+)*\s+\d+(?::\d+)?/.test(q); if(looksRef){const inp=$('deepStudyReference');if(inp)inp.value=q; if(typeof window.openDeepReferenceInReader==='function'){window.openDeepReferenceInReader(q);} else {$('deepReferenceInput').value=q; activate('references');} scrollToId('bmReaderCard');}else{const ci=$('deepConcordanceInput');if(ci)ci.value=q;activate('concordance');setTimeout(()=>$('deepConcordanceButton')?.click(),60);}}
+  $('bmGlobalSearchButton')?.addEventListener('click',runGlobal); $('bmGlobalSearch')?.addEventListener('keydown',e=>{if(e.key==='Enter')runGlobal()});
+
+  // Dashboard bottom cards remain visible independently from Deep Study tab activation.
+  const originalDisplayGuard=()=>{ if(body.classList.contains('bm-layout-dashboard')){ const g=$('deepStudyGospelsPanel'),m=$('deepStudyMapsPanel'); if(g)g.style.display='block'; if(m)m.style.display='block'; }};
+  document.querySelectorAll('.deep-study-tab').forEach(t=>t.addEventListener('click',()=>setTimeout(originalDisplayGuard,0))); originalDisplayGuard();
+})();
+</script></body>
 </html>
