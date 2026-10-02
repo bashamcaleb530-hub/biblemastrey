@@ -11178,46 +11178,100 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
   // Layout 1 remains the owner's main layout. Layout 3 is the default for regular users once account role is resolved.
   let saved='regular'; try{saved=localStorage.getItem(STORAGE)||'regular'}catch(e){}
   setLayout(saved);
-  document.querySelectorAll('[data-bm-layout]').forEach(b=>b.addEventListener('click',()=>{setLayout(b.dataset.bmLayout); const p=$('bmSettingsPanel'); if(p)p.hidden=true;}));
+  document.querySelectorAll('[data-bm-layout]').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.bmLayout==='dashboard'){try{localStorage.setItem('biblemastery.personalStudy.ownerLayoutAccess.v1','true')}catch(e){}} setLayout(b.dataset.bmLayout); const p=$('bmSettingsPanel'); if(p)p.hidden=true;}));
 
-  // Owner gets Layouts 1, 2, 3. Members and signed-out users get Layouts 2 and 3 only.
-  const OWNER_CACHE='biblemastery.personalStudy.ownerLayoutAccess.v1'; // persists verified owner access on this device
-  function applyLayoutAccess(isOwner){
+  // Owner gets Layouts 1, 2, 3. Regular members get Layouts 2 and 3.
+  // IMPORTANT: an unknown/slow/missing session must NEVER overwrite the owner's saved Layout 1 choice.
+  const OWNER_CACHE='biblemastery.personalStudy.ownerLayoutAccess.v1';
+
+  function currentLayout(){
+    return body.classList.contains('bm-layout-dashboard')?'dashboard':body.classList.contains('bm-layout-classic')?'classic':'regular';
+  }
+
+  function storedLayout(){
+    try{return localStorage.getItem(STORAGE)||''}catch(e){return ''}
+  }
+
+  function setOwnerButtonsVisible(isOwner){
     document.documentElement.classList.toggle('bm-owner-layout-access',!!isOwner);
-    document.querySelectorAll('[data-owner-layout="true"]').forEach(btn=>{btn.hidden=!isOwner;btn.setAttribute('aria-hidden',isOwner?'false':'true');});
-    let current=body.classList.contains('bm-layout-dashboard')?'dashboard':body.classList.contains('bm-layout-classic')?'classic':'regular';
-    let stored=''; try{stored=localStorage.getItem(STORAGE)||''}catch(e){}
-    if(isOwner){
-      const wanted=['dashboard','classic','regular'].includes(stored)?stored:'dashboard';
-      if(current!==wanted)setLayout(wanted);
-    }else{
-      const wanted=['classic','regular'].includes(stored)?stored:'regular';
-      if(current!==wanted)setLayout(wanted);
+    document.querySelectorAll('[data-owner-layout="true"]').forEach(btn=>{
+      btn.hidden=!isOwner;
+      btn.setAttribute('aria-hidden',isOwner?'false':'true');
+    });
+  }
+
+  function grantOwnerLayoutAccess(){
+    try{localStorage.setItem(OWNER_CACHE,'true')}catch(e){}
+    setOwnerButtonsVisible(true);
+    // Preserve whatever layout the owner is actively testing. If there is no valid
+    // preference yet, Layout 1 is the owner's main/default layout.
+    const stored=storedLayout();
+    if(!['dashboard','classic','regular'].includes(stored))setLayout('dashboard');
+  }
+
+  function applyVerifiedRegularAccess(){
+    // Only a positively verified NON-admin account is allowed to revoke Layout 1.
+    try{localStorage.setItem(OWNER_CACHE,'false')}catch(e){}
+    setOwnerButtonsVisible(false);
+    const stored=storedLayout();
+    if(currentLayout()==='dashboard' || stored==='dashboard'){
+      setLayout('regular');
     }
   }
+
   async function resolveLayoutAccess(){
-    let cached=false; try{cached=localStorage.getItem(OWNER_CACHE)==='true'}catch(e){}
-    // Cached owner status prevents the owner's layout disappearing during a temporary network problem.
-    if(cached)applyLayoutAccess(true);
+    let cachedOwner=false;
+    try{cachedOwner=localStorage.getItem(OWNER_CACHE)==='true'}catch(e){}
+    const saved=storedLayout();
+
+    // Layout 1 itself is also treated as a local owner-device signal. This is only
+    // a UI preference, not an authorization boundary; admin data remains protected
+    // by Supabase/RLS. It prevents a temporary auth/session problem from kicking the
+    // owner out of the layout that was already chosen on this device.
+    const provisionalOwner=cachedOwner || saved==='dashboard';
+    setOwnerButtonsVisible(provisionalOwner);
+
     try{
       if(!window.supabase)throw new Error('Supabase client unavailable');
       const client=window.supabase.createClient('https://pjkkxvntssvukulxipfr.supabase.co','sb_publishable_1kehaIywv1Wb9Iwj2OPGdg_aFosOSwK');
       const sessionResult=await client.auth.getSession();
       const user=sessionResult?.data?.session?.user;
-      // If this device was already verified as the owner/admin, do not revoke Layout 1
-      // just because the auth session is temporarily missing, slow, or unavailable.
-      // A verified signed-in non-admin account below can still revoke owner access.
+
+      // No current session is UNKNOWN, not proof that this device is a regular user.
+      // Do not hide Layout 1 and do not rewrite STORAGE in this state.
       if(!user){
-        applyLayoutAccess(cached);
+        if(provisionalOwner)setOwnerButtonsVisible(true);
         return;
       }
+
       const profileResult=await client.from('profiles').select('role').eq('id',user.id).maybeSingle();
       if(profileResult.error)throw profileResult.error;
-      const isOwner=String(profileResult?.data?.role||'').toLowerCase()==='admin';
-      try{localStorage.setItem(OWNER_CACHE,isOwner?'true':'false')}catch(e){}
-      applyLayoutAccess(isOwner);
+      const role=String(profileResult?.data?.role||'').trim().toLowerCase();
+
+      if(role==='admin'){
+        grantOwnerLayoutAccess();
+      }else if(role){
+        applyVerifiedRegularAccess();
+      }
+      // Blank/missing role is treated as unresolved; preserve the current device state.
+
+      // Re-check when Supabase later reports an auth change. This catches slow PWA sessions.
+      client.auth.onAuthStateChange(async (_event,session)=>{
+        const changedUser=session?.user;
+        if(!changedUser)return;
+        try{
+          const changedProfile=await client.from('profiles').select('role').eq('id',changedUser.id).maybeSingle();
+          if(changedProfile.error)throw changedProfile.error;
+          const changedRole=String(changedProfile?.data?.role||'').trim().toLowerCase();
+          if(changedRole==='admin')grantOwnerLayoutAccess();
+          else if(changedRole)applyVerifiedRegularAccess();
+        }catch(err){
+          console.warn('BibleMastery delayed layout role check:',err);
+        }
+      });
     }catch(error){
-      if(!cached)applyLayoutAccess(false);
+      // Network/RLS/client errors are UNKNOWN. Never demote the owner's UI because of them.
+      if(provisionalOwner)setOwnerButtonsVisible(true);
       console.warn('BibleMastery layout role check:',error);
     }
   }
