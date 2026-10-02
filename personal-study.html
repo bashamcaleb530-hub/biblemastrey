@@ -2269,6 +2269,11 @@ body.bm-layout-regular .bm-gospel-card,body.bm-layout-regular .bm-map-card{backg
 <button class="bm-profile-button" id="bmProfileButton" title="Account" type="button" onclick="window.location.href='account.html'">●</button>
 </div>
 </header>
+<div style="padding:8px 16px;background:#fff5df;color:#542c20;border-bottom:1px solid #d8bd82;display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+  <span id="bmLayoutAccountStatus" role="status" aria-live="polite">Checking layout access…</span>
+  <button id="bmLayoutRetry" type="button">Retry account check</button>
+  <a href="account.html">Account</a>
+</div>
 <div class="bm-shell">
 <aside class="bm-sidebar" id="bmSidebar">
 <nav aria-label="Personal Study sections" class="bm-sidebar-nav">
@@ -11162,7 +11167,7 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
   const STORAGE='biblemastery.personalStudy.layout.v2';
   const body=document.body;
   const $=id=>document.getElementById(id);
-  function setLayout(layout){
+  function setLayout(layout, persist=true){
     layout=['dashboard','classic','regular'].includes(layout)?layout:'regular';
     body.classList.toggle('bm-layout-dashboard',layout==='dashboard');
     body.classList.toggle('bm-layout-classic',layout==='classic');
@@ -11171,110 +11176,116 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
     const heading=document.querySelector('#deepStudyCenter>h2');
     if(heading)heading.textContent=layout==='regular'?'📖 Passage Guide':'🧭 BibleMastery Deep Study Center';
     if(layout!=='regular')document.querySelectorAll('.bm-regular-open').forEach(el=>el.classList.remove('bm-regular-open'));
-    try{localStorage.setItem(STORAGE,layout)}catch(e){}
+    if(persist){try{localStorage.setItem(activeLayoutKey,layout)}catch(e){}}
     setTimeout(()=>{ if(window.bibleLeafletMap && typeof window.bibleLeafletMap.invalidateSize==='function') window.bibleLeafletMap.invalidateSize(); },120);
   }
-  window.BibleMasterySetPersonalStudyLayout=setLayout;
-  // Layout 1 remains the owner's main layout. Layout 3 is the default for regular users once account role is resolved.
-  let saved='regular'; try{saved=localStorage.getItem(STORAGE)||'regular'}catch(e){}
-  setLayout(saved);
-  document.querySelectorAll('[data-bm-layout]').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.bmLayout==='dashboard'){try{localStorage.setItem('biblemastery.personalStudy.ownerLayoutAccess.v1','true')}catch(e){}} setLayout(b.dataset.bmLayout); const p=$('bmSettingsPanel'); if(p)p.hidden=true;}));
-
-  // Owner gets Layouts 1, 2, 3. Regular members get Layouts 2 and 3.
-  // IMPORTANT: an unknown/slow/missing session must NEVER overwrite the owner's saved Layout 1 choice.
-  const OWNER_CACHE='biblemastery.personalStudy.ownerLayoutAccess.v1';
-
-  function currentLayout(){
-    return body.classList.contains('bm-layout-dashboard')?'dashboard':body.classList.contains('bm-layout-classic')?'classic':'regular';
-  }
-
-  function storedLayout(){
-    try{return localStorage.getItem(STORAGE)||''}catch(e){return ''}
-  }
-
-  function setOwnerButtonsVisible(isOwner){
-    document.documentElement.classList.toggle('bm-owner-layout-access',!!isOwner);
+  // Layout preferences are separate from account authorization and keyed per user.
+  let activeLayoutKey=STORAGE;
+  let verifiedOwner=false;
+  let activeUserId=null;
+  let checkGeneration=0;
+  let authRevision=0;
+  let layoutClient=null;
+  const validLayout=value=>['dashboard','classic','regular'].includes(value);
+  function readPreference(key){try{return localStorage.getItem(key)||''}catch(e){return ''}}
+  function setOwnerButtonsVisible(allowed){
+    document.documentElement.classList.toggle('bm-owner-layout-access',allowed);
     document.querySelectorAll('[data-owner-layout="true"]').forEach(btn=>{
-      btn.hidden=!isOwner;
-      btn.setAttribute('aria-hidden',isOwner?'false':'true');
+      btn.hidden=!allowed;
+      btn.setAttribute('aria-hidden',allowed?'false':'true');
     });
   }
-
-  function grantOwnerLayoutAccess(){
-    try{localStorage.setItem(OWNER_CACHE,'true')}catch(e){}
-    setOwnerButtonsVisible(true);
-    // Preserve whatever layout the owner is actively testing. If there is no valid
-    // preference yet, Layout 1 is the owner's main/default layout.
-    const stored=storedLayout();
-    if(!['dashboard','classic','regular'].includes(stored))setLayout('dashboard');
+  function layoutStatus(message){
+    const el=$('bmLayoutAccountStatus');if(el)el.textContent=message;
   }
-
-  function applyVerifiedRegularAccess(){
-    // Only a positively verified NON-admin account is allowed to revoke Layout 1.
-    try{localStorage.setItem(OWNER_CACHE,'false')}catch(e){}
-    setOwnerButtonsVisible(false);
-    const stored=storedLayout();
-    if(currentLayout()==='dashboard' || stored==='dashboard'){
-      setLayout('regular');
+  function chooseLayout(layout){
+    if(layout==='dashboard'&&!verifiedOwner){
+      layoutStatus('Layout 1 needs a verified administrator account. Open Account or retry the account check.');
+      return;
     }
+    setLayout(layout);
   }
+  window.BibleMasterySetPersonalStudyLayout=chooseLayout;
+  const savedLayout=readPreference(STORAGE);
+  setOwnerButtonsVisible(false);
+  setLayout(savedLayout==='classic'?'classic':'regular',false);
+  document.querySelectorAll('[data-bm-layout]').forEach(btn=>btn.addEventListener('click',()=>{
+    chooseLayout(btn.dataset.bmLayout);
+    const panel=$('bmSettingsPanel');if(panel)panel.hidden=true;
+  }));
 
-  async function resolveLayoutAccess(){
-    let cachedOwner=false;
-    try{cachedOwner=localStorage.getItem(OWNER_CACHE)==='true'}catch(e){}
-    const saved=storedLayout();
-
-    // Layout 1 itself is also treated as a local owner-device signal. This is only
-    // a UI preference, not an authorization boundary; admin data remains protected
-    // by Supabase/RLS. It prevents a temporary auth/session problem from kicking the
-    // owner out of the layout that was already chosen on this device.
-    const provisionalOwner=cachedOwner || saved==='dashboard';
-    setOwnerButtonsVisible(provisionalOwner);
-
+  async function checkLayoutUser(user){
+    const generation=++checkGeneration;
+    const userId=user?.id||null;
+    if(userId!==activeUserId){
+      activeUserId=userId;
+      verifiedOwner=false;
+      activeLayoutKey=userId?STORAGE+'.user.'+userId:STORAGE;
+      setOwnerButtonsVisible(false);
+      const preference=readPreference(activeLayoutKey);
+      setLayout(preference==='classic'?'classic':'regular',false);
+    }
+    if(!userId){
+      layoutStatus('No signed-in account found. Open Account to sign in, then retry to restore Layout 1.');
+      return;
+    }
+    layoutStatus('Checking your account for Layout 1…');
     try{
-      if(!window.supabase)throw new Error('Supabase client unavailable');
-      const client=window.supabase.createClient('https://pjkkxvntssvukulxipfr.supabase.co','sb_publishable_1kehaIywv1Wb9Iwj2OPGdg_aFosOSwK');
-      const sessionResult=await client.auth.getSession();
-      const user=sessionResult?.data?.session?.user;
-
-      // No current session is UNKNOWN, not proof that this device is a regular user.
-      // Do not hide Layout 1 and do not rewrite STORAGE in this state.
-      if(!user){
-        if(provisionalOwner)setOwnerButtonsVisible(true);
+      const result=await layoutClient.from('profiles').select('role').eq('id',userId).maybeSingle();
+      if(generation!==checkGeneration)return;
+      if(result.error)throw result.error;
+      const role=String(result.data?.role||'').trim().toLowerCase();
+      if(!role){
+        layoutStatus('Your account has no profile role available. Layout access could not be confirmed.');
         return;
       }
-
-      const profileResult=await client.from('profiles').select('role').eq('id',user.id).maybeSingle();
-      if(profileResult.error)throw profileResult.error;
-      const role=String(profileResult?.data?.role||'').trim().toLowerCase();
-
-      if(role==='admin'){
-        grantOwnerLayoutAccess();
-      }else if(role){
-        applyVerifiedRegularAccess();
+      verifiedOwner=role==='admin';
+      setOwnerButtonsVisible(verifiedOwner);
+      let preference=readPreference(activeLayoutKey);
+      if(verifiedOwner){
+        // First verified visit repairs the old forced Layout 3 preference.
+        if(!validLayout(preference))preference='dashboard';
+        setLayout(preference);
+        layoutStatus('Administrator verified. Layouts 1, 2 and 3 are available.');
+      }else{
+        if(!validLayout(preference)||preference==='dashboard')preference='regular';
+        setLayout(preference);
+        layoutStatus('Your signed-in profile reports “'+role+'”, not administrator. Layouts 2 and 3 are available.');
       }
-      // Blank/missing role is treated as unresolved; preserve the current device state.
-
-      // Re-check when Supabase later reports an auth change. This catches slow PWA sessions.
-      client.auth.onAuthStateChange(async (_event,session)=>{
-        const changedUser=session?.user;
-        if(!changedUser)return;
-        try{
-          const changedProfile=await client.from('profiles').select('role').eq('id',changedUser.id).maybeSingle();
-          if(changedProfile.error)throw changedProfile.error;
-          const changedRole=String(changedProfile?.data?.role||'').trim().toLowerCase();
-          if(changedRole==='admin')grantOwnerLayoutAccess();
-          else if(changedRole)applyVerifiedRegularAccess();
-        }catch(err){
-          console.warn('BibleMastery delayed layout role check:',err);
-        }
-      });
     }catch(error){
-      // Network/RLS/client errors are UNKNOWN. Never demote the owner's UI because of them.
-      if(provisionalOwner)setOwnerButtonsVisible(true);
-      console.warn('BibleMastery layout role check:',error);
+      if(generation!==checkGeneration)return;
+      layoutStatus('Account check failed. Your saved layout has not been changed. Retry or open Account.');
+      console.warn('BibleMastery layout account check:',error);
     }
   }
+  async function resolveLayoutAccess(){
+    if(!layoutClient){
+      layoutStatus('Account service is unavailable. Refresh the page to try again.');return;
+    }
+    const revision=authRevision;
+    try{
+      const result=await layoutClient.auth.getSession();
+      if(revision!==authRevision)return;
+      if(result.error)throw result.error;
+      await checkLayoutUser(result.data?.session?.user);
+    }catch(error){
+      layoutStatus('Could not read your session. Open Account or retry. Your saved layout is unchanged.');
+    }
+  }
+  try{
+    layoutClient=window.supabase.createClient('https://pjkkxvntssvukulxipfr.supabase.co','sb_publishable_1kehaIywv1Wb9Iwj2OPGdg_aFosOSwK');
+    // Subscribe before the initial check, even when startup has no session.
+    // Keep the callback synchronous; profile queries run after it returns.
+    layoutClient.auth.onAuthStateChange((event,session)=>{
+      const revision=++authRevision;
+      ++checkGeneration; // Discard profile responses from a previous session.
+      setTimeout(()=>{
+        if(revision!==authRevision)return;
+        checkLayoutUser(session?.user);
+      },0);
+    });
+  }catch(error){console.warn('BibleMastery account service:',error)}
+  $('bmLayoutRetry')?.addEventListener('click',resolveLayoutAccess);
   resolveLayoutAccess();
 
   document.querySelectorAll('[data-regular-deep]').forEach(btn=>btn.addEventListener('click',()=>{
