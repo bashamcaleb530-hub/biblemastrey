@@ -1995,6 +1995,11 @@ button,a,input,select,textarea{min-height:38px}
 <option value="DRA">Douay-Rheims American Edition</option>
 <option value="BSB">Berean Standard Bible</option>
 <option value="MSB">Majority Standard Bible</option>
+<option value="BBE">Bible in Basic English (BBE)</option>
+<option value="DBY">Darby Translation (DBY)</option>
+<option value="WEBSTER">Noah Webster Bible</option>
+<option value="WMB">World Messianic Bible (WMB)</option>
+<option value="RV">Revised Version (RV)</option>
 </select>
 </div>
 <div class="reader-control">
@@ -2298,6 +2303,11 @@ button,a,input,select,textarea{min-height:38px}
 <option value="WEB">WEB</option>
 <option value="ASV">ASV</option>
 <option value="YLT">YLT</option>
+<option value="BBE">BBE</option>
+<option value="DBY">DBY</option>
+<option value="WEBSTER">Webster</option>
+<option value="WMB">WMB</option>
+<option value="RV">RV</option>
 </select>
 </div>
 </div>
@@ -2602,6 +2612,11 @@ button,a,input,select,textarea{min-height:38px}
 <option value="DRA">Douay-Rheims American Edition</option>
 <option value="BSB">Berean Standard Bible</option>
 <option value="MSB">Majority Standard Bible</option>
+<option value="BBE">Bible in Basic English (BBE)</option>
+<option value="DBY">Darby Translation (DBY)</option>
+<option value="WEBSTER">Noah Webster Bible</option>
+<option value="WMB">World Messianic Bible (WMB)</option>
+<option value="RV">Revised Version (RV)</option>
 </select>
 </div>
 </div>
@@ -2997,6 +3012,26 @@ button,a,input,select,textarea{min-height:38px}
 
     if (translation === "MSB") {
       return await getMSB();
+    }
+
+    if (translation === "BBE") {
+      return await getBBE();
+    }
+
+    if (translation === "DBY") {
+      return await getDBY();
+    }
+
+    if (translation === "WEBSTER") {
+      return await getWEBSTER();
+    }
+
+    if (translation === "WMB") {
+      return await getWMB();
+    }
+
+    if (translation === "RV") {
+      return await getRV();
     }
 
     return await getKJV();
