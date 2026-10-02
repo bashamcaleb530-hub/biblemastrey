@@ -12,7 +12,15 @@
 
   <title>Personal Bible Study - BibleMastery</title>
 
-  <style>
+    <!-- Interactive Bible maps: Leaflet + OpenStreetMap -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  >
+
+<style>
   * {
     box-sizing: border-box;
   }
@@ -1043,6 +1051,381 @@
     text-decoration: underline;
     outline: none;
   }
+
+
+/* =========================================
+     BIBLEMASTERY MASTER TOOL SUITE
+  ========================================= */
+  .master-tool-suite {
+    border-color: rgba(231,202,125,.45);
+    background: linear-gradient(145deg, rgba(20,34,57,.98), rgba(11,21,38,.98));
+  }
+
+  .master-tool-intro {
+    color: var(--muted);
+    line-height: 1.65;
+    max-width: 980px;
+  }
+
+  .master-tool-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: 14px;
+  }
+
+  .master-tool-card {
+    min-width: 0;
+    background: rgba(8,15,29,.40);
+    border: 1px solid rgba(216,185,106,.22);
+    border-radius: 11px;
+    padding: 16px;
+  }
+
+  .master-tool-card.full {
+    grid-column: 1 / -1;
+  }
+
+  .master-tool-card h3 {
+    margin: 0 0 8px;
+    color: var(--gold);
+  }
+
+  .master-tool-card p {
+    color: var(--muted);
+    line-height: 1.55;
+  }
+
+  .master-tool-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .master-tool-output {
+    margin-top: 12px;
+    max-height: 520px;
+    overflow-y: auto;
+  }
+
+  .master-source-list {
+    display: grid;
+    gap: 8px;
+  }
+
+  .master-source-row {
+    padding: 10px 12px;
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 8px;
+    background: rgba(16,27,46,.78);
+    line-height: 1.55;
+  }
+
+  .master-source-row strong {
+    color: var(--gold-light);
+  }
+
+  .master-guide-keywords {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-top: 8px;
+  }
+
+  .master-keyword {
+    border: 1px solid rgba(216,185,106,.28);
+    border-radius: 999px;
+    padding: 5px 9px;
+    color: var(--gold-light);
+    background: rgba(216,185,106,.08);
+    cursor: pointer;
+  }
+
+  .master-search-controls {
+    display: grid;
+    grid-template-columns: 1.5fr .65fr .75fr auto;
+    gap: 8px;
+    align-items: end;
+  }
+
+  .master-commentary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0,1fr));
+    gap: 10px;
+  }
+
+  .master-commentary-card {
+    min-width: 0;
+    background: rgba(16,27,46,.82);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 9px;
+    padding: 12px;
+  }
+
+  .master-commentary-card h4 {
+    margin: 0 0 8px;
+    color: var(--gold);
+  }
+
+  .master-commentary-body {
+    max-height: 340px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    line-height: 1.62;
+    color: #d9dde5;
+  }
+
+  @media (max-width: 1000px) {
+    .master-commentary-grid,
+    .master-search-controls {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 800px) {
+    .master-tool-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .master-tool-card.full {
+      grid-column: auto;
+    }
+  }
+
+
+
+
+  /* =========================================
+     GOSPEL CHRONOLOGY + INTERACTIVE MAPS
+  ========================================= */
+
+  .gospel-chronology-layout {
+    display: grid;
+    grid-template-columns: minmax(260px, .8fr) minmax(0, 1.7fr);
+    gap: 16px;
+    align-items: start;
+  }
+
+  .gospel-event-sidebar,
+  .gospel-reading-pane,
+  .bible-map-sidebar,
+  .bible-map-shell {
+    background: rgba(8,15,29,.42);
+    border: 1px solid rgba(216,185,106,.24);
+    border-radius: 11px;
+    padding: 16px;
+  }
+
+  .gospel-event-controls {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(150px, .45fr);
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .gospel-event-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 620px;
+    overflow: auto;
+    padding-right: 4px;
+  }
+
+  .gospel-event-button {
+    width: 100%;
+    text-align: left;
+    border: 1px solid var(--soft-line);
+    border-radius: 9px;
+    padding: 10px 11px;
+    background: var(--panel-2);
+    color: var(--text);
+    cursor: pointer;
+  }
+
+  .gospel-event-button:hover,
+  .gospel-event-button.active {
+    border-color: var(--gold);
+    background: #172640;
+  }
+
+  .gospel-event-number {
+    color: var(--gold);
+    font-weight: bold;
+    margin-right: 6px;
+  }
+
+  .gospel-event-ref {
+    display: block;
+    color: var(--muted);
+    font-size: 12px;
+    margin-top: 4px;
+    line-height: 1.4;
+  }
+
+  .gospel-reading-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+
+  .gospel-reading-header h3 {
+    margin: 0;
+    color: var(--gold);
+  }
+
+  .gospel-reading-location {
+    color: var(--gold-light);
+    font-size: 14px;
+    margin-top: 5px;
+  }
+
+  .gospel-reading-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .gospel-passage-card {
+    border: 1px solid var(--soft-line);
+    border-radius: 10px;
+    padding: 14px;
+    margin: 12px 0;
+    background: rgba(16,27,46,.78);
+  }
+
+  .gospel-passage-card h4 {
+    margin: 0 0 10px;
+    color: var(--gold-light);
+  }
+
+  .gospel-verse-line {
+    display: inline;
+    line-height: 1.8;
+  }
+
+  .gospel-verse-number {
+    color: var(--gold);
+    font-size: .78em;
+    font-weight: bold;
+    vertical-align: super;
+    margin-right: 4px;
+  }
+
+  .gospel-source-note {
+    margin-top: 14px;
+    border-top: 1px solid var(--soft-line);
+    padding-top: 12px;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  .gospel-source-note a {
+    color: var(--gold-light);
+  }
+
+  .gospel-progress-bar {
+    height: 8px;
+    border-radius: 999px;
+    overflow: hidden;
+    background: rgba(255,255,255,.08);
+    margin: 10px 0 4px;
+  }
+
+  .gospel-progress-fill {
+    height: 100%;
+    background: var(--gold);
+    width: 0;
+    transition: width .2s ease;
+  }
+
+  .bible-map-layout {
+    display: grid;
+    grid-template-columns: minmax(250px, .55fr) minmax(0, 1.7fr);
+    gap: 16px;
+    align-items: start;
+  }
+
+  #bibleInteractiveMap {
+    width: 100%;
+    height: 560px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #d7e1e8;
+  }
+
+  .bible-map-place-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 500px;
+    overflow: auto;
+  }
+
+  .bible-map-place-button {
+    width: 100%;
+    text-align: left;
+    border: 1px solid var(--soft-line);
+    border-radius: 9px;
+    padding: 10px;
+    color: var(--text);
+    background: var(--panel-2);
+    cursor: pointer;
+  }
+
+  .bible-map-place-button:hover,
+  .bible-map-place-button.active {
+    border-color: var(--gold);
+    background: #172640;
+  }
+
+  .bible-map-place-button small {
+    display: block;
+    color: var(--muted);
+    margin-top: 4px;
+    line-height: 1.4;
+  }
+
+  .map-legend-note {
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.55;
+    margin-top: 12px;
+  }
+
+  .leaflet-popup-content-wrapper,
+  .leaflet-popup-tip {
+    color: #111;
+  }
+
+  @media (max-width: 900px) {
+    .gospel-chronology-layout,
+    .bible-map-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .gospel-event-list {
+      max-height: 340px;
+    }
+
+    #bibleInteractiveMap {
+      height: 430px;
+    }
+  }
+
+  @media (max-width: 620px) {
+    .gospel-event-controls {
+      grid-template-columns: 1fr;
+    }
+
+    #bibleInteractiveMap {
+      height: 360px;
+    }
+  }
 </style>
 
 <style>
@@ -1211,6 +1594,8 @@
         <button class="deep-study-tab" type="button" data-deep-tab="entities">👤 People & Places</button>
         <button class="deep-study-tab" type="button" data-deep-tab="context">🗺 Timeline & Text</button>
         <button class="deep-study-tab" type="button" data-deep-tab="saved">💾 My Study</button>
+<button class="deep-study-tab" type="button" data-deep-tab="gospels">📜 Gospel Chronology</button>
+        <button class="deep-study-tab" type="button" data-deep-tab="maps">🗺 Interactive Maps</button>
       </div>
 
       <div class="deep-study-panel active" id="deepStudyLanguagePanel">
@@ -1336,7 +1721,189 @@
         </div>
       </div>
 
+
+<div class="deep-study-panel" id="deepStudyGospelsPanel">
+        <div class="deep-study-card full-width">
+          <h3>📜 Read the Gospels in Chronological Order</h3>
+          <p>
+            Follow the life and ministry of Jesus as one continuous reading journey. Parallel accounts are grouped together,
+            so you can read Matthew, Mark, Luke, and John at the same point in the chronology instead of jumping around on your own.
+          </p>
+
+          <div class="gospel-event-controls">
+            <div>
+              <label for="gospelChronologySearch">Find an event</label>
+              <input id="gospelChronologySearch" class="search-input" type="search" placeholder="Example: Nicodemus, Lazarus, crucifixion">
+            </div>
+            <div>
+              <label for="gospelChronologyTranslation">Translation</label>
+              <select id="gospelChronologyTranslation" class="commentary-select">
+                <option value="KJV" selected>KJV</option>
+                <option value="WEB">WEB</option>
+                <option value="ASV">ASV</option>
+                <option value="YLT">YLT</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="gospel-progress-bar" aria-hidden="true">
+            <div id="gospelChronologyProgress" class="gospel-progress-fill"></div>
+          </div>
+          <div id="gospelChronologyProgressText" class="small-note"></div>
+
+          <div class="gospel-chronology-layout" style="margin-top:14px">
+            <aside class="gospel-event-sidebar">
+              <div id="gospelChronologyList" class="gospel-event-list"></div>
+            </aside>
+
+            <div class="gospel-reading-pane">
+              <div class="gospel-reading-header">
+                <div>
+                  <h3 id="gospelChronologyTitle">Choose an event</h3>
+                  <div id="gospelChronologyLocation" class="gospel-reading-location"></div>
+                </div>
+                <div class="gospel-reading-actions">
+                  <button id="gospelPreviousButton" class="reader-nav-button" type="button">← Previous</button>
+                  <button id="gospelNextButton" class="reader-nav-button" type="button">Next →</button>
+                  <button id="gospelOpenReaderButton" class="reader-nav-button" type="button">Open in Bible Reader</button>
+                  <button id="gospelShowMapButton" class="reader-nav-button" type="button">Show on Map</button>
+                </div>
+              </div>
+              <div id="gospelChronologyReading" class="deep-study-output">
+                <div class="status-message">Choose an event from the chronological list.</div>
+              </div>
+              <div class="gospel-source-note">
+                Chronological harmonies can differ on the placement of a few events. This reading sequence broadly follows the
+                classic public-domain harmony by A. T. Robertson while keeping the interface simple for Bible reading.
+                <a href="https://www.gutenberg.org/ebooks/36264" target="_blank" rel="noopener">View the public-domain source</a>.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="deep-study-panel" id="deepStudyMapsPanel">
+        <div class="deep-study-card full-width">
+          <h3>🗺 Interactive Bible Maps</h3>
+          <p>
+            Explore biblical places on a real interactive map. The base map is OpenStreetMap; BibleMastery adds markers for important Gospel locations.
+            Ancient-site identifications that are debated are labeled approximate or traditional.
+          </p>
+
+          <div class="bible-map-layout">
+            <aside class="bible-map-sidebar">
+              <label for="bibleMapPreset">Map view</label>
+              <select id="bibleMapPreset" class="commentary-select">
+                <option value="all" selected>All Gospel places</option>
+                <option value="galilee">Galilee ministry</option>
+                <option value="judea">Judea & Jordan</option>
+                <option value="jerusalem">Jerusalem & Passion Week</option>
+                <option value="north">Northern journeys</option>
+              </select>
+              <button id="bibleMapResetButton" class="search-button" type="button" style="margin:10px 0 14px;width:100%">Show Map View</button>
+              <div id="bibleMapPlaceList" class="bible-map-place-list"></div>
+              <div class="map-legend-note">
+                Locations are shown on a modern map for geographic orientation. A marker does not claim that every archaeological identification is certain.
+              </div>
+            </aside>
+
+            <div class="bible-map-shell">
+              <div id="bibleInteractiveMap" role="region" aria-label="Interactive map of Gospel locations"></div>
+              <div id="bibleMapStatus" class="small-note" style="margin-top:10px">
+                Open this tab to load the interactive map.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
+
+
+<div class="workspace-section master-tool-suite" id="masterToolSuite">
+      <h2>🧰 BibleMastery Master Tool Suite</h2>
+      <p class="master-tool-intro">
+        These tools are built to keep the serious research work in Personal Study without crowding the regular Bible reader.
+        Use a passage guide, advanced Bible search, commentary comparison, book background, quick word research, and a source register from one place.
+      </p>
+
+      <div class="master-tool-grid">
+        <div class="master-tool-card">
+          <h3>⚡ One-Click Passage Guide</h3>
+          <p>Open the verse, nearby context, important repeated words, related study paths, and research shortcuts together.</p>
+          <div class="search-row">
+            <input id="masterPassageInput" class="search-input" type="text" placeholder="Example: Genesis 17:19">
+            <button id="masterPassageButton" class="search-button" type="button">Build Guide</button>
+          </div>
+          <div id="masterPassageOutput" class="master-tool-output"></div>
+        </div>
+
+        <div class="master-tool-card">
+          <h3>📚 Book Background</h3>
+          <p>Pull a Bible-dictionary background entry for a biblical book and combine it with the current Bible data.</p>
+          <div class="search-row">
+            <input id="masterBookInput" class="search-input" type="text" placeholder="Example: Romans or Genesis">
+            <button id="masterBookButton" class="search-button" type="button">Open Background</button>
+          </div>
+          <div id="masterBookOutput" class="master-tool-output"></div>
+        </div>
+
+        <div class="master-tool-card full">
+          <h3>🔎 Advanced Bible Search</h3>
+          <p>Search by exact phrase, all words, or any words and narrow the results to the Old Testament, New Testament, or a single book.</p>
+          <div class="master-search-controls">
+            <div>
+              <label for="masterSearchInput">Search</label>
+              <input id="masterSearchInput" class="search-input" type="text" placeholder="Example: covenant faith righteousness">
+            </div>
+            <div>
+              <label for="masterSearchMode">Match</label>
+              <select id="masterSearchMode" class="commentary-select">
+                <option value="all" selected>All words</option>
+                <option value="any">Any word</option>
+                <option value="exact">Exact phrase</option>
+              </select>
+            </div>
+            <div>
+              <label for="masterSearchScope">Scope</label>
+              <select id="masterSearchScope" class="commentary-select">
+                <option value="all" selected>Whole Bible</option>
+                <option value="ot">Old Testament</option>
+                <option value="nt">New Testament</option>
+              </select>
+            </div>
+            <button id="masterSearchButton" class="search-button" type="button">Search</button>
+          </div>
+          <div id="masterSearchOutput" class="master-tool-output"></div>
+        </div>
+
+        <div class="master-tool-card full">
+          <h3>📖 Commentary Comparison</h3>
+          <p>Compare the same passage across Matthew Henry, John Gill, and Jamieson-Fausset-Brown without changing the commentary beside your Bible.</p>
+          <div class="search-row">
+            <input id="masterCommentaryInput" class="search-input" type="text" placeholder="Example: John 3:16">
+            <button id="masterCommentaryButton" class="search-button" type="button">Compare Commentaries</button>
+          </div>
+          <div id="masterCommentaryOutput" class="master-tool-output"></div>
+        </div>
+
+        <div class="master-tool-card">
+          <h3>🔤 Quick Word Research</h3>
+          <p>Send an English word or Strong’s number directly into the Deep Study language tools. You can also select a word in the Bible reader and double-click it.</p>
+          <div class="search-row">
+            <input id="masterWordInput" class="search-input" type="text" placeholder="Example: righteousness or G1343">
+            <button id="masterWordButton" class="search-button" type="button">Research Word</button>
+          </div>
+          <div id="masterWordOutput" class="master-tool-output"></div>
+        </div>
+
+        <div class="master-tool-card">
+          <h3>🧾 Automatic Source Register</h3>
+          <p>See which BibleMastery sources are being used in this study area so you can keep Scripture, dictionaries, lexicons, commentaries, and study data clearly identified.</p>
+          <button id="masterSourcesButton" class="search-button" type="button">Show Sources</button>
+          <div id="masterSourcesOutput" class="master-tool-output"></div>
+        </div>
+      </div>
 
 
     <div class="workspace-section">
@@ -1794,6 +2361,11 @@
 
 <script src="bible.js"></script>
 
+<script
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+  crossorigin=""
+></script>
 
 <script>
 
@@ -6835,6 +7407,17 @@
         name.charAt(0).toUpperCase() + name.slice(1) + "Panel");
     });
     if (name === "saved") renderAdvancedStudyHistory();
+    if (name === "gospels") {
+      renderGospelChronologyList();
+      updateGospelProgress();
+      if (!gospelChronologyReading.querySelector(".gospel-passage-card")) {
+        openGospelChronologyEvent(gospelChronologyIndex);
+      }
+    }
+    if (name === "maps") {
+      initBibleInteractiveMap();
+      setTimeout(function() { if (bibleLeafletMap) bibleLeafletMap.invalidateSize(); }, 80);
+    }
   }
 
   document.querySelectorAll(".deep-study-tab").forEach(function(button) {
@@ -7215,6 +7798,2321 @@
     startPersonalStudy();
 
   }
+
+
+/* --- MASTER TOOL SUITE JS --- */
+
+  /* =========================================
+     BIBLEMASTERY MASTER TOOL SUITE
+  ========================================= */
+  const masterPassageInput = document.getElementById("masterPassageInput");
+  const masterPassageOutput = document.getElementById("masterPassageOutput");
+  const masterBookInput = document.getElementById("masterBookInput");
+  const masterBookOutput = document.getElementById("masterBookOutput");
+  const masterSearchInput = document.getElementById("masterSearchInput");
+  const masterSearchMode = document.getElementById("masterSearchMode");
+  const masterSearchScope = document.getElementById("masterSearchScope");
+  const masterSearchOutput = document.getElementById("masterSearchOutput");
+  const masterCommentaryInput = document.getElementById("masterCommentaryInput");
+  const masterCommentaryOutput = document.getElementById("masterCommentaryOutput");
+  const masterWordInput = document.getElementById("masterWordInput");
+  const masterWordOutput = document.getElementById("masterWordOutput");
+  const masterSourcesOutput = document.getElementById("masterSourcesOutput");
+
+  const masterStopWords = new Set([
+    "the","and","that","with","from","this","they","them","their","there","then","than",
+    "into","unto","upon","have","has","had","were","was","are","is","be","been","being",
+    "for","but","not","you","your","his","her","she","him","our","out","all","any","who",
+    "whom","which","what","when","where","why","how","shall","will","would","should","could",
+    "may","might","can","did","does","do","of","to","in","on","at","by","as","a","an","or"
+  ]);
+
+  function masterSetOutput(node, html) {
+    if (node) node.innerHTML = html;
+  }
+
+  function masterNormalizeWords(value) {
+    return String(value || "")
+      .toLowerCase()
+      .replace(/[^a-z0-9'\s]/g, " ")
+      .split(/\s+/)
+      .filter(Boolean);
+  }
+
+  function masterTopKeywords(value, limit) {
+    const counts = {};
+    masterNormalizeWords(value).forEach(function(word) {
+      if (word.length < 4 || masterStopWords.has(word)) return;
+      counts[word] = (counts[word] || 0) + 1;
+    });
+    return Object.keys(counts)
+      .sort(function(a, b) {
+        return counts[b] - counts[a] || a.localeCompare(b);
+      })
+      .slice(0, limit || 10)
+      .map(function(word) { return { word: word, count: counts[word] }; });
+  }
+
+  async function buildMasterPassageGuide(reference) {
+    const input = String(reference || "").trim();
+    if (!input) {
+      masterSetOutput(masterPassageOutput, "<div class='status-message'>Enter a verse reference.</div>");
+      return;
+    }
+
+    masterSetOutput(masterPassageOutput, "<div class='status-message'>Building passage guide...</div>");
+
+    try {
+      if (!studyBible) await loadStudyBible();
+      const found = await findDeepReference(input, studyBible);
+      if (!found) {
+        masterSetOutput(masterPassageOutput, "<div class='error-message'>That reference was not found in the loaded Bible.</div>");
+        return;
+      }
+
+      const verses = Array.isArray(found.chapterData.verses) ? found.chapterData.verses : [];
+      const center = Number(found.verse || 1);
+      const nearby = verses.filter(function(v) {
+        const n = Number(v.number);
+        return n >= Math.max(1, center - 3) && n <= center + 3;
+      });
+
+      const contextText = nearby.map(function(v) { return String(v.text || ""); }).join(" ");
+      const keywords = masterTopKeywords(contextText, 10);
+
+      let html =
+        "<div class='result-item'><div class='result-reference'>" +
+        escapeHtml(deepReferenceLabel(found)) +
+        "</div><div>" + escapeHtml(found.text || "") + "</div></div>" +
+        "<div class='result-item'><div class='result-reference'>Nearby context</div>" +
+        nearby.map(function(v) {
+          return "<div style='margin:7px 0'><strong>" +
+            escapeHtml(found.book + " " + found.chapter + ":" + v.number) +
+            "</strong> " + escapeHtml(String(v.text || "")) + "</div>";
+        }).join("") + "</div>" +
+        "<div class='result-item'><div class='result-reference'>Repeated / important words</div>" +
+        (keywords.length
+          ? "<div class='master-guide-keywords'>" + keywords.map(function(item) {
+              return "<button class='master-keyword' type='button' data-master-word='" +
+                escapeHtml(item.word) + "'>" + escapeHtml(item.word) +
+                (item.count > 1 ? " ×" + item.count : "") + "</button>";
+            }).join("") + "</div>"
+          : "<div class='small-note'>No repeated keywords stood out in this short context.</div>") +
+        "</div>" +
+        "<div class='result-item'><div class='result-reference'>Research paths</div>" +
+        "<div class='master-tool-actions'>" +
+        "<button class='reader-nav-button master-guide-action' type='button' data-master-action='references' data-reference='" + escapeHtml(input) + "'>Cross-References</button>" +
+        "<button class='reader-nav-button master-guide-action' type='button' data-master-action='commentaries' data-reference='" + escapeHtml(input) + "'>Compare Commentaries</button>" +
+        "<button class='reader-nav-button master-guide-action' type='button' data-master-action='timeline' data-reference='" + escapeHtml(input) + "'>Timeline & Text</button>" +
+        "<button class='reader-nav-button master-guide-action' type='button' data-master-action='reader' data-reference='" + escapeHtml(input) + "'>Open in Bible Reader</button>" +
+        "</div></div>";
+
+      masterSetOutput(masterPassageOutput, html);
+      recordAdvancedStudy("Passage guide", input, "Context, keywords, and research paths");
+    } catch (error) {
+      console.error("Passage guide error:", error);
+      masterSetOutput(masterPassageOutput, "<div class='error-message'>The passage guide could not be built right now.</div>");
+    }
+  }
+
+  function masterSearchBible(data, query, mode, scope) {
+    if (!data || !Array.isArray(data.books)) return [];
+    const raw = String(query || "").trim().toLowerCase();
+    if (!raw) return [];
+    const words = masterNormalizeWords(raw).filter(function(word) { return word.length > 1; });
+    const results = [];
+    const ntStart = 39;
+
+    data.books.forEach(function(book, bookIndex) {
+      if (scope === "ot" && bookIndex >= ntStart) return;
+      if (scope === "nt" && bookIndex < ntStart) return;
+      const bookName = getBookName(book);
+      (book.chapters || []).forEach(function(chapter) {
+        (chapter.verses || []).forEach(function(verse) {
+          const verseText = String(verse.text || "");
+          const haystack = verseText.toLowerCase();
+          let matched = false;
+          if (mode === "exact") {
+            matched = haystack.includes(raw);
+          } else if (mode === "any") {
+            matched = words.some(function(word) { return haystack.includes(word); });
+          } else {
+            matched = words.length > 0 && words.every(function(word) { return haystack.includes(word); });
+          }
+          if (matched) {
+            results.push({
+              book: bookName,
+              bookIndex: bookIndex,
+              chapter: chapter.number,
+              verse: verse.number,
+              text: verseText
+            });
+          }
+        });
+      });
+    });
+    return results;
+  }
+
+  async function runMasterAdvancedSearch() {
+    const query = masterSearchInput.value.trim();
+    if (!query) {
+      masterSetOutput(masterSearchOutput, "<div class='status-message'>Enter a word or phrase to search.</div>");
+      return;
+    }
+    masterSetOutput(masterSearchOutput, "<div class='status-message'>Searching...</div>");
+    try {
+      if (!studyBible) await loadStudyBible();
+      const matches = masterSearchBible(studyBible, query, masterSearchMode.value, masterSearchScope.value);
+      const label = matches.length + " matching verse" + (matches.length === 1 ? "" : "s");
+      masterSetOutput(masterSearchOutput,
+        "<div class='success-message'>" + label + " found.</div>" +
+        (matches.length
+          ? matches.slice(0,100).map(function(item) {
+              const ref = item.book + " " + item.chapter + ":" + item.verse;
+              return "<div class='result-item'><div class='result-reference'>" +
+                escapeHtml(ref) + "</div><div>" + escapeHtml(item.text) + "</div>" +
+                deepOpenReferenceButton(ref) + "</div>";
+            }).join("")
+          : "<div class='status-message'>No verses matched those settings.</div>")
+      );
+      recordAdvancedStudy("Advanced Bible search", query, masterSearchMode.value + " / " + masterSearchScope.value);
+    } catch (error) {
+      console.error("Advanced Bible search error:", error);
+      masterSetOutput(masterSearchOutput, "<div class='error-message'>Advanced search could not run right now.</div>");
+    }
+  }
+
+  async function runMasterBookBackground() {
+    const input = masterBookInput.value.trim();
+    if (!input) {
+      masterSetOutput(masterBookOutput, "<div class='status-message'>Enter a Bible book name.</div>");
+      return;
+    }
+    masterSetOutput(masterBookOutput, "<div class='status-message'>Loading book background...</div>");
+
+    try {
+      if (!studyBible) await loadStudyBible();
+      const book = (studyBible.books || []).find(function(item) {
+        return getBookName(item).toLowerCase() === input.toLowerCase();
+      }) || (studyBible.books || []).find(function(item) {
+        return getBookName(item).toLowerCase().startsWith(input.toLowerCase());
+      });
+
+      const entry = await searchBibleDictionaries(input);
+      let dictionaryHtml = "";
+      if (entry && Array.isArray(entry.definitions)) {
+        dictionaryHtml = entry.definitions.slice(0,4).map(function(definition) {
+          return "<div class='result-item'><div class='result-reference'>" +
+            escapeHtml(definition.source === "EAS" ? "Easton’s Bible Dictionary" :
+              definition.source === "SMI" ? "Smith’s Bible Dictionary" : String(definition.source || "Dictionary")) +
+            "</div><div>" + escapeHtml(flattenDictionaryText(definition)) + "</div></div>";
+        }).join("");
+      }
+
+      const bookHtml = book
+        ? "<div class='result-item'><div class='result-reference'>" + escapeHtml(getBookName(book)) +
+          "</div><div><strong>Chapters in loaded Bible:</strong> " +
+          escapeHtml(String((book.chapters || []).length)) + "</div></div>"
+        : "";
+
+      masterSetOutput(masterBookOutput,
+        bookHtml +
+        (dictionaryHtml || "<div class='status-message'>No Easton’s or Smith’s book entry was found for that exact title. Try the full Bible book name.</div>")
+      );
+      recordAdvancedStudy("Book background", input, "Bible structure + public-domain dictionary background");
+    } catch (error) {
+      console.error("Book background error:", error);
+      masterSetOutput(masterBookOutput, "<div class='error-message'>Book background could not be loaded right now.</div>");
+    }
+  }
+
+  function masterCommentaryGroupFromReference(found) {
+    return {
+      bookId: normalizeBookId(found.book, { id: found.bookId || found.book }),
+      bookName: found.book,
+      chapter: found.chapter,
+      verses: [{ book: found.book, chapter: found.chapter, verse: found.verse }]
+    };
+  }
+
+  async function masterFetchCommentary(reference, commentaryKey) {
+    if (!studyBible) await loadStudyBible();
+    const found = await findDeepReference(reference, studyBible);
+    if (!found) return { name: commentaryNames[commentaryKey] || commentaryKey, text: "Reference not found." };
+
+    const apiId = commentaryIds[commentaryKey];
+    if (!apiId) return { name: commentaryNames[commentaryKey] || commentaryKey, text: "Commentary source is not configured." };
+
+    const group = masterCommentaryGroupFromReference(found);
+    const books = await getCommentaryBooks(apiId);
+    const commentaryBookId = resolveCommentaryBookId(books, group);
+    if (!commentaryBookId) return { name: commentaryNames[commentaryKey], text: "This commentary does not contain this Bible book." };
+
+    const cacheKey = apiId + "|" + commentaryBookId + "|" + group.chapter;
+    let chapterData = commentaryCache[cacheKey];
+    if (!chapterData) {
+      const response = await fetch(
+        COMMENTARY_API + apiId + "/" +
+        encodeURIComponent(commentaryBookId) + "/" +
+        encodeURIComponent(group.chapter) + ".simple.json"
+      );
+      if (!response.ok) throw new Error("Commentary request failed: " + response.status);
+      chapterData = await response.json();
+      commentaryCache[cacheKey] = chapterData;
+    }
+
+    let commentaryText = "";
+    if (commentaryKey === "matthew-henry-complete") {
+      commentaryText = flattenWholeCommentaryChapter(chapterData);
+    } else {
+      const entries = extractCommentaryEntries(chapterData);
+      commentaryText = findCommentaryText(entries, found.verse);
+      if (!commentaryText) commentaryText = flattenWholeCommentaryChapter(chapterData);
+    }
+
+    return {
+      name: commentaryNames[commentaryKey] || commentaryKey,
+      text: commentaryText || "No commentary text was returned for this reference."
+    };
+  }
+
+  async function runMasterCommentaryComparison() {
+    const input = masterCommentaryInput.value.trim();
+    if (!input) {
+      masterSetOutput(masterCommentaryOutput, "<div class='status-message'>Enter a verse reference.</div>");
+      return;
+    }
+    masterSetOutput(masterCommentaryOutput, "<div class='status-message'>Loading commentaries...</div>");
+    try {
+      const keys = ["matthew-henry-complete", "john-gill", "jfb"];
+      const results = await Promise.all(keys.map(function(key) {
+        return masterFetchCommentary(input, key).catch(function(error) {
+          console.error("Commentary compare source error:", key, error);
+          return { name: commentaryNames[key] || key, text: "This source could not be loaded right now." };
+        });
+      }));
+
+      masterSetOutput(masterCommentaryOutput,
+        "<div class='master-commentary-grid'>" +
+        results.map(function(item) {
+          return "<div class='master-commentary-card'><h4>" + escapeHtml(item.name) +
+            "</h4><div class='master-commentary-body'>" + escapeHtml(item.text) + "</div></div>";
+        }).join("") +
+        "</div>"
+      );
+      recordAdvancedStudy("Commentary comparison", input, results.map(function(x) { return x.name; }).join(" / "));
+    } catch (error) {
+      console.error("Commentary comparison error:", error);
+      masterSetOutput(masterCommentaryOutput, "<div class='error-message'>The commentary comparison could not be loaded right now.</div>");
+    }
+  }
+
+  async function runMasterWordResearch(value) {
+    const input = String(value || masterWordInput.value || "").trim();
+    if (!input) {
+      masterSetOutput(masterWordOutput, "<div class='status-message'>Enter a word or Strong’s number.</div>");
+      return;
+    }
+    masterWordInput.value = input;
+    masterSetOutput(masterWordOutput,
+      "<div class='success-message'>Opening this term in Deep Study Language: <strong>" +
+      escapeHtml(input) + "</strong></div>"
+    );
+    deepStudyWord.value = input;
+    deepLanguageInput.value = input;
+    activateDeepTab("language");
+    document.getElementById("deepStudyCenter").scrollIntoView({ behavior: "smooth", block: "start" });
+    await runDeepLanguageStudy(input);
+    recordAdvancedStudy("Quick word research", input, "Opened in Deep Study Language");
+  }
+
+  function renderMasterSources() {
+    const sources = [
+      ["Bible text", "Translations loaded by BibleMastery through bible.js, including KJV and the other versions configured in this build."],
+      ["Commentaries", "HelloAO commentary API: Matthew Henry, John Gill, Jamieson-Fausset-Brown, Adam Clarke, John Calvin, Keil & Delitzsch, and Tyndale Open Study Notes where available."],
+      ["Bible dictionaries", "Easton’s and Smith’s public-domain dictionary dataset."],
+      ["English dictionary", "Webster’s 1913 / configured free English dictionary source."],
+      ["Original-language study", "Strong’s, Brown–Driver–Briggs, Thayer’s, and STEPBible extended data where connected."],
+      ["Cross-references / topics", "BibleMastery’s current Scripture-search connections plus the public-domain resource expansion planned for TSK, Nave’s, and Torrey’s."],
+      ["Personal notes", "Stored locally in this browser/device unless exported as a backup."]
+    ];
+    masterSetOutput(masterSourcesOutput,
+      "<div class='master-source-list'>" +
+      sources.map(function(item) {
+        return "<div class='master-source-row'><strong>" + escapeHtml(item[0]) +
+          "</strong><br>" + escapeHtml(item[1]) + "</div>";
+      }).join("") +
+      "</div>"
+    );
+  }
+
+  document.getElementById("masterPassageButton").addEventListener("click", function() {
+    buildMasterPassageGuide(masterPassageInput.value);
+  });
+
+  document.getElementById("masterBookButton").addEventListener("click", runMasterBookBackground);
+  document.getElementById("masterSearchButton").addEventListener("click", runMasterAdvancedSearch);
+  document.getElementById("masterCommentaryButton").addEventListener("click", runMasterCommentaryComparison);
+  document.getElementById("masterWordButton").addEventListener("click", function() {
+    runMasterWordResearch(masterWordInput.value);
+  });
+  document.getElementById("masterSourcesButton").addEventListener("click", renderMasterSources);
+
+  document.addEventListener("click", function(event) {
+    const keyword = event.target.closest("[data-master-word]");
+    if (keyword) {
+      runMasterWordResearch(keyword.dataset.masterWord);
+      return;
+    }
+
+    const action = event.target.closest(".master-guide-action");
+    if (!action) return;
+    const reference = action.dataset.reference || masterPassageInput.value;
+    const type = action.dataset.masterAction;
+
+    if (type === "references") {
+      deepStudyReference.value = reference;
+      document.getElementById("deepReferenceInput").value = reference;
+      activateDeepTab("references");
+      document.getElementById("deepStudyCenter").scrollIntoView({ behavior: "smooth", block: "start" });
+      runDeepReferences(reference);
+    } else if (type === "commentaries") {
+      masterCommentaryInput.value = reference;
+      runMasterCommentaryComparison();
+      document.getElementById("masterCommentaryOutput").scrollIntoView({ behavior: "smooth", block: "center" });
+    } else if (type === "timeline") {
+      deepStudyReference.value = reference;
+      activateDeepTab("context");
+      document.getElementById("deepStudyCenter").scrollIntoView({ behavior: "smooth", block: "start" });
+      renderDeepTimeline();
+      runDeepComparison(reference);
+    } else if (type === "reader") {
+      openDeepReferenceInReader(reference);
+    }
+  });
+
+  document.addEventListener("dblclick", function(event) {
+    const verseArea = event.target.closest(".reader-verse, .verse-text, .verse-card");
+    if (!verseArea) return;
+    const selected = String(window.getSelection ? window.getSelection().toString() : "").trim();
+    if (!selected || selected.split(/\s+/).length > 3) return;
+    runMasterWordResearch(selected.replace(/[^\w'-]/g, ""));
+  });
+
+  [masterPassageInput, masterBookInput, masterSearchInput, masterCommentaryInput, masterWordInput].forEach(function(input) {
+    if (!input) return;
+    input.addEventListener("keydown", function(event) {
+      if (event.key !== "Enter") return;
+      if (input === masterPassageInput) buildMasterPassageGuide(input.value);
+      else if (input === masterBookInput) runMasterBookBackground();
+      else if (input === masterSearchInput) runMasterAdvancedSearch();
+      else if (input === masterCommentaryInput) runMasterCommentaryComparison();
+      else if (input === masterWordInput) runMasterWordResearch(input.value);
+    });
+  });
+
+  renderMasterSources();
+
+
+/* --- GOSPEL CHRONOLOGY + INTERACTIVE MAPS JS --- */
+
+  /* =========================================
+     GOSPEL CHRONOLOGY + INTERACTIVE MAPS
+  ========================================= */
+
+  const gospelChronologyEvents = [
+  {
+    "n": 1,
+    "title": "Luke explains his purpose",
+    "refs": [
+      "Luke 1:1-4"
+    ],
+    "place": ""
+  },
+  {
+    "n": 2,
+    "title": "The Word before creation and the incarnation",
+    "refs": [
+      "John 1:1-18"
+    ],
+    "place": ""
+  },
+  {
+    "n": 3,
+    "title": "Genealogies of Jesus",
+    "refs": [
+      "Matthew 1:1-17",
+      "Luke 3:23-38"
+    ],
+    "place": ""
+  },
+  {
+    "n": 4,
+    "title": "John the Baptist's birth announced",
+    "refs": [
+      "Luke 1:5-25"
+    ],
+    "place": "jerusalem"
+  },
+  {
+    "n": 5,
+    "title": "Jesus' birth announced to Mary",
+    "refs": [
+      "Luke 1:26-38"
+    ],
+    "place": "nazareth"
+  },
+  {
+    "n": 6,
+    "title": "Mary visits Elizabeth",
+    "refs": [
+      "Luke 1:39-56"
+    ],
+    "place": "judean-hill-country"
+  },
+  {
+    "n": 7,
+    "title": "John the Baptist is born",
+    "refs": [
+      "Luke 1:57-80"
+    ],
+    "place": "judean-hill-country"
+  },
+  {
+    "n": 8,
+    "title": "Joseph is told about Jesus' birth",
+    "refs": [
+      "Matthew 1:18-25"
+    ],
+    "place": "nazareth"
+  },
+  {
+    "n": 9,
+    "title": "Jesus is born and shepherds visit",
+    "refs": [
+      "Luke 2:1-20"
+    ],
+    "place": "bethlehem"
+  },
+  {
+    "n": 10,
+    "title": "Circumcision and presentation at the temple",
+    "refs": [
+      "Luke 2:21-38"
+    ],
+    "place": "jerusalem"
+  },
+  {
+    "n": 11,
+    "title": "The Magi visit Jesus",
+    "refs": [
+      "Matthew 2:1-12"
+    ],
+    "place": "bethlehem"
+  },
+  {
+    "n": 12,
+    "title": "Flight into Egypt",
+    "refs": [
+      "Matthew 2:13-18"
+    ],
+    "place": "egypt"
+  },
+  {
+    "n": 13,
+    "title": "Return from Egypt and settlement in Nazareth",
+    "refs": [
+      "Matthew 2:19-23",
+      "Luke 2:39-40"
+    ],
+    "place": "nazareth"
+  },
+  {
+    "n": 14,
+    "title": "Jesus at the temple at age twelve",
+    "refs": [
+      "Luke 2:41-52"
+    ],
+    "place": "jerusalem"
+  },
+  {
+    "n": 15,
+    "title": "John the Baptist begins preaching",
+    "refs": [
+      "Matthew 3:1-12",
+      "Mark 1:1-8",
+      "Luke 3:1-18"
+    ],
+    "place": "jordan-baptism"
+  },
+  {
+    "n": 16,
+    "title": "Jesus is baptized",
+    "refs": [
+      "Matthew 3:13-17",
+      "Mark 1:9-11",
+      "Luke 3:21-22"
+    ],
+    "place": "jordan-baptism"
+  },
+  {
+    "n": 17,
+    "title": "Jesus is tempted in the wilderness",
+    "refs": [
+      "Matthew 4:1-11",
+      "Mark 1:12-13",
+      "Luke 4:1-13"
+    ],
+    "place": "judean-wilderness"
+  },
+  {
+    "n": 18,
+    "title": "John testifies about Jesus",
+    "refs": [
+      "John 1:19-34"
+    ],
+    "place": "jordan-baptism"
+  },
+  {
+    "n": 19,
+    "title": "Jesus calls his first disciples",
+    "refs": [
+      "John 1:35-51"
+    ],
+    "place": "jordan-baptism"
+  },
+  {
+    "n": 20,
+    "title": "Water turned to wine at Cana",
+    "refs": [
+      "John 2:1-11"
+    ],
+    "place": "cana"
+  },
+  {
+    "n": 21,
+    "title": "First stay at Capernaum",
+    "refs": [
+      "John 2:12"
+    ],
+    "place": "capernaum"
+  },
+  {
+    "n": 22,
+    "title": "First temple cleansing",
+    "refs": [
+      "John 2:13-22"
+    ],
+    "place": "jerusalem"
+  },
+  {
+    "n": 23,
+    "title": "Nicodemus meets Jesus",
+    "refs": [
+      "John 2:23-25",
+      "John 3:1-21"
+    ],
+    "place": "jerusalem"
+  },
+  {
+    "n": 24,
+    "title": "Jesus and John minister in Judea",
+    "refs": [
+      "John 3:22-36"
+    ],
+    "place": "judea"
+  },
+  {
+    "n": 25,
+    "title": "Jesus leaves Judea for Galilee",
+    "refs": [
+      "Matthew 4:12",
+      "Mark 1:14",
+      "Luke 4:14",
+      "John 4:1-4"
+    ],
+    "place": "samaria"
+  },
+  {
+    "n": 26,
+    "title": "The Samaritan woman at the well",
+    "refs": [
+      "John 4:5-42"
+    ],
+    "place": "jacobs-well"
+  },
+  {
+    "n": 27,
+    "title": "Jesus arrives in Galilee",
+    "refs": [
+      "John 4:43-45"
+    ],
+    "place": "galilee"
+  },
+  {
+    "n": 28,
+    "title": "A royal official's son is healed",
+    "refs": [
+      "John 4:46-54"
+    ],
+    "place": "cana"
+  },
+  {
+    "n": 29,
+    "title": "Jesus is rejected at Nazareth",
+    "refs": [
+      "Luke 4:16-30"
+    ],
+    "place": "nazareth"
+  },
+  {
+    "n": 30,
+    "title": "Jesus settles in Capernaum and calls fishermen",
+    "refs": [
+      "Matthew 4:13-22",
+      "Mark 1:16-20",
+      "Luke 5:1-11"
+    ],
+    "place": "capernaum"
+  },
+  {
+    "n": 31,
+    "title": "A demon is cast out in the synagogue",
+    "refs": [
+      "Mark 1:21-28",
+      "Luke 4:31-37"
+    ],
+    "place": "capernaum"
+  },
+  {
+    "n": 32,
+    "title": "Peter's mother-in-law and many are healed",
+    "refs": [
+      "Matthew 8:14-17",
+      "Mark 1:29-34",
+      "Luke 4:38-41"
+    ],
+    "place": "capernaum"
+  },
+  {
+    "n": 33,
+    "title": "Jesus preaches throughout Galilee",
+    "refs": [
+      "Matthew 4:23-25",
+      "Mark 1:35-39",
+      "Luke 4:42-44"
+    ],
+    "place": "galilee"
+  },
+  {
+    "n": 34,
+    "title": "A leper is cleansed",
+    "refs": [
+      "Matthew 8:2-4",
+      "Mark 1:40-45",
+      "Luke 5:12-16"
+    ],
+    "place": "galilee"
+  },
+  {
+    "n": 35,
+    "title": "A paralytic is lowered through the roof",
+    "refs": [
+      "Matthew 9:1-8",
+      "Mark 2:1-12",
+      "Luke 5:17-26"
+    ],
+    "place": "capernaum"
+  },
+  {
+    "n": 36,
+    "title": "Matthew is called",
+    "refs": [
+      "Matthew 9:9-13",
+      "Mark 2:13-17",
+      "Luke 5:27-32"
+    ],
+    "place": "capernaum"
+  },
+  {
+    "n": 37,
+    "title": "Question about fasting",
+    "refs": [
+      "Matthew 9:14-17",
+      "Mark 2:18-22",
+      "Luke 5:33-39"
+    ],
+    "place": "galilee"
+  },
+  {
+    "n": 38,
+    "title": "Healing at the pool on the Sabbath",
+    "refs": [
+      "John 5:1-47"
+    ],
+    "place": "jerusalem"
+  },
+  {
+    "n": 39,
+    "title": "Disciples pick grain on the Sabbath",
+    "refs": [
+      "Matthew 12:1-8",
+      "Mark 2:23-28",
+      "Luke 6:1-5"
+    ],
+    "place": "galilee"
+  },
+  {
+    "n": 40,
+    "title": "A man with a withered hand is healed",
+    "refs": [
+      "Matthew 12:9-14",
+      "Mark 3:1-6",
+      "Luke 6:6-11"
+    ],
+    "place": "galilee"
+  },
+  {
+    "n": 41,
+    "title": "Crowds gather and many are healed",
+    "refs": [
+      "Matthew 12:15-21",
+      "Mark 3:7-12"
+    ],
+    "place": "sea-galilee"
+  },
+  {
+    "n": 42,
+    "title": "The Twelve are appointed",
+    "refs": [
+      "Mark 3:13-19",
+      "Luke 6:12-16"
+    ],
+    "place": "galilee"
+  },
+  {
+    "n": 43,
+    "title": "Sermon on the Mount and Sermon on the Plain",
+    "refs": [
+      "Matthew 5",
+      "Matthew 6",
+      "Matthew 7",
+      "Luke 6:17-49"
+    ],
+    "place": "galilee"
+  },
+  {
+    "n": 44,
+    "title": "A centurion's servant is healed",
+    "refs": [
+      "Matthew 8:5-13",
+      "Luke 7:1-10"
+    ],
+    "place": "capernaum"
+  },
+  {
+    "n": 45,
+    "title": "The widow's son is raised",
+    "refs": [
+      "Luke 7:11-17"
+    ],
+    "place": "nain"
+  },
+  {
+    "n": 46,
+    "title": "John the Baptist sends messengers",
+    "refs": [
+      "Matthew 11:2-19",
+      "Luke 7:18-35"
+    ],
+    "place": "galilee"
+  },
+  {
+    "n": 47,
+    "title": "Jesus warns unrepentant cities",
+    "refs": [
+      "Matthew 11:20-30"
+    ],
+    "place": "galilee"
+  },
+  {
+    "n": 48,
+    "title": "A sinful woman anoints Jesus",
+    "refs": [
+      "Luke 7:36-50"
+    ],
+    "place": "galilee"
+  },
+  {
+    "n": 49,
+    "title": "Second tour through Galilee",
+    "refs": [
+      "Luke 8:1-3"
+    ],
+    "place": "galilee"
+  },
+  {
+    "n": 50,
+    "title": "Jesus answers the Beelzebub accusation",
+    "refs": [
+      "Matthew 12:22-37",
+      "Mark 3:20-30"
+    ],
+    "place": "galilee"
+  },
+  {
+    "n": 51,
+    "title": "Religious leaders ask for a sign",
+    "refs": [
+      "Matthew 12:38-45"
+    ],
+    "place": "galilee"
+  },
+  {
+    "n": 52,
+    "title": "Jesus speaks about his true family",
+    "refs": [
+      "Matthew 12:46-50",
+      "Mark 3:31-35",
+      "Luke 8:19-21"
+    ],
+    "place": "galilee"
+  },
+  {
+    "n": 53,
+    "title": "Kingdom parables by the sea",
+    "refs": [
+      "Matthew 13:1-53",
+      "Mark 4:1-34",
+      "Luke 8:4-18"
+    ],
+    "place": "sea-galilee"
+  },
+  {
+    "n": 54,
+    "title": "Jesus calms the storm",
+    "refs": [
+      "Matthew 8:18-27",
+      "Mark 4:35-41",
+      "Luke 8:22-25"
+    ],
+    "place": "sea-galilee"
+  },
+  {
+    "n": 55,
+    "title": "The Gerasene demoniac is delivered",
+    "refs": [
+      "Matthew 8:28-34",
+      "Mark 5:1-20",
+      "Luke 8:26-39"
+    ],
+    "place": "kursi"
+  },
+  {
+    "n": 56,
+    "title": "Jairus' daughter and the woman who touched Jesus",
+    "refs": [
+      "Matthew 9:18-26",
+      "Mark 5:21-43",
+      "Luke 8:40-56"
+    ],
+    "place": "capernaum"
+  },
+  {
+    "n": 57,
+    "title": "Two blind men and a mute man are healed",
+    "refs": [
+      "Matthew 9:27-34"
+    ],
+    "place": "galilee"
+  },
+  {
+    "n": 58,
+    "title": "Final rejection at Nazareth",
+    "refs": [
+      "Matthew 13:54-58",
+      "Mark 6:1-6"
+    ],
+    "place": "nazareth"
+  },
+  {
+    "n": 59,
+    "title": "The Twelve are sent out",
+    "refs": [
+      "Matthew 9:35-38",
+      "Matthew 10",
+      "Matthew 11:1",
+      "Mark 6:6-13",
+      "Luke 9:1-6"
+    ],
+    "place": "galilee"
+  },
+  {
+    "n": 60,
+    "title": "Herod hears about Jesus and John's death is recalled",
+    "refs": [
+      "Matthew 14:1-12",
+      "Mark 6:14-29",
+      "Luke 9:7-9"
+    ],
+    "place": "tiberias"
+  },
+  {
+    "n": 61,
+    "title": "Five thousand are fed",
+    "refs": [
+      "Matthew 14:13-21",
+      "Mark 6:30-44",
+      "Luke 9:10-17",
+      "John 6:1-13"
+    ],
+    "place": "bethsaida"
+  },
+  {
+    "n": 62,
+    "title": "Jesus walks on the water",
+    "refs": [
+      "Matthew 14:22-33",
+      "Mark 6:45-52",
+      "John 6:14-21"
+    ],
+    "place": "sea-galilee"
+  },
+  {
+    "n": 63,
+    "title": "Healings at Gennesaret",
+    "refs": [
+      "Matthew 14:34-36",
+      "Mark 6:53-56"
+    ],
+    "place": "gennesaret"
+  },
+  {
+    "n": 64,
+    "title": "Bread of Life teaching",
+    "refs": [
+      "John 6:22-71"
+    ],
+    "place": "capernaum"
+  },
+  {
+    "n": 65,
+    "title": "What defiles a person",
+    "refs": [
+      "Matthew 15:1-20",
+      "Mark 7:1-23"
+    ],
+    "place": "galilee"
+  },
+  {
+    "n": 66,
+    "title": "The Syrophoenician woman's daughter",
+    "refs": [
+      "Matthew 15:21-28",
+      "Mark 7:24-30"
+    ],
+    "place": "tyre"
+  },
+  {
+    "n": 67,
+    "title": "Decapolis healings and feeding four thousand",
+    "refs": [
+      "Matthew 15:29-38",
+      "Mark 7:31-37",
+      "Mark 8:1-10"
+    ],
+    "place": "decapolis"
+  },
+  {
+    "n": 68,
+    "title": "Warning about the leaven of the leaders",
+    "refs": [
+      "Matthew 16:1-12",
+      "Mark 8:11-21"
+    ],
+    "place": "sea-galilee"
+  },
+  {
+    "n": 69,
+    "title": "A blind man is healed at Bethsaida",
+    "refs": [
+      "Mark 8:22-26"
+    ],
+    "place": "bethsaida"
+  },
+  {
+    "n": 70,
+    "title": "Peter confesses Jesus as the Christ",
+    "refs": [
+      "Matthew 16:13-20",
+      "Mark 8:27-30",
+      "Luke 9:18-21"
+    ],
+    "place": "caesarea-philippi"
+  },
+  {
+    "n": 71,
+    "title": "Jesus first plainly predicts his death and resurrection",
+    "refs": [
+      "Matthew 16:21-28",
+      "Mark 8:31-38",
+      "Mark 9:1",
+      "Luke 9:22-27"
+    ],
+    "place": "caesarea-philippi"
+  },
+  {
+    "n": 72,
+    "title": "The transfiguration",
+    "refs": [
+      "Matthew 17:1-13",
+      "Mark 9:2-13",
+      "Luke 9:28-36"
+    ],
+    "place": ""
+  },
+  {
+    "n": 73,
+    "title": "A demon-possessed boy is healed",
+    "refs": [
+      "Matthew 17:14-20",
+      "Mark 9:14-29",
+      "Luke 9:37-43"
+    ],
+    "place": "galilee"
+  },
+  {
+    "n": 74,
+    "title": "Jesus again predicts his death",
+    "refs": [
+      "Matthew 17:22-23",
+      "Mark 9:30-32",
+      "Luke 9:43-45"
+    ],
+    "place": "galilee"
+  },
+  {
+    "n": 75,
+    "title": "The temple tax",
+    "refs": [
+      "Matthew 17:24-27"
+    ],
+    "place": "capernaum"
+  },
+  {
+    "n": 76,
+    "title": "Greatness, humility, stumbling, forgiveness",
+    "refs": [
+      "Matthew 18",
+      "Mark 9:33-50",
+      "Luke 9:46-50"
+    ],
+    "place": "capernaum"
+  },
+  {
+    "n": 77,
+    "title": "Jesus sets out toward Jerusalem",
+    "refs": [
+      "Luke 9:51-62",
+      "John 7:1-10"
+    ],
+    "place": "samaria"
+  },
+  {
+    "n": 78,
+    "title": "Teaching at the Feast of Tabernacles",
+    "refs": [
+      "John 7:11-52"
+    ],
+    "place": "jerusalem"
+  },
+  {
+    "n": 79,
+    "title": "The woman caught in adultery",
+    "refs": [
+      "John 7:53",
+      "John 8:1-11"
+    ],
+    "place": "jerusalem"
+  },
+  {
+    "n": 80,
+    "title": "Jesus teaches as the Light of the World",
+    "refs": [
+      "John 8:12-59"
+    ],
+    "place": "jerusalem"
+  },
+  {
+    "n": 81,
+    "title": "A man born blind is healed",
+    "refs": [
+      "John 9"
+    ],
+    "place": "jerusalem"
+  },
+  {
+    "n": 82,
+    "title": "The Good Shepherd teaching",
+    "refs": [
+      "John 10:1-21"
+    ],
+    "place": "jerusalem"
+  },
+  {
+    "n": 83,
+    "title": "The seventy are sent and return",
+    "refs": [
+      "Luke 10:1-24"
+    ],
+    "place": "judea"
+  },
+  {
+    "n": 84,
+    "title": "The Good Samaritan",
+    "refs": [
+      "Luke 10:25-37"
+    ],
+    "place": "jericho-road"
+  },
+  {
+    "n": 85,
+    "title": "Mary and Martha receive Jesus",
+    "refs": [
+      "Luke 10:38-42"
+    ],
+    "place": "bethany"
+  },
+  {
+    "n": 86,
+    "title": "Prayer, spiritual conflict, and warnings",
+    "refs": [
+      "Luke 11"
+    ],
+    "place": "judea"
+  },
+  {
+    "n": 87,
+    "title": "Warnings about hypocrisy and readiness",
+    "refs": [
+      "Luke 12"
+    ],
+    "place": "judea"
+  },
+  {
+    "n": 88,
+    "title": "Repentance and the barren fig tree",
+    "refs": [
+      "Luke 13:1-9"
+    ],
+    "place": "judea"
+  },
+  {
+    "n": 89,
+    "title": "A bent woman is healed; mustard seed and leaven",
+    "refs": [
+      "Luke 13:10-21"
+    ],
+    "place": "judea"
+  },
+  {
+    "n": 90,
+    "title": "Jesus at the Feast of Dedication",
+    "refs": [
+      "John 10:22-39"
+    ],
+    "place": "jerusalem"
+  },
+  {
+    "n": 91,
+    "title": "Jesus withdraws beyond the Jordan",
+    "refs": [
+      "John 10:40-42"
+    ],
+    "place": "bethany-beyond-jordan"
+  },
+  {
+    "n": 92,
+    "title": "Teachings in Perea and a Pharisee's house",
+    "refs": [
+      "Luke 13:22-35",
+      "Luke 14:1-24"
+    ],
+    "place": "perea"
+  },
+  {
+    "n": 93,
+    "title": "Counting the cost of discipleship",
+    "refs": [
+      "Luke 14:25-35"
+    ],
+    "place": "perea"
+  },
+  {
+    "n": 94,
+    "title": "Lost sheep, lost coin, lost son",
+    "refs": [
+      "Luke 15"
+    ],
+    "place": "perea"
+  },
+  {
+    "n": 95,
+    "title": "Stewardship, the rich man and Lazarus, forgiveness and faith",
+    "refs": [
+      "Luke 16",
+      "Luke 17:1-10"
+    ],
+    "place": "perea"
+  },
+  {
+    "n": 96,
+    "title": "Lazarus is raised from the dead",
+    "refs": [
+      "John 11:1-44"
+    ],
+    "place": "bethany"
+  },
+  {
+    "n": 97,
+    "title": "Leaders plot; Jesus withdraws",
+    "refs": [
+      "John 11:45-54"
+    ],
+    "place": "ephraim"
+  },
+  {
+    "n": 98,
+    "title": "Ten lepers and teaching on the kingdom",
+    "refs": [
+      "Luke 17:11-37"
+    ],
+    "place": "samaria"
+  },
+  {
+    "n": 99,
+    "title": "Persistent widow and Pharisee with tax collector",
+    "refs": [
+      "Luke 18:1-14"
+    ],
+    "place": "perea"
+  },
+  {
+    "n": 100,
+    "title": "Teaching about divorce",
+    "refs": [
+      "Matthew 19:1-12",
+      "Mark 10:1-12"
+    ],
+    "place": "perea"
+  },
+  {
+    "n": 101,
+    "title": "Jesus blesses children",
+    "refs": [
+      "Matthew 19:13-15",
+      "Mark 10:13-16",
+      "Luke 18:15-17"
+    ],
+    "place": "perea"
+  },
+  {
+    "n": 102,
+    "title": "The rich young ruler",
+    "refs": [
+      "Matthew 19:16-30",
+      "Matthew 20:1-16",
+      "Mark 10:17-31",
+      "Luke 18:18-30"
+    ],
+    "place": "perea"
+  },
+  {
+    "n": 103,
+    "title": "Jesus predicts his death again; ambition corrected",
+    "refs": [
+      "Matthew 20:17-28",
+      "Mark 10:32-45",
+      "Luke 18:31-34"
+    ],
+    "place": "jericho-road"
+  },
+  {
+    "n": 104,
+    "title": "Blind men are healed near Jericho",
+    "refs": [
+      "Matthew 20:29-34",
+      "Mark 10:46-52",
+      "Luke 18:35-43"
+    ],
+    "place": "jericho"
+  },
+  {
+    "n": 105,
+    "title": "Zacchaeus and the parable of the minas",
+    "refs": [
+      "Luke 19:1-28"
+    ],
+    "place": "jericho"
+  },
+  {
+    "n": 106,
+    "title": "Jesus arrives at Bethany before Passover",
+    "refs": [
+      "John 11:55-57",
+      "John 12:1",
+      "John 12:9-11"
+    ],
+    "place": "bethany"
+  },
+  {
+    "n": 107,
+    "title": "Mary anoints Jesus at Bethany",
+    "refs": [
+      "Matthew 26:6-13",
+      "Mark 14:3-9",
+      "John 12:2-8"
+    ],
+    "place": "bethany"
+  },
+  {
+    "n": 108,
+    "title": "Triumphal entry into Jerusalem",
+    "refs": [
+      "Matthew 21:1-11",
+      "Matthew 21:14-17",
+      "Mark 11:1-11",
+      "Luke 19:29-44",
+      "John 12:12-19"
+    ],
+    "place": "jerusalem"
+  },
+  {
+    "n": 109,
+    "title": "Fig tree and temple cleansing",
+    "refs": [
+      "Matthew 21:12-19",
+      "Mark 11:12-18",
+      "Luke 19:45-48"
+    ],
+    "place": "jerusalem"
+  },
+  {
+    "n": 110,
+    "title": "Greeks seek Jesus",
+    "refs": [
+      "John 12:20-50"
+    ],
+    "place": "jerusalem"
+  },
+  {
+    "n": 111,
+    "title": "The withered fig tree",
+    "refs": [
+      "Matthew 21:19-22",
+      "Mark 11:19-25"
+    ],
+    "place": "jerusalem"
+  },
+  {
+    "n": 112,
+    "title": "Jesus' authority challenged and judgment parables",
+    "refs": [
+      "Matthew 21:23-46",
+      "Matthew 22:1-14",
+      "Mark 11:27-33",
+      "Mark 12:1-12",
+      "Luke 20:1-19"
+    ],
+    "place": "jerusalem"
+  },
+  {
+    "n": 113,
+    "title": "Question about paying taxes to Caesar",
+    "refs": [
+      "Matthew 22:15-22",
+      "Mark 12:13-17",
+      "Luke 20:20-26"
+    ],
+    "place": "jerusalem"
+  },
+  {
+    "n": 114,
+    "title": "Sadducees ask about the resurrection",
+    "refs": [
+      "Matthew 22:23-33",
+      "Mark 12:18-27",
+      "Luke 20:27-40"
+    ],
+    "place": "jerusalem"
+  },
+  {
+    "n": 115,
+    "title": "The greatest commandment",
+    "refs": [
+      "Matthew 22:34-40",
+      "Mark 12:28-34"
+    ],
+    "place": "jerusalem"
+  },
+  {
+    "n": 116,
+    "title": "Whose son is the Christ?",
+    "refs": [
+      "Matthew 22:41-46",
+      "Mark 12:35-37",
+      "Luke 20:41-44"
+    ],
+    "place": "jerusalem"
+  },
+  {
+    "n": 117,
+    "title": "Warnings against scribes and Pharisees",
+    "refs": [
+      "Matthew 23",
+      "Mark 12:38-40",
+      "Luke 20:45-47"
+    ],
+    "place": "jerusalem"
+  },
+  {
+    "n": 118,
+    "title": "The widow's offering",
+    "refs": [
+      "Mark 12:41-44",
+      "Luke 21:1-4"
+    ],
+    "place": "jerusalem"
+  },
+  {
+    "n": 119,
+    "title": "Olivet discourse",
+    "refs": [
+      "Matthew 24",
+      "Matthew 25",
+      "Mark 13",
+      "Luke 21:5-36"
+    ],
+    "place": "mount-olives"
+  },
+  {
+    "n": 120,
+    "title": "Plot against Jesus and Judas agrees to betray him",
+    "refs": [
+      "Matthew 26:1-5",
+      "Matthew 26:14-16",
+      "Mark 14:1-2",
+      "Mark 14:10-11",
+      "Luke 22:1-6"
+    ],
+    "place": "jerusalem"
+  },
+  {
+    "n": 121,
+    "title": "Passover preparations",
+    "refs": [
+      "Matthew 26:17-19",
+      "Mark 14:12-16",
+      "Luke 22:7-13"
+    ],
+    "place": "jerusalem"
+  },
+  {
+    "n": 122,
+    "title": "Last Supper begins and Jesus washes the disciples' feet",
+    "refs": [
+      "Luke 22:14-18",
+      "John 13:1-20"
+    ],
+    "place": "jerusalem"
+  },
+  {
+    "n": 123,
+    "title": "Jesus identifies the betrayer",
+    "refs": [
+      "Matthew 26:20-25",
+      "Mark 14:17-21",
+      "Luke 22:21-23",
+      "John 13:21-30"
+    ],
+    "place": "jerusalem"
+  },
+  {
+    "n": 124,
+    "title": "The Lord's Supper",
+    "refs": [
+      "Matthew 26:26-29",
+      "Mark 14:22-25",
+      "Luke 22:19-20"
+    ],
+    "place": "jerusalem"
+  },
+  {
+    "n": 125,
+    "title": "Servant leadership and Peter's denial predicted",
+    "refs": [
+      "Luke 22:24-38",
+      "John 13:31-38"
+    ],
+    "place": "jerusalem"
+  },
+  {
+    "n": 126,
+    "title": "Upper Room discourse",
+    "refs": [
+      "John 14"
+    ],
+    "place": "jerusalem"
+  },
+  {
+    "n": 127,
+    "title": "Vine, persecution, and the Spirit's work",
+    "refs": [
+      "John 15",
+      "John 16"
+    ],
+    "place": "jerusalem"
+  },
+  {
+    "n": 128,
+    "title": "Jesus prays for his disciples",
+    "refs": [
+      "John 17"
+    ],
+    "place": "jerusalem"
+  },
+  {
+    "n": 129,
+    "title": "Gethsemane",
+    "refs": [
+      "Matthew 26:30",
+      "Matthew 26:36-46",
+      "Mark 14:26",
+      "Mark 14:32-42",
+      "Luke 22:39-46",
+      "John 18:1"
+    ],
+    "place": "gethsemane"
+  },
+  {
+    "n": 130,
+    "title": "Jesus is arrested",
+    "refs": [
+      "Matthew 26:47-56",
+      "Mark 14:43-52",
+      "Luke 22:47-53",
+      "John 18:2-12"
+    ],
+    "place": "gethsemane"
+  },
+  {
+    "n": 131,
+    "title": "Jewish hearings and Peter's denials",
+    "refs": [
+      "Matthew 26:57-75",
+      "Mark 14:53-72",
+      "Luke 22:54-65",
+      "John 18:12-27"
+    ],
+    "place": "jerusalem"
+  },
+  {
+    "n": 132,
+    "title": "Formal Sanhedrin hearing",
+    "refs": [
+      "Matthew 27:1-2",
+      "Mark 15:1",
+      "Luke 22:66-71"
+    ],
+    "place": "jerusalem"
+  },
+  {
+    "n": 133,
+    "title": "Judas' remorse and death",
+    "refs": [
+      "Matthew 27:3-10"
+    ],
+    "place": "jerusalem"
+  },
+  {
+    "n": 134,
+    "title": "Jesus before Pilate the first time",
+    "refs": [
+      "Matthew 27:11-14",
+      "Mark 15:2-5",
+      "Luke 23:1-5",
+      "John 18:28-38"
+    ],
+    "place": "jerusalem"
+  },
+  {
+    "n": 135,
+    "title": "Jesus before Herod Antipas",
+    "refs": [
+      "Luke 23:6-12"
+    ],
+    "place": "jerusalem"
+  },
+  {
+    "n": 136,
+    "title": "Jesus before Pilate the second time",
+    "refs": [
+      "Matthew 27:15-26",
+      "Mark 15:6-15",
+      "Luke 23:13-25",
+      "John 18:39",
+      "John 19:1-16"
+    ],
+    "place": "jerusalem"
+  },
+  {
+    "n": 137,
+    "title": "Roman soldiers mock Jesus",
+    "refs": [
+      "Matthew 27:27-30",
+      "Mark 15:16-19"
+    ],
+    "place": "jerusalem"
+  },
+  {
+    "n": 138,
+    "title": "Jesus is led to the cross",
+    "refs": [
+      "Matthew 27:31-34",
+      "Mark 15:20-23",
+      "Luke 23:26-33",
+      "John 19:16-17"
+    ],
+    "place": "jerusalem"
+  },
+  {
+    "n": 139,
+    "title": "First hours on the cross",
+    "refs": [
+      "Matthew 27:35-44",
+      "Mark 15:24-32",
+      "Luke 23:33-43",
+      "John 19:18-27"
+    ],
+    "place": "jerusalem"
+  },
+  {
+    "n": 140,
+    "title": "Jesus dies",
+    "refs": [
+      "Matthew 27:45-56",
+      "Mark 15:33-41",
+      "Luke 23:44-49",
+      "John 19:28-30"
+    ],
+    "place": "jerusalem"
+  },
+  {
+    "n": 141,
+    "title": "Jesus is buried",
+    "refs": [
+      "Matthew 27:57-66",
+      "Mark 15:42-47",
+      "Luke 23:50-56",
+      "John 19:31-42"
+    ],
+    "place": "jerusalem"
+  },
+  {
+    "n": 142,
+    "title": "Women come to the tomb",
+    "refs": [
+      "Matthew 28:1-8",
+      "Mark 16:1-8",
+      "Luke 24:1-8",
+      "John 20:1"
+    ],
+    "place": "jerusalem"
+  },
+  {
+    "n": 143,
+    "title": "Peter and John inspect the empty tomb",
+    "refs": [
+      "Luke 24:9-12",
+      "John 20:2-10"
+    ],
+    "place": "jerusalem"
+  },
+  {
+    "n": 144,
+    "title": "Jesus appears to Mary Magdalene",
+    "refs": [
+      "Mark 16:9-11",
+      "John 20:11-18"
+    ],
+    "place": "jerusalem"
+  },
+  {
+    "n": 145,
+    "title": "Jesus appears to other women",
+    "refs": [
+      "Matthew 28:9-10"
+    ],
+    "place": "jerusalem"
+  },
+  {
+    "n": 146,
+    "title": "The guards report to the leaders",
+    "refs": [
+      "Matthew 28:11-15"
+    ],
+    "place": "jerusalem"
+  },
+  {
+    "n": 147,
+    "title": "Jesus appears on the road to Emmaus",
+    "refs": [
+      "Mark 16:12-13",
+      "Luke 24:13-35"
+    ],
+    "place": "emmaus"
+  },
+  {
+    "n": 148,
+    "title": "Jesus appears to the disciples; Thomas is absent",
+    "refs": [
+      "Mark 16:14",
+      "Luke 24:36-43",
+      "John 20:19-25"
+    ],
+    "place": "jerusalem"
+  },
+  {
+    "n": 149,
+    "title": "Jesus appears again; Thomas believes",
+    "refs": [
+      "John 20:26-31"
+    ],
+    "place": "jerusalem"
+  },
+  {
+    "n": 150,
+    "title": "Jesus appears beside the Sea of Galilee",
+    "refs": [
+      "John 21"
+    ],
+    "place": "sea-galilee"
+  },
+  {
+    "n": 151,
+    "title": "Great Commission in Galilee",
+    "refs": [
+      "Matthew 28:16-20",
+      "Mark 16:15-18"
+    ],
+    "place": "galilee"
+  },
+  {
+    "n": 152,
+    "title": "Final instructions and ascension",
+    "refs": [
+      "Mark 16:19-20",
+      "Luke 24:44-53"
+    ],
+    "place": "mount-olives"
+  }
+];
+
+  const gospelMapPlaces = {
+  "jerusalem": {
+    "name": "Jerusalem",
+    "lat": 31.778,
+    "lng": 35.235,
+    "group": "jerusalem",
+    "note": "Jerusalem, central to the temple ministry and Passion Week."
+  },
+  "bethlehem": {
+    "name": "Bethlehem",
+    "lat": 31.7054,
+    "lng": 35.2024,
+    "group": "judea",
+    "note": "Bethlehem, the Gospel birthplace of Jesus."
+  },
+  "nazareth": {
+    "name": "Nazareth",
+    "lat": 32.6996,
+    "lng": 35.3035,
+    "group": "galilee",
+    "note": "Nazareth in Galilee, where Jesus grew up."
+  },
+  "cana": {
+    "name": "Cana (traditional Kafr Kanna)",
+    "lat": 32.7471,
+    "lng": 35.3423,
+    "group": "galilee",
+    "note": "A traditional identification of Cana; the exact ancient site is debated."
+  },
+  "capernaum": {
+    "name": "Capernaum",
+    "lat": 32.8807,
+    "lng": 35.575,
+    "group": "galilee",
+    "note": "Capernaum on the northwest shore of the Sea of Galilee."
+  },
+  "sea-galilee": {
+    "name": "Sea of Galilee",
+    "lat": 32.824,
+    "lng": 35.587,
+    "group": "galilee",
+    "note": "The lake around which much of Jesus' Galilean ministry occurred."
+  },
+  "galilee": {
+    "name": "Galilee region",
+    "lat": 32.8,
+    "lng": 35.45,
+    "group": "galilee",
+    "note": "Approximate regional center for Galilee."
+  },
+  "nain": {
+    "name": "Nain",
+    "lat": 32.6305,
+    "lng": 35.3483,
+    "group": "galilee",
+    "note": "Traditional location of Nain, south of Nazareth."
+  },
+  "tiberias": {
+    "name": "Tiberias",
+    "lat": 32.794,
+    "lng": 35.5312,
+    "group": "galilee",
+    "note": "Tiberias on the western shore of the Sea of Galilee."
+  },
+  "bethsaida": {
+    "name": "Bethsaida area",
+    "lat": 32.91,
+    "lng": 35.63,
+    "group": "galilee",
+    "note": "Approximate Bethsaida area; proposed ancient-site identifications differ."
+  },
+  "gennesaret": {
+    "name": "Gennesaret plain",
+    "lat": 32.855,
+    "lng": 35.523,
+    "group": "galilee",
+    "note": "Approximate Gennesaret plain on the northwest side of the lake."
+  },
+  "kursi": {
+    "name": "Kursi / eastern Sea of Galilee",
+    "lat": 32.8248,
+    "lng": 35.65,
+    "group": "galilee",
+    "note": "Traditional area associated with the Gerasene/Gadarene episode; exact identification is debated."
+  },
+  "decapolis": {
+    "name": "Decapolis region (Hippos area)",
+    "lat": 32.7792,
+    "lng": 35.6596,
+    "group": "galilee",
+    "note": "Representative point for the Decapolis east of the Sea of Galilee."
+  },
+  "caesarea-philippi": {
+    "name": "Caesarea Philippi / Banias",
+    "lat": 33.2482,
+    "lng": 35.6941,
+    "group": "north",
+    "note": "Banias at the foot of Mount Hermon, identified with Caesarea Philippi."
+  },
+  "tyre": {
+    "name": "Tyre",
+    "lat": 33.2705,
+    "lng": 35.2038,
+    "group": "north",
+    "note": "Tyre on the Mediterranean coast."
+  },
+  "samaria": {
+    "name": "Samaria / central highlands",
+    "lat": 32.276,
+    "lng": 35.198,
+    "group": "judea",
+    "note": "Approximate regional marker near ancient Samaria/Sebastia."
+  },
+  "jacobs-well": {
+    "name": "Jacob's Well / Shechem area",
+    "lat": 32.2119,
+    "lng": 35.2854,
+    "group": "judea",
+    "note": "Traditional location of Jacob's Well near modern Nablus."
+  },
+  "jordan-baptism": {
+    "name": "Jordan baptism area",
+    "lat": 31.8375,
+    "lng": 35.5485,
+    "group": "judea",
+    "note": "Traditional baptism area near the Jordan River; exact first-century location is discussed."
+  },
+  "bethany-beyond-jordan": {
+    "name": "Bethany beyond Jordan / Al-Maghtas area",
+    "lat": 31.8365,
+    "lng": 35.5504,
+    "group": "judea",
+    "note": "Traditional area east of the Jordan associated with Bethany beyond Jordan."
+  },
+  "judean-wilderness": {
+    "name": "Judean Wilderness",
+    "lat": 31.79,
+    "lng": 35.36,
+    "group": "judea",
+    "note": "Approximate regional marker for the Judean wilderness."
+  },
+  "judea": {
+    "name": "Judea region",
+    "lat": 31.7,
+    "lng": 35.22,
+    "group": "judea",
+    "note": "Approximate regional center for Judea."
+  },
+  "judean-hill-country": {
+    "name": "Judean hill country",
+    "lat": 31.7,
+    "lng": 35.1,
+    "group": "judea",
+    "note": "Approximate regional marker; Luke does not name the town."
+  },
+  "jericho": {
+    "name": "Jericho",
+    "lat": 31.856,
+    "lng": 35.461,
+    "group": "judea",
+    "note": "Jericho in the Jordan Valley."
+  },
+  "jericho-road": {
+    "name": "Jerusalem–Jericho road area",
+    "lat": 31.817,
+    "lng": 35.35,
+    "group": "judea",
+    "note": "Approximate midpoint for geographic orientation, not a claimed exact event site."
+  },
+  "bethany": {
+    "name": "Bethany / Al-Eizariya",
+    "lat": 31.771,
+    "lng": 35.261,
+    "group": "jerusalem",
+    "note": "Bethany just east of Jerusalem, associated with Mary, Martha, and Lazarus."
+  },
+  "mount-olives": {
+    "name": "Mount of Olives",
+    "lat": 31.7781,
+    "lng": 35.2434,
+    "group": "jerusalem",
+    "note": "Mount of Olives east of Jerusalem."
+  },
+  "gethsemane": {
+    "name": "Gethsemane area",
+    "lat": 31.7793,
+    "lng": 35.2401,
+    "group": "jerusalem",
+    "note": "Traditional Gethsemane area at the foot of the Mount of Olives."
+  },
+  "emmaus": {
+    "name": "Emmaus (one traditional identification)",
+    "lat": 31.839,
+    "lng": 34.989,
+    "group": "judea",
+    "note": "One traditional Emmaus identification; several sites have been proposed."
+  },
+  "perea": {
+    "name": "Perea region",
+    "lat": 31.95,
+    "lng": 35.65,
+    "group": "judea",
+    "note": "Approximate regional marker east of the Jordan."
+  },
+  "ephraim": {
+    "name": "Ephraim (traditional Taybeh area)",
+    "lat": 31.9535,
+    "lng": 35.3,
+    "group": "judea",
+    "note": "Traditional identification of Ephraim with the Taybeh area."
+  },
+  "egypt": {
+    "name": "Egypt (regional marker)",
+    "lat": 30.0444,
+    "lng": 31.2357,
+    "group": "judea",
+    "note": "Regional orientation only; Matthew does not specify the family's exact location in Egypt."
+  }
+};
+
+
+  let gospelChronologyIndex = 0;
+  let gospelChronologyBible = null;
+  let gospelChronologyTranslationLoaded = "";
+  let bibleLeafletMap = null;
+  let bibleMapMarkers = {};
+  let bibleMapLayerGroup = null;
+
+  const gospelChronologyList = document.getElementById("gospelChronologyList");
+  const gospelChronologyReading = document.getElementById("gospelChronologyReading");
+  const gospelChronologyTitle = document.getElementById("gospelChronologyTitle");
+  const gospelChronologyLocation = document.getElementById("gospelChronologyLocation");
+  const gospelChronologySearch = document.getElementById("gospelChronologySearch");
+  const gospelChronologyTranslation = document.getElementById("gospelChronologyTranslation");
+  const gospelPreviousButton = document.getElementById("gospelPreviousButton");
+  const gospelNextButton = document.getElementById("gospelNextButton");
+  const gospelOpenReaderButton = document.getElementById("gospelOpenReaderButton");
+  const gospelShowMapButton = document.getElementById("gospelShowMapButton");
+  const gospelChronologyProgress = document.getElementById("gospelChronologyProgress");
+  const gospelChronologyProgressText = document.getElementById("gospelChronologyProgressText");
+  const bibleMapPreset = document.getElementById("bibleMapPreset");
+  const bibleMapPlaceList = document.getElementById("bibleMapPlaceList");
+  const bibleMapStatus = document.getElementById("bibleMapStatus");
+
+  function gospelBookIdFromName(name) {
+    const clean = String(name || "").trim().toUpperCase();
+    return bookIdMap[clean] || clean;
+  }
+
+  function gospelParseReference(reference) {
+    const match = String(reference || "").trim().match(/^((?:[1-3]\s+)?[A-Za-z]+)\s+(\d+)(?::(\d+)(?:-(\d+))?)?$/);
+    if (!match) return null;
+    return {
+      book: match[1],
+      chapter: Number(match[2]),
+      startVerse: match[3] ? Number(match[3]) : null,
+      endVerse: match[4] ? Number(match[4]) : (match[3] ? Number(match[3]) : null)
+    };
+  }
+
+  async function gospelEnsureBible() {
+    const wanted = gospelChronologyTranslation.value || "KJV";
+    if (gospelChronologyBible && gospelChronologyTranslationLoaded === wanted) return gospelChronologyBible;
+    gospelChronologyReading.innerHTML = "<div class='status-message'>Loading " + escapeHtml(wanted) + " Gospel text...</div>";
+    gospelChronologyBible = await loadBibleTranslation(wanted);
+    gospelChronologyTranslationLoaded = wanted;
+    return gospelChronologyBible;
+  }
+
+  function gospelFindBook(data, bookName) {
+    if (!data || !Array.isArray(data.books)) return null;
+    const wantedId = gospelBookIdFromName(bookName);
+    return data.books.find(function(book) {
+      return normalizeBookId(getBookName(book), book) === wantedId ||
+        deepNormalize(getBookName(book)) === deepNormalize(bookName);
+    }) || null;
+  }
+
+  function gospelRenderPassageFromBible(data, reference) {
+    const parsed = gospelParseReference(reference);
+    if (!parsed) {
+      return "<div class='error-message'>Could not parse " + escapeHtml(reference) + ".</div>";
+    }
+    const book = gospelFindBook(data, parsed.book);
+    if (!book) {
+      return "<div class='error-message'>" + escapeHtml(parsed.book) + " could not be found in this translation.</div>";
+    }
+    const chapter = (book.chapters || []).find(function(item, index) {
+      return Number(item.chapter || (index + 1)) === parsed.chapter;
+    });
+    if (!chapter) {
+      return "<div class='error-message'>" + escapeHtml(reference) + " could not be found.</div>";
+    }
+    const bookIndex = data.books.indexOf(book);
+    const verses = (chapter.verses || []).filter(function(verse, index) {
+      const n = Number(verse.number || (index + 1));
+      if (parsed.startVerse === null) return true;
+      return n >= parsed.startVerse && n <= parsed.endVerse;
+    });
+    const verseHtml = verses.map(function(verse, index) {
+      const n = verse.number || (index + 1);
+      const verseText = getReaderVerseText(verse, bookIndex, gospelChronologyTranslationLoaded);
+      return "<span class='gospel-verse-line'><span class='gospel-verse-number'>" +
+        escapeHtml(String(n)) + "</span>" + escapeHtml(verseText) + " </span>";
+    }).join("");
+    return "<article class='gospel-passage-card'><h4>" + escapeHtml(reference) + "</h4>" +
+      (verseHtml || "<div class='status-message'>No verses were returned for this passage.</div>") + "</article>";
+  }
+
+  function gospelFilteredIndexes() {
+    const query = deepNormalize(gospelChronologySearch.value || "");
+    return gospelChronologyEvents.map(function(event, index) {
+      return { event: event, index: index };
+    }).filter(function(item) {
+      if (!query) return true;
+      const haystack = deepNormalize(item.event.title + " " + item.event.refs.join(" "));
+      return haystack.includes(query);
+    });
+  }
+
+  function renderGospelChronologyList() {
+    const items = gospelFilteredIndexes();
+    gospelChronologyList.innerHTML = items.length ? items.map(function(item) {
+      const event = item.event;
+      return "<button type='button' class='gospel-event-button" +
+        (item.index === gospelChronologyIndex ? " active" : "") +
+        "' data-gospel-index='" + item.index + "'>" +
+        "<span class='gospel-event-number'>" + event.n + ".</span>" +
+        escapeHtml(event.title) +
+        "<span class='gospel-event-ref'>" + escapeHtml(event.refs.join(" • ")) + "</span></button>";
+    }).join("") : "<div class='status-message'>No chronological events match that search.</div>";
+  }
+
+  function updateGospelProgress() {
+    const current = gospelChronologyIndex + 1;
+    const total = gospelChronologyEvents.length;
+    gospelChronologyProgress.style.width = ((current / total) * 100).toFixed(2) + "%";
+    gospelChronologyProgressText.textContent = "Event " + current + " of " + total;
+    gospelPreviousButton.disabled = gospelChronologyIndex <= 0;
+    gospelNextButton.disabled = gospelChronologyIndex >= total - 1;
+  }
+
+  async function openGospelChronologyEvent(index) {
+    const safeIndex = Math.max(0, Math.min(gospelChronologyEvents.length - 1, Number(index) || 0));
+    gospelChronologyIndex = safeIndex;
+    const event = gospelChronologyEvents[gospelChronologyIndex];
+    gospelChronologyTitle.textContent = event.n + ". " + event.title;
+    const place = event.place ? gospelMapPlaces[event.place] : null;
+    gospelChronologyLocation.textContent = place ? "📍 " + place.name : "";
+    gospelShowMapButton.disabled = !place;
+    renderGospelChronologyList();
+    updateGospelProgress();
+    try {
+      const data = await gospelEnsureBible();
+      gospelChronologyReading.innerHTML = event.refs.map(function(reference) {
+        return gospelRenderPassageFromBible(data, reference);
+      }).join("");
+    } catch (error) {
+      console.error("Gospel chronology error:", error);
+      gospelChronologyReading.innerHTML = "<div class='error-message'>The Gospel text could not be loaded right now.</div>";
+    }
+  }
+
+  function gospelSelectAdjacent(delta) {
+    const next = gospelChronologyIndex + delta;
+    if (next >= 0 && next < gospelChronologyEvents.length) {
+      openGospelChronologyEvent(next);
+      const active = gospelChronologyList.querySelector(".gospel-event-button.active");
+      if (active) active.scrollIntoView({ block: "nearest" });
+    }
+  }
+
+  function gospelOpenFirstReferenceInReader() {
+    const event = gospelChronologyEvents[gospelChronologyIndex];
+    if (!event || !event.refs.length) return;
+    openDeepReferenceInReader(event.refs[0]);
+  }
+
+  function initBibleInteractiveMap() {
+    if (bibleLeafletMap) {
+      setTimeout(function() { bibleLeafletMap.invalidateSize(); }, 50);
+      return;
+    }
+    if (typeof L === "undefined") {
+      bibleMapStatus.innerHTML = "<span class='error-message'>The interactive map library could not load. Check the internet connection and try again.</span>";
+      return;
+    }
+    bibleLeafletMap = L.map("bibleInteractiveMap", { scrollWheelZoom: true }).setView([31.9, 35.35], 8);
+    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors',
+      referrerPolicy: "strict-origin-when-cross-origin"
+    }).addTo(bibleLeafletMap);
+    bibleMapLayerGroup = L.layerGroup().addTo(bibleLeafletMap);
+    renderBibleMapPreset("all");
+    setTimeout(function() { bibleLeafletMap.invalidateSize(); }, 100);
+  }
+
+  function bibleMapKeysForPreset(preset) {
+    const allKeys = Object.keys(gospelMapPlaces);
+    if (!preset || preset === "all") return allKeys;
+    return allKeys.filter(function(key) {
+      return gospelMapPlaces[key].group === preset;
+    });
+  }
+
+  function renderBibleMapPlaceList(keys) {
+    bibleMapPlaceList.innerHTML = keys.map(function(key) {
+      const place = gospelMapPlaces[key];
+      return "<button type='button' class='bible-map-place-button' data-map-place='" + escapeHtml(key) + "'>" +
+        escapeHtml(place.name) + "<small>" + escapeHtml(place.note) + "</small></button>";
+    }).join("");
+  }
+
+  function addBibleMapMarker(key) {
+    const place = gospelMapPlaces[key];
+    if (!place || !bibleLeafletMap || !bibleMapLayerGroup) return null;
+    const marker = L.marker([place.lat, place.lng]).addTo(bibleMapLayerGroup);
+    marker.bindPopup("<strong>" + escapeHtml(place.name) + "</strong><br>" + escapeHtml(place.note));
+    bibleMapMarkers[key] = marker;
+    return marker;
+  }
+
+  function renderBibleMapPreset(preset) {
+    initBibleInteractiveMap();
+    if (!bibleLeafletMap || !bibleMapLayerGroup) return;
+    const keys = bibleMapKeysForPreset(preset);
+    bibleMapLayerGroup.clearLayers();
+    bibleMapMarkers = {};
+    const bounds = [];
+    keys.forEach(function(key) {
+      const marker = addBibleMapMarker(key);
+      if (marker) bounds.push(marker.getLatLng());
+    });
+    renderBibleMapPlaceList(keys);
+    if (bounds.length > 1) bibleLeafletMap.fitBounds(bounds, { padding: [24, 24] });
+    else if (bounds.length === 1) bibleLeafletMap.setView(bounds[0], 11);
+    bibleMapStatus.textContent = keys.length + " Gospel locations shown • modern OpenStreetMap base map";
+    setTimeout(function() { bibleLeafletMap.invalidateSize(); }, 50);
+  }
+
+  function showBibleMapPlace(key) {
+    const place = gospelMapPlaces[key];
+    if (!place) return;
+    activateDeepTab("maps");
+    initBibleInteractiveMap();
+    if (!bibleLeafletMap) return;
+    const currentPresetKeys = bibleMapKeysForPreset(bibleMapPreset.value);
+    if (!currentPresetKeys.includes(key)) {
+      bibleMapPreset.value = "all";
+      renderBibleMapPreset("all");
+    }
+    const marker = bibleMapMarkers[key] || addBibleMapMarker(key);
+    bibleLeafletMap.setView([place.lat, place.lng], 12);
+    if (marker) marker.openPopup();
+    bibleMapPlaceList.querySelectorAll(".bible-map-place-button").forEach(function(button) {
+      button.classList.toggle("active", button.dataset.mapPlace === key);
+    });
+    bibleMapStatus.textContent = "Showing " + place.name + ". " + place.note;
+    setTimeout(function() { bibleLeafletMap.invalidateSize(); }, 50);
+  }
+
+  gospelChronologyList.addEventListener("click", function(event) {
+    const button = event.target.closest("[data-gospel-index]");
+    if (button) openGospelChronologyEvent(Number(button.dataset.gospelIndex));
+  });
+
+  gospelChronologySearch.addEventListener("input", renderGospelChronologyList);
+  gospelChronologyTranslation.addEventListener("change", function() {
+    gospelChronologyBible = null;
+    gospelChronologyTranslationLoaded = "";
+    openGospelChronologyEvent(gospelChronologyIndex);
+  });
+  gospelPreviousButton.addEventListener("click", function() { gospelSelectAdjacent(-1); });
+  gospelNextButton.addEventListener("click", function() { gospelSelectAdjacent(1); });
+  gospelOpenReaderButton.addEventListener("click", gospelOpenFirstReferenceInReader);
+  gospelShowMapButton.addEventListener("click", function() {
+    const event = gospelChronologyEvents[gospelChronologyIndex];
+    if (event && event.place) showBibleMapPlace(event.place);
+  });
+
+  document.getElementById("bibleMapResetButton").addEventListener("click", function() {
+    renderBibleMapPreset(bibleMapPreset.value);
+  });
+  bibleMapPreset.addEventListener("change", function() {
+    renderBibleMapPreset(bibleMapPreset.value);
+  });
+  bibleMapPlaceList.addEventListener("click", function(event) {
+    const button = event.target.closest("[data-map-place]");
+    if (button) showBibleMapPlace(button.dataset.mapPlace);
+  });
+
+  renderGospelChronologyList();
+  updateGospelProgress();
 
 </script>
 
