@@ -10741,6 +10741,68 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
     grid-column: 1 / -1 !important;
   }
 }
+
+
+/* === BibleMastery Parallel/Reader comfort fix: wider card + two selector rows === */
+@media (min-width: 1121px) {
+  .bm-dashboard-grid {
+    grid-template-columns: minmax(500px, 1.08fr) minmax(540px, 1.22fr) !important;
+    gap: 12px !important;
+  }
+}
+
+.bm-reader-card .reader-controls {
+  display: grid !important;
+  grid-template-columns: minmax(240px, 1.25fr) minmax(210px, 1fr) !important;
+  gap: 10px 12px !important;
+  width: 100% !important;
+  align-items: end !important;
+}
+
+/* Row 1 = Translation + Book; Row 2 = Chapter + Verse. */
+.bm-reader-card .reader-control {
+  display: block !important;
+  min-width: 0 !important;
+}
+
+.bm-reader-card .reader-control:nth-of-type(4) {
+  display: block !important;
+}
+
+.bm-reader-card .reader-control label {
+  display: block !important;
+  margin: 0 0 5px !important;
+  font-weight: 800 !important;
+  font-size: 12px !important;
+}
+
+.bm-reader-card .reader-select {
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 42px !important;
+  padding: 8px 10px !important;
+  font-size: 14px !important;
+}
+
+.bm-reader-card .reader-display {
+  margin-top: 2px !important;
+}
+
+@media (max-width: 1120px) {
+  .bm-reader-card .reader-controls {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+  }
+}
+
+@media (max-width: 620px) {
+  .bm-reader-card .reader-controls {
+    grid-template-columns: 1fr !important;
+  }
+  .bm-reader-card .reader-control:first-child {
+    grid-column: auto !important;
+  }
+}
+
 </style>
 <button id="bmInstallAppButton" type="button" aria-label="Install BibleMastery on this computer">⬇ Install BibleMastery</button>
 <script id="biblemastery-desktop-install-script">
