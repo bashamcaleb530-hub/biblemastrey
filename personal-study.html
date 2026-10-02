@@ -1956,6 +1956,25 @@ button,a,input,select,textarea{min-height:38px}
 .bm-passage-book-actions button{font-size:13px}
 @media(max-width:900px){.bm-library-layout{grid-template-columns:1fr}.bm-library-shelf{max-height:300px}.bm-library-frame{min-height:520px;height:68vh}.bm-passage-book-grid{grid-template-columns:1fr}}
 </style>
+
+<style id="bm-book-context-reader-style">
+.bm-book-context-modal{position:fixed;inset:0;z-index:10050;background:rgba(17,10,12,.72);display:flex;align-items:center;justify-content:center;padding:18px}
+.bm-book-context-modal[hidden]{display:none}
+.bm-book-context-dialog{width:min(680px,96vw);max-height:86vh;overflow:auto;background:#fffaf0;color:#2f2430;border:2px solid #c69a45;border-radius:18px;box-shadow:0 24px 70px rgba(0,0,0,.38);padding:20px}
+.bm-book-context-top{display:flex;gap:12px;justify-content:space-between;align-items:flex-start}
+.bm-book-context-top h3{margin:3px 0 2px;color:#7a0d12;font-size:24px}
+.bm-book-context-close{border:1px solid #c69a45;background:#7a0d12;color:#fff7df;border-radius:999px;width:38px;height:38px;font-size:20px;cursor:pointer;flex:0 0 auto}
+.bm-book-context-start{margin:16px 0;padding:14px;border-left:5px solid #c69a45;background:#fff3d2;border-radius:10px}
+.bm-book-context-start strong{display:block;color:#7a0d12;font-size:17px;margin-bottom:5px}
+.bm-book-context-reason{line-height:1.65;margin:12px 0}
+.bm-book-context-themes{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0}
+.bm-book-context-chip{border:1px solid #d8bd7b;border-radius:999px;padding:5px 9px;background:#fff;color:#6a4a12;font-size:12px;font-weight:700}
+.bm-book-context-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}
+.bm-book-context-actions button,.bm-book-context-actions a{min-height:40px}
+.bm-passage-book-card .bm-start-here{margin:9px 0;padding:9px 10px;border-radius:9px;background:rgba(216,185,106,.12);border:1px solid rgba(216,185,106,.3)}
+.bm-passage-book-card .bm-start-here strong{color:var(--gold-light)}
+@media(max-width:600px){.bm-book-context-dialog{padding:15px}.bm-book-context-top h3{font-size:20px}.bm-book-context-actions>*{width:100%}}
+</style>
 </head>
 <body class="bm-layout-dashboard" data-default-view="personal-study">
 
@@ -11157,6 +11176,77 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
     "The Ministry of Healing":{healing:5,evangelism:5,missions:5,history:4,compassion:3}
   };
 
+  const bookStartSections={
+    "The Believer's Authority":{
+      authority:{section:"Authority of the Believer",note:"Begin with Wommack's teaching on the authority Jesus delegated to believers and how that authority is exercised."},
+      identity:{section:"Your Position in Christ",note:"Start with the believer's identity and position in Christ before moving into spiritual authority."},
+      warfare:{section:"Resisting the Devil",note:"Begin where the teaching turns from delegated authority to actively resisting Satan."},
+      faith:{section:"Acting on Delegated Authority",note:"Start with the relationship between faith, God's Word, and exercising authority."},
+      default:{section:"Authority of the Believer",note:"This is the best general starting point for this resource."}
+    },
+    "Christ the Healer":{
+      healing:{section:"Is Healing for All?",note:"Begin with Bosworth's central biblical case for divine healing before moving into receiving and testimony sections."},
+      redemption:{section:"How to Appropriate the Redemptive and Covenant Blessing of Bodily Healing",note:"Start where Bosworth directly connects healing with redemption and covenant blessing."},
+      covenant:{section:"How to Appropriate the Redemptive and Covenant Blessing of Bodily Healing",note:"This section most directly connects covenant promises with receiving healing."},
+      compassion:{section:"The Lord's Compassion",note:"Start with Bosworth's treatment of Jesus' compassion and willingness to heal."},
+      faith:{section:"How to Appropriate the Redemptive and Covenant Blessing of Bodily Healing",note:"Begin where faith and receiving God's promise are applied most directly."},
+      default:{section:"Is Healing for All?",note:"This gives the clearest entry into Bosworth's main argument."}
+    },
+    "Ever-Increasing Faith":{
+      faith:{section:"Ever-Increasing Faith",note:"Begin with Wigglesworth's central emphasis on believing God's Word and acting on faith."},
+      healing:{section:"Faith Applied to Healing",note:"Start with the healing testimonies and teaching where faith is applied to the sick."},
+      spirit:{section:"Life in the Holy Spirit",note:"Begin with Wigglesworth's teaching on the Spirit's power in the believer's life."},
+      gifts:{section:"The Holy Spirit and Spiritual Gifts",note:"Start where the book emphasizes the Spirit's operation and supernatural ministry."},
+      authority:{section:"Faith That Acts",note:"Begin with the passages where faith moves from belief into bold action."},
+      default:{section:"Ever-Increasing Faith",note:"This is the strongest general starting point in the book."}
+    },
+    "Faith That Prevails":{
+      faith:{section:"Faith That Prevails",note:"Begin with the book's central theme of persistent, overcoming faith."},
+      healing:{section:"Prevailing Faith for Healing",note:"Start where faith is applied to sickness and receiving from God."},
+      spirit:{section:"The Holy Spirit and Prevailing Faith",note:"Begin with the sections that connect Spirit-empowered living and active faith."},
+      prayer:{section:"Prevailing Prayer",note:"Start where prayer and faith are treated together."},
+      default:{section:"Faith That Prevails",note:"This is the clearest general entry point."}
+    },
+    "The Wonderful Name of Jesus":{
+      name:{section:"The Wonderful Name of Jesus",note:"Begin with the meaning, authority, and use of Jesus' Name."},
+      authority:{section:"Authority in the Name of Jesus",note:"Start where the book connects Christ's Name with delegated authority."},
+      identity:{section:"The Believer's Place in Christ",note:"Begin with identity in Christ before applying the authority of His Name."},
+      prayer:{section:"Prayer in the Name of Jesus",note:"Start where the Name of Jesus is applied specifically to prayer."},
+      warfare:{section:"The Name of Jesus in Spiritual Conflict",note:"Begin where the book applies Christ's Name to spiritual opposition."},
+      default:{section:"The Wonderful Name of Jesus",note:"This is the strongest general starting point."}
+    },
+    "The Gospel of Healing":{
+      healing:{section:"The Gospel of Healing",note:"Begin with Simpson's presentation of healing as part of the good news of Christ."},
+      faith:{section:"Receiving Healing by Faith",note:"Start where faith and receiving God's healing promise are emphasized."},
+      covenant:{section:"The Lord for the Body",note:"Begin where God's covenant care is applied to the body."},
+      evangelism:{section:"Healing and the Gospel Witness",note:"Start where healing is connected with gospel ministry and witness."},
+      default:{section:"The Gospel of Healing",note:"This is the clearest general starting point."}
+    },
+    "Divine Healing":{
+      healing:{section:"The Lord Thy Healer",note:"Begin with Murray's biblical foundation for God as healer."},
+      prayer:{section:"The Prayer of Faith",note:"Start where healing is connected directly with believing prayer."},
+      faith:{section:"According to Your Faith",note:"Begin with Murray's treatment of faith as the means of receiving."},
+      redemption:{section:"Healing and Redemption",note:"Start where salvation and healing are considered together."},
+      holiness:{section:"Healing and Consecration",note:"Begin where Murray connects healing with a life yielded to God."},
+      default:{section:"The Lord Thy Healer",note:"This is the strongest general entry point."}
+    },
+    "The Ministry of Healing":{
+      healing:{section:"The Ministry of Healing",note:"Begin with Gordon's biblical case for healing ministry in the church."},
+      evangelism:{section:"Healing and Gospel Ministry",note:"Start where healing is considered alongside evangelism and Christian witness."},
+      missions:{section:"Healing and Missions",note:"Begin where healing ministry is connected with the missionary work of the church."},
+      history:{section:"Historical Witnesses to Healing",note:"Start with Gordon's survey of healing testimony in church history."},
+      compassion:{section:"Christ's Compassion and Healing",note:"Begin where the compassion of Jesus is tied to ministry to the sick."},
+      default:{section:"The Ministry of Healing",note:"This is the clearest general starting point."}
+    }
+  };
+
+  function bestStartForBook(book,themes){
+    const map=bookStartSections[book.title]||{};
+    const preferred=(themes||[]).find(t=>map[t]);
+    const data=(preferred&&map[preferred])||map.default||{section:"Recommended Study Section",note:"Start with the section that most directly matches the current passage or topic."};
+    return {theme:preferred||'',section:data.section,note:data.note};
+  }
+
   function currentReaderRef(){
     const bookSel=$('readerBookSelect'),chSel=$('readerChapterSelect'),vSel=$('readerVerseSelect');
     const book=bookSel?.selectedIndex>0?bookSel.options[bookSel.selectedIndex].textContent.trim():'';
@@ -11213,8 +11303,31 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
     if(!ref.book||!ref.chapter){refEl.textContent='Choose a Bible book and chapter to see the strongest book connections.';out.innerHTML='<div class="small-note">The recommendations will update automatically as you read.</div>';return;}
     refEl.textContent='Best matches for '+ref.book+' '+ref.chapter+(ref.verse?(':'+ref.verse):'');
     const picks=bestBooksForPassage(ref);
-    out.innerHTML=picks.map((x,i)=>'<article class="bm-passage-book-card"><div class="bm-eyebrow">MATCH '+(i+1)+'</div><h4>'+esc(x.book.title)+'</h4><div class="small-note">'+esc(x.book.author||'')+'</div><p class="bm-match-reason">Connected through '+esc(themeLabel(x.matched)||'faith and Christian life')+'.</p><div class="bm-passage-book-actions"><button type="button" class="search-button" data-open-library-book="'+esc(x.book.title)+'">Read in Library</button><button type="button" class="reader-nav-button" data-open-theology-book="'+x.index+'">Open Study Entry</button></div></article>').join('');
+    out.innerHTML=picks.map((x,i)=>{const start=bestStartForBook(x.book,x.matched);return '<article class="bm-passage-book-card"><div class="bm-eyebrow">MATCH '+(i+1)+'</div><h4>'+esc(x.book.title)+'</h4><div class="small-note">'+esc(x.book.author||'')+'</div><div class="bm-start-here"><strong>Start here:</strong> '+esc(start.section)+'</div><p class="bm-match-reason">Connected through '+esc(themeLabel(x.matched)||'faith and Christian life')+'.</p><div class="bm-passage-book-actions"><button type="button" class="search-button" data-open-book-context="'+x.index+'">Read from Here</button><button type="button" class="reader-nav-button" data-open-library-book="'+esc(x.book.title)+'">Full Book in Library</button></div></article>'}).join('');
   }
+
+  let bmBookContextState=null;
+  function openBookContext(bookIndexValue,matchedThemes=[]){
+    const books=getBooks(),index=Number(bookIndexValue)||0,book=books[index]; if(!book)return;
+    const start=bestStartForBook(book,matchedThemes);
+    bmBookContextState={book,index,matched:matchedThemes,start};
+    const modal=$('bmBookContextModal'); if(!modal)return;
+    $('bmBookContextTitle').textContent=book.title;
+    $('bmBookContextAuthor').textContent=book.author||'';
+    $('bmBookContextSection').textContent=start.section;
+    $('bmBookContextReason').textContent=start.note+' This recommendation is based on the current Bible passage or study topic, so you can begin with the most relevant part instead of opening the whole book first.';
+    $('bmBookContextThemes').innerHTML=(matchedThemes.length?matchedThemes:['faith']).slice(0,5).map(t=>'<span class="bm-book-context-chip">'+esc(themeLabel([t])||t)+'</span>').join('');
+    const src=librarySources[book.title];
+    $('bmBookContextRead').textContent=src&&src.mode==='external'?'Open Official Reading':'Open at This Starting Point';
+    modal.hidden=false; modal.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden';
+  }
+  function closeBookContext(){const modal=$('bmBookContextModal');if(!modal)return;modal.hidden=true;modal.setAttribute('aria-hidden','true');document.body.style.overflow='';}
+  function openContextInLibrary(fullOnly=false){
+    if(!bmBookContextState)return;
+    const {book,start}=bmBookContextState; closeBookContext();
+    openLibraryBook(book.title,fullOnly?'':start.section,fullOnly?'':start.note);
+  }
+  window.BibleMasteryOpenBookContext=function(title,themes=[]){const books=getBooks(),i=books.findIndex(b=>b.title===title);if(i>=0)openBookContext(i,themes)};
 
   let libraryCurrentTitle='';
   function renderLibraryList(filter=''){
@@ -11222,13 +11335,16 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
     list.innerHTML=books.map((b,i)=>({b,i})).filter(x=>!f||((x.b.title||'')+' '+(x.b.author||'')).toLowerCase().includes(f)).map(x=>'<button type="button" class="bm-library-book '+(x.b.title===libraryCurrentTitle?'active':'')+'" data-library-title="'+esc(x.b.title)+'"><strong>'+esc(x.b.title)+'</strong><span class="small-note">'+esc(x.b.author||'')+'</span></button>').join('')||'<div class="small-note">No matching books.</div>';
   }
 
-  function openLibraryBook(title){
+  function openLibraryBook(title,startSection,startNote){
     const books=getBooks(),book=books.find(b=>b.title===title),source=librarySources[title]; if(!book||!source)return;
     libraryCurrentTitle=title; renderLibraryList($('bmLibrarySearch')?.value||'');
     $('bmLibraryTitle').textContent=book.title; $('bmLibraryAuthor').textContent=book.author||''; $('bmLibraryType').textContent=source.label||'LIBRARY READER';
     const frame=$('bmLibraryFrame'),status=$('bmLibraryStatus'),external=$('bmLibraryExternal');
     external.hidden=false;external.href=source.external||source.url;external.textContent=source.mode==='external'?'Open Official Resource ↗':'Open Full View ↗';
     status.textContent=source.note||'';
+    if(startSection){
+      status.innerHTML='<div class="bm-start-here"><strong>Recommended starting point:</strong> '+esc(startSection)+(startNote?'<br><span>'+esc(startNote)+'</span>':'')+'</div>'+(source.note?'<div style="margin-top:8px">'+esc(source.note)+'</div>':'');
+    }
     if(source.mode==='embed'){
       frame.hidden=false;frame.src=source.url;
     }else{
@@ -11242,9 +11358,17 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
   $('bmLibrarySearch')?.addEventListener('input',e=>renderLibraryList(e.target.value));
   $('bmLibraryList')?.addEventListener('click',e=>{const b=e.target.closest('[data-library-title]');if(b)openLibraryBook(b.dataset.libraryTitle)});
   $('bmPassageBookResults')?.addEventListener('click',e=>{
+    const ctx=e.target.closest('[data-open-book-context]');
+    if(ctx){const picks=bestBooksForPassage(currentReaderRef());const idx=Number(ctx.dataset.openBookContext)||0;const match=picks.find(x=>x.index===idx);openBookContext(idx,match?.matched||[]);return;}
     const lb=e.target.closest('[data-open-library-book]');if(lb){openLibraryBook(lb.dataset.openLibraryBook);return;}
     const tb=e.target.closest('[data-open-theology-book]');if(tb){bookIndex=Number(tb.dataset.openTheologyBook)||0;chapterIndex=0;activate('books');renderBooks($('theologyBookSearch')?.value||'');renderBookReader();$('bmDeepCard')?.scrollIntoView({behavior:'smooth',block:'start'});}
   });
+  $('bmBookContextClose')?.addEventListener('click',closeBookContext);
+  $('bmBookContextModal')?.addEventListener('click',e=>{if(e.target?.id==='bmBookContextModal')closeBookContext()});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('bmBookContextModal')?.hidden)closeBookContext()});
+  $('bmBookContextRead')?.addEventListener('click',()=>openContextInLibrary(false));
+  $('bmBookContextLibrary')?.addEventListener('click',()=>openContextInLibrary(true));
+  $('bmBookContextStudy')?.addEventListener('click',()=>{if(!bmBookContextState)return;bookIndex=bmBookContextState.index;chapterIndex=0;closeBookContext();activate('books');renderBooks($('theologyBookSearch')?.value||'');renderBookReader();$('bmDeepCard')?.scrollIntoView({behavior:'smooth',block:'start'});});
   $('bmOpenLibraryFromBooks')?.addEventListener('click',()=>{$('bmLibraryCard')?.scrollIntoView({behavior:'smooth',block:'start'})});
   ['readerBookSelect','readerChapterSelect','readerVerseSelect','readerTranslationSelect'].forEach(id=>$(id)?.addEventListener('change',()=>setTimeout(renderPassageBookConnections,20)));
   const readerObs=$('readerDisplay');if(readerObs)new MutationObserver(()=>renderPassageBookConnections()).observe(readerObs,{childList:true,subtree:true});
@@ -11452,5 +11576,30 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
 })();
 </script>
 
+
+<div class="bm-book-context-modal" id="bmBookContextModal" hidden aria-hidden="true">
+  <section class="bm-book-context-dialog" role="dialog" aria-modal="true" aria-labelledby="bmBookContextTitle">
+    <div class="bm-book-context-top">
+      <div>
+        <div class="bm-eyebrow">CONNECTED BOOK READING</div>
+        <h3 id="bmBookContextTitle">Book connection</h3>
+        <div class="small-note" id="bmBookContextAuthor"></div>
+      </div>
+      <button class="bm-book-context-close" id="bmBookContextClose" type="button" aria-label="Close book connection">×</button>
+    </div>
+    <div class="bm-book-context-start">
+      <strong>Start here</strong>
+      <span id="bmBookContextSection"></span>
+    </div>
+    <p class="bm-book-context-reason" id="bmBookContextReason"></p>
+    <div class="bm-book-context-themes" id="bmBookContextThemes"></div>
+    <div class="bm-book-context-actions">
+      <button class="search-button" id="bmBookContextRead" type="button">Open at This Starting Point</button>
+      <button class="reader-nav-button" id="bmBookContextStudy" type="button">Open Study Entry</button>
+      <button class="reader-nav-button" id="bmBookContextLibrary" type="button">Open Full Book in Library</button>
+    </div>
+    <p class="small-note" style="margin-top:12px">Deep Study gives you the best place to begin. The complete book stays in the Library.</p>
+  </section>
+</div>
 </body>
 </html>
