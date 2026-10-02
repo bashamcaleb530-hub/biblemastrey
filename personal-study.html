@@ -10683,6 +10683,72 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
             </div>`
         }
       ]
+    },
+    {
+      title:"Christ the Healer",
+      author:"F. F. Bosworth",
+      resourceType:"Public-domain 1924 edition",
+      officialUrl:"https://openlibrary.org/works/OL31252713W/Christ_the_healer",
+      chapters:[
+        {
+          title:"Read 1924 Edition",
+          html:`
+            <div class="bm-public-domain-book">
+              <div class="bm-public-domain-badge">PUBLIC DOMAIN • ORIGINAL 1924 EDITION</div>
+              <h3>Christ the Healer</h3>
+              <p><strong>Author:</strong> F. F. Bosworth</p>
+              <p>This is the original 1924 edition of <em>Christ the Healer: Sermons on Divine Healing</em>. BibleMastery intentionally uses the 1924 public-domain edition and does not reproduce later copyrighted forewords, revisions, or added chapters.</p>
+              <div class="bm-book-source-actions">
+                <a class="search-button bm-book-link" href="https://archive.org/details/christhealerserm0000fred" target="_blank" rel="noopener">Open Full 1924 Scan ↗</a>
+                <a class="reader-nav-button bm-book-link" href="https://openlibrary.org/works/OL31252713W/Christ_the_healer" target="_blank" rel="noopener">Open Library Record ↗</a>
+              </div>
+              <iframe class="bm-book-scan-frame" src="https://archive.org/embed/christhealerserm0000fred" title="Christ the Healer, F. F. Bosworth, original 1924 edition" loading="lazy" allowfullscreen></iframe>
+              <p class="small-note">The scanned pages are served by Internet Archive. An internet connection is required for this embedded scan.</p>
+            </div>`
+        },
+        {
+          title:"Study Guide",
+          html:`
+            <div class="bm-public-domain-book">
+              <div class="bm-public-domain-badge">BIBLEMASTERY STUDY GUIDE</div>
+              <h3>Christ the Healer — Study Focus</h3>
+              <p>Bosworth's central emphasis is that believers should hear what Scripture says about Christ's healing ministry, redemption, faith, God's compassion, and receiving the promises of God.</p>
+              <div class="bm-book-study-grid">
+                <div class="bm-book-study-box"><h4>Healing & Redemption</h4><p>Study how Bosworth connects bodily healing with Christ's redemptive work and covenant promises.</p></div>
+                <div class="bm-book-study-box"><h4>Faith Comes by Hearing</h4><p>Notice the repeated emphasis on hearing God's Word until faith becomes settled in the heart.</p></div>
+                <div class="bm-book-study-box"><h4>The Lord's Compassion</h4><p>Trace passages where Jesus' compassion is connected with His willingness to heal the sick.</p></div>
+                <div class="bm-book-study-box"><h4>Receiving from Christ</h4><p>Compare Bosworth's teaching on appropriation, prayer, confession, and receiving with the Bible passages he cites.</p></div>
+              </div>
+              <h4>Key questions while reading</h4>
+              <ul>
+                <li>What Scriptures does Bosworth use to argue that healing is connected to redemption?</li>
+                <li>How does he distinguish God's willingness to heal from a person's process of receiving?</li>
+                <li>How does the compassion of Jesus shape his doctrine of healing?</li>
+                <li>Which claims are direct biblical statements, and which are Bosworth's interpretation of them?</li>
+                <li>How do these teachings connect with Jehovah-Rapha in the Seven Redemptive Names framework?</li>
+              </ul>
+            </div>`
+        },
+        {
+          title:"1924 Contents",
+          html:`
+            <div class="bm-public-domain-book">
+              <div class="bm-public-domain-badge">ORIGINAL EDITION CONTENTS</div>
+              <h3>Sections in the 1924 edition</h3>
+              <p>The original 1924 table of contents includes the following major sections:</p>
+              <ul>
+                <li>Sermon I</li>
+                <li>Is Healing for All?</li>
+                <li>The Lord's Compassion</li>
+                <li>How to Appropriate the Redemptive and Covenant Blessing of Bodily Healing</li>
+                <li>Paul's Thorn</li>
+                <li>Thirty-one Questions</li>
+                <li>Testimonies</li>
+              </ul>
+              <p class="small-note">Later editions expanded the book. BibleMastery keeps this entry tied to the 1924 edition so later copyrighted additions are not treated as public-domain text.</p>
+            </div>`
+        }
+      ]
     }
   ];
   const getBooks=()=>Array.isArray(window.BIBLEMASTERY_THEOLOGY_BOOKS)?window.BIBLEMASTERY_THEOLOGY_BOOKS:builtInBooks;
@@ -10838,6 +10904,16 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
   }
 }
 
+
+/* BibleMastery public-domain theology book viewer */
+.bm-public-domain-book{display:flex;flex-direction:column;gap:10px}
+.bm-public-domain-badge{display:inline-flex;align-items:center;gap:6px;width:max-content;max-width:100%;padding:5px 9px;border-radius:999px;background:#f7ead0;color:#6f1419;border:1px solid #d7ad45;font-size:11px;font-weight:800;letter-spacing:.04em}
+.bm-book-source-actions{display:flex;flex-wrap:wrap;gap:7px;margin:4px 0 8px}
+.bm-book-scan-frame{width:100%;height:720px;min-height:520px;border:1px solid #d9c49b;border-radius:8px;background:#f8f1e6}
+.bm-book-study-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:10px}
+.bm-book-study-box{border:1px solid #e1cda7;border-radius:8px;background:#fffaf0;padding:11px}
+.bm-book-study-box h4{margin:0 0 6px;color:#73131a}
+@media(max-width:760px){.bm-book-scan-frame{height:560px}.bm-book-study-grid{grid-template-columns:1fr}}
 </style>
 <button id="bmInstallAppButton" type="button" aria-label="Install BibleMastery on this computer">⬇ Install BibleMastery</button>
 <script id="biblemastery-desktop-install-script">
