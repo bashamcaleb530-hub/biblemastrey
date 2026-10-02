@@ -1,10 +1,12 @@
-const CACHE_NAME = "biblemastery-desktop-v4-new-logo";
+const CACHE_NAME = "biblemastery-desktop-v5-exact-logo";
 const CORE_ASSETS = [
   "/personal-study.html",
   "/main.html",
+  "/account.html",
   "/manifest.json",
-  "/biblemastery-app-icon-192.png",
-  "/biblemastery-app-icon-512.png"
+  "/icon-192.png",
+  "/icon-512.png",
+  "/biblemastery-logo.png"
 ];
 
 self.addEventListener("install", event => {
@@ -35,8 +37,9 @@ self.addEventListener("fetch", event => {
   const url = new URL(request.url);
   const forceFresh = [
     "/manifest.json",
-    "/biblemastery-app-icon-192.png",
-    "/biblemastery-app-icon-512.png"
+    "/icon-192.png",
+    "/icon-512.png",
+    "/biblemastery-logo.png"
   ].includes(url.pathname);
 
   if (forceFresh || request.mode === "navigate") {
