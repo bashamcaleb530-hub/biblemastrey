@@ -567,6 +567,36 @@
   .sermon-checklist input{width:auto;margin-top:3px}
   @media(max-width:900px){.sermon-advanced-grid,.sermon-point-grid{grid-template-columns:1fr}.sermon-advanced-wide{grid-column:auto}}
 
+
+  /* RESEARCH + LINGUISTIC TOOL FRAMEWORK — layout intentionally neutral */
+  .research-tool-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+  .research-tool-wide{grid-column:1/-1}
+  .research-toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0}
+  .research-toolbar button{margin:0}
+  .research-output{margin-top:12px;padding:12px;background:rgba(8,15,29,.48);border:1px solid rgba(216,185,106,.2);border-radius:9px;min-height:54px;max-height:480px;overflow:auto}
+  .research-columns{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+  .research-card{background:#132039;border:1px solid rgba(216,185,106,.18);border-radius:8px;padding:12px;min-width:0}
+  .research-card h4{margin:0 0 8px;color:var(--gold)}
+  .translation-picker{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:7px;margin:10px 0}
+  .translation-picker label{display:flex;align-items:center;gap:7px;margin:0;color:var(--text);font-weight:normal}
+  .translation-picker input{width:auto;margin:0}
+  .clause-diagram{display:grid;gap:8px;margin-top:10px}
+  .clause-node{padding:9px 11px;border-left:3px solid var(--gold);background:rgba(216,185,106,.07);border-radius:5px}
+  .lexeme-chip{display:inline-block;padding:5px 8px;margin:4px;background:#172640;border:1px solid rgba(216,185,106,.28);border-radius:999px;color:#f3ead1;cursor:pointer}
+  .quotation-hit{padding:11px;margin:8px 0;background:#132039;border-left:4px solid var(--gold);border-radius:6px}
+  .quotation-kind{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--gold)}
+  .unit-result{font-size:18px;color:var(--text);line-height:1.5}
+  .unit-caution{font-size:12px;color:var(--muted);margin-top:8px}
+  .priority-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+  .smart-search-source{font-size:12px;color:var(--gold);margin-bottom:4px}
+  .smart-search-score{float:right;color:var(--muted);font-size:12px}
+  #advBiblicalMap{height:360px;border-radius:9px;background:#0a1323;border:1px solid rgba(216,185,106,.22);overflow:hidden}
+  .media-note-grid{display:grid;grid-template-columns:minmax(220px,.6fr) minmax(0,1.4fr);gap:12px}
+  .timeline-strip{display:flex;gap:10px;overflow-x:auto;padding:8px 2px}
+  .timeline-item{min-width:210px;padding:10px;background:#132039;border-top:3px solid var(--gold);border-radius:6px}
+  .workspace-profile{padding:10px;background:#132039;border-radius:7px;margin:7px 0}
+  @media(max-width:900px){.research-tool-grid,.priority-row,.media-note-grid{grid-template-columns:1fr}.research-tool-wide{grid-column:auto}}
+
 </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -1563,11 +1593,140 @@
         <textarea id="advSourceNotes" placeholder="Quotation, author/source, page/link/reference, and where it may fit."></textarea>
       </div>
 
+
+
+      <!-- =========================================================
+           ADVANCED RESEARCH & LINGUISTIC TOOLS
+           Functional framework first; final placement/layout comes later.
+      ========================================================== -->
+      <div class="sermon-advanced-card sermon-advanced-wide" id="advancedResearchLinguisticTools">
+        <h3>🧠 Advanced Research & Linguistic Tools</h3>
+        <p>Use the current Bible Reader selection as the shared passage for comparison, original-language research, quotation mapping, media, and research search.</p>
+
+        <div class="research-tool-grid">
+          <div class="research-card research-tool-wide">
+            <h4>📑 Text Comparison Tool</h4>
+            <p class="small-note">Compare the selected reader verse — or the whole selected chapter when no verse is chosen — across as many BibleMastery translations as you choose.</p>
+            <div id="advCompareTranslationPicker" class="translation-picker"></div>
+            <div class="research-toolbar">
+              <button id="advRunTextComparison" type="button">Compare Current Passage</button>
+              <button id="advCompareSelectCore" class="secondary" type="button">KJV + WEB + ASV</button>
+              <button id="advCompareSelectAll" class="secondary" type="button">Select All</button>
+              <button id="advCompareClear" class="secondary" type="button">Clear</button>
+            </div>
+            <div id="advTextComparisonOutput" class="research-output">Choose a passage in the Bible Reader, then compare it here.</div>
+          </div>
+
+          <div class="research-card research-tool-wide">
+            <h4>🔬 Exegetical Guide</h4>
+            <p class="small-note">Builds an original-language research view from KJV+ Strong’s tagging, existing Strong’s/BDB/Thayer resources, and a clause-structure diagram. A full morphology/syntax dataset can plug into the same guide later without changing the interface.</p>
+            <div class="research-toolbar">
+              <button id="advRunExegeticalGuide" type="button">Analyze Current Verse</button>
+              <button id="advExegeticalToNotes" class="secondary" type="button">Add Results to Exegetical Notes</button>
+              <button id="advLanguageToNotes" class="secondary" type="button">Add Word Study to Hebrew/Greek Notes</button>
+            </div>
+            <div id="advExegeticalGuideOutput" class="research-output">Select a specific verse in the Bible Reader to begin.</div>
+          </div>
+
+          <div class="research-card">
+            <h4>🔁 OT / NT Quotation Mapper</h4>
+            <p class="small-note">Checks the selected verse against quotation/allusion data in both directions: NT → OT and OT → NT.</p>
+            <div class="research-toolbar">
+              <button id="advRunQuotationMapper" type="button">Map Current Verse</button>
+              <button id="advQuotationToCrossRefs" class="secondary" type="button">Add to Cross-References</button>
+            </div>
+            <div id="advQuotationMapperOutput" class="research-output">Select a verse and run the mapper.</div>
+          </div>
+
+          <div class="research-card">
+            <h4>⚖️ Weights & Measures Converter</h4>
+            <div class="priority-row">
+              <div><label for="advUnitValue">Amount</label><input id="advUnitValue" type="number" step="any" value="1"></div>
+              <div><label for="advUnitType">Biblical Unit</label><select id="advUnitType"></select></div>
+              <div><label for="advUnitTarget">Modern Unit</label><select id="advUnitTarget"></select></div>
+            </div>
+            <div class="research-toolbar"><button id="advConvertUnit" type="button">Convert</button></div>
+            <div id="advUnitOutput" class="research-output">Choose an ancient unit to see an approximate modern equivalent.</div>
+          </div>
+
+          <div class="research-card research-tool-wide">
+            <h4>🗺️ Interactive Media, Maps & Timeline</h4>
+            <div class="media-note-grid">
+              <div>
+                <label for="advMapLocationSelect">Biblical Location</label>
+                <select id="advMapLocationSelect"></select>
+                <div class="research-toolbar">
+                  <button id="advShowMapLocation" type="button">Show Location</button>
+                  <button id="advMapToNotes" class="secondary" type="button">Add Location to Map/Timeline Notes</button>
+                </div>
+                <label for="advTimelinePreset">Timeline</label>
+                <select id="advTimelinePreset">
+                  <option value="patriarchs">Patriarchs</option>
+                  <option value="exodus">Exodus & Wilderness</option>
+                  <option value="kingdom">United & Divided Kingdom</option>
+                  <option value="exile">Exile & Return</option>
+                  <option value="jesus">Life and Ministry of Jesus</option>
+                  <option value="earlyChurch">Early Church & Paul</option>
+                </select>
+                <div class="research-toolbar"><button id="advShowTimeline" type="button">Show Timeline</button></div>
+                <label for="advCultureConcept">Cultural Concept Locator</label>
+                <select id="advCultureConcept"></select>
+                <div class="research-toolbar">
+                  <button id="advShowCultureConcept" type="button">Show Cultural Context</button>
+                  <button id="advOpenTerrain" class="secondary" type="button">Open 3D Terrain</button>
+                </div>
+                <div id="advCultureOutput" class="research-output">Choose a cultural concept.</div>
+              </div>
+              <div>
+                <div id="advBiblicalMap">Map loads when you choose a location.</div>
+                <div id="advTimelineOutput" class="research-output" style="margin-top:10px;">Choose a timeline.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="research-card research-tool-wide">
+            <h4>✨ AI Smart Search</h4>
+            <p class="small-note">Natural-language research search across the current sermon, saved sermon research, Scripture, and any BibleMastery Library search adapter connected to this page. The local search itself uses no AI credits.</p>
+            <label for="advSmartSearchQuery">What are you researching?</label>
+            <input id="advSmartSearchQuery" placeholder="Example: righteousness by faith and peace with God">
+            <div class="research-toolbar">
+              <button id="advRunSmartSearch" type="button">Smart Search</button>
+              <button id="advSmartSearchAi" class="secondary" type="button">Ask AI About These Results</button>
+              <button id="advSmartSearchToNotes" class="secondary" type="button">Add Results to Research Notes</button>
+            </div>
+            <div id="advSmartSearchStatus" class="small-note"></div>
+            <div id="advSmartSearchOutput" class="research-output">Enter a natural-language research question.</div>
+          </div>
+
+          <div class="research-card research-tool-wide">
+            <h4>🧩 Custom Workspaces & Resource Prioritization</h4>
+            <p class="small-note">Save resource preferences now. We will decide the visible screen arrangement later, so this stores the settings without locking us into a final layout.</p>
+            <label for="advWorkspaceProfileName">Workspace Name</label>
+            <input id="advWorkspaceProfileName" placeholder="Example: Expository Study">
+            <div class="priority-row">
+              <div><label for="advPriorityCommentary1">Commentary Priority 1</label><select id="advPriorityCommentary1"></select></div>
+              <div><label for="advPriorityCommentary2">Commentary Priority 2</label><select id="advPriorityCommentary2"></select></div>
+              <div><label for="advPriorityCommentary3">Commentary Priority 3</label><select id="advPriorityCommentary3"></select></div>
+            </div>
+            <label for="advPriorityTranslations">Preferred Translation Order</label>
+            <input id="advPriorityTranslations" value="KJV, WEB, ASV" placeholder="KJV, WEB, ASV">
+            <div class="research-toolbar">
+              <button id="advSaveWorkspaceProfile" type="button">Save Workspace</button>
+              <button id="advApplyWorkspaceProfile" class="secondary" type="button">Apply Selected Workspace</button>
+              <button id="advDeleteWorkspaceProfile" class="danger" type="button">Delete Selected Workspace</button>
+            </div>
+            <label for="advWorkspaceProfileSelect">Saved Workspaces</label>
+            <select id="advWorkspaceProfileSelect"><option value="">Choose a workspace</option></select>
+            <div id="advWorkspaceProfileOutput" class="research-output">No workspace selected.</div>
+          </div>
+        </div>
+      </div>
+
       <div class="sermon-advanced-card sermon-advanced-wide">
         <h3>📖 Sermon Research Library</h3>
         <p>Save research items separately while developing the sermon.</p>
         <div class="sermon-point-grid">
-          <div><label>Category</label><select id="advLibraryType"><option>Scripture</option><option>Word Study</option><option>Cross-Reference</option><option>Commentary</option><option>Illustration</option><option>Application</option><option>Question</option><option>Quote</option><option>People / Place / Event</option><option>Map / Timeline</option></select></div>
+          <div><label>Category</label><select id="advLibraryType"><option>Scripture</option><option>Word Study</option><option>Cross-Reference</option><option>Commentary</option><option>Illustration</option><option>Application</option><option>Question</option><option>Quote</option><option>People / Place / Event</option><option>Map / Timeline</option><option>Text Comparison</option><option>Exegetical Guide</option><option>OT / NT Quotation</option><option>Weights / Measures</option><option>Smart Search</option></select></div>
           <div><label>Title / Reference</label><input id="advLibraryTitle" placeholder="Reference or short title"></div>
           <div><label>Research</label><textarea id="advLibraryText" placeholder="Research note..."></textarea></div>
         </div>
@@ -2983,6 +3142,387 @@
   if(advEl("advPrintFullSermon"))advEl("advPrintFullSermon").addEventListener("click",function(){
     const w=window.open("","_blank");if(!w)return;w.document.write("<!doctype html><html><head><title>Sermon Package</title><style>body{font-family:Arial,sans-serif;max-width:900px;margin:40px auto;padding:0 24px;line-height:1.6;white-space:pre-wrap}h1{font-size:24px}</style></head><body><h1>BibleMastery — Sermon Development Package</h1>"+escapeHTML(advFullPackage())+"</body></html>");w.document.close();w.focus();w.print();
   });
+
+
+  /* =========================================
+     ADVANCED RESEARCH + LINGUISTIC TOOLS
+     Kept modular so the final page layout can be changed later.
+  ========================================= */
+
+  const ADV_TRANSLATION_LABELS = {
+    KJV:"King James Version (KJV)", KJV1611:"King James Version 1611", KJVPLUS:"King James Version Plus (KJV+)",
+    YLT:"Young's Literal Translation", WEB:"World English Bible", ASV:"American Standard Version",
+    GENEVA1599:"Geneva Bible 1599", DRA:"Douay-Rheims American Edition", BSB:"Berean Standard Bible", MSB:"Majority Standard Bible"
+  };
+
+  function advSelectedReaderLocation(requireVerse){
+    if(!readerBible || readerBook.value==="" || readerChapter.value==="") return null;
+    const bi=Number(readerBook.value), ci=Number(readerChapter.value);
+    const book=readerBible.books[bi], chapter=book && book.chapters ? book.chapters[ci] : null;
+    if(!book || !chapter) return null;
+    const hasVerse=readerVerse.value!=="";
+    if(requireVerse && !hasVerse) return null;
+    const vi=hasVerse ? Number(readerVerse.value) : null;
+    return {
+      bookIndex:bi, chapterIndex:ci, verseIndex:vi,
+      bookName:getBookName(book), chapterNumber:chapterNumber(chapter,ci),
+      verseNumber:hasVerse ? verseNumber(chapter.verses[vi],vi) : null,
+      reference:getBookName(book)+" "+chapterNumber(chapter,ci)+(hasVerse?":"+verseNumber(chapter.verses[vi],vi):""),
+      testament:bi<39?"OT":"NT"
+    };
+  }
+
+  function advFindBookIndexByName(bible,name){
+    const wanted=String(name||"").trim().toLowerCase();
+    return (bible.books||[]).findIndex(function(b){return getBookName(b).trim().toLowerCase()===wanted;});
+  }
+
+  async function advGetPassageFromTranslation(translation,loc){
+    const bible=await getBibleByTranslation(translation);
+    let bi=loc.bookIndex;
+    if(!bible.books[bi] || getBookName(bible.books[bi]).toLowerCase()!==loc.bookName.toLowerCase()) bi=advFindBookIndexByName(bible,loc.bookName);
+    if(bi<0) throw new Error("Book not found in "+translation);
+    const book=bible.books[bi], chapter=book.chapters[loc.chapterIndex];
+    if(!chapter) throw new Error("Chapter not found in "+translation);
+    const verses=chapter.verses||[];
+    if(loc.verseIndex!==null){
+      const verse=verses[loc.verseIndex];
+      if(!verse) throw new Error("Verse not found in "+translation);
+      return [{reference:getBookName(book)+" "+chapterNumber(chapter,loc.chapterIndex)+":"+verseNumber(verse,loc.verseIndex),text:verseText(verse,translation,bi)}];
+    }
+    return verses.map(function(v,i){return {reference:getBookName(book)+" "+chapterNumber(chapter,loc.chapterIndex)+":"+verseNumber(v,i),text:verseText(v,translation,bi)};});
+  }
+
+  function advInitTranslationPicker(){
+    const wrap=advEl("advCompareTranslationPicker"); if(!wrap)return;
+    wrap.innerHTML=Object.entries(ADV_TRANSLATION_LABELS).map(function(pair){
+      const checked=["KJV","WEB","ASV"].includes(pair[0])?" checked":"";
+      return "<label><input type='checkbox' class='adv-compare-version' value='"+escapeHTML(pair[0])+"'"+checked+"> "+escapeHTML(pair[1])+"</label>";
+    }).join("");
+  }
+  advInitTranslationPicker();
+
+  function advSetComparisonVersions(mode){
+    document.querySelectorAll(".adv-compare-version").forEach(function(cb){
+      cb.checked = mode==="all" ? true : mode==="clear" ? false : ["KJV","WEB","ASV"].includes(cb.value);
+    });
+  }
+  if(advEl("advCompareSelectCore"))advEl("advCompareSelectCore").addEventListener("click",function(){advSetComparisonVersions("core");});
+  if(advEl("advCompareSelectAll"))advEl("advCompareSelectAll").addEventListener("click",function(){advSetComparisonVersions("all");});
+  if(advEl("advCompareClear"))advEl("advCompareClear").addEventListener("click",function(){advSetComparisonVersions("clear");});
+
+  if(advEl("advRunTextComparison"))advEl("advRunTextComparison").addEventListener("click",async function(){
+    const out=advEl("advTextComparisonOutput"),loc=advSelectedReaderLocation(false);
+    if(!loc){out.innerHTML="<div class='status-message'>Choose a book and chapter in the Bible Reader first.</div>";return;}
+    const versions=Array.from(document.querySelectorAll(".adv-compare-version:checked")).map(function(x){return x.value;});
+    if(!versions.length){out.innerHTML="<div class='status-message'>Select at least one translation.</div>";return;}
+    out.innerHTML="<div class='status-message'>Loading "+versions.length+" translation"+(versions.length===1?"":"s")+"...</div>";
+    const cards=[];
+    for(const version of versions){
+      try{
+        const passage=await advGetPassageFromTranslation(version,loc);
+        const text=passage.map(function(x){return (loc.verseIndex===null?"<strong>"+escapeHTML(x.reference)+"</strong> ":"")+escapeHTML(x.text);}).join("<br><br>");
+        cards.push("<div class='research-card'><h4>"+escapeHTML(ADV_TRANSLATION_LABELS[version]||version)+"</h4><div>"+text+"</div></div>");
+      }catch(e){cards.push("<div class='research-card'><h4>"+escapeHTML(version)+"</h4><div class='error-message'>"+escapeHTML(e.message)+"</div></div>");}
+    }
+    out.innerHTML="<div class='small-note' style='margin-bottom:8px'>"+escapeHTML(loc.reference)+"</div><div class='research-columns'>"+cards.join("")+"</div>";
+  });
+
+  function advExtractRawVerseText(verse){
+    return String((verse&&(verse.text||verse.content||verse.verseText||verse.verse))||"");
+  }
+  function advUnique(arr){return Array.from(new Set(arr));}
+  function advBuildClauseDiagram(text){
+    const cleaned=String(text||"").replace(/<[^>]+>/g," ").replace(/\s+/g," ").trim();
+    let clauses=cleaned.split(/(?<=[,;:.!?])\s+|\s+(?=(?:and|but|for|because|therefore|that|which|who|when|if|then)\b)/i).map(function(x){return x.trim();}).filter(Boolean);
+    if(clauses.length<2 && cleaned) clauses=cleaned.split(/\s+(?:and|but|for)\s+/i).filter(Boolean);
+    return clauses.slice(0,12).map(function(c,i){return "<div class='clause-node'><strong>Clause "+(i+1)+":</strong> "+escapeHTML(c)+"</div>";}).join("") || "<div class='small-note'>No clause structure could be generated.</div>";
+  }
+  async function advLexiconSummary(strongs){
+    const rows=[];
+    for(const key of strongs.slice(0,24)){
+      try{
+        const strong=findStrongEntry(key);
+        let lemma=strong&&strong.data?strong.data.lemma:"", translit=strong&&strong.data?strong.data.transliteration:"", definition=strong&&strong.data?strong.data.definition:"", grammar="";
+        if(key.startsWith("G")){
+          const t=await findThayerEntry(key).catch(function(){return null;});
+          if(t){lemma=t.lemma||lemma; grammar=t.grammar||""; definition=t.text||(Array.isArray(t.paragraphs)?t.paragraphs.join(" "):definition);}
+        }else if(key.startsWith("H")){
+          const b=await findBdbEntry(key).catch(function(){return null;});
+          if(b){lemma=b.word||lemma; translit=b.transliteration||translit; definition=b.shortDefinition||b.text||definition;}
+        }
+        rows.push({key,lemma,translit,grammar,definition:String(definition||"").replace(/\s+/g," ").trim().slice(0,550)});
+      }catch(e){rows.push({key,lemma:"",translit:"",grammar:"",definition:"Lookup unavailable"});}
+    }
+    return rows;
+  }
+  let advLastExegeticalText="",advLastLanguageText="";
+  if(advEl("advRunExegeticalGuide"))advEl("advRunExegeticalGuide").addEventListener("click",async function(){
+    const out=advEl("advExegeticalGuideOutput"),loc=advSelectedReaderLocation(true);
+    if(!loc){out.innerHTML="<div class='status-message'>Choose a specific verse in the Bible Reader first.</div>";return;}
+    out.innerHTML="<div class='status-message'>Building exegetical guide...</div>";
+    try{
+      const plus=await getBibleByTranslation("KJVPLUS");
+      let bi=loc.bookIndex;if(!plus.books[bi]||getBookName(plus.books[bi]).toLowerCase()!==loc.bookName.toLowerCase())bi=advFindBookIndexByName(plus,loc.bookName);
+      const ch=plus.books[bi].chapters[loc.chapterIndex],v=ch.verses[loc.verseIndex];
+      const raw=advExtractRawVerseText(v),prefix=bi<39?"H":"G";
+      const strongs=advUnique(Array.from(raw.matchAll(/<S>(\d+)<\/S>/g)).map(function(m){return prefix+String(Number(m[1]));}));
+      const plain=raw.replace(/<S>\d+<\/S>/g,"").replace(/<[^>]+>/g,"").replace(/\s+/g," ").trim();
+      const lex=await advLexiconSummary(strongs);
+      const lexHtml=lex.length?lex.map(function(x){return "<div class='research-card'><h4>"+escapeHTML(x.key+(x.lemma?" — "+x.lemma:""))+"</h4>"+(x.translit?"<div><strong>Transliteration:</strong> "+escapeHTML(x.translit)+"</div>":"")+(x.grammar?"<div><strong>Grammar:</strong> "+escapeHTML(x.grammar)+"</div>":"")+"<div class='small-note'>"+escapeHTML(x.definition||"No definition loaded.")+"</div></div>";}).join(""):"<div class='small-note'>No Strong’s tags were found for this verse in the loaded KJV+ data.</div>";
+      let morphologyHtml="<div class='small-note'>Full morphology/syntax parsing is not connected yet. This guide currently uses lexical tagging plus a structural clause view.</div>";
+      if(typeof window.BibleMasteryMorphologyProvider==="function"){
+        try{const morph=await window.BibleMasteryMorphologyProvider(loc);if(morph)morphologyHtml=typeof morph==="string"?morph:"<pre>"+escapeHTML(JSON.stringify(morph,null,2))+"</pre>";}catch(e){}
+      }
+      out.innerHTML="<div class='research-card'><h4>"+escapeHTML(loc.reference)+"</h4><div>"+escapeHTML(plain)+"</div></div>"+
+        "<h4 style='color:var(--gold)'>Original-Language Lexical Findings</h4><div class='research-columns'>"+lexHtml+"</div>"+
+        "<h4 style='color:var(--gold)'>Clause / Sentence Structure View</h4><div class='clause-diagram'>"+advBuildClauseDiagram(plain)+"</div>"+
+        "<h4 style='color:var(--gold)'>Morphology / Syntax Provider</h4>"+morphologyHtml;
+      advLastExegeticalText=loc.reference+"\nText: "+plain+"\n\nClause structure:\n"+plain;
+      advLastLanguageText=loc.reference+"\n"+lex.map(function(x){return [x.key,x.lemma,x.translit,x.grammar,x.definition].filter(Boolean).join(" | ");}).join("\n");
+    }catch(e){console.error(e);out.innerHTML="<div class='error-message'>The exegetical guide could not load this verse.</div>";}
+  });
+  if(advEl("advExegeticalToNotes"))advEl("advExegeticalToNotes").addEventListener("click",function(){if(advLastExegeticalText)advEl("advExegetical").value+=(advEl("advExegetical").value.trim()?"\n\n":"")+advLastExegeticalText;});
+  if(advEl("advLanguageToNotes"))advEl("advLanguageToNotes").addEventListener("click",function(){if(advLastLanguageText)advEl("advOriginalLanguage").value+=(advEl("advOriginalLanguage").value.trim()?"\n\n":"")+advLastLanguageText;});
+
+  const OT_NT_QUOTATION_SEED = [
+    {nt:"Matthew 1:23",ot:"Isaiah 7:14",kind:"quotation",note:"Matthew cites Isaiah in connection with Immanuel."},
+    {nt:"Matthew 2:6",ot:"Micah 5:2",kind:"quotation",note:"Bethlehem ruler prophecy."},
+    {nt:"Matthew 3:3",ot:"Isaiah 40:3",kind:"quotation",note:"Voice in the wilderness."},
+    {nt:"Matthew 4:4",ot:"Deuteronomy 8:3",kind:"quotation",note:"Man shall not live by bread alone."},
+    {nt:"Matthew 4:6",ot:"Psalm 91:11-12",kind:"quotation",note:"The tempter quotes Psalm 91."},
+    {nt:"Matthew 4:7",ot:"Deuteronomy 6:16",kind:"quotation",note:"Do not test the Lord."},
+    {nt:"Matthew 4:10",ot:"Deuteronomy 6:13",kind:"quotation",note:"Worship and serve God alone."},
+    {nt:"Matthew 11:10",ot:"Malachi 3:1",kind:"quotation",note:"Messenger sent before the Lord."},
+    {nt:"Matthew 21:5",ot:"Zechariah 9:9",kind:"quotation",note:"King comes humble and riding on a donkey."},
+    {nt:"Matthew 21:13",ot:"Isaiah 56:7",kind:"quotation",note:"House of prayer."},
+    {nt:"Matthew 21:13",ot:"Jeremiah 7:11",kind:"quotation",note:"Den of robbers."},
+    {nt:"Matthew 22:37",ot:"Deuteronomy 6:5",kind:"quotation",note:"Love the Lord your God."},
+    {nt:"Matthew 22:39",ot:"Leviticus 19:18",kind:"quotation",note:"Love your neighbor as yourself."},
+    {nt:"Matthew 22:44",ot:"Psalm 110:1",kind:"quotation",note:"The LORD said to my Lord."},
+    {nt:"Matthew 26:31",ot:"Zechariah 13:7",kind:"quotation",note:"Strike the shepherd and the sheep scatter."},
+    {nt:"Mark 1:2",ot:"Malachi 3:1",kind:"quotation",note:"Messenger prepares the way."},
+    {nt:"Mark 1:3",ot:"Isaiah 40:3",kind:"quotation",note:"Voice in the wilderness."},
+    {nt:"Luke 4:18-19",ot:"Isaiah 61:1-2",kind:"quotation",note:"Jesus reads Isaiah in Nazareth."},
+    {nt:"Luke 20:42-43",ot:"Psalm 110:1",kind:"quotation",note:"David calls the Messiah Lord."},
+    {nt:"John 1:23",ot:"Isaiah 40:3",kind:"quotation",note:"John identifies himself with the wilderness voice."},
+    {nt:"John 2:17",ot:"Psalm 69:9",kind:"allusion",note:"Zeal for your house."},
+    {nt:"John 6:31",ot:"Psalm 78:24",kind:"quotation/allusion",note:"Bread from heaven."},
+    {nt:"John 12:15",ot:"Zechariah 9:9",kind:"quotation",note:"Daughter of Zion and the coming King."},
+    {nt:"Acts 2:17-21",ot:"Joel 2:28-32",kind:"quotation",note:"Peter cites Joel at Pentecost."},
+    {nt:"Acts 2:25-28",ot:"Psalm 16:8-11",kind:"quotation",note:"Peter cites David concerning resurrection."},
+    {nt:"Acts 2:34-35",ot:"Psalm 110:1",kind:"quotation",note:"Exaltation at God's right hand."},
+    {nt:"Acts 8:32-33",ot:"Isaiah 53:7-8",kind:"quotation",note:"The Ethiopian official reads Isaiah 53."},
+    {nt:"Acts 13:47",ot:"Isaiah 49:6",kind:"quotation",note:"Light for the Gentiles."},
+    {nt:"Romans 1:17",ot:"Habakkuk 2:4",kind:"quotation",note:"The righteous shall live by faith."},
+    {nt:"Romans 3:10-12",ot:"Psalm 14:1-3",kind:"quotation",note:"Paul's chain of texts on universal sin."},
+    {nt:"Romans 4:3",ot:"Genesis 15:6",kind:"quotation",note:"Abraham believed God."},
+    {nt:"Romans 9:25",ot:"Hosea 2:23",kind:"quotation",note:"Not my people / my people."},
+    {nt:"Romans 10:13",ot:"Joel 2:32",kind:"quotation",note:"Everyone who calls on the name of the Lord."},
+    {nt:"Romans 12:19",ot:"Deuteronomy 32:35",kind:"quotation",note:"Vengeance belongs to God."},
+    {nt:"1 Corinthians 1:19",ot:"Isaiah 29:14",kind:"quotation",note:"Wisdom of the wise brought to nothing."},
+    {nt:"1 Corinthians 10:7",ot:"Exodus 32:6",kind:"quotation",note:"Israel's idolatry in the wilderness."},
+    {nt:"1 Corinthians 15:54",ot:"Isaiah 25:8",kind:"quotation/allusion",note:"Death swallowed up in victory."},
+    {nt:"Galatians 3:6",ot:"Genesis 15:6",kind:"quotation",note:"Abraham believed God."},
+    {nt:"Galatians 3:11",ot:"Habakkuk 2:4",kind:"quotation",note:"The righteous shall live by faith."},
+    {nt:"Galatians 4:27",ot:"Isaiah 54:1",kind:"quotation",note:"Rejoice, barren woman."},
+    {nt:"Ephesians 4:8",ot:"Psalm 68:18",kind:"quotation/application",note:"Ascended on high and gave gifts."},
+    {nt:"Ephesians 6:2-3",ot:"Exodus 20:12",kind:"quotation",note:"Honor father and mother."},
+    {nt:"Hebrews 1:5",ot:"Psalm 2:7",kind:"quotation",note:"You are my Son."},
+    {nt:"Hebrews 1:8-9",ot:"Psalm 45:6-7",kind:"quotation",note:"Your throne, O God."},
+    {nt:"Hebrews 2:6-8",ot:"Psalm 8:4-6",kind:"quotation",note:"Humanity and dominion."},
+    {nt:"Hebrews 8:8-12",ot:"Jeremiah 31:31-34",kind:"quotation",note:"Promise of the new covenant."},
+    {nt:"Hebrews 10:5-7",ot:"Psalm 40:6-8",kind:"quotation",note:"A body prepared and doing God's will."},
+    {nt:"Hebrews 10:30",ot:"Deuteronomy 32:35-36",kind:"quotation",note:"Vengeance and judgment belong to God."},
+    {nt:"1 Peter 1:16",ot:"Leviticus 19:2",kind:"quotation",note:"Be holy, for I am holy."},
+    {nt:"1 Peter 2:6",ot:"Isaiah 28:16",kind:"quotation",note:"Cornerstone in Zion."},
+    {nt:"1 Peter 2:22",ot:"Isaiah 53:9",kind:"quotation/allusion",note:"No sin or deceit."},
+    {nt:"Revelation 1:7",ot:"Daniel 7:13",kind:"allusion",note:"Coming with the clouds."},
+    {nt:"Revelation 1:7",ot:"Zechariah 12:10",kind:"allusion",note:"Those who pierced him will see."}
+  ];
+  let advQuotationDataCache=null,advLastQuotationText="";
+  function advParseRef(ref){
+    const m=String(ref||"").trim().match(/^((?:[1-3]\s)?[A-Za-z]+(?:\s+[A-Za-z]+)*)\s+(\d+):(\d+)(?:-(\d+))?$/);
+    return m?{book:m[1].toLowerCase(),chapter:Number(m[2]),start:Number(m[3]),end:Number(m[4]||m[3])}:null;
+  }
+  function advRefContains(rangeRef,pointRef){
+    const a=advParseRef(rangeRef),b=advParseRef(pointRef);if(!a||!b)return false;
+    return a.book===b.book&&a.chapter===b.chapter&&b.start>=a.start&&b.start<=a.end;
+  }
+  async function advLoadQuotationData(){
+    if(advQuotationDataCache)return advQuotationDataCache;
+    try{
+      const r=await fetch("ot-nt-quotations.json",{cache:"force-cache"});
+      if(r.ok){const d=await r.json();if(Array.isArray(d)&&d.length){advQuotationDataCache=d;return d;}}
+    }catch(e){}
+    advQuotationDataCache=OT_NT_QUOTATION_SEED;return advQuotationDataCache;
+  }
+  if(advEl("advRunQuotationMapper"))advEl("advRunQuotationMapper").addEventListener("click",async function(){
+    const out=advEl("advQuotationMapperOutput"),loc=advSelectedReaderLocation(true);
+    if(!loc){out.innerHTML="<div class='status-message'>Choose a specific verse in the Bible Reader first.</div>";return;}
+    const data=await advLoadQuotationData(),hits=data.filter(function(x){return advRefContains(x.nt,loc.reference)||advRefContains(x.ot,loc.reference);});
+    if(!hits.length){out.innerHTML="<div class='small-note'>No match was found in the currently loaded quotation/allusion dataset for "+escapeHTML(loc.reference)+". The mapper can load a larger <code>ot-nt-quotations.json</code> dataset automatically when we add it.</div>";advLastQuotationText="";return;}
+    out.innerHTML=hits.map(function(x){return "<div class='quotation-hit'><div class='quotation-kind'>"+escapeHTML(x.kind||"connection")+"</div><strong>NT:</strong> "+escapeHTML(x.nt)+"<br><strong>OT:</strong> "+escapeHTML(x.ot)+(x.note?"<br><span class='small-note'>"+escapeHTML(x.note)+"</span>":"")+"</div>";}).join("");
+    advLastQuotationText="OT / NT quotation connections for "+loc.reference+"\n"+hits.map(function(x){return x.nt+" ↔ "+x.ot+" — "+(x.kind||"connection")+(x.note?": "+x.note:"");}).join("\n");
+  });
+  if(advEl("advQuotationToCrossRefs"))advEl("advQuotationToCrossRefs").addEventListener("click",function(){if(advLastQuotationText)advEl("advCrossRefs").value+=(advEl("advCrossRefs").value.trim()?"\n\n":"")+advLastQuotationText;});
+
+  const ADV_UNITS = {
+    cubit:{label:"Cubit",kind:"length",base:0.4572,note:"Approx. 18 in / 45.72 cm; cubit length varied by period and region."},
+    span:{label:"Span",kind:"length",base:0.2286,note:"Approx. 9 in / 22.86 cm."},
+    handbreadth:{label:"Handbreadth",kind:"length",base:0.0762,note:"Approx. 3 in / 7.62 cm."},
+    reed:{label:"Reed",kind:"length",base:2.7432,note:"Approx. 6 cubits / 9 ft; biblical reed definitions can vary."},
+    ephah:{label:"Ephah",kind:"volume",base:22,note:"Approximate dry-measure value; scholarly estimates vary."},
+    omer:{label:"Omer",kind:"volume",base:2.2,note:"About one-tenth of an ephah."},
+    seah:{label:"Seah",kind:"volume",base:7.3,note:"Approximate dry-measure value."},
+    homer:{label:"Homer / Kor",kind:"volume",base:220,note:"Approximate large dry/liquid measure; estimates vary."},
+    bath:{label:"Bath",kind:"volume",base:22,note:"Approximate liquid measure; estimates vary."},
+    hin:{label:"Hin",kind:"volume",base:3.7,note:"Approximate liquid measure."},
+    shekel:{label:"Shekel (weight)",kind:"mass",base:11.4,note:"Approximate weight in grams; ancient standards varied."},
+    mina:{label:"Mina (weight)",kind:"mass",base:570,note:"Approximate weight; standards varied."},
+    talent:{label:"Talent (weight)",kind:"mass",base:34200,note:"Approximate 34.2 kg using a 60-mina standard; ancient talents varied."},
+    denarius:{label:"Denarius (wage relation)",kind:"wage",base:1,note:"A denarius is better explained as a historical coin/wage reference than converted to a fixed modern dollar amount; Matthew 20:2 depicts one denarius as a day's agreed wage."}
+  };
+  const ADV_UNIT_TARGETS={length:[["m","meters",1],["cm","centimeters",100],["ft","feet",3.280839895],["in","inches",39.37007874]],volume:[["L","liters",1],["mL","milliliters",1000],["gal","US gallons",0.264172052],["qt","US quarts",1.05668821]],mass:[["g","grams",1],["kg","kilograms",0.001],["oz","ounces",0.0352739619],["lb","pounds",0.00220462262]],wage:[["days","day(s) of wage",1]]};
+  function advInitUnitConverter(){
+    const unit=advEl("advUnitType");if(!unit)return;
+    unit.innerHTML=Object.keys(ADV_UNITS).map(function(k){return "<option value='"+k+"'>"+escapeHTML(ADV_UNITS[k].label)+"</option>";}).join("");
+    function targets(){const u=ADV_UNITS[unit.value],sel=advEl("advUnitTarget");sel.innerHTML=(ADV_UNIT_TARGETS[u.kind]||[]).map(function(x){return "<option value='"+x[0]+"'>"+escapeHTML(x[1])+"</option>";}).join("");}
+    unit.addEventListener("change",targets);targets();
+  }
+  advInitUnitConverter();
+  if(advEl("advConvertUnit"))advEl("advConvertUnit").addEventListener("click",function(){
+    const amount=Number(advEl("advUnitValue").value),key=advEl("advUnitType").value,u=ADV_UNITS[key],target=advEl("advUnitTarget").value,row=(ADV_UNIT_TARGETS[u.kind]||[]).find(function(x){return x[0]===target;});
+    if(!Number.isFinite(amount)||!row){advEl("advUnitOutput").textContent="Enter a valid amount.";return;}
+    const value=amount*u.base*row[2],formatted=Math.abs(value)>=100?value.toLocaleString(undefined,{maximumFractionDigits:2}):value.toLocaleString(undefined,{maximumFractionDigits:4});
+    advEl("advUnitOutput").innerHTML="<div class='unit-result'><strong>"+escapeHTML(String(amount)+" "+u.label)+"</strong> ≈ <strong>"+escapeHTML(formatted+" "+row[1])+"</strong></div><div class='unit-caution'>"+escapeHTML(u.note)+"</div>";
+  });
+
+  const ADV_BIBLICAL_LOCATIONS=[
+    {name:"Jerusalem",lat:31.778,long:35.235,note:"Central city of Judah; temple, Davidic kingdom, crucifixion/resurrection setting, and early church."},
+    {name:"Bethlehem",lat:31.705,long:35.202,note:"City of David; associated with Ruth, David, and the birth of Jesus."},
+    {name:"Nazareth",lat:32.700,long:35.303,note:"Galilean town where Jesus was raised."},
+    {name:"Capernaum",lat:32.881,long:35.575,note:"Major Galilean ministry center of Jesus near the Sea of Galilee."},
+    {name:"Sea of Galilee",lat:32.82,long:35.59,note:"Freshwater lake central to many Gospel narratives and disciples' fishing work."},
+    {name:"Jericho",lat:31.870,long:35.444,note:"Jordan Valley city appearing in conquest narratives and the ministry of Jesus."},
+    {name:"Mount Sinai (traditional area)",lat:28.539,long:33.975,note:"Traditional southern Sinai identification; the exact biblical location is debated."},
+    {name:"Babylon",lat:32.542,long:44.421,note:"Major Mesopotamian imperial city associated with Judah's exile."},
+    {name:"Nineveh",lat:36.359,long:43.152,note:"Ancient Assyrian capital, prominently connected with Jonah and Assyrian history."},
+    {name:"Ephesus",lat:37.939,long:27.341,note:"Major city of Roman Asia and an important center of Paul's ministry."},
+    {name:"Corinth",lat:37.906,long:22.880,note:"Strategic Greek city and setting for Paul's Corinthian ministry and letters."},
+    {name:"Rome",lat:41.893,long:12.483,note:"Capital of the Roman Empire; destination of Paul's letter to the Romans and later ministry."},
+    {name:"Patmos",lat:37.309,long:26.547,note:"Aegean island associated with John's vision in Revelation."}
+  ];
+  const ADV_CULTURAL_CONCEPTS = {
+    shepherding:{label:"Shepherding",text:"Shepherds guided, protected, counted, watered, and sometimes carried sheep. Biblical shepherd imagery can describe divine care, leadership, guidance, protection, and accountability."},
+    threshing:{label:"Threshing & Winnowing",text:"Harvested grain was threshed to loosen kernels and winnowed so wind separated grain from chaff. Scripture often uses this agricultural process as an image of separation, judgment, or harvest."},
+    vineyard:{label:"Vineyards & Winepresses",text:"Vineyards required planting, pruning, guarding, harvesting, and pressing. Vineyard imagery appears in teaching about Israel, fruitfulness, stewardship, judgment, and abiding."},
+    synagogue:{label:"Synagogue Life",text:"Synagogues functioned as local gathering places for Scripture reading, teaching, prayer, and community life in the Second Temple and early Roman periods."},
+    temple:{label:"Temple & Temple Courts",text:"The Jerusalem temple complex structured worship around sacrifices, priestly service, prayer, pilgrimage festivals, and distinct courts and sacred zones."},
+    romanRoads:{label:"Roman Roads & Travel",text:"Roman road networks and sea routes helped connect major cities of the empire. Acts and the Pauline letters reflect repeated movement through these transportation corridors."},
+    patronage:{label:"Patronage, Honor & Shame",text:"Greco-Roman social life often involved patrons, clients, public honor, status, reciprocity, and shame. These conventions can illuminate some social tensions addressed in New Testament letters."},
+    household:{label:"Ancient Household",text:"Households could include extended family, dependents, servants or slaves, business relationships, and household leadership. Early Christian gatherings often met in homes."},
+    marketplace:{label:"Marketplace / Agora",text:"The marketplace was a commercial and civic center where buying, selling, public discussion, and social interaction took place; several biblical narratives occur in such public settings."}
+  };
+  function advInitCultureConcepts(){const s=advEl("advCultureConcept");if(s)s.innerHTML=Object.keys(ADV_CULTURAL_CONCEPTS).map(function(k){return "<option value='"+k+"'>"+escapeHTML(ADV_CULTURAL_CONCEPTS[k].label)+"</option>";}).join("");}
+  advInitCultureConcepts();
+  if(advEl("advShowCultureConcept"))advEl("advShowCultureConcept").addEventListener("click",function(){const x=ADV_CULTURAL_CONCEPTS[advEl("advCultureConcept").value];if(!x)return;advEl("advCultureOutput").innerHTML="<strong>"+escapeHTML(x.label)+"</strong><br>"+escapeHTML(x.text);advLastMapNote=x.label+" — "+x.text;});
+  if(advEl("advOpenTerrain"))advEl("advOpenTerrain").addEventListener("click",async function(){
+    const item=ADV_BIBLICAL_LOCATIONS[Number(advEl("advMapLocationSelect").value)||0];
+    if(window.BibleMastery3DTerrain && typeof window.BibleMastery3DTerrain.open==="function"){try{await window.BibleMastery3DTerrain.open(item);}catch(e){advEl("advCultureOutput").textContent="The connected 3D terrain engine could not open this location.";}}
+    else advEl("advCultureOutput").innerHTML="<strong>3D terrain hook is ready.</strong><br><span class='small-note'>The final terrain renderer is not connected yet. When we choose the mapping/3D source, it can plug into <code>window.BibleMastery3DTerrain.open(location)</code> without rebuilding this workspace.</span>";
+  });
+
+  const ADV_TIMELINES={
+    patriarchs:[{era:"Patriarchal narratives",text:"Abraham, Isaac, Jacob, Joseph — Genesis 12–50. Exact absolute dates are debated."}],
+    exodus:[{era:"Exodus",text:"Moses, deliverance from Egypt, Sinai covenant, wilderness journey. Proposed chronologies vary."},{era:"Conquest / Settlement",text:"Joshua and Israel's settlement in Canaan."}],
+    kingdom:[{era:"United Kingdom",text:"Saul, David, Solomon."},{era:"Divided Kingdom",text:"Israel (north) and Judah (south) until successive exiles."}],
+    exile:[{era:"Assyrian crisis",text:"Northern kingdom falls to Assyria (8th century BC)."},{era:"Babylonian exile",text:"Judah's deportations and Jerusalem's destruction in the 6th century BC."},{era:"Return",text:"Persian-period return, temple rebuilding, Ezra and Nehemiah."}],
+    jesus:[{era:"Birth & early years",text:"Birth narratives and upbringing."},{era:"Galilean ministry",text:"Teaching, healings, calling disciples, kingdom proclamation."},{era:"Journey to Jerusalem",text:"Later ministry and teaching."},{era:"Passion & resurrection",text:"Crucifixion, burial, resurrection, commission."}],
+    earlyChurch:[{era:"Jerusalem church",text:"Acts 1–7: Pentecost and early witness."},{era:"Expansion",text:"Acts 8–12: Judea, Samaria, Gentile mission opens."},{era:"Paul's missions",text:"Acts 13–21: missionary journeys through Asia Minor, Macedonia, and Greece."},{era:"Rome",text:"Acts 22–28: arrest, hearings, voyage, and witness in Rome."}]
+  };
+  let advLeafletReady=null,advMapInstance=null,advMapMarker=null,advLastMapNote="";
+  function advInitLocations(){const s=advEl("advMapLocationSelect");if(s)s.innerHTML=ADV_BIBLICAL_LOCATIONS.map(function(x,i){return "<option value='"+i+"'>"+escapeHTML(x.name)+"</option>";}).join("");}
+  advInitLocations();
+  function advLoadLeaflet(){
+    if(window.L)return Promise.resolve();if(advLeafletReady)return advLeafletReady;
+    advLeafletReady=new Promise(function(resolve,reject){
+      if(!document.querySelector("link[data-bm-leaflet]")){const l=document.createElement("link");l.rel="stylesheet";l.href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";l.dataset.bmLeaflet="1";document.head.appendChild(l);}
+      const sc=document.createElement("script");sc.src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";sc.onload=resolve;sc.onerror=function(){reject(new Error("Map library failed to load."));};document.head.appendChild(sc);
+    });return advLeafletReady;
+  }
+  async function advShowBiblicalLocation(item){
+    const box=advEl("advBiblicalMap");box.textContent="Loading map...";
+    try{
+      await advLoadLeaflet();
+      if(!advMapInstance){box.textContent="";advMapInstance=L.map(box).setView([item.lat,item.long],8);L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:"&copy; OpenStreetMap contributors"}).addTo(advMapInstance);}else advMapInstance.setView([item.lat,item.long],8);
+      if(advMapMarker)advMapMarker.remove();advMapMarker=L.marker([item.lat,item.long]).addTo(advMapInstance).bindPopup("<strong>"+escapeHTML(item.name)+"</strong><br>"+escapeHTML(item.note)).openPopup();setTimeout(function(){advMapInstance.invalidateSize();},50);
+    }catch(e){box.innerHTML="<div class='error-message' style='padding:15px'>Map tiles could not load. "+escapeHTML(item.name)+": "+escapeHTML(item.note)+"</div>";}
+  }
+  if(advEl("advShowMapLocation"))advEl("advShowMapLocation").addEventListener("click",function(){const item=ADV_BIBLICAL_LOCATIONS[Number(advEl("advMapLocationSelect").value)||0];advLastMapNote=item.name+" — "+item.note;advShowBiblicalLocation(item);});
+  if(advEl("advMapToNotes"))advEl("advMapToNotes").addEventListener("click",function(){if(advLastMapNote)advEl("advMapTimeline").value+=(advEl("advMapTimeline").value.trim()?"\n\n":"")+advLastMapNote;});
+  if(advEl("advShowTimeline"))advEl("advShowTimeline").addEventListener("click",function(){const items=ADV_TIMELINES[advEl("advTimelinePreset").value]||[];advEl("advTimelineOutput").innerHTML="<div class='timeline-strip'>"+items.map(function(x){return "<div class='timeline-item'><strong>"+escapeHTML(x.era)+"</strong><br><span class='small-note'>"+escapeHTML(x.text)+"</span></div>";}).join("")+"</div>";});
+
+  function advSearchTokens(q){return advUnique(String(q||"").toLowerCase().match(/[a-z0-9']{2,}/g)||[]).filter(function(x){return !["the","and","for","with","from","that","this","what","where","when","into","about","does","are","was","were","how"].includes(x);});}
+  function advScoreText(text,tokens){const low=String(text||"").toLowerCase();let score=0;tokens.forEach(function(t){const n=(low.match(new RegExp(t.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"),"g"))||[]).length;score+=Math.min(n,5);});if(tokens.length&&tokens.every(function(t){return low.includes(t);})){score+=6;}return score;}
+  function advCollectCurrentSermonSearchDocs(){
+    const ids=["manualSermon","advBigIdea","advExegetical","advOriginalLanguage","advCrossRefs","advResearchNotes","advThemeTracker","advPeoplePlaces","advMapTimeline","advContextExplorer","advIllustrationBank","advApplicationBuilder","advQuestionsObjections","advSourceNotes"];
+    return ids.map(function(id){return {source:"Current Sermon",title:id.replace(/^adv/,"").replace(/([A-Z])/g," $1").trim(),text:advVal(id)};}).filter(function(x){return x.text;});
+  }
+  let advLastSmartSearchResults=[];
+  async function advScriptureSmartSearch(tokens,limit){
+    if(!tokens.length)return[];const bible=await getBibleByTranslation(readerTranslation?readerTranslation.value:"KJV"),found=[];
+    (bible.books||[]).forEach(function(book,bi){(book.chapters||[]).forEach(function(ch,ci){(ch.verses||[]).forEach(function(v,vi){const txt=verseText(v,readerTranslation.value,bi),score=advScoreText(txt,tokens);if(score>0)found.push({source:"Scripture — "+readerTranslation.value,title:getBookName(book)+" "+chapterNumber(ch,ci)+":"+verseNumber(v,vi),text:txt,score});});});});
+    return found.sort(function(a,b){return b.score-a.score;}).slice(0,limit||20);
+  }
+  if(advEl("advRunSmartSearch"))advEl("advRunSmartSearch").addEventListener("click",async function(){
+    const q=advVal("advSmartSearchQuery"),out=advEl("advSmartSearchOutput"),status=advEl("advSmartSearchStatus");if(!q){out.textContent="Enter a research question.";return;}
+    const tokens=advSearchTokens(q);status.textContent="Searching current sermon, saved research, Scripture, and connected Library adapter...";out.textContent="Searching...";
+    let docs=advCollectCurrentSermonSearchDocs();
+    (advRead("library",[])||[]).forEach(function(x){docs.push({source:"Saved Sermon Research",title:(x.type||"Research")+(x.title?" — "+x.title:""),text:x.text||""});});
+    let local=docs.map(function(d){return Object.assign({},d,{score:advScoreText(d.title+" "+d.text,tokens)});}).filter(function(x){return x.score>0;});
+    let scripture=[];try{scripture=await advScriptureSmartSearch(tokens,25);}catch(e){}
+    let external=[];
+    if(typeof window.BibleMasteryLibrarySearch==="function"){
+      try{const r=await window.BibleMasteryLibrarySearch(q);if(Array.isArray(r))external=r.map(function(x){return {source:x.source||"BibleMastery Library",title:x.title||x.reference||"Library result",text:x.text||x.snippet||"",score:Number(x.score)||advScoreText((x.title||"")+" "+(x.text||x.snippet||""),tokens)+4};});}catch(e){console.error("Library adapter error",e);}
+    }
+    advLastSmartSearchResults=local.concat(scripture,external).sort(function(a,b){return b.score-a.score;}).slice(0,40);
+    status.textContent=(external.length?"Full Library adapter connected. ":"Full theology-book Library adapter is not connected on this page yet. ")+advLastSmartSearchResults.length+" ranked result(s).";
+    out.innerHTML=advLastSmartSearchResults.length?advLastSmartSearchResults.map(function(x){return "<div class='result-item'><span class='smart-search-score'>score "+escapeHTML(x.score)+"</span><div class='smart-search-source'>"+escapeHTML(x.source)+"</div><strong>"+escapeHTML(x.title)+"</strong><br>"+escapeHTML(String(x.text||"").slice(0,900))+"</div>";}).join(""):"<div class='small-note'>No matching material was found in the connected sources.</div>";
+  });
+  if(advEl("advSmartSearchAi"))advEl("advSmartSearchAi").addEventListener("click",async function(){
+    const q=advVal("advSmartSearchQuery");if(!q){advEl("advSmartSearchStatus").textContent="Run a search first.";return;}if(!advLastSmartSearchResults.length){advEl("advRunSmartSearch").click();return;}
+    const evidence=advLastSmartSearchResults.slice(0,12).map(function(x,i){return (i+1)+". ["+x.source+"] "+x.title+" — "+String(x.text||"").slice(0,700);}).join("\n");
+    bibleMasteryAiQuestion.value="Research question: "+q+"\n\nUse these BibleMastery search results as the research evidence. Organize the strongest relevant findings, preserve Scripture context, and state when the supplied evidence is insufficient.\n\n"+evidence;
+    bibleMasteryAiAnswer.scrollIntoView({behavior:"smooth",block:"center"});await askBibleMasteryRealAi();
+  });
+  if(advEl("advSmartSearchToNotes"))advEl("advSmartSearchToNotes").addEventListener("click",function(){if(!advLastSmartSearchResults.length)return;const t="Smart Search: "+advVal("advSmartSearchQuery")+"\n"+advLastSmartSearchResults.slice(0,12).map(function(x){return "["+x.source+"] "+x.title+" — "+x.text;}).join("\n");advEl("advResearchNotes").value+=(advEl("advResearchNotes").value.trim()?"\n\n":"")+t;});
+
+  const ADV_COMMENTARY_OPTIONS=[
+    ["matthew-henry-complete","Matthew Henry — Complete"],["john-gill","John Gill — Exposition"],["jfb","Jamieson-Fausset-Brown"],["adam-clarke","Adam Clarke"],["john-calvin","John Calvin — Commentaries"],["keil-delitzsch","Keil & Delitzsch — Old Testament"],["tyndale","Tyndale — Open Study Notes"]
+  ];
+  function advInitPrioritySelects(){
+    ["advPriorityCommentary1","advPriorityCommentary2","advPriorityCommentary3"].forEach(function(id,idx){const e=advEl(id);if(e)e.innerHTML=ADV_COMMENTARY_OPTIONS.map(function(x){return "<option value='"+x[0]+"'>"+escapeHTML(x[1])+"</option>";}).join("");});
+    if(advEl("advPriorityCommentary1"))advEl("advPriorityCommentary1").value="matthew-henry-complete";
+    if(advEl("advPriorityCommentary2"))advEl("advPriorityCommentary2").value="john-gill";
+    if(advEl("advPriorityCommentary3"))advEl("advPriorityCommentary3").value="jfb";
+    advRefreshWorkspaceProfiles();
+  }
+  function advRefreshWorkspaceProfiles(){
+    const sel=advEl("advWorkspaceProfileSelect");if(!sel)return;const profiles=advRead("workspaceProfiles",[]);sel.innerHTML="<option value=''>Choose a workspace</option>"+profiles.map(function(x){return "<option value='"+x.id+"'>"+escapeHTML(x.name)+"</option>";}).join("");
+  }
+  function advSelectedWorkspace(){const id=Number(advEl("advWorkspaceProfileSelect").value);return (advRead("workspaceProfiles",[])||[]).find(function(x){return x.id===id;})||null;}
+  if(advEl("advSaveWorkspaceProfile"))advEl("advSaveWorkspaceProfile").addEventListener("click",function(){
+    const name=advVal("advWorkspaceProfileName")||"Sermon Workspace";const profiles=advRead("workspaceProfiles",[]);const profile={id:Date.now(),savedAt:new Date().toISOString(),name,commentaries:[advEl("advPriorityCommentary1").value,advEl("advPriorityCommentary2").value,advEl("advPriorityCommentary3").value],translations:advVal("advPriorityTranslations").split(",").map(function(x){return x.trim().toUpperCase();}).filter(Boolean),toolOrder:[]};profiles.unshift(profile);advWrite("workspaceProfiles",profiles);advRefreshWorkspaceProfiles();advEl("advWorkspaceProfileSelect").value=String(profile.id);advEl("advWorkspaceProfileOutput").innerHTML="<div class='workspace-profile'><strong>"+escapeHTML(profile.name)+"</strong><br>Resource priorities saved. Final screen arrangement remains unlocked for the later layout step.</div>";
+  });
+  if(advEl("advApplyWorkspaceProfile"))advEl("advApplyWorkspaceProfile").addEventListener("click",function(){
+    const p=advSelectedWorkspace();if(!p){advEl("advWorkspaceProfileOutput").textContent="Choose a saved workspace first.";return;}
+    if(p.commentaries){["advPriorityCommentary1","advPriorityCommentary2","advPriorityCommentary3"].forEach(function(id,i){if(p.commentaries[i])advEl(id).value=p.commentaries[i];});if(commentarySelect&&p.commentaries[0]){commentarySelect.value=p.commentaries[0];loadReaderCommentary();}}
+    if(p.translations&&p.translations.length){advEl("advPriorityTranslations").value=p.translations.join(", ");if(readerTranslation&&ADV_TRANSLATION_LABELS[p.translations[0]]){readerTranslation.value=p.translations[0];loadReaderBible(true);}document.querySelectorAll(".adv-compare-version").forEach(function(cb){cb.checked=p.translations.includes(cb.value);});}
+    advEl("advWorkspaceProfileName").value=p.name;advEl("advWorkspaceProfileOutput").innerHTML="<div class='workspace-profile'><strong>"+escapeHTML(p.name)+"</strong><br><strong>Commentaries:</strong> "+escapeHTML((p.commentaries||[]).join(" → "))+"<br><strong>Translations:</strong> "+escapeHTML((p.translations||[]).join(" → "))+"</div>";
+  });
+  if(advEl("advDeleteWorkspaceProfile"))advEl("advDeleteWorkspaceProfile").addEventListener("click",function(){const p=advSelectedWorkspace();if(!p)return;advWrite("workspaceProfiles",advRead("workspaceProfiles",[]).filter(function(x){return x.id!==p.id;}));advRefreshWorkspaceProfiles();advEl("advWorkspaceProfileOutput").textContent="Workspace deleted.";});
+  advInitPrioritySelects();
 
 </script>
 </body>
