@@ -739,108 +739,6 @@ body.gb-ready>header,body.gb-ready>.container{display:none!important}
 .rns-brand-subtitle{display:block;margin-top:4px;font-family:Georgia,"Times New Roman",serif;font-size:10px;font-weight:800;letter-spacing:2.2px;color:#6a3a1d}
 @media(max-width:720px){.rns-brand-lockup{padding:7px 10px;gap:9px}.rns-brand-mark{font-size:31px}.rns-brand-name{font-size:23px}.rns-brand-subtitle{font-size:8px;letter-spacing:1.4px}}
 </style>
-
-
-<style id="gb-commentary-approved-theme-fix-2026">
-/* Force every Bible Study commentary surface into the approved cream / burgundy / gold theme. */
-.commentary-layout,
-.commentary-panel,
-.commentary-results-panel,
-#commentarySection,
-#commentaryContent,
-#gbCommentaryHost,
-#gbCommentaryHost .commentary-layout,
-#gbCommentaryHost .commentary-panel,
-#gbCommentaryHost .commentary-results-panel{
-  background:#fffdf8!important;
-  color:#2b2018!important;
-  border-color:#ead9b7!important;
-  box-shadow:none!important;
-}
-
-.commentary-panel,
-.commentary-results-panel{
-  border:1px solid #ead9b7!important;
-  border-radius:8px!important;
-}
-
-.commentary-panel h2,
-.commentary-panel h3,
-.commentary-results-panel h2,
-.commentary-results-panel h3,
-#commentaryHeading,
-#commentarySubheading,
-#gbCommentaryHost h2,
-#gbCommentaryHost h3{
-  color:#7a0d12!important;
-}
-
-.commentary-panel label,
-.commentary-results-panel label,
-#commentaryStatus{
-  color:#6b574b!important;
-}
-
-.commentary-panel select,
-.commentary-panel input,
-.commentary-results-panel select,
-.commentary-results-panel input,
-#commentarySelect,
-#commentarySource{
-  background:#fffef9!important;
-  color:#2b2018!important;
-  border:1px solid #ddc89e!important;
-  border-radius:6px!important;
-}
-
-#commentaryContent,
-#commentaryContent.result,
-#gbCommentaryHost #commentaryContent,
-#gbCommentaryHost .result,
-#gbCommentaryHost .status-message,
-#gbCommentaryHost .error-message,
-#gbCommentaryHost .commentary-verse,
-#gbCommentaryHost .commentary-text{
-  background:#fffdf8!important;
-  color:#2f241c!important;
-  border-color:#ead9b7!important;
-}
-
-#commentaryContent strong,
-#commentaryContent b,
-#gbCommentaryHost strong,
-#gbCommentaryHost b{
-  color:#7a0d12!important;
-}
-
-#commentaryContent a,
-#gbCommentaryHost a{
-  color:#8a5b08!important;
-}
-
-.gb-commentary-track{
-  background:#fffdf9!important;
-  border-color:#eadcc2!important;
-}
-
-.gb-commentary-track button{
-  background:#fffdf9!important;
-  color:#31251d!important;
-  border-color:#eadcc2!important;
-}
-
-.gb-commentary-track button.active{
-  background:linear-gradient(180deg,#98171c,#790c11)!important;
-  color:#fff!important;
-}
-
-.gb-commentary-arrow{
-  background:#fff8e8!important;
-  color:#790c11!important;
-  border-color:#b98837!important;
-}
-</style>
-
 </head>
 
 
@@ -3079,6 +2977,127 @@ body.gb-ready>header,body.gb-ready>.container{display:none!important}
   };
 })();
 </script>
+
+
+<style id="gb-commentary-approved-theme-final-2026">
+/* FINAL Bible Study commentary theme — approved cream / burgundy / gold */
+#gbCommentaryHost,
+#gbCommentaryHost *,
+.commentary-layout,
+.commentary-layout *,
+.commentary-panel,
+.commentary-panel *,
+.commentary-results-panel,
+.commentary-results-panel *,
+#commentaryContent,
+#commentaryStatus,
+#commentaryHeading,
+#commentarySubheading{
+  box-sizing:border-box;
+}
+
+#gbCommentaryHost,
+.commentary-layout,
+.commentary-panel,
+.commentary-results-panel,
+#commentaryContent,
+#gbCommentaryHost .result,
+#gbCommentaryHost .commentary-results-panel,
+#gbCommentaryHost .commentary-panel{
+  background:#fffdf8 !important;
+  background-image:none !important;
+  color:#2e241d !important;
+  border-color:#e4cfa5 !important;
+}
+
+.commentary-panel,
+.commentary-results-panel,
+#gbCommentaryHost .commentary-panel,
+#gbCommentaryHost .commentary-results-panel{
+  border:1px solid #e4cfa5 !important;
+  border-radius:12px !important;
+  box-shadow:0 8px 22px rgba(84,45,22,.08) !important;
+}
+
+#commentaryHeading,
+#commentarySubheading,
+.commentary-panel h2,
+.commentary-panel h3,
+.commentary-results-panel h2,
+.commentary-results-panel h3,
+#gbCommentaryHost h2,
+#gbCommentaryHost h3,
+#gbCommentaryHost h4{
+  color:#7a0d12 !important;
+}
+
+#commentaryStatus,
+.commentary-panel label,
+.commentary-results-panel label,
+#gbCommentaryHost label,
+#gbCommentaryHost .small-note{
+  color:#6b574b !important;
+}
+
+#commentarySelect,
+#commentarySource,
+.commentary-panel select,
+.commentary-panel input,
+.commentary-results-panel select,
+.commentary-results-panel input,
+#gbCommentaryHost select,
+#gbCommentaryHost input{
+  background:#fffef9 !important;
+  color:#2e241d !important;
+  border:1px solid #d6b977 !important;
+  border-radius:8px !important;
+}
+
+#commentaryContent,
+#gbCommentaryHost .result,
+#gbCommentaryHost .commentary-text,
+#gbCommentaryHost .commentary-verse,
+#gbCommentaryHost .result-item,
+#gbCommentaryHost .verse-result{
+  background:#fffdf8 !important;
+  background-image:none !important;
+  color:#2e241d !important;
+  border-color:#e8d8b6 !important;
+}
+
+#commentaryContent strong,
+#commentaryContent b,
+#gbCommentaryHost strong,
+#gbCommentaryHost b{
+  color:#7a0d12 !important;
+}
+
+#commentaryContent a,
+#gbCommentaryHost a{
+  color:#8a5b08 !important;
+}
+
+.gb-commentary-track{
+  background:#fffaf0 !important;
+  border:1px solid #e4cfa5 !important;
+  box-shadow:none !important;
+}
+.gb-commentary-track button{
+  background:#fffdf8 !important;
+  color:#3a2b21 !important;
+  border-color:#e4cfa5 !important;
+}
+.gb-commentary-track button.active{
+  background:linear-gradient(180deg,#9a1b20,#720b10) !important;
+  color:#fff !important;
+  border-color:#720b10 !important;
+}
+.gb-commentary-arrow{
+  background:#fff3d8 !important;
+  color:#720b10 !important;
+  border-color:#b98a39 !important;
+}
+</style>
 
 </body></html>");w.document.close();w.focus();w.print();}
   if(asEl("advCopyLeaderStudy"))asEl("advCopyLeaderStudy").addEventListener("click",()=>asCopy(asLeaderPackage(),"Leader version copied."));
