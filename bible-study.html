@@ -740,6 +740,107 @@ body.gb-ready>header,body.gb-ready>.container{display:none!important}
 @media(max-width:720px){.rns-brand-lockup{padding:7px 10px;gap:9px}.rns-brand-mark{font-size:31px}.rns-brand-name{font-size:23px}.rns-brand-subtitle{font-size:8px;letter-spacing:1.4px}}
 </style>
 
+
+<style id="gb-commentary-approved-theme-fix-2026">
+/* Force every Bible Study commentary surface into the approved cream / burgundy / gold theme. */
+.commentary-layout,
+.commentary-panel,
+.commentary-results-panel,
+#commentarySection,
+#commentaryContent,
+#gbCommentaryHost,
+#gbCommentaryHost .commentary-layout,
+#gbCommentaryHost .commentary-panel,
+#gbCommentaryHost .commentary-results-panel{
+  background:#fffdf8!important;
+  color:#2b2018!important;
+  border-color:#ead9b7!important;
+  box-shadow:none!important;
+}
+
+.commentary-panel,
+.commentary-results-panel{
+  border:1px solid #ead9b7!important;
+  border-radius:8px!important;
+}
+
+.commentary-panel h2,
+.commentary-panel h3,
+.commentary-results-panel h2,
+.commentary-results-panel h3,
+#commentaryHeading,
+#commentarySubheading,
+#gbCommentaryHost h2,
+#gbCommentaryHost h3{
+  color:#7a0d12!important;
+}
+
+.commentary-panel label,
+.commentary-results-panel label,
+#commentaryStatus{
+  color:#6b574b!important;
+}
+
+.commentary-panel select,
+.commentary-panel input,
+.commentary-results-panel select,
+.commentary-results-panel input,
+#commentarySelect,
+#commentarySource{
+  background:#fffef9!important;
+  color:#2b2018!important;
+  border:1px solid #ddc89e!important;
+  border-radius:6px!important;
+}
+
+#commentaryContent,
+#commentaryContent.result,
+#gbCommentaryHost #commentaryContent,
+#gbCommentaryHost .result,
+#gbCommentaryHost .status-message,
+#gbCommentaryHost .error-message,
+#gbCommentaryHost .commentary-verse,
+#gbCommentaryHost .commentary-text{
+  background:#fffdf8!important;
+  color:#2f241c!important;
+  border-color:#ead9b7!important;
+}
+
+#commentaryContent strong,
+#commentaryContent b,
+#gbCommentaryHost strong,
+#gbCommentaryHost b{
+  color:#7a0d12!important;
+}
+
+#commentaryContent a,
+#gbCommentaryHost a{
+  color:#8a5b08!important;
+}
+
+.gb-commentary-track{
+  background:#fffdf9!important;
+  border-color:#eadcc2!important;
+}
+
+.gb-commentary-track button{
+  background:#fffdf9!important;
+  color:#31251d!important;
+  border-color:#eadcc2!important;
+}
+
+.gb-commentary-track button.active{
+  background:linear-gradient(180deg,#98171c,#790c11)!important;
+  color:#fff!important;
+}
+
+.gb-commentary-arrow{
+  background:#fff8e8!important;
+  color:#790c11!important;
+  border-color:#b98837!important;
+}
+</style>
+
 </head>
 
 
@@ -2776,33 +2877,67 @@ body.gb-ready>header,body.gb-ready>.container{display:none!important}
 })();
 </script>
 
-
 <script id="rns-live-study-session-bible-study-2026">
 (function(){
   'use strict';
 
-  // Keep THIS study area's unfinished work alive while the app/tab session is open.
-  // sessionStorage is intentionally used instead of localStorage:
-  // navigating to another study area does not erase the draft, while ending the
-  // browsing/app session allows a fresh start next time.
-  const PAGE_KEY='rns.liveStudySession.v1.bible-study';
-  const REFRESH_IDS=[];
+  /*
+    LIVE STUDY SESSION
+    ------------------
+    Keeps unfinished work when moving between Redemptive Names Software pages.
+
+    - Normal navigation away and back: restore exactly where the user left off.
+    - Browser/page Refresh: clear this page's live draft and load fresh.
+    - New app/webview session: old live draft is ignored.
+    - Saved sermons/studies remain handled by their existing Save systems.
+  */
+  const PAGE_KEY='rns.liveDraft.v2.bible-study';
+  const NAME_PREFIX='RNSAPP:';
+
+  function navigationType(){
+    try{
+      const nav=performance.getEntriesByType('navigation')[0];
+      return nav && nav.type ? nav.type : '';
+    }catch(e){return '';}
+  }
+
+  // A browsing-context session token that survives normal same-tab navigation,
+  // but resets when the app/webview is fully closed and a new context is created.
+  let sessionId='';
+  try{
+    if(typeof window.name==='string' && window.name.startsWith(NAME_PREFIX)){
+      sessionId=window.name.slice(NAME_PREFIX.length);
+    }else{
+      sessionId=Date.now().toString(36)+'-'+Math.random().toString(36).slice(2);
+      window.name=NAME_PREFIX+sessionId;
+    }
+  }catch(e){
+    sessionId='fallback-'+Date.now().toString(36);
+  }
+
+  // A deliberate reload means the user wants a fresh page.
+  if(navigationType()==='reload'){
+    try{ localStorage.removeItem(PAGE_KEY); }catch(e){}
+  }
+
   let restoring=false;
   let saveTimer=null;
 
-  function controlKey(el,index){
+  function keyFor(el,index){
     if(el.id) return 'id:'+el.id;
     if(el.name) return 'name:'+el.name+':'+index;
     return 'anon:'+el.tagName+':'+index;
   }
 
   function collect(){
-    const controls=[...document.querySelectorAll('input,textarea,select,[contenteditable="true"]')];
+    if(restoring) return;
+
     const values={};
+    const controls=[...document.querySelectorAll('input,textarea,select,[contenteditable="true"]')];
 
     controls.forEach((el,index)=>{
       if(el.matches('input[type="password"],input[type="file"],input[type="button"],input[type="submit"],input[type="reset"]')) return;
-      const key=controlKey(el,index);
+      const key=keyFor(el,index);
 
       if(el.matches('[contenteditable="true"]')){
         values[key]={kind:'html',value:el.innerHTML};
@@ -2818,54 +2953,50 @@ body.gb-ready>header,body.gb-ready>.container{display:none!important}
       open:!!el.open
     }));
 
-    const scrolls={};
+    const scrollers={};
     document.querySelectorAll('[id]').forEach(el=>{
-      if(el.scrollHeight>el.clientHeight+8 || el.scrollWidth>el.clientWidth+8){
-        if(el.scrollTop || el.scrollLeft){
-          scrolls[el.id]={top:el.scrollTop,left:el.scrollLeft};
-        }
+      if((el.scrollHeight>el.clientHeight+8 || el.scrollWidth>el.clientWidth+8) && (el.scrollTop || el.scrollLeft)){
+        scrollers[el.id]={top:el.scrollTop,left:el.scrollLeft};
       }
     });
 
-    const activeIds=[...document.querySelectorAll('.active[id]')].map(el=>el.id);
-
     const data={
+      sessionId,
       values,
       details,
-      scrolls,
-      activeIds,
+      scrollers,
       windowScrollX:window.scrollX||0,
       windowScrollY:window.scrollY||0,
       hash:location.hash||'',
       savedAt:Date.now()
     };
 
-    try{ sessionStorage.setItem(PAGE_KEY,JSON.stringify(data)); }catch(e){}
+    try{ localStorage.setItem(PAGE_KEY,JSON.stringify(data)); }catch(e){}
   }
 
   function scheduleSave(){
     if(restoring) return;
     clearTimeout(saveTimer);
-    saveTimer=setTimeout(collect,120);
+    saveTimer=setTimeout(collect,80);
   }
 
-  function findControl(key,index){
-    if(key.startsWith('id:')) return document.getElementById(key.slice(3));
-    if(key.startsWith('name:')){
-      const name=key.split(':').slice(1,-1).join(':');
-      const list=[...document.getElementsByName(name)];
-      return list[index] || list[0] || null;
-    }
-    return null;
+  function readDraft(){
+    try{
+      const data=JSON.parse(localStorage.getItem(PAGE_KEY)||'null');
+      if(!data || data.sessionId!==sessionId) return null;
+      return data;
+    }catch(e){return null;}
   }
 
-  function restoreControls(data){
+  function applyValues(data){
+    if(!data || !data.values) return;
+
     const controls=[...document.querySelectorAll('input,textarea,select,[contenteditable="true"]')];
 
     controls.forEach((el,index)=>{
       if(el.matches('input[type="password"],input[type="file"],input[type="button"],input[type="submit"],input[type="reset"]')) return;
-      const key=controlKey(el,index);
-      const saved=data.values && data.values[key];
+
+      const saved=data.values[keyFor(el,index)];
       if(!saved) return;
 
       if(saved.kind==='html' && el.matches('[contenteditable="true"]')){
@@ -2879,39 +3010,42 @@ body.gb-ready>header,body.gb-ready>.container{display:none!important}
       }
 
       if(saved.kind==='value'){
-        // For async-loaded selects, wait until the saved option exists.
-        if(el.tagName==='SELECT' && saved.value!=='' && ![...el.options].some(o=>o.value===saved.value)) return;
-        if(el.value!==saved.value){
+        if(el.tagName==='SELECT'){
+          // Some Bible/chapter selectors populate asynchronously.
+          if(saved.value!=='' && ![...el.options].some(o=>o.value===saved.value)) return;
+
+          if(el.value!==saved.value){
+            el.value=saved.value;
+            el.dispatchEvent(new Event('change',{bubbles:true}));
+          }
+        }else if(el.value!==saved.value){
           el.value=saved.value;
-          // Change is needed so dependent reader/chapter controls rebuild correctly.
-          if(el.tagName==='SELECT') el.dispatchEvent(new Event('change',{bubbles:true}));
-          else el.dispatchEvent(new Event('input',{bubbles:true}));
+          el.dispatchEvent(new Event('input',{bubbles:true}));
         }
       }
-    });
-
-    (data.details||[]).forEach((item,index)=>{
-      let el=null;
-      if(item.key.startsWith('id:')) el=document.getElementById(item.key.slice(3));
-      else el=document.querySelectorAll('details')[index];
-      if(el) el.open=!!item.open;
     });
   }
 
   function restore(){
-    let data=null;
-    try{ data=JSON.parse(sessionStorage.getItem(PAGE_KEY)||'null'); }catch(e){}
+    const data=readDraft();
     if(!data) return;
 
     restoring=true;
 
-    // Restore several times because Bible/book/chapter options and embedded UI
-    // are populated asynchronously on these pages.
-    [0,220,700,1500].forEach(delay=>setTimeout(()=>restoreControls(data),delay));
+    // Repeat because Bible/commentary controls are populated after page load.
+    [0,180,500,1000,1800].forEach(delay=>{
+      setTimeout(()=>applyValues(data),delay);
+    });
 
     setTimeout(()=>{
-      (data.scrolls||{});
-      Object.entries(data.scrolls||{}).forEach(([id,pos])=>{
+      (data.details||[]).forEach((item,index)=>{
+        let el=null;
+        if(item.key && item.key.startsWith('id:')) el=document.getElementById(item.key.slice(3));
+        else el=document.querySelectorAll('details')[index];
+        if(el) el.open=!!item.open;
+      });
+
+      Object.entries(data.scrollers||{}).forEach(([id,pos])=>{
         const el=document.getElementById(id);
         if(el){
           el.scrollTop=Number(pos.top)||0;
@@ -2919,36 +3053,17 @@ body.gb-ready>header,body.gb-ready>.container{display:none!important}
         }
       });
 
-      // Restore last private-builder tab without forcing a new page load.
-      if('bible-study'==='seven-names-builder' && data.hash){
-        if(data.hash==='#bible-course') document.getElementById('snrBibleCourseButton')?.click();
-        else if(data.hash==='#bible-study') document.getElementById('snrBibleStudyButton')?.click();
-        else if(data.hash==='#sermon') document.getElementById('snrSermonButton')?.click();
-      }
-
       window.scrollTo(Number(data.windowScrollX)||0,Number(data.windowScrollY)||0);
       restoring=false;
-      setTimeout(collect,80);
-    },1650);
+      setTimeout(collect,100);
+    },1950);
   }
-
-  function clearLiveSession(){
-    try{ sessionStorage.removeItem(PAGE_KEY); }catch(e){}
-  }
-
-  // Explicit page Refresh means "start this study area fresh now".
-  REFRESH_IDS.forEach(id=>{
-    const btn=document.getElementById(id);
-    if(btn){
-      btn.addEventListener('click',clearLiveSession,true);
-    }
-  });
 
   document.addEventListener('input',scheduleSave,true);
   document.addEventListener('change',scheduleSave,true);
   document.addEventListener('click',()=>setTimeout(scheduleSave,0),true);
   window.addEventListener('pagehide',collect);
-  window.addEventListener('visibilitychange',()=>{
+  document.addEventListener('visibilitychange',()=>{
     if(document.visibilityState==='hidden') collect();
   });
   window.addEventListener('scroll',scheduleSave,{passive:true});
@@ -2959,7 +3074,9 @@ body.gb-ready>header,body.gb-ready>.container{display:none!important}
     restore();
   }
 
-  window.rnsClearCurrentLiveStudySession=clearLiveSession;
+  window.rnsClearCurrentLiveStudySession=function(){
+    try{ localStorage.removeItem(PAGE_KEY); }catch(e){}
+  };
 })();
 </script>
 
