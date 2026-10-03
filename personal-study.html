@@ -2036,9 +2036,17 @@ body{overflow-x:hidden}
 #snChronologyHost .gospel-event-list{max-height:330px!important}.sn-hidden{display:none!important}
 
 /* Commentary */
-.sn-commentary-tabs{display:flex;gap:0;overflow-x:auto;border:1px solid #eadcc2;border-radius:5px;margin-bottom:8px}
-.sn-commentary-tabs button{flex:1 0 104px;min-height:33px!important;height:33px!important;border:0;border-right:1px solid #eadcc2;background:#fffdf9;color:#31251d;font-size:11px;cursor:pointer;white-space:nowrap}
+.sn-commentary-slider-row{display:grid;grid-template-columns:34px minmax(0,1fr) 34px;gap:5px;align-items:center;margin-bottom:8px}
+.sn-commentary-slider-viewport{min-width:0;overflow:hidden;border:1px solid #eadcc2;border-radius:6px;background:#fffdf9}
+.sn-commentary-tabs{display:flex;gap:0;overflow-x:auto;margin:0;scroll-behavior:smooth;scrollbar-width:none}
+.sn-commentary-tabs::-webkit-scrollbar{display:none}
+.sn-commentary-tabs button{flex:0 0 128px;min-height:35px!important;height:35px!important;border:0;border-right:1px solid #eadcc2;background:#fffdf9;color:#31251d;font-size:11px;cursor:pointer;white-space:nowrap;padding:0 8px!important}
 .sn-commentary-tabs button.active{background:linear-gradient(180deg,#98171c,#790c11);color:#fff;font-weight:800}
+.sn-commentary-arrow{height:35px!important;min-height:35px!important;padding:0!important;border:1px solid #b98837!important;border-radius:6px!important;background:#fff8e8!important;color:#790c11!important;font-size:23px!important;font-weight:900!important;cursor:pointer}
+.sn-commentary-arrow:hover{background:#f6e8c8!important}
+.sn-commentary-refresh{min-height:28px!important;height:28px!important;padding:3px 9px!important;border:1px solid #d6bd87!important;border-radius:6px!important;background:#fff9eb!important;color:#790c11!important;font-size:11px!important;font-weight:800!important;cursor:pointer}
+.sn-commentary-refresh:hover{background:#f7e9c9!important}
+.sn-card-head-actions{display:flex;align-items:center;gap:5px}
 .sn-commentary-output{height:350px;overflow:auto;padding:2px 4px}
 .sn-commentary-reference{font-family:Georgia,'Times New Roman',serif;color:var(--sn-maroon);font-weight:700;font-size:25px;margin:2px 0 2px}
 .sn-commentary-verse{font-family:Georgia,'Times New Roman',serif;font-size:17px;font-style:italic;color:#263047;margin:0 0 10px}
@@ -11288,9 +11296,21 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
       </section>
 
       <section class="sn-card sn-commentary-card">
-        <div class="sn-card-head"><div><span class="sn-head-icon">✥</span><span id="snCommentaryHeading">Commentary</span></div><button type="button" data-sn-tool="commentaries">⌄</button></div>
+        <div class="sn-card-head">
+          <div><span class="sn-head-icon">✥</span><span id="snCommentaryHeading">Commentary</span></div>
+          <div class="sn-card-head-actions">
+            <button class="sn-commentary-refresh" id="snCommentaryRefresh" type="button" title="Refresh commentary">↻ Refresh</button>
+            <button type="button" data-sn-tool="commentaries">⌄</button>
+          </div>
+        </div>
         <div class="sn-card-body">
-          <div class="sn-commentary-tabs" id="snCommentaryTabs"></div>
+          <div class="sn-commentary-slider-row">
+            <button class="sn-commentary-arrow" id="snCommentaryPrev" type="button" aria-label="Previous commentary">‹</button>
+            <div class="sn-commentary-slider-viewport">
+              <div class="sn-commentary-tabs" id="snCommentaryTabs"></div>
+            </div>
+            <button class="sn-commentary-arrow" id="snCommentaryNext" type="button" aria-label="Next commentary">›</button>
+          </div>
           <div class="sn-commentary-output" id="snCommentaryOutput"><div class="sn-commentary-loading">Choose a Bible passage to load commentary.</div></div>
         </div>
       </section>
@@ -11726,62 +11746,139 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
 
   /* ---------- Commentary companion ---------- */
   const commentaryChoices = [
-    ['matthew-henry-complete','Matthew Henry'],['john-gill','John Gill'],['keil-delitzsch','Keil & Delitzsch'],['jfb','Jamieson-Fausset-Brown'],['john-calvin','John Calvin']
+    ['matthew-henry-complete','Matthew Henry'],
+    ['john-gill','John Gill'],
+    ['jfb','Jamieson-Fausset-Brown'],
+    ['john-calvin','John Calvin'],
+    ['keil-delitzsch','Keil & Delitzsch'],
+    ['tyndale','Tyndale Open Study Notes']
   ];
-  let primaryCommentary = commentaryChoices[0][0];
-  $('snCommentaryTabs').innerHTML = commentaryChoices.map(([k,n],i)=>`<button type="button" data-cmt="${k}" class="${i===0?'active':''}">${esc(n)}</button>`).join('');
-  qsa('[data-cmt]',$('snCommentaryTabs')).forEach(b=>b.addEventListener('click',()=>{primaryCommentary=b.dataset.cmt;qsa('[data-cmt]',$('snCommentaryTabs')).forEach(x=>x.classList.toggle('active',x===b));refreshCommentary();}));
 
-  async function fetchReaderCommentary(state,key){
-    if(!state)throw new Error('No reader state');
-    const apiId=(typeof commentaryIds!=='undefined'&&commentaryIds[key])||'';
-    if(!apiId)throw new Error('Commentary source is not configured');
-    const group={
-      bookId:typeof normalizeBookId==='function'?normalizeBookId(state.bookName,{id:state.bookName}):state.bookName,
-      bookName:state.bookName,
-      chapter:state.chapterNumber,
-      verses:[{book:state.bookName,chapter:state.chapterNumber,verse:state.verseNumber}]
-    };
-    const books=await getCommentaryBooks(apiId);
-    const commentaryBookId=resolveCommentaryBookId(books,group);
-    if(!commentaryBookId)return {name:commentaryNames[key]||key,text:'This commentary does not contain this Bible book.'};
-    const cacheKey=apiId+'|'+commentaryBookId+'|'+state.chapterNumber;
-    let chapterData=commentaryCache[cacheKey];
-    if(!chapterData){
-      const response=await fetch(COMMENTARY_API+apiId+'/'+encodeURIComponent(commentaryBookId)+'/'+encodeURIComponent(state.chapterNumber)+'.simple.json');
-      if(!response.ok)throw new Error('Commentary request failed: '+response.status);
-      chapterData=await response.json();
-      commentaryCache[cacheKey]=chapterData;
-    }
-    let text='';
-    if(key==='matthew-henry-complete'){
-      text=flattenWholeCommentaryChapter(chapterData);
-    }else{
-      const entries=extractCommentaryEntries(chapterData);
-      text=findCommentaryText(entries,state.verseNumber)||flattenWholeCommentaryChapter(chapterData);
-    }
-    return {name:commentaryNames[key]||key,text:text||'No commentary text was returned for this reference.'};
+  let commentaryChoiceIndex = 0;
+  let primaryCommentary = commentaryChoices[0][0];
+
+  function renderCommentarySlider(){
+    const tabs=$('snCommentaryTabs');
+    if(!tabs)return;
+    tabs.innerHTML=commentaryChoices.map(([key,name],i)=>
+      `<button type="button" data-cmt="${key}" data-cmt-index="${i}" class="${i===commentaryChoiceIndex?'active':''}">${esc(name)}</button>`
+    ).join('');
+
+    qsa('[data-cmt]',tabs).forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const index=Number(btn.dataset.cmtIndex)||0;
+        selectCommentary(index,true);
+      });
+    });
   }
 
+  function centerSelectedCommentary(){
+    const active=qs('[data-cmt].active',$('snCommentaryTabs'));
+    if(active){
+      try{active.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});}catch(e){}
+    }
+  }
+
+  function selectCommentary(index,loadNow=true){
+    const total=commentaryChoices.length;
+    commentaryChoiceIndex=((Number(index)||0)%total+total)%total;
+    primaryCommentary=commentaryChoices[commentaryChoiceIndex][0];
+
+    qsa('[data-cmt]',$('snCommentaryTabs')).forEach((btn,i)=>{
+      btn.classList.toggle('active',i===commentaryChoiceIndex);
+    });
+
+    centerSelectedCommentary();
+    if(loadNow)refreshCommentary();
+  }
+
+  renderCommentarySlider();
+
+  $('snCommentaryPrev')?.addEventListener('click',()=>selectCommentary(commentaryChoiceIndex-1,true));
+  $('snCommentaryNext')?.addEventListener('click',()=>selectCommentary(commentaryChoiceIndex+1,true));
+  $('snCommentaryRefresh')?.addEventListener('click',()=>refreshCommentary(true));
+
   let commentaryToken=0;
-  async function refreshCommentary(){
-    const state=currentReaderState(); const out=$('snCommentaryOutput'); if(!out)return;
-    if(!state){out.innerHTML='<div class="sn-commentary-loading">Choose a book and chapter.</div>';return;}
-    const token=++commentaryToken; $('snCommentaryHeading').textContent='Commentary on '+state.reference;
-    out.innerHTML=`<div class="sn-commentary-reference">${esc(state.reference)}</div><div class="sn-commentary-verse">“${esc(state.text)}”</div><div class="sn-commentary-loading">Loading commentary…</div>`;
+
+  async function refreshCommentary(forceReload=false){
+    const state=currentReaderState();
+    const out=$('snCommentaryOutput');
+    if(!out)return;
+
+    if(!state){
+      $('snCommentaryHeading').textContent='Commentary';
+      out.innerHTML='<div class="sn-commentary-loading">Choose a book and chapter.</div>';
+      return;
+    }
+
+    const token=++commentaryToken;
+    const sourceName=(commentaryChoices.find(x=>x[0]===primaryCommentary)||[])[1]||primaryCommentary;
+
+    $('snCommentaryHeading').textContent='Commentary — '+sourceName;
+    out.innerHTML=
+      `<div class="sn-commentary-reference">${esc(state.reference)}</div>`+
+      `<div class="sn-commentary-verse">“${esc(state.text)}”</div>`+
+      `<div class="sn-commentary-loading">Loading ${esc(sourceName)}…</div>`;
+
     try{
-      const second=primaryCommentary==='john-gill'?'matthew-henry-complete':'john-gill';
-      const results=await Promise.all([
-        fetchReaderCommentary(state,primaryCommentary),
-        fetchReaderCommentary(state,second)
-      ]);
-      if(token!==commentaryToken)return;
-      out.innerHTML=`<div class="sn-commentary-reference">${esc(state.reference)}</div><div class="sn-commentary-verse">“${esc(state.text)}”</div>`+
-        results.map(r=>`<div class="sn-commentary-entry"><h4>📖 ${esc(r.name)}</h4><p>${esc(r.text)}</p></div>`).join('');
+      // IMPORTANT: Use the original Personal Study commentary engine.
+      // This is the engine already used by the existing Commentary tool.
+      if(typeof loadSelectedCommentary==='function' &&
+         typeof commentarySelect!=='undefined' &&
+         typeof commentaryContent!=='undefined'){
+
+        // Give the original engine the verse currently displayed in the Bible Reader.
+        currentVerses=[{
+          book:state.bookName,
+          chapter:state.chapterNumber,
+          verse:state.verseNumber,
+          text:state.text
+        }];
+
+        selectedCommentary=primaryCommentary;
+        commentarySelect.value=primaryCommentary;
+
+        if(forceReload){
+          try{
+            const apiId=commentaryIds[primaryCommentary];
+            const groupKey=apiId+'|';
+            Object.keys(commentaryCache||{}).forEach(k=>{
+              if(k.startsWith(groupKey))delete commentaryCache[k];
+            });
+          }catch(e){}
+        }
+
+        await loadSelectedCommentary();
+
+        if(token!==commentaryToken)return;
+
+        const originalHtml=commentaryContent.innerHTML||'';
+        if(originalHtml.trim()){
+          out.innerHTML=originalHtml;
+        }else{
+          out.innerHTML='<div class="sn-error">No commentary text was returned for this passage.</div>';
+        }
+        return;
+      }
+
+      // Fallback to the advanced commentary engine if the original engine is unavailable.
+      if(typeof masterFetchCommentary==='function'){
+        const result=await masterFetchCommentary(state.reference,primaryCommentary);
+        if(token!==commentaryToken)return;
+        out.innerHTML=
+          `<div class="sn-commentary-reference">${esc(state.reference)}</div>`+
+          `<div class="sn-commentary-entry"><h4>📖 ${esc(result.name||sourceName)}</h4><p>${esc(result.text||'No commentary text was returned.')}</p></div>`;
+        return;
+      }
+
+      throw new Error('Commentary engine unavailable');
+
     }catch(err){
       console.error('Personal Study commentary error:',err);
       if(token!==commentaryToken)return;
-      out.innerHTML=`<div class="sn-commentary-reference">${esc(state.reference)}</div><div class="sn-commentary-verse">“${esc(state.text)}”</div><div class="sn-error">Commentary could not load right now. Try another commentary tab.</div>`;
+      out.innerHTML=
+        `<div class="sn-commentary-reference">${esc(state.reference)}</div>`+
+        `<div class="sn-error">This commentary could not load. Press Refresh or use the arrows to try another commentary.</div>`;
     }
   }
 
