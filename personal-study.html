@@ -13391,10 +13391,13 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
   document.body.appendChild(verseActionPopover);
 
   let verseActionTarget=null;
+  let verseActionState=null;
+
   function readJsonStore(key){
     try{const v=JSON.parse(localStorage.getItem(key)||'[]');return Array.isArray(v)?v:[]}catch(e){return[]}
   }
   function writeJsonStore(key,value){try{localStorage.setItem(key,JSON.stringify(value));return true}catch(e){return false}}
+
   function verseStateForIndex(index){
     try{
       const base=currentReaderState();
@@ -13413,20 +13416,43 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
       };
     }catch(e){return null}
   }
+
   function selectedVerseState(){
+    if(verseActionState) return verseActionState;
     const index=readerVerseSelect?.value===''?0:Number(readerVerseSelect?.value)||0;
     return verseStateForIndex(index);
   }
+
+  function isVerseHighlighted(state){
+    if(!state?.reference)return false;
+    return readJsonStore('biblemastery_highlights')
+      .some(x=>(typeof x==='string'?x:x.reference)===state.reference);
+  }
+
+  function updateHighlightButton(state){
+    const btn=$('snVerseHighlight');
+    if(!btn)return;
+    const on=isVerseHighlighted(state);
+    btn.textContent=on?'🖍 Remove Highlight':'🖍 Highlight';
+    btn.setAttribute('aria-pressed',on?'true':'false');
+  }
+
   function applySavedHighlights(){
     if(!readerDisplay)return;
-    const saved=new Set(readJsonStore('biblemastery_highlights').map(x=>typeof x==='string'?x:x.reference).filter(Boolean));
+    const saved=new Set(
+      readJsonStore('biblemastery_highlights')
+        .map(x=>typeof x==='string'?x:x.reference)
+        .filter(Boolean)
+    );
     qsa('[data-reader-verse]',readerDisplay).forEach(el=>{
       const s=verseStateForIndex(el.dataset.readerVerse);
       el.classList.toggle('sn-verse-highlighted',!!(s&&saved.has(s.reference)));
     });
+    updateHighlightButton(verseActionState);
   }
+
   function positionVersePopover(target){
-    if(!target)return;
+    if(!target || !target.isConnected)return;
     const r=target.getBoundingClientRect();
     verseActionPopover.hidden=false;
     const box=verseActionPopover.getBoundingClientRect();
@@ -13436,43 +13462,93 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
     verseActionPopover.style.left=left+'px';
     verseActionPopover.style.top=top+'px';
   }
+
   function openVerseActions(target,state){
+    if(!state)return;
     verseActionTarget=target;
-    $('snVerseActionRef').textContent=state?.reference||'Selected verse';
+    verseActionState=state;
+    $('snVerseActionRef').textContent=state.reference||'Selected verse';
     $('snVerseActionStatus').textContent='';
+    updateHighlightButton(state);
     positionVersePopover(target);
   }
-  function closeVerseActions(){verseActionPopover.hidden=true;verseActionTarget=null}
+
+  function closeVerseActions(){
+    verseActionPopover.hidden=true;
+    verseActionTarget=null;
+    verseActionState=null;
+  }
+
   $('snVerseActionClose')?.addEventListener('click',closeVerseActions);
+
   document.addEventListener('click',e=>{
     if(verseActionPopover.hidden)return;
     if(verseActionPopover.contains(e.target))return;
     if(e.target.closest?.('[data-reader-verse]'))return;
     closeVerseActions();
   });
-  window.addEventListener('resize',closeVerseActions);
-  window.addEventListener('scroll',closeVerseActions,true);
+
+  window.addEventListener('resize',()=>{
+    if(!verseActionPopover.hidden && verseActionTarget?.isConnected){
+      positionVersePopover(verseActionTarget);
+    }
+  });
 
   readerDisplay?.addEventListener('click',e=>{
-    const verseEl=e.target.closest('[data-reader-verse]'); if(!verseEl)return;
+    const verseEl=e.target.closest('[data-reader-verse]');
+    if(!verseEl)return;
     e.preventDefault();
     e.stopPropagation();
+
     const idx=verseEl.dataset.readerVerse;
-    if(readerVerseSelect){
-      readerVerseSelect.value=idx;
+    const state=verseStateForIndex(idx);
+    if(!state)return;
+
+    if(readerVerseSelect && readerVerseSelect.value!==String(idx)){
+      readerVerseSelect.value=String(idx);
       readerVerseSelect.dispatchEvent(new Event('change',{bubbles:true}));
     }
-    const state=verseStateForIndex(idx);
-    setTimeout(()=>{refreshAll();openVerseActions(verseEl,state);},20);
+
+    // Open immediately so clicking the same verse again always works.
+    openVerseActions(verseEl,state);
+
+    // Refresh the other study panels without depending on the refresh to open this popup.
+    setTimeout(()=>{
+      refreshAll();
+      applySavedHighlights();
+      const current=qsa('[data-reader-verse]',readerDisplay)
+        .find(el=>String(el.dataset.readerVerse)===String(idx));
+      if(current && !verseActionPopover.hidden){
+        verseActionTarget=current;
+        positionVersePopover(current);
+      }
+    },20);
   },true);
 
-  $('snVerseHighlight')?.addEventListener('click',()=>{
-    const s=selectedVerseState();if(!s)return;
+  $('snVerseHighlight')?.addEventListener('click',e=>{
+    e.preventDefault();
+    e.stopPropagation();
+
+    const s=verseActionState || selectedVerseState();
+    if(!s)return;
+
     let items=readJsonStore('biblemastery_highlights');
     const exists=items.some(x=>(typeof x==='string'?x:x.reference)===s.reference);
-    items=exists?items.filter(x=>(typeof x==='string'?x:x.reference)!==s.reference):items.concat([{reference:s.reference,text:s.text,translation:readerTranslationSelect?.value||'KJV',savedAt:new Date().toISOString()}]);
+
+    if(exists){
+      items=items.filter(x=>(typeof x==='string'?x:x.reference)!==s.reference);
+    }else{
+      items.push({
+        reference:s.reference,
+        text:s.text,
+        translation:readerTranslationSelect?.value||'KJV',
+        savedAt:new Date().toISOString()
+      });
+    }
+
     if(writeJsonStore('biblemastery_highlights',items)){
       applySavedHighlights();
+      updateHighlightButton(s);
       $('snVerseActionStatus').textContent=exists?'Highlight removed.':'Verse highlighted.';
     }
   });
