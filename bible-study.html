@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Group Bible Study Builder - BibleMastery</title>
+  <title>Group Bible Study Builder - Redemptive Names Software</title>
 
   <style>
   * { box-sizing: border-box; }
@@ -573,7 +573,7 @@
   }
 
 
-  /* BibleMastery Real AI */
+  /* Redemptive Names Software Real AI */
   .biblemastery-ai-box {
     background: linear-gradient(135deg, rgba(18,30,51,.98), rgba(15,27,48,.98));
     border: 1px solid rgba(216,185,106,.38);
@@ -731,14 +731,27 @@ body.gb-ready>header,body.gb-ready>.container{display:none!important}
 @media(max-width:760px){.gb-topbar{height:70px;min-height:70px;padding:0 9px}.gb-brand{min-width:0}.gb-brand-copy strong{font-size:20px}.gb-brand-copy small{display:none}.gb-global-search{display:none}.gb-top-actions{margin-left:auto}.gb-top-actions .gb-text{display:none}.gb-primary-nav{top:70px}.gb-nav-track a,.gb-nav-track button{padding:0 15px;white-space:nowrap}.gb-location-controls{grid-template-columns:1fr 1fr 1fr 38px 38px}.gb-location-controls .gb-select-wrap:first-child{grid-column:1/-1}.gb-field-grid{grid-template-columns:1fr}.gb-flow-add{grid-template-columns:1fr 1fr}.gb-flow-add input:nth-child(2){grid-column:1/-1}.gb-quick-grid{grid-template-columns:repeat(2,1fr)}.gb-status-strip{grid-template-columns:1fr}.gb-main{padding:6px}.gb-modal{padding:7px}.gb-modal-dialog{width:100%;height:94vh}}
 </style>
 
+
+<style id="rns-brand-visibility-2026">
+.rns-brand-lockup{display:flex;align-items:center;gap:12px;width:max-content;max-width:100%;padding:8px 14px;margin:0 0 10px;background:rgba(255,250,236,.9);border:1px solid rgba(198,138,0,.58);border-radius:12px;box-shadow:0 3px 12px rgba(90,45,10,.14)}
+.rns-brand-mark{flex:0 0 auto;font-size:38px;line-height:1;color:#9a6500;text-shadow:0 1px 0 #fff7df}
+.rns-brand-name{display:block;font-family:Georgia,"Times New Roman",serif;font-size:30px;line-height:1.02;font-weight:800;letter-spacing:.15px;color:#790c11;text-shadow:0 1px 0 rgba(255,255,255,.8)}
+.rns-brand-subtitle{display:block;margin-top:4px;font-family:Georgia,"Times New Roman",serif;font-size:10px;font-weight:800;letter-spacing:2.2px;color:#6a3a1d}
+@media(max-width:720px){.rns-brand-lockup{padding:7px 10px;gap:9px}.rns-brand-mark{font-size:31px}.rns-brand-name{font-size:23px}.rns-brand-subtitle{font-size:8px;letter-spacing:1.4px}}
+</style>
+
 </head>
 
 
 <body>
 <header>
+<div class="rns-brand-lockup">
+<span class="rns-brand-mark" aria-hidden="true">♛</span>
+<span><span class="rns-brand-name">Redemptive Names Software</span><span class="rns-brand-subtitle">SEVEN NAMES ONE REDEEMER</span></span>
+</div>
   <h1>📖 Build a Bible Study</h1>
   <p>Study Scripture, prepare your teaching, and write your Bible study your way.</p>
-  <a href="/" class="back-button">← Back to BibleMastery</a>
+  <a href="/" class="back-button">← Back to Redemptive Names Software</a>
 </header>
 
 <div class="container">
@@ -760,12 +773,12 @@ body.gb-ready>header,body.gb-ready>.container{display:none!important}
 
   
   <div class="biblemastery-ai-box no-print">
-    <h2>✨ BibleMastery AI — Bible Study Assistant</h2>
+    <h2>✨ Redemptive Names Software AI — Bible Study Assistant</h2>
     <p>Ask for help preparing a group Bible study, explaining a passage, building teaching points, applications, discussion questions, or organizing your study.</p>
     <label for="studyAiQuestion">What would you like AI to help with?</label>
     <textarea id="studyAiQuestion" placeholder="Example: Help me prepare a Bible study on faith from Hebrews 11."></textarea>
     <div class="biblemastery-ai-actions">
-      <button id="studyAiButton" type="button">Ask BibleMastery AI</button>
+      <button id="studyAiButton" type="button">Ask Redemptive Names Software AI</button>
       <button id="studyAiClear" class="secondary" type="button">Clear AI</button>
     </div>
     <div id="studyAiAnswer" class="biblemastery-ai-answer">AI is ready when you are.</div>
@@ -791,7 +804,7 @@ body.gb-ready>header,body.gb-ready>.container{display:none!important}
     <div class="tool-grid">
       <div class="tool-box bible-reader-tool">
         <h3>📖 Bible Reader</h3>
-        <p>Read any book, chapter, and verse in all 10 BibleMastery translations.</p>
+        <p>Read any book, chapter, and verse in all 10 Redemptive Names Software translations.</p>
         <div class="reader-shell">
           <div class="reader-controls">
             <div class="reader-control"><label for="readerTranslation">Translation</label><select id="readerTranslation">
@@ -1334,7 +1347,7 @@ body.gb-ready>header,body.gb-ready>.container{display:none!important}
 
   <div class="section no-print">
     <h2>💾 Bible Study Controls</h2>
-    <p>Save more than one Bible study on this device. If you are signed in, BibleMastery also saves your Bible study to your account.</p>
+    <p>Save more than one Bible study on this device. If you are signed in, Redemptive Names Software also saves your Bible study to your account.</p>
     <button class="success" id="saveStudyButton" type="button">Save Bible Study</button>
     <button id="loadStudyButton" type="button">Load Saved Study</button>
     <button class="danger" id="clearStudyButton" type="button">Clear Study</button>
@@ -2321,7 +2334,7 @@ body.gb-ready>header,body.gb-ready>.container{display:none!important}
     refreshSavedStudies();
     let cloud=false;
     try{cloud=await saveCloudStudy(study);}catch(e){console.error("Cloud Bible study save error:",e);}
-    saveStatus.textContent=cloud?"Bible study saved on this device and to your BibleMastery account.":"Bible study saved on this device.";
+    saveStatus.textContent=cloud?"Bible study saved on this device and to your Redemptive Names Software account.":"Bible study saved on this device.";
   }
   function loadStudy(){
     const value=savedStudySelect.value;
@@ -2365,7 +2378,7 @@ body.gb-ready>header,body.gb-ready>.container{display:none!important}
      Commentary source text remains unchanged.
   ========================================= */
   const studyLanguageSelect = document.getElementById("studyLanguageSelect");
-  const studyUiText = {"es": {"📖 Build a Bible Study": "📖 Crear un estudio bíblico", "Study Scripture, prepare your teaching, and write your Bible study your way.": "Estudia las Escrituras, prepara tu enseñanza y escribe tu estudio bíblico a tu manera.", "← Back to BibleMastery": "← Volver a BibleMastery", "Build Your Bible Study Your Way": "Crea tu estudio bíblico a tu manera", "Begin with Scripture and the Bible study tools. As you study, discover your topic and teaching, then write manually or use the guided Bible Study Builder.": "Comienza con las Escrituras y las herramientas de estudio bíblico. Mientras estudias, descubre tu tema y enseñanza; luego escribe manualmente o usa el Constructor guiado.", "Language": "Idioma", "✍️ Write Bible Study Manually": "✍️ Escribir estudio bíblico manualmente", "📝 Guided Bible Study Template": "📝 Plantilla guiada de estudio bíblico", "📖 Bible Reader": "📖 Lector de la Biblia", "Bible Reader": "Lector de la Biblia", "Translation": "Traducción", "Book": "Libro", "Chapter": "Capítulo", "Verse": "Versículo", "All verses": "Todos los versículos", "← Previous": "← Anterior", "Next →": "Siguiente →", "Choose a book": "Elige un libro", "Choose a chapter": "Elige un capítulo", "Choose a verse": "Elige un versículo", "📖 Bible Commentary": "📖 Comentario bíblico", "Choose Commentary": "Elegir comentario", "🧰 Bible Tools": "🧰 Herramientas bíblicas", "📘 Bible Dictionaries": "📘 Diccionarios bíblicos", "📗 English Dictionary": "📗 Diccionario de inglés", "🔤 Hebrew & Greek Word Lookup": "🔤 Búsqueda de palabras hebreas y griegas", "🔎 Concordance": "🔎 Concordancia", "📚 Parallel Bible": "📚 Biblia paralela", "Compare the same verse across Bible translations while you study.": "Compara el mismo versículo entre traducciones bíblicas mientras estudias.", "Version 1": "Versión 1", "Version 2": "Versión 2", "Version 3": "Versión 3", "💾 Bible Study Controls": "💾 Controles del estudio bíblico", "Save Bible Study": "Guardar estudio bíblico", "Load Saved Study": "Cargar estudio guardado", "Clear Study": "Borrar estudio", "Print Bible Study": "Imprimir estudio bíblico", "Delete Saved Study": "Eliminar estudio guardado"}, "fr": {"📖 Build a Bible Study": "📖 Construire une étude biblique", "Study Scripture, prepare your teaching, and write your Bible study your way.": "Étudiez les Écritures, préparez votre enseignement et rédigez votre étude biblique à votre manière.", "← Back to BibleMastery": "← Retour à BibleMastery", "Build Your Bible Study Your Way": "Construisez votre étude biblique à votre manière", "Begin with Scripture and the Bible study tools. As you study, discover your topic and teaching, then write manually or use the guided Bible Study Builder.": "Commencez par les Écritures et les outils d’étude biblique. En étudiant, découvrez votre thème et votre enseignement, puis écrivez manuellement ou utilisez le constructeur guidé.", "Language": "Langue", "✍️ Write Bible Study Manually": "✍️ Écrire l’étude biblique manuellement", "📝 Guided Bible Study Template": "📝 Modèle guidé d’étude biblique", "📖 Bible Reader": "📖 Lecteur de la Bible", "Bible Reader": "Lecteur de la Bible", "Translation": "Traduction", "Book": "Livre", "Chapter": "Chapitre", "Verse": "Verset", "All verses": "Tous les versets", "← Previous": "← Précédent", "Next →": "Suivant →", "Choose a book": "Choisir un livre", "Choose a chapter": "Choisir un chapitre", "Choose a verse": "Choisir un verset", "📖 Bible Commentary": "📖 Commentaire biblique", "Choose Commentary": "Choisir un commentaire", "🧰 Bible Tools": "🧰 Outils bibliques", "📘 Bible Dictionaries": "📘 Dictionnaires bibliques", "📗 English Dictionary": "📗 Dictionnaire anglais", "🔤 Hebrew & Greek Word Lookup": "🔤 Recherche de mots hébreux et grecs", "🔎 Concordance": "🔎 Concordance", "📚 Parallel Bible": "📚 Bible parallèle", "Compare the same verse across Bible translations while you study.": "Comparez le même verset dans différentes traductions pendant votre étude.", "Version 1": "Version 1", "Version 2": "Version 2", "Version 3": "Version 3", "💾 Bible Study Controls": "💾 Commandes de l’étude biblique", "Save Bible Study": "Enregistrer l’étude biblique", "Load Saved Study": "Charger l’étude enregistrée", "Clear Study": "Effacer l’étude", "Print Bible Study": "Imprimer l’étude biblique", "Delete Saved Study": "Supprimer l’étude enregistrée"}, "de": {"📖 Build a Bible Study": "📖 Eine Bibelstudie erstellen", "Study Scripture, prepare your teaching, and write your Bible study your way.": "Studiere die Schrift, bereite deine Lehre vor und schreibe deine Bibelstudie auf deine Weise.", "← Back to BibleMastery": "← Zurück zu BibleMastery", "Build Your Bible Study Your Way": "Erstelle deine Bibelstudie auf deine Weise", "Begin with Scripture and the Bible study tools. As you study, discover your topic and teaching, then write manually or use the guided Bible Study Builder.": "Beginne mit der Schrift und den Bibelstudien-Werkzeugen. Entdecke beim Studieren dein Thema und deine Lehre und schreibe dann manuell oder mit dem geführten Builder.", "Language": "Sprache", "✍️ Write Bible Study Manually": "✍️ Bibelstudie manuell schreiben", "📝 Guided Bible Study Template": "📝 Geführte Bibelstudien-Vorlage", "📖 Bible Reader": "📖 Bibelleser", "Bible Reader": "Bibelleser", "Translation": "Übersetzung", "Book": "Buch", "Chapter": "Kapitel", "Verse": "Vers", "All verses": "Alle Verse", "← Previous": "← Zurück", "Next →": "Weiter →", "Choose a book": "Buch auswählen", "Choose a chapter": "Kapitel auswählen", "Choose a verse": "Vers auswählen", "📖 Bible Commentary": "📖 Bibelkommentar", "Choose Commentary": "Kommentar auswählen", "🧰 Bible Tools": "🧰 Bibelwerkzeuge", "📘 Bible Dictionaries": "📘 Bibelwörterbücher", "📗 English Dictionary": "📗 Englisches Wörterbuch", "🔤 Hebrew & Greek Word Lookup": "🔤 Hebräische & griechische Wörtersuche", "🔎 Concordance": "🔎 Konkordanz", "📚 Parallel Bible": "📚 Parallelbibel", "Compare the same verse across Bible translations while you study.": "Vergleiche beim Studium denselben Vers in verschiedenen Bibelübersetzungen.", "Version 1": "Version 1", "Version 2": "Version 2", "Version 3": "Version 3", "💾 Bible Study Controls": "💾 Bibelstudien-Steuerung", "Save Bible Study": "Bibelstudie speichern", "Load Saved Study": "Gespeicherte Studie laden", "Clear Study": "Studie leeren", "Print Bible Study": "Bibelstudie drucken", "Delete Saved Study": "Gespeicherte Studie löschen"}, "pt": {"📖 Build a Bible Study": "📖 Criar um estudo bíblico", "Study Scripture, prepare your teaching, and write your Bible study your way.": "Estude as Escrituras, prepare seu ensino e escreva seu estudo bíblico do seu jeito.", "← Back to BibleMastery": "← Voltar ao BibleMastery", "Build Your Bible Study Your Way": "Crie seu estudo bíblico do seu jeito", "Begin with Scripture and the Bible study tools. As you study, discover your topic and teaching, then write manually or use the guided Bible Study Builder.": "Comece com as Escrituras e as ferramentas de estudo bíblico. Ao estudar, descubra seu tema e ensino; depois escreva manualmente ou use o construtor guiado.", "Language": "Idioma", "✍️ Write Bible Study Manually": "✍️ Escrever estudo bíblico manualmente", "📝 Guided Bible Study Template": "📝 Modelo guiado de estudo bíblico", "📖 Bible Reader": "📖 Leitor da Bíblia", "Bible Reader": "Leitor da Bíblia", "Translation": "Tradução", "Book": "Livro", "Chapter": "Capítulo", "Verse": "Versículo", "All verses": "Todos os versículos", "← Previous": "← Anterior", "Next →": "Próximo →", "Choose a book": "Escolha um livro", "Choose a chapter": "Escolha um capítulo", "Choose a verse": "Escolha um versículo", "📖 Bible Commentary": "📖 Comentário bíblico", "Choose Commentary": "Escolher comentário", "🧰 Bible Tools": "🧰 Ferramentas bíblicas", "📘 Bible Dictionaries": "📘 Dicionários bíblicos", "📗 English Dictionary": "📗 Dicionário de inglês", "🔤 Hebrew & Greek Word Lookup": "🔤 Pesquisa de palavras hebraicas e gregas", "🔎 Concordance": "🔎 Concordância", "📚 Parallel Bible": "📚 Bíblia paralela", "Compare the same verse across Bible translations while you study.": "Compare o mesmo versículo entre traduções bíblicas enquanto estuda.", "Version 1": "Versão 1", "Version 2": "Versão 2", "Version 3": "Versão 3", "💾 Bible Study Controls": "💾 Controles do estudo bíblico", "Save Bible Study": "Salvar estudo bíblico", "Load Saved Study": "Carregar estudo salvo", "Clear Study": "Limpar estudo", "Print Bible Study": "Imprimir estudo bíblico", "Delete Saved Study": "Excluir estudo salvo"}};
+  const studyUiText = {"es": {"📖 Build a Bible Study": "📖 Crear un estudio bíblico", "Study Scripture, prepare your teaching, and write your Bible study your way.": "Estudia las Escrituras, prepara tu enseñanza y escribe tu estudio bíblico a tu manera.", "← Back to Redemptive Names Software": "← Volver a Redemptive Names Software", "Build Your Bible Study Your Way": "Crea tu estudio bíblico a tu manera", "Begin with Scripture and the Bible study tools. As you study, discover your topic and teaching, then write manually or use the guided Bible Study Builder.": "Comienza con las Escrituras y las herramientas de estudio bíblico. Mientras estudias, descubre tu tema y enseñanza; luego escribe manualmente o usa el Constructor guiado.", "Language": "Idioma", "✍️ Write Bible Study Manually": "✍️ Escribir estudio bíblico manualmente", "📝 Guided Bible Study Template": "📝 Plantilla guiada de estudio bíblico", "📖 Bible Reader": "📖 Lector de la Biblia", "Bible Reader": "Lector de la Biblia", "Translation": "Traducción", "Book": "Libro", "Chapter": "Capítulo", "Verse": "Versículo", "All verses": "Todos los versículos", "← Previous": "← Anterior", "Next →": "Siguiente →", "Choose a book": "Elige un libro", "Choose a chapter": "Elige un capítulo", "Choose a verse": "Elige un versículo", "📖 Bible Commentary": "📖 Comentario bíblico", "Choose Commentary": "Elegir comentario", "🧰 Bible Tools": "🧰 Herramientas bíblicas", "📘 Bible Dictionaries": "📘 Diccionarios bíblicos", "📗 English Dictionary": "📗 Diccionario de inglés", "🔤 Hebrew & Greek Word Lookup": "🔤 Búsqueda de palabras hebreas y griegas", "🔎 Concordance": "🔎 Concordancia", "📚 Parallel Bible": "📚 Biblia paralela", "Compare the same verse across Bible translations while you study.": "Compara el mismo versículo entre traducciones bíblicas mientras estudias.", "Version 1": "Versión 1", "Version 2": "Versión 2", "Version 3": "Versión 3", "💾 Bible Study Controls": "💾 Controles del estudio bíblico", "Save Bible Study": "Guardar estudio bíblico", "Load Saved Study": "Cargar estudio guardado", "Clear Study": "Borrar estudio", "Print Bible Study": "Imprimir estudio bíblico", "Delete Saved Study": "Eliminar estudio guardado"}, "fr": {"📖 Build a Bible Study": "📖 Construire une étude biblique", "Study Scripture, prepare your teaching, and write your Bible study your way.": "Étudiez les Écritures, préparez votre enseignement et rédigez votre étude biblique à votre manière.", "← Back to Redemptive Names Software": "← Retour à Redemptive Names Software", "Build Your Bible Study Your Way": "Construisez votre étude biblique à votre manière", "Begin with Scripture and the Bible study tools. As you study, discover your topic and teaching, then write manually or use the guided Bible Study Builder.": "Commencez par les Écritures et les outils d’étude biblique. En étudiant, découvrez votre thème et votre enseignement, puis écrivez manuellement ou utilisez le constructeur guidé.", "Language": "Langue", "✍️ Write Bible Study Manually": "✍️ Écrire l’étude biblique manuellement", "📝 Guided Bible Study Template": "📝 Modèle guidé d’étude biblique", "📖 Bible Reader": "📖 Lecteur de la Bible", "Bible Reader": "Lecteur de la Bible", "Translation": "Traduction", "Book": "Livre", "Chapter": "Chapitre", "Verse": "Verset", "All verses": "Tous les versets", "← Previous": "← Précédent", "Next →": "Suivant →", "Choose a book": "Choisir un livre", "Choose a chapter": "Choisir un chapitre", "Choose a verse": "Choisir un verset", "📖 Bible Commentary": "📖 Commentaire biblique", "Choose Commentary": "Choisir un commentaire", "🧰 Bible Tools": "🧰 Outils bibliques", "📘 Bible Dictionaries": "📘 Dictionnaires bibliques", "📗 English Dictionary": "📗 Dictionnaire anglais", "🔤 Hebrew & Greek Word Lookup": "🔤 Recherche de mots hébreux et grecs", "🔎 Concordance": "🔎 Concordance", "📚 Parallel Bible": "📚 Bible parallèle", "Compare the same verse across Bible translations while you study.": "Comparez le même verset dans différentes traductions pendant votre étude.", "Version 1": "Version 1", "Version 2": "Version 2", "Version 3": "Version 3", "💾 Bible Study Controls": "💾 Commandes de l’étude biblique", "Save Bible Study": "Enregistrer l’étude biblique", "Load Saved Study": "Charger l’étude enregistrée", "Clear Study": "Effacer l’étude", "Print Bible Study": "Imprimer l’étude biblique", "Delete Saved Study": "Supprimer l’étude enregistrée"}, "de": {"📖 Build a Bible Study": "📖 Eine Bibelstudie erstellen", "Study Scripture, prepare your teaching, and write your Bible study your way.": "Studiere die Schrift, bereite deine Lehre vor und schreibe deine Bibelstudie auf deine Weise.", "← Back to Redemptive Names Software": "← Zurück zu Redemptive Names Software", "Build Your Bible Study Your Way": "Erstelle deine Bibelstudie auf deine Weise", "Begin with Scripture and the Bible study tools. As you study, discover your topic and teaching, then write manually or use the guided Bible Study Builder.": "Beginne mit der Schrift und den Bibelstudien-Werkzeugen. Entdecke beim Studieren dein Thema und deine Lehre und schreibe dann manuell oder mit dem geführten Builder.", "Language": "Sprache", "✍️ Write Bible Study Manually": "✍️ Bibelstudie manuell schreiben", "📝 Guided Bible Study Template": "📝 Geführte Bibelstudien-Vorlage", "📖 Bible Reader": "📖 Bibelleser", "Bible Reader": "Bibelleser", "Translation": "Übersetzung", "Book": "Buch", "Chapter": "Kapitel", "Verse": "Vers", "All verses": "Alle Verse", "← Previous": "← Zurück", "Next →": "Weiter →", "Choose a book": "Buch auswählen", "Choose a chapter": "Kapitel auswählen", "Choose a verse": "Vers auswählen", "📖 Bible Commentary": "📖 Bibelkommentar", "Choose Commentary": "Kommentar auswählen", "🧰 Bible Tools": "🧰 Bibelwerkzeuge", "📘 Bible Dictionaries": "📘 Bibelwörterbücher", "📗 English Dictionary": "📗 Englisches Wörterbuch", "🔤 Hebrew & Greek Word Lookup": "🔤 Hebräische & griechische Wörtersuche", "🔎 Concordance": "🔎 Konkordanz", "📚 Parallel Bible": "📚 Parallelbibel", "Compare the same verse across Bible translations while you study.": "Vergleiche beim Studium denselben Vers in verschiedenen Bibelübersetzungen.", "Version 1": "Version 1", "Version 2": "Version 2", "Version 3": "Version 3", "💾 Bible Study Controls": "💾 Bibelstudien-Steuerung", "Save Bible Study": "Bibelstudie speichern", "Load Saved Study": "Gespeicherte Studie laden", "Clear Study": "Studie leeren", "Print Bible Study": "Bibelstudie drucken", "Delete Saved Study": "Gespeicherte Studie löschen"}, "pt": {"📖 Build a Bible Study": "📖 Criar um estudo bíblico", "Study Scripture, prepare your teaching, and write your Bible study your way.": "Estude as Escrituras, prepare seu ensino e escreva seu estudo bíblico do seu jeito.", "← Back to Redemptive Names Software": "← Voltar ao Redemptive Names Software", "Build Your Bible Study Your Way": "Crie seu estudo bíblico do seu jeito", "Begin with Scripture and the Bible study tools. As you study, discover your topic and teaching, then write manually or use the guided Bible Study Builder.": "Comece com as Escrituras e as ferramentas de estudo bíblico. Ao estudar, descubra seu tema e ensino; depois escreva manualmente ou use o construtor guiado.", "Language": "Idioma", "✍️ Write Bible Study Manually": "✍️ Escrever estudo bíblico manualmente", "📝 Guided Bible Study Template": "📝 Modelo guiado de estudo bíblico", "📖 Bible Reader": "📖 Leitor da Bíblia", "Bible Reader": "Leitor da Bíblia", "Translation": "Tradução", "Book": "Livro", "Chapter": "Capítulo", "Verse": "Versículo", "All verses": "Todos os versículos", "← Previous": "← Anterior", "Next →": "Próximo →", "Choose a book": "Escolha um livro", "Choose a chapter": "Escolha um capítulo", "Choose a verse": "Escolha um versículo", "📖 Bible Commentary": "📖 Comentário bíblico", "Choose Commentary": "Escolher comentário", "🧰 Bible Tools": "🧰 Ferramentas bíblicas", "📘 Bible Dictionaries": "📘 Dicionários bíblicos", "📗 English Dictionary": "📗 Dicionário de inglês", "🔤 Hebrew & Greek Word Lookup": "🔤 Pesquisa de palavras hebraicas e gregas", "🔎 Concordance": "🔎 Concordância", "📚 Parallel Bible": "📚 Bíblia paralela", "Compare the same verse across Bible translations while you study.": "Compare o mesmo versículo entre traduções bíblicas enquanto estuda.", "Version 1": "Versão 1", "Version 2": "Versão 2", "Version 3": "Versão 3", "💾 Bible Study Controls": "💾 Controles do estudo bíblico", "Save Bible Study": "Salvar estudo bíblico", "Load Saved Study": "Carregar estudo salvo", "Clear Study": "Limpar estudo", "Print Bible Study": "Imprimir estudo bíblico", "Delete Saved Study": "Excluir estudo salvo"}};
   const studyEnglishText = new WeakMap();
 
   function translateStudyNode(node, lang) {
@@ -2582,7 +2595,7 @@ body.gb-ready>header,body.gb-ready>.container{display:none!important}
     const userQuestion = bibleMasteryAiQuestion.value.trim();
 
     if (!userQuestion) {
-      bibleMasteryAiAnswer.textContent = "Enter a question or request for BibleMastery AI.";
+      bibleMasteryAiAnswer.textContent = "Enter a question or request for Redemptive Names Software AI.";
       bibleMasteryAiQuestion.focus();
       return;
     }
@@ -2591,7 +2604,7 @@ body.gb-ready>header,body.gb-ready>.container{display:none!important}
     const answerLanguage = bibleMasteryAiLanguages[languageCode] || "English";
 
     bibleMasteryAiButton.disabled = true;
-    bibleMasteryAiAnswer.textContent = "BibleMastery AI is thinking...";
+    bibleMasteryAiAnswer.textContent = "Redemptive Names Software AI is thinking...";
 
     try {
       const question =
@@ -2619,12 +2632,12 @@ body.gb-ready>header,body.gb-ready>.container{display:none!important}
       }
 
       bibleMasteryAiAnswer.textContent =
-        data.answer || "BibleMastery AI did not return an answer.";
+        data.answer || "Redemptive Names Software AI did not return an answer.";
 
     } catch (error) {
-      console.error("BibleMastery AI error:", error);
+      console.error("Redemptive Names Software AI error:", error);
       bibleMasteryAiAnswer.textContent =
-        "BibleMastery AI could not answer right now. Please try again.";
+        "Redemptive Names Software AI could not answer right now. Please try again.";
     } finally {
       bibleMasteryAiButton.disabled = false;
     }
@@ -2723,19 +2736,19 @@ body.gb-ready>header,body.gb-ready>.container{display:none!important}
   async function asCopy(text,msg){try{await navigator.clipboard.writeText(text);asEl("advStudyExportStatus").textContent=msg;}catch(e){asEl("advStudyExportStatus").textContent="Browser blocked clipboard access. Use Print instead.";}}
   function asPrint(title,text){const w=window.open("","_blank");if(!w)return;w.document.write("<!doctype html><html><head><title>"+escapeHTML(title)+"</title><style>body{font-family:Arial,sans-serif;max-width:900px;margin:40px auto;padding:0 24px;line-height:1.6;white-space:pre-wrap}h1{font-size:24px}</style></head><body><h1>"+escapeHTML(title)+"</h1>"+escapeHTML(text)+"</body></html>");w.document.close();w.focus();w.print();}
   if(asEl("advCopyLeaderStudy"))asEl("advCopyLeaderStudy").addEventListener("click",()=>asCopy(asLeaderPackage(),"Leader version copied."));
-  if(asEl("advPrintLeaderStudy"))asEl("advPrintLeaderStudy").addEventListener("click",()=>asPrint("BibleMastery — Leader Bible Study",asLeaderPackage()));
+  if(asEl("advPrintLeaderStudy"))asEl("advPrintLeaderStudy").addEventListener("click",()=>asPrint("Redemptive Names Software — Leader Bible Study",asLeaderPackage()));
   if(asEl("advCopyParticipantStudy"))asEl("advCopyParticipantStudy").addEventListener("click",()=>asCopy(asParticipantPackage(),"Participant version copied."));
-  if(asEl("advPrintParticipantStudy"))asEl("advPrintParticipantStudy").addEventListener("click",()=>asPrint("BibleMastery — Participant Bible Study",asParticipantPackage()));
+  if(asEl("advPrintParticipantStudy"))asEl("advPrintParticipantStudy").addEventListener("click",()=>asPrint("Redemptive Names Software — Participant Bible Study",asParticipantPackage()));
 
 </script>
 
 <div class="gb-app" id="gbApp">
 <header class="gb-topbar">
-  <div class="gb-brand"><span class="gb-brand-mark">♛</span><span class="gb-brand-copy"><strong>BibleMastery</strong><small>SEVEN NAMES ONE REDEEMER</small></span></div>
+  <div class="gb-brand"><span class="gb-brand-mark">♛</span><span class="gb-brand-copy"><strong>Redemptive Names Software</strong><small>SEVEN NAMES ONE REDEEMER</small></span></div>
   <div class="gb-global-search"><input id="gbGlobalSearch" type="search" placeholder="Go to a Bible reference (example: John 3:16)"><button id="gbGlobalSearchButton" type="button">⌕</button></div>
   <div class="gb-top-actions"><button id="gbPageRefresh" type="button">↻ <span class="gb-text">Refresh</span></button><a class="gb-main-link" href="personal-study.html">⌂ <span class="gb-text">Main Page</span></a><button type="button" onclick="window.location.href='account.html'">● <span class="gb-text">Account</span></button></div>
 </header>
-<nav class="gb-primary-nav" aria-label="BibleMastery study navigation">
+<nav class="gb-primary-nav" aria-label="Redemptive Names Software study navigation">
   <button class="gb-nav-arrow" id="gbNavPrev" type="button" aria-label="Previous navigation items">‹</button>
   <div class="gb-nav-track" id="gbNavTrack">
     <a href="personal-study.html">⌂ Main Study / Personal Study</a>
@@ -2783,7 +2796,7 @@ body.gb-ready>header,body.gb-ready>.container{display:none!important}
         <div class="gb-field" style="margin-top:7px"><label>Central Truth / Big Idea</label><div id="gbBigIdeaHost"></div></div>
         <div class="gb-field" style="margin-top:7px"><label>Desired Outcome</label><div id="gbOutcomeHost"></div></div>
         <div class="gb-study-editor"><label>Full Study / Teaching Notes</label><div id="gbManualStudyHost"></div></div>
-        <div class="gb-core-actions"><button class="primary" id="gbSaveStudy" type="button">💾 Save Study</button><button id="gbOpenGuided" type="button">18-Step Guide</button><button id="gbOpenAdvanced" type="button">Advanced Prep</button><button id="gbOpenAi" type="button">✨ BibleMastery AI</button></div>
+        <div class="gb-core-actions"><button class="primary" id="gbSaveStudy" type="button">💾 Save Study</button><button id="gbOpenGuided" type="button">18-Step Guide</button><button id="gbOpenAdvanced" type="button">Advanced Prep</button><button id="gbOpenAi" type="button">✨ Redemptive Names Software AI</button></div>
       </div>
       <div class="gb-meeting-flow" id="gbMeetingFlowPanel">
         <h3>Meeting Flow</h3><div class="gb-flow-list" id="gbFlowList"></div>
@@ -2920,13 +2933,13 @@ function currentReader(){
               <h3>The Believer's Authority</h3>
               <p><strong>Author:</strong> Andrew Wommack</p>
               <p>This teaching focuses on the authority believers have in Christ, resisting the devil, spiritual warfare, faith, and using the authority Jesus has delegated to believers.</p>
-              <p class="small-note">BibleMastery does not host the copyrighted book text. Andrew Wommack Ministries currently offers an official free PDF/resource through its own site.</p>
+              <p class="small-note">Redemptive Names Software does not host the copyrighted book text. Andrew Wommack Ministries currently offers an official free PDF/resource through its own site.</p>
               <div class="bm-official-book-actions">
                 <a class="search-button bm-book-link" href="https://www.awmi.net/authority/" target="_blank" rel="noopener">Read / Get Free PDF from AWMI ↗</a>
                 <a class="reader-nav-button bm-book-link" href="https://www.awmi.net/browse-teaching/believers-authority/" target="_blank" rel="noopener">Open Believer's Authority Teaching ↗</a>
               </div>
               <hr>
-              <h4>Study focus in BibleMastery</h4>
+              <h4>Study focus in Redemptive Names Software</h4>
               <ul>
                 <li>Authority delegated to believers through Jesus Christ</li>
                 <li>Identity and position in Christ</li>
@@ -2951,7 +2964,7 @@ function currentReader(){
               <div class="bm-public-domain-badge">PUBLIC DOMAIN • ORIGINAL 1924 EDITION</div>
               <h3>Christ the Healer</h3>
               <p><strong>Author:</strong> F. F. Bosworth</p>
-              <p>This is the original 1924 edition of <em>Christ the Healer: Sermons on Divine Healing</em>. BibleMastery intentionally uses the 1924 public-domain edition and does not reproduce later copyrighted forewords, revisions, or added chapters.</p>
+              <p>This is the original 1924 edition of <em>Christ the Healer: Sermons on Divine Healing</em>. Redemptive Names Software intentionally uses the 1924 public-domain edition and does not reproduce later copyrighted forewords, revisions, or added chapters.</p>
               <div class="bm-book-source-actions">
                 <a class="search-button bm-book-link" href="https://archive.org/details/christhealerserm0000fred" target="_blank" rel="noopener">Open Full 1924 Scan ↗</a>
                 <a class="reader-nav-button bm-book-link" href="https://openlibrary.org/works/OL31252713W/Christ_the_healer" target="_blank" rel="noopener">Open Library Record ↗</a>
@@ -2999,7 +3012,7 @@ function currentReader(){
                 <li>Thirty-one Questions</li>
                 <li>Testimonies</li>
               </ul>
-              <p class="small-note">Later editions expanded the book. BibleMastery keeps this entry tied to the 1924 edition so later copyrighted additions are not treated as public-domain text.</p>
+              <p class="small-note">Later editions expanded the book. Redemptive Names Software keeps this entry tied to the 1924 edition so later copyrighted additions are not treated as public-domain text.</p>
             </div>`
         }
       ]
@@ -3017,7 +3030,7 @@ function currentReader(){
               <div class="bm-public-domain-badge">PUBLIC DOMAIN • 1924 EDITION</div>
               <h3>Ever-Increasing Faith</h3>
               <p><strong>Author:</strong> Smith Wigglesworth</p>
-              <p>The Library of Congress identifies this 1924 edition as public domain with no known restrictions and no copyright renewal found. BibleMastery links the original digitized edition rather than a later revised printing.</p>
+              <p>The Library of Congress identifies this 1924 edition as public domain with no known restrictions and no copyright renewal found. Redemptive Names Software links the original digitized edition rather than a later revised printing.</p>
               <div class="bm-book-source-actions">
                 <a class="search-button bm-book-link" href="https://www.loc.gov/item/24022022/" target="_blank" rel="noopener">Library of Congress Edition ↗</a>
                 <a class="reader-nav-button bm-book-link" href="https://archive.org/details/everincreasingfa00wigg_0" target="_blank" rel="noopener">Open Full Scan ↗</a>
@@ -3060,7 +3073,7 @@ function currentReader(){
               <h3>Faith That Prevails</h3>
               <p><strong>Author:</strong> Smith Wigglesworth</p>
               <p>This classic focuses on faith, spiritual power, Pentecost, receiving power from the Holy Spirit, keeping spiritual vision, and living in God's present blessing.</p>
-              <p class="small-note">BibleMastery is not copying the full book text here. The Gospel Publishing House archive catalogs a 1938 copyrighted edition, and the publisher still sells the work today. This entry therefore links to the publisher while giving you a BibleMastery study guide.</p>
+              <p class="small-note">Redemptive Names Software is not copying the full book text here. The Gospel Publishing House archive catalogs a 1938 copyrighted edition, and the publisher still sells the work today. This entry therefore links to the publisher while giving you a Redemptive Names Software study guide.</p>
               <div class="bm-official-book-actions">
                 <a class="search-button bm-book-link" href="https://gospelpublishinghouse.com/shop/product/faith-that-prevails" target="_blank" rel="noopener">Open Gospel Publishing House ↗</a>
               </div>
@@ -3099,7 +3112,7 @@ function currentReader(){
               <div class="bm-public-domain-badge">PUBLIC DOMAIN • ORIGINAL 1927 EDITION</div>
               <h3>The Wonderful Name of Jesus</h3>
               <p><strong>Author:</strong> E. W. Kenyon</p>
-              <p>This classic centers on the believer's authority in the name of Jesus, prayer, faith, healing, spiritual conflict, and the believer's position in Christ. BibleMastery will use only the original 1927 text when we add the complete book to the Library.</p>
+              <p>This classic centers on the believer's authority in the name of Jesus, prayer, faith, healing, spiritual conflict, and the believer's position in Christ. Redemptive Names Software will use only the original 1927 text when we add the complete book to the Library.</p>
               <div class="bm-book-source-actions">
                 <a class="search-button bm-book-link" href="https://books.google.com/books/about/The_Wonderful_Name_of_Jesus.html?id=a5RpEQAAQBAJ" target="_blank" rel="noopener">Book Record ↗</a>
               </div>
@@ -3405,7 +3418,7 @@ function route(name){
   if(name==='research'||name==='reader'||name==='commentaries'||name==='more'){if(toolsColumn)openModalNode('⌕ Bible Study Research Tools',toolsColumn);return}
   if(name==='guided'){if(guided)openModalNode('☷ 18-Step Bible Study Preparation Guide',guided);return}
   if(name==='advanced'||name==='series'||name==='builder'){if(advanced)openModalNode('✦ Advanced Group Bible Study Preparation',advanced);return}
-  if(name==='ai'){if(aiBox)openModalNode('✨ BibleMastery AI — Group Bible Study',aiBox);return}
+  if(name==='ai'){if(aiBox)openModalNode('✨ Redemptive Names Software AI — Group Bible Study',aiBox);return}
   if(name==='saved'){if(saveSection)openModalNode('▰ Saved Group Bible Studies',saveSection);return}
   if(name==='visuals'){visualsPopup();return}if(name==='live'){livePopup();return}if(name==='offline'){offlinePopup();return}
   if(name==='books'){openCustom('▦ Best Book for This Study','<p>The best book follows the selected verse, whole chapter, and your study topic. Choose Read Best Section for the strongest match or Read Full Book to open the complete available resource.</p>')}
@@ -3415,6 +3428,39 @@ qsa('[data-gb-tool]').forEach(b=>b.addEventListener('click',()=>route(b.dataset.
 function maybeSeedPassage(){const s=currentReader(),e=$('advStudyPrimaryPassage');if(s&&e&&!e.value.trim())e.value=s.bookName+' '+s.chapter}
 readerChapter?.addEventListener?.('change',()=>setTimeout(maybeSeedPassage,50));setTimeout(maybeSeedPassage,600);
 saveGroup();
+})();
+</script>
+
+
+<script id="rns-visible-brand-text-2026">
+(function(){
+  const OLD='BibleMastery', NEW='Redemptive Names Software';
+  function replaceVisible(root){
+    if(!root)return;
+    const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT), a=[];
+    while(w.nextNode())a.push(w.currentNode);
+    a.forEach(n=>{
+      const p=n.parentElement;
+      if(!p||/^(SCRIPT|STYLE|NOSCRIPT|CODE|PRE)$/i.test(p.tagName))return;
+      if(n.nodeValue&&n.nodeValue.includes(OLD))n.nodeValue=n.nodeValue.split(OLD).join(NEW);
+    });
+    if(root.querySelectorAll)root.querySelectorAll('[title],[placeholder],[aria-label]').forEach(el=>{
+      ['title','placeholder','aria-label'].forEach(k=>{
+        const v=el.getAttribute(k);
+        if(v&&v.includes(OLD))el.setAttribute(k,v.split(OLD).join(NEW));
+      });
+    });
+  }
+  function run(){replaceVisible(document.body)}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run,{once:true});else run();
+  const o=new MutationObserver(ms=>ms.forEach(m=>m.addedNodes.forEach(n=>{
+    if(n.nodeType===1)replaceVisible(n);
+    else if(n.nodeType===3&&n.nodeValue&&n.nodeValue.includes(OLD)){
+      const p=n.parentElement;
+      if(p&&!/^(SCRIPT|STYLE|NOSCRIPT|CODE|PRE)$/i.test(p.tagName))n.nodeValue=n.nodeValue.split(OLD).join(NEW);
+    }
+  })));
+  document.addEventListener('DOMContentLoaded',()=>{if(document.body)o.observe(document.body,{childList:true,subtree:true})},{once:true});
 })();
 </script>
 
