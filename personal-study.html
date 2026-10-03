@@ -2130,6 +2130,8 @@ body{overflow-x:hidden}
 }
 
 </style>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body class="bm-layout-dashboard" data-default-view="personal-study">
 
@@ -11260,8 +11262,9 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
     <button class="sn-primary-nav-arrow" id="snPrimaryNavPrev" type="button" aria-label="Previous navigation items">‹</button>
     <div class="sn-primary-nav-track" id="snPrimaryNavTrack">
       <a class="active" href="#" data-sn-nojump>Personal Study</a>
-      <a href="sermon.html">Sermon Builder</a>
-      <a href="bible-study.html">Group Bible Study</a>
+      <a href="sermon.html" id="snPublicSermonBuilder">Sermon Builder</a>
+      <a href="bible-study.html" id="snPublicBibleStudyBuilder">Group Bible Study</a>
+      <a href="seven-names-builder.html" id="snOwnerSevenNamesBuilder" style="display:none;">Seven Names One Redeemer Sermon / Bible Study Builder</a>
       <a href="library.html">Library</a>
       <button type="button" data-sn-tool="advanced">Tools⌄</button>
     </div>
@@ -11269,6 +11272,40 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
   main.prepend(primaryNav);
   $('snPrimaryNavPrev')?.addEventListener('click',()=>$('snPrimaryNavTrack')?.scrollBy({left:-300,behavior:'smooth'}));
   $('snPrimaryNavNext')?.addEventListener('click',()=>$('snPrimaryNavTrack')?.scrollBy({left:300,behavior:'smooth'}));
+
+  // Owner-only navigation: regular users keep the public builders.
+  // The owner sees one Seven Names One Redeemer combined builder instead.
+  (async function snApplyOwnerBuilderNavigation(){
+    const publicSermon=$('snPublicSermonBuilder');
+    const publicBibleStudy=$('snPublicBibleStudyBuilder');
+    const ownerBuilder=$('snOwnerSevenNamesBuilder');
+
+    function applyOwnerNav(isOwner){
+      if(publicSermon) publicSermon.style.display=isOwner?'none':'';
+      if(publicBibleStudy) publicBibleStudy.style.display=isOwner?'none':'';
+      if(ownerBuilder) ownerBuilder.style.display=isOwner?'':'none';
+    }
+
+    applyOwnerNav(false);
+
+    try{
+      if(!window.supabase || typeof window.supabase.createClient!=='function') return;
+      const client=window.supabase.createClient(
+        'https://pjkkxvntssvukulxipfr.supabase.co',
+        'sb_publishable_1kehaIywv1Wb9Iwj2OPGdg_aFosOSwK'
+      );
+      const result=await client.auth.getSession();
+      const email=result?.data?.session?.user?.email||'';
+      applyOwnerNav(email.toLowerCase()==='bashamcaleb530@gmail.com');
+
+      client.auth.onAuthStateChange(function(_event,session){
+        const currentEmail=session?.user?.email||'';
+        applyOwnerNav(currentEmail.toLowerCase()==='bashamcaleb530@gmail.com');
+      });
+    }catch(err){
+      console.warn('Owner navigation check unavailable:',err);
+    }
+  })();
 
   /* ---------- Hidden working vault ---------- */
   const vault = document.createElement('div');
