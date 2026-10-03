@@ -599,6 +599,43 @@
 
 </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style id="sermon-builder-seven-names-approved-layout">
+/* ============================================================
+   BIBLEMASTERY SERMON BUILDER — SEVEN NAMES APPROVED LAYOUT
+   Same visual language and spacing as approved Personal Study.
+   ============================================================ */
+:root{
+  --ss-maroon:#7a0d12;--ss-maroon-dark:#56070b;--ss-maroon-deep:#3f0508;
+  --ss-gold:#c68a00;--ss-gold-dark:#976500;--ss-gold-soft:#f6dfa3;
+  --ss-cream:#fff9ec;--ss-card:#fffef9;--ss-card-2:#fff9ef;
+  --ss-text:#24160f;--ss-muted:#69564b;--ss-line:#e3c68b;--ss-line-soft:#efdfbd;
+  --ss-shadow:0 3px 12px rgba(89,46,12,.10);
+}
+html,body{background:linear-gradient(180deg,#fff9eb 0%,#fffef8 55%,#fff5dc 100%)!important;color:var(--ss-text)!important}
+body{overflow-x:hidden;font-family:Arial,sans-serif!important}
+body>header,body>.container{display:none!important}
+.ss-app{min-height:100vh;background:linear-gradient(180deg,#fff9eb 0%,#fffef8 55%,#fff5dc 100%);color:var(--ss-text)}
+.ss-topbar{height:84px;display:flex;align-items:center;gap:18px;padding:0 18px;position:sticky;top:0;z-index:350;background:radial-gradient(circle at 75% 10%,rgba(255,251,204,.98) 0 6%,rgba(255,229,148,.80) 7%,rgba(255,224,137,0) 25%),linear-gradient(180deg,#fff7dc 0%,#f2d08a 52%,#cd8841 100%);border-bottom:2px solid var(--ss-gold);box-shadow:0 4px 16px rgba(82,41,12,.20)}
+.ss-brand{display:flex;align-items:center;gap:12px;min-width:470px}.ss-brand-mark{font-size:42px;color:var(--ss-gold-dark);line-height:1}.ss-brand-copy{display:flex;flex-direction:column}.ss-brand-copy strong{font:700 35px/.98 Georgia,'Times New Roman',serif;color:var(--ss-maroon)}.ss-brand-copy small{margin-top:7px;font:700 10px/1.1 Georgia,'Times New Roman',serif;letter-spacing:2.6px;color:#603218}
+.ss-top-search{flex:1;max-width:470px;margin-left:auto;display:flex;border:1px solid #b77a1c;border-radius:6px;overflow:hidden;background:#fffdf7;box-shadow:0 1px 3px rgba(93,47,7,.13)}.ss-top-search input{flex:1;min-width:0;border:0!important;background:#fffdf8!important;color:#352217!important;padding:10px 12px!important}.ss-top-search button{width:46px;border:0!important;background:#fffdf8!important;color:var(--ss-maroon)!important;font-size:22px;cursor:pointer}.ss-home{border:1px solid #b77a1c;background:#fff8e8;color:var(--ss-maroon);border-radius:6px;padding:9px 13px;text-decoration:none;font-weight:800}
+.ss-nav{height:39px;display:flex;align-items:stretch;padding:0 22px;background:rgba(255,248,228,.98);border-bottom:1px solid var(--ss-line);box-shadow:0 1px 5px rgba(98,54,14,.08)}.ss-nav button,.ss-nav a{min-height:39px;border:0;border-right:1px solid #ead7ad;background:transparent;color:#4a2c1c;padding:0 22px;font-size:14px;cursor:pointer;text-decoration:none;display:flex;align-items:center;justify-content:center}.ss-nav .active{background:linear-gradient(180deg,#94151b,#760b10);color:#fff;font-weight:800}.ss-nav button:hover,.ss-nav a:hover{background:#fff0c8}.ss-nav .active:hover{background:linear-gradient(180deg,#9d1b21,#7a0d12)}
+.ss-main{padding:8px 14px 18px;max-width:1900px;margin:0 auto}.ss-control-strip{display:grid;grid-template-columns:minmax(470px,.92fr) minmax(560px,1.25fr) minmax(390px,.8fr);gap:8px;margin-bottom:8px}.ss-controls,.ss-translations,.ss-header-tools{background:rgba(255,254,248,.96);border:1px solid var(--ss-line-soft);border-radius:8px;box-shadow:0 1px 4px rgba(80,45,15,.04);min-width:0}.ss-controls{display:grid;grid-template-columns:1.25fr .68fr .68fr 40px 40px;gap:6px;padding:7px}.ss-control-box{min-width:0}.ss-control-box label{display:block;color:#6a3e20!important;font-size:10px!important;font-weight:800!important;margin:0 0 3px!important}.ss-controls select{width:100%!important;height:34px!important;min-height:34px!important;padding:0 9px!important;border:1px solid #dbc89f!important;border-radius:5px!important;background:#fffdf7!important;color:#2c1d15!important;font-size:13px!important}.ss-controls .ss-chapter-nav{align-self:end;height:34px!important;min-height:34px!important;padding:0!important;border:1px solid #d9c28f!important;border-radius:5px!important;background:#fff9e8!important;color:var(--ss-maroon)!important;font-size:20px!important;cursor:pointer}
+.ss-translations{display:grid;grid-template-columns:38px minmax(0,1fr) 38px;align-items:stretch;overflow:hidden}.ss-trans-arrow{border:0!important;background:#fff8e8!important;color:var(--ss-maroon)!important;font-size:22px!important;cursor:pointer}.ss-trans-track{display:flex;overflow-x:auto;scroll-behavior:smooth;scrollbar-width:none;padding:7px 0}.ss-trans-track::-webkit-scrollbar{display:none}.ss-trans-track button{flex:0 0 78px;height:36px!important;min-height:36px!important;border:1px solid #eadcc0;border-left:0;background:#fffdf8;color:#31241c;font-size:11px;font-weight:800;cursor:pointer}.ss-trans-track button:first-child{border-left:1px solid #eadcc0}.ss-trans-track button.active{background:linear-gradient(180deg,#98171c,#790c11);color:#fff;border-color:#790c11}
+.ss-header-tools{display:grid;grid-template-columns:repeat(5,1fr);overflow:hidden}.ss-header-tools button{border:0;border-right:1px solid #eadcc0;background:#fffdf8;color:#33241b;cursor:pointer;font-size:10.5px;padding:4px 3px}.ss-header-tools button:last-child{border-right:0}.ss-header-tools button:hover{background:#fff2cd}.ss-header-tools .ss-hi-icon{display:block;color:var(--ss-maroon);font-size:19px;line-height:1.15;margin-bottom:3px}
+.ss-card{background:rgba(255,254,249,.98);border:1px solid var(--ss-line);border-radius:8px;box-shadow:var(--ss-shadow);overflow:hidden;min-width:0;color:var(--ss-text)}.ss-card-head{height:38px;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 13px;background:linear-gradient(180deg,#fffdf7,#fff8e8);border-bottom:1px solid #ead9b7;color:var(--ss-maroon);font:700 17px/1.1 Georgia,'Times New Roman',serif}.ss-card-head small{font-family:Arial,sans-serif;color:#8a6e5e;font-size:10px;font-weight:600}.ss-card-body{padding:8px 10px;min-width:0}
+.ss-reading-grid{display:grid;grid-template-columns:minmax(350px,.95fr) minmax(520px,1.42fr) minmax(390px,1.03fr);gap:8px;align-items:stretch}.ss-reader-card,.ss-commentary-card,.ss-books-card{height:432px}.ss-reader-card .ss-card-body,.ss-commentary-card .ss-card-body,.ss-books-card .ss-card-body{height:calc(100% - 38px);overflow:hidden}
+#ssReaderHost{height:100%}#ssReaderHost .reader-display{height:100%!important;min-height:0!important;max-height:none!important;overflow:auto!important;background:#fffef9!important;color:#211a16!important;border:0!important;border-radius:0!important;padding:0 4px 8px 2px!important}#ssReaderHost .reader-title{display:none!important}#ssReaderHost .reader-verse{font-family:Georgia,'Times New Roman',serif!important;font-size:16px!important;line-height:1.48!important;color:#1f2331!important;padding:8px 9px 8px 13px!important;border-bottom:0!important;border-radius:5px!important;cursor:pointer}#ssReaderHost .reader-verse:hover{background:#fff4d4!important}#ssReaderHost .reader-verse.active-reader-verse{background:linear-gradient(90deg,#fff0bd,#ffe9a2)!important;color:#241b16!important;box-shadow:inset 4px 0 0 var(--ss-maroon)!important}#ssReaderHost .reader-verse-number{color:var(--ss-maroon)!important;min-width:26px;display:inline-block}
+.ss-commentary-tabs{display:flex;overflow-x:auto;border:1px solid #eadcc2;border-radius:5px;margin-bottom:7px;scrollbar-width:none}.ss-commentary-tabs::-webkit-scrollbar{display:none}.ss-commentary-tabs button{flex:0 0 112px;height:32px!important;min-height:32px!important;border:0;border-right:1px solid #eadcc2;background:#fffdf9;color:#31251d;font-size:10.5px;cursor:pointer;white-space:nowrap}.ss-commentary-tabs button.active{background:linear-gradient(180deg,#95151b,#770b10);color:#fff;font-weight:800}.ss-commentary-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px;color:#765844;font-size:11px}.ss-commentary-output{height:calc(100% - 72px);overflow:auto;padding-right:3px}.ss-commentary-output .result,.ss-commentary-output .result-item{background:#fffdf8!important;color:#34251d!important;border:0!important;border-bottom:1px solid #eddfc2!important;border-radius:0!important;margin:0!important;padding:9px 5px!important;white-space:pre-wrap!important}.ss-commentary-output .result-reference{color:var(--ss-maroon)!important}
+.ss-books-list{height:100%;overflow:auto;padding-right:3px}.ss-book-card{position:relative;display:grid;grid-template-columns:74px minmax(0,1fr);gap:10px;border:1px solid #ead7b0;border-radius:8px;background:#fffdf8;padding:9px;margin-bottom:8px}.ss-book-cover{height:92px;border-radius:5px;background:linear-gradient(160deg,#8d1117,#5d070b);color:#f7d47a;display:flex;align-items:center;justify-content:center;text-align:center;padding:7px;font:700 11px/1.15 Georgia,serif;box-shadow:inset 0 0 0 2px rgba(246,214,123,.28)}.ss-book-info strong{display:block;color:#3b2115;font-family:Georgia,serif;font-size:15px}.ss-book-author{font-size:10px;color:#8b6d5d;margin:2px 0 5px}.ss-book-section{font-size:11px;color:var(--ss-maroon);font-weight:800}.ss-book-info p{margin:5px 0 0;color:#5b493e;font-size:11px;line-height:1.38}.ss-open-book{grid-column:1/-1;justify-self:end;border:0;background:var(--ss-maroon);color:#fff;border-radius:5px;padding:6px 10px;cursor:pointer;font-weight:800;font-size:10px}.ss-book-empty{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:#765f50;padding:20px}.ss-book-empty .ss-empty-icon{font-size:40px;margin-bottom:8px}
+.ss-work-row{display:grid;grid-template-columns:minmax(760px,1.65fr) minmax(390px,.85fr);gap:8px;margin-top:8px}.ss-writing-card,.ss-focus-card{height:292px}.ss-writing-card .ss-card-body,.ss-focus-card .ss-card-body{height:calc(100% - 38px);overflow:auto}.ss-writing-tabs{display:flex;border:1px solid #eadcc0;border-radius:5px;overflow:hidden;margin-bottom:6px}.ss-writing-tabs button{flex:1;height:31px!important;min-height:31px!important;border:0;border-right:1px solid #eadcc0;background:#fffdf8;color:#35261e;font-size:11px;font-weight:800;cursor:pointer}.ss-writing-tabs button:last-child{border-right:0}.ss-writing-tabs button.active{background:var(--ss-maroon);color:#fff}.ss-writing-host{height:calc(100% - 38px);overflow:auto}.ss-writing-host .section{margin:0!important;padding:0!important;background:transparent!important;border:0!important;box-shadow:none!important}.ss-writing-host .section>h2{display:none!important}.ss-writing-host .section>p{display:none!important}.ss-writing-host label{color:#6a3e20!important;margin:5px 0 3px!important;font-size:11px!important}.ss-writing-host input,.ss-writing-host textarea{background:#fff!important;color:#2d211a!important;border:1px solid #dec9a1!important}.ss-writing-host .manual-sermon-area{min-height:165px!important;height:165px!important}.ss-writing-host .guide-template{grid-template-columns:1fr!important}.ss-writing-host .sticky-box{display:none!important}.ss-writing-host .template-section{background:#fffdf8!important;border:1px solid #eadcc0!important;padding:10px!important;margin:0 0 7px!important}.ss-writing-host .template-section textarea{min-height:86px!important}.ss-writing-host #lessons .lesson{background:#fffdf8!important;border:1px solid #eadcc0!important;padding:10px!important;margin-bottom:7px!important}.ss-writing-host #lessons .lesson p,.ss-writing-host .helper{color:#5d4c42!important}.ss-writing-host .course-progress{background:#f2e6cf!important}.ss-writing-host .course-progress-bar{background:var(--ss-maroon)!important}
+.ss-focus-stack{display:grid;grid-template-columns:1fr 1fr;gap:7px;height:100%}.ss-focus-stack .sermon-advanced-card{background:#fffdf8!important;border:1px solid #ead7b0!important;border-radius:7px!important;padding:8px!important;box-shadow:none!important;margin:0!important;color:#35251c!important;overflow:auto}.ss-focus-stack .sermon-advanced-card h3{font-size:13px!important;color:var(--ss-maroon)!important;margin:0 0 5px!important}.ss-focus-stack label{font-size:10px!important;color:#6a3e20!important;margin:4px 0 2px!important}.ss-focus-stack input,.ss-focus-stack textarea,.ss-focus-stack select{background:#fff!important;color:#2d211a!important;border:1px solid #dec9a1!important;padding:6px!important;font-size:11px!important}.ss-focus-stack textarea{min-height:52px!important}
+.ss-launchers{display:grid;grid-template-columns:1.35fr 1.15fr .85fr;gap:8px;margin-top:8px}.ss-launch-card{min-height:126px}.ss-launch-grid{display:grid;grid-template-columns:repeat(7,minmax(82px,1fr));gap:5px}.ss-launch-grid button{min-height:66px!important;border:1px solid #ead8b5;background:#fffdf8;color:#38271d;border-radius:6px;cursor:pointer;font-size:10px;font-weight:800;padding:6px 4px}.ss-launch-grid button:hover{background:#fff0c5;transform:translateY(-1px)}.ss-tool-icon{display:block;font-size:20px;color:var(--ss-maroon);line-height:1.1;margin-bottom:4px}.ss-workflow-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}.ss-workflow-grid button{min-height:53px!important;border:1px solid #ead8b5;background:#fffdf8;color:#38271d;border-radius:6px;cursor:pointer;font-size:10px;font-weight:800;padding:5px}.ss-workflow-grid button:hover{background:#fff0c5}.ss-status-box{font-size:11px;color:#5f4d42;line-height:1.45}.ss-status-box strong{color:var(--ss-maroon)}
+.ss-modal{position:fixed;inset:0;z-index:1200;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(43,20,8,.58);backdrop-filter:blur(2px)}.ss-modal.open{display:flex}.ss-modal-dialog{width:min(1280px,95vw);height:min(820px,91vh);display:flex;flex-direction:column;background:var(--ss-cream);border:2px solid var(--ss-gold);border-radius:12px;box-shadow:0 26px 80px rgba(38,15,2,.36);overflow:hidden}.ss-modal-head{min-height:64px;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:10px 14px;background:linear-gradient(180deg,#fff1c3,#efce82);border-bottom:1px solid #dcb45b}.ss-modal-title{font:700 24px/1 Georgia,serif;color:var(--ss-maroon)}.ss-modal-subtitle{margin-top:4px;font-size:11px;color:#6b4a35}.ss-modal-close{width:42px;height:42px!important;min-height:42px!important;border:1px solid #b97d1e!important;background:#fff9e8!important;color:var(--ss-maroon)!important;border-radius:50%!important;font-size:24px!important;cursor:pointer}.ss-modal-body{flex:1;overflow:auto;padding:14px;background:linear-gradient(180deg,#fffdf8,#fff7e5);color:#33231b}.ss-modal-body .section,.ss-modal-body .tool-box,.ss-modal-body .sermon-advanced-card,.ss-modal-body .research-card,.ss-modal-body .biblemastery-ai-box{background:#fffef9!important;color:#33231b!important;border:1px solid #e4cc9d!important;border-radius:9px!important;box-shadow:none!important;margin:0!important;padding:16px!important}.ss-modal-body h2,.ss-modal-body h3,.ss-modal-body h4{color:var(--ss-maroon)!important}.ss-modal-body p,.ss-modal-body .small-note,.ss-modal-body .status-message{color:#655247!important}.ss-modal-body input,.ss-modal-body textarea,.ss-modal-body select{background:#fff!important;color:#2d211a!important;border:1px solid #dec9a1!important}.ss-modal-body button{border-color:var(--ss-maroon)!important;background:var(--ss-maroon)!important;color:#fff!important}.ss-modal-body button.secondary{background:#fff8e7!important;color:var(--ss-maroon)!important;border-color:#caa056!important}.ss-modal-body .result,.ss-modal-body .research-output,.ss-modal-body .sermon-output,.ss-modal-body .parallel-card,.ss-modal-body .result-item{background:#fffdf8!important;color:#33251e!important;border-color:#ead9b7!important}.ss-modal-body .result-reference,.ss-modal-body .strongs-number,.ss-modal-body .strongs-lemma{color:var(--ss-maroon)!important}.ss-modal-body .research-tool-grid,.ss-modal-body .sermon-advanced-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.ss-custom-results{display:grid;gap:8px}.ss-xref-item{background:#fffdf8;border:1px solid #ead9b7;border-radius:6px;padding:10px}.ss-xref-item strong{color:var(--ss-maroon)}
+@media(max-width:1320px){.ss-brand{min-width:350px}.ss-brand-copy strong{font-size:29px}.ss-control-strip{grid-template-columns:1fr 1fr}.ss-header-tools{grid-column:1/-1}.ss-reading-grid{grid-template-columns:minmax(320px,.9fr) minmax(430px,1.2fr) minmax(330px,.9fr)}.ss-launch-grid{grid-template-columns:repeat(4,1fr)}}
+@media(max-width:1050px){.ss-topbar{height:72px}.ss-brand{min-width:260px}.ss-brand-copy strong{font-size:24px}.ss-brand-copy small{display:none}.ss-home{display:none}.ss-control-strip,.ss-reading-grid,.ss-work-row,.ss-launchers{grid-template-columns:1fr}.ss-reader-card,.ss-commentary-card,.ss-books-card{height:390px}.ss-writing-card,.ss-focus-card{height:300px}.ss-launch-grid{grid-template-columns:repeat(4,1fr)}}
+@media(max-width:720px){.ss-topbar{height:64px;padding:0 8px}.ss-brand{min-width:0}.ss-brand-copy strong{font-size:19px}.ss-brand-mark{font-size:30px}.ss-top-search{display:none}.ss-nav{padding:0 5px;overflow-x:auto}.ss-nav button,.ss-nav a{padding:0 12px;white-space:nowrap}.ss-main{padding:6px}.ss-controls{grid-template-columns:1fr 1fr}.ss-control-box:first-child{grid-column:1/-1}.ss-translations{grid-column:1/-1}.ss-header-tools{grid-template-columns:repeat(3,1fr)}.ss-launch-grid,.ss-workflow-grid{grid-template-columns:repeat(2,1fr)}.ss-modal{padding:6px}.ss-modal-dialog{width:100%;height:95vh}.ss-modal-body .research-tool-grid,.ss-modal-body .sermon-advanced-grid{grid-template-columns:1fr!important}}
+
+</style>
 </head>
 
 
@@ -3140,7 +3177,254 @@
   if(advEl("advCopyFullSermon"))advEl("advCopyFullSermon").addEventListener("click",async function(){try{await navigator.clipboard.writeText(advFullPackage());advEl("advExportStatus").textContent="Full sermon package copied.";}catch(e){advEl("advExportStatus").textContent="Browser blocked clipboard access. Use Print / Save as PDF.";}});
 
   if(advEl("advPrintFullSermon"))advEl("advPrintFullSermon").addEventListener("click",function(){
-    const w=window.open("","_blank");if(!w)return;w.document.write("<!doctype html><html><head><title>Sermon Package</title><style>body{font-family:Arial,sans-serif;max-width:900px;margin:40px auto;padding:0 24px;line-height:1.6;white-space:pre-wrap}h1{font-size:24px}</style></head><body><h1>BibleMastery — Sermon Development Package</h1>"+escapeHTML(advFullPackage())+"</body></html>");w.document.close();w.focus();w.print();
+    const w=window.open("","_blank");if(!w)return;w.document.write("<!doctype html><html><head><title>Sermon Package</title><style>body{font-family:Arial,sans-serif;max-width:900px;margin:40px auto;padding:0 24px;line-height:1.6;white-space:pre-wrap}h1{font-size:24px}</style></head><body><h1>BibleMastery — Sermon Development Package</h1>"+escapeHTML(advFullPackage())+"<script id="sermon-builder-seven-names-approved-layout-js">
+(function(){
+  'use strict';
+  const $=id=>document.getElementById(id), qs=(s,r=document)=>r.querySelector(s), qsa=(s,r=document)=>Array.from(r.querySelectorAll(s));
+  const esc=v=>String(v==null?'':v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+  const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+
+  function boot(){
+    if($('ssApp')) return;
+    const app=document.createElement('div'); app.className='ss-app'; app.id='ssApp';
+    app.innerHTML=`
+      <header class="ss-topbar">
+        <div class="ss-brand"><span class="ss-brand-mark">♛</span><span class="ss-brand-copy"><strong>BibleMastery</strong><small>SEVEN NAMES ONE REDEEMER</small></span></div>
+        <div class="ss-top-search"><input id="ssGlobalSearch" type="search" placeholder="Search Bible, sermon notes, research, topics..."><button id="ssGlobalSearchBtn" type="button">⌕</button></div>
+        <a class="ss-home" href="/">⌂ Main Page</a>
+      </header>
+      <nav class="ss-nav">
+        <button class="active" type="button">Sermon Builder</button>
+        <button type="button" data-ss-tool="ai">AI Assistant</button>
+        <button type="button" data-ss-tool="guided">Guided Template</button>
+        <button type="button" data-ss-tool="prep">Preparation Guide</button>
+        <button type="button" data-ss-tool="research-library">Research Library</button>
+        <button type="button" data-ss-tool="save">Save / Load</button>
+        <a href="/">BibleMastery</a>
+      </nav>
+      <main class="ss-main">
+        <section class="ss-control-strip">
+          <div class="ss-controls">
+            <div class="ss-control-box"><label>BOOK</label><div id="ssBookHost"></div></div>
+            <div class="ss-control-box"><label>CHAPTER</label><div id="ssChapterHost"></div></div>
+            <div class="ss-control-box"><label>VERSE</label><div id="ssVerseHost"></div></div>
+            <button class="ss-chapter-nav" id="ssPrevChapter" type="button" title="Previous chapter">‹</button>
+            <button class="ss-chapter-nav" id="ssNextChapter" type="button" title="Next chapter">›</button>
+          </div>
+          <div class="ss-translations"><button class="ss-trans-arrow" id="ssTransLeft" type="button">‹</button><div class="ss-trans-track" id="ssTransTrack"></div><button class="ss-trans-arrow" id="ssTransRight" type="button">›</button></div>
+          <div class="ss-header-tools">
+            <button type="button" data-ss-tool="crossrefs"><span class="ss-hi-icon">⛓</span>Cross-Refs</button>
+            <button type="button" data-ss-tool="exegetical"><span class="ss-hi-icon">🔬</span>Exegetical</button>
+            <button type="button" data-ss-tool="maps"><span class="ss-hi-icon">🗺</span>Maps</button>
+            <button type="button" data-ss-tool="ai-search"><span class="ss-hi-icon">⌕</span>Smart Search</button>
+            <button type="button" data-ss-tool="final-review"><span class="ss-hi-icon">✓</span>Review</button>
+          </div>
+        </section>
+
+        <section class="ss-reading-grid">
+          <article class="ss-card ss-reader-card"><div class="ss-card-head"><span>📖 Bible Reader</span><small id="ssReaderLabel">Regular Bible</small></div><div class="ss-card-body"><div id="ssReaderHost"></div></div></article>
+          <article class="ss-card ss-commentary-card"><div class="ss-card-head"><span>📖 Commentary</span><small id="ssCommentaryRef">follows Bible Reader</small></div><div class="ss-card-body"><div class="ss-commentary-tabs" id="ssCommentaryTabs"></div><div class="ss-commentary-meta"><span id="ssCommentaryName">Matthew Henry</span><button type="button" data-ss-tool="commentary-research" style="border:0;background:transparent;color:#7a0d12;cursor:pointer">Research Notes ↗</button></div><div class="ss-commentary-output" id="ssCommentaryHost"></div></div></article>
+          <article class="ss-card ss-books-card"><div class="ss-card-head"><span>📚 Books Ready to Read</span><button type="button" data-ss-tool="books" style="border:0;background:transparent;color:#976500;cursor:pointer">Library ↗</button></div><div class="ss-card-body"><div class="ss-books-list" id="ssBooksList"></div></div></article>
+        </section>
+
+        <section class="ss-work-row">
+          <article class="ss-card ss-writing-card"><div class="ss-card-head"><span>✍️ Sermon Writing</span><small>write here while research stays above</small></div><div class="ss-card-body"><div class="ss-writing-tabs"><button class="active" id="ssManualTab" type="button">Manual Sermon</button><button id="ssGuidedTab" type="button">Guided Template</button><button id="ssPrepTab" type="button">18-Step Guide</button></div><div class="ss-writing-host" id="ssWritingHost"></div></div></article>
+          <article class="ss-card ss-focus-card"><div class="ss-card-head"><span>🎯 Sermon Focus</span><small>big idea • direction</small></div><div class="ss-card-body"><div class="ss-focus-stack" id="ssFocusHost"></div></div></article>
+        </section>
+
+        <section class="ss-launchers">
+          <article class="ss-card ss-launch-card"><div class="ss-card-head"><span>🧰 Research Tools</span><small>open • study • close</small></div><div class="ss-card-body"><div class="ss-launch-grid">
+            <button data-ss-tool="dictionary"><span class="ss-tool-icon">▤</span>Dictionary</button>
+            <button data-ss-tool="concordance"><span class="ss-tool-icon">⌕</span>Concordance</button>
+            <button data-ss-tool="crossrefs"><span class="ss-tool-icon">⛓</span>Cross-References</button>
+            <button data-ss-tool="original"><span class="ss-tool-icon">α</span>Original Language</button>
+            <button data-ss-tool="compare"><span class="ss-tool-icon">▣</span>Text Comparison</button>
+            <button data-ss-tool="exegetical"><span class="ss-tool-icon">🔬</span>Exegetical Guide</button>
+            <button data-ss-tool="quotations"><span class="ss-tool-icon">⇄</span>OT/NT Mapper</button>
+            <button data-ss-tool="maps"><span class="ss-tool-icon">🗺</span>Maps & Timeline</button>
+            <button data-ss-tool="people"><span class="ss-tool-icon">⌾</span>People / Places</button>
+            <button data-ss-tool="culture"><span class="ss-tool-icon">▥</span>Cultural Context</button>
+            <button data-ss-tool="measures"><span class="ss-tool-icon">⚖</span>Weights & Measures</button>
+            <button data-ss-tool="ai-search"><span class="ss-tool-icon">✨</span>AI Smart Search</button>
+            <button data-ss-tool="parallel"><span class="ss-tool-icon">▥</span>Parallel Bible</button>
+            <button data-ss-tool="books"><span class="ss-tool-icon">📚</span>Theology Library</button>
+          </div></div></article>
+
+          <article class="ss-card ss-launch-card"><div class="ss-card-head"><span>🎤 Sermon Development</span><small>tools open in a reading window</small></div><div class="ss-card-body"><div class="ss-launch-grid">
+            <button data-ss-tool="points"><span class="ss-tool-icon">1•2•3</span>Point Builder</button>
+            <button data-ss-tool="context"><span class="ss-tool-icon">◫</span>Context Explorer</button>
+            <button data-ss-tool="theme"><span class="ss-tool-icon">🧵</span>Theme Tracker</button>
+            <button data-ss-tool="illustrations"><span class="ss-tool-icon">💡</span>Illustrations</button>
+            <button data-ss-tool="application"><span class="ss-tool-icon">♥</span>Application</button>
+            <button data-ss-tool="transitions"><span class="ss-tool-icon">→</span>Transitions</button>
+            <button data-ss-tool="questions"><span class="ss-tool-icon">?</span>Questions / Objections</button>
+            <button data-ss-tool="invitation"><span class="ss-tool-icon">🗣</span>Invitation</button>
+            <button data-ss-tool="prayer"><span class="ss-tool-icon">🙏</span>Prayer Journal</button>
+            <button data-ss-tool="delivery"><span class="ss-tool-icon">🎙</span>Delivery Notes</button>
+            <button data-ss-tool="sources"><span class="ss-tool-icon">📝</span>Source Notes</button>
+            <button data-ss-tool="research-notes"><span class="ss-tool-icon">📚</span>Research Notes</button>
+            <button data-ss-tool="exegetical-notes"><span class="ss-tool-icon">🔬</span>Exegetical Notes</button>
+            <button data-ss-tool="language-notes"><span class="ss-tool-icon">α</span>Hebrew / Greek Notes</button>
+          </div></div></article>
+
+          <article class="ss-card ss-launch-card"><div class="ss-card-head"><span>⚙ Workflow</span><small>save • organize • finish</small></div><div class="ss-card-body"><div class="ss-workflow-grid">
+            <button data-ss-tool="ai">✨ AI Assistant</button><button data-ss-tool="research-library">Research Library</button><button data-ss-tool="collections">Scripture Collections</button><button data-ss-tool="history">Preparation History</button>
+            <button data-ss-tool="templates">Sermon Templates</button><button data-ss-tool="time">Time Estimator</button><button data-ss-tool="workspace">Workspace Priorities</button><button data-ss-tool="final-review">Final Review</button>
+            <button data-ss-tool="export">Export / Print</button><button data-ss-tool="save">Save / Load Sermon</button><button data-ss-tool="guided">Guided Template</button><button data-ss-tool="prep">Preparation Guide</button>
+          </div><div class="ss-status-box" style="margin-top:7px"><strong>Layout:</strong> Bible Reader, Commentary, and Books stay visible. Everything else opens when needed and closes back to this screen.</div></div></article>
+        </section>
+      </main>
+
+      <div class="ss-modal" id="ssModal" aria-hidden="true"><div class="ss-modal-dialog"><div class="ss-modal-head"><div><div class="ss-modal-title" id="ssModalTitle">Study Tool</div><div class="ss-modal-subtitle" id="ssModalSubtitle"></div></div><button class="ss-modal-close" id="ssModalClose" type="button" aria-label="Close">×</button></div><div class="ss-modal-body" id="ssModalBody"></div></div></div>
+    `;
+    document.body.insertBefore(app,document.body.firstChild);
+    wireLayout();
+  }
+
+  const writingHomes=new Map();
+  function wireLayout(){
+    const readerDisplay=$('readerDisplay'), readerBook=$('readerBook'), readerChapter=$('readerChapter'), readerVerse=$('readerVerse'), readerTranslation=$('readerTranslation'), readerPrev=$('readerPrev'), readerNext=$('readerNext');
+    if(readerDisplay) $('ssReaderHost').appendChild(readerDisplay);
+    if(readerBook) $('ssBookHost').appendChild(readerBook); if(readerChapter) $('ssChapterHost').appendChild(readerChapter); if(readerVerse) $('ssVerseHost').appendChild(readerVerse);
+    $('ssPrevChapter').onclick=()=>readerPrev?.click(); $('ssNextChapter').onclick=()=>readerNext?.click();
+
+    // Translation strip from the real translation control.
+    const track=$('ssTransTrack');
+    function renderTranslations(){
+      if(!readerTranslation||!track)return;
+      track.innerHTML=Array.from(readerTranslation.options).map(o=>`<button type="button" data-ss-trans="${esc(o.value)}" class="${o.value===readerTranslation.value?'active':''}">${esc(o.value.replace('GENEVA1599','Geneva').replace('KJV1611','KJV 1611').replace('KJVPLUS','KJV+'))}</button>`).join('');
+      qsa('[data-ss-trans]',track).forEach(b=>b.onclick=()=>{readerTranslation.value=b.dataset.ssTrans;readerTranslation.dispatchEvent(new Event('change',{bubbles:true}));qsa('[data-ss-trans]',track).forEach(x=>x.classList.toggle('active',x===b));setTimeout(refreshCompanions,320)});
+    }
+    renderTranslations(); $('ssTransLeft').onclick=()=>track.scrollBy({left:-250,behavior:'smooth'}); $('ssTransRight').onclick=()=>track.scrollBy({left:250,behavior:'smooth'});
+    readerTranslation?.addEventListener('change',()=>{renderTranslations();setTimeout(refreshCompanions,280)});
+
+    // Commentary output is the real working commentary output.
+    const commentaryContent=$('commentaryContent'); if(commentaryContent)$('ssCommentaryHost').appendChild(commentaryContent);
+    const commentarySelect=$('commentarySelect');
+    const choices=[['matthew-henry-complete','Matthew Henry'],['john-gill','John Gill'],['jfb','JFB'],['adam-clarke','Adam Clarke'],['john-calvin','John Calvin'],['keil-delitzsch','Keil & Delitzsch'],['tyndale','Tyndale']];
+    $('ssCommentaryTabs').innerHTML=choices.map(([v,n],i)=>`<button type="button" data-ss-cmt="${v}" class="${commentarySelect?.value===v||(!commentarySelect&&i===0)?'active':''}">${esc(n)}</button>`).join('');
+    qsa('[data-ss-cmt]',$('ssCommentaryTabs')).forEach(b=>b.onclick=()=>{if(commentarySelect){commentarySelect.value=b.dataset.ssCmt;commentarySelect.dispatchEvent(new Event('change',{bubbles:true}));}$('ssCommentaryName').textContent=b.textContent;qsa('[data-ss-cmt]',$('ssCommentaryTabs')).forEach(x=>x.classList.toggle('active',x===b));});
+
+    // Main writing area uses existing working manual editor.
+    const manual=$('manualSermonSection'), guided=$('templateSection'), prep=$('courseSection'); [manual,guided,prep].forEach(n=>{if(n)writingHomes.set(n,{parent:n.parentNode,next:n.nextSibling})}); if(manual)$('ssWritingHost').appendChild(manual);
+    const vision=$('advBigIdea')?.closest('.sermon-advanced-card'), direction=$('advSermonType')?.closest('.sermon-advanced-card'); if(vision)$('ssFocusHost').appendChild(vision); if(direction)$('ssFocusHost').appendChild(direction);
+    $('ssManualTab').onclick=()=>showWriting('manual'); $('ssGuidedTab').onclick=()=>showWriting('guided'); $('ssPrepTab').onclick=()=>showWriting('prep');
+
+    // Select verse by clicking the Bible text so Commentary/Books/Tools follow it.
+    readerDisplay?.addEventListener('click',e=>{const row=e.target.closest('[data-reader-verse]');if(!row||!readerVerse)return;readerVerse.value=row.dataset.readerVerse;readerVerse.dispatchEvent(new Event('change',{bubbles:true}));if(typeof scrollToReaderVerse==='function')scrollToReaderVerse();setTimeout(refreshCompanions,30)});
+    [readerBook,readerChapter,readerVerse].forEach(el=>el?.addEventListener('change',()=>setTimeout(refreshCompanions,220)));
+    readerDisplay && new MutationObserver(()=>setTimeout(refreshCompanions,40)).observe(readerDisplay,{childList:true,subtree:true});
+
+    // Tool launchers.
+    qsa('[data-ss-tool]').forEach(b=>b.addEventListener('click',()=>openTool(b.dataset.ssTool)));
+    $('ssModalClose').onclick=closeModal; $('ssModal').addEventListener('click',e=>{if(e.target===$('ssModal'))closeModal()}); document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('ssModal').classList.contains('open'))closeModal()});
+    $('ssGlobalSearchBtn').onclick=()=>openGlobalSearch(); $('ssGlobalSearch').addEventListener('keydown',e=>{if(e.key==='Enter')openGlobalSearch()});
+
+    setTimeout(refreshCompanions,600);
+  }
+
+  function showWriting(mode){
+    qsa('.ss-writing-tabs button').forEach(b=>b.classList.remove('active'));
+    const host=$('ssWritingHost'); if(!host)return;
+    const nodes=[$('manualSermonSection'),$('templateSection'),$('courseSection')].filter(Boolean);
+    nodes.forEach(n=>{if(n.parentNode===host){const h=writingHomes.get(n);if(h){if(h.next&&h.next.parentNode===h.parent)h.parent.insertBefore(n,h.next);else h.parent.appendChild(n);}}});
+    if(mode==='manual'){ $('ssManualTab').classList.add('active'); const n=$('manualSermonSection'); if(n)host.appendChild(n); }
+    if(mode==='guided'){ $('ssGuidedTab').classList.add('active'); const n=$('templateSection'); if(n)host.appendChild(n); }
+    if(mode==='prep'){ $('ssPrepTab').classList.add('active'); const n=$('courseSection'); if(n)host.appendChild(n); }
+  }
+
+  function currentState(){
+    try{
+      if(!readerBible||readerBookIndex<0||readerChapterIndex<0)return null;
+      const book=readerBible.books[readerBookIndex], chapter=book.chapters[readerChapterIndex], verses=chapter.verses||[];
+      const vi=$('readerVerse')?.value===''?0:Number($('readerVerse')?.value||0), verse=verses[Math.min(vi,Math.max(0,verses.length-1))];
+      if(!verse)return null; const ref=getBookName(book)+' '+chapterNumber(chapter,readerChapterIndex)+':'+verseNumber(verse,vi);
+      return {reference:ref,text:verseText(verse,$('readerTranslation')?.value||'KJV',readerBookIndex),bookName:getBookName(book),chapter:chapterNumber(chapter,readerChapterIndex),verse:verseNumber(verse,vi),vi};
+    }catch(e){return null;}
+  }
+
+  function refreshCompanions(){
+    const s=currentState(); $('ssReaderLabel').textContent=s?s.reference:'Regular Bible'; $('ssCommentaryRef').textContent=s?s.reference:'follows Bible Reader'; renderBooks(s);
+  }
+
+  function plainText(html){const d=document.createElement('div');d.innerHTML=String(html||'');return (d.textContent||'').replace(/\s+/g,' ').trim();}
+  const stopWords=new Set('the and that with from this into unto upon have has had were was are for but not you your his her our out all any who which what when where shall will would should could may might can did does of to in on at by as a an or be been being'.split(' '));
+  function keywords(s){const counts={};String(s||'').toLowerCase().replace(/[^a-z0-9\s]/g,' ').split(/\s+/).forEach(w=>{if(w.length<4||stopWords.has(w))return;counts[w]=(counts[w]||0)+1});return Object.keys(counts).sort((a,b)=>counts[b]-counts[a]).slice(0,12)}
+  function theologyBooks(){return Array.isArray(window.BIBLEMASTERY_THEOLOGY_BOOKS)?window.BIBLEMASTERY_THEOLOGY_BOOKS:[];}
+  function rankBooks(s){const ks=keywords((s?.reference||'')+' '+(s?.text||'')),found=[];theologyBooks().forEach((b,bi)=>(b.chapters||[]).forEach((c,ci)=>{const txt=plainText((c.title||'')+' '+(c.text||'')+' '+(c.html||''));let score=0;ks.forEach(k=>{if(txt.toLowerCase().includes(k))score+=2;if(String(c.title||'').toLowerCase().includes(k))score+=4});if(s?.bookName&&txt.toLowerCase().includes(s.bookName.toLowerCase()))score+=3;found.push({b,c,bi,ci,score,txt})}));return found.sort((a,b)=>b.score-a.score).slice(0,2)}
+  function renderBooks(s){const list=$('ssBooksList');if(!list)return;const matches=rankBooks(s);if(!matches.length){list.innerHTML='<div class="ss-book-empty"><div class="ss-empty-icon">📚</div><strong>Books Ready to Read</strong><span>The two best matching theology-book sections will appear here when the BibleMastery theology library is loaded.</span></div>';return;}list.innerHTML=matches.map(m=>`<div class="ss-book-card"><div class="ss-book-cover">${esc(m.b.shortTitle||m.b.title||'THEOLOGY')}</div><div class="ss-book-info"><strong>${esc(m.b.title||'Untitled Book')}</strong><div class="ss-book-author">${esc(m.b.author||'')}</div><div class="ss-book-section">${esc(m.c.title||('Chapter '+(m.ci+1)))}</div><p>${esc(m.txt.slice(0,180))}${m.txt.length>180?'…':''}</p></div><button class="ss-open-book" data-ss-book="${m.bi}" data-ss-chapter="${m.ci}">Open Section</button></div>`).join('');qsa('[data-ss-book]',list).forEach(b=>b.onclick=()=>openBookSection(Number(b.dataset.ssBook),Number(b.dataset.ssChapter)));}
+  function openBookSection(bi,ci){const b=theologyBooks()[bi],c=b?.chapters?.[ci];if(!b||!c)return;openCustom('📚 '+(b.title||'Theology Book'),(b.author||'')+(c.title?' • '+c.title:''),`<article style="max-width:860px;margin:auto;font-family:Georgia,serif;font-size:17px;line-height:1.72"><h2>${esc(c.title||'')}</h2>${c.html||('<p>'+esc(c.text||'')+'</p>')}</article>`)}
+
+  let moved=[];
+  function modalBase(title,subtitle){closeModal(true);$('ssModalTitle').textContent=title;$('ssModalSubtitle').textContent=subtitle||'';$('ssModalBody').innerHTML='';$('ssModal').classList.add('open');$('ssModal').setAttribute('aria-hidden','false');document.body.style.overflow='hidden';}
+  function moveToModal(node,title,subtitle){if(!node){openCustom(title,subtitle,'<div class="status-message">This tool is not available in this build.</div>');return;}modalBase(title,subtitle);moved.push({node,parent:node.parentNode,next:node.nextSibling});$('ssModalBody').appendChild(node);node.style.display='block';node.scrollTop=0;}
+  function moveManyToModal(nodes,title,subtitle){nodes=(nodes||[]).filter(Boolean);if(!nodes.length){openCustom(title,subtitle,'<div class="status-message">This tool is not available in this build.</div>');return;}modalBase(title,subtitle);nodes.forEach(node=>{moved.push({node,parent:node.parentNode,next:node.nextSibling});$('ssModalBody').appendChild(node);node.style.display='block';});}
+  function openCustom(title,subtitle,html){modalBase(title,subtitle);$('ssModalBody').innerHTML=html;}
+  function closeModal(restore=true){if(restore){while(moved.length){const x=moved.pop();try{x.node.style.display='';if(x.next&&x.next.parentNode===x.parent)x.parent.insertBefore(x.node,x.next);else x.parent.appendChild(x.node)}catch(e){}}}$('ssModal')?.classList.remove('open');$('ssModal')?.setAttribute('aria-hidden','true');document.body.style.overflow='';}
+  function cardFor(id,selector){const e=$(id);return e?e.closest(selector||'.sermon-advanced-card'):null;}
+  function toolBoxFor(id){return $(id)?.closest('.tool-box')||null;}
+
+  async function openCrossRefs(){
+    const s=currentState(); openCustom('⛓ Cross-References','Rank related verses across the whole Bible and add useful ones to the sermon verse chain.',`<div class="search-row"><input class="search-input" id="ssXrefQuery" value="${esc(s?.reference||'')}" placeholder="Current verse or theme"><button class="search-button" id="ssRunXrefs">Find Related Verses</button></div><div id="ssXrefResults" class="ss-custom-results" style="margin-top:12px"></div><button id="ssAddXrefs" class="search-button" style="margin-top:10px">Add Top Results to Cross-Reference Notes</button>`);
+    let last=[]; const run=async()=>{const out=$('ssXrefResults');out.innerHTML='<div class="status-message">Searching the Bible…</div>';try{const state=currentState();const base=(state?.text||$('ssXrefQuery').value||'');const ks=keywords(base);const bible=await getBibleByTranslation('KJV');const rows=[];(bible.books||[]).forEach((book,bi)=>(book.chapters||[]).forEach((ch,ci)=>(ch.verses||[]).forEach((v,vi)=>{const txt=verseText(v,'KJV',bi),low=txt.toLowerCase();let score=0;ks.forEach(k=>{if(low.includes(k))score+=2});if(score>0){const ref=getBookName(book)+' '+chapterNumber(ch,ci)+':'+verseNumber(v,vi);if(!state||ref!==state.reference)rows.push({ref,txt,score});}})));last=rows.sort((a,b)=>b.score-a.score).slice(0,20);out.innerHTML=last.length?last.map(x=>`<div class="ss-xref-item"><strong>${esc(x.ref)}</strong><div>${esc(x.txt)}</div></div>`).join(''):'<div class="status-message">No strong related verses were found.</div>';}catch(e){out.innerHTML='<div class="error-message">Cross-reference search could not run right now.</div>';}};$('ssRunXrefs').onclick=run;$('ssAddXrefs').onclick=()=>{const t=$('advCrossRefs');if(t&&last.length){t.value+=(t.value?'\n\n':'')+last.slice(0,8).map(x=>x.ref+' — '+x.txt).join('\n');$('ssAddXrefs').textContent='Added ✓';}};run();
+  }
+
+  function openBooks(){const books=theologyBooks();if(!books.length){openCustom('📚 Theology Library','Full books remain separate while the main screen shows the two best matching sections.','<div class="ss-book-empty" style="height:480px"><div class="ss-empty-icon">📚</div><strong>The theology shelf is ready.</strong><span>Load BIBLEMASTERY_THEOLOGY_BOOKS and this window will show the full books and chapters.</span></div>');return;}openCustom('📚 Theology Library','Choose any book or chapter. The main screen continues to show the two best matching sections.',`<div id="ssFullBooks"></div>`);$('ssFullBooks').innerHTML=books.map((b,bi)=>`<div class="result-item"><div class="result-reference">${esc(b.title||'Untitled')}</div><div>${esc(b.author||'')}</div><div style="margin-top:7px">${(b.chapters||[]).map((c,ci)=>`<button type="button" class="secondary" data-ss-full-book="${bi}" data-ss-full-chapter="${ci}" style="margin:3px">${esc(c.title||('Chapter '+(ci+1)))}</button>`).join('')}</div></div>`).join('');qsa('[data-ss-full-book]',$('ssFullBooks')).forEach(x=>x.onclick=()=>openBookSection(Number(x.dataset.ssFullBook),Number(x.dataset.ssFullChapter)));}
+
+  function openGlobalSearch(){const q=$('ssGlobalSearch').value.trim();const input=$('advSmartSearchQuery'),btn=$('advRunSmartSearch');if(input&&btn){input.value=q;moveToModal(cardFor('advRunSmartSearch'),'✨ AI Smart Search','Search Scripture, sermon research, saved notes, and connected BibleMastery library resources.');setTimeout(()=>btn.click(),70)}else openCustom('⌕ Search','Search BibleMastery','<div class="status-message">Smart Search is unavailable.</div>');}
+
+  function openTool(name){
+    const map={
+      ai:()=>moveToModal(qs('.biblemastery-ai-box'),'✨ BibleMastery AI — Sermon Assistant','Ask for sermon preparation help while keeping Scripture primary.'),
+      guided:()=>moveToModal($('templateSection'),'📝 Guided Sermon Template','Use the complete 18-part sermon template in a large reading window.'),
+      prep:()=>moveToModal($('courseSection'),'📖 Sermon Preparation Guide','Follow the 18-step sermon preparation process without crowding the main screen.'),
+      dictionary:()=>moveManyToModal([toolBoxFor('dictionarySource'),toolBoxFor('englishDictionarySource')],'📘 Dictionaries','Search Easton’s, Smith’s, Webster’s, and the regular English dictionary tools.'),
+      concordance:()=>moveToModal(toolBoxFor('concordanceTranslation'),'🔎 Concordance','Search the Bible for a word or phrase.'),
+      original:()=>moveToModal(toolBoxFor('lexiconSource'),'🔤 Original Language / Word Study','Strong’s, BDB, and Thayer’s lexical tools.'),
+      parallel:()=>moveToModal(toolBoxFor('parallelBook'),'📚 Parallel Bible','Compare the same verse in three translations.'),
+      crossrefs:openCrossRefs,
+      compare:()=>moveToModal(cardFor('advRunTextComparison','.research-card'),'📑 Text Comparison Tool','Compare the selected passage across BibleMastery translations.'),
+      exegetical:()=>moveToModal(cardFor('advRunExegeticalGuide','.research-card'),'🔬 Exegetical Guide','Original-language analysis, clause structure, Strong’s, BDB, Thayer, and syntax framework.'),
+      quotations:()=>moveToModal(cardFor('advRunQuotationMapper','.research-card'),'🔁 OT / NT Quotation Mapper','Trace quotations and allusions in both directions.'),
+      measures:()=>moveToModal(cardFor('advConvertUnit','.research-card'),'⚖ Weights & Measures','Convert ancient biblical units into approximate modern equivalents.'),
+      maps:()=>moveToModal(cardFor('advShowMapLocation','.research-card'),'🗺 Interactive Maps, Timeline & Media','Biblical locations, timelines, cultural concepts, and 3D terrain integration.'),
+      culture:()=>{moveToModal(cardFor('advShowMapLocation','.research-card'),'▥ Cultural Context','Use the Cultural Concept Locator inside the maps/media workspace.');setTimeout(()=>$('advCultureConcept')?.scrollIntoView({block:'center'}),80)},
+      'ai-search':()=>moveToModal(cardFor('advRunSmartSearch','.research-card'),'✨ AI Smart Search','Natural-language research across Scripture, sermon research, and connected library resources.'),
+      workspace:()=>moveToModal(cardFor('advWorkspaceProfileName','.research-card'),'🧩 Custom Workspaces & Resource Prioritization','Save preferred commentaries, translations, and sermon research profiles.'),
+      people:()=>moveToModal(cardFor('advPeoplePlaces'),'👥 People • Places • Events','Record and study people, places, events, journeys, and historical connections.'),
+      context:()=>moveToModal(cardFor('advContextExplorer'),'🔎 Context Explorer','Immediate, chapter, book, historical, author, and audience context.'),
+      points:()=>moveToModal(cardFor('advPoint1'),'🧱 Advanced Point Builder','Develop sermon points, supporting texts, illustrations, applications, and transitions.'),
+      theme:()=>moveToModal(cardFor('advThemeTracker'),'🧵 Theme Tracker','Trace the sermon theme through Scripture.'),
+      illustrations:()=>moveToModal(cardFor('advIllustrationBank'),'💡 Illustrations & Examples Bank','Keep illustrations and examples organized while Scripture stays primary.'),
+      application:()=>moveToModal(cardFor('advApplicationBuilder'),'❤️ Application Builder','Connect biblical truth to belief, choices, relationships, prayer, and daily life.'),
+      transitions:()=>moveToModal(cardFor('advTransitions'),'🌉 Transitions','Plan clear movement between introduction, points, and conclusion.'),
+      questions:()=>moveToModal(cardFor('advQuestionsObjections'),'❓ Questions / Objections','Prepare clear biblical answers to likely questions and misunderstandings.'),
+      invitation:()=>moveToModal(cardFor('advInvitation'),'🗣 Invitation / Response','Plan the listener response to the biblical message.'),
+      prayer:()=>moveToModal(cardFor('advPrayerJournal'),'🙏 Prayer & Preparation Journal','Keep prayer, direction, and preparation reflections together.'),
+      delivery:()=>moveToModal(cardFor('advDeliveryNotes'),'🎙 Speaker / Delivery Notes','Pauses, emphasis, visual aids, pronunciation, and delivery reminders.'),
+      sources:()=>moveToModal(cardFor('advSourceNotes'),'📝 Quotations / Source Notes','Keep quotations, authors, links, references, and verification notes.'),
+      'research-notes':()=>moveToModal(cardFor('advResearchNotes'),'📚 Commentary / Research Notes','Collect commentary observations and research notes.'),
+      'commentary-research':()=>moveToModal(cardFor('advResearchNotes'),'📚 Commentary / Research Notes','Collect commentary observations and research notes.'),
+      'exegetical-notes':()=>moveToModal(cardFor('advExegetical'),'🔬 Exegetical Research Notes','Store grammatical, contextual, structural, and textual observations.'),
+      'language-notes':()=>moveToModal(cardFor('advOriginalLanguage'),'🔤 Hebrew / Greek Findings','Store lemmas, definitions, occurrences, and language observations.'),
+      'research-library':()=>moveToModal(cardFor('advSaveLibraryItem'),'📖 Sermon Research Library','Save research items separately while developing the sermon.'),
+      history:()=>moveToModal(cardFor('advRecordHistory'),'📅 Sermon Preparation History','Record preparation sessions and return to previous work.'),
+      collections:()=>moveToModal(cardFor('advSaveCollection'),'📂 Scripture Collections','Build reusable Scripture collections for sermons and themes.'),
+      templates:()=>moveToModal(cardFor('advTemplatePreset'),'🧩 Sermon Templates','Load expository, topical, doctrinal, evangelistic, or character-study structures.'),
+      time:()=>moveToModal(cardFor('advSpeakingRate'),'⏱ Preaching Time Estimator','Estimate sermon delivery time from your current manuscript.'),
+      'final-review':()=>moveToModal(cardFor('reviewScripture'),'✅ Final Sermon Review','Review Scripture support, context, clarity, application, references, and response.'),
+      export:()=>moveToModal(cardFor('advCopyFullSermon'),'🖨 Export / Copy','Copy the full sermon development package or print/save it as PDF.'),
+      save:()=>moveToModal($('saveSermonButton')?.closest('.section'),'💾 Sermon Controls','Save, load, delete, print, or clear sermons.'),
+      books:openBooks
+    };
+    (map[name]||map.ai)();
+  }
+
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(boot,60));else setTimeout(boot,60);
+})();
+
+</script>
+</body></html>");w.document.close();w.focus();w.print();
   });
 
 
