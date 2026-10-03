@@ -3177,254 +3177,7 @@ body>header,body>.container{display:none!important}
   if(advEl("advCopyFullSermon"))advEl("advCopyFullSermon").addEventListener("click",async function(){try{await navigator.clipboard.writeText(advFullPackage());advEl("advExportStatus").textContent="Full sermon package copied.";}catch(e){advEl("advExportStatus").textContent="Browser blocked clipboard access. Use Print / Save as PDF.";}});
 
   if(advEl("advPrintFullSermon"))advEl("advPrintFullSermon").addEventListener("click",function(){
-    const w=window.open("","_blank");if(!w)return;w.document.write("<!doctype html><html><head><title>Sermon Package</title><style>body{font-family:Arial,sans-serif;max-width:900px;margin:40px auto;padding:0 24px;line-height:1.6;white-space:pre-wrap}h1{font-size:24px}</style></head><body><h1>BibleMastery — Sermon Development Package</h1>"+escapeHTML(advFullPackage())+"<script id="sermon-builder-seven-names-approved-layout-js">
-(function(){
-  'use strict';
-  const $=id=>document.getElementById(id), qs=(s,r=document)=>r.querySelector(s), qsa=(s,r=document)=>Array.from(r.querySelectorAll(s));
-  const esc=v=>String(v==null?'':v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
-  const sleep=ms=>new Promise(r=>setTimeout(r,ms));
-
-  function boot(){
-    if($('ssApp')) return;
-    const app=document.createElement('div'); app.className='ss-app'; app.id='ssApp';
-    app.innerHTML=`
-      <header class="ss-topbar">
-        <div class="ss-brand"><span class="ss-brand-mark">♛</span><span class="ss-brand-copy"><strong>BibleMastery</strong><small>SEVEN NAMES ONE REDEEMER</small></span></div>
-        <div class="ss-top-search"><input id="ssGlobalSearch" type="search" placeholder="Search Bible, sermon notes, research, topics..."><button id="ssGlobalSearchBtn" type="button">⌕</button></div>
-        <a class="ss-home" href="/">⌂ Main Page</a>
-      </header>
-      <nav class="ss-nav">
-        <button class="active" type="button">Sermon Builder</button>
-        <button type="button" data-ss-tool="ai">AI Assistant</button>
-        <button type="button" data-ss-tool="guided">Guided Template</button>
-        <button type="button" data-ss-tool="prep">Preparation Guide</button>
-        <button type="button" data-ss-tool="research-library">Research Library</button>
-        <button type="button" data-ss-tool="save">Save / Load</button>
-        <a href="/">BibleMastery</a>
-      </nav>
-      <main class="ss-main">
-        <section class="ss-control-strip">
-          <div class="ss-controls">
-            <div class="ss-control-box"><label>BOOK</label><div id="ssBookHost"></div></div>
-            <div class="ss-control-box"><label>CHAPTER</label><div id="ssChapterHost"></div></div>
-            <div class="ss-control-box"><label>VERSE</label><div id="ssVerseHost"></div></div>
-            <button class="ss-chapter-nav" id="ssPrevChapter" type="button" title="Previous chapter">‹</button>
-            <button class="ss-chapter-nav" id="ssNextChapter" type="button" title="Next chapter">›</button>
-          </div>
-          <div class="ss-translations"><button class="ss-trans-arrow" id="ssTransLeft" type="button">‹</button><div class="ss-trans-track" id="ssTransTrack"></div><button class="ss-trans-arrow" id="ssTransRight" type="button">›</button></div>
-          <div class="ss-header-tools">
-            <button type="button" data-ss-tool="crossrefs"><span class="ss-hi-icon">⛓</span>Cross-Refs</button>
-            <button type="button" data-ss-tool="exegetical"><span class="ss-hi-icon">🔬</span>Exegetical</button>
-            <button type="button" data-ss-tool="maps"><span class="ss-hi-icon">🗺</span>Maps</button>
-            <button type="button" data-ss-tool="ai-search"><span class="ss-hi-icon">⌕</span>Smart Search</button>
-            <button type="button" data-ss-tool="final-review"><span class="ss-hi-icon">✓</span>Review</button>
-          </div>
-        </section>
-
-        <section class="ss-reading-grid">
-          <article class="ss-card ss-reader-card"><div class="ss-card-head"><span>📖 Bible Reader</span><small id="ssReaderLabel">Regular Bible</small></div><div class="ss-card-body"><div id="ssReaderHost"></div></div></article>
-          <article class="ss-card ss-commentary-card"><div class="ss-card-head"><span>📖 Commentary</span><small id="ssCommentaryRef">follows Bible Reader</small></div><div class="ss-card-body"><div class="ss-commentary-tabs" id="ssCommentaryTabs"></div><div class="ss-commentary-meta"><span id="ssCommentaryName">Matthew Henry</span><button type="button" data-ss-tool="commentary-research" style="border:0;background:transparent;color:#7a0d12;cursor:pointer">Research Notes ↗</button></div><div class="ss-commentary-output" id="ssCommentaryHost"></div></div></article>
-          <article class="ss-card ss-books-card"><div class="ss-card-head"><span>📚 Books Ready to Read</span><button type="button" data-ss-tool="books" style="border:0;background:transparent;color:#976500;cursor:pointer">Library ↗</button></div><div class="ss-card-body"><div class="ss-books-list" id="ssBooksList"></div></div></article>
-        </section>
-
-        <section class="ss-work-row">
-          <article class="ss-card ss-writing-card"><div class="ss-card-head"><span>✍️ Sermon Writing</span><small>write here while research stays above</small></div><div class="ss-card-body"><div class="ss-writing-tabs"><button class="active" id="ssManualTab" type="button">Manual Sermon</button><button id="ssGuidedTab" type="button">Guided Template</button><button id="ssPrepTab" type="button">18-Step Guide</button></div><div class="ss-writing-host" id="ssWritingHost"></div></div></article>
-          <article class="ss-card ss-focus-card"><div class="ss-card-head"><span>🎯 Sermon Focus</span><small>big idea • direction</small></div><div class="ss-card-body"><div class="ss-focus-stack" id="ssFocusHost"></div></div></article>
-        </section>
-
-        <section class="ss-launchers">
-          <article class="ss-card ss-launch-card"><div class="ss-card-head"><span>🧰 Research Tools</span><small>open • study • close</small></div><div class="ss-card-body"><div class="ss-launch-grid">
-            <button data-ss-tool="dictionary"><span class="ss-tool-icon">▤</span>Dictionary</button>
-            <button data-ss-tool="concordance"><span class="ss-tool-icon">⌕</span>Concordance</button>
-            <button data-ss-tool="crossrefs"><span class="ss-tool-icon">⛓</span>Cross-References</button>
-            <button data-ss-tool="original"><span class="ss-tool-icon">α</span>Original Language</button>
-            <button data-ss-tool="compare"><span class="ss-tool-icon">▣</span>Text Comparison</button>
-            <button data-ss-tool="exegetical"><span class="ss-tool-icon">🔬</span>Exegetical Guide</button>
-            <button data-ss-tool="quotations"><span class="ss-tool-icon">⇄</span>OT/NT Mapper</button>
-            <button data-ss-tool="maps"><span class="ss-tool-icon">🗺</span>Maps & Timeline</button>
-            <button data-ss-tool="people"><span class="ss-tool-icon">⌾</span>People / Places</button>
-            <button data-ss-tool="culture"><span class="ss-tool-icon">▥</span>Cultural Context</button>
-            <button data-ss-tool="measures"><span class="ss-tool-icon">⚖</span>Weights & Measures</button>
-            <button data-ss-tool="ai-search"><span class="ss-tool-icon">✨</span>AI Smart Search</button>
-            <button data-ss-tool="parallel"><span class="ss-tool-icon">▥</span>Parallel Bible</button>
-            <button data-ss-tool="books"><span class="ss-tool-icon">📚</span>Theology Library</button>
-          </div></div></article>
-
-          <article class="ss-card ss-launch-card"><div class="ss-card-head"><span>🎤 Sermon Development</span><small>tools open in a reading window</small></div><div class="ss-card-body"><div class="ss-launch-grid">
-            <button data-ss-tool="points"><span class="ss-tool-icon">1•2•3</span>Point Builder</button>
-            <button data-ss-tool="context"><span class="ss-tool-icon">◫</span>Context Explorer</button>
-            <button data-ss-tool="theme"><span class="ss-tool-icon">🧵</span>Theme Tracker</button>
-            <button data-ss-tool="illustrations"><span class="ss-tool-icon">💡</span>Illustrations</button>
-            <button data-ss-tool="application"><span class="ss-tool-icon">♥</span>Application</button>
-            <button data-ss-tool="transitions"><span class="ss-tool-icon">→</span>Transitions</button>
-            <button data-ss-tool="questions"><span class="ss-tool-icon">?</span>Questions / Objections</button>
-            <button data-ss-tool="invitation"><span class="ss-tool-icon">🗣</span>Invitation</button>
-            <button data-ss-tool="prayer"><span class="ss-tool-icon">🙏</span>Prayer Journal</button>
-            <button data-ss-tool="delivery"><span class="ss-tool-icon">🎙</span>Delivery Notes</button>
-            <button data-ss-tool="sources"><span class="ss-tool-icon">📝</span>Source Notes</button>
-            <button data-ss-tool="research-notes"><span class="ss-tool-icon">📚</span>Research Notes</button>
-            <button data-ss-tool="exegetical-notes"><span class="ss-tool-icon">🔬</span>Exegetical Notes</button>
-            <button data-ss-tool="language-notes"><span class="ss-tool-icon">α</span>Hebrew / Greek Notes</button>
-          </div></div></article>
-
-          <article class="ss-card ss-launch-card"><div class="ss-card-head"><span>⚙ Workflow</span><small>save • organize • finish</small></div><div class="ss-card-body"><div class="ss-workflow-grid">
-            <button data-ss-tool="ai">✨ AI Assistant</button><button data-ss-tool="research-library">Research Library</button><button data-ss-tool="collections">Scripture Collections</button><button data-ss-tool="history">Preparation History</button>
-            <button data-ss-tool="templates">Sermon Templates</button><button data-ss-tool="time">Time Estimator</button><button data-ss-tool="workspace">Workspace Priorities</button><button data-ss-tool="final-review">Final Review</button>
-            <button data-ss-tool="export">Export / Print</button><button data-ss-tool="save">Save / Load Sermon</button><button data-ss-tool="guided">Guided Template</button><button data-ss-tool="prep">Preparation Guide</button>
-          </div><div class="ss-status-box" style="margin-top:7px"><strong>Layout:</strong> Bible Reader, Commentary, and Books stay visible. Everything else opens when needed and closes back to this screen.</div></div></article>
-        </section>
-      </main>
-
-      <div class="ss-modal" id="ssModal" aria-hidden="true"><div class="ss-modal-dialog"><div class="ss-modal-head"><div><div class="ss-modal-title" id="ssModalTitle">Study Tool</div><div class="ss-modal-subtitle" id="ssModalSubtitle"></div></div><button class="ss-modal-close" id="ssModalClose" type="button" aria-label="Close">×</button></div><div class="ss-modal-body" id="ssModalBody"></div></div></div>
-    `;
-    document.body.insertBefore(app,document.body.firstChild);
-    wireLayout();
-  }
-
-  const writingHomes=new Map();
-  function wireLayout(){
-    const readerDisplay=$('readerDisplay'), readerBook=$('readerBook'), readerChapter=$('readerChapter'), readerVerse=$('readerVerse'), readerTranslation=$('readerTranslation'), readerPrev=$('readerPrev'), readerNext=$('readerNext');
-    if(readerDisplay) $('ssReaderHost').appendChild(readerDisplay);
-    if(readerBook) $('ssBookHost').appendChild(readerBook); if(readerChapter) $('ssChapterHost').appendChild(readerChapter); if(readerVerse) $('ssVerseHost').appendChild(readerVerse);
-    $('ssPrevChapter').onclick=()=>readerPrev?.click(); $('ssNextChapter').onclick=()=>readerNext?.click();
-
-    // Translation strip from the real translation control.
-    const track=$('ssTransTrack');
-    function renderTranslations(){
-      if(!readerTranslation||!track)return;
-      track.innerHTML=Array.from(readerTranslation.options).map(o=>`<button type="button" data-ss-trans="${esc(o.value)}" class="${o.value===readerTranslation.value?'active':''}">${esc(o.value.replace('GENEVA1599','Geneva').replace('KJV1611','KJV 1611').replace('KJVPLUS','KJV+'))}</button>`).join('');
-      qsa('[data-ss-trans]',track).forEach(b=>b.onclick=()=>{readerTranslation.value=b.dataset.ssTrans;readerTranslation.dispatchEvent(new Event('change',{bubbles:true}));qsa('[data-ss-trans]',track).forEach(x=>x.classList.toggle('active',x===b));setTimeout(refreshCompanions,320)});
-    }
-    renderTranslations(); $('ssTransLeft').onclick=()=>track.scrollBy({left:-250,behavior:'smooth'}); $('ssTransRight').onclick=()=>track.scrollBy({left:250,behavior:'smooth'});
-    readerTranslation?.addEventListener('change',()=>{renderTranslations();setTimeout(refreshCompanions,280)});
-
-    // Commentary output is the real working commentary output.
-    const commentaryContent=$('commentaryContent'); if(commentaryContent)$('ssCommentaryHost').appendChild(commentaryContent);
-    const commentarySelect=$('commentarySelect');
-    const choices=[['matthew-henry-complete','Matthew Henry'],['john-gill','John Gill'],['jfb','JFB'],['adam-clarke','Adam Clarke'],['john-calvin','John Calvin'],['keil-delitzsch','Keil & Delitzsch'],['tyndale','Tyndale']];
-    $('ssCommentaryTabs').innerHTML=choices.map(([v,n],i)=>`<button type="button" data-ss-cmt="${v}" class="${commentarySelect?.value===v||(!commentarySelect&&i===0)?'active':''}">${esc(n)}</button>`).join('');
-    qsa('[data-ss-cmt]',$('ssCommentaryTabs')).forEach(b=>b.onclick=()=>{if(commentarySelect){commentarySelect.value=b.dataset.ssCmt;commentarySelect.dispatchEvent(new Event('change',{bubbles:true}));}$('ssCommentaryName').textContent=b.textContent;qsa('[data-ss-cmt]',$('ssCommentaryTabs')).forEach(x=>x.classList.toggle('active',x===b));});
-
-    // Main writing area uses existing working manual editor.
-    const manual=$('manualSermonSection'), guided=$('templateSection'), prep=$('courseSection'); [manual,guided,prep].forEach(n=>{if(n)writingHomes.set(n,{parent:n.parentNode,next:n.nextSibling})}); if(manual)$('ssWritingHost').appendChild(manual);
-    const vision=$('advBigIdea')?.closest('.sermon-advanced-card'), direction=$('advSermonType')?.closest('.sermon-advanced-card'); if(vision)$('ssFocusHost').appendChild(vision); if(direction)$('ssFocusHost').appendChild(direction);
-    $('ssManualTab').onclick=()=>showWriting('manual'); $('ssGuidedTab').onclick=()=>showWriting('guided'); $('ssPrepTab').onclick=()=>showWriting('prep');
-
-    // Select verse by clicking the Bible text so Commentary/Books/Tools follow it.
-    readerDisplay?.addEventListener('click',e=>{const row=e.target.closest('[data-reader-verse]');if(!row||!readerVerse)return;readerVerse.value=row.dataset.readerVerse;readerVerse.dispatchEvent(new Event('change',{bubbles:true}));if(typeof scrollToReaderVerse==='function')scrollToReaderVerse();setTimeout(refreshCompanions,30)});
-    [readerBook,readerChapter,readerVerse].forEach(el=>el?.addEventListener('change',()=>setTimeout(refreshCompanions,220)));
-    readerDisplay && new MutationObserver(()=>setTimeout(refreshCompanions,40)).observe(readerDisplay,{childList:true,subtree:true});
-
-    // Tool launchers.
-    qsa('[data-ss-tool]').forEach(b=>b.addEventListener('click',()=>openTool(b.dataset.ssTool)));
-    $('ssModalClose').onclick=closeModal; $('ssModal').addEventListener('click',e=>{if(e.target===$('ssModal'))closeModal()}); document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('ssModal').classList.contains('open'))closeModal()});
-    $('ssGlobalSearchBtn').onclick=()=>openGlobalSearch(); $('ssGlobalSearch').addEventListener('keydown',e=>{if(e.key==='Enter')openGlobalSearch()});
-
-    setTimeout(refreshCompanions,600);
-  }
-
-  function showWriting(mode){
-    qsa('.ss-writing-tabs button').forEach(b=>b.classList.remove('active'));
-    const host=$('ssWritingHost'); if(!host)return;
-    const nodes=[$('manualSermonSection'),$('templateSection'),$('courseSection')].filter(Boolean);
-    nodes.forEach(n=>{if(n.parentNode===host){const h=writingHomes.get(n);if(h){if(h.next&&h.next.parentNode===h.parent)h.parent.insertBefore(n,h.next);else h.parent.appendChild(n);}}});
-    if(mode==='manual'){ $('ssManualTab').classList.add('active'); const n=$('manualSermonSection'); if(n)host.appendChild(n); }
-    if(mode==='guided'){ $('ssGuidedTab').classList.add('active'); const n=$('templateSection'); if(n)host.appendChild(n); }
-    if(mode==='prep'){ $('ssPrepTab').classList.add('active'); const n=$('courseSection'); if(n)host.appendChild(n); }
-  }
-
-  function currentState(){
-    try{
-      if(!readerBible||readerBookIndex<0||readerChapterIndex<0)return null;
-      const book=readerBible.books[readerBookIndex], chapter=book.chapters[readerChapterIndex], verses=chapter.verses||[];
-      const vi=$('readerVerse')?.value===''?0:Number($('readerVerse')?.value||0), verse=verses[Math.min(vi,Math.max(0,verses.length-1))];
-      if(!verse)return null; const ref=getBookName(book)+' '+chapterNumber(chapter,readerChapterIndex)+':'+verseNumber(verse,vi);
-      return {reference:ref,text:verseText(verse,$('readerTranslation')?.value||'KJV',readerBookIndex),bookName:getBookName(book),chapter:chapterNumber(chapter,readerChapterIndex),verse:verseNumber(verse,vi),vi};
-    }catch(e){return null;}
-  }
-
-  function refreshCompanions(){
-    const s=currentState(); $('ssReaderLabel').textContent=s?s.reference:'Regular Bible'; $('ssCommentaryRef').textContent=s?s.reference:'follows Bible Reader'; renderBooks(s);
-  }
-
-  function plainText(html){const d=document.createElement('div');d.innerHTML=String(html||'');return (d.textContent||'').replace(/\s+/g,' ').trim();}
-  const stopWords=new Set('the and that with from this into unto upon have has had were was are for but not you your his her our out all any who which what when where shall will would should could may might can did does of to in on at by as a an or be been being'.split(' '));
-  function keywords(s){const counts={};String(s||'').toLowerCase().replace(/[^a-z0-9\s]/g,' ').split(/\s+/).forEach(w=>{if(w.length<4||stopWords.has(w))return;counts[w]=(counts[w]||0)+1});return Object.keys(counts).sort((a,b)=>counts[b]-counts[a]).slice(0,12)}
-  function theologyBooks(){return Array.isArray(window.BIBLEMASTERY_THEOLOGY_BOOKS)?window.BIBLEMASTERY_THEOLOGY_BOOKS:[];}
-  function rankBooks(s){const ks=keywords((s?.reference||'')+' '+(s?.text||'')),found=[];theologyBooks().forEach((b,bi)=>(b.chapters||[]).forEach((c,ci)=>{const txt=plainText((c.title||'')+' '+(c.text||'')+' '+(c.html||''));let score=0;ks.forEach(k=>{if(txt.toLowerCase().includes(k))score+=2;if(String(c.title||'').toLowerCase().includes(k))score+=4});if(s?.bookName&&txt.toLowerCase().includes(s.bookName.toLowerCase()))score+=3;found.push({b,c,bi,ci,score,txt})}));return found.sort((a,b)=>b.score-a.score).slice(0,2)}
-  function renderBooks(s){const list=$('ssBooksList');if(!list)return;const matches=rankBooks(s);if(!matches.length){list.innerHTML='<div class="ss-book-empty"><div class="ss-empty-icon">📚</div><strong>Books Ready to Read</strong><span>The two best matching theology-book sections will appear here when the BibleMastery theology library is loaded.</span></div>';return;}list.innerHTML=matches.map(m=>`<div class="ss-book-card"><div class="ss-book-cover">${esc(m.b.shortTitle||m.b.title||'THEOLOGY')}</div><div class="ss-book-info"><strong>${esc(m.b.title||'Untitled Book')}</strong><div class="ss-book-author">${esc(m.b.author||'')}</div><div class="ss-book-section">${esc(m.c.title||('Chapter '+(m.ci+1)))}</div><p>${esc(m.txt.slice(0,180))}${m.txt.length>180?'…':''}</p></div><button class="ss-open-book" data-ss-book="${m.bi}" data-ss-chapter="${m.ci}">Open Section</button></div>`).join('');qsa('[data-ss-book]',list).forEach(b=>b.onclick=()=>openBookSection(Number(b.dataset.ssBook),Number(b.dataset.ssChapter)));}
-  function openBookSection(bi,ci){const b=theologyBooks()[bi],c=b?.chapters?.[ci];if(!b||!c)return;openCustom('📚 '+(b.title||'Theology Book'),(b.author||'')+(c.title?' • '+c.title:''),`<article style="max-width:860px;margin:auto;font-family:Georgia,serif;font-size:17px;line-height:1.72"><h2>${esc(c.title||'')}</h2>${c.html||('<p>'+esc(c.text||'')+'</p>')}</article>`)}
-
-  let moved=[];
-  function modalBase(title,subtitle){closeModal(true);$('ssModalTitle').textContent=title;$('ssModalSubtitle').textContent=subtitle||'';$('ssModalBody').innerHTML='';$('ssModal').classList.add('open');$('ssModal').setAttribute('aria-hidden','false');document.body.style.overflow='hidden';}
-  function moveToModal(node,title,subtitle){if(!node){openCustom(title,subtitle,'<div class="status-message">This tool is not available in this build.</div>');return;}modalBase(title,subtitle);moved.push({node,parent:node.parentNode,next:node.nextSibling});$('ssModalBody').appendChild(node);node.style.display='block';node.scrollTop=0;}
-  function moveManyToModal(nodes,title,subtitle){nodes=(nodes||[]).filter(Boolean);if(!nodes.length){openCustom(title,subtitle,'<div class="status-message">This tool is not available in this build.</div>');return;}modalBase(title,subtitle);nodes.forEach(node=>{moved.push({node,parent:node.parentNode,next:node.nextSibling});$('ssModalBody').appendChild(node);node.style.display='block';});}
-  function openCustom(title,subtitle,html){modalBase(title,subtitle);$('ssModalBody').innerHTML=html;}
-  function closeModal(restore=true){if(restore){while(moved.length){const x=moved.pop();try{x.node.style.display='';if(x.next&&x.next.parentNode===x.parent)x.parent.insertBefore(x.node,x.next);else x.parent.appendChild(x.node)}catch(e){}}}$('ssModal')?.classList.remove('open');$('ssModal')?.setAttribute('aria-hidden','true');document.body.style.overflow='';}
-  function cardFor(id,selector){const e=$(id);return e?e.closest(selector||'.sermon-advanced-card'):null;}
-  function toolBoxFor(id){return $(id)?.closest('.tool-box')||null;}
-
-  async function openCrossRefs(){
-    const s=currentState(); openCustom('⛓ Cross-References','Rank related verses across the whole Bible and add useful ones to the sermon verse chain.',`<div class="search-row"><input class="search-input" id="ssXrefQuery" value="${esc(s?.reference||'')}" placeholder="Current verse or theme"><button class="search-button" id="ssRunXrefs">Find Related Verses</button></div><div id="ssXrefResults" class="ss-custom-results" style="margin-top:12px"></div><button id="ssAddXrefs" class="search-button" style="margin-top:10px">Add Top Results to Cross-Reference Notes</button>`);
-    let last=[]; const run=async()=>{const out=$('ssXrefResults');out.innerHTML='<div class="status-message">Searching the Bible…</div>';try{const state=currentState();const base=(state?.text||$('ssXrefQuery').value||'');const ks=keywords(base);const bible=await getBibleByTranslation('KJV');const rows=[];(bible.books||[]).forEach((book,bi)=>(book.chapters||[]).forEach((ch,ci)=>(ch.verses||[]).forEach((v,vi)=>{const txt=verseText(v,'KJV',bi),low=txt.toLowerCase();let score=0;ks.forEach(k=>{if(low.includes(k))score+=2});if(score>0){const ref=getBookName(book)+' '+chapterNumber(ch,ci)+':'+verseNumber(v,vi);if(!state||ref!==state.reference)rows.push({ref,txt,score});}})));last=rows.sort((a,b)=>b.score-a.score).slice(0,20);out.innerHTML=last.length?last.map(x=>`<div class="ss-xref-item"><strong>${esc(x.ref)}</strong><div>${esc(x.txt)}</div></div>`).join(''):'<div class="status-message">No strong related verses were found.</div>';}catch(e){out.innerHTML='<div class="error-message">Cross-reference search could not run right now.</div>';}};$('ssRunXrefs').onclick=run;$('ssAddXrefs').onclick=()=>{const t=$('advCrossRefs');if(t&&last.length){t.value+=(t.value?'\n\n':'')+last.slice(0,8).map(x=>x.ref+' — '+x.txt).join('\n');$('ssAddXrefs').textContent='Added ✓';}};run();
-  }
-
-  function openBooks(){const books=theologyBooks();if(!books.length){openCustom('📚 Theology Library','Full books remain separate while the main screen shows the two best matching sections.','<div class="ss-book-empty" style="height:480px"><div class="ss-empty-icon">📚</div><strong>The theology shelf is ready.</strong><span>Load BIBLEMASTERY_THEOLOGY_BOOKS and this window will show the full books and chapters.</span></div>');return;}openCustom('📚 Theology Library','Choose any book or chapter. The main screen continues to show the two best matching sections.',`<div id="ssFullBooks"></div>`);$('ssFullBooks').innerHTML=books.map((b,bi)=>`<div class="result-item"><div class="result-reference">${esc(b.title||'Untitled')}</div><div>${esc(b.author||'')}</div><div style="margin-top:7px">${(b.chapters||[]).map((c,ci)=>`<button type="button" class="secondary" data-ss-full-book="${bi}" data-ss-full-chapter="${ci}" style="margin:3px">${esc(c.title||('Chapter '+(ci+1)))}</button>`).join('')}</div></div>`).join('');qsa('[data-ss-full-book]',$('ssFullBooks')).forEach(x=>x.onclick=()=>openBookSection(Number(x.dataset.ssFullBook),Number(x.dataset.ssFullChapter)));}
-
-  function openGlobalSearch(){const q=$('ssGlobalSearch').value.trim();const input=$('advSmartSearchQuery'),btn=$('advRunSmartSearch');if(input&&btn){input.value=q;moveToModal(cardFor('advRunSmartSearch'),'✨ AI Smart Search','Search Scripture, sermon research, saved notes, and connected BibleMastery library resources.');setTimeout(()=>btn.click(),70)}else openCustom('⌕ Search','Search BibleMastery','<div class="status-message">Smart Search is unavailable.</div>');}
-
-  function openTool(name){
-    const map={
-      ai:()=>moveToModal(qs('.biblemastery-ai-box'),'✨ BibleMastery AI — Sermon Assistant','Ask for sermon preparation help while keeping Scripture primary.'),
-      guided:()=>moveToModal($('templateSection'),'📝 Guided Sermon Template','Use the complete 18-part sermon template in a large reading window.'),
-      prep:()=>moveToModal($('courseSection'),'📖 Sermon Preparation Guide','Follow the 18-step sermon preparation process without crowding the main screen.'),
-      dictionary:()=>moveManyToModal([toolBoxFor('dictionarySource'),toolBoxFor('englishDictionarySource')],'📘 Dictionaries','Search Easton’s, Smith’s, Webster’s, and the regular English dictionary tools.'),
-      concordance:()=>moveToModal(toolBoxFor('concordanceTranslation'),'🔎 Concordance','Search the Bible for a word or phrase.'),
-      original:()=>moveToModal(toolBoxFor('lexiconSource'),'🔤 Original Language / Word Study','Strong’s, BDB, and Thayer’s lexical tools.'),
-      parallel:()=>moveToModal(toolBoxFor('parallelBook'),'📚 Parallel Bible','Compare the same verse in three translations.'),
-      crossrefs:openCrossRefs,
-      compare:()=>moveToModal(cardFor('advRunTextComparison','.research-card'),'📑 Text Comparison Tool','Compare the selected passage across BibleMastery translations.'),
-      exegetical:()=>moveToModal(cardFor('advRunExegeticalGuide','.research-card'),'🔬 Exegetical Guide','Original-language analysis, clause structure, Strong’s, BDB, Thayer, and syntax framework.'),
-      quotations:()=>moveToModal(cardFor('advRunQuotationMapper','.research-card'),'🔁 OT / NT Quotation Mapper','Trace quotations and allusions in both directions.'),
-      measures:()=>moveToModal(cardFor('advConvertUnit','.research-card'),'⚖ Weights & Measures','Convert ancient biblical units into approximate modern equivalents.'),
-      maps:()=>moveToModal(cardFor('advShowMapLocation','.research-card'),'🗺 Interactive Maps, Timeline & Media','Biblical locations, timelines, cultural concepts, and 3D terrain integration.'),
-      culture:()=>{moveToModal(cardFor('advShowMapLocation','.research-card'),'▥ Cultural Context','Use the Cultural Concept Locator inside the maps/media workspace.');setTimeout(()=>$('advCultureConcept')?.scrollIntoView({block:'center'}),80)},
-      'ai-search':()=>moveToModal(cardFor('advRunSmartSearch','.research-card'),'✨ AI Smart Search','Natural-language research across Scripture, sermon research, and connected library resources.'),
-      workspace:()=>moveToModal(cardFor('advWorkspaceProfileName','.research-card'),'🧩 Custom Workspaces & Resource Prioritization','Save preferred commentaries, translations, and sermon research profiles.'),
-      people:()=>moveToModal(cardFor('advPeoplePlaces'),'👥 People • Places • Events','Record and study people, places, events, journeys, and historical connections.'),
-      context:()=>moveToModal(cardFor('advContextExplorer'),'🔎 Context Explorer','Immediate, chapter, book, historical, author, and audience context.'),
-      points:()=>moveToModal(cardFor('advPoint1'),'🧱 Advanced Point Builder','Develop sermon points, supporting texts, illustrations, applications, and transitions.'),
-      theme:()=>moveToModal(cardFor('advThemeTracker'),'🧵 Theme Tracker','Trace the sermon theme through Scripture.'),
-      illustrations:()=>moveToModal(cardFor('advIllustrationBank'),'💡 Illustrations & Examples Bank','Keep illustrations and examples organized while Scripture stays primary.'),
-      application:()=>moveToModal(cardFor('advApplicationBuilder'),'❤️ Application Builder','Connect biblical truth to belief, choices, relationships, prayer, and daily life.'),
-      transitions:()=>moveToModal(cardFor('advTransitions'),'🌉 Transitions','Plan clear movement between introduction, points, and conclusion.'),
-      questions:()=>moveToModal(cardFor('advQuestionsObjections'),'❓ Questions / Objections','Prepare clear biblical answers to likely questions and misunderstandings.'),
-      invitation:()=>moveToModal(cardFor('advInvitation'),'🗣 Invitation / Response','Plan the listener response to the biblical message.'),
-      prayer:()=>moveToModal(cardFor('advPrayerJournal'),'🙏 Prayer & Preparation Journal','Keep prayer, direction, and preparation reflections together.'),
-      delivery:()=>moveToModal(cardFor('advDeliveryNotes'),'🎙 Speaker / Delivery Notes','Pauses, emphasis, visual aids, pronunciation, and delivery reminders.'),
-      sources:()=>moveToModal(cardFor('advSourceNotes'),'📝 Quotations / Source Notes','Keep quotations, authors, links, references, and verification notes.'),
-      'research-notes':()=>moveToModal(cardFor('advResearchNotes'),'📚 Commentary / Research Notes','Collect commentary observations and research notes.'),
-      'commentary-research':()=>moveToModal(cardFor('advResearchNotes'),'📚 Commentary / Research Notes','Collect commentary observations and research notes.'),
-      'exegetical-notes':()=>moveToModal(cardFor('advExegetical'),'🔬 Exegetical Research Notes','Store grammatical, contextual, structural, and textual observations.'),
-      'language-notes':()=>moveToModal(cardFor('advOriginalLanguage'),'🔤 Hebrew / Greek Findings','Store lemmas, definitions, occurrences, and language observations.'),
-      'research-library':()=>moveToModal(cardFor('advSaveLibraryItem'),'📖 Sermon Research Library','Save research items separately while developing the sermon.'),
-      history:()=>moveToModal(cardFor('advRecordHistory'),'📅 Sermon Preparation History','Record preparation sessions and return to previous work.'),
-      collections:()=>moveToModal(cardFor('advSaveCollection'),'📂 Scripture Collections','Build reusable Scripture collections for sermons and themes.'),
-      templates:()=>moveToModal(cardFor('advTemplatePreset'),'🧩 Sermon Templates','Load expository, topical, doctrinal, evangelistic, or character-study structures.'),
-      time:()=>moveToModal(cardFor('advSpeakingRate'),'⏱ Preaching Time Estimator','Estimate sermon delivery time from your current manuscript.'),
-      'final-review':()=>moveToModal(cardFor('reviewScripture'),'✅ Final Sermon Review','Review Scripture support, context, clarity, application, references, and response.'),
-      export:()=>moveToModal(cardFor('advCopyFullSermon'),'🖨 Export / Copy','Copy the full sermon development package or print/save it as PDF.'),
-      save:()=>moveToModal($('saveSermonButton')?.closest('.section'),'💾 Sermon Controls','Save, load, delete, print, or clear sermons.'),
-      books:openBooks
-    };
-    (map[name]||map.ai)();
-  }
-
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(boot,60));else setTimeout(boot,60);
-})();
-
-</script>
-</body></html>");w.document.close();w.focus();w.print();
+    const w=window.open("","_blank");if(!w)return;w.document.write("<!doctype html><html><head><title>Sermon Package</title><style>body{font-family:Arial,sans-serif;max-width:900px;margin:40px auto;padding:0 24px;line-height:1.6;white-space:pre-wrap}h1{font-size:24px}</style></head><body><h1>BibleMastery — Sermon Development Package</h1>"+escapeHTML(advFullPackage())+"</body></html>");w.document.close();w.focus();w.print();
   });
 
 
@@ -3808,6 +3561,253 @@ body>header,body>.container{display:none!important}
   if(advEl("advDeleteWorkspaceProfile"))advEl("advDeleteWorkspaceProfile").addEventListener("click",function(){const p=advSelectedWorkspace();if(!p)return;advWrite("workspaceProfiles",advRead("workspaceProfiles",[]).filter(function(x){return x.id!==p.id;}));advRefreshWorkspaceProfiles();advEl("advWorkspaceProfileOutput").textContent="Workspace deleted.";});
   advInitPrioritySelects();
 
+</script>
+
+<script id="sermon-builder-seven-names-approved-layout-js">
+(function(){
+  'use strict';
+  const $=id=>document.getElementById(id), qs=(s,r=document)=>r.querySelector(s), qsa=(s,r=document)=>Array.from(r.querySelectorAll(s));
+  const esc=v=>String(v==null?'':v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+  const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+
+  function boot(){
+    if($('ssApp')) return;
+    const app=document.createElement('div'); app.className='ss-app'; app.id='ssApp';
+    app.innerHTML=`
+      <header class="ss-topbar">
+        <div class="ss-brand"><span class="ss-brand-mark">♛</span><span class="ss-brand-copy"><strong>BibleMastery</strong><small>SEVEN NAMES ONE REDEEMER</small></span></div>
+        <div class="ss-top-search"><input id="ssGlobalSearch" type="search" placeholder="Search Bible, sermon notes, research, topics..."><button id="ssGlobalSearchBtn" type="button">⌕</button></div>
+        <a class="ss-home" href="/">⌂ Main Page</a>
+      </header>
+      <nav class="ss-nav">
+        <button class="active" type="button">Sermon Builder</button>
+        <button type="button" data-ss-tool="ai">AI Assistant</button>
+        <button type="button" data-ss-tool="guided">Guided Template</button>
+        <button type="button" data-ss-tool="prep">Preparation Guide</button>
+        <button type="button" data-ss-tool="research-library">Research Library</button>
+        <button type="button" data-ss-tool="save">Save / Load</button>
+        <a href="/">BibleMastery</a>
+      </nav>
+      <main class="ss-main">
+        <section class="ss-control-strip">
+          <div class="ss-controls">
+            <div class="ss-control-box"><label>BOOK</label><div id="ssBookHost"></div></div>
+            <div class="ss-control-box"><label>CHAPTER</label><div id="ssChapterHost"></div></div>
+            <div class="ss-control-box"><label>VERSE</label><div id="ssVerseHost"></div></div>
+            <button class="ss-chapter-nav" id="ssPrevChapter" type="button" title="Previous chapter">‹</button>
+            <button class="ss-chapter-nav" id="ssNextChapter" type="button" title="Next chapter">›</button>
+          </div>
+          <div class="ss-translations"><button class="ss-trans-arrow" id="ssTransLeft" type="button">‹</button><div class="ss-trans-track" id="ssTransTrack"></div><button class="ss-trans-arrow" id="ssTransRight" type="button">›</button></div>
+          <div class="ss-header-tools">
+            <button type="button" data-ss-tool="crossrefs"><span class="ss-hi-icon">⛓</span>Cross-Refs</button>
+            <button type="button" data-ss-tool="exegetical"><span class="ss-hi-icon">🔬</span>Exegetical</button>
+            <button type="button" data-ss-tool="maps"><span class="ss-hi-icon">🗺</span>Maps</button>
+            <button type="button" data-ss-tool="ai-search"><span class="ss-hi-icon">⌕</span>Smart Search</button>
+            <button type="button" data-ss-tool="final-review"><span class="ss-hi-icon">✓</span>Review</button>
+          </div>
+        </section>
+
+        <section class="ss-reading-grid">
+          <article class="ss-card ss-reader-card"><div class="ss-card-head"><span>📖 Bible Reader</span><small id="ssReaderLabel">Regular Bible</small></div><div class="ss-card-body"><div id="ssReaderHost"></div></div></article>
+          <article class="ss-card ss-commentary-card"><div class="ss-card-head"><span>📖 Commentary</span><small id="ssCommentaryRef">follows Bible Reader</small></div><div class="ss-card-body"><div class="ss-commentary-tabs" id="ssCommentaryTabs"></div><div class="ss-commentary-meta"><span id="ssCommentaryName">Matthew Henry</span><button type="button" data-ss-tool="commentary-research" style="border:0;background:transparent;color:#7a0d12;cursor:pointer">Research Notes ↗</button></div><div class="ss-commentary-output" id="ssCommentaryHost"></div></div></article>
+          <article class="ss-card ss-books-card"><div class="ss-card-head"><span>📚 Books Ready to Read</span><button type="button" data-ss-tool="books" style="border:0;background:transparent;color:#976500;cursor:pointer">Library ↗</button></div><div class="ss-card-body"><div class="ss-books-list" id="ssBooksList"></div></div></article>
+        </section>
+
+        <section class="ss-work-row">
+          <article class="ss-card ss-writing-card"><div class="ss-card-head"><span>✍️ Sermon Writing</span><small>write here while research stays above</small></div><div class="ss-card-body"><div class="ss-writing-tabs"><button class="active" id="ssManualTab" type="button">Manual Sermon</button><button id="ssGuidedTab" type="button">Guided Template</button><button id="ssPrepTab" type="button">18-Step Guide</button></div><div class="ss-writing-host" id="ssWritingHost"></div></div></article>
+          <article class="ss-card ss-focus-card"><div class="ss-card-head"><span>🎯 Sermon Focus</span><small>big idea • direction</small></div><div class="ss-card-body"><div class="ss-focus-stack" id="ssFocusHost"></div></div></article>
+        </section>
+
+        <section class="ss-launchers">
+          <article class="ss-card ss-launch-card"><div class="ss-card-head"><span>🧰 Research Tools</span><small>open • study • close</small></div><div class="ss-card-body"><div class="ss-launch-grid">
+            <button data-ss-tool="dictionary"><span class="ss-tool-icon">▤</span>Dictionary</button>
+            <button data-ss-tool="concordance"><span class="ss-tool-icon">⌕</span>Concordance</button>
+            <button data-ss-tool="crossrefs"><span class="ss-tool-icon">⛓</span>Cross-References</button>
+            <button data-ss-tool="original"><span class="ss-tool-icon">α</span>Original Language</button>
+            <button data-ss-tool="compare"><span class="ss-tool-icon">▣</span>Text Comparison</button>
+            <button data-ss-tool="exegetical"><span class="ss-tool-icon">🔬</span>Exegetical Guide</button>
+            <button data-ss-tool="quotations"><span class="ss-tool-icon">⇄</span>OT/NT Mapper</button>
+            <button data-ss-tool="maps"><span class="ss-tool-icon">🗺</span>Maps & Timeline</button>
+            <button data-ss-tool="people"><span class="ss-tool-icon">⌾</span>People / Places</button>
+            <button data-ss-tool="culture"><span class="ss-tool-icon">▥</span>Cultural Context</button>
+            <button data-ss-tool="measures"><span class="ss-tool-icon">⚖</span>Weights & Measures</button>
+            <button data-ss-tool="ai-search"><span class="ss-tool-icon">✨</span>AI Smart Search</button>
+            <button data-ss-tool="parallel"><span class="ss-tool-icon">▥</span>Parallel Bible</button>
+            <button data-ss-tool="books"><span class="ss-tool-icon">📚</span>Theology Library</button>
+          </div></div></article>
+
+          <article class="ss-card ss-launch-card"><div class="ss-card-head"><span>🎤 Sermon Development</span><small>tools open in a reading window</small></div><div class="ss-card-body"><div class="ss-launch-grid">
+            <button data-ss-tool="points"><span class="ss-tool-icon">1•2•3</span>Point Builder</button>
+            <button data-ss-tool="context"><span class="ss-tool-icon">◫</span>Context Explorer</button>
+            <button data-ss-tool="theme"><span class="ss-tool-icon">🧵</span>Theme Tracker</button>
+            <button data-ss-tool="illustrations"><span class="ss-tool-icon">💡</span>Illustrations</button>
+            <button data-ss-tool="application"><span class="ss-tool-icon">♥</span>Application</button>
+            <button data-ss-tool="transitions"><span class="ss-tool-icon">→</span>Transitions</button>
+            <button data-ss-tool="questions"><span class="ss-tool-icon">?</span>Questions / Objections</button>
+            <button data-ss-tool="invitation"><span class="ss-tool-icon">🗣</span>Invitation</button>
+            <button data-ss-tool="prayer"><span class="ss-tool-icon">🙏</span>Prayer Journal</button>
+            <button data-ss-tool="delivery"><span class="ss-tool-icon">🎙</span>Delivery Notes</button>
+            <button data-ss-tool="sources"><span class="ss-tool-icon">📝</span>Source Notes</button>
+            <button data-ss-tool="research-notes"><span class="ss-tool-icon">📚</span>Research Notes</button>
+            <button data-ss-tool="exegetical-notes"><span class="ss-tool-icon">🔬</span>Exegetical Notes</button>
+            <button data-ss-tool="language-notes"><span class="ss-tool-icon">α</span>Hebrew / Greek Notes</button>
+          </div></div></article>
+
+          <article class="ss-card ss-launch-card"><div class="ss-card-head"><span>⚙ Workflow</span><small>save • organize • finish</small></div><div class="ss-card-body"><div class="ss-workflow-grid">
+            <button data-ss-tool="ai">✨ AI Assistant</button><button data-ss-tool="research-library">Research Library</button><button data-ss-tool="collections">Scripture Collections</button><button data-ss-tool="history">Preparation History</button>
+            <button data-ss-tool="templates">Sermon Templates</button><button data-ss-tool="time">Time Estimator</button><button data-ss-tool="workspace">Workspace Priorities</button><button data-ss-tool="final-review">Final Review</button>
+            <button data-ss-tool="export">Export / Print</button><button data-ss-tool="save">Save / Load Sermon</button><button data-ss-tool="guided">Guided Template</button><button data-ss-tool="prep">Preparation Guide</button>
+          </div><div class="ss-status-box" style="margin-top:7px"><strong>Layout:</strong> Bible Reader, Commentary, and Books stay visible. Everything else opens when needed and closes back to this screen.</div></div></article>
+        </section>
+      </main>
+
+      <div class="ss-modal" id="ssModal" aria-hidden="true"><div class="ss-modal-dialog"><div class="ss-modal-head"><div><div class="ss-modal-title" id="ssModalTitle">Study Tool</div><div class="ss-modal-subtitle" id="ssModalSubtitle"></div></div><button class="ss-modal-close" id="ssModalClose" type="button" aria-label="Close">×</button></div><div class="ss-modal-body" id="ssModalBody"></div></div></div>
+    `;
+    document.body.insertBefore(app,document.body.firstChild);
+    wireLayout();
+  }
+
+  const writingHomes=new Map();
+  function wireLayout(){
+    const readerDisplay=$('readerDisplay'), readerBook=$('readerBook'), readerChapter=$('readerChapter'), readerVerse=$('readerVerse'), readerTranslation=$('readerTranslation'), readerPrev=$('readerPrev'), readerNext=$('readerNext');
+    if(readerDisplay) $('ssReaderHost').appendChild(readerDisplay);
+    if(readerBook) $('ssBookHost').appendChild(readerBook); if(readerChapter) $('ssChapterHost').appendChild(readerChapter); if(readerVerse) $('ssVerseHost').appendChild(readerVerse);
+    $('ssPrevChapter').onclick=()=>readerPrev?.click(); $('ssNextChapter').onclick=()=>readerNext?.click();
+
+    // Translation strip from the real translation control.
+    const track=$('ssTransTrack');
+    function renderTranslations(){
+      if(!readerTranslation||!track)return;
+      track.innerHTML=Array.from(readerTranslation.options).map(o=>`<button type="button" data-ss-trans="${esc(o.value)}" class="${o.value===readerTranslation.value?'active':''}">${esc(o.value.replace('GENEVA1599','Geneva').replace('KJV1611','KJV 1611').replace('KJVPLUS','KJV+'))}</button>`).join('');
+      qsa('[data-ss-trans]',track).forEach(b=>b.onclick=()=>{readerTranslation.value=b.dataset.ssTrans;readerTranslation.dispatchEvent(new Event('change',{bubbles:true}));qsa('[data-ss-trans]',track).forEach(x=>x.classList.toggle('active',x===b));setTimeout(refreshCompanions,320)});
+    }
+    renderTranslations(); $('ssTransLeft').onclick=()=>track.scrollBy({left:-250,behavior:'smooth'}); $('ssTransRight').onclick=()=>track.scrollBy({left:250,behavior:'smooth'});
+    readerTranslation?.addEventListener('change',()=>{renderTranslations();setTimeout(refreshCompanions,280)});
+
+    // Commentary output is the real working commentary output.
+    const commentaryContent=$('commentaryContent'); if(commentaryContent)$('ssCommentaryHost').appendChild(commentaryContent);
+    const commentarySelect=$('commentarySelect');
+    const choices=[['matthew-henry-complete','Matthew Henry'],['john-gill','John Gill'],['jfb','JFB'],['adam-clarke','Adam Clarke'],['john-calvin','John Calvin'],['keil-delitzsch','Keil & Delitzsch'],['tyndale','Tyndale']];
+    $('ssCommentaryTabs').innerHTML=choices.map(([v,n],i)=>`<button type="button" data-ss-cmt="${v}" class="${commentarySelect?.value===v||(!commentarySelect&&i===0)?'active':''}">${esc(n)}</button>`).join('');
+    qsa('[data-ss-cmt]',$('ssCommentaryTabs')).forEach(b=>b.onclick=()=>{if(commentarySelect){commentarySelect.value=b.dataset.ssCmt;commentarySelect.dispatchEvent(new Event('change',{bubbles:true}));}$('ssCommentaryName').textContent=b.textContent;qsa('[data-ss-cmt]',$('ssCommentaryTabs')).forEach(x=>x.classList.toggle('active',x===b));});
+
+    // Main writing area uses existing working manual editor.
+    const manual=$('manualSermonSection'), guided=$('templateSection'), prep=$('courseSection'); [manual,guided,prep].forEach(n=>{if(n)writingHomes.set(n,{parent:n.parentNode,next:n.nextSibling})}); if(manual)$('ssWritingHost').appendChild(manual);
+    const vision=$('advBigIdea')?.closest('.sermon-advanced-card'), direction=$('advSermonType')?.closest('.sermon-advanced-card'); if(vision)$('ssFocusHost').appendChild(vision); if(direction)$('ssFocusHost').appendChild(direction);
+    $('ssManualTab').onclick=()=>showWriting('manual'); $('ssGuidedTab').onclick=()=>showWriting('guided'); $('ssPrepTab').onclick=()=>showWriting('prep');
+
+    // Select verse by clicking the Bible text so Commentary/Books/Tools follow it.
+    readerDisplay?.addEventListener('click',e=>{const row=e.target.closest('[data-reader-verse]');if(!row||!readerVerse)return;readerVerse.value=row.dataset.readerVerse;readerVerse.dispatchEvent(new Event('change',{bubbles:true}));if(typeof scrollToReaderVerse==='function')scrollToReaderVerse();setTimeout(refreshCompanions,30)});
+    [readerBook,readerChapter,readerVerse].forEach(el=>el?.addEventListener('change',()=>setTimeout(refreshCompanions,220)));
+    readerDisplay && new MutationObserver(()=>setTimeout(refreshCompanions,40)).observe(readerDisplay,{childList:true,subtree:true});
+
+    // Tool launchers.
+    qsa('[data-ss-tool]').forEach(b=>b.addEventListener('click',()=>openTool(b.dataset.ssTool)));
+    $('ssModalClose').onclick=closeModal; $('ssModal').addEventListener('click',e=>{if(e.target===$('ssModal'))closeModal()}); document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('ssModal').classList.contains('open'))closeModal()});
+    $('ssGlobalSearchBtn').onclick=()=>openGlobalSearch(); $('ssGlobalSearch').addEventListener('keydown',e=>{if(e.key==='Enter')openGlobalSearch()});
+
+    setTimeout(refreshCompanions,600);
+  }
+
+  function showWriting(mode){
+    qsa('.ss-writing-tabs button').forEach(b=>b.classList.remove('active'));
+    const host=$('ssWritingHost'); if(!host)return;
+    const nodes=[$('manualSermonSection'),$('templateSection'),$('courseSection')].filter(Boolean);
+    nodes.forEach(n=>{if(n.parentNode===host){const h=writingHomes.get(n);if(h){if(h.next&&h.next.parentNode===h.parent)h.parent.insertBefore(n,h.next);else h.parent.appendChild(n);}}});
+    if(mode==='manual'){ $('ssManualTab').classList.add('active'); const n=$('manualSermonSection'); if(n)host.appendChild(n); }
+    if(mode==='guided'){ $('ssGuidedTab').classList.add('active'); const n=$('templateSection'); if(n)host.appendChild(n); }
+    if(mode==='prep'){ $('ssPrepTab').classList.add('active'); const n=$('courseSection'); if(n)host.appendChild(n); }
+  }
+
+  function currentState(){
+    try{
+      if(!readerBible||readerBookIndex<0||readerChapterIndex<0)return null;
+      const book=readerBible.books[readerBookIndex], chapter=book.chapters[readerChapterIndex], verses=chapter.verses||[];
+      const vi=$('readerVerse')?.value===''?0:Number($('readerVerse')?.value||0), verse=verses[Math.min(vi,Math.max(0,verses.length-1))];
+      if(!verse)return null; const ref=getBookName(book)+' '+chapterNumber(chapter,readerChapterIndex)+':'+verseNumber(verse,vi);
+      return {reference:ref,text:verseText(verse,$('readerTranslation')?.value||'KJV',readerBookIndex),bookName:getBookName(book),chapter:chapterNumber(chapter,readerChapterIndex),verse:verseNumber(verse,vi),vi};
+    }catch(e){return null;}
+  }
+
+  function refreshCompanions(){
+    const s=currentState(); $('ssReaderLabel').textContent=s?s.reference:'Regular Bible'; $('ssCommentaryRef').textContent=s?s.reference:'follows Bible Reader'; renderBooks(s);
+  }
+
+  function plainText(html){const d=document.createElement('div');d.innerHTML=String(html||'');return (d.textContent||'').replace(/\s+/g,' ').trim();}
+  const stopWords=new Set('the and that with from this into unto upon have has had were was are for but not you your his her our out all any who which what when where shall will would should could may might can did does of to in on at by as a an or be been being'.split(' '));
+  function keywords(s){const counts={};String(s||'').toLowerCase().replace(/[^a-z0-9\s]/g,' ').split(/\s+/).forEach(w=>{if(w.length<4||stopWords.has(w))return;counts[w]=(counts[w]||0)+1});return Object.keys(counts).sort((a,b)=>counts[b]-counts[a]).slice(0,12)}
+  function theologyBooks(){return Array.isArray(window.BIBLEMASTERY_THEOLOGY_BOOKS)?window.BIBLEMASTERY_THEOLOGY_BOOKS:[];}
+  function rankBooks(s){const ks=keywords((s?.reference||'')+' '+(s?.text||'')),found=[];theologyBooks().forEach((b,bi)=>(b.chapters||[]).forEach((c,ci)=>{const txt=plainText((c.title||'')+' '+(c.text||'')+' '+(c.html||''));let score=0;ks.forEach(k=>{if(txt.toLowerCase().includes(k))score+=2;if(String(c.title||'').toLowerCase().includes(k))score+=4});if(s?.bookName&&txt.toLowerCase().includes(s.bookName.toLowerCase()))score+=3;found.push({b,c,bi,ci,score,txt})}));return found.sort((a,b)=>b.score-a.score).slice(0,2)}
+  function renderBooks(s){const list=$('ssBooksList');if(!list)return;const matches=rankBooks(s);if(!matches.length){list.innerHTML='<div class="ss-book-empty"><div class="ss-empty-icon">📚</div><strong>Books Ready to Read</strong><span>The two best matching theology-book sections will appear here when the BibleMastery theology library is loaded.</span></div>';return;}list.innerHTML=matches.map(m=>`<div class="ss-book-card"><div class="ss-book-cover">${esc(m.b.shortTitle||m.b.title||'THEOLOGY')}</div><div class="ss-book-info"><strong>${esc(m.b.title||'Untitled Book')}</strong><div class="ss-book-author">${esc(m.b.author||'')}</div><div class="ss-book-section">${esc(m.c.title||('Chapter '+(m.ci+1)))}</div><p>${esc(m.txt.slice(0,180))}${m.txt.length>180?'…':''}</p></div><button class="ss-open-book" data-ss-book="${m.bi}" data-ss-chapter="${m.ci}">Open Section</button></div>`).join('');qsa('[data-ss-book]',list).forEach(b=>b.onclick=()=>openBookSection(Number(b.dataset.ssBook),Number(b.dataset.ssChapter)));}
+  function openBookSection(bi,ci){const b=theologyBooks()[bi],c=b?.chapters?.[ci];if(!b||!c)return;openCustom('📚 '+(b.title||'Theology Book'),(b.author||'')+(c.title?' • '+c.title:''),`<article style="max-width:860px;margin:auto;font-family:Georgia,serif;font-size:17px;line-height:1.72"><h2>${esc(c.title||'')}</h2>${c.html||('<p>'+esc(c.text||'')+'</p>')}</article>`)}
+
+  let moved=[];
+  function modalBase(title,subtitle){closeModal(true);$('ssModalTitle').textContent=title;$('ssModalSubtitle').textContent=subtitle||'';$('ssModalBody').innerHTML='';$('ssModal').classList.add('open');$('ssModal').setAttribute('aria-hidden','false');document.body.style.overflow='hidden';}
+  function moveToModal(node,title,subtitle){if(!node){openCustom(title,subtitle,'<div class="status-message">This tool is not available in this build.</div>');return;}modalBase(title,subtitle);moved.push({node,parent:node.parentNode,next:node.nextSibling});$('ssModalBody').appendChild(node);node.style.display='block';node.scrollTop=0;}
+  function moveManyToModal(nodes,title,subtitle){nodes=(nodes||[]).filter(Boolean);if(!nodes.length){openCustom(title,subtitle,'<div class="status-message">This tool is not available in this build.</div>');return;}modalBase(title,subtitle);nodes.forEach(node=>{moved.push({node,parent:node.parentNode,next:node.nextSibling});$('ssModalBody').appendChild(node);node.style.display='block';});}
+  function openCustom(title,subtitle,html){modalBase(title,subtitle);$('ssModalBody').innerHTML=html;}
+  function closeModal(restore=true){if(restore){while(moved.length){const x=moved.pop();try{x.node.style.display='';if(x.next&&x.next.parentNode===x.parent)x.parent.insertBefore(x.node,x.next);else x.parent.appendChild(x.node)}catch(e){}}}$('ssModal')?.classList.remove('open');$('ssModal')?.setAttribute('aria-hidden','true');document.body.style.overflow='';}
+  function cardFor(id,selector){const e=$(id);return e?e.closest(selector||'.sermon-advanced-card'):null;}
+  function toolBoxFor(id){return $(id)?.closest('.tool-box')||null;}
+
+  async function openCrossRefs(){
+    const s=currentState(); openCustom('⛓ Cross-References','Rank related verses across the whole Bible and add useful ones to the sermon verse chain.',`<div class="search-row"><input class="search-input" id="ssXrefQuery" value="${esc(s?.reference||'')}" placeholder="Current verse or theme"><button class="search-button" id="ssRunXrefs">Find Related Verses</button></div><div id="ssXrefResults" class="ss-custom-results" style="margin-top:12px"></div><button id="ssAddXrefs" class="search-button" style="margin-top:10px">Add Top Results to Cross-Reference Notes</button>`);
+    let last=[]; const run=async()=>{const out=$('ssXrefResults');out.innerHTML='<div class="status-message">Searching the Bible…</div>';try{const state=currentState();const base=(state?.text||$('ssXrefQuery').value||'');const ks=keywords(base);const bible=await getBibleByTranslation('KJV');const rows=[];(bible.books||[]).forEach((book,bi)=>(book.chapters||[]).forEach((ch,ci)=>(ch.verses||[]).forEach((v,vi)=>{const txt=verseText(v,'KJV',bi),low=txt.toLowerCase();let score=0;ks.forEach(k=>{if(low.includes(k))score+=2});if(score>0){const ref=getBookName(book)+' '+chapterNumber(ch,ci)+':'+verseNumber(v,vi);if(!state||ref!==state.reference)rows.push({ref,txt,score});}})));last=rows.sort((a,b)=>b.score-a.score).slice(0,20);out.innerHTML=last.length?last.map(x=>`<div class="ss-xref-item"><strong>${esc(x.ref)}</strong><div>${esc(x.txt)}</div></div>`).join(''):'<div class="status-message">No strong related verses were found.</div>';}catch(e){out.innerHTML='<div class="error-message">Cross-reference search could not run right now.</div>';}};$('ssRunXrefs').onclick=run;$('ssAddXrefs').onclick=()=>{const t=$('advCrossRefs');if(t&&last.length){t.value+=(t.value?'\n\n':'')+last.slice(0,8).map(x=>x.ref+' — '+x.txt).join('\n');$('ssAddXrefs').textContent='Added ✓';}};run();
+  }
+
+  function openBooks(){const books=theologyBooks();if(!books.length){openCustom('📚 Theology Library','Full books remain separate while the main screen shows the two best matching sections.','<div class="ss-book-empty" style="height:480px"><div class="ss-empty-icon">📚</div><strong>The theology shelf is ready.</strong><span>Load BIBLEMASTERY_THEOLOGY_BOOKS and this window will show the full books and chapters.</span></div>');return;}openCustom('📚 Theology Library','Choose any book or chapter. The main screen continues to show the two best matching sections.',`<div id="ssFullBooks"></div>`);$('ssFullBooks').innerHTML=books.map((b,bi)=>`<div class="result-item"><div class="result-reference">${esc(b.title||'Untitled')}</div><div>${esc(b.author||'')}</div><div style="margin-top:7px">${(b.chapters||[]).map((c,ci)=>`<button type="button" class="secondary" data-ss-full-book="${bi}" data-ss-full-chapter="${ci}" style="margin:3px">${esc(c.title||('Chapter '+(ci+1)))}</button>`).join('')}</div></div>`).join('');qsa('[data-ss-full-book]',$('ssFullBooks')).forEach(x=>x.onclick=()=>openBookSection(Number(x.dataset.ssFullBook),Number(x.dataset.ssFullChapter)));}
+
+  function openGlobalSearch(){const q=$('ssGlobalSearch').value.trim();const input=$('advSmartSearchQuery'),btn=$('advRunSmartSearch');if(input&&btn){input.value=q;moveToModal(cardFor('advRunSmartSearch'),'✨ AI Smart Search','Search Scripture, sermon research, saved notes, and connected BibleMastery library resources.');setTimeout(()=>btn.click(),70)}else openCustom('⌕ Search','Search BibleMastery','<div class="status-message">Smart Search is unavailable.</div>');}
+
+  function openTool(name){
+    const map={
+      ai:()=>moveToModal(qs('.biblemastery-ai-box'),'✨ BibleMastery AI — Sermon Assistant','Ask for sermon preparation help while keeping Scripture primary.'),
+      guided:()=>moveToModal($('templateSection'),'📝 Guided Sermon Template','Use the complete 18-part sermon template in a large reading window.'),
+      prep:()=>moveToModal($('courseSection'),'📖 Sermon Preparation Guide','Follow the 18-step sermon preparation process without crowding the main screen.'),
+      dictionary:()=>moveManyToModal([toolBoxFor('dictionarySource'),toolBoxFor('englishDictionarySource')],'📘 Dictionaries','Search Easton’s, Smith’s, Webster’s, and the regular English dictionary tools.'),
+      concordance:()=>moveToModal(toolBoxFor('concordanceTranslation'),'🔎 Concordance','Search the Bible for a word or phrase.'),
+      original:()=>moveToModal(toolBoxFor('lexiconSource'),'🔤 Original Language / Word Study','Strong’s, BDB, and Thayer’s lexical tools.'),
+      parallel:()=>moveToModal(toolBoxFor('parallelBook'),'📚 Parallel Bible','Compare the same verse in three translations.'),
+      crossrefs:openCrossRefs,
+      compare:()=>moveToModal(cardFor('advRunTextComparison','.research-card'),'📑 Text Comparison Tool','Compare the selected passage across BibleMastery translations.'),
+      exegetical:()=>moveToModal(cardFor('advRunExegeticalGuide','.research-card'),'🔬 Exegetical Guide','Original-language analysis, clause structure, Strong’s, BDB, Thayer, and syntax framework.'),
+      quotations:()=>moveToModal(cardFor('advRunQuotationMapper','.research-card'),'🔁 OT / NT Quotation Mapper','Trace quotations and allusions in both directions.'),
+      measures:()=>moveToModal(cardFor('advConvertUnit','.research-card'),'⚖ Weights & Measures','Convert ancient biblical units into approximate modern equivalents.'),
+      maps:()=>moveToModal(cardFor('advShowMapLocation','.research-card'),'🗺 Interactive Maps, Timeline & Media','Biblical locations, timelines, cultural concepts, and 3D terrain integration.'),
+      culture:()=>{moveToModal(cardFor('advShowMapLocation','.research-card'),'▥ Cultural Context','Use the Cultural Concept Locator inside the maps/media workspace.');setTimeout(()=>$('advCultureConcept')?.scrollIntoView({block:'center'}),80)},
+      'ai-search':()=>moveToModal(cardFor('advRunSmartSearch','.research-card'),'✨ AI Smart Search','Natural-language research across Scripture, sermon research, and connected library resources.'),
+      workspace:()=>moveToModal(cardFor('advWorkspaceProfileName','.research-card'),'🧩 Custom Workspaces & Resource Prioritization','Save preferred commentaries, translations, and sermon research profiles.'),
+      people:()=>moveToModal(cardFor('advPeoplePlaces'),'👥 People • Places • Events','Record and study people, places, events, journeys, and historical connections.'),
+      context:()=>moveToModal(cardFor('advContextExplorer'),'🔎 Context Explorer','Immediate, chapter, book, historical, author, and audience context.'),
+      points:()=>moveToModal(cardFor('advPoint1'),'🧱 Advanced Point Builder','Develop sermon points, supporting texts, illustrations, applications, and transitions.'),
+      theme:()=>moveToModal(cardFor('advThemeTracker'),'🧵 Theme Tracker','Trace the sermon theme through Scripture.'),
+      illustrations:()=>moveToModal(cardFor('advIllustrationBank'),'💡 Illustrations & Examples Bank','Keep illustrations and examples organized while Scripture stays primary.'),
+      application:()=>moveToModal(cardFor('advApplicationBuilder'),'❤️ Application Builder','Connect biblical truth to belief, choices, relationships, prayer, and daily life.'),
+      transitions:()=>moveToModal(cardFor('advTransitions'),'🌉 Transitions','Plan clear movement between introduction, points, and conclusion.'),
+      questions:()=>moveToModal(cardFor('advQuestionsObjections'),'❓ Questions / Objections','Prepare clear biblical answers to likely questions and misunderstandings.'),
+      invitation:()=>moveToModal(cardFor('advInvitation'),'🗣 Invitation / Response','Plan the listener response to the biblical message.'),
+      prayer:()=>moveToModal(cardFor('advPrayerJournal'),'🙏 Prayer & Preparation Journal','Keep prayer, direction, and preparation reflections together.'),
+      delivery:()=>moveToModal(cardFor('advDeliveryNotes'),'🎙 Speaker / Delivery Notes','Pauses, emphasis, visual aids, pronunciation, and delivery reminders.'),
+      sources:()=>moveToModal(cardFor('advSourceNotes'),'📝 Quotations / Source Notes','Keep quotations, authors, links, references, and verification notes.'),
+      'research-notes':()=>moveToModal(cardFor('advResearchNotes'),'📚 Commentary / Research Notes','Collect commentary observations and research notes.'),
+      'commentary-research':()=>moveToModal(cardFor('advResearchNotes'),'📚 Commentary / Research Notes','Collect commentary observations and research notes.'),
+      'exegetical-notes':()=>moveToModal(cardFor('advExegetical'),'🔬 Exegetical Research Notes','Store grammatical, contextual, structural, and textual observations.'),
+      'language-notes':()=>moveToModal(cardFor('advOriginalLanguage'),'🔤 Hebrew / Greek Findings','Store lemmas, definitions, occurrences, and language observations.'),
+      'research-library':()=>moveToModal(cardFor('advSaveLibraryItem'),'📖 Sermon Research Library','Save research items separately while developing the sermon.'),
+      history:()=>moveToModal(cardFor('advRecordHistory'),'📅 Sermon Preparation History','Record preparation sessions and return to previous work.'),
+      collections:()=>moveToModal(cardFor('advSaveCollection'),'📂 Scripture Collections','Build reusable Scripture collections for sermons and themes.'),
+      templates:()=>moveToModal(cardFor('advTemplatePreset'),'🧩 Sermon Templates','Load expository, topical, doctrinal, evangelistic, or character-study structures.'),
+      time:()=>moveToModal(cardFor('advSpeakingRate'),'⏱ Preaching Time Estimator','Estimate sermon delivery time from your current manuscript.'),
+      'final-review':()=>moveToModal(cardFor('reviewScripture'),'✅ Final Sermon Review','Review Scripture support, context, clarity, application, references, and response.'),
+      export:()=>moveToModal(cardFor('advCopyFullSermon'),'🖨 Export / Copy','Copy the full sermon development package or print/save it as PDF.'),
+      save:()=>moveToModal($('saveSermonButton')?.closest('.section'),'💾 Sermon Controls','Save, load, delete, print, or clear sermons.'),
+      books:openBooks
+    };
+    (map[name]||map.ai)();
+  }
+
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(boot,60));else setTimeout(boot,60);
+})();
 </script>
 </body>
 </html>
