@@ -13425,8 +13425,18 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
 
   function isVerseHighlighted(state){
     if(!state?.reference)return false;
-    return readJsonStore('biblemastery_highlights')
-      .some(x=>(typeof x==='string'?x:x.reference)===state.reference);
+
+    const inArray=readJsonStore('biblemastery_highlights')
+      .some(x=>(typeof x==='string'?x:x?.reference)===state.reference);
+
+    const legacyKey=
+      'biblemastrey_personal_highlight_'+
+      state.bookName+'_'+state.chapterNumber+'_'+state.verseNumber;
+
+    let legacy=false;
+    try{legacy=localStorage.getItem(legacyKey)==='true'}catch(_){}
+
+    return inArray || legacy;
   }
 
   function updateHighlightButton(state){
@@ -13441,13 +13451,27 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
     if(!readerDisplay)return;
     const saved=new Set(
       readJsonStore('biblemastery_highlights')
-        .map(x=>typeof x==='string'?x:x.reference)
+        .map(x=>typeof x==='string'?x:x?.reference)
         .filter(Boolean)
     );
+
     qsa('[data-reader-verse]',readerDisplay).forEach(el=>{
       const s=verseStateForIndex(el.dataset.readerVerse);
-      el.classList.toggle('sn-verse-highlighted',!!(s&&saved.has(s.reference)));
+      if(!s)return;
+
+      const legacyKey=
+        'biblemastrey_personal_highlight_'+
+        s.bookName+'_'+s.chapterNumber+'_'+s.verseNumber;
+
+      let legacy=false;
+      try{legacy=localStorage.getItem(legacyKey)==='true'}catch(_){}
+
+      el.classList.toggle(
+        'sn-verse-highlighted',
+        saved.has(s.reference) || legacy
+      );
     });
+
     updateHighlightButton(verseActionState);
   }
 
@@ -13494,35 +13518,53 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
     }
   });
 
-  readerDisplay?.addEventListener('click',e=>{
-    const verseEl=e.target.closest('[data-reader-verse]');
-    if(!verseEl)return;
+  /* Robust verse click handling:
+     open the action popup first, then synchronize the verse selector.
+     Some reader change handlers rebuild the verse DOM synchronously, so
+     opening after dispatching "change" can leave us with a dead element. */
+  document.addEventListener('click',e=>{
+    const verseEl=e.target.closest?.('[data-reader-verse]');
+    if(!verseEl || !readerDisplay?.contains(verseEl))return;
+
     e.preventDefault();
     e.stopPropagation();
 
-    const idx=verseEl.dataset.readerVerse;
+    const idx=String(verseEl.dataset.readerVerse ?? '0');
     const state=verseStateForIndex(idx);
     if(!state)return;
 
-    if(readerVerseSelect && readerVerseSelect.value!==String(idx)){
-      readerVerseSelect.value=String(idx);
-      readerVerseSelect.dispatchEvent(new Event('change',{bubbles:true}));
-    }
-
-    // Open immediately so clicking the same verse again always works.
+    // Open immediately on the element the user actually clicked.
     openVerseActions(verseEl,state);
 
-    // Refresh the other study panels without depending on the refresh to open this popup.
-    setTimeout(()=>{
-      refreshAll();
-      applySavedHighlights();
-      const current=qsa('[data-reader-verse]',readerDisplay)
-        .find(el=>String(el.dataset.readerVerse)===String(idx));
-      if(current && !verseActionPopover.hidden){
+    // Keep the selector in sync, but do the potentially destructive change
+    // after the popup/state have already been established.
+    if(readerVerseSelect){
+      const changed=readerVerseSelect.value!==idx;
+      readerVerseSelect.value=idx;
+
+      if(changed){
+        setTimeout(()=>{
+          readerVerseSelect.dispatchEvent(new Event('change',{bubbles:true}));
+
+          // If the reader was rebuilt, attach the popup to the replacement verse.
+          setTimeout(()=>{
+            const current=readerDisplay?.querySelector(`[data-reader-verse="${CSS.escape(idx)}"]`);
+            if(current && !verseActionPopover.hidden){
+              verseActionTarget=current;
+              positionVersePopover(current);
+              applySavedHighlights();
+            }
+            refreshAll();
+          },30);
+        },0);
+      }else{
+        // Clicking the same verse again must still reopen/reposition the popup.
+        const current=readerDisplay?.querySelector(`[data-reader-verse="${CSS.escape(idx)}"]`) || verseEl;
         verseActionTarget=current;
         positionVersePopover(current);
+        applySavedHighlights();
       }
-    },20);
+    }
   },true);
 
   $('snVerseHighlight')?.addEventListener('click',e=>{
@@ -13533,10 +13575,17 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
     if(!s)return;
 
     let items=readJsonStore('biblemastery_highlights');
-    const exists=items.some(x=>(typeof x==='string'?x:x.reference)===s.reference);
+    const same=x=>(typeof x==='string'?x:x?.reference)===s.reference;
+    const exists=isVerseHighlighted(s);
+
+    // Mirror the older Personal Study highlight key as well.
+    const legacyKey=
+      'biblemastrey_personal_highlight_'+
+      s.bookName+'_'+s.chapterNumber+'_'+s.verseNumber;
 
     if(exists){
-      items=items.filter(x=>(typeof x==='string'?x:x.reference)!==s.reference);
+      items=items.filter(x=>!same(x));
+      try{localStorage.removeItem(legacyKey)}catch(_){}
     }else{
       items.push({
         reference:s.reference,
@@ -13544,12 +13593,21 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
         translation:readerTranslationSelect?.value||'KJV',
         savedAt:new Date().toISOString()
       });
+      try{localStorage.setItem(legacyKey,'true')}catch(_){}
     }
 
     if(writeJsonStore('biblemastery_highlights',items)){
       applySavedHighlights();
       updateHighlightButton(s);
       $('snVerseActionStatus').textContent=exists?'Highlight removed.':'Verse highlighted.';
+
+      // Keep the popup open and anchored after either action.
+      const idx=String(s.vi);
+      const current=readerDisplay?.querySelector(`[data-reader-verse="${CSS.escape(idx)}"]`);
+      if(current){
+        verseActionTarget=current;
+        positionVersePopover(current);
+      }
     }
   });
   $('snVerseSave')?.addEventListener('click',()=>{
