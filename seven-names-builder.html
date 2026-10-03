@@ -48,7 +48,7 @@ html,body{margin:0;min-height:100%;background:#f8f0de;color:var(--ink);font-fami
 <body>
 <div class="snr-shell">
   <header class="snr-top">
-    <a class="snr-back" href="main.html">← Back to Main Page</a>
+    <a class="snr-back" href="personal-study.html">← Back to Main Page</a>
     <div class="snr-switch" aria-label="Seven Names One Redeemer builder mode">
       <button id="snrSermonButton" type="button">Sermon Builder</button>
       <button id="snrBibleStudyButton" type="button">Bible Study Builder</button>
@@ -80,6 +80,14 @@ html,body{margin:0;min-height:100%;background:#f8f0de;color:var(--ink);font-fami
   function withSiteBase(html){
     const pageBase=new URL("./",window.location.href).href;
     const baseTag='<base href="'+pageBase+'">';
+
+    /* Old dashboard must never be a destination. */
+    html=html
+      .replaceAll('href="main.html"','href="personal-study.html"')
+      .replaceAll("href='main.html'","href='personal-study.html'")
+      .replaceAll('"main.html"','"personal-study.html"')
+      .replaceAll("'main.html'","'personal-study.html'");
+
     if(/<base\b/i.test(html)){
       return html.replace(/<base\b[^>]*>/i,baseTag);
     }
