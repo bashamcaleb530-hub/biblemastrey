@@ -1,0 +1,13 @@
+<!-- Redemptive Names Software app / iPhone Home Screen icons -->
+<link rel="manifest" href="/manifest.json">
+
+<link rel="icon" type="image/png" sizes="192x192" href="/redemptive-names-software-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/redemptive-names-software-512.png">
+
+<link rel="apple-touch-icon" sizes="192x192" href="/redemptive-names-software-192.png">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Redemptive Names Software">
+
+<meta name="theme-color" content="#7a0d12">
