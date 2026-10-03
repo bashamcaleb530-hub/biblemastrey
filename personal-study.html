@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Personal Bible Study - BibleMastery</title>
+<title>Personal Bible Study - Redemptive Names Software</title>
 <link rel="manifest" href="manifest.json"/>
 <meta name="theme-color" content="#7a0d12"/>
 <!-- Interactive Bible maps: Leaflet + OpenStreetMap -->
@@ -2758,6 +2758,12 @@ body{overflow-x:hidden}
 }
 </style>
 
+<style id="rns-personal-brand-visibility-2026">
+.bm-brand{background:rgba(255,250,236,.82)!important;border:1px solid rgba(183,122,28,.52)!important;border-radius:12px!important;padding:7px 13px!important;box-shadow:0 3px 12px rgba(84,42,10,.15)!important}
+.bm-brand-copy strong{color:#790c11!important;font-size:32px!important;line-height:1.02!important;font-weight:800!important;text-shadow:0 1px 0 rgba(255,255,255,.9)!important}
+.bm-brand-copy small{color:#6b3a1d!important;font-weight:800!important}.bm-brand-mark{color:#9a6500!important}
+@media(max-width:900px){.bm-brand-copy strong{font-size:25px!important}}
+</style>
 </head>
 <body class="bm-layout-dashboard" data-default-view="personal-study">
 
@@ -2767,7 +2773,7 @@ body{overflow-x:hidden}
 <div aria-label="Toggle navigation" class="bm-mobile-menu" id="bmMobileMenu">☰</div>
 <div class="bm-brand">
 <span class="bm-brand-mark" aria-hidden="true">♛</span>
-<span class="bm-brand-copy"><strong>BibleMastery</strong><small>SEVEN NAMES ONE REDEEMER</small></span>
+<span class="bm-brand-copy"><strong>Redemptive Names Software</strong><small>SEVEN NAMES ONE REDEEMER</small></span>
 </div>
 <div class="bm-global-search-wrap">
 <input id="bmGlobalSearch" placeholder="Search Bible (e.g. John 3:16, faith, salvation, parables...)" type="search"/>
@@ -13120,5 +13126,38 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
 })();
 
 </script>
+
+<script id="rns-visible-brand-text-2026">
+(function(){
+  const OLD='BibleMastery', NEW='Redemptive Names Software';
+  function replaceVisible(root){
+    if(!root)return;
+    const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT), a=[];
+    while(w.nextNode())a.push(w.currentNode);
+    a.forEach(n=>{
+      const p=n.parentElement;
+      if(!p||/^(SCRIPT|STYLE|NOSCRIPT|CODE|PRE)$/i.test(p.tagName))return;
+      if(n.nodeValue&&n.nodeValue.includes(OLD))n.nodeValue=n.nodeValue.split(OLD).join(NEW);
+    });
+    if(root.querySelectorAll)root.querySelectorAll('[title],[placeholder],[aria-label]').forEach(el=>{
+      ['title','placeholder','aria-label'].forEach(k=>{
+        const v=el.getAttribute(k);
+        if(v&&v.includes(OLD))el.setAttribute(k,v.split(OLD).join(NEW));
+      });
+    });
+  }
+  function run(){replaceVisible(document.body)}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run,{once:true});else run();
+  const o=new MutationObserver(ms=>ms.forEach(m=>m.addedNodes.forEach(n=>{
+    if(n.nodeType===1)replaceVisible(n);
+    else if(n.nodeType===3&&n.nodeValue&&n.nodeValue.includes(OLD)){
+      const p=n.parentElement;
+      if(p&&!/^(SCRIPT|STYLE|NOSCRIPT|CODE|PRE)$/i.test(p.tagName))n.nodeValue=n.nodeValue.split(OLD).join(NEW);
+    }
+  })));
+  document.addEventListener('DOMContentLoaded',()=>{if(document.body)o.observe(document.body,{childList:true,subtree:true})},{once:true});
+})();
+</script>
+
 </body>
 </html>
