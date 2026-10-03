@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Verse Teaching - BibleMastery</title>
+  <title>Redemptive Verse Teaching - Redemptive Names Software</title>
   <style>
     * { box-sizing: border-box; }
     :root {
@@ -130,10 +130,89 @@
       .reader-nav-button { width: 100%; }
     }
   </style>
+
+  <style id="rns-redemptive-verse-bright-theme-2026">
+    :root{
+      --bg-deep:#fff8e8;
+      --bg-mid:#f7ead1;
+      --panel:#fffdf7;
+      --gold:#c49333;
+      --gold-light:#e6c477;
+      --text:#3b2519;
+      --muted:#765f4c;
+      --line:rgba(196,147,51,.30);
+      --burgundy:#790c11;
+      --burgundy-dark:#5b090e;
+    }
+    body{
+      background:
+        radial-gradient(circle at 50% -110px,rgba(244,188,82,.24),transparent 360px),
+        linear-gradient(180deg,#fffaf0 0%,#f8ecd8 56%,#fff8e8 100%)!important;
+      color:var(--text)!important;
+    }
+    header{
+      background:linear-gradient(180deg,#fffaf0,#f4dfb4)!important;
+      border-bottom:1px solid var(--gold)!important;
+      box-shadow:0 4px 16px rgba(95,54,17,.12)!important;
+    }
+    header h1{
+      color:var(--burgundy)!important;
+      font-family:Georgia,"Times New Roman",serif!important;
+    }
+    header p{color:#6f4d31!important}
+    .back-button{
+      color:var(--burgundy)!important;
+      background:#fffaf0!important;
+      border-color:var(--gold)!important;
+      box-shadow:0 2px 7px rgba(92,52,16,.08)!important;
+    }
+    .back-button:hover{background:#fff2d6!important}
+    .redemptive-page{
+      background:linear-gradient(180deg,#fffdf8,#fff6e6)!important;
+      border:1px solid #d9b56f!important;
+      box-shadow:0 8px 24px rgba(100,58,16,.11)!important;
+    }
+    .page-header h2,h3,.connection-card h3{
+      color:var(--burgundy)!important;
+      font-family:Georgia,"Times New Roman",serif!important;
+    }
+    .page-header p{color:var(--muted)!important}
+    .notice{
+      border-left-color:var(--gold)!important;
+      background:#fff2d7!important;
+      color:#523727!important;
+    }
+    .teaching-card,.connection-card{
+      background:linear-gradient(180deg,#fffdf8,#fff8ea)!important;
+      border:1px solid #ddbd7b!important;
+      box-shadow:0 4px 14px rgba(100,58,16,.07)!important;
+    }
+    .badge{
+      color:#fffaf0!important;
+      background:linear-gradient(180deg,#941d27,#700c13)!important;
+      border:1px solid #b98739!important;
+    }
+    .teaching-text{color:#4d3628!important}
+    .verse-text{
+      background:#fff8e5!important;
+      border:1px solid #e1c58d!important;
+      color:#3b2519!important;
+    }
+    .reader-nav-button{
+      color:#fffaf0!important;
+      background:linear-gradient(180deg,#941d27,#700c13)!important;
+      border-color:#b98739!important;
+    }
+    .reader-nav-button:hover:not(:disabled){
+      background:linear-gradient(180deg,#a82933,#7c1017)!important;
+    }
+    .error{color:#8a1c1c!important}
+  </style>
+
 </head>
 <body>
   <header>
-    <h1>BibleMastery</h1>
+    <h1>Redemptive Names Software</h1>
     <p>Seven Redemptive Names of God — Verse Teaching</p>
   </header>
 
@@ -922,8 +1001,25 @@
       };
     });
 
-    // Genesis 16 has not yet been assigned a curated Redemptive Name connection.
-    // Leave it open until Caleb teaches the chapter verse by verse.
+    // -------------------------
+    // GENESIS 16 — Caleb's teaching
+    // -------------------------
+
+    registerRange(16, 7, 9, ["shammah"], function(verseNumber) {
+      return {
+        shammah: pair(
+          "The angel of the LORD found Hagar in the wilderness, spoke directly to her, and gave her direction. This connects with Jehovah-Shammah because the Lord was there with Hagar in a place where she could easily have felt unseen, alone, and forgotten.",
+          "When you feel overlooked or alone, remember that God sees you and is present. Do not assume that isolation means He has abandoned you. Stay open to His direction and follow what He makes clear, even when the next step requires trust and obedience."
+        )
+      };
+    });
+
+    registerTeaching("genesis 16:10", ["jireh"], {
+      jireh: pair(
+        "The angel of the LORD promised Hagar that her descendants would be multiplied exceedingly. This connects with Jehovah-Jireh because God was not only present with Hagar; He also spoke provision and increase into her future.",
+        "God can provide beyond what you can see in the present moment. When your current circumstances seem small, uncertain, or restricted, remember that His provision is not limited to what is visible today. Trust Him with the future while you follow His direction now."
+      )
+    });
 
     function matchedKeywordsFor(profile, result) {
       const verseText = normalize(result.text);
@@ -1081,7 +1177,7 @@
       const matches = findProfiles(result);
       const connections = document.getElementById("connections");
 
-      document.title = verseReference(result) + " - BibleMastery";
+      document.title = verseReference(result) + " - Redemptive Names Software";
       document.getElementById("reference").textContent = verseReference(result) + " • " + ((state && state.translation) || "KJV");
       document.getElementById("verse").textContent = result.text || "The verse text is not available.";
       connections.innerHTML = "";
