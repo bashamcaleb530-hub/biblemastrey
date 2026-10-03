@@ -714,7 +714,7 @@ body>header,body>.container{display:none!important}
     <div class="tool-grid">
       <div class="tool-box bible-reader-tool">
         <h3>📖 Bible Reader</h3>
-        <p>Read any book, chapter, and verse in all 10 Redemptive Names Software translations.</p>
+        <p>Read any book, chapter, and verse in all 15 Redemptive Names Software translations.</p>
         <div class="reader-shell">
           <div class="reader-controls">
             <div class="reader-control"><label for="readerTranslation">Translation</label><select id="readerTranslation">
@@ -727,7 +727,12 @@ body>header,body>.container{display:none!important}
             <option value="GENEVA1599">Geneva Bible 1599</option>
             <option value="DRA">Douay-Rheims American Edition</option>
             <option value="BSB">Berean Standard Bible</option>
-            <option value="MSB">Majority Standard Bible</option></select></div>
+            <option value="MSB">Majority Standard Bible</option>
+            <option value="BBE">Bible in Basic English</option>
+            <option value="DBY">Darby Translation</option>
+            <option value="WEBSTER">Noah Webster Bible</option>
+            <option value="WMB">World Messianic Bible</option>
+            <option value="RV">Revised Version</option></select></div>
             <div class="reader-control"><label for="readerBook">Book</label><select id="readerBook"><option value="">Choose a book</option></select></div>
             <div class="reader-control"><label for="readerChapter">Chapter</label><select id="readerChapter"><option value="">Choose a chapter</option></select></div>
             <div class="reader-control"><label for="readerVerse">Verse</label><select id="readerVerse"><option value="">All verses</option></select></div>
@@ -782,7 +787,12 @@ body>header,body>.container{display:none!important}
             <option value="GENEVA1599">Geneva Bible 1599</option>
             <option value="DRA">Douay-Rheims American Edition</option>
             <option value="BSB">Berean Standard Bible</option>
-            <option value="MSB">Majority Standard Bible</option></select></div>
+            <option value="MSB">Majority Standard Bible</option>
+            <option value="BBE">Bible in Basic English</option>
+            <option value="DBY">Darby Translation</option>
+            <option value="WEBSTER">Noah Webster Bible</option>
+            <option value="WMB">World Messianic Bible</option>
+            <option value="RV">Revised Version</option></select></div>
           <div><label for="parallelTranslation2">Version 2</label><select id="parallelTranslation2">
             <option value="KJV">King James Version (KJV)</option>
             <option value="KJV1611">King James Version 1611</option>
@@ -793,7 +803,12 @@ body>header,body>.container{display:none!important}
             <option value="GENEVA1599">Geneva Bible 1599</option>
             <option value="DRA">Douay-Rheims American Edition</option>
             <option value="BSB">Berean Standard Bible</option>
-            <option value="MSB">Majority Standard Bible</option></select></div>
+            <option value="MSB">Majority Standard Bible</option>
+            <option value="BBE">Bible in Basic English</option>
+            <option value="DBY">Darby Translation</option>
+            <option value="WEBSTER">Noah Webster Bible</option>
+            <option value="WMB">World Messianic Bible</option>
+            <option value="RV">Revised Version</option></select></div>
           <div><label for="parallelTranslation3">Version 3</label><select id="parallelTranslation3">
             <option value="KJV">King James Version (KJV)</option>
             <option value="KJV1611">King James Version 1611</option>
@@ -804,7 +819,12 @@ body>header,body>.container{display:none!important}
             <option value="GENEVA1599">Geneva Bible 1599</option>
             <option value="DRA">Douay-Rheims American Edition</option>
             <option value="BSB">Berean Standard Bible</option>
-            <option value="MSB">Majority Standard Bible</option></select></div>
+            <option value="MSB">Majority Standard Bible</option>
+            <option value="BBE">Bible in Basic English</option>
+            <option value="DBY">Darby Translation</option>
+            <option value="WEBSTER">Noah Webster Bible</option>
+            <option value="WMB">World Messianic Bible</option>
+            <option value="RV">Revised Version</option></select></div>
         </div>
         <div class="parallel-results"><div id="parallelResult1" class="parallel-card">Choose a verse.</div><div id="parallelResult2" class="parallel-card">Choose a verse.</div><div id="parallelResult3" class="parallel-card">Choose a verse.</div></div>
       </div>
@@ -865,7 +885,12 @@ body>header,body>.container{display:none!important}
             <option value="GENEVA1599">Geneva Bible 1599</option>
             <option value="DRA">Douay-Rheims American Edition</option>
             <option value="BSB">Berean Standard Bible</option>
-            <option value="MSB">Majority Standard Bible</option></select>
+            <option value="MSB">Majority Standard Bible</option>
+            <option value="BBE">Bible in Basic English</option>
+            <option value="DBY">Darby Translation</option>
+            <option value="WEBSTER">Noah Webster Bible</option>
+            <option value="WMB">World Messianic Bible</option>
+            <option value="RV">Revised Version</option></select>
         <label for="concordanceSearch">Search Word</label>
         <input id="concordanceSearch" type="text" placeholder="Example: love">
         <button id="concordanceButton" type="button">Search Concordance</button>
@@ -1955,7 +1980,12 @@ body>header,body>.container{display:none!important}
       ["GENEVA1599", "Geneva Bible 1599"],
       ["DRA", "Douay-Rheims American Edition"],
       ["BSB", "Berean Standard Bible"],
-      ["MSB", "Majority Standard Bible"]
+      ["MSB", "Majority Standard Bible"],
+      ["BBE", "Bible in Basic English"],
+      ["DBY", "Darby Translation"],
+      ["WEBSTER", "Noah Webster Bible"],
+      ["WMB", "World Messianic Bible"],
+      ["RV", "Revised Version"]
     ],
     es: [["VALERA1909", "Reina-Valera 1909"]],
     fr: [["LSG1910", "Louis Segond 1910"]],
@@ -1987,6 +2017,11 @@ body>header,body>.container{display:none!important}
     else if (translation === "DRA") rawBible = await getDRA();
     else if (translation === "BSB") rawBible = await getBSB();
     else if (translation === "MSB") rawBible = await getMSB();
+    else if (translation === "BBE") rawBible = await getBBE();
+    else if (translation === "DBY") rawBible = await getDBY();
+    else if (translation === "WEBSTER") rawBible = await getWEBSTER();
+    else if (translation === "WMB") rawBible = await getWMB();
+    else if (translation === "RV") rawBible = await getRV();
     else rawBible = await getKJV();
 
     return normalizeBibleForReader(rawBible);
@@ -3464,7 +3499,9 @@ body>header,body>.container{display:none!important}
   const ADV_TRANSLATION_LABELS = {
     KJV:"King James Version (KJV)", KJV1611:"King James Version 1611", KJVPLUS:"King James Version Plus (KJV+)",
     YLT:"Young's Literal Translation", WEB:"World English Bible", ASV:"American Standard Version",
-    GENEVA1599:"Geneva Bible 1599", DRA:"Douay-Rheims American Edition", BSB:"Berean Standard Bible", MSB:"Majority Standard Bible"
+    GENEVA1599:"Geneva Bible 1599", DRA:"Douay-Rheims American Edition", BSB:"Berean Standard Bible", MSB:"Majority Standard Bible",
+    BBE:"Bible in Basic English", DBY:"Darby Translation", WEBSTER:"Noah Webster Bible",
+    WMB:"World Messianic Bible", RV:"Revised Version"
   };
 
   function advSelectedReaderLocation(requireVerse){
@@ -4348,11 +4385,125 @@ body>header,body>.container{display:none!important}
 
   function plainText(html){const d=document.createElement('div');d.innerHTML=String(html||'');return (d.textContent||'').replace(/\s+/g,' ').trim();}
   const stopWords=new Set('the and that with from this into unto upon have has had were was are for but not you your his her our out all any who which what when where shall will would should could may might can did does of to in on at by as a an or be been being'.split(' '));
-  function keywords(s){const counts={};String(s||'').toLowerCase().replace(/[^a-z0-9\s]/g,' ').split(/\s+/).forEach(w=>{if(w.length<4||stopWords.has(w))return;counts[w]=(counts[w]||0)+1});return Object.keys(counts).sort((a,b)=>counts[b]-counts[a]).slice(0,12)}
+  function keywords(s){const counts={};String(s||'').toLowerCase().replace(/[^a-z0-9\s]/g,' ').split(/\s+/).forEach(w=>{if(w.length<4||stopWords.has(w))return;counts[w]=(counts[w]||0)+1});return Object.keys(counts).sort((a,b)=>counts[b]-counts[a]).slice(0,18)}
   function theologyBooks(){return Array.isArray(window.BIBLEMASTERY_THEOLOGY_BOOKS)?window.BIBLEMASTERY_THEOLOGY_BOOKS:[];}
-  function rankBooks(s){const ks=keywords((s?.reference||'')+' '+(s?.text||'')),found=[];theologyBooks().forEach((b,bi)=>(b.chapters||[]).forEach((c,ci)=>{const txt=plainText((c.title||'')+' '+(c.text||'')+' '+(c.html||''));let score=0;ks.forEach(k=>{if(txt.toLowerCase().includes(k))score+=2;if(String(c.title||'').toLowerCase().includes(k))score+=4});if(s?.bookName&&txt.toLowerCase().includes(s.bookName.toLowerCase()))score+=3;found.push({b,c,bi,ci,score,txt})}));return found.sort((a,b)=>b.score-a.score).slice(0,2)}
-  function renderBooks(s){const list=$('ssBooksList');if(!list)return;const matches=rankBooks(s);if(!matches.length){list.innerHTML='<div class="ss-book-empty"><div class="ss-empty-icon">📚</div><strong>Books Ready to Read</strong><span>The two best matching theology-book sections will appear here when the Redemptive Names Software theology library is loaded.</span></div>';return;}list.innerHTML=matches.map(m=>`<div class="ss-book-card"><div class="ss-book-cover">${esc(m.b.shortTitle||m.b.title||'THEOLOGY')}</div><div class="ss-book-info"><strong>${esc(m.b.title||'Untitled Book')}</strong><div class="ss-book-author">${esc(m.b.author||'')}</div><div class="ss-book-section">${esc(m.c.title||('Chapter '+(m.ci+1)))}</div><p>${esc(m.txt.slice(0,180))}${m.txt.length>180?'…':''}</p></div><button class="ss-open-book" data-ss-book="${m.bi}" data-ss-chapter="${m.ci}">Open Section</button></div>`).join('');qsa('[data-ss-book]',list).forEach(b=>b.onclick=()=>openBookSection(Number(b.dataset.ssBook),Number(b.dataset.ssChapter)));}
-  function openBookSection(bi,ci){const b=theologyBooks()[bi],c=b?.chapters?.[ci];if(!b||!c)return;openCustom('📚 '+(b.title||'Theology Book'),(b.author||'')+(c.title?' • '+c.title:''),`<article style="max-width:860px;margin:auto;font-family:Georgia,serif;font-size:17px;line-height:1.72"><h2>${esc(c.title||'')}</h2>${c.html||('<p>'+esc(c.text||'')+'</p>')}</article>`)}
+
+  function sermonTopicContext(){
+    const ids=['manualSermonTitle','sermonTitle','mainScripture','advPrimaryPassage','advBigIdea','advThemeTracker','advOutcome','advAudience'];
+    const parts=ids.map(id=>$(id)?.value||'').filter(Boolean);
+    const manual=$('manualSermon')?.value||'';
+    if(manual)parts.push(manual.slice(0,1200));
+    return parts.join(' ');
+  }
+
+  function chapterPassages(c){
+    const rows=[];
+    const html=String(c?.html||'').trim();
+    if(html){
+      const wrap=document.createElement('div');
+      wrap.innerHTML=html;
+      const nodes=Array.from(wrap.querySelectorAll('p,li,blockquote'));
+      nodes.forEach((node,i)=>{
+        const text=(node.textContent||'').replace(/\s+/g,' ').trim();
+        if(text.length>=35)rows.push({text,html:node.outerHTML,index:i});
+      });
+      if(!rows.length){
+        const text=(wrap.textContent||'').replace(/\s+/g,' ').trim();
+        if(text)rows.push({text,html:html,index:0});
+      }
+    }
+    if(!rows.length){
+      const text=String(c?.text||'').trim();
+      const blocks=text.split(/\n\s*\n+/).map(x=>x.replace(/\s+/g,' ').trim()).filter(Boolean);
+      blocks.forEach((block,i)=>rows.push({text:block,html:'<p>'+esc(block)+'</p>',index:i}));
+    }
+    return rows;
+  }
+
+  function scoreBookPassage(text,title,ks,bookName){
+    const low=String(text||'').toLowerCase(), t=String(title||'').toLowerCase();
+    let score=0;
+    ks.forEach(k=>{
+      if(low.includes(k))score+=3;
+      if(t.includes(k))score+=5;
+    });
+    if(bookName&&low.includes(String(bookName).toLowerCase()))score+=3;
+    return score;
+  }
+
+  function rankBooks(s){
+    const context=((s?.reference||'')+' '+(s?.text||'')+' '+sermonTopicContext()).trim();
+    const ks=keywords(context), winners=[];
+    theologyBooks().forEach((b,bi)=>{
+      let best=null;
+      (b.chapters||[]).forEach((c,ci)=>{
+        const passages=chapterPassages(c);
+        passages.forEach((p,pi)=>{
+          const score=scoreBookPassage(p.text,c.title||'',ks,s?.bookName||'');
+          const row={b,c,bi,ci,pi,score,passageText:p.text,passageHtml:p.html,passages};
+          if(!best||row.score>best.score)best=row;
+        });
+      });
+      if(best)winners.push(best);
+    });
+    return winners.sort((a,b)=>b.score-a.score).slice(0,2);
+  }
+
+  function renderBooks(s){
+    const list=$('ssBooksList');if(!list)return;
+    const matches=rankBooks(s);
+    if(!matches.length){
+      list.innerHTML='<div class="ss-book-empty"><div class="ss-empty-icon">📚</div><strong>Books Ready to Read</strong><span>Select a Bible passage or enter your sermon topic and the two strongest connected theology-book passages will appear here.</span></div>';
+      return;
+    }
+    list.innerHTML=matches.map(m=>`
+      <div class="ss-book-card">
+        <div class="ss-book-cover">${esc(m.b.shortTitle||m.b.title||'THEOLOGY')}</div>
+        <div class="ss-book-info">
+          <strong>${esc(m.b.title||'Untitled Book')}</strong>
+          <div class="ss-book-author">${esc(m.b.author||'')}</div>
+          <div class="ss-book-section">${esc(m.c.title||('Chapter '+(m.ci+1)))}</div>
+          <p><strong>Connected passage:</strong> ${esc(m.passageText.slice(0,320))}${m.passageText.length>320?'…':''}</p>
+        </div>
+        <button class="ss-open-book" data-ss-book="${m.bi}" data-ss-chapter="${m.ci}" data-ss-passage="${m.pi}">Read Connected Passage</button>
+      </div>`).join('');
+    qsa('[data-ss-book]',list).forEach(btn=>btn.onclick=()=>openBookPassage(Number(btn.dataset.ssBook),Number(btn.dataset.ssChapter),Number(btn.dataset.ssPassage)));
+  }
+
+  function openBookPassage(bi,ci,pi){
+    const b=theologyBooks()[bi],c=b?.chapters?.[ci];
+    if(!b||!c)return;
+    const passages=chapterPassages(c), p=passages[Math.max(0,Math.min(pi,passages.length-1))];
+    if(!p){openBookSection(bi,ci);return;}
+    const start=Math.max(0,pi-1), end=Math.min(passages.length,pi+2);
+    const contextHtml=passages.slice(start,end).map((x,idx)=>{
+      const actual=start+idx;
+      return actual===pi
+        ? `<div style="padding:16px 18px;border:2px solid #c68a00;border-radius:10px;background:#fff7df;margin:12px 0">${x.html}</div>`
+        : `<div style="padding:8px 4px;margin:8px 0">${x.html}</div>`;
+    }).join('');
+    openCustom(
+      '📚 '+(b.title||'Theology Book'),
+      (b.author||'')+(c.title?' • '+c.title:'')+' • Connected passage',
+      `<article style="max-width:860px;margin:auto;font-family:Georgia,serif;font-size:17px;line-height:1.72">
+         <div style="font-family:Arial,sans-serif;font-size:12px;font-weight:800;color:#7a0d12;margin-bottom:8px">BEST MATCH FOR YOUR CURRENT VERSE / CHAPTER / SERMON TOPIC</div>
+         ${contextHtml}
+         <button id="ssReadFullSection" type="button" class="secondary" style="margin-top:16px">Read Full Section</button>
+       </article>`
+    );
+    const full=$('ssReadFullSection');
+    if(full)full.onclick=()=>openBookSection(bi,ci);
+  }
+
+  function openBookSection(bi,ci){
+    const b=theologyBooks()[bi],c=b?.chapters?.[ci];
+    if(!b||!c)return;
+    openCustom(
+      '📚 '+(b.title||'Theology Book'),
+      (b.author||'')+(c.title?' • '+c.title:''),
+      `<article style="max-width:860px;margin:auto;font-family:Georgia,serif;font-size:17px;line-height:1.72"><h2>${esc(c.title||'')}</h2>${c.html||('<p>'+esc(c.text||'')+'</p>')}</article>`
+    );
+  }
 
   let moved=[];
   function modalBase(title,subtitle){closeModal(true);$('ssModalTitle').textContent=title;$('ssModalSubtitle').textContent=subtitle||'';$('ssModalBody').innerHTML='';$('ssModal').classList.add('open');$('ssModal').setAttribute('aria-hidden','false');document.body.style.overflow='hidden';}
