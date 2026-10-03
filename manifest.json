@@ -1,7 +1,9 @@
 {
+  "id": "/redemptive-names-software",
   "name": "Redemptive Names Software",
   "short_name": "Redemptive Names",
-  "start_url": "/",
+  "description": "Redemptive Names Software",
+  "start_url": "/personal-study.html",
   "scope": "/",
   "display": "standalone",
   "background_color": "#fff9ec",
