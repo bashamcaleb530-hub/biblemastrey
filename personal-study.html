@@ -5,7 +5,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Personal Bible Study - BibleMastery</title>
-<link rel="manifest" href="manifest.json"/>
+<link rel="manifest" href="manifest.json"/>ca
 <meta name="theme-color" content="#7a0d12"/>
 <!-- Interactive Bible maps: Leaflet + OpenStreetMap -->
 <link crossorigin="" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" rel="stylesheet"/>
@@ -1979,15 +1979,23 @@ body{overflow-x:hidden}
 .sn-primary-nav a:hover,.sn-primary-nav button:hover{background:#fff0c8}
 
 /* Control strip: location, translations, quick header actions. */
-.sn-control-strip{display:grid;grid-template-columns:320px minmax(520px,1fr) 460px;gap:8px;align-items:stretch;margin-bottom:8px}
+.sn-control-strip{display:grid;grid-template-columns:minmax(520px,.95fr) minmax(500px,1.05fr) minmax(420px,.82fr);gap:8px;align-items:stretch;margin-bottom:8px}
 .sn-location-controls,.sn-translation-strip,.sn-header-actions{background:rgba(255,254,248,.94);border:1px solid var(--sn-line-soft);border-radius:8px;box-shadow:0 1px 4px rgba(80,45,15,.04);min-width:0}
-.sn-location-controls{display:grid;grid-template-columns:1.25fr .8fr 42px 42px;gap:6px;padding:7px}
-.sn-location-controls select,.sn-location-controls button{height:38px!important;min-height:38px!important;border:1px solid #dbc89f!important;border-radius:5px!important;background:#fffdf7!important;color:#2c1d15!important;padding:0 10px!important}
-.sn-location-controls button{font-size:22px!important;color:var(--sn-maroon)!important;padding:0!important}
-.sn-translation-strip{display:flex;overflow-x:auto;padding:7px}
-.sn-translation-strip button{flex:1 0 58px;min-height:38px!important;height:38px!important;border:1px solid #eadcc0;border-left:0;background:#fffdf8;color:#2f261f;font-weight:700;cursor:pointer}
-.sn-translation-strip button:first-child{border-left:1px solid #eadcc0;border-radius:5px 0 0 5px}.sn-translation-strip button:last-child{border-radius:0 5px 5px 0}
-.sn-translation-strip button.active{background:linear-gradient(180deg,#98171c,#790c11);color:#fff;border-color:#790c11}
+.sn-location-controls{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(90px,.72fr) minmax(90px,.72fr) 38px 38px;gap:6px;padding:7px}
+.sn-select-wrap{position:relative;min-width:0}
+.sn-select-wrap::after{content:"⌄";position:absolute;right:9px;top:50%;transform:translateY(-54%);pointer-events:none;color:var(--sn-maroon);font-size:17px;font-weight:900;line-height:1}
+.sn-location-controls select{width:100%!important;height:38px!important;min-height:38px!important;border:1px solid #dbc89f!important;border-radius:5px!important;background:#fffdf7!important;color:#2c1d15!important;padding:0 30px 0 10px!important;appearance:none!important;-webkit-appearance:none!important;-moz-appearance:none!important;font-weight:700!important}
+.sn-location-controls>button{height:38px!important;min-height:38px!important;border:1px solid #dbc89f!important;border-radius:5px!important;background:#fff8e8!important;color:var(--sn-maroon)!important;padding:0!important;font-size:22px!important;cursor:pointer}
+.sn-location-controls>button:hover{background:#fff0c8!important}
+.sn-translation-strip{display:grid;grid-template-columns:38px minmax(0,1fr) 38px;align-items:stretch;overflow:hidden;padding:0}
+.sn-trans-arrow{min-height:52px!important;height:52px!important;border:0!important;background:#fff8e8!important;color:var(--sn-maroon)!important;font-size:23px!important;font-weight:900!important;cursor:pointer;padding:0!important}
+.sn-trans-arrow:first-child{border-right:1px solid #eadcc0!important}.sn-trans-arrow:last-child{border-left:1px solid #eadcc0!important}
+.sn-trans-arrow:hover{background:#fff0c8!important}
+.sn-translation-track{display:flex;overflow-x:auto;scroll-behavior:smooth;scrollbar-width:none;padding:7px 0}
+.sn-translation-track::-webkit-scrollbar{display:none}
+.sn-translation-track button{flex:0 0 78px;min-height:38px!important;height:38px!important;border:1px solid #eadcc0;border-left:0;background:#fffdf8;color:#2f261f;font-weight:700;cursor:pointer;padding:0 8px;white-space:nowrap}
+.sn-translation-track button:first-child{border-left:1px solid #eadcc0;border-radius:5px 0 0 5px}.sn-translation-track button:last-child{border-radius:0 5px 5px 0}
+.sn-translation-track button.active{background:linear-gradient(180deg,#98171c,#790c11);color:#fff;border-color:#790c11}
 .sn-header-actions{display:grid;grid-template-columns:repeat(6,1fr);overflow:hidden}
 .sn-header-actions button{min-height:52px!important;border:0;border-right:1px solid #ebdcc0;background:#fffdf8;color:#2d2018;cursor:pointer;font-size:11px;padding:4px 3px}
 .sn-header-actions button:last-child{border-right:0}.sn-header-actions button:hover{background:#fff2cd}.sn-header-actions .sn-hi-icon{display:block;font-size:20px;color:var(--sn-maroon);line-height:1.1;margin-bottom:3px}
@@ -2081,7 +2089,7 @@ body{overflow-x:hidden}
 /* Desktop scaling: preserve readability before collapsing. */
 @media(max-width:1380px){
   .bm-brand{min-width:420px!important}.bm-brand-copy strong{font-size:30px!important}
-  .sn-control-strip{grid-template-columns:280px minmax(440px,1fr) 390px}
+  .sn-control-strip{grid-template-columns:minmax(470px,.95fr) minmax(440px,1fr) 390px}
   .sn-reading-grid{grid-template-columns:minmax(320px,.88fr) minmax(460px,1.36fr) minmax(340px,.95fr)}
   .sn-book-card{grid-template-columns:72px minmax(0,1fr)}.sn-book-cover{height:90px}.sn-book-card .sn-open-section{grid-column:2;justify-self:start}
   .sn-bottom-grid{grid-template-columns:minmax(270px,.85fr) minmax(400px,1.25fr) minmax(245px,.7fr) minmax(270px,.82fr)}
@@ -2091,6 +2099,7 @@ body{overflow-x:hidden}
   .sn-control-strip{grid-template-columns:1fr}.sn-header-actions{min-height:54px}.sn-reading-grid,.sn-middle-grid,.sn-bottom-grid{grid-template-columns:1fr 1fr}.sn-books-card{grid-column:1/-1;height:330px}.sn-reader-card,.sn-commentary-card{height:420px}.sn-bottom-grid .sn-card{height:165px}.sn-more-resources{flex-wrap:wrap;height:auto}
 }
 @media(max-width:760px){
+  .sn-location-controls{grid-template-columns:1fr 1fr 1fr 38px 38px}.sn-location-controls .sn-select-wrap:first-child{grid-column:1/-1}.sn-trans-arrow{min-height:48px!important;height:48px!important}
   .bm-topbar{height:70px!important;min-height:70px!important;padding:0 9px!important}.bm-brand{min-width:0!important}.bm-brand-copy strong{font-size:20px!important}.bm-brand-copy small{display:none!important}.bm-global-search-wrap{display:none!important}.bm-top-actions{margin-left:auto}.sn-primary-nav{overflow-x:auto;padding:0}.sn-primary-nav a,.sn-primary-nav button{padding:0 15px;white-space:nowrap}
   .bm-main{padding:6px!important}.sn-reading-grid,.sn-middle-grid,.sn-bottom-grid{display:block}.sn-card{margin-bottom:7px}.sn-reader-card,.sn-commentary-card,.sn-books-card{height:390px}.sn-middle-grid .sn-card,.sn-bottom-grid .sn-card{height:170px}.sn-quick-grid{grid-template-columns:repeat(2,1fr);grid-template-rows:auto;height:auto}.sn-quick-grid button{min-height:54px!important}.sn-modal{padding:8px}.sn-modal-dialog{width:100%;height:94vh}.sn-modal-title{font-size:21px}.sn-modal-body .deep-study-grid,.sn-modal-body .bm-theology-layout,.sn-modal-body .bible-map-layout{grid-template-columns:1fr!important}
 }
@@ -10859,13 +10868,18 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
   dashboard.id = 'snApprovedDashboard';
   dashboard.innerHTML = `
     <div class="sn-control-strip">
-      <div class="sn-location-controls">
-        <select id="snBookSelect" aria-label="Bible book"></select>
-        <select id="snChapterSelect" aria-label="Bible chapter"></select>
-        <button id="snPrevChapter" type="button" title="Previous chapter">‹</button>
-        <button id="snNextChapter" type="button" title="Next chapter">›</button>
+      <div class="sn-location-controls" aria-label="Bible location">
+        <div class="sn-select-wrap"><select id="snBookSelect" aria-label="Bible book"></select></div>
+        <div class="sn-select-wrap"><select id="snChapterSelect" aria-label="Bible chapter"></select></div>
+        <div class="sn-select-wrap"><select id="snVerseSelect" aria-label="Bible verse"></select></div>
+        <button id="snPrevChapter" type="button" title="Previous chapter" aria-label="Previous chapter">‹</button>
+        <button id="snNextChapter" type="button" title="Next chapter" aria-label="Next chapter">›</button>
       </div>
-      <div class="sn-translation-strip" id="snTranslationStrip"></div>
+      <div class="sn-translation-strip" aria-label="Bible translations">
+        <button class="sn-trans-arrow" id="snTransPrev" type="button" title="Previous translations" aria-label="Previous translations">‹</button>
+        <div class="sn-translation-track" id="snTranslationStrip"></div>
+        <button class="sn-trans-arrow" id="snTransNext" type="button" title="More translations" aria-label="More translations">›</button>
+      </div>
       <div class="sn-header-actions">
         <button type="button" data-sn-tool="search"><span class="sn-hi-icon">⌕</span>Search</button>
         <button type="button" data-sn-tool="crossrefs"><span class="sn-hi-icon">⛓</span>Cross-Refs</button>
@@ -10987,7 +11001,7 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
   const readerNext = $('readerNextButton');
   const readerDisplay = $('readerDisplay');
 
-  const snBook = $('snBookSelect'), snChapter = $('snChapterSelect'), snTranslations = $('snTranslationStrip');
+  const snBook = $('snBookSelect'), snChapter = $('snChapterSelect'), snVerse = $('snVerseSelect'), snTranslations = $('snTranslationStrip');
 
   function syncSelectOptions(source, target){
     if(!source || !target) return;
@@ -10996,9 +11010,10 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
     target.value = source.value || old;
   }
   function syncLocationControls(){
-    syncSelectOptions(readerBookSelect, snBook); syncSelectOptions(readerChapterSelect, snChapter);
+    syncSelectOptions(readerBookSelect, snBook); syncSelectOptions(readerChapterSelect, snChapter); syncSelectOptions(readerVerseSelect, snVerse);
     if(snBook && readerBookSelect) snBook.value = readerBookSelect.value;
     if(snChapter && readerChapterSelect) snChapter.value = readerChapterSelect.value;
+    if(snVerse && readerVerseSelect) snVerse.value = readerVerseSelect.value;
     const name = readerBookSelect?.selectedOptions?.[0]?.textContent || 'Bible Reader';
     const chapter = readerChapterSelect?.selectedOptions?.[0]?.textContent || '';
     const trans = readerTranslationSelect?.value || '';
@@ -11014,11 +11029,20 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
     }));
   }
   renderTranslationButtons();
+  function slideTranslations(direction){
+    if(!snTranslations) return;
+    const amount=Math.max(220,Math.round(snTranslations.clientWidth*.72));
+    snTranslations.scrollBy({left:direction*amount,behavior:'smooth'});
+  }
+  $('snTransPrev')?.addEventListener('click',()=>slideTranslations(-1));
+  $('snTransNext')?.addEventListener('click',()=>slideTranslations(1));
   setTimeout(syncLocationControls,300);
   if(readerBookSelect) new MutationObserver(()=>syncLocationControls()).observe(readerBookSelect,{childList:true,subtree:true});
   if(readerChapterSelect) new MutationObserver(()=>syncLocationControls()).observe(readerChapterSelect,{childList:true,subtree:true});
+  if(readerVerseSelect) new MutationObserver(()=>syncLocationControls()).observe(readerVerseSelect,{childList:true,subtree:true});
   snBook?.addEventListener('change',()=>{readerBookSelect.value=snBook.value;readerBookSelect.dispatchEvent(new Event('change',{bubbles:true}));setTimeout(()=>{syncLocationControls();refreshAll();},150)});
   snChapter?.addEventListener('change',()=>{readerChapterSelect.value=snChapter.value;readerChapterSelect.dispatchEvent(new Event('change',{bubbles:true}));setTimeout(()=>{syncLocationControls();refreshAll();},150)});
+  snVerse?.addEventListener('change',()=>{readerVerseSelect.value=snVerse.value;readerVerseSelect.dispatchEvent(new Event('change',{bubbles:true}));setTimeout(()=>{syncLocationControls();refreshAll();},80)});
   $('snPrevChapter')?.addEventListener('click',()=>{readerPrev?.click();setTimeout(()=>{syncLocationControls();refreshAll();},160)});
   $('snNextChapter')?.addEventListener('click',()=>{readerNext?.click();setTimeout(()=>{syncLocationControls();refreshAll();},160)});
 
