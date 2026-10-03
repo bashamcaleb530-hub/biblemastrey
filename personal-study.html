@@ -11499,6 +11499,24 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
   $('snRegularMode')?.addEventListener('click',showRegular); $('snChronologyMode')?.addEventListener('click',showChronology);
 
   /* ---------- Current reader helpers ---------- */
+  function snChapterNumber(chapter,index){
+    if(!chapter)return index+1;
+    return chapter.chapter ?? chapter.number ?? chapter.chapterNumber ?? (index+1);
+  }
+  function snVerseNumber(verse,index){
+    if(!verse)return index+1;
+    return verse.number ?? verse.verse ?? verse.verseNumber ?? (index+1);
+  }
+  function snBibleBooks(bible){
+    return bible && Array.isArray(bible.books) ? bible.books : [];
+  }
+  function snBibleChapters(book){
+    return book && Array.isArray(book.chapters) ? book.chapters : [];
+  }
+  function snBibleVerses(chapter){
+    return chapter && Array.isArray(chapter.verses) ? chapter.verses : [];
+  }
+
   function selectedReaderVerseIndex(){
     if(!readerVerseSelect) return 0;
     return readerVerseSelect.value === '' ? 0 : Number(readerVerseSelect.value)||0;
@@ -11562,8 +11580,8 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
 
       const verse = verses[vi];
       const bookName = getBookName(book);
-      const ch = chapterNumber(chapter, ci);
-      const vn = verseNumber(verse, vi);
+      const ch = snChapterNumber(chapter, ci);
+      const vn = snVerseNumber(verse, vi);
 
       return {
         book, chapter, verse, vi,
@@ -11626,7 +11644,7 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
       const verses=Array.isArray(base.chapter.verses)?base.chapter.verses:[];
       const vi=Math.max(0,Math.min(Number(index)||0,verses.length-1));
       const verse=verses[vi];
-      const vn=verseNumber(verse,vi);
+      const vn=snVerseNumber(verse,vi);
       return {
         vi,
         bookName:base.bookName,
@@ -11744,7 +11762,7 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
       .observe(readerDisplay,{childList:true,subtree:true});
   }
 
-  /* ---------- Commentary companion ---------- */
+  /* ---------- Commentary companion — Bible Reader engine ---------- */
   const commentaryChoices = [
     ['matthew-henry-complete','Matthew Henry'],
     ['john-gill','John Gill'],
@@ -11756,18 +11774,19 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
 
   let commentaryChoiceIndex = 0;
   let primaryCommentary = commentaryChoices[0][0];
+  let snReaderCommentaryRequestId = 0;
 
   function renderCommentarySlider(){
     const tabs=$('snCommentaryTabs');
     if(!tabs)return;
+
     tabs.innerHTML=commentaryChoices.map(([key,name],i)=>
       `<button type="button" data-cmt="${key}" data-cmt-index="${i}" class="${i===commentaryChoiceIndex?'active':''}">${esc(name)}</button>`
     ).join('');
 
     qsa('[data-cmt]',tabs).forEach(btn=>{
       btn.addEventListener('click',()=>{
-        const index=Number(btn.dataset.cmtIndex)||0;
-        selectCommentary(index,true);
+        selectCommentary(Number(btn.dataset.cmtIndex)||0,true);
       });
     });
   }
@@ -11798,7 +11817,112 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
   $('snCommentaryNext')?.addEventListener('click',()=>selectCommentary(commentaryChoiceIndex+1,true));
   $('snCommentaryRefresh')?.addEventListener('click',()=>refreshCommentary(true));
 
-  let commentaryToken=0;
+  function snCommentaryBookId(bookName){
+    const key=String(bookName||'').trim().toUpperCase();
+    return (typeof bookIdMap!=='undefined' && bookIdMap[key]) ? bookIdMap[key] : '';
+  }
+
+  async function snFetchReaderCommentaryChapter(state,key,forceReload=false){
+    const apiId=(typeof commentaryIds!=='undefined' && commentaryIds[key]) ? commentaryIds[key] : '';
+    const bookId=snCommentaryBookId(state.bookName);
+
+    if(!apiId)throw new Error('Commentary source is not configured.');
+    if(!bookId)throw new Error('Bible book is not configured for commentary.');
+
+    const cacheKey='approved-reader-commentary|'+apiId+'|'+bookId+'|'+state.chapterNumber;
+
+    if(forceReload && typeof commentaryCache!=='undefined'){
+      delete commentaryCache[cacheKey];
+    }
+
+    if(typeof commentaryCache!=='undefined' && commentaryCache[cacheKey]){
+      return commentaryCache[cacheKey];
+    }
+
+    const url=
+      COMMENTARY_API+
+      apiId+'/'+
+      encodeURIComponent(bookId)+'/'+
+      encodeURIComponent(String(state.chapterNumber))+
+      '.simple.json';
+
+    const response=await fetch(url,{cache:forceReload?'reload':'default'});
+
+    if(response.status===404){
+      return {unavailable:true};
+    }
+    if(!response.ok){
+      throw new Error('Commentary request failed: '+response.status);
+    }
+
+    const data=await response.json();
+    const chapterData=
+      data && data.chapter ? data :
+      (data && data.data && data.data.chapter ? data.data : data);
+
+    if(!chapterData || !chapterData.chapter || !Array.isArray(chapterData.chapter.content)){
+      throw new Error('Commentary response was invalid.');
+    }
+
+    if(typeof commentaryCache!=='undefined'){
+      commentaryCache[cacheKey]=chapterData;
+    }
+    return chapterData;
+  }
+
+  function snCommentaryName(key){
+    if(typeof commentaryNames!=='undefined' && commentaryNames[key]){
+      return commentaryNames[key];
+    }
+    return (commentaryChoices.find(x=>x[0]===key)||[])[1]||key;
+  }
+
+  function snChapterCommentaryHtml(state,key,chapterData){
+    const sourceName=snCommentaryName(key);
+
+    if(key==='matthew-henry-complete'){
+      const text=flattenWholeCommentaryChapter(chapterData);
+      return text
+        ? `<div class="sn-commentary-entry"><h4>📖 ${esc(sourceName)} — ${esc(state.bookName+' '+state.chapterNumber)}</h4><p>${esc(text)}</p></div>`
+        : `<div class="sn-commentary-loading">No commentary text was returned for this chapter.</div>`;
+    }
+
+    const entries=extractCommentaryEntries(chapterData);
+    const explicitVerse=
+      (readerVerseSelect && readerVerseSelect.value!=='') ||
+      (snVerse && snVerse.value!=='');
+
+    if(explicitVerse){
+      const verseText=findCommentaryText(entries,state.verseNumber);
+      if(verseText){
+        return `<div class="sn-commentary-entry"><h4>📖 ${esc(sourceName)} — ${esc(state.reference)}</h4><p>${esc(verseText)}</p></div>`;
+      }
+
+      // Some commentaries are chapter/section based rather than exact-verse based.
+      const whole=flattenWholeCommentaryChapter(chapterData);
+      if(whole){
+        return `<div class="sn-commentary-entry"><h4>📖 ${esc(sourceName)} — ${esc(state.bookName+' '+state.chapterNumber)}</h4><p>${esc(whole)}</p></div>`;
+      }
+    }
+
+    const usable=entries
+      .map(x=>({
+        number:x.number,
+        text:String(x.text||'').trim()
+      }))
+      .filter(x=>x.text);
+
+    if(usable.length){
+      return usable.map(item=>
+        `<div class="sn-commentary-entry"><h4>${esc(state.bookName+' '+state.chapterNumber+':'+item.number)}</h4><p>${esc(item.text)}</p></div>`
+      ).join('');
+    }
+
+    const whole=flattenWholeCommentaryChapter(chapterData);
+    return whole
+      ? `<div class="sn-commentary-entry"><h4>📖 ${esc(sourceName)} — ${esc(state.bookName+' '+state.chapterNumber)}</h4><p>${esc(whole)}</p></div>`
+      : `<div class="sn-commentary-loading">No commentary text was returned for this chapter.</div>`;
+  }
 
   async function refreshCommentary(forceReload=false){
     const state=currentReaderState();
@@ -11811,74 +11935,40 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
       return;
     }
 
-    const token=++commentaryToken;
-    const sourceName=(commentaryChoices.find(x=>x[0]===primaryCommentary)||[])[1]||primaryCommentary;
+    const requestId=++snReaderCommentaryRequestId;
+    const sourceName=snCommentaryName(primaryCommentary);
 
     $('snCommentaryHeading').textContent='Commentary — '+sourceName;
     out.innerHTML=
-      `<div class="sn-commentary-reference">${esc(state.reference)}</div>`+
-      `<div class="sn-commentary-verse">“${esc(state.text)}”</div>`+
+      `<div class="sn-commentary-reference">${esc(state.bookName+' '+state.chapterNumber)}</div>`+
       `<div class="sn-commentary-loading">Loading ${esc(sourceName)}…</div>`;
 
     try{
-      // IMPORTANT: Use the original Personal Study commentary engine.
-      // This is the engine already used by the existing Commentary tool.
-      if(typeof loadSelectedCommentary==='function' &&
-         typeof commentarySelect!=='undefined' &&
-         typeof commentaryContent!=='undefined'){
+      const chapterData=await snFetchReaderCommentaryChapter(
+        state,
+        primaryCommentary,
+        forceReload
+      );
 
-        // Give the original engine the verse currently displayed in the Bible Reader.
-        currentVerses=[{
-          book:state.bookName,
-          chapter:state.chapterNumber,
-          verse:state.verseNumber,
-          text:state.text
-        }];
+      if(requestId!==snReaderCommentaryRequestId)return;
 
-        selectedCommentary=primaryCommentary;
-        commentarySelect.value=primaryCommentary;
-
-        if(forceReload){
-          try{
-            const apiId=commentaryIds[primaryCommentary];
-            const groupKey=apiId+'|';
-            Object.keys(commentaryCache||{}).forEach(k=>{
-              if(k.startsWith(groupKey))delete commentaryCache[k];
-            });
-          }catch(e){}
-        }
-
-        await loadSelectedCommentary();
-
-        if(token!==commentaryToken)return;
-
-        const originalHtml=commentaryContent.innerHTML||'';
-        if(originalHtml.trim()){
-          out.innerHTML=originalHtml;
-        }else{
-          out.innerHTML='<div class="sn-error">No commentary text was returned for this passage.</div>';
-        }
-        return;
-      }
-
-      // Fallback to the advanced commentary engine if the original engine is unavailable.
-      if(typeof masterFetchCommentary==='function'){
-        const result=await masterFetchCommentary(state.reference,primaryCommentary);
-        if(token!==commentaryToken)return;
+      if(chapterData && chapterData.unavailable){
         out.innerHTML=
-          `<div class="sn-commentary-reference">${esc(state.reference)}</div>`+
-          `<div class="sn-commentary-entry"><h4>📖 ${esc(result.name||sourceName)}</h4><p>${esc(result.text||'No commentary text was returned.')}</p></div>`;
+          `<div class="sn-commentary-reference">${esc(state.bookName+' '+state.chapterNumber)}</div>`+
+          `<div class="sn-commentary-loading">${esc(sourceName)} has no material for this chapter. Use the arrows to choose another commentary.</div>`;
         return;
       }
 
-      throw new Error('Commentary engine unavailable');
+      out.innerHTML=
+        `<div class="sn-commentary-reference">${esc(state.bookName+' '+state.chapterNumber)}</div>`+
+        snChapterCommentaryHtml(state,primaryCommentary,chapterData);
 
     }catch(err){
-      console.error('Personal Study commentary error:',err);
-      if(token!==commentaryToken)return;
+      if(requestId!==snReaderCommentaryRequestId)return;
+      console.error('Bible Reader commentary error:',err);
       out.innerHTML=
-        `<div class="sn-commentary-reference">${esc(state.reference)}</div>`+
-        `<div class="sn-error">This commentary could not load. Press Refresh or use the arrows to try another commentary.</div>`;
+        `<div class="sn-commentary-reference">${esc(state.bookName+' '+state.chapterNumber)}</div>`+
+        `<div class="sn-error">Could not load ${esc(sourceName)}. Press Refresh or use the arrows to try another commentary.</div>`;
     }
   }
 
@@ -11945,7 +12035,7 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
     try{
       if(typeof loadBibleTranslation!=='function') throw new Error('Bible engine unavailable');
       const plus=await loadBibleTranslation('KJVPLUS'); if(token!==wordToken)return;
-      const books=getBibleBooks(plus), book=books[state.bookIndex], chapter=getBibleChapters(book)[state.chapterIndex], verse=getBibleVerses(chapter)[state.vi];
+      const books=snBibleBooks(plus), book=books[state.bookIndex], chapter=snBibleChapters(book)[state.chapterIndex], verse=snBibleVerses(chapter)[state.vi];
       const raw=String(verse?.text||verse?.content||verse?.verse||''); const prefix=state.bookIndex<39?'H':'G'; const m=raw.match(/<S>(\d+)<\/S>/i)||raw.match(/\b([HG]\d+)\b/i); const key=m?(m[1].match(/^[HG]/i)?m[1].toUpperCase():prefix+m[1]):'';
       const entry=key&&typeof findStrongEntry==='function'?findStrongEntry(key):null;
       if(!entry){$('snWordLemma').textContent='—';$('snWordTranslit').textContent='No Strong’s tag found';$('snWordDetails').innerHTML='Open <strong>Original Language</strong> for deeper word study.';return;}
