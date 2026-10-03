@@ -664,10 +664,14 @@ body.gb-ready>header,body.gb-ready>.container{display:none!important}
   color:var(--gb-maroon)!important;padding:8px 11px!important;font-weight:800!important;text-decoration:none;display:inline-flex;align-items:center;gap:6px;margin:0!important;white-space:nowrap
 }
 .gb-top-actions button:hover,.gb-main-link:hover{background:#fff6dc!important}
-.gb-primary-nav{height:40px;display:flex;align-items:stretch;padding:0 22px;background:rgba(255,248,228,.98);border-bottom:1px solid var(--gb-line);box-shadow:0 1px 5px rgba(98,54,14,.08);position:sticky;top:84px;z-index:840}
-.gb-primary-nav a,.gb-primary-nav button{min-height:40px!important;border:0!important;border-right:1px solid #ead7ad!important;background:transparent!important;color:#4a2c1c!important;padding:0 24px!important;font-size:14px!important;cursor:pointer!important;text-decoration:none;display:flex;align-items:center;justify-content:center;margin:0!important;border-radius:0!important}
-.gb-primary-nav a.active{background:linear-gradient(180deg,#94151b,#760b10)!important;color:#fff!important;font-weight:800!important}
-.gb-primary-nav a:hover,.gb-primary-nav button:hover{background:#fff0c8!important}
+.gb-primary-nav{height:40px;display:grid;grid-template-columns:38px minmax(0,1fr) 38px;align-items:stretch;padding:0;background:rgba(255,248,228,.98);border-bottom:1px solid var(--gb-line);box-shadow:0 1px 5px rgba(98,54,14,.08);position:sticky;top:84px;z-index:840;overflow:hidden}
+.gb-nav-track{display:flex;align-items:stretch;min-width:0;overflow-x:auto;scroll-behavior:smooth;scrollbar-width:none}
+.gb-nav-track::-webkit-scrollbar{display:none}
+.gb-nav-track a,.gb-nav-track button{flex:0 0 auto;min-height:40px!important;border:0!important;border-right:1px solid #ead7ad!important;background:transparent!important;color:#4a2c1c!important;padding:0 18px!important;font-size:14px!important;cursor:pointer!important;text-decoration:none;display:flex;align-items:center;justify-content:center;margin:0!important;border-radius:0!important;white-space:nowrap}
+.gb-nav-track a.active{background:linear-gradient(180deg,#94151b,#760b10)!important;color:#fff!important;font-weight:800!important}
+.gb-nav-track a:hover,.gb-nav-track button:hover{background:#fff0c8!important}
+.gb-nav-arrow{min-height:40px!important;height:40px!important;border:0!important;background:#fff3d1!important;color:var(--gb-maroon)!important;font-size:24px!important;font-weight:900!important;padding:0!important;margin:0!important;border-radius:0!important;cursor:pointer!important;z-index:2}
+.gb-nav-arrow:hover{background:#f2ddb0!important}
 .gb-main{padding:8px 14px 24px;max-width:1900px;margin:0 auto}
 .gb-control-strip{display:grid;grid-template-columns:minmax(520px,.95fr) minmax(500px,1.05fr) minmax(420px,.82fr);gap:8px;align-items:stretch;margin-bottom:8px}
 .gb-location-controls,.gb-translation-strip,.gb-header-actions{background:rgba(255,254,248,.94);border:1px solid var(--gb-line-soft);border-radius:8px;box-shadow:0 1px 4px rgba(80,45,15,.04);min-width:0}
@@ -680,9 +684,14 @@ body.gb-ready>header,body.gb-ready>.container{display:none!important}
 .gb-translation-track{display:flex;overflow-x:auto;scroll-behavior:smooth;scrollbar-width:none;padding:7px 0}.gb-translation-track::-webkit-scrollbar{display:none}
 .gb-translation-track button{flex:0 0 88px;min-height:38px!important;height:38px!important;border:1px solid #eadcc0!important;border-left:0!important;background:#fffdf8!important;color:#2f261f!important;font-weight:700!important;cursor:pointer!important;padding:0 8px!important;white-space:nowrap;margin:0!important;border-radius:0!important}
 .gb-translation-track button.active{background:linear-gradient(180deg,#98171c,#790c11)!important;color:#fff!important;border-color:#790c11!important}
-.gb-header-actions{display:grid;grid-template-columns:repeat(6,1fr);overflow:hidden}
-.gb-header-actions button{min-height:52px!important;border:0!important;border-right:1px solid #ebdcc0!important;background:#fffdf8!important;color:#2d2018!important;cursor:pointer!important;font-size:11px!important;padding:4px 3px!important;margin:0!important;border-radius:0!important}
-.gb-header-actions button:hover{background:#fff2cd!important}.gb-header-actions .gb-icon{display:block;font-size:20px;color:var(--gb-maroon);line-height:1.1;margin-bottom:3px}
+.gb-header-actions{display:grid;grid-template-columns:38px minmax(0,1fr) 38px;align-items:stretch;overflow:hidden}
+.gb-header-actions-track{display:flex;align-items:stretch;min-width:0;overflow-x:auto;scroll-behavior:smooth;scrollbar-width:none}
+.gb-header-actions-track::-webkit-scrollbar{display:none}
+.gb-header-actions-track button{flex:0 0 112px;min-height:52px!important;height:52px!important;border:0!important;border-right:1px solid #ebdcc0!important;background:#fffdf8!important;color:#2d2018!important;cursor:pointer!important;font-size:11px!important;padding:4px 5px!important;margin:0!important;border-radius:0!important;white-space:nowrap}
+.gb-header-actions-track button:hover{background:#fff2cd!important}
+.gb-header-actions-track .gb-icon{display:block;font-size:20px;color:var(--gb-maroon);line-height:1.1;margin-bottom:3px}
+.gb-header-action-arrow{min-height:52px!important;height:52px!important;border:0!important;background:#fff8e8!important;color:var(--gb-maroon)!important;font-size:23px!important;font-weight:900!important;cursor:pointer!important;padding:0!important;margin:0!important;border-radius:0!important}
+.gb-header-action-arrow:hover{background:#f2ddb0!important}
 .gb-card{background:rgba(255,254,249,.98);border:1px solid var(--gb-line);border-radius:8px;box-shadow:var(--gb-shadow);overflow:hidden;min-width:0;color:var(--gb-text)}
 .gb-card-head{height:38px;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 13px;background:linear-gradient(180deg,#fffdf7,#fff8e8);border-bottom:1px solid #ead9b7;color:var(--gb-maroon);font-family:Georgia,'Times New Roman',serif;font-weight:700;font-size:17px}
 .gb-card-head button{border:0!important;background:transparent!important;color:#9b6708!important;font-size:15px!important;cursor:pointer!important;min-height:auto!important;margin:0!important;padding:4px!important}
@@ -719,7 +728,7 @@ body.gb-ready>header,body.gb-ready>.container{display:none!important}
 .gb-present{position:fixed;inset:0;z-index:5000;background:#fffaf0;color:#2b2018;display:flex;flex-direction:column}.gb-present[hidden]{display:none!important}.gb-present-head{height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;background:linear-gradient(180deg,#fff5d3,#dfad4a);border-bottom:2px solid var(--gb-gold);color:var(--gb-maroon)}.gb-present-head strong{font-family:Georgia,'Times New Roman',serif;font-size:28px}.gb-present-head button{margin:0!important;background:#fff8e8!important;color:var(--gb-maroon)!important;border:1px solid #b98837!important}.gb-present-body{flex:1;display:grid;place-items:center;padding:34px;overflow:auto}.gb-present-slide{width:min(1200px,94vw);text-align:center}.gb-present-type{font-size:18px;letter-spacing:.12em;text-transform:uppercase;color:#8b5a10;font-weight:900}.gb-present-title{font-family:Georgia,'Times New Roman',serif;font-size:clamp(38px,5vw,70px);color:var(--gb-maroon);margin:12px 0 18px}.gb-present-content{font-size:clamp(22px,2.5vw,38px);line-height:1.5;white-space:pre-wrap}.gb-present-nav{display:flex;gap:8px;justify-content:center;padding:14px;border-top:1px solid #ead9b7;background:#fffef9}.gb-present-nav button{min-height:42px!important;padding:8px 18px!important;margin:0!important;background:#fff2cf!important;color:var(--gb-maroon)!important;border:1px solid #cda75c!important;border-radius:7px!important;font-weight:900!important}
 @media(max-width:1380px){.gb-control-strip{grid-template-columns:minmax(470px,.95fr) minmax(440px,1fr) minmax(360px,.82fr)}.gb-reading-grid{grid-template-columns:minmax(330px,.9fr) minmax(460px,1.25fr) minmax(340px,.95fr)}.gb-quick-grid{grid-template-columns:repeat(5,1fr)}}
 @media(max-width:1120px){.gb-brand{min-width:260px}.gb-brand-copy strong{font-size:28px}.gb-brand-copy small{font-size:9px;letter-spacing:1.5px}.gb-control-strip{grid-template-columns:1fr}.gb-reading-grid{grid-template-columns:1fr}.gb-reader-card,.gb-commentary-card,.gb-books-card{height:400px}.gb-builder-grid{grid-template-columns:1fr}.gb-lower-grid{grid-template-columns:1fr}.gb-lower-card{height:auto;min-height:220px}.gb-status-strip{grid-template-columns:1fr 1fr}}
-@media(max-width:760px){.gb-topbar{height:70px;min-height:70px;padding:0 9px}.gb-brand{min-width:0}.gb-brand-copy strong{font-size:20px}.gb-brand-copy small{display:none}.gb-global-search{display:none}.gb-top-actions{margin-left:auto}.gb-top-actions .gb-text{display:none}.gb-primary-nav{top:70px;overflow-x:auto;padding:0}.gb-primary-nav a,.gb-primary-nav button{padding:0 15px;white-space:nowrap}.gb-location-controls{grid-template-columns:1fr 1fr 1fr 38px 38px}.gb-location-controls .gb-select-wrap:first-child{grid-column:1/-1}.gb-header-actions{grid-template-columns:repeat(3,1fr)}.gb-field-grid{grid-template-columns:1fr}.gb-flow-add{grid-template-columns:1fr 1fr}.gb-flow-add input:nth-child(2){grid-column:1/-1}.gb-quick-grid{grid-template-columns:repeat(2,1fr)}.gb-status-strip{grid-template-columns:1fr}.gb-main{padding:6px}.gb-modal{padding:7px}.gb-modal-dialog{width:100%;height:94vh}}
+@media(max-width:760px){.gb-topbar{height:70px;min-height:70px;padding:0 9px}.gb-brand{min-width:0}.gb-brand-copy strong{font-size:20px}.gb-brand-copy small{display:none}.gb-global-search{display:none}.gb-top-actions{margin-left:auto}.gb-top-actions .gb-text{display:none}.gb-primary-nav{top:70px}.gb-nav-track a,.gb-nav-track button{padding:0 15px;white-space:nowrap}.gb-location-controls{grid-template-columns:1fr 1fr 1fr 38px 38px}.gb-location-controls .gb-select-wrap:first-child{grid-column:1/-1}.gb-field-grid{grid-template-columns:1fr}.gb-flow-add{grid-template-columns:1fr 1fr}.gb-flow-add input:nth-child(2){grid-column:1/-1}.gb-quick-grid{grid-template-columns:repeat(2,1fr)}.gb-status-strip{grid-template-columns:1fr}.gb-main{padding:6px}.gb-modal{padding:7px}.gb-modal-dialog{width:100%;height:94vh}}
 </style>
 
 </head>
@@ -2726,19 +2735,33 @@ body.gb-ready>header,body.gb-ready>.container{display:none!important}
   <div class="gb-global-search"><input id="gbGlobalSearch" type="search" placeholder="Go to a Bible reference (example: John 3:16)"><button id="gbGlobalSearchButton" type="button">⌕</button></div>
   <div class="gb-top-actions"><button id="gbPageRefresh" type="button">↻ <span class="gb-text">Refresh</span></button><a class="gb-main-link" href="main.html">⌂ <span class="gb-text">Main Page</span></a><button type="button" onclick="window.location.href='account.html'">● <span class="gb-text">Account</span></button></div>
 </header>
-<nav class="gb-primary-nav"><a href="personal-study.html">Personal Study</a><a href="sermon.html">Sermon Builder</a><a href="bible-study.html" class="active">Group Bible Study</a><a href="library.html">Library</a><button id="gbNavTools" type="button">Tools⌄</button></nav>
+<nav class="gb-primary-nav" aria-label="BibleMastery study navigation">
+  <button class="gb-nav-arrow" id="gbNavPrev" type="button" aria-label="Previous navigation items">‹</button>
+  <div class="gb-nav-track" id="gbNavTrack">
+    <a href="personal-study.html">⌂ Main Study / Personal Study</a>
+    <a href="sermon.html">Sermon Builder</a>
+    <a href="bible-study.html" class="active">Group Bible Study</a>
+    <a href="library.html">Library</a>
+    <button id="gbNavTools" type="button">Tools⌄</button>
+  </div>
+  <button class="gb-nav-arrow" id="gbNavNext" type="button" aria-label="More navigation items">›</button>
+</nav>
 
 <main class="gb-main">
   <div class="gb-control-strip">
     <div class="gb-location-controls"><div class="gb-select-wrap" id="gbBookWrap"></div><div class="gb-select-wrap" id="gbChapterWrap"></div><div class="gb-select-wrap" id="gbVerseWrap"></div><div id="gbPrevWrap"></div><div id="gbNextWrap"></div></div>
     <div class="gb-translation-strip"><button class="gb-trans-arrow" id="gbTransPrev" type="button">‹</button><div class="gb-translation-track" id="gbTranslationTrack"></div><button class="gb-trans-arrow" id="gbTransNext" type="button">›</button></div>
-    <div class="gb-header-actions">
-      <button type="button" data-gb-tool="flow"><span class="gb-icon">☷</span>Meeting Flow</button>
-      <button type="button" data-gb-tool="present"><span class="gb-icon">▣</span>Present</button>
-      <button type="button" data-gb-tool="views"><span class="gb-icon">👥</span>Leader / Group</button>
-      <button type="button" data-gb-tool="prayer"><span class="gb-icon">🙏</span>Prayer</button>
-      <button type="button" data-gb-tool="notebook"><span class="gb-icon">▤</span>Notebook</button>
-      <button type="button" data-gb-tool="more"><span class="gb-icon">•••</span>More</button>
+    <div class="gb-header-actions" aria-label="Group meeting controls">
+      <button class="gb-header-action-arrow" id="gbHeaderActionsPrev" type="button" aria-label="Previous group controls">‹</button>
+      <div class="gb-header-actions-track" id="gbHeaderActionsTrack">
+        <button type="button" data-gb-tool="flow"><span class="gb-icon">☷</span>Meeting Flow</button>
+        <button type="button" data-gb-tool="present"><span class="gb-icon">▣</span>Present</button>
+        <button type="button" data-gb-tool="views"><span class="gb-icon">👥</span>Leader / Group</button>
+        <button type="button" data-gb-tool="prayer"><span class="gb-icon">🙏</span>Prayer</button>
+        <button type="button" data-gb-tool="notebook"><span class="gb-icon">▤</span>Notebook</button>
+        <button type="button" data-gb-tool="more"><span class="gb-icon">•••</span>More</button>
+      </div>
+      <button class="gb-header-action-arrow" id="gbHeaderActionsNext" type="button" aria-label="More group controls">›</button>
     </div>
   </div>
 
@@ -2748,7 +2771,7 @@ body.gb-ready>header,body.gb-ready>.container{display:none!important}
       <div class="gb-card-head"><div>✥ Commentary</div><button type="button" data-gb-tool="commentaries">⌄</button></div>
       <div class="gb-card-body"><div class="gb-commentary-slider"><button class="gb-commentary-arrow" id="gbCommentaryPrev" type="button">‹</button><div class="gb-commentary-track" id="gbCommentaryTrack"></div><button class="gb-commentary-arrow" id="gbCommentaryNext" type="button">›</button></div><div id="gbCommentaryHost"></div></div>
     </section>
-    <section class="gb-card gb-books-card"><div class="gb-card-head"><div>▦ Books Ready to Read</div><button type="button" data-gb-tool="books">⌄</button></div><div class="gb-card-body"><div class="gb-books-list" id="gbBooksList"></div></div></section>
+    <section class="gb-card gb-books-card"><div class="gb-card-head"><div>▦ Best Book for This Study</div><button type="button" data-gb-tool="books">⌄</button></div><div class="gb-card-body"><div class="gb-books-list" id="gbBooksList"></div></div></section>
   </div>
 
   <section class="gb-card gb-builder-card">
@@ -2818,6 +2841,8 @@ const guided=$('guidedStudySection'),advanced=$('advancedBibleStudyWorkspace');
 [aiBox,toolsColumn,guided,advanced,saveSection].forEach(el=>{if(el&&storage)storage.appendChild(el)});
 
 $('gbPageRefresh')?.addEventListener('click',()=>location.reload());
+$('gbNavPrev')?.addEventListener('click',()=>$('gbNavTrack')?.scrollBy({left:-300,behavior:'smooth'}));
+$('gbNavNext')?.addEventListener('click',()=>$('gbNavTrack')?.scrollBy({left:300,behavior:'smooth'}));
 
 function renderTranslations(){
   const track=$('gbTranslationTrack');if(!track||typeof readerTranslation==='undefined'||!readerTranslation)return;track.innerHTML='';
@@ -2832,6 +2857,8 @@ renderTranslations();
 readerTranslation?.addEventListener?.('change',()=>setTimeout(renderTranslations,20));
 $('gbTransPrev')?.addEventListener('click',()=>$('gbTranslationTrack')?.scrollBy({left:-320,behavior:'smooth'}));
 $('gbTransNext')?.addEventListener('click',()=>$('gbTranslationTrack')?.scrollBy({left:320,behavior:'smooth'}));
+$('gbHeaderActionsPrev')?.addEventListener('click',()=>$('gbHeaderActionsTrack')?.scrollBy({left:-260,behavior:'smooth'}));
+$('gbHeaderActionsNext')?.addEventListener('click',()=>$('gbHeaderActionsTrack')?.scrollBy({left:260,behavior:'smooth'}));
 
 function renderCommentaries(){
   const track=$('gbCommentaryTrack');if(!track||typeof commentarySelect==='undefined'||!commentarySelect)return;track.innerHTML='';
@@ -2860,8 +2887,21 @@ $('gbGlobalSearchButton')?.addEventListener('click',goReference);$('gbGlobalSear
 function currentReader(){
   try{
     if(typeof readerBible==='undefined'||!readerBible||typeof readerBookIndex==='undefined'||readerBookIndex<0||typeof readerChapterIndex==='undefined'||readerChapterIndex<0)return null;
-    const b=readerBible.books[readerBookIndex],c=b.chapters[readerChapterIndex],vs=c.verses||[],vi=readerVerse&&readerVerse.value!==''?Number(readerVerse.value)||0:0,v=vs[Math.max(0,Math.min(vi,Math.max(0,vs.length-1)))];
-    const name=getBookName(b),ch=chapterNumber(c,readerChapterIndex),vn=v?verseNumber(v,vi):1;return{bookName:name,chapter:ch,verse:vn,text:v?verseText(v,readerTranslation.value,readerBookIndex):'',reference:`${name} ${ch}:${vn}`};
+    const b=readerBible.books[readerBookIndex],c=b.chapters[readerChapterIndex],vs=c.verses||[];
+    const explicitVerse=!!(readerVerse&&readerVerse.value!=='');
+    const vi=explicitVerse?(Number(readerVerse.value)||0):0;
+    const safe=Math.max(0,Math.min(vi,Math.max(0,vs.length-1))),v=vs[safe];
+    const name=getBookName(b),ch=chapterNumber(c,readerChapterIndex),vn=v?verseNumber(v,safe):1;
+    const chapterText=vs.map((verse,index)=>verseText(verse,readerTranslation.value,readerBookIndex)).join(' ');
+    return{
+      bookName:name,
+      chapter:ch,
+      verse:vn,
+      explicitVerse,
+      text:v?verseText(v,readerTranslation.value,readerBookIndex):'',
+      chapterText,
+      reference:explicitVerse?`${name} ${ch}:${vn}`:`${name} ${ch}`
+    };
   }catch(e){return null}
 }
 
@@ -3196,14 +3236,109 @@ function currentReader(){
 function gbPlain(html){const d=document.createElement('div');d.innerHTML=String(html||'');return(d.textContent||'').replace(/\s+/g,' ').trim()}
 const gbStop=new Set('the and that with from this into unto upon have has had were was are for but not you your his her our out all any who which what when where shall will would should could may might can did does of to in on at by as a an or be been being'.split(' '));
 function gbKeywords(s){const c={};String(s||'').toLowerCase().replace(/[^a-z0-9\s]/g,' ').split(/\s+/).forEach(w=>{if(w.length<4||gbStop.has(w))return;c[w]=(c[w]||0)+1});return Object.keys(c).sort((a,b)=>c[b]-c[a]).slice(0,12)}
-function gbBestBooks(){
-  const s=currentReader(),out=$('gbBooksList');if(!out)return;if(!s){out.innerHTML='<div class="gb-book-card"><h4>Select a passage</h4><p>The two strongest book sections will appear here.</p></div>';return}
-  const ks=gbKeywords(s.reference+' '+s.text),per=[];gbTheologyBooks.forEach((b,bi)=>{let best=null;(b.chapters||[]).forEach((c,ci)=>{const text=gbPlain((c.title||'')+' '+(c.text||'')+' '+(c.html||'')),low=text.toLowerCase(),title=String(c.title||'').toLowerCase();let score=0;ks.forEach(k=>{if(low.includes(k))score+=2;if(title.includes(k))score+=5});if(low.includes(s.bookName.toLowerCase()))score+=3;const x={b,c,bi,ci,score,text};if(!best||score>best.score)best=x});if(best)per.push(best)});
-  const picks=per.sort((a,b)=>b.score-a.score).slice(0,2);
-  out.innerHTML=picks.map((x,i)=>`<article class="gb-book-card"><h4>${i+1}. ${escapeHTML(x.b.title||'Book')}</h4><p>${escapeHTML(x.b.author||'')}</p><div class="gb-book-start"><strong>Start here:</strong> ${escapeHTML(x.c.title||'Recommended section')}</div><p>${escapeHTML((x.text||'').slice(0,210))}${x.text?.length>210?'…':''}</p><button type="button" data-gb-book="${x.bi}" data-gb-chapter="${x.ci}">Read Section</button></article>`).join('');
-  qsa('[data-gb-book]',out).forEach(btn=>btn.addEventListener('click',()=>{const b=gbTheologyBooks[Number(btn.dataset.gbBook)],c=b?.chapters?.[Number(btn.dataset.gbChapter)];openCustom('▦ '+(b?.title||'Book'),`<h3>${escapeHTML(c?.title||'')}</h3><div>${c?.html||'<p>'+escapeHTML(c?.text||'')+'</p>'}</div>`)}));
+function gbStudyTopicText(){
+  const values=[
+    $('manualStudyTitle')?.value||'',
+    $('advStudyPrimaryPassage')?.value||'',
+    $('advStudyBigIdea')?.value||'',
+    $('advStudyTheme')?.value||'',
+    $('advStudyOutcome')?.value||'',
+    $('studyTitle')?.value||'',
+    $('mainTruth')?.value||''
+  ];
+  return values.join(' ');
 }
-readerBook?.addEventListener?.('change',()=>setTimeout(gbBestBooks,60));readerChapter?.addEventListener?.('change',()=>setTimeout(gbBestBooks,60));readerVerse?.addEventListener?.('change',()=>setTimeout(gbBestBooks,30));
+function gbBestBooks(){
+  const s=currentReader(),out=$('gbBooksList');if(!out)return;
+  if(!s){
+    out.innerHTML='<div class="gb-book-card"><h4>Select a passage</h4><p>The strongest matching book and section will appear here when you choose a chapter or verse.</p></div>';
+    return;
+  }
+
+  // Verse selected = emphasize that verse.
+  // No verse selected = rank from the whole chapter.
+  // Always blend in the study title/topic, primary passage, theme, big idea, and outcome.
+  const biblicalContext=s.explicitVerse
+    ? `${s.reference} ${s.text}`
+    : `${s.bookName} ${s.chapter} ${s.chapterText}`;
+
+  const topicContext=gbStudyTopicText();
+  const ks=gbKeywords(`${biblicalContext} ${topicContext}`);
+  const per=[];
+
+  gbTheologyBooks.forEach((b,bi)=>{
+    let best=null;
+    (b.chapters||[]).forEach((c,ci)=>{
+      const text=gbPlain((c.title||'')+' '+(c.text||'')+' '+(c.html||'')),
+            low=text.toLowerCase(),
+            title=String(c.title||'').toLowerCase();
+      let score=0;
+
+      ks.forEach(k=>{
+        if(low.includes(k))score+=2;
+        if(title.includes(k))score+=6;
+      });
+
+      if(low.includes(s.bookName.toLowerCase()))score+=4;
+
+      // Give extra weight to leader-entered study topic/theme words.
+      gbKeywords(topicContext).forEach(k=>{
+        if(low.includes(k))score+=3;
+        if(title.includes(k))score+=7;
+      });
+
+      const x={b,c,bi,ci,score,text};
+      if(!best||score>best.score)best=x;
+    });
+    if(best)per.push(best);
+  });
+
+  const x=per.sort((a,b)=>b.score-a.score)[0];
+  if(!x){
+    out.innerHTML='<div class="gb-book-card"><h4>No matching book found</h4><p>Try selecting another verse or adding a study topic.</p></div>';
+    return;
+  }
+
+  const basis=s.explicitVerse?`Best match for ${s.reference}`:`Best match for ${s.bookName} ${s.chapter} + your study topic`;
+  out.innerHTML=`<article class="gb-book-card">
+    <h4>${escapeHTML(x.b.title||'Book')}</h4>
+    <p>${escapeHTML(x.b.author||'')}</p>
+    <div class="gb-book-start"><strong>${escapeHTML(basis)}</strong><br><strong>Start here:</strong> ${escapeHTML(x.c.title||'Recommended section')}</div>
+    <p>${escapeHTML((x.text||'').slice(0,300))}${x.text?.length>300?'…':''}</p>
+    <button type="button" data-gb-best-section="${x.bi}:${x.ci}">Read Best Section</button>
+    <button type="button" data-gb-full-book="${x.bi}">Read Full Book</button>
+  </article>`;
+
+  qs('[data-gb-best-section]',out)?.addEventListener('click',e=>{
+    const [bi,ci]=e.currentTarget.dataset.gbBestSection.split(':').map(Number),
+          b=gbTheologyBooks[bi],
+          c=b?.chapters?.[ci];
+    openCustom('▦ '+(b?.title||'Book'),
+      `<h3>${escapeHTML(c?.title||'')}</h3><div>${c?.html||'<p>'+escapeHTML(c?.text||'')+'</p>'}</div>`);
+  });
+
+  qs('[data-gb-full-book]',out)?.addEventListener('click',e=>{
+    const bi=Number(e.currentTarget.dataset.gbFullBook),
+          b=gbTheologyBooks[bi];
+    if(!b)return;
+
+    const chapters=(b.chapters||[]).map((c,ci)=>`
+      <section style="padding:10px 0;border-bottom:1px solid #ead9b7">
+        <h3 style="margin-bottom:7px">${escapeHTML(c.title||('Section '+(ci+1)))}</h3>
+        <div>${c.html||'<p>'+escapeHTML(c.text||'')+'</p>'}</div>
+      </section>`).join('');
+
+    openCustom('📚 '+(b.title||'Full Book'),
+      `<p><strong>${escapeHTML(b.author||'')}</strong></p>${chapters||'<p>No sections are stored in this resource.</p>'}`);
+  });
+}
+readerBook?.addEventListener?.('change',()=>setTimeout(gbBestBooks,60));
+readerChapter?.addEventListener?.('change',()=>setTimeout(gbBestBooks,60));
+readerVerse?.addEventListener?.('change',()=>setTimeout(gbBestBooks,30));
+['manualStudyTitle','advStudyPrimaryPassage','advStudyBigIdea','advStudyTheme','advStudyOutcome','studyTitle','mainTruth'].forEach(id=>{
+  $(id)?.addEventListener('input',()=>setTimeout(gbBestBooks,80));
+  $(id)?.addEventListener('change',()=>setTimeout(gbBestBooks,80));
+});
 if(typeof readerDisplay!=='undefined'&&readerDisplay)new MutationObserver(()=>setTimeout(gbBestBooks,40)).observe(readerDisplay,{childList:true,subtree:true});setTimeout(gbBestBooks,500);
 
 const hiddenFields=['gbMeetingFlowJson','gbNotebookJson','gbPrayerJson','gbVisualsJson'];
@@ -3273,7 +3408,7 @@ function route(name){
   if(name==='ai'){if(aiBox)openModalNode('✨ BibleMastery AI — Group Bible Study',aiBox);return}
   if(name==='saved'){if(saveSection)openModalNode('▰ Saved Group Bible Studies',saveSection);return}
   if(name==='visuals'){visualsPopup();return}if(name==='live'){livePopup();return}if(name==='offline'){offlinePopup();return}
-  if(name==='books'){openCustom('▦ Books Ready to Read','<p>The two recommended sections follow the current Bible passage. Choose Read Section to open the relevant place.</p>')}
+  if(name==='books'){openCustom('▦ Best Book for This Study','<p>The best book follows the selected verse, whole chapter, and your study topic. Choose Read Best Section for the strongest match or Read Full Book to open the complete available resource.</p>')}
 }
 qsa('[data-gb-tool]').forEach(b=>b.addEventListener('click',()=>route(b.dataset.gbTool)));$('gbNavTools')?.addEventListener('click',()=>route('more'));$('gbOpenGuided')?.addEventListener('click',()=>route('guided'));$('gbOpenAdvanced')?.addEventListener('click',()=>route('advanced'));$('gbOpenAi')?.addEventListener('click',()=>route('ai'));$('gbSaveStudy')?.addEventListener('click',()=>{saveGroup();$('saveStudyButton')?.click()});
 
