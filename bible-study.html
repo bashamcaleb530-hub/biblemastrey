@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Build a Bible Study - BibleMastery</title>
+  <title>Group Bible Study Builder - BibleMastery</title>
 
   <style>
   * { box-sizing: border-box; }
@@ -633,6 +633,95 @@
 
 </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style id="gb-seven-names-group-builder-theme">
+:root{
+  --gb-maroon:#7a0d12;--gb-maroon-dark:#56070b;--gb-gold:#c68a00;--gb-gold-dark:#946000;
+  --gb-cream:#fff9ec;--gb-card:#fffef9;--gb-text:#24160f;--gb-muted:#6b574b;
+  --gb-line:#e5c98d;--gb-line-soft:#efe0bd;--gb-shadow:0 3px 12px rgba(89,46,12,.10);
+}
+html,body{background:linear-gradient(180deg,#fff9eb 0%,#fffef8 56%,#fff7e2 100%)!important;color:var(--gb-text)!important}
+body.gb-ready{overflow-x:hidden;background:linear-gradient(180deg,#fff9eb 0%,#fffef8 56%,#fff7e2 100%)!important}
+body.gb-ready>header,body.gb-ready>.container{display:none!important}
+.gb-app{min-height:100vh;color:var(--gb-text);font-family:Arial,sans-serif}
+.gb-topbar{
+  min-height:84px;height:84px;display:flex;align-items:center;gap:18px;padding:0 18px;
+  background:radial-gradient(circle at 72% 6%,rgba(255,251,204,.98) 0 6%,rgba(255,229,148,.82) 7%,rgba(255,224,137,0) 25%),
+             linear-gradient(180deg,#fff7dc 0%,#f1ce86 52%,#cc8740 100%);
+  border-bottom:2px solid var(--gb-gold);box-shadow:0 4px 16px rgba(82,41,12,.20);position:sticky;top:0;z-index:850
+}
+.gb-brand{min-width:440px;display:flex;align-items:center;gap:12px;color:var(--gb-maroon)}
+.gb-brand-mark{font-size:44px;color:var(--gb-gold-dark);line-height:1}
+.gb-brand-copy{display:flex;flex-direction:column;justify-content:center}
+.gb-brand-copy strong{font-family:Georgia,'Times New Roman',serif;font-size:36px;line-height:.98;color:var(--gb-maroon)}
+.gb-brand-copy small{font-family:Georgia,'Times New Roman',serif;font-size:11px;letter-spacing:2.7px;color:#603218;margin-top:7px;font-weight:700}
+.gb-global-search{flex:1;max-width:390px;margin:auto;display:flex;background:#fffdf6;border:1px solid #b77a1c;border-radius:6px;overflow:hidden;box-shadow:0 1px 3px rgba(93,47,7,.13)}
+.gb-global-search input{flex:1;min-height:40px;border:0!important;outline:0!important;background:#fffdf8!important;color:#3a2519!important;padding:10px 12px!important;border-radius:0!important}
+.gb-global-search button{width:44px;min-height:40px!important;border:0!important;background:#fffdf8!important;color:var(--gb-maroon)!important;font-size:22px!important;padding:0!important;margin:0!important}
+.gb-top-actions{display:flex;align-items:center;gap:9px;margin-left:auto}
+.gb-top-actions button,.gb-main-link{
+  min-height:38px!important;border:1px solid rgba(122,13,18,.34)!important;border-radius:7px!important;background:rgba(255,253,245,.72)!important;
+  color:var(--gb-maroon)!important;padding:8px 11px!important;font-weight:800!important;text-decoration:none;display:inline-flex;align-items:center;gap:6px;margin:0!important;white-space:nowrap
+}
+.gb-top-actions button:hover,.gb-main-link:hover{background:#fff6dc!important}
+.gb-primary-nav{height:40px;display:flex;align-items:stretch;padding:0 22px;background:rgba(255,248,228,.98);border-bottom:1px solid var(--gb-line);box-shadow:0 1px 5px rgba(98,54,14,.08);position:sticky;top:84px;z-index:840}
+.gb-primary-nav a,.gb-primary-nav button{min-height:40px!important;border:0!important;border-right:1px solid #ead7ad!important;background:transparent!important;color:#4a2c1c!important;padding:0 24px!important;font-size:14px!important;cursor:pointer!important;text-decoration:none;display:flex;align-items:center;justify-content:center;margin:0!important;border-radius:0!important}
+.gb-primary-nav a.active{background:linear-gradient(180deg,#94151b,#760b10)!important;color:#fff!important;font-weight:800!important}
+.gb-primary-nav a:hover,.gb-primary-nav button:hover{background:#fff0c8!important}
+.gb-main{padding:8px 14px 24px;max-width:1900px;margin:0 auto}
+.gb-control-strip{display:grid;grid-template-columns:minmax(520px,.95fr) minmax(500px,1.05fr) minmax(420px,.82fr);gap:8px;align-items:stretch;margin-bottom:8px}
+.gb-location-controls,.gb-translation-strip,.gb-header-actions{background:rgba(255,254,248,.94);border:1px solid var(--gb-line-soft);border-radius:8px;box-shadow:0 1px 4px rgba(80,45,15,.04);min-width:0}
+.gb-location-controls{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(90px,.72fr) minmax(90px,.72fr) 38px 38px;gap:6px;padding:7px}
+.gb-select-wrap{position:relative;min-width:0}.gb-select-wrap::after{content:"⌄";position:absolute;right:9px;top:50%;transform:translateY(-54%);pointer-events:none;color:var(--gb-maroon);font-size:17px;font-weight:900;line-height:1}
+.gb-location-controls select{width:100%!important;height:38px!important;min-height:38px!important;border:1px solid #dbc89f!important;border-radius:5px!important;background:#fffdf7!important;color:#2c1d15!important;padding:0 30px 0 10px!important;appearance:none!important;font-weight:700!important}
+.gb-location-controls>div>button{width:100%;height:38px!important;min-height:38px!important;border:1px solid #dbc89f!important;border-radius:5px!important;background:#fff8e8!important;color:var(--gb-maroon)!important;padding:0!important;font-size:20px!important;cursor:pointer!important;margin:0!important}
+.gb-translation-strip{display:grid;grid-template-columns:38px minmax(0,1fr) 38px;align-items:stretch;overflow:hidden}
+.gb-trans-arrow{min-height:52px!important;height:52px!important;border:0!important;background:#fff8e8!important;color:var(--gb-maroon)!important;font-size:23px!important;font-weight:900!important;cursor:pointer!important;padding:0!important;margin:0!important}
+.gb-translation-track{display:flex;overflow-x:auto;scroll-behavior:smooth;scrollbar-width:none;padding:7px 0}.gb-translation-track::-webkit-scrollbar{display:none}
+.gb-translation-track button{flex:0 0 88px;min-height:38px!important;height:38px!important;border:1px solid #eadcc0!important;border-left:0!important;background:#fffdf8!important;color:#2f261f!important;font-weight:700!important;cursor:pointer!important;padding:0 8px!important;white-space:nowrap;margin:0!important;border-radius:0!important}
+.gb-translation-track button.active{background:linear-gradient(180deg,#98171c,#790c11)!important;color:#fff!important;border-color:#790c11!important}
+.gb-header-actions{display:grid;grid-template-columns:repeat(6,1fr);overflow:hidden}
+.gb-header-actions button{min-height:52px!important;border:0!important;border-right:1px solid #ebdcc0!important;background:#fffdf8!important;color:#2d2018!important;cursor:pointer!important;font-size:11px!important;padding:4px 3px!important;margin:0!important;border-radius:0!important}
+.gb-header-actions button:hover{background:#fff2cd!important}.gb-header-actions .gb-icon{display:block;font-size:20px;color:var(--gb-maroon);line-height:1.1;margin-bottom:3px}
+.gb-card{background:rgba(255,254,249,.98);border:1px solid var(--gb-line);border-radius:8px;box-shadow:var(--gb-shadow);overflow:hidden;min-width:0;color:var(--gb-text)}
+.gb-card-head{height:38px;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 13px;background:linear-gradient(180deg,#fffdf7,#fff8e8);border-bottom:1px solid #ead9b7;color:var(--gb-maroon);font-family:Georgia,'Times New Roman',serif;font-weight:700;font-size:17px}
+.gb-card-head button{border:0!important;background:transparent!important;color:#9b6708!important;font-size:15px!important;cursor:pointer!important;min-height:auto!important;margin:0!important;padding:4px!important}
+.gb-card-body{padding:8px 10px;min-width:0}
+.gb-reading-grid{display:grid;grid-template-columns:minmax(350px,.92fr) minmax(520px,1.42fr) minmax(390px,1.02fr);gap:8px;align-items:stretch}
+.gb-reader-card,.gb-commentary-card,.gb-books-card{height:438px}.gb-reader-card .gb-card-body,.gb-commentary-card .gb-card-body,.gb-books-card .gb-card-body{height:calc(100% - 38px);overflow:hidden}
+#gbReaderHost{height:100%}
+#gbReaderHost .reader-display{height:100%!important;min-height:0!important;max-height:none!important;overflow:auto!important;background:#fffdf8!important;color:#2b2018!important;border:1px solid #eadab9!important;border-radius:6px!important;padding:8px 10px!important;font-family:Georgia,'Times New Roman',serif!important;font-size:16px!important;line-height:1.62!important}
+#gbReaderHost .reader-title{color:var(--gb-maroon)!important;margin:0 0 8px!important}#gbReaderHost .reader-verse{color:#2b2018!important;background:transparent!important;border-bottom:1px solid #f0e5cc!important;cursor:pointer}
+#gbReaderHost .reader-verse:hover,#gbReaderHost .reader-verse.active-reader-verse{background:#fff2c9!important;color:#4a220c!important;box-shadow:inset 3px 0 0 var(--gb-gold)!important}#gbReaderHost .reader-verse-number{color:var(--gb-maroon)!important}
+.gb-commentary-slider{display:grid;grid-template-columns:34px minmax(0,1fr) 34px;gap:5px;align-items:center;margin-bottom:7px}
+.gb-commentary-track{display:flex;overflow-x:auto;scroll-behavior:smooth;scrollbar-width:none;border:1px solid #eadcc2;border-radius:6px;background:#fffdf9}.gb-commentary-track::-webkit-scrollbar{display:none}
+.gb-commentary-track button{flex:0 0 128px;min-height:34px!important;height:34px!important;border:0!important;border-right:1px solid #eadcc2!important;background:#fffdf9!important;color:#31251d!important;font-size:11px!important;cursor:pointer!important;white-space:nowrap;padding:0 8px!important;margin:0!important;border-radius:0!important}
+.gb-commentary-track button.active{background:linear-gradient(180deg,#98171c,#790c11)!important;color:#fff!important;font-weight:800!important}
+.gb-commentary-arrow{height:34px!important;min-height:34px!important;padding:0!important;border:1px solid #b98837!important;border-radius:6px!important;background:#fff8e8!important;color:#790c11!important;font-size:23px!important;font-weight:900!important;cursor:pointer!important;margin:0!important}
+#gbCommentaryHost{height:calc(100% - 42px);overflow:auto;background:#fffdf8;border:1px solid #eadab9;border-radius:6px;padding:7px}
+#gbCommentaryHost #commentaryContent{margin:0!important;padding:5px!important;background:transparent!important;color:#2f241c!important;border:0!important;white-space:pre-wrap!important;line-height:1.58!important}
+#gbCommentaryHost .commentary-verse,#gbCommentaryHost .commentary-text,#gbCommentaryHost .commentary-loading,#gbCommentaryHost .commentary-empty,#gbCommentaryHost .status-message,#gbCommentaryHost .error-message{color:#2f241c!important;background:transparent!important}
+.gb-books-list{height:100%;overflow:auto;display:flex;flex-direction:column;gap:7px}.gb-book-card{border:1px solid #ead9b7;border-radius:7px;background:#fffdf8;padding:10px}.gb-book-card h4{margin:0 0 4px;color:var(--gb-maroon);font-family:Georgia,'Times New Roman',serif}.gb-book-card p{margin:5px 0;color:#5d4c40;font-size:12px;line-height:1.45}.gb-book-start{padding:6px 7px;background:#fff3d0;border-left:3px solid var(--gb-gold);border-radius:4px;font-size:12px}.gb-book-card button{min-height:30px!important;padding:4px 8px!important;margin:6px 4px 0 0!important;background:#fff8e8!important;color:var(--gb-maroon)!important;border:1px solid #d7b66d!important;border-radius:5px!important;font-weight:800!important}
+.gb-builder-card{margin-top:8px}.gb-builder-body{padding:10px}.gb-builder-grid{display:grid;grid-template-columns:minmax(420px,.92fr) minmax(520px,1.28fr);gap:10px}.gb-study-core,.gb-meeting-flow{border:1px solid #ead9b7;background:#fffdf9;border-radius:7px;padding:10px;min-width:0}.gb-study-core h3,.gb-meeting-flow h3{margin:0 0 7px;color:var(--gb-maroon);font-family:Georgia,'Times New Roman',serif}
+.gb-field-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}.gb-field label{display:block;margin:0 0 4px!important;color:#6d3c1d!important;font-size:11px!important;font-weight:800!important}
+.gb-field input,.gb-field textarea,.gb-field select,#manualStudyTitle,#manualStudy,#advStudyPrimaryPassage,#advStudyBigIdea,#advStudyAudience,#advStudyOutcome,#advStudyMinutes{width:100%!important;background:#fffef9!important;color:#2b2018!important;border:1px solid #ddc89e!important;border-radius:5px!important;padding:8px!important;font-family:Arial,sans-serif!important;font-size:13px!important}
+#manualStudy{min-height:155px!important;resize:vertical!important}.gb-study-editor{margin-top:7px}.gb-study-editor label{display:block;color:#6d3c1d;font-size:11px;font-weight:800;margin-bottom:4px}
+.gb-core-actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px}.gb-core-actions button,.gb-small-btn{min-height:32px!important;padding:5px 9px!important;margin:0!important;border:1px solid #cba75b!important;border-radius:6px!important;background:#fff7df!important;color:var(--gb-maroon)!important;font-weight:800!important;cursor:pointer!important}.gb-core-actions .primary,.gb-small-btn.primary{background:linear-gradient(180deg,#97161c,#790c11)!important;color:#fff!important;border-color:#790c11!important}
+.gb-flow-list{display:flex;flex-direction:column;gap:5px;max-height:216px;overflow:auto;margin-bottom:7px}.gb-flow-item{display:grid;grid-template-columns:30px minmax(0,1fr) 62px 28px 28px 28px;gap:5px;align-items:center;border:1px solid #eadcc0;background:#fffef9;border-radius:6px;padding:5px}.gb-flow-num{font-weight:900;color:var(--gb-maroon);text-align:center}
+.gb-flow-item input{min-height:31px!important;height:31px!important;margin:0!important;padding:4px 6px!important;background:#fff!important;color:#2b2018!important;border:1px solid #ddc89e!important;border-radius:4px!important;font-size:12px!important}.gb-flow-item button{min-height:30px!important;height:30px!important;margin:0!important;padding:0!important;border:1px solid #d8c39a!important;border-radius:4px!important;background:#fff8e8!important;color:var(--gb-maroon)!important}
+.gb-flow-add{display:grid;grid-template-columns:150px minmax(0,1fr) 85px auto;gap:6px}.gb-flow-add input,.gb-flow-add select{min-height:33px!important;height:33px!important;margin:0!important;padding:5px 7px!important;background:#fff!important;color:#2b2018!important;border:1px solid #ddc89e!important;border-radius:5px!important}.gb-flow-add button{margin:0!important;min-height:33px!important;padding:5px 10px!important;background:var(--gb-maroon)!important;color:#fff!important;border:1px solid var(--gb-maroon)!important;border-radius:5px!important;font-weight:800!important}
+.gb-lower-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:8px}.gb-lower-card{height:228px}.gb-lower-card .gb-card-body{height:calc(100% - 38px);overflow:auto}.gb-inline-row{display:flex;gap:6px;align-items:center;margin-bottom:6px}.gb-inline-row>*{min-width:0}.gb-inline-row input,.gb-inline-row select,.gb-lower-card textarea{background:#fffef9!important;color:#2b2018!important;border:1px solid #ddc89e!important;border-radius:5px!important;padding:7px!important;font-size:12px!important}.gb-lower-card textarea{width:100%;min-height:70px;resize:vertical}.gb-list{display:flex;flex-direction:column;gap:5px}.gb-entry{border:1px solid #eadcc0;background:#fffdf8;border-radius:5px;padding:6px;font-size:12px;line-height:1.4}.gb-entry strong{color:var(--gb-maroon)}.gb-entry-actions{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}.gb-entry-actions button{min-height:26px!important;padding:3px 6px!important;margin:0!important;background:#fff8e8!important;color:var(--gb-maroon)!important;border:1px solid #d8c39a!important;border-radius:4px!important;font-size:10px!important}
+.gb-timer{display:flex;align-items:center;gap:7px;padding:7px;background:#fff3d0;border:1px solid #ead09b;border-radius:6px;margin-bottom:7px}.gb-timer-display{font-size:25px;font-weight:900;color:var(--gb-maroon);font-family:Georgia,'Times New Roman',serif}.gb-timer button{min-height:29px!important;padding:4px 7px!important;margin:0!important;border:1px solid #cba75b!important;background:#fffaf0!important;color:var(--gb-maroon)!important;border-radius:5px!important}
+.gb-quick-tools{margin-top:8px}.gb-quick-grid{display:grid;grid-template-columns:repeat(10,minmax(90px,1fr));gap:5px;padding:8px}.gb-quick-grid button{min-height:58px!important;margin:0!important;border:1px solid #ead3a6!important;border-radius:6px!important;background:#fff8e7!important;color:#542816!important;font-weight:800!important;font-size:11px!important;padding:6px 4px!important}.gb-quick-grid button .gb-icon{display:block;font-size:20px;color:var(--gb-maroon);margin-bottom:3px}
+.gb-status-strip{margin-top:8px;display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.gb-status-chip{border:1px solid #ead9b7;background:#fffef9;border-radius:6px;padding:6px 8px;font-size:11px;color:#5b493d}.gb-status-chip strong{color:var(--gb-maroon)}
+.gb-tool-storage{display:none}.gb-modal{position:fixed;inset:0;z-index:3000;background:rgba(48,22,8,.48);display:flex;align-items:center;justify-content:center;padding:18px}.gb-modal[hidden]{display:none!important}.gb-modal-dialog{width:min(1280px,96vw);height:min(88vh,900px);background:#fffaf0;border:2px solid #c99225;border-radius:12px;box-shadow:0 25px 70px rgba(58,26,7,.34);display:flex;flex-direction:column;overflow:hidden}.gb-modal-head{height:52px;flex:0 0 52px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;background:linear-gradient(180deg,#fff4cf,#e4b85d);border-bottom:1px solid #c38a22;color:var(--gb-maroon);font-family:Georgia,'Times New Roman',serif;font-size:21px;font-weight:800}.gb-modal-head button{border:0!important;background:transparent!important;color:var(--gb-maroon)!important;font-size:28px!important;padding:0 6px!important;margin:0!important}.gb-modal-body{flex:1;overflow:auto;padding:12px;background:#fffdf7;color:#2b2018}
+.gb-modal-body .section,.gb-modal-body .tool-box,.gb-modal-body .study-advanced-card,.gb-modal-body .lesson,.gb-modal-body .template-section,.gb-modal-body .biblemastery-ai-box{background:#fffef9!important;color:#2b2018!important;border:1px solid #ead9b7!important;box-shadow:none!important}.gb-modal-body h2,.gb-modal-body h3,.gb-modal-body label{color:var(--gb-maroon)!important}.gb-modal-body p,.gb-modal-body .small,.gb-modal-body .small-note{color:#665447!important}.gb-modal-body input,.gb-modal-body select,.gb-modal-body textarea{background:#fff!important;color:#2b2018!important;border-color:#ddc89e!important}.gb-modal-body .result,.gb-modal-body .study-output,.gb-modal-body .study-item{background:#fffaf0!important;color:#2b2018!important;border-color:#ead9b7!important}.gb-modal-body button{background:#fff1c7!important;color:var(--gb-maroon)!important;border:1px solid #cda75c!important}.gb-modal-body button.success,.gb-modal-body button.primary{background:var(--gb-maroon)!important;color:#fff!important;border-color:var(--gb-maroon)!important}.gb-modal-body button.danger{background:#7b2b2b!important;color:#fff!important;border-color:#7b2b2b!important}
+.gb-present{position:fixed;inset:0;z-index:5000;background:#fffaf0;color:#2b2018;display:flex;flex-direction:column}.gb-present[hidden]{display:none!important}.gb-present-head{height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;background:linear-gradient(180deg,#fff5d3,#dfad4a);border-bottom:2px solid var(--gb-gold);color:var(--gb-maroon)}.gb-present-head strong{font-family:Georgia,'Times New Roman',serif;font-size:28px}.gb-present-head button{margin:0!important;background:#fff8e8!important;color:var(--gb-maroon)!important;border:1px solid #b98837!important}.gb-present-body{flex:1;display:grid;place-items:center;padding:34px;overflow:auto}.gb-present-slide{width:min(1200px,94vw);text-align:center}.gb-present-type{font-size:18px;letter-spacing:.12em;text-transform:uppercase;color:#8b5a10;font-weight:900}.gb-present-title{font-family:Georgia,'Times New Roman',serif;font-size:clamp(38px,5vw,70px);color:var(--gb-maroon);margin:12px 0 18px}.gb-present-content{font-size:clamp(22px,2.5vw,38px);line-height:1.5;white-space:pre-wrap}.gb-present-nav{display:flex;gap:8px;justify-content:center;padding:14px;border-top:1px solid #ead9b7;background:#fffef9}.gb-present-nav button{min-height:42px!important;padding:8px 18px!important;margin:0!important;background:#fff2cf!important;color:var(--gb-maroon)!important;border:1px solid #cda75c!important;border-radius:7px!important;font-weight:900!important}
+@media(max-width:1380px){.gb-control-strip{grid-template-columns:minmax(470px,.95fr) minmax(440px,1fr) minmax(360px,.82fr)}.gb-reading-grid{grid-template-columns:minmax(330px,.9fr) minmax(460px,1.25fr) minmax(340px,.95fr)}.gb-quick-grid{grid-template-columns:repeat(5,1fr)}}
+@media(max-width:1120px){.gb-brand{min-width:260px}.gb-brand-copy strong{font-size:28px}.gb-brand-copy small{font-size:9px;letter-spacing:1.5px}.gb-control-strip{grid-template-columns:1fr}.gb-reading-grid{grid-template-columns:1fr}.gb-reader-card,.gb-commentary-card,.gb-books-card{height:400px}.gb-builder-grid{grid-template-columns:1fr}.gb-lower-grid{grid-template-columns:1fr}.gb-lower-card{height:auto;min-height:220px}.gb-status-strip{grid-template-columns:1fr 1fr}}
+@media(max-width:760px){.gb-topbar{height:70px;min-height:70px;padding:0 9px}.gb-brand{min-width:0}.gb-brand-copy strong{font-size:20px}.gb-brand-copy small{display:none}.gb-global-search{display:none}.gb-top-actions{margin-left:auto}.gb-top-actions .gb-text{display:none}.gb-primary-nav{top:70px;overflow-x:auto;padding:0}.gb-primary-nav a,.gb-primary-nav button{padding:0 15px;white-space:nowrap}.gb-location-controls{grid-template-columns:1fr 1fr 1fr 38px 38px}.gb-location-controls .gb-select-wrap:first-child{grid-column:1/-1}.gb-header-actions{grid-template-columns:repeat(3,1fr)}.gb-field-grid{grid-template-columns:1fr}.gb-flow-add{grid-template-columns:1fr 1fr}.gb-flow-add input:nth-child(2){grid-column:1/-1}.gb-quick-grid{grid-template-columns:repeat(2,1fr)}.gb-status-strip{grid-template-columns:1fr}.gb-main{padding:6px}.gb-modal{padding:7px}.gb-modal-dialog{width:100%;height:94vh}}
+</style>
+
 </head>
 
 
@@ -2630,5 +2719,569 @@
   if(asEl("advPrintParticipantStudy"))asEl("advPrintParticipantStudy").addEventListener("click",()=>asPrint("BibleMastery — Participant Bible Study",asParticipantPackage()));
 
 </script>
+
+<div class="gb-app" id="gbApp">
+<header class="gb-topbar">
+  <div class="gb-brand"><span class="gb-brand-mark">♛</span><span class="gb-brand-copy"><strong>BibleMastery</strong><small>SEVEN NAMES ONE REDEEMER</small></span></div>
+  <div class="gb-global-search"><input id="gbGlobalSearch" type="search" placeholder="Go to a Bible reference (example: John 3:16)"><button id="gbGlobalSearchButton" type="button">⌕</button></div>
+  <div class="gb-top-actions"><button id="gbPageRefresh" type="button">↻ <span class="gb-text">Refresh</span></button><a class="gb-main-link" href="main.html">⌂ <span class="gb-text">Main Page</span></a><button type="button" onclick="window.location.href='account.html'">● <span class="gb-text">Account</span></button></div>
+</header>
+<nav class="gb-primary-nav"><a href="personal-study.html">Personal Study</a><a href="sermon.html">Sermon Builder</a><a href="bible-study.html" class="active">Group Bible Study</a><a href="library.html">Library</a><button id="gbNavTools" type="button">Tools⌄</button></nav>
+
+<main class="gb-main">
+  <div class="gb-control-strip">
+    <div class="gb-location-controls"><div class="gb-select-wrap" id="gbBookWrap"></div><div class="gb-select-wrap" id="gbChapterWrap"></div><div class="gb-select-wrap" id="gbVerseWrap"></div><div id="gbPrevWrap"></div><div id="gbNextWrap"></div></div>
+    <div class="gb-translation-strip"><button class="gb-trans-arrow" id="gbTransPrev" type="button">‹</button><div class="gb-translation-track" id="gbTranslationTrack"></div><button class="gb-trans-arrow" id="gbTransNext" type="button">›</button></div>
+    <div class="gb-header-actions">
+      <button type="button" data-gb-tool="flow"><span class="gb-icon">☷</span>Meeting Flow</button>
+      <button type="button" data-gb-tool="present"><span class="gb-icon">▣</span>Present</button>
+      <button type="button" data-gb-tool="views"><span class="gb-icon">👥</span>Leader / Group</button>
+      <button type="button" data-gb-tool="prayer"><span class="gb-icon">🙏</span>Prayer</button>
+      <button type="button" data-gb-tool="notebook"><span class="gb-icon">▤</span>Notebook</button>
+      <button type="button" data-gb-tool="more"><span class="gb-icon">•••</span>More</button>
+    </div>
+  </div>
+
+  <div class="gb-reading-grid">
+    <section class="gb-card gb-reader-card"><div class="gb-card-head"><div>📖 Bible Reader</div><button type="button" data-gb-tool="reader">⌄</button></div><div class="gb-card-body"><div id="gbReaderHost"></div></div></section>
+    <section class="gb-card gb-commentary-card">
+      <div class="gb-card-head"><div>✥ Commentary</div><button type="button" data-gb-tool="commentaries">⌄</button></div>
+      <div class="gb-card-body"><div class="gb-commentary-slider"><button class="gb-commentary-arrow" id="gbCommentaryPrev" type="button">‹</button><div class="gb-commentary-track" id="gbCommentaryTrack"></div><button class="gb-commentary-arrow" id="gbCommentaryNext" type="button">›</button></div><div id="gbCommentaryHost"></div></div>
+    </section>
+    <section class="gb-card gb-books-card"><div class="gb-card-head"><div>▦ Books Ready to Read</div><button type="button" data-gb-tool="books">⌄</button></div><div class="gb-card-body"><div class="gb-books-list" id="gbBooksList"></div></div></section>
+  </div>
+
+  <section class="gb-card gb-builder-card">
+    <div class="gb-card-head"><div>📚 Group Bible Study Builder</div><button type="button" data-gb-tool="builder">⌄</button></div>
+    <div class="gb-builder-body"><div class="gb-builder-grid">
+      <div class="gb-study-core">
+        <h3>Study Plan</h3>
+        <div class="gb-field-grid"><div class="gb-field"><label>Study Title</label><div id="gbTitleHost"></div></div><div class="gb-field"><label>Primary Passage</label><div id="gbPassageHost"></div></div><div class="gb-field"><label>Audience / Group</label><div id="gbAudienceHost"></div></div><div class="gb-field"><label>Meeting Length</label><div id="gbMinutesHost"></div></div></div>
+        <div class="gb-field" style="margin-top:7px"><label>Central Truth / Big Idea</label><div id="gbBigIdeaHost"></div></div>
+        <div class="gb-field" style="margin-top:7px"><label>Desired Outcome</label><div id="gbOutcomeHost"></div></div>
+        <div class="gb-study-editor"><label>Full Study / Teaching Notes</label><div id="gbManualStudyHost"></div></div>
+        <div class="gb-core-actions"><button class="primary" id="gbSaveStudy" type="button">💾 Save Study</button><button id="gbOpenGuided" type="button">18-Step Guide</button><button id="gbOpenAdvanced" type="button">Advanced Prep</button><button id="gbOpenAi" type="button">✨ BibleMastery AI</button></div>
+      </div>
+      <div class="gb-meeting-flow" id="gbMeetingFlowPanel">
+        <h3>Meeting Flow</h3><div class="gb-flow-list" id="gbFlowList"></div>
+        <div class="gb-flow-add"><select id="gbFlowType"><option>Welcome</option><option>Icebreaker</option><option>Scripture</option><option>Teaching</option><option>Discussion</option><option>Map / Timeline</option><option>Media</option><option>Application</option><option>Prayer</option><option>Closing</option></select><input id="gbFlowTitle" placeholder="Segment title"><input id="gbFlowMinutes" type="number" min="1" value="10"><button id="gbAddFlow" type="button">+ Add</button></div>
+        <div class="gb-core-actions"><button class="primary" id="gbStartPresentation" type="button">▣ Start Presentation</button><button id="gbStartTimerFromFlow" type="button">⏱ Start Pacing</button><button id="gbResetFlow" type="button">Reset Default Flow</button></div>
+      </div>
+    </div></div>
+  </section>
+
+  <div class="gb-lower-grid">
+    <section class="gb-card gb-lower-card"><div class="gb-card-head"><div>💬 Discussion & Facilitation</div><button type="button" data-gb-tool="discussion">⌄</button></div><div class="gb-card-body"><div class="gb-timer"><div class="gb-timer-display" id="gbTimerDisplay">10:00</div><button id="gbTimerStart" type="button">Start</button><button id="gbTimerPause" type="button">Pause</button><button id="gbTimerReset" type="button">Reset</button></div><div class="gb-inline-row"><button class="gb-small-btn primary" id="gbGeneratePrompts" type="button">Generate Passage Prompts</button><button class="gb-small-btn" id="gbAddPromptsToStudy" type="button">Add to Study</button></div><div class="gb-list" id="gbPromptList"></div></div></section>
+    <section class="gb-card gb-lower-card"><div class="gb-card-head"><div>▤ Shared Group Notebook</div><button type="button" data-gb-tool="notebook">⌄</button></div><div class="gb-card-body"><div class="gb-inline-row"><select id="gbNoteType"><option>Insight</option><option>Question</option><option>Aha Moment</option><option>Follow-Up</option></select><label style="font-size:11px;white-space:nowrap"><input id="gbNoteAnonymous" type="checkbox" style="width:auto"> Anonymous</label></div><textarea id="gbNoteText" placeholder="Add a group insight, question, or aha-moment..."></textarea><div class="gb-inline-row"><button class="gb-small-btn primary" id="gbAddNote" type="button">Add Note</button><button class="gb-small-btn" id="gbCopyNotebook" type="button">Copy Notebook</button></div><div class="gb-list" id="gbNotebookList"></div></div></section>
+    <section class="gb-card gb-lower-card"><div class="gb-card-head"><div>🙏 Prayer & Care Hub</div><button type="button" data-gb-tool="prayer">⌄</button></div><div class="gb-card-body"><div class="gb-inline-row"><input id="gbPrayerName" placeholder="Name or 'Anonymous'"><select id="gbPrayerStatus"><option>Waiting</option><option>Answered</option><option>Praise</option></select></div><textarea id="gbPrayerText" placeholder="Prayer request or praise..."></textarea><div class="gb-inline-row"><button class="gb-small-btn primary" id="gbAddPrayer" type="button">Add Request</button><button class="gb-small-btn" id="gbPrayerDigest" type="button">Prayer Digest</button></div><div class="gb-list" id="gbPrayerList"></div></div></section>
+  </div>
+
+  <section class="gb-card gb-quick-tools"><div class="gb-card-head"><div>Quick Group Study Tools</div><button type="button" data-gb-tool="more">⌄</button></div><div class="gb-quick-grid">
+    <button data-gb-tool="research"><span class="gb-icon">⌕</span>Research Tools</button><button data-gb-tool="guided"><span class="gb-icon">☷</span>18-Step Guide</button><button data-gb-tool="advanced"><span class="gb-icon">✦</span>Advanced Prep</button><button data-gb-tool="views"><span class="gb-icon">👥</span>Leader / Participant</button><button data-gb-tool="series"><span class="gb-icon">▦</span>Series & Sessions</button><button data-gb-tool="visuals"><span class="gb-icon">◫</span>Maps / Media</button><button data-gb-tool="live"><span class="gb-icon">●</span>Live Group</button><button data-gb-tool="saved"><span class="gb-icon">▰</span>Saved Studies</button><button data-gb-tool="offline"><span class="gb-icon">⇩</span>Offline / Sync</button><button data-gb-tool="ai"><span class="gb-icon">✨</span>AI Assistant</button>
+  </div></section>
+
+  <div class="gb-status-strip"><div class="gb-status-chip"><strong>Presentation:</strong> works locally</div><div class="gb-status-chip"><strong>Study saving:</strong> device + existing account save</div><div class="gb-status-chip"><strong>Notebook / Prayer:</strong> private local workspace</div><div class="gb-status-chip"><strong>Live phone sync:</strong> backend connection required</div></div>
+  <div class="gb-tool-storage" id="gbToolStorage"></div>
+</main>
+</div>
+
+<div class="gb-modal" id="gbModal" hidden><div class="gb-modal-dialog"><div class="gb-modal-head"><span id="gbModalTitle">Group Study Tool</span><button id="gbModalClose" type="button">×</button></div><div class="gb-modal-body" id="gbModalBody"></div></div></div>
+<div class="gb-present" id="gbPresentation" hidden><div class="gb-present-head"><strong>Group Bible Study</strong><button id="gbPresentationClose" type="button">× Close</button></div><div class="gb-present-body"><div class="gb-present-slide"><div class="gb-present-type" id="gbPresentType"></div><div class="gb-present-title" id="gbPresentTitle"></div><div class="gb-present-content" id="gbPresentContent"></div></div></div><div class="gb-present-nav"><button id="gbPresentPrev" type="button">← Previous</button><button id="gbPresentNext" type="button">Next →</button></div></div>
+
+
+<script id="gb-seven-names-group-builder-js">
+(function(){
+"use strict";
+const $=id=>document.getElementById(id),qs=(s,r=document)=>r.querySelector(s),qsa=(s,r=document)=>Array.from(r.querySelectorAll(s));
+document.body.classList.add('gb-ready');
+
+if(typeof readerBook!=='undefined'&&readerBook)$('gbBookWrap').appendChild(readerBook);
+if(typeof readerChapter!=='undefined'&&readerChapter)$('gbChapterWrap').appendChild(readerChapter);
+if(typeof readerVerse!=='undefined'&&readerVerse)$('gbVerseWrap').appendChild(readerVerse);
+if(typeof readerPrev!=='undefined'&&readerPrev)$('gbPrevWrap').appendChild(readerPrev);
+if(typeof readerNext!=='undefined'&&readerNext)$('gbNextWrap').appendChild(readerNext);
+if(typeof readerDisplay!=='undefined'&&readerDisplay)$('gbReaderHost').appendChild(readerDisplay);
+if(typeof commentaryContent!=='undefined'&&commentaryContent)$('gbCommentaryHost').appendChild(commentaryContent);
+
+const moveField=(id,host)=>{const e=$(id),h=$(host);if(e&&h)h.appendChild(e)};
+moveField('manualStudyTitle','gbTitleHost');moveField('advStudyPrimaryPassage','gbPassageHost');moveField('advStudyAudience','gbAudienceHost');
+moveField('advStudyMinutes','gbMinutesHost');moveField('advStudyBigIdea','gbBigIdeaHost');moveField('advStudyOutcome','gbOutcomeHost');moveField('manualStudy','gbManualStudyHost');
+
+const storage=$('gbToolStorage'),oldContainer=qs('body>.container');
+let aiBox=null,toolsColumn=null,saveSection=null;
+if(oldContainer){
+  aiBox=qs('.biblemastery-ai-box',oldContainer);
+  toolsColumn=qs('.bible-study-tools',oldContainer);
+  saveSection=qsa('.section',oldContainer).find(x=>(x.querySelector('h2')?.textContent||'').includes('Bible Study Controls'));
+}
+const guided=$('guidedStudySection'),advanced=$('advancedBibleStudyWorkspace');
+[aiBox,toolsColumn,guided,advanced,saveSection].forEach(el=>{if(el&&storage)storage.appendChild(el)});
+
+$('gbPageRefresh')?.addEventListener('click',()=>location.reload());
+
+function renderTranslations(){
+  const track=$('gbTranslationTrack');if(!track||typeof readerTranslation==='undefined'||!readerTranslation)return;track.innerHTML='';
+  Array.from(readerTranslation.options).forEach(opt=>{
+    const b=document.createElement('button');b.type='button';
+    b.textContent=String(opt.textContent||opt.value).replace('King James Version ','KJV ').replace('American Standard Version','ASV').replace('World English Bible','WEB').replace("Young's Literal Translation",'YLT').replace('Berean Standard Bible','BSB').replace('Majority Standard Bible','MSB').replace('Douay-Rheims American Edition','DRA').replace('Geneva Bible 1599','Geneva');
+    b.title=opt.textContent||opt.value;b.classList.toggle('active',readerTranslation.value===opt.value);
+    b.addEventListener('click',()=>{readerTranslation.value=opt.value;readerTranslation.dispatchEvent(new Event('change',{bubbles:true}));renderTranslations()});track.appendChild(b);
+  });
+}
+renderTranslations();
+readerTranslation?.addEventListener?.('change',()=>setTimeout(renderTranslations,20));
+$('gbTransPrev')?.addEventListener('click',()=>$('gbTranslationTrack')?.scrollBy({left:-320,behavior:'smooth'}));
+$('gbTransNext')?.addEventListener('click',()=>$('gbTranslationTrack')?.scrollBy({left:320,behavior:'smooth'}));
+
+function renderCommentaries(){
+  const track=$('gbCommentaryTrack');if(!track||typeof commentarySelect==='undefined'||!commentarySelect)return;track.innerHTML='';
+  Array.from(commentarySelect.options).forEach(opt=>{
+    const b=document.createElement('button');b.type='button';
+    b.textContent=String(opt.textContent||opt.value).replace(' — Complete','').replace(' — Exposition','').replace(' — Commentaries','').replace(' — Old Testament','').replace(' — Open Study Notes','');
+    b.title=opt.textContent||opt.value;b.classList.toggle('active',commentarySelect.value===opt.value);
+    b.addEventListener('click',()=>{commentarySelect.value=opt.value;commentarySelect.dispatchEvent(new Event('change',{bubbles:true}));renderCommentaries()});track.appendChild(b);
+  });
+}
+renderCommentaries();
+commentarySelect?.addEventListener?.('change',()=>setTimeout(renderCommentaries,20));
+$('gbCommentaryPrev')?.addEventListener('click',()=>{const a=Array.from(commentarySelect.options),i=Math.max(0,a.findIndex(x=>x.value===commentarySelect.value)),n=(i-1+a.length)%a.length;commentarySelect.value=a[n].value;commentarySelect.dispatchEvent(new Event('change',{bubbles:true}));renderCommentaries()});
+$('gbCommentaryNext')?.addEventListener('click',()=>{const a=Array.from(commentarySelect.options),i=Math.max(0,a.findIndex(x=>x.value===commentarySelect.value)),n=(i+1)%a.length;commentarySelect.value=a[n].value;commentarySelect.dispatchEvent(new Event('change',{bubbles:true}));renderCommentaries()});
+
+function goReference(){
+  const q=($('gbGlobalSearch')?.value||'').trim(),m=q.match(/^([1-3]?\s*[A-Za-z]+(?:\s+[A-Za-z]+)*)\s+(\d+)(?::(\d+))?$/);if(!m)return;
+  const wanted=m[1].toLowerCase().replace(/\s+/g,' ').trim(),opts=Array.from(readerBook.options),opt=opts.find(o=>String(o.textContent||'').toLowerCase().replace(/\s+/g,' ').trim()===wanted);if(!opt)return;
+  readerBook.value=opt.value;readerBook.dispatchEvent(new Event('change',{bubbles:true}));
+  setTimeout(()=>{const c=Array.from(readerChapter.options).find(o=>String(o.textContent||'')===String(m[2]));if(c){readerChapter.value=c.value;readerChapter.dispatchEvent(new Event('change',{bubbles:true}))}
+    if(m[3])setTimeout(()=>{const v=Array.from(readerVerse.options).find(o=>String(o.textContent||'')===String(m[3]));if(v){readerVerse.value=v.value;readerVerse.dispatchEvent(new Event('change',{bubbles:true}))}},80);
+  },80);
+}
+$('gbGlobalSearchButton')?.addEventListener('click',goReference);$('gbGlobalSearch')?.addEventListener('keydown',e=>{if(e.key==='Enter')goReference()});
+
+function currentReader(){
+  try{
+    if(typeof readerBible==='undefined'||!readerBible||typeof readerBookIndex==='undefined'||readerBookIndex<0||typeof readerChapterIndex==='undefined'||readerChapterIndex<0)return null;
+    const b=readerBible.books[readerBookIndex],c=b.chapters[readerChapterIndex],vs=c.verses||[],vi=readerVerse&&readerVerse.value!==''?Number(readerVerse.value)||0:0,v=vs[Math.max(0,Math.min(vi,Math.max(0,vs.length-1)))];
+    const name=getBookName(b),ch=chapterNumber(c,readerChapterIndex),vn=v?verseNumber(v,vi):1;return{bookName:name,chapter:ch,verse:vn,text:v?verseText(v,readerTranslation.value,readerBookIndex):'',reference:`${name} ${ch}:${vn}`};
+  }catch(e){return null}
+}
+
+  const gbTheologyBooks=[
+    {
+      title:"The Believer's Authority",
+      author:"Andrew Wommack",
+      resourceType:"Official free ministry resource",
+      officialUrl:"https://www.awmi.net/authority/",
+      chapters:[
+        {
+          title:"Book Information",
+          html:`
+            <div class="bm-official-book-card">
+              <div class="bm-official-book-badge">OFFICIAL AWMI RESOURCE</div>
+              <h3>The Believer's Authority</h3>
+              <p><strong>Author:</strong> Andrew Wommack</p>
+              <p>This teaching focuses on the authority believers have in Christ, resisting the devil, spiritual warfare, faith, and using the authority Jesus has delegated to believers.</p>
+              <p class="small-note">BibleMastery does not host the copyrighted book text. Andrew Wommack Ministries currently offers an official free PDF/resource through its own site.</p>
+              <div class="bm-official-book-actions">
+                <a class="search-button bm-book-link" href="https://www.awmi.net/authority/" target="_blank" rel="noopener">Read / Get Free PDF from AWMI ↗</a>
+                <a class="reader-nav-button bm-book-link" href="https://www.awmi.net/browse-teaching/believers-authority/" target="_blank" rel="noopener">Open Believer's Authority Teaching ↗</a>
+              </div>
+              <hr>
+              <h4>Study focus in BibleMastery</h4>
+              <ul>
+                <li>Authority delegated to believers through Jesus Christ</li>
+                <li>Identity and position in Christ</li>
+                <li>Resisting Satan rather than passively accepting defeat</li>
+                <li>The relationship between faith, God's Word, and spiritual authority</li>
+                <li>Applying biblical authority to everyday Christian life</li>
+              </ul>
+            </div>`
+        }
+      ]
+    },
+    {
+      title:"Christ the Healer",
+      author:"F. F. Bosworth",
+      resourceType:"Public-domain 1924 edition",
+      officialUrl:"https://openlibrary.org/works/OL31252713W/Christ_the_healer",
+      chapters:[
+        {
+          title:"Read 1924 Edition",
+          html:`
+            <div class="bm-public-domain-book">
+              <div class="bm-public-domain-badge">PUBLIC DOMAIN • ORIGINAL 1924 EDITION</div>
+              <h3>Christ the Healer</h3>
+              <p><strong>Author:</strong> F. F. Bosworth</p>
+              <p>This is the original 1924 edition of <em>Christ the Healer: Sermons on Divine Healing</em>. BibleMastery intentionally uses the 1924 public-domain edition and does not reproduce later copyrighted forewords, revisions, or added chapters.</p>
+              <div class="bm-book-source-actions">
+                <a class="search-button bm-book-link" href="https://archive.org/details/christhealerserm0000fred" target="_blank" rel="noopener">Open Full 1924 Scan ↗</a>
+                <a class="reader-nav-button bm-book-link" href="https://openlibrary.org/works/OL31252713W/Christ_the_healer" target="_blank" rel="noopener">Open Library Record ↗</a>
+              </div>
+              <iframe class="bm-book-scan-frame" src="https://archive.org/embed/christhealerserm0000fred" title="Christ the Healer, F. F. Bosworth, original 1924 edition" loading="lazy" allowfullscreen></iframe>
+              <p class="small-note">The scanned pages are served by Internet Archive. An internet connection is required for this embedded scan.</p>
+            </div>`
+        },
+        {
+          title:"Study Guide",
+          html:`
+            <div class="bm-public-domain-book">
+              <div class="bm-public-domain-badge">BIBLEMASTERY STUDY GUIDE</div>
+              <h3>Christ the Healer — Study Focus</h3>
+              <p>Bosworth's central emphasis is that believers should hear what Scripture says about Christ's healing ministry, redemption, faith, God's compassion, and receiving the promises of God.</p>
+              <div class="bm-book-study-grid">
+                <div class="bm-book-study-box"><h4>Healing & Redemption</h4><p>Study how Bosworth connects bodily healing with Christ's redemptive work and covenant promises.</p></div>
+                <div class="bm-book-study-box"><h4>Faith Comes by Hearing</h4><p>Notice the repeated emphasis on hearing God's Word until faith becomes settled in the heart.</p></div>
+                <div class="bm-book-study-box"><h4>The Lord's Compassion</h4><p>Trace passages where Jesus' compassion is connected with His willingness to heal the sick.</p></div>
+                <div class="bm-book-study-box"><h4>Receiving from Christ</h4><p>Compare Bosworth's teaching on appropriation, prayer, confession, and receiving with the Bible passages he cites.</p></div>
+              </div>
+              <h4>Key questions while reading</h4>
+              <ul>
+                <li>What Scriptures does Bosworth use to argue that healing is connected to redemption?</li>
+                <li>How does he distinguish God's willingness to heal from a person's process of receiving?</li>
+                <li>How does the compassion of Jesus shape his doctrine of healing?</li>
+                <li>Which claims are direct biblical statements, and which are Bosworth's interpretation of them?</li>
+                <li>How do these teachings connect with Jehovah-Rapha in the Seven Redemptive Names framework?</li>
+              </ul>
+            </div>`
+        },
+        {
+          title:"1924 Contents",
+          html:`
+            <div class="bm-public-domain-book">
+              <div class="bm-public-domain-badge">ORIGINAL EDITION CONTENTS</div>
+              <h3>Sections in the 1924 edition</h3>
+              <p>The original 1924 table of contents includes the following major sections:</p>
+              <ul>
+                <li>Sermon I</li>
+                <li>Is Healing for All?</li>
+                <li>The Lord's Compassion</li>
+                <li>How to Appropriate the Redemptive and Covenant Blessing of Bodily Healing</li>
+                <li>Paul's Thorn</li>
+                <li>Thirty-one Questions</li>
+                <li>Testimonies</li>
+              </ul>
+              <p class="small-note">Later editions expanded the book. BibleMastery keeps this entry tied to the 1924 edition so later copyrighted additions are not treated as public-domain text.</p>
+            </div>`
+        }
+      ]
+    },
+    {
+      title:"Ever-Increasing Faith",
+      author:"Smith Wigglesworth",
+      resourceType:"Public-domain 1924 edition",
+      officialUrl:"https://www.loc.gov/item/24022022/",
+      chapters:[
+        {
+          title:"Read 1924 Edition",
+          html:`
+            <div class="bm-public-domain-book">
+              <div class="bm-public-domain-badge">PUBLIC DOMAIN • 1924 EDITION</div>
+              <h3>Ever-Increasing Faith</h3>
+              <p><strong>Author:</strong> Smith Wigglesworth</p>
+              <p>The Library of Congress identifies this 1924 edition as public domain with no known restrictions and no copyright renewal found. BibleMastery links the original digitized edition rather than a later revised printing.</p>
+              <div class="bm-book-source-actions">
+                <a class="search-button bm-book-link" href="https://www.loc.gov/item/24022022/" target="_blank" rel="noopener">Library of Congress Edition ↗</a>
+                <a class="reader-nav-button bm-book-link" href="https://archive.org/details/everincreasingfa00wigg_0" target="_blank" rel="noopener">Open Full Scan ↗</a>
+              </div>
+              <iframe class="bm-book-scan-frame" src="https://archive.org/embed/everincreasingfa00wigg_0" title="Ever-Increasing Faith by Smith Wigglesworth, 1924 edition" loading="lazy" allowfullscreen></iframe>
+              <p class="small-note">The scan is served by Internet Archive and needs internet access unless we later package a local offline copy.</p>
+            </div>`
+        },
+        {
+          title:"Study Guide",
+          html:`
+            <div class="bm-public-domain-book">
+              <div class="bm-public-domain-badge">BIBLEMASTERY STUDY GUIDE</div>
+              <h3>Ever-Increasing Faith — Study Focus</h3>
+              <div class="bm-book-study-grid">
+                <div class="bm-book-study-box"><h4>Faith in God</h4><p>Trace how Wigglesworth connects believing God's Word with action, perseverance, and receiving from God.</p></div>
+                <div class="bm-book-study-box"><h4>Healing</h4><p>Compare his healing teaching with the Gospel accounts and the redemptive name Jehovah-Rapha.</p></div>
+                <div class="bm-book-study-box"><h4>Name of Jesus</h4><p>Study his emphasis on Christ's authority and the believer's use of Jesus' name.</p></div>
+                <div class="bm-book-study-box"><h4>Holy Spirit & Gifts</h4><p>Follow the chapters on Spirit baptism, spiritual gifts, healing, miracles, prophecy, discernment, and tongues.</p></div>
+              </div>
+              <h4>1924 chapter sequence</h4>
+              <ol>
+                <li>Have Faith in God</li><li>Deliverance to the Captives</li><li>The Power of the Name</li><li>Wilt Thou Be Made Whole?</li><li>I Am the Lord That Healeth Thee</li><li>Himself Took Our Infirmities</li><li>Our Risen Christ</li><li>Righteousness</li><li>The Words of This Life</li><li>Life in the Spirit</li><li>Full of the Spirit</li><li>Baptism of the Spirit</li><li>Concerning Spiritual Gifts</li><li>The Word of Knowledge and of Faith</li><li>The Gift of Healings and Miracles</li><li>The Gift of Prophecy</li><li>The Discerning of Spirits</li><li>The Gift of Tongues</li>
+              </ol>
+            </div>`
+        }
+      ]
+    },
+    {
+      title:"Faith That Prevails",
+      author:"Smith Wigglesworth",
+      resourceType:"Publisher resource / copyright-cautious entry",
+      officialUrl:"https://gospelpublishinghouse.com/shop/product/faith-that-prevails",
+      chapters:[
+        {
+          title:"Book Information",
+          html:`
+            <div class="bm-official-book-card">
+              <div class="bm-official-book-badge">OFFICIAL PUBLISHER RESOURCE</div>
+              <h3>Faith That Prevails</h3>
+              <p><strong>Author:</strong> Smith Wigglesworth</p>
+              <p>This classic focuses on faith, spiritual power, Pentecost, receiving power from the Holy Spirit, keeping spiritual vision, and living in God's present blessing.</p>
+              <p class="small-note">BibleMastery is not copying the full book text here. The Gospel Publishing House archive catalogs a 1938 copyrighted edition, and the publisher still sells the work today. This entry therefore links to the publisher while giving you a BibleMastery study guide.</p>
+              <div class="bm-official-book-actions">
+                <a class="search-button bm-book-link" href="https://gospelpublishinghouse.com/shop/product/faith-that-prevails" target="_blank" rel="noopener">Open Gospel Publishing House ↗</a>
+              </div>
+            </div>`
+        },
+        {
+          title:"Study Guide",
+          html:`
+            <div class="bm-public-domain-book">
+              <div class="bm-public-domain-badge">BIBLEMASTERY STUDY GUIDE</div>
+              <h3>Faith That Prevails — Study Focus</h3>
+              <p>The commonly published contents center on seven themes. Use these as a Bible study outline while keeping the copyrighted text on the publisher's site.</p>
+              <div class="bm-book-study-grid">
+                <div class="bm-book-study-box"><h4>God-Given Faith</h4><p>Compare Wigglesworth's faith emphasis with Hebrews 11 and Jesus' teaching on believing God.</p></div>
+                <div class="bm-book-study-box"><h4>Like Precious Faith</h4><p>Study the shared faith believers receive and how it grows through God's Word.</p></div>
+                <div class="bm-book-study-box"><h4>Spiritual Power</h4><p>Trace New Testament teaching on power, witness, holiness, and dependence on the Holy Spirit.</p></div>
+                <div class="bm-book-study-box"><h4>Pentecost & Power</h4><p>Compare Acts 1–2 with the book's emphasis on receiving power and Spirit-filled ministry.</p></div>
+              </div>
+              <h4>Chapter themes</h4>
+              <ol><li>God-Given Faith</li><li>Like Precious Faith</li><li>Spiritual Power</li><li>Paul's Pentecost</li><li>Ye Shall Receive Power</li><li>Keeping the Vision</li><li>Present-Time Blessings</li></ol>
+            </div>`
+        }
+      ]
+    },
+    {
+      title:"The Wonderful Name of Jesus",
+      author:"E. W. Kenyon",
+      resourceType:"Public-domain original 1927 edition",
+      officialUrl:"https://books.google.com/books/about/The_Wonderful_Name_of_Jesus.html?id=a5RpEQAAQBAJ",
+      topics:["authority in Christ","name of Jesus","faith","prayer","healing","spiritual warfare","redemption"],
+      chapters:[
+        {
+          title:"Book Information",
+          html:`
+            <div class="bm-public-domain-book">
+              <div class="bm-public-domain-badge">PUBLIC DOMAIN • ORIGINAL 1927 EDITION</div>
+              <h3>The Wonderful Name of Jesus</h3>
+              <p><strong>Author:</strong> E. W. Kenyon</p>
+              <p>This classic centers on the believer's authority in the name of Jesus, prayer, faith, healing, spiritual conflict, and the believer's position in Christ. BibleMastery will use only the original 1927 text when we add the complete book to the Library.</p>
+              <div class="bm-book-source-actions">
+                <a class="search-button bm-book-link" href="https://books.google.com/books/about/The_Wonderful_Name_of_Jesus.html?id=a5RpEQAAQBAJ" target="_blank" rel="noopener">Book Record ↗</a>
+              </div>
+            </div>`
+        },
+        {
+          title:"Study Guide",
+          html:`
+            <div class="bm-public-domain-book">
+              <div class="bm-public-domain-badge">BIBLEMASTERY STUDY GUIDE</div>
+              <h3>The Wonderful Name of Jesus — Study Focus</h3>
+              <div class="bm-book-study-grid">
+                <div class="bm-book-study-box"><h4>The Name of Jesus</h4><p>Trace the authority Jesus gives believers to act and pray in His name.</p></div>
+                <div class="bm-book-study-box"><h4>Authority</h4><p>Compare Kenyon's teaching with the Gospels, Acts, and the Epistles.</p></div>
+                <div class="bm-book-study-box"><h4>Faith & Prayer</h4><p>Study the relationship between faith, asking, speaking, and receiving.</p></div>
+                <div class="bm-book-study-box"><h4>Victory in Christ</h4><p>Follow themes of redemption, spiritual conflict, and the believer's position in Christ.</p></div>
+              </div>
+            </div>`
+        }
+      ]
+    },
+    {
+      title:"The Gospel of Healing",
+      author:"A. B. Simpson",
+      resourceType:"Public-domain original edition",
+      officialUrl:"https://cdn.cmalliance.org/wordpress/cmalliance/the-gospel-of-healing.pdf",
+      topics:["divine healing","redemption","faith","atonement","resurrection life","Jehovah-Rapha"],
+      chapters:[
+        {
+          title:"Read Public-Domain Edition",
+          html:`
+            <div class="bm-public-domain-book">
+              <div class="bm-public-domain-badge">PUBLIC DOMAIN • ORIGINAL HEALING CLASSIC</div>
+              <h3>The Gospel of Healing</h3>
+              <p><strong>Author:</strong> A. B. Simpson</p>
+              <p>Simpson presents a biblical case for divine healing, Christ's redemptive work, resurrection life, faith, and practical receiving of healing.</p>
+              <div class="bm-book-source-actions">
+                <a class="search-button bm-book-link" href="https://cdn.cmalliance.org/wordpress/cmalliance/the-gospel-of-healing.pdf" target="_blank" rel="noopener">Read Full Public-Domain PDF ↗</a>
+              </div>
+              <iframe class="bm-book-scan-frame" src="https://cdn.cmalliance.org/wordpress/cmalliance/the-gospel-of-healing.pdf" title="The Gospel of Healing by A. B. Simpson" loading="lazy"></iframe>
+            </div>`
+        },
+        {
+          title:"Study Guide",
+          html:`
+            <div class="bm-public-domain-book">
+              <div class="bm-public-domain-badge">BIBLEMASTERY STUDY GUIDE</div>
+              <h3>The Gospel of Healing — Study Focus</h3>
+              <ul>
+                <li>The scriptural foundation for divine healing</li>
+                <li>Healing and Christ's redemptive work</li>
+                <li>Resurrection life and the believer's body</li>
+                <li>Faith, practical directions, and common objections</li>
+                <li>Connections to Jehovah-Rapha and the healing ministry of Jesus</li>
+              </ul>
+            </div>`
+        }
+      ]
+    },
+    {
+      title:"Divine Healing",
+      author:"Andrew Murray",
+      resourceType:"Public-domain 1900 edition",
+      officialUrl:"https://books.google.com/books/about/Divine_Healing.html?id=reLE0QEACAAJ",
+      topics:["divine healing","faith","prayer","Holy Spirit","redemption","body","James 5"],
+      chapters:[
+        {
+          title:"Book Information",
+          html:`
+            <div class="bm-public-domain-book">
+              <div class="bm-public-domain-badge">PUBLIC DOMAIN • 1900 EDITION</div>
+              <h3>Divine Healing</h3>
+              <p><strong>Author:</strong> Andrew Murray</p>
+              <p>Murray develops a Scripture-centered teaching on healing, faith, prayer, the body as the temple of the Holy Spirit, the name of Jesus, and the relationship between healing and redemption.</p>
+              <div class="bm-book-source-actions">
+                <a class="search-button bm-book-link" href="https://books.google.com/books/about/Divine_Healing.html?id=reLE0QEACAAJ" target="_blank" rel="noopener">1900 Edition Record ↗</a>
+              </div>
+            </div>`
+        },
+        {
+          title:"Study Guide",
+          html:`
+            <div class="bm-public-domain-book">
+              <div class="bm-public-domain-badge">BIBLEMASTERY STUDY GUIDE</div>
+              <h3>Divine Healing — Study Focus</h3>
+              <div class="bm-book-study-grid">
+                <div class="bm-book-study-box"><h4>Forgiveness & Healing</h4><p>Compare Murray's treatment of pardon and healing with the Gospels and James 5.</p></div>
+                <div class="bm-book-study-box"><h4>Faith</h4><p>Study his teaching on the prayer of faith, unbelief, and perseverance.</p></div>
+                <div class="bm-book-study-box"><h4>The Body</h4><p>Trace his use of the body as the temple of the Holy Spirit and the Lord's claim upon it.</p></div>
+                <div class="bm-book-study-box"><h4>Jesus the Healer</h4><p>Compare the book with Christ's healing ministry and redemption passages.</p></div>
+              </div>
+            </div>`
+        }
+      ]
+    },
+    {
+      title:"The Ministry of Healing",
+      author:"A. J. Gordon",
+      resourceType:"Public-domain 1882 edition",
+      officialUrl:"https://books.google.com/books/about/The_Ministry_of_Healing.html?id=PQEDAAAAQAAJ",
+      topics:["divine healing","miracles","Scripture","missions","healing testimony","church history"],
+      chapters:[
+        {
+          title:"Read / Book Record",
+          html:`
+            <div class="bm-public-domain-book">
+              <div class="bm-public-domain-badge">PUBLIC DOMAIN • 1882 EDITION</div>
+              <h3>The Ministry of Healing</h3>
+              <p><strong>Author:</strong> A. J. Gordon</p>
+              <p>This early healing classic surveys biblical evidence, historical testimony, missions, healing experience, and arguments for the continuing ministry of divine healing.</p>
+              <div class="bm-book-source-actions">
+                <a class="search-button bm-book-link" href="https://books.google.com/books/about/The_Ministry_of_Healing.html?id=PQEDAAAAQAAJ" target="_blank" rel="noopener">Open Full-View Book Record ↗</a>
+              </div>
+            </div>`
+        },
+        {
+          title:"Study Guide",
+          html:`
+            <div class="bm-public-domain-book">
+              <div class="bm-public-domain-badge">BIBLEMASTERY STUDY GUIDE</div>
+              <h3>The Ministry of Healing — Study Focus</h3>
+              <ul>
+                <li>Biblical testimony for healing</li>
+                <li>Healing in church history and missions</li>
+                <li>Reason, testimony, and experience</li>
+                <li>Comparing historical healing claims with Scripture</li>
+                <li>How healing ministry relates to evangelism and compassion</li>
+              </ul>
+            </div>`
+        }
+      ]
+    }
+  ];
+function gbPlain(html){const d=document.createElement('div');d.innerHTML=String(html||'');return(d.textContent||'').replace(/\s+/g,' ').trim()}
+const gbStop=new Set('the and that with from this into unto upon have has had were was are for but not you your his her our out all any who which what when where shall will would should could may might can did does of to in on at by as a an or be been being'.split(' '));
+function gbKeywords(s){const c={};String(s||'').toLowerCase().replace(/[^a-z0-9\s]/g,' ').split(/\s+/).forEach(w=>{if(w.length<4||gbStop.has(w))return;c[w]=(c[w]||0)+1});return Object.keys(c).sort((a,b)=>c[b]-c[a]).slice(0,12)}
+function gbBestBooks(){
+  const s=currentReader(),out=$('gbBooksList');if(!out)return;if(!s){out.innerHTML='<div class="gb-book-card"><h4>Select a passage</h4><p>The two strongest book sections will appear here.</p></div>';return}
+  const ks=gbKeywords(s.reference+' '+s.text),per=[];gbTheologyBooks.forEach((b,bi)=>{let best=null;(b.chapters||[]).forEach((c,ci)=>{const text=gbPlain((c.title||'')+' '+(c.text||'')+' '+(c.html||'')),low=text.toLowerCase(),title=String(c.title||'').toLowerCase();let score=0;ks.forEach(k=>{if(low.includes(k))score+=2;if(title.includes(k))score+=5});if(low.includes(s.bookName.toLowerCase()))score+=3;const x={b,c,bi,ci,score,text};if(!best||score>best.score)best=x});if(best)per.push(best)});
+  const picks=per.sort((a,b)=>b.score-a.score).slice(0,2);
+  out.innerHTML=picks.map((x,i)=>`<article class="gb-book-card"><h4>${i+1}. ${escapeHTML(x.b.title||'Book')}</h4><p>${escapeHTML(x.b.author||'')}</p><div class="gb-book-start"><strong>Start here:</strong> ${escapeHTML(x.c.title||'Recommended section')}</div><p>${escapeHTML((x.text||'').slice(0,210))}${x.text?.length>210?'…':''}</p><button type="button" data-gb-book="${x.bi}" data-gb-chapter="${x.ci}">Read Section</button></article>`).join('');
+  qsa('[data-gb-book]',out).forEach(btn=>btn.addEventListener('click',()=>{const b=gbTheologyBooks[Number(btn.dataset.gbBook)],c=b?.chapters?.[Number(btn.dataset.gbChapter)];openCustom('▦ '+(b?.title||'Book'),`<h3>${escapeHTML(c?.title||'')}</h3><div>${c?.html||'<p>'+escapeHTML(c?.text||'')+'</p>'}</div>`)}));
+}
+readerBook?.addEventListener?.('change',()=>setTimeout(gbBestBooks,60));readerChapter?.addEventListener?.('change',()=>setTimeout(gbBestBooks,60));readerVerse?.addEventListener?.('change',()=>setTimeout(gbBestBooks,30));
+if(typeof readerDisplay!=='undefined'&&readerDisplay)new MutationObserver(()=>setTimeout(gbBestBooks,40)).observe(readerDisplay,{childList:true,subtree:true});setTimeout(gbBestBooks,500);
+
+const hiddenFields=['gbMeetingFlowJson','gbNotebookJson','gbPrayerJson','gbVisualsJson'];
+hiddenFields.forEach(id=>{if(!$(id)){const e=document.createElement('textarea');e.id=id;e.hidden=true;document.body.appendChild(e)}});
+try{if(typeof studyFields!=='undefined'&&Array.isArray(studyFields))hiddenFields.forEach(id=>{if(!studyFields.includes(id))studyFields.push(id)})}catch(e){}
+const GB_KEY='bibleMasteryGroupBuilderV2';function gbRead(){try{return JSON.parse(localStorage.getItem(GB_KEY)||'{}')||{}}catch(e){return{}}}
+function gbWrite(p){const v=Object.assign(gbRead(),p);localStorage.setItem(GB_KEY,JSON.stringify(v));return v}
+let saved=gbRead(),flow=Array.isArray(saved.flow)&&saved.flow.length?saved.flow:[],notebook=Array.isArray(saved.notebook)?saved.notebook:[],prayers=Array.isArray(saved.prayers)?saved.prayers:[],visuals=Array.isArray(saved.visuals)?saved.visuals:[];
+const defaultFlow=[{type:'Welcome',title:'Welcome & Opening',minutes:5},{type:'Icebreaker',title:'Icebreaker / Opening Question',minutes:10},{type:'Scripture',title:'Read the Primary Passage',minutes:10},{type:'Teaching',title:'Teaching & Context',minutes:15},{type:'Discussion',title:'Group Discussion',minutes:20},{type:'Application',title:'Application & Response',minutes:10},{type:'Prayer',title:'Prayer & Care',minutes:15}];
+if(!flow.length)flow=defaultFlow.map(x=>({...x}));
+function syncHidden(){$('gbMeetingFlowJson').value=JSON.stringify(flow);$('gbNotebookJson').value=JSON.stringify(notebook);$('gbPrayerJson').value=JSON.stringify(prayers);$('gbVisualsJson').value=JSON.stringify(visuals)}
+function saveGroup(){gbWrite({flow,notebook,prayers,visuals});syncHidden()}
+function restoreHidden(){try{const f=JSON.parse($('gbMeetingFlowJson').value||'[]'),n=JSON.parse($('gbNotebookJson').value||'[]'),p=JSON.parse($('gbPrayerJson').value||'[]'),v=JSON.parse($('gbVisualsJson').value||'[]');if(Array.isArray(f)&&f.length)flow=f;if(Array.isArray(n))notebook=n;if(Array.isArray(p))prayers=p;if(Array.isArray(v))visuals=v;saveGroup();renderFlow();renderNotebook();renderPrayers()}catch(e){}}
+$('loadStudyButton')?.addEventListener('click',()=>setTimeout(restoreHidden,180));
+
+function renderFlow(){
+  const out=$('gbFlowList');out.innerHTML=flow.map((x,i)=>`<div class="gb-flow-item" data-flow-i="${i}"><div class="gb-flow-num">${i+1}</div><input data-flow-title value="${escapeHTML(x.title||'')}"><input data-flow-min type="number" min="1" value="${Number(x.minutes)||5}"><button data-flow-up type="button">↑</button><button data-flow-down type="button">↓</button><button data-flow-del type="button">×</button></div>`).join('');
+  qsa('[data-flow-i]',out).forEach(row=>{const i=Number(row.dataset.flowI);qs('[data-flow-title]',row)?.addEventListener('input',e=>{flow[i].title=e.target.value;saveGroup()});qs('[data-flow-min]',row)?.addEventListener('input',e=>{flow[i].minutes=Math.max(1,Number(e.target.value)||1);saveGroup()});qs('[data-flow-up]',row)?.addEventListener('click',()=>{if(i>0){[flow[i-1],flow[i]]=[flow[i],flow[i-1]];saveGroup();renderFlow()}});qs('[data-flow-down]',row)?.addEventListener('click',()=>{if(i<flow.length-1){[flow[i+1],flow[i]]=[flow[i],flow[i+1]];saveGroup();renderFlow()}});qs('[data-flow-del]',row)?.addEventListener('click',()=>{flow.splice(i,1);saveGroup();renderFlow()})});
+}
+$('gbAddFlow')?.addEventListener('click',()=>{flow.push({type:$('gbFlowType').value,title:$('gbFlowTitle').value.trim()||$('gbFlowType').value,minutes:Math.max(1,Number($('gbFlowMinutes').value)||10)});$('gbFlowTitle').value='';saveGroup();renderFlow()});
+$('gbResetFlow')?.addEventListener('click',()=>{flow=defaultFlow.map(x=>({...x}));saveGroup();renderFlow()});renderFlow();
+
+let timerSeconds=600,timerRemaining=600,timerHandle=null;
+function showTimer(){const m=Math.floor(timerRemaining/60),s=timerRemaining%60;$('gbTimerDisplay').textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0')}
+function startTimer(sec){if(sec){timerSeconds=timerRemaining=Math.max(1,sec)}clearInterval(timerHandle);timerHandle=setInterval(()=>{timerRemaining=Math.max(0,timerRemaining-1);showTimer();if(timerRemaining<=0){clearInterval(timerHandle);timerHandle=null}},1000);showTimer()}
+$('gbTimerStart')?.addEventListener('click',()=>startTimer());$('gbTimerPause')?.addEventListener('click',()=>{clearInterval(timerHandle);timerHandle=null});$('gbTimerReset')?.addEventListener('click',()=>{clearInterval(timerHandle);timerHandle=null;timerRemaining=timerSeconds;showTimer()});$('gbStartTimerFromFlow')?.addEventListener('click',()=>startTimer((Number(flow[0]?.minutes)||10)*60));showTimer();
+
+let generatedPrompts=[];
+function generatePrompts(){const s=currentReader(),ref=s?.reference||$('advStudyPrimaryPassage')?.value||'the selected passage',t=(s?.text||'').toLowerCase(),theme=t.includes('faith')?'faith':t.includes('love')?'love':t.includes('fear')?'fear':t.includes('peace')?'peace':t.includes('heal')?'healing':t.includes('righteous')?'righteousness':'what this passage reveals about God and our response';generatedPrompts=[`Icebreaker: What experience from your life helps you connect with ${theme}?`,`Observation: What words, actions, or repeated ideas stand out in ${ref}?`,`Interpretation: What does this passage reveal about ${theme}, and what in the context supports that?`,`Application: What is one specific response this passage calls our group to make this week?`];$('gbPromptList').innerHTML=generatedPrompts.map((q,i)=>`<div class="gb-entry"><strong>${i===0?'Icebreaker':'Question '+i}</strong><br>${escapeHTML(q)}</div>`).join('')}
+$('gbGeneratePrompts')?.addEventListener('click',generatePrompts);$('gbAddPromptsToStudy')?.addEventListener('click',()=>{if(!generatedPrompts.length)generatePrompts();const e=$('advDiscussionQuestions');if(e)e.value=(e.value.trim()?e.value+'\n\n':'')+generatedPrompts.join('\n')});generatePrompts();
+
+function renderNotebook(){$('gbNotebookList').innerHTML=notebook.slice(0,8).map((n,i)=>`<div class="gb-entry"><strong>${escapeHTML(n.type||'Note')}</strong> · ${n.anonymous?'Anonymous':'Group'}<br>${escapeHTML(n.text||'')}<div class="gb-entry-actions"><button data-note-del="${i}" type="button">Delete</button></div></div>`).join('')||'<div class="gb-entry">No group notes yet.</div>';qsa('[data-note-del]',$('gbNotebookList')).forEach(b=>b.addEventListener('click',()=>{notebook.splice(Number(b.dataset.noteDel),1);saveGroup();renderNotebook()}))}
+$('gbAddNote')?.addEventListener('click',()=>{const text=$('gbNoteText').value.trim();if(!text)return;notebook.unshift({type:$('gbNoteType').value,anonymous:$('gbNoteAnonymous').checked,text,at:new Date().toISOString()});$('gbNoteText').value='';saveGroup();renderNotebook()});
+$('gbCopyNotebook')?.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(notebook.map(n=>`${n.type}: ${n.anonymous?'Anonymous':'Group'} — ${n.text}`).join('\n'))}catch(e){}});renderNotebook();
+
+function renderPrayers(){$('gbPrayerList').innerHTML=prayers.slice(0,8).map((p,i)=>`<div class="gb-entry"><strong>${escapeHTML(p.status||'Waiting')}</strong> · ${escapeHTML(p.name||'Anonymous')}<br>${escapeHTML(p.text||'')}<div class="gb-entry-actions"><button data-prayer-status="${i}:Waiting" type="button">Waiting</button><button data-prayer-status="${i}:Answered" type="button">Answered</button><button data-prayer-status="${i}:Praise" type="button">Praise</button><button data-prayer-del="${i}" type="button">Archive</button></div></div>`).join('')||'<div class="gb-entry">No prayer requests yet.</div>';qsa('[data-prayer-status]',$('gbPrayerList')).forEach(b=>b.addEventListener('click',()=>{const [i,s]=b.dataset.prayerStatus.split(':');prayers[Number(i)].status=s;saveGroup();renderPrayers()}));qsa('[data-prayer-del]',$('gbPrayerList')).forEach(b=>b.addEventListener('click',()=>{prayers.splice(Number(b.dataset.prayerDel),1);saveGroup();renderPrayers()}))}
+$('gbAddPrayer')?.addEventListener('click',()=>{const text=$('gbPrayerText').value.trim();if(!text)return;prayers.unshift({name:$('gbPrayerName').value.trim()||'Anonymous',status:$('gbPrayerStatus').value,text,at:new Date().toISOString()});$('gbPrayerText').value='';$('gbPrayerName').value='';saveGroup();renderPrayers()});renderPrayers();
+
+let presentIndex=0;
+function presentSlide(){if(!flow.length)return;presentIndex=Math.max(0,Math.min(presentIndex,flow.length-1));const x=flow[presentIndex],s=currentReader();$('gbPresentType').textContent=x.type||'Study';$('gbPresentTitle').textContent=x.title||'Group Bible Study';let content='';if((x.type||'').toLowerCase().includes('scripture')&&s)content=s.reference+'\n\n'+s.text;else if((x.type||'').toLowerCase().includes('discussion'))content=generatedPrompts.join('\n\n')||'Group discussion';else if((x.type||'').toLowerCase().includes('prayer'))content=prayers.filter(p=>p.status!=='Answered').map(p=>p.text).join('\n\n')||'Prayer & response';else content=`${x.minutes||0} minute segment`;$('gbPresentContent').textContent=content}
+function openPresentation(){presentIndex=0;$('gbPresentation').hidden=false;document.body.style.overflow='hidden';presentSlide()}
+$('gbStartPresentation')?.addEventListener('click',openPresentation);$('gbPresentationClose')?.addEventListener('click',()=>{$('gbPresentation').hidden=true;document.body.style.overflow=''});$('gbPresentPrev')?.addEventListener('click',()=>{presentIndex=Math.max(0,presentIndex-1);presentSlide()});$('gbPresentNext')?.addEventListener('click',()=>{presentIndex=Math.min(flow.length-1,presentIndex+1);presentSlide()});
+
+let modalReturn=null;
+function openModalNode(title,node){if(!node)return;const body=$('gbModalBody');body.innerHTML='';modalReturn={node};body.appendChild(node);$('gbModalTitle').textContent=title;$('gbModal').hidden=false;document.body.style.overflow='hidden'}
+function closeModal(){if(modalReturn?.node&&storage)storage.appendChild(modalReturn.node);modalReturn=null;$('gbModal').hidden=true;document.body.style.overflow=''}
+function openCustom(title,html){modalReturn=null;$('gbModalTitle').textContent=title;$('gbModalBody').innerHTML=html;$('gbModal').hidden=false;document.body.style.overflow='hidden'}
+window.gbOpenCustom=openCustom;
+$('gbModalClose')?.addEventListener('click',closeModal);$('gbModal')?.addEventListener('click',e=>{if(e.target===$('gbModal'))closeModal()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(!$('gbModal').hidden)closeModal();if(!$('gbPresentation').hidden){$('gbPresentation').hidden=true;document.body.style.overflow=''}}});
+
+function leaderParticipant(){let leader='',participant='';try{leader=typeof asLeaderPackage==='function'?asLeaderPackage():($('manualStudy')?.value||'');participant=typeof asParticipantPackage==='function'?asParticipantPackage():($('manualStudy')?.value||'')}catch(e){}openCustom('👥 Leader Notes vs Participant View',`<div class="gb-field-grid"><div><h3>Leader View</h3><textarea style="width:100%;min-height:520px">${escapeHTML(leader)}</textarea></div><div><h3>Participant View</h3><textarea style="width:100%;min-height:520px">${escapeHTML(participant)}</textarea></div></div><div class="gb-core-actions"><button id="gbPrintLeader" type="button">Print Leader Guide</button><button id="gbPrintParticipant" type="button">Print Participant Handout</button></div>`);setTimeout(()=>{$('gbPrintLeader')?.addEventListener('click',()=>$('advPrintLeaderStudy')?.click());$('gbPrintParticipant')?.addEventListener('click',()=>$('advPrintParticipantStudy')?.click())},0)}
+function visualsPopup(){openCustom('◫ Maps, Timelines & Media',`<p>Add a visual or media block to the study flow.</p><div class="gb-field-grid"><div class="gb-field"><label>Type</label><select id="gbVisualType"><option>Map</option><option>Timeline</option><option>Image</option><option>Video</option><option>Audio / Podcast</option><option>PDF / Handout</option><option>Link</option></select></div><div class="gb-field"><label>Title</label><input id="gbVisualTitle"></div></div><div class="gb-field"><label>URL / Resource</label><input id="gbVisualUrl"></div><div class="gb-field"><label>Leader Notes</label><textarea id="gbVisualNotes"></textarea></div><div class="gb-core-actions"><button class="primary" id="gbAddVisual" type="button">Add to Meeting Flow</button></div><div id="gbVisualList" class="gb-list" style="margin-top:10px"></div>`);const render=()=>{$('gbVisualList').innerHTML=visuals.map(v=>`<div class="gb-entry"><strong>${escapeHTML(v.type)} — ${escapeHTML(v.title||'Visual')}</strong><br>${escapeHTML(v.url||'')}<br>${escapeHTML(v.notes||'')}</div>`).join('')||'<div class="gb-entry">No visual/media blocks saved yet.</div>'};setTimeout(()=>{render();$('gbAddVisual')?.addEventListener('click',()=>{const v={type:$('gbVisualType').value,title:$('gbVisualTitle').value.trim(),url:$('gbVisualUrl').value.trim(),notes:$('gbVisualNotes').value.trim()};visuals.push(v);flow.push({type:(v.type==='Map'||v.type==='Timeline')?'Map / Timeline':'Media',title:v.title||v.type,minutes:5,url:v.url,notes:v.notes});saveGroup();renderFlow();render()})},0)}
+function livePopup(){openCustom('● Live Group & Follow-Along',`<h3>Presentation Mode is active now.</h3><p>Use the projector/shared-screen presentation from this page.</p><h3>Phones and tablets</h3><p>Real-time join codes, cross-device shared notebooks, silent/anonymous submissions from other devices, and live leader broadcast require a realtime group backend and member permissions. This page keeps those features ready without pretending they are connected yet.</p>`)}
+function offlinePopup(){openCustom('⇩ Offline & Cross-Device',`<h3>Offline Meeting Snapshot</h3><p>The study, flow, prayer hub, notebook, and visual links are saved locally as you work.</p><div class="gb-core-actions"><button id="gbOfflineSave" class="primary" type="button">Save Offline Snapshot</button><button id="gbBackupCopy" type="button">Copy Backup JSON</button></div><p id="gbOfflineStatus"></p>`);setTimeout(()=>{$('gbOfflineSave')?.addEventListener('click',()=>{saveGroup();$('gbOfflineStatus').textContent='Offline group-study data saved on this device.'});$('gbBackupCopy')?.addEventListener('click',async()=>{const data={group:gbRead(),title:$('manualStudyTitle')?.value||'',study:$('manualStudy')?.value||''};try{await navigator.clipboard.writeText(JSON.stringify(data,null,2));$('gbOfflineStatus').textContent='Backup JSON copied.'}catch(e){}})},0)}
+$('gbPrayerDigest')?.addEventListener('click',()=>{const digest=prayers.filter(p=>p.status!=='Answered').map(p=>`${p.name}: ${p.text} [${p.status}]`).join('\n')||'No active prayer requests.';openCustom('🙏 Prayer Reminder Digest',`<p>Copy this approved digest into your email/text workflow.</p><textarea id="gbDigest" style="width:100%;min-height:280px">${escapeHTML(digest)}</textarea><div class="gb-core-actions"><button id="gbCopyDigest" type="button">Copy Digest</button></div>`);setTimeout(()=>$('gbCopyDigest')?.addEventListener('click',async()=>{try{await navigator.clipboard.writeText($('gbDigest').value)}catch(e){}}),0)});
+
+function route(name){
+  if(name==='present'){openPresentation();return}if(name==='views'){leaderParticipant();return}
+  if(name==='flow'){document.getElementById('gbMeetingFlowPanel')?.scrollIntoView({behavior:'smooth',block:'center'});return}
+  if(name==='discussion'){document.querySelector('.gb-lower-grid')?.scrollIntoView({behavior:'smooth',block:'center'});return}
+  if(name==='prayer'){document.querySelector('.gb-lower-grid')?.scrollIntoView({behavior:'smooth',block:'center'});return}
+  if(name==='notebook'){document.querySelector('.gb-lower-grid')?.scrollIntoView({behavior:'smooth',block:'center'});return}
+  if(name==='research'||name==='reader'||name==='commentaries'||name==='more'){if(toolsColumn)openModalNode('⌕ Bible Study Research Tools',toolsColumn);return}
+  if(name==='guided'){if(guided)openModalNode('☷ 18-Step Bible Study Preparation Guide',guided);return}
+  if(name==='advanced'||name==='series'||name==='builder'){if(advanced)openModalNode('✦ Advanced Group Bible Study Preparation',advanced);return}
+  if(name==='ai'){if(aiBox)openModalNode('✨ BibleMastery AI — Group Bible Study',aiBox);return}
+  if(name==='saved'){if(saveSection)openModalNode('▰ Saved Group Bible Studies',saveSection);return}
+  if(name==='visuals'){visualsPopup();return}if(name==='live'){livePopup();return}if(name==='offline'){offlinePopup();return}
+  if(name==='books'){openCustom('▦ Books Ready to Read','<p>The two recommended sections follow the current Bible passage. Choose Read Section to open the relevant place.</p>')}
+}
+qsa('[data-gb-tool]').forEach(b=>b.addEventListener('click',()=>route(b.dataset.gbTool)));$('gbNavTools')?.addEventListener('click',()=>route('more'));$('gbOpenGuided')?.addEventListener('click',()=>route('guided'));$('gbOpenAdvanced')?.addEventListener('click',()=>route('advanced'));$('gbOpenAi')?.addEventListener('click',()=>route('ai'));$('gbSaveStudy')?.addEventListener('click',()=>{saveGroup();$('saveStudyButton')?.click()});
+
+function maybeSeedPassage(){const s=currentReader(),e=$('advStudyPrimaryPassage');if(s&&e&&!e.value.trim())e.value=s.bookName+' '+s.chapter}
+readerChapter?.addEventListener?.('change',()=>setTimeout(maybeSeedPassage,50));setTimeout(maybeSeedPassage,600);
+saveGroup();
+})();
+</script>
+
 </body>
 </html>
