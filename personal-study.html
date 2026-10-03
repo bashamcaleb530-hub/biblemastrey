@@ -3745,7 +3745,7 @@ body{overflow-x:hidden}
 <div class="bm-top-actions">
 <button class="bm-icon-button" title="Notifications" type="button">♧</button>
 <button class="bm-page-refresh-button" id="bmPageRefreshButton" title="Refresh Personal Study" type="button">↻ <span>Refresh</span></button>
-<a class="bm-main-page-link" href="personal-study.html">⌂ <span>Main Page</span></a>
+<a class="bm-main-page-link" href="#" id="bmMainPageNoReload">⌂ <span>Main Page</span></a>
 <button class="bm-profile-button" id="bmProfileButton" title="Account" type="button" onclick="window.location.href='account.html'">●</button>
 </div>
 </header>
@@ -3762,7 +3762,7 @@ body{overflow-x:hidden}
 <button data-bm-open-extra="masteryNotebook" type="button">▤ <span>Notebook</span></button>
 <button data-deep-shortcut="saved" type="button">▰ <span>Saved Studies</span></button>
 <button id="bmSettingsButton" type="button">⚙ <span>Settings</span></button>
-<a href="personal-study.html">⌂ <span>Main Page</span></a>
+<a href="#" id="bmSidebarMainPageNoReload">⌂ <span>Main Page</span></a>
 </nav>
 <div class="bm-sidebar-motto" aria-label="Seven Redemptive Names of God theme">
   <div class="bm-sidebar-crown" aria-hidden="true">♛</div>
@@ -12487,6 +12487,41 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
   const STORAGE='biblemastery.personalStudy.layout.v2';
   const body=document.body;
   const $=id=>document.getElementById(id);
+
+  // Main Page means return to the top of Personal Study WITHOUT reloading.
+  // The page only reloads from the explicit Refresh button or a fresh app/page launch.
+  function goMainWithoutReload(event){
+    if(event) event.preventDefault();
+
+    // Close any open panels/popups that should not remain over the main dashboard.
+    const settings=$('bmSettingsPanel');
+    if(settings) settings.hidden=true;
+
+    const versePopup=$('snVerseActionPopover');
+    if(versePopup) versePopup.hidden=true;
+
+    const modal=$('snToolModal');
+    if(modal && modal.classList.contains('open')){
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden','true');
+    }
+
+    const top=$('bmDashboardTop') || document.querySelector('.sn-dashboard') || document.body;
+    try{
+      top.scrollIntoView({behavior:'smooth',block:'start'});
+    }catch(e){
+      window.scrollTo(0,0);
+    }
+
+    // Keep URL clean without causing navigation/reload.
+    if(location.hash){
+      history.replaceState(history.state,'',location.pathname+location.search);
+    }
+  }
+
+  $('bmMainPageNoReload')?.addEventListener('click',goMainWithoutReload);
+  $('bmSidebarMainPageNoReload')?.addEventListener('click',goMainWithoutReload);
+
   $('bmPageRefreshButton')?.addEventListener('click',()=>window.location.reload());
   function setLayout(layout){
     layout=layout==='classic'?'classic':'dashboard';
@@ -14602,6 +14637,224 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
   window.addEventListener('storage',function(e){
     if(e.key===AUTH_KEY) apply();
   });
+})();
+</script>
+
+
+<script id="rns-main-page-no-reload-2026">
+(function(){
+  function samePersonalStudyLink(a){
+    if(!a) return false;
+    const raw=a.getAttribute('href')||'';
+    if(raw==='personal-study.html' || raw==='./personal-study.html') return true;
+    try{
+      const u=new URL(a.href,location.href);
+      return u.pathname===location.pathname && /personal-study\.html$/i.test(u.pathname);
+    }catch(e){ return false; }
+  }
+
+  document.addEventListener('click',function(e){
+    const a=e.target.closest?.('a');
+    if(!samePersonalStudyLink(a)) return;
+
+    // Only intercept links intended as "Main Page"; other same-page links can behave normally.
+    const label=(a.textContent||'').trim().toLowerCase();
+    if(!label.includes('main page')) return;
+
+    e.preventDefault();
+    const top=document.getElementById('bmDashboardTop') ||
+              document.querySelector('.sn-dashboard') ||
+              document.body;
+    try{ top.scrollIntoView({behavior:'smooth',block:'start'}); }
+    catch(_){ window.scrollTo(0,0); }
+  },true);
+})();
+</script>
+
+
+<script id="rns-live-study-session-personal-study-2026">
+(function(){
+  'use strict';
+
+  // Keep THIS study area's unfinished work alive while the app/tab session is open.
+  // sessionStorage is intentionally used instead of localStorage:
+  // navigating to another study area does not erase the draft, while ending the
+  // browsing/app session allows a fresh start next time.
+  const PAGE_KEY='rns.liveStudySession.v1.personal-study';
+  const REFRESH_IDS=["bmPageRefreshButton"];
+  let restoring=false;
+  let saveTimer=null;
+
+  function controlKey(el,index){
+    if(el.id) return 'id:'+el.id;
+    if(el.name) return 'name:'+el.name+':'+index;
+    return 'anon:'+el.tagName+':'+index;
+  }
+
+  function collect(){
+    const controls=[...document.querySelectorAll('input,textarea,select,[contenteditable="true"]')];
+    const values={};
+
+    controls.forEach((el,index)=>{
+      if(el.matches('input[type="password"],input[type="file"],input[type="button"],input[type="submit"],input[type="reset"]')) return;
+      const key=controlKey(el,index);
+
+      if(el.matches('[contenteditable="true"]')){
+        values[key]={kind:'html',value:el.innerHTML};
+      }else if(el.type==='checkbox' || el.type==='radio'){
+        values[key]={kind:'checked',value:!!el.checked};
+      }else{
+        values[key]={kind:'value',value:el.value};
+      }
+    });
+
+    const details=[...document.querySelectorAll('details')].map((el,index)=>({
+      key:el.id ? 'id:'+el.id : 'details:'+index,
+      open:!!el.open
+    }));
+
+    const scrolls={};
+    document.querySelectorAll('[id]').forEach(el=>{
+      if(el.scrollHeight>el.clientHeight+8 || el.scrollWidth>el.clientWidth+8){
+        if(el.scrollTop || el.scrollLeft){
+          scrolls[el.id]={top:el.scrollTop,left:el.scrollLeft};
+        }
+      }
+    });
+
+    const activeIds=[...document.querySelectorAll('.active[id]')].map(el=>el.id);
+
+    const data={
+      values,
+      details,
+      scrolls,
+      activeIds,
+      windowScrollX:window.scrollX||0,
+      windowScrollY:window.scrollY||0,
+      hash:location.hash||'',
+      savedAt:Date.now()
+    };
+
+    try{ sessionStorage.setItem(PAGE_KEY,JSON.stringify(data)); }catch(e){}
+  }
+
+  function scheduleSave(){
+    if(restoring) return;
+    clearTimeout(saveTimer);
+    saveTimer=setTimeout(collect,120);
+  }
+
+  function findControl(key,index){
+    if(key.startsWith('id:')) return document.getElementById(key.slice(3));
+    if(key.startsWith('name:')){
+      const name=key.split(':').slice(1,-1).join(':');
+      const list=[...document.getElementsByName(name)];
+      return list[index] || list[0] || null;
+    }
+    return null;
+  }
+
+  function restoreControls(data){
+    const controls=[...document.querySelectorAll('input,textarea,select,[contenteditable="true"]')];
+
+    controls.forEach((el,index)=>{
+      if(el.matches('input[type="password"],input[type="file"],input[type="button"],input[type="submit"],input[type="reset"]')) return;
+      const key=controlKey(el,index);
+      const saved=data.values && data.values[key];
+      if(!saved) return;
+
+      if(saved.kind==='html' && el.matches('[contenteditable="true"]')){
+        if(el.innerHTML!==saved.value) el.innerHTML=saved.value;
+        return;
+      }
+
+      if(saved.kind==='checked'){
+        el.checked=!!saved.value;
+        return;
+      }
+
+      if(saved.kind==='value'){
+        // For async-loaded selects, wait until the saved option exists.
+        if(el.tagName==='SELECT' && saved.value!=='' && ![...el.options].some(o=>o.value===saved.value)) return;
+        if(el.value!==saved.value){
+          el.value=saved.value;
+          // Change is needed so dependent reader/chapter controls rebuild correctly.
+          if(el.tagName==='SELECT') el.dispatchEvent(new Event('change',{bubbles:true}));
+          else el.dispatchEvent(new Event('input',{bubbles:true}));
+        }
+      }
+    });
+
+    (data.details||[]).forEach((item,index)=>{
+      let el=null;
+      if(item.key.startsWith('id:')) el=document.getElementById(item.key.slice(3));
+      else el=document.querySelectorAll('details')[index];
+      if(el) el.open=!!item.open;
+    });
+  }
+
+  function restore(){
+    let data=null;
+    try{ data=JSON.parse(sessionStorage.getItem(PAGE_KEY)||'null'); }catch(e){}
+    if(!data) return;
+
+    restoring=true;
+
+    // Restore several times because Bible/book/chapter options and embedded UI
+    // are populated asynchronously on these pages.
+    [0,220,700,1500].forEach(delay=>setTimeout(()=>restoreControls(data),delay));
+
+    setTimeout(()=>{
+      (data.scrolls||{});
+      Object.entries(data.scrolls||{}).forEach(([id,pos])=>{
+        const el=document.getElementById(id);
+        if(el){
+          el.scrollTop=Number(pos.top)||0;
+          el.scrollLeft=Number(pos.left)||0;
+        }
+      });
+
+      // Restore last private-builder tab without forcing a new page load.
+      if('personal-study'==='seven-names-builder' && data.hash){
+        if(data.hash==='#bible-course') document.getElementById('snrBibleCourseButton')?.click();
+        else if(data.hash==='#bible-study') document.getElementById('snrBibleStudyButton')?.click();
+        else if(data.hash==='#sermon') document.getElementById('snrSermonButton')?.click();
+      }
+
+      window.scrollTo(Number(data.windowScrollX)||0,Number(data.windowScrollY)||0);
+      restoring=false;
+      setTimeout(collect,80);
+    },1650);
+  }
+
+  function clearLiveSession(){
+    try{ sessionStorage.removeItem(PAGE_KEY); }catch(e){}
+  }
+
+  // Explicit page Refresh means "start this study area fresh now".
+  REFRESH_IDS.forEach(id=>{
+    const btn=document.getElementById(id);
+    if(btn){
+      btn.addEventListener('click',clearLiveSession,true);
+    }
+  });
+
+  document.addEventListener('input',scheduleSave,true);
+  document.addEventListener('change',scheduleSave,true);
+  document.addEventListener('click',()=>setTimeout(scheduleSave,0),true);
+  window.addEventListener('pagehide',collect);
+  window.addEventListener('visibilitychange',()=>{
+    if(document.visibilityState==='hidden') collect();
+  });
+  window.addEventListener('scroll',scheduleSave,{passive:true});
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',restore,{once:true});
+  }else{
+    restore();
+  }
+
+  window.rnsClearCurrentLiveStudySession=clearLiveSession;
 })();
 </script>
 
