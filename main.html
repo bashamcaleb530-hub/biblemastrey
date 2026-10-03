@@ -413,8 +413,8 @@
   </a>
 
   <a href="seven-names-builder.html" id="ownerSevenNamesBuilderLink" class="sidebar-link" style="display:none;">
-    <strong>✦ Seven Names One Redeemer</strong>
-    <span>Private Sermon & Bible Study Builder.</span>
+    <strong>✦ Seven Names One Redeemer Sermon / Bible Study Builder</strong>
+    <span>Private ministry sermon and Bible study workspace.</span>
     <div class="admin-label">Owner Only</div>
   </a>
 
@@ -5328,6 +5328,9 @@ const staySignedIn =
 
       accountMessage.textContent =
   "Logged in successfully!";
+  applyOwnerWorkspace(
+    !!(data && data.user && data.user.email === ADMIN_EMAIL)
+  );
 
 if (
   !staySignedIn.checked
