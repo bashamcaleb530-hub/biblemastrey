@@ -4385,123 +4385,268 @@ body>header,body>.container{display:none!important}
 
   function plainText(html){const d=document.createElement('div');d.innerHTML=String(html||'');return (d.textContent||'').replace(/\s+/g,' ').trim();}
   const stopWords=new Set('the and that with from this into unto upon have has had were was are for but not you your his her our out all any who which what when where shall will would should could may might can did does of to in on at by as a an or be been being'.split(' '));
-  function keywords(s){const counts={};String(s||'').toLowerCase().replace(/[^a-z0-9\s]/g,' ').split(/\s+/).forEach(w=>{if(w.length<4||stopWords.has(w))return;counts[w]=(counts[w]||0)+1});return Object.keys(counts).sort((a,b)=>counts[b]-counts[a]).slice(0,18)}
-  function theologyBooks(){return Array.isArray(window.BIBLEMASTERY_THEOLOGY_BOOKS)?window.BIBLEMASTERY_THEOLOGY_BOOKS:[];}
+
+  function keywords(s){
+    const counts={};
+    String(s||'').toLowerCase().replace(/[^a-z0-9\s]/g,' ').split(/\s+/).forEach(w=>{
+      if(w.length<4||stopWords.has(w))return;
+      counts[w]=(counts[w]||0)+1;
+    });
+    return Object.keys(counts).sort((a,b)=>counts[b]-counts[a]).slice(0,22);
+  }
+
+  function theologyBooks(){
+    return Array.isArray(window.BIBLEMASTERY_THEOLOGY_BOOKS)?window.BIBLEMASTERY_THEOLOGY_BOOKS:[];
+  }
 
   function sermonTopicContext(){
-    const ids=['manualSermonTitle','sermonTitle','mainScripture','advPrimaryPassage','advBigIdea','advThemeTracker','advOutcome','advAudience'];
+    const ids=[
+      'manualSermonTitle','sermonTitle','mainScripture','advPrimaryPassage',
+      'advBigIdea','advThemeTracker','advOutcome','advAudience'
+    ];
     const parts=ids.map(id=>$(id)?.value||'').filter(Boolean);
     const manual=$('manualSermon')?.value||'';
-    if(manual)parts.push(manual.slice(0,1200));
+    if(manual)parts.push(manual.slice(0,1800));
     return parts.join(' ');
   }
 
-  function chapterPassages(c){
+  function wholeBibleChapterContext(){
+    try{
+      if(!readerBible||readerBookIndex<0||readerChapterIndex<0)return '';
+      const book=readerBible.books[readerBookIndex];
+      const ch=book?.chapters?.[readerChapterIndex];
+      if(!ch)return '';
+      return (ch.verses||[]).map((v,vi)=>verseText(v,readerTranslation?.value||'KJV',readerBookIndex)).join(' ');
+    }catch(e){return ''}
+  }
+
+  function chapterParagraphs(c){
     const rows=[];
     const html=String(c?.html||'').trim();
+
     if(html){
       const wrap=document.createElement('div');
       wrap.innerHTML=html;
-      const nodes=Array.from(wrap.querySelectorAll('p,li,blockquote'));
+
+      // Paragraph-sized reading units, not single sentences.
+      const nodes=Array.from(wrap.querySelectorAll('p,li,blockquote,.bm-book-study-box'));
       nodes.forEach((node,i)=>{
         const text=(node.textContent||'').replace(/\s+/g,' ').trim();
         if(text.length>=35)rows.push({text,html:node.outerHTML,index:i});
       });
+
       if(!rows.length){
         const text=(wrap.textContent||'').replace(/\s+/g,' ').trim();
-        if(text)rows.push({text,html:html,index:0});
+        if(text)rows.push({text,html,index:0});
       }
     }
+
     if(!rows.length){
       const text=String(c?.text||'').trim();
       const blocks=text.split(/\n\s*\n+/).map(x=>x.replace(/\s+/g,' ').trim()).filter(Boolean);
       blocks.forEach((block,i)=>rows.push({text:block,html:'<p>'+esc(block)+'</p>',index:i}));
     }
+
     return rows;
   }
 
-  function scoreBookPassage(text,title,ks,bookName){
-    const low=String(text||'').toLowerCase(), t=String(title||'').toLowerCase();
+  function isCopyrightRestrictedBook(b){
+    const type=String(b?.resourceType||'').toLowerCase();
+    return type.includes('copyright') ||
+           type.includes('publisher resource') ||
+           type.includes('official free ministry resource');
+  }
+
+  function scoreTextAgainstContext(text,title,ks,bookName){
+    const low=String(text||'').toLowerCase();
+    const t=String(title||'').toLowerCase();
     let score=0;
+
     ks.forEach(k=>{
       if(low.includes(k))score+=3;
-      if(t.includes(k))score+=5;
+      if(t.includes(k))score+=6;
     });
+
     if(bookName&&low.includes(String(bookName).toLowerCase()))score+=3;
     return score;
   }
 
   function rankBooks(s){
-    const context=((s?.reference||'')+' '+(s?.text||'')+' '+sermonTopicContext()).trim();
-    const ks=keywords(context), winners=[];
+    const bibleContext=[
+      s?.reference||'',
+      s?.text||'',
+      wholeBibleChapterContext(),
+      sermonTopicContext()
+    ].join(' ');
+
+    const ks=keywords(bibleContext);
+    const winners=[];
+
     theologyBooks().forEach((b,bi)=>{
       let best=null;
+
       (b.chapters||[]).forEach((c,ci)=>{
-        const passages=chapterPassages(c);
-        passages.forEach((p,pi)=>{
-          const score=scoreBookPassage(p.text,c.title||'',ks,s?.bookName||'');
-          const row={b,c,bi,ci,pi,score,passageText:p.text,passageHtml:p.html,passages};
-          if(!best||row.score>best.score)best=row;
+        const paras=chapterParagraphs(c);
+        const wholeChapter=plainText((c.title||'')+' '+(c.text||'')+' '+(c.html||''));
+        let chapterScore=scoreTextAgainstContext(
+          wholeChapter+' '+((b.topics||[]).join(' ')),
+          c.title||'',
+          ks,
+          s?.bookName||''
+        );
+
+        let bestPi=0, bestParaScore=-1;
+        paras.forEach((p,pi)=>{
+          const pScore=scoreTextAgainstContext(p.text,c.title||'',ks,s?.bookName||'');
+          if(pScore>bestParaScore){bestParaScore=pScore;bestPi=pi;}
         });
+
+        chapterScore += Math.max(0,bestParaScore);
+
+        const row={
+          b,c,bi,ci,pi:bestPi,score:chapterScore,paras,
+          copyrightRestricted:isCopyrightRestrictedBook(b)
+        };
+
+        if(!best||row.score>best.score)best=row;
       });
+
       if(best)winners.push(best);
     });
+
     return winners.sort((a,b)=>b.score-a.score).slice(0,2);
   }
 
+  function connectedWindow(m){
+    const paras=m.paras||[];
+    if(!paras.length)return [];
+
+    // Read a real multi-paragraph passage from the chapter:
+    // two paragraphs before the strongest match and three after it.
+    const start=Math.max(0,m.pi-2);
+    const end=Math.min(paras.length,m.pi+4);
+    return paras.slice(start,end);
+  }
+
   function renderBooks(s){
-    const list=$('ssBooksList');if(!list)return;
+    const list=$('ssBooksList');
+    if(!list)return;
+
     const matches=rankBooks(s);
+
     if(!matches.length){
-      list.innerHTML='<div class="ss-book-empty"><div class="ss-empty-icon">📚</div><strong>Books Ready to Read</strong><span>Select a Bible passage or enter your sermon topic and the two strongest connected theology-book passages will appear here.</span></div>';
+      list.innerHTML='<div class="ss-book-empty"><div class="ss-empty-icon">📚</div><strong>Books Ready to Read</strong><span>Select a Bible passage or enter your sermon topic. The two strongest theology-book chapters will be ranked from the verse, the whole Bible chapter, and your sermon topic.</span></div>';
       return;
     }
-    list.innerHTML=matches.map(m=>`
-      <div class="ss-book-card">
+
+    list.innerHTML=matches.map(m=>{
+      const windowRows=connectedWindow(m);
+      const preview=windowRows.map(x=>x.text).join(' ').slice(0,520);
+      const restricted=m.copyrightRestricted;
+
+      return `<div class="ss-book-card">
         <div class="ss-book-cover">${esc(m.b.shortTitle||m.b.title||'THEOLOGY')}</div>
         <div class="ss-book-info">
           <strong>${esc(m.b.title||'Untitled Book')}</strong>
           <div class="ss-book-author">${esc(m.b.author||'')}</div>
           <div class="ss-book-section">${esc(m.c.title||('Chapter '+(m.ci+1)))}</div>
-          <p><strong>Connected passage:</strong> ${esc(m.passageText.slice(0,320))}${m.passageText.length>320?'…':''}</p>
+          <p><strong>${restricted?'Copyright-safe connection':'Connected passage from this chapter'}:</strong>
+             ${esc(preview)}${preview.length>=520?'…':''}</p>
         </div>
-        <button class="ss-open-book" data-ss-book="${m.bi}" data-ss-chapter="${m.ci}" data-ss-passage="${m.pi}">Read Connected Passage</button>
-      </div>`).join('');
-    qsa('[data-ss-book]',list).forEach(btn=>btn.onclick=()=>openBookPassage(Number(btn.dataset.ssBook),Number(btn.dataset.ssChapter),Number(btn.dataset.ssPassage)));
+        <button class="ss-open-book"
+          data-ss-book="${m.bi}"
+          data-ss-chapter="${m.ci}"
+          data-ss-passage="${m.pi}">
+          ${restricted?'Open Connected Section':'Read Connected Passage'}
+        </button>
+      </div>`;
+    }).join('');
+
+    qsa('[data-ss-book]',list).forEach(btn=>{
+      btn.onclick=()=>openBookPassage(
+        Number(btn.dataset.ssBook),
+        Number(btn.dataset.ssChapter),
+        Number(btn.dataset.ssPassage)
+      );
+    });
+  }
+
+  function openCopyrightSafeConnection(b,c){
+    const url=String(b?.officialUrl||'');
+    const guide=chapterParagraphs(c).slice(0,4).map(x=>x.html).join('');
+
+    openCustom(
+      '📚 '+(b.title||'Theology Book'),
+      (b.author||'')+(c?.title?' • '+c.title:'')+' • Copyright-safe connection',
+      `<article style="max-width:860px;margin:auto;font-family:Georgia,serif;font-size:17px;line-height:1.72">
+        <div style="padding:13px 15px;border:1px solid #d6b977;background:#fff7df;border-radius:9px;margin-bottom:15px;font-family:Arial,sans-serif">
+          <strong>Copyright-safe connection</strong><br>
+          This book is not reproduced inside Redemptive Names Software. The software identifies the strongest connected section from the available study information, but the copyrighted book text stays with the publisher/ministry.
+        </div>
+        ${guide||'<p>The connected section is identified above.</p>'}
+        ${url?`<p><a class="search-button" href="${esc(url)}" target="_blank" rel="noopener">Read from the official source ↗</a></p>`:''}
+      </article>`
+    );
   }
 
   function openBookPassage(bi,ci,pi){
-    const b=theologyBooks()[bi],c=b?.chapters?.[ci];
+    const b=theologyBooks()[bi];
+    const c=b?.chapters?.[ci];
     if(!b||!c)return;
-    const passages=chapterPassages(c), p=passages[Math.max(0,Math.min(pi,passages.length-1))];
-    if(!p){openBookSection(bi,ci);return;}
-    const start=Math.max(0,pi-1), end=Math.min(passages.length,pi+2);
-    const contextHtml=passages.slice(start,end).map((x,idx)=>{
-      const actual=start+idx;
-      return actual===pi
-        ? `<div style="padding:16px 18px;border:2px solid #c68a00;border-radius:10px;background:#fff7df;margin:12px 0">${x.html}</div>`
-        : `<div style="padding:8px 4px;margin:8px 0">${x.html}</div>`;
-    }).join('');
-    openCustom(
-      '📚 '+(b.title||'Theology Book'),
-      (b.author||'')+(c.title?' • '+c.title:'')+' • Connected passage',
-      `<article style="max-width:860px;margin:auto;font-family:Georgia,serif;font-size:17px;line-height:1.72">
-         <div style="font-family:Arial,sans-serif;font-size:12px;font-weight:800;color:#7a0d12;margin-bottom:8px">BEST MATCH FOR YOUR CURRENT VERSE / CHAPTER / SERMON TOPIC</div>
-         ${contextHtml}
-         <button id="ssReadFullSection" type="button" class="secondary" style="margin-top:16px">Read Full Section</button>
-       </article>`
-    );
-    const full=$('ssReadFullSection');
-    if(full)full.onclick=()=>openBookSection(bi,ci);
+
+    if(isCopyrightRestrictedBook(b)){
+      openCopyrightSafeConnection(b,c);
+      return;
+    }
+
+    const paras=chapterParagraphs(c);
+
+    // If the public-domain full chapter text is actually stored locally,
+    // open a multi-paragraph connected passage from that chapter.
+    if(paras.length>=2){
+      const safePi=Math.max(0,Math.min(pi,paras.length-1));
+      const start=Math.max(0,safePi-2);
+      const end=Math.min(paras.length,safePi+4);
+
+      const passageHtml=paras.slice(start,end).map((x,idx)=>{
+        const actual=start+idx;
+        return actual===safePi
+          ? `<div style="padding:15px 17px;border-left:4px solid #c68a00;background:#fff7df;margin:10px 0">${x.html}</div>`
+          : `<div style="padding:6px 2px;margin:7px 0">${x.html}</div>`;
+      }).join('');
+
+      openCustom(
+        '📚 '+(b.title||'Theology Book'),
+        (b.author||'')+(c.title?' • '+c.title:'')+' • Connected passage',
+        `<article style="max-width:860px;margin:auto;font-family:Georgia,serif;font-size:17px;line-height:1.72">
+          <div style="font-family:Arial,sans-serif;font-size:12px;font-weight:800;color:#7a0d12;margin-bottom:8px">
+            MATCHED FROM YOUR VERSE + WHOLE BIBLE CHAPTER + SERMON TOPIC
+          </div>
+          ${passageHtml}
+          <button id="ssReadFullSection" type="button" class="secondary" style="margin-top:16px">Read Full Chapter / Section</button>
+        </article>`
+      );
+
+      $('ssReadFullSection')?.addEventListener('click',()=>openBookSection(bi,ci));
+      return;
+    }
+
+    // Some current public-domain entries contain only a scan/PDF link, not
+    // extracted chapter text. Open the full legal edition rather than invent text.
+    openBookSection(bi,ci);
   }
 
   function openBookSection(bi,ci){
     const b=theologyBooks()[bi],c=b?.chapters?.[ci];
     if(!b||!c)return;
+
     openCustom(
       '📚 '+(b.title||'Theology Book'),
       (b.author||'')+(c.title?' • '+c.title:''),
-      `<article style="max-width:860px;margin:auto;font-family:Georgia,serif;font-size:17px;line-height:1.72"><h2>${esc(c.title||'')}</h2>${c.html||('<p>'+esc(c.text||'')+'</p>')}</article>`
+      `<article style="max-width:860px;margin:auto;font-family:Georgia,serif;font-size:17px;line-height:1.72">
+        <h2>${esc(c.title||'')}</h2>
+        ${c.html||('<p>'+esc(c.text||'')+'</p>')}
+      </article>`
     );
   }
 
@@ -4603,6 +4748,266 @@ body>header,body>.container{display:none!important}
     }
   })));
   document.addEventListener('DOMContentLoaded',()=>{if(document.body)o.observe(document.body,{childList:true,subtree:true})},{once:true});
+})();
+</script>
+
+
+
+<style id="rns-shared-verse-actions-style-2026">
+.reader-verse.rns-shared-highlight{
+  background:#fff3a6!important;
+  color:#151515!important;
+  box-shadow:inset 4px 0 0 #c68a00!important;
+}
+.reader-verse.rns-shared-highlight .reader-verse-number{color:#7a0d12!important}
+.rns-verse-actions{
+  position:fixed;z-index:999999;min-width:285px;max-width:min(94vw,540px);
+  background:#fffdf8;border:1px solid #d6b977;border-radius:12px;
+  box-shadow:0 18px 45px rgba(55,28,15,.24);padding:10px;color:#2e241d;
+}
+.rns-verse-actions[hidden]{display:none!important}
+.rns-verse-actions-head{display:flex;align-items:center;justify-content:space-between;gap:12px;
+  color:#7a0d12;font-weight:800;margin-bottom:8px}
+.rns-verse-actions-close{border:0!important;background:transparent!important;color:#7a0d12!important;
+  font-size:20px!important;padding:2px 6px!important;min-height:auto!important}
+.rns-verse-actions-buttons{display:flex;flex-wrap:wrap;gap:6px}
+.rns-verse-actions-buttons button{margin:0!important;min-height:34px!important;padding:6px 9px!important;
+  border:1px solid #d6b977!important;background:#fff8e8!important;color:#7a0d12!important;
+  border-radius:7px!important;font-weight:800!important}
+.rns-verse-actions-buttons .rns-redemptive{background:linear-gradient(180deg,#96151b,#720b10)!important;color:white!important}
+.rns-verse-actions-status{font-size:12px;color:#6b574b;margin-top:7px;min-height:16px}
+</style>
+
+
+<script id="rns-shared-verse-actions-sermon-builder-2026">
+(function(){
+  'use strict';
+
+  const areaName='Sermon Builder';
+  const HIGHLIGHTS='biblemastery_highlights';
+  const SAVED='biblemastery_saved_verses';
+  const BOOKMARKS='biblemastery_bookmarks';
+
+  function readStore(key){
+    try{const x=JSON.parse(localStorage.getItem(key)||'[]');return Array.isArray(x)?x:[]}catch(e){return[]}
+  }
+  function writeStore(key,v){try{localStorage.setItem(key,JSON.stringify(v));return true}catch(e){return false}}
+  function currentTranslation(){
+    try{return document.getElementById('readerTranslation')?.value||'KJV'}catch(e){return'KJV'}
+  }
+
+  function verseState(index){
+    try{
+      if(typeof readerBible==='undefined'||!readerBible||readerBookIndex<0||readerChapterIndex<0)return null;
+      const bi=readerBookIndex,ci=readerChapterIndex;
+      const b=readerBible.books[bi],c=b?.chapters?.[ci],verses=c?.verses||[];
+      const vi=Math.max(0,Math.min(Number(index)||0,verses.length-1));
+      const v=verses[vi];if(!v)return null;
+      const bn=getBookName(b),cn=chapterNumber(c,ci),vn=verseNumber(v,vi);
+      return {
+        vi,bookName:bn,chapterNumber:cn,verseNumber:vn,
+        reference:bn+' '+cn+':'+vn,
+        text:verseText(v,currentTranslation(),bi)
+      };
+    }catch(e){return null}
+  }
+
+  function legacyKey(s){
+    return 'biblemastrey_personal_highlight_'+s.bookName+'_'+s.chapterNumber+'_'+s.verseNumber;
+  }
+
+  function highlighted(s){
+    if(!s)return false;
+    const shared=readStore(HIGHLIGHTS).some(x=>(typeof x==='string'?x:x?.reference)===s.reference);
+    let legacy=false;
+    try{legacy=localStorage.getItem(legacyKey(s))==='true'}catch(e){}
+    return shared||legacy;
+  }
+
+  function applyHighlights(){
+    const display=document.getElementById('readerDisplay');
+    if(!display)return;
+    display.querySelectorAll('[data-reader-verse]').forEach(el=>{
+      const s=verseState(el.dataset.readerVerse);
+      el.classList.toggle('rns-shared-highlight',highlighted(s));
+    });
+    updateHighlightButton();
+  }
+
+  const pop=document.createElement('div');
+  pop.className='rns-verse-actions';
+  pop.hidden=true;
+  pop.innerHTML=`
+    <div class="rns-verse-actions-head">
+      <span id="rnsVerseActionRef">Selected verse</span>
+      <button id="rnsVerseActionClose" class="rns-verse-actions-close" type="button">×</button>
+    </div>
+    <div class="rns-verse-actions-buttons">
+      <button id="rnsVerseHighlight" type="button">🖍 Highlight in All Study Areas</button>
+      <button id="rnsVerseSave" type="button">💾 Save</button>
+      <button id="rnsVerseBookmark" type="button">🔖 Bookmark</button>
+      <button id="rnsVerseShare" type="button">↗ Share</button>
+      <button id="rnsVerseRedemptive" class="rns-redemptive" type="button">✦ Redemptive Verse</button>
+    </div>
+    <div id="rnsVerseActionStatus" class="rns-verse-actions-status"></div>`;
+  document.body.appendChild(pop);
+
+  let state=null,target=null;
+
+  function updateHighlightButton(){
+    const btn=document.getElementById('rnsVerseHighlight');
+    if(!btn)return;
+    const on=highlighted(state);
+    btn.textContent=on?'🖍 Unhighlight in All Study Areas':'🖍 Highlight in All Study Areas';
+    btn.setAttribute('aria-pressed',on?'true':'false');
+  }
+
+  function position(el){
+    if(!el||!el.isConnected)return;
+    pop.hidden=false;
+    const r=el.getBoundingClientRect(),box=pop.getBoundingClientRect();
+    let left=Math.min(Math.max(10,r.left),window.innerWidth-box.width-10);
+    let top=r.bottom+7;
+    if(top+box.height>window.innerHeight-10)top=Math.max(10,r.top-box.height-7);
+    pop.style.left=left+'px';pop.style.top=top+'px';
+  }
+
+  function open(el,s){
+    target=el;state=s;
+    document.getElementById('rnsVerseActionRef').textContent=s.reference;
+    document.getElementById('rnsVerseActionStatus').textContent='';
+    updateHighlightButton();
+    position(el);
+  }
+  function close(){pop.hidden=true;target=null;state=null}
+
+  document.getElementById('rnsVerseActionClose').onclick=close;
+
+  document.addEventListener('click',e=>{
+    const display=document.getElementById('readerDisplay');
+    const verse=e.target.closest?.('[data-reader-verse]');
+
+    if(verse&&display?.contains(verse)){
+      e.preventDefault();e.stopPropagation();
+      const idx=String(verse.dataset.readerVerse??'0');
+      const s=verseState(idx);if(!s)return;
+      open(verse,s);
+
+      const select=document.getElementById('readerVerse');
+      if(select){
+        const changed=select.value!==idx;
+        select.value=idx;
+        if(changed){
+          setTimeout(()=>{
+            select.dispatchEvent(new Event('change',{bubbles:true}));
+            setTimeout(()=>{
+              const fresh=document.getElementById('readerDisplay')?.querySelector(`[data-reader-verse="${CSS.escape(idx)}"]`);
+              if(fresh&&!pop.hidden){target=fresh;position(fresh);applyHighlights();}
+            },30);
+          },0);
+        }
+      }
+      return;
+    }
+
+    if(!pop.hidden&&!pop.contains(e.target))close();
+  },true);
+
+  document.getElementById('rnsVerseHighlight').onclick=e=>{
+    e.preventDefault();e.stopPropagation();
+    if(!state)return;
+
+    let items=readStore(HIGHLIGHTS);
+    const same=x=>(typeof x==='string'?x:x?.reference)===state.reference;
+    const wasOn=highlighted(state);
+
+    if(wasOn){
+      items=items.filter(x=>!same(x));
+      try{localStorage.removeItem(legacyKey(state))}catch(e){}
+    }else{
+      if(!items.some(same)){
+        items.unshift({
+          reference:state.reference,text:state.text,translation:currentTranslation(),
+          sourceStudyArea:areaName,savedAt:new Date().toISOString()
+        });
+      }
+      try{localStorage.setItem(legacyKey(state),'true')}catch(e){}
+    }
+
+    writeStore(HIGHLIGHTS,items);
+    applyHighlights();
+    document.getElementById('rnsVerseActionStatus').textContent=
+      wasOn?'Highlight removed from every study area.':'Highlighted for every study area.';
+    if(target?.isConnected)position(target);
+  };
+
+  document.getElementById('rnsVerseSave').onclick=()=>{
+    if(!state)return;
+    let items=readStore(SAVED);
+    if(!items.some(x=>x.reference===state.reference)){
+      items.unshift({reference:state.reference,text:state.text,translation:currentTranslation(),sourceStudyArea:areaName,savedAt:new Date().toISOString()});
+    }
+    writeStore(SAVED,items);
+    document.getElementById('rnsVerseActionStatus').textContent='Verse saved.';
+  };
+
+  document.getElementById('rnsVerseBookmark').onclick=()=>{
+    if(!state)return;
+    let items=readStore(BOOKMARKS);
+    if(!items.some(x=>x.reference===state.reference)){
+      items.unshift({reference:state.reference,text:state.text,translation:currentTranslation(),sourceStudyArea:areaName,savedAt:new Date().toISOString()});
+    }
+    writeStore(BOOKMARKS,items);
+    document.getElementById('rnsVerseActionStatus').textContent='Bookmark saved.';
+  };
+
+  document.getElementById('rnsVerseShare').onclick=async()=>{
+    if(!state)return;
+    const text=state.reference+' — '+state.text;
+    try{
+      if(navigator.share)await navigator.share({title:state.reference,text});
+      else await navigator.clipboard.writeText(text);
+      document.getElementById('rnsVerseActionStatus').textContent=navigator.share?'Share opened.':'Verse copied for sharing.';
+    }catch(e){}
+  };
+
+  document.getElementById('rnsVerseRedemptive').onclick=()=>{
+    if(!state)return;
+
+    try{
+      const b=readerBible.books[readerBookIndex],c=b.chapters[readerChapterIndex];
+      const verses=(c.verses||[]).map((v,vi)=>{
+        const vn=verseNumber(v,vi);
+        return {
+          book:getBookName(b),chapter:chapterNumber(c,readerChapterIndex),verse:vn,
+          reference:getBookName(b)+' '+chapterNumber(c,readerChapterIndex)+':'+vn,
+          text:verseText(v,currentTranslation(),readerBookIndex)
+        };
+      });
+      localStorage.setItem('biblemasteryRedemptiveVerseState',JSON.stringify({
+        verses,index:state.vi,translation:currentTranslation(),topic:areaName
+      }));
+    }catch(e){}
+
+    location.href='redemptive-verse.html?book='+encodeURIComponent(state.bookName)+
+      '&chapter='+encodeURIComponent(String(state.chapterNumber))+
+      '&verse='+encodeURIComponent(String(state.verseNumber))+
+      '&text='+encodeURIComponent(state.text)+
+      '&translation='+encodeURIComponent(currentTranslation())+
+      '&index='+encodeURIComponent(String(state.vi));
+  };
+
+  const display=document.getElementById('readerDisplay');
+  if(display){
+    new MutationObserver(()=>setTimeout(applyHighlights,10)).observe(display,{childList:true,subtree:true});
+    setTimeout(applyHighlights,50);
+  }
+
+  window.addEventListener('storage',e=>{
+    if(e.key===HIGHLIGHTS)applyHighlights();
+  });
+  window.addEventListener('resize',()=>{if(!pop.hidden&&target?.isConnected)position(target)});
+
 })();
 </script>
 
