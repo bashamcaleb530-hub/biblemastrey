@@ -739,6 +739,7 @@ body.gb-ready>header,body.gb-ready>.container{display:none!important}
 .rns-brand-subtitle{display:block;margin-top:4px;font-family:Georgia,"Times New Roman",serif;font-size:10px;font-weight:800;letter-spacing:2.2px;color:#6a3a1d}
 @media(max-width:720px){.rns-brand-lockup{padding:7px 10px;gap:9px}.rns-brand-mark{font-size:31px}.rns-brand-name{font-size:23px}.rns-brand-subtitle{font-size:8px;letter-spacing:1.4px}}
 </style>
+
 </head>
 
 
@@ -750,7 +751,7 @@ body.gb-ready>header,body.gb-ready>.container{display:none!important}
 </div>
   <h1>📖 Build a Bible Study</h1>
   <p>Study Scripture, prepare your teaching, and write your Bible study your way.</p>
-  <a href="personal-study.html" class="back-button" data-rns-main-back>← Back to Main Page</a>
+  <a href="/" class="back-button">← Back to Redemptive Names Software</a>
 </header>
 
 <div class="container">
@@ -1441,6 +1442,25 @@ body.gb-ready>header,body.gb-ready>.container{display:none!important}
   }
 
 
+
+  let studyBibleEngineRetryPromise = null;
+
+  async function ensureStudyBibleEngine() {
+    if (typeof getKJV === "function") return true;
+    if (studyBibleEngineRetryPromise) return studyBibleEngineRetryPromise;
+
+    studyBibleEngineRetryPromise = new Promise(function(resolve) {
+      const script = document.createElement("script");
+      script.src = "bible.js";
+      script.async = false;
+      script.onload = function() { resolve(typeof getKJV === "function"); };
+      script.onerror = function() { resolve(false); };
+      document.head.appendChild(script);
+    });
+
+    return studyBibleEngineRetryPromise;
+  }
+
   const studyRemoteBibleCache = {};
 
   async function getStudyRemoteBible(url) {
@@ -1473,6 +1493,7 @@ body.gb-ready>header,body.gb-ready>.container{display:none!important}
 
   async function getBibleByTranslation(translation) {
     let rawBible;
+    await ensureStudyBibleEngine();
 
     if (translation === "VALERA1909") {
       rawBible = await getStudyRemoteBible("https://api.getbible.net/v2/valera.json");
@@ -1486,16 +1507,18 @@ body.gb-ready>header,body.gb-ready>.container{display:none!important}
     else if (translation === "ALMEIDA1819") {
       rawBible = await getStudyRemoteBible("https://raw.githubusercontent.com/midvash/bible-data/main/versions/pt/almeida-livre/almeida-livre.json");
     }
-    else if (translation === "KJV1611") rawBible = await getKJV1611();
-    else if (translation === "KJVPLUS") rawBible = await getKJVPLUS();
-    else if (translation === "YLT") rawBible = await getYLT();
-    else if (translation === "WEB") rawBible = await getWEB();
-    else if (translation === "ASV") rawBible = await getASV();
-    else if (translation === "GENEVA1599") rawBible = await getGENEVA1599();
-    else if (translation === "DRA") rawBible = await getDRA();
-    else if (translation === "BSB") rawBible = await getBSB();
-    else if (translation === "MSB") rawBible = await getMSB();
-    else rawBible = await getKJV();
+    else if (translation === "KJV1611" && typeof getKJV1611 === "function") rawBible = await getKJV1611();
+    else if (translation === "KJVPLUS" && typeof getKJVPLUS === "function") rawBible = await getKJVPLUS();
+    else if (translation === "YLT" && typeof getYLT === "function") rawBible = await getYLT();
+    else if (translation === "WEB" && typeof getWEB === "function") rawBible = await getWEB();
+    else if (translation === "ASV" && typeof getASV === "function") rawBible = await getASV();
+    else if (translation === "GENEVA1599" && typeof getGENEVA1599 === "function") rawBible = await getGENEVA1599();
+    else if (translation === "DRA" && typeof getDRA === "function") rawBible = await getDRA();
+    else if (translation === "BSB" && typeof getBSB === "function") rawBible = await getBSB();
+    else if (translation === "MSB" && typeof getMSB === "function") rawBible = await getMSB();
+    else if (translation === "KJV" && typeof getKJV === "function") rawBible = await getKJV();
+    else if (translation === "KJV") rawBible = await getStudyRemoteBible("https://api.getbible.net/v2/kjv.json");
+    else throw new Error("The selected Bible translation loader is not available.");
 
     return normalizeBibleForReader(rawBible);
   }
@@ -2733,373 +2756,7 @@ body.gb-ready>header,body.gb-ready>.container{display:none!important}
       "PRAYER / REFLECTION:",asVal("advStudyPrayer")].join("\n");
   }
   async function asCopy(text,msg){try{await navigator.clipboard.writeText(text);asEl("advStudyExportStatus").textContent=msg;}catch(e){asEl("advStudyExportStatus").textContent="Browser blocked clipboard access. Use Print instead.";}}
-  function asPrint(title,text){const w=window.open("","_blank");if(!w)return;w.document.write("<!doctype html><html><head><title>"+escapeHTML(title)+"</title><style>body{font-family:Arial,sans-serif;max-width:900px;margin:40px auto;padding:0 24px;line-height:1.6;white-space:pre-wrap}h1{font-size:24px}</style></head><body><h1>"+escapeHTML(title)+"</h1>"+escapeHTML(text)+"
-<script id="rns-preserve-main-page-state-2026">
-(function(){
-  function returnToMain(event){
-    if(event) event.preventDefault();
-
-    const cameFromPersonalStudy =
-      document.referrer &&
-      /personal-study\.html(?:[?#].*)?$/i.test(new URL(document.referrer, location.href).pathname + new URL(document.referrer, location.href).search + new URL(document.referrer, location.href).hash);
-
-    if(cameFromPersonalStudy && history.length > 1){
-      history.back();
-      return;
-    }
-
-    // If this page was entered from another Redemptive Names study page,
-    // browser Back still preserves the previous study state better than a fresh load.
-    if(document.referrer && history.length > 1){
-      try{
-        const ref=new URL(document.referrer,location.href);
-        if(ref.origin===location.origin){
-          history.back();
-          return;
-        }
-      }catch(e){}
-    }
-
-    // Safe fallback for a fresh tab/direct visit.
-    location.href='personal-study.html';
-  }
-
-  const selectors = ["[data-rns-main-back]"];
-  selectors.forEach(function(selector){
-    document.querySelectorAll(selector).forEach(function(el){
-      el.addEventListener('click',returnToMain);
-    });
-  });
-
-  window.rnsReturnToMainWithoutFreshLoad=returnToMain;
-})();
-</script>
-
-<script id="rns-live-study-session-bible-study-2026">
-(function(){
-  'use strict';
-
-  /*
-    LIVE STUDY SESSION
-    ------------------
-    Keeps unfinished work when moving between Redemptive Names Software pages.
-
-    - Normal navigation away and back: restore exactly where the user left off.
-    - Browser/page Refresh: clear this page's live draft and load fresh.
-    - New app/webview session: old live draft is ignored.
-    - Saved sermons/studies remain handled by their existing Save systems.
-  */
-  const PAGE_KEY='rns.liveDraft.v2.bible-study';
-  const NAME_PREFIX='RNSAPP:';
-
-  function navigationType(){
-    try{
-      const nav=performance.getEntriesByType('navigation')[0];
-      return nav && nav.type ? nav.type : '';
-    }catch(e){return '';}
-  }
-
-  // A browsing-context session token that survives normal same-tab navigation,
-  // but resets when the app/webview is fully closed and a new context is created.
-  let sessionId='';
-  try{
-    if(typeof window.name==='string' && window.name.startsWith(NAME_PREFIX)){
-      sessionId=window.name.slice(NAME_PREFIX.length);
-    }else{
-      sessionId=Date.now().toString(36)+'-'+Math.random().toString(36).slice(2);
-      window.name=NAME_PREFIX+sessionId;
-    }
-  }catch(e){
-    sessionId='fallback-'+Date.now().toString(36);
-  }
-
-  // A deliberate reload means the user wants a fresh page.
-  if(navigationType()==='reload'){
-    try{ localStorage.removeItem(PAGE_KEY); }catch(e){}
-  }
-
-  let restoring=false;
-  let saveTimer=null;
-
-  function keyFor(el,index){
-    if(el.id) return 'id:'+el.id;
-    if(el.name) return 'name:'+el.name+':'+index;
-    return 'anon:'+el.tagName+':'+index;
-  }
-
-  function collect(){
-    if(restoring) return;
-
-    const values={};
-    const controls=[...document.querySelectorAll('input,textarea,select,[contenteditable="true"]')];
-
-    controls.forEach((el,index)=>{
-      if(el.matches('input[type="password"],input[type="file"],input[type="button"],input[type="submit"],input[type="reset"]')) return;
-      const key=keyFor(el,index);
-
-      if(el.matches('[contenteditable="true"]')){
-        values[key]={kind:'html',value:el.innerHTML};
-      }else if(el.type==='checkbox' || el.type==='radio'){
-        values[key]={kind:'checked',value:!!el.checked};
-      }else{
-        values[key]={kind:'value',value:el.value};
-      }
-    });
-
-    const details=[...document.querySelectorAll('details')].map((el,index)=>({
-      key:el.id ? 'id:'+el.id : 'details:'+index,
-      open:!!el.open
-    }));
-
-    const scrollers={};
-    document.querySelectorAll('[id]').forEach(el=>{
-      if((el.scrollHeight>el.clientHeight+8 || el.scrollWidth>el.clientWidth+8) && (el.scrollTop || el.scrollLeft)){
-        scrollers[el.id]={top:el.scrollTop,left:el.scrollLeft};
-      }
-    });
-
-    const data={
-      sessionId,
-      values,
-      details,
-      scrollers,
-      windowScrollX:window.scrollX||0,
-      windowScrollY:window.scrollY||0,
-      hash:location.hash||'',
-      savedAt:Date.now()
-    };
-
-    try{ localStorage.setItem(PAGE_KEY,JSON.stringify(data)); }catch(e){}
-  }
-
-  function scheduleSave(){
-    if(restoring) return;
-    clearTimeout(saveTimer);
-    saveTimer=setTimeout(collect,80);
-  }
-
-  function readDraft(){
-    try{
-      const data=JSON.parse(localStorage.getItem(PAGE_KEY)||'null');
-      if(!data || data.sessionId!==sessionId) return null;
-      return data;
-    }catch(e){return null;}
-  }
-
-  function applyValues(data){
-    if(!data || !data.values) return;
-
-    const controls=[...document.querySelectorAll('input,textarea,select,[contenteditable="true"]')];
-
-    controls.forEach((el,index)=>{
-      if(el.matches('input[type="password"],input[type="file"],input[type="button"],input[type="submit"],input[type="reset"]')) return;
-
-      const saved=data.values[keyFor(el,index)];
-      if(!saved) return;
-
-      if(saved.kind==='html' && el.matches('[contenteditable="true"]')){
-        if(el.innerHTML!==saved.value) el.innerHTML=saved.value;
-        return;
-      }
-
-      if(saved.kind==='checked'){
-        el.checked=!!saved.value;
-        return;
-      }
-
-      if(saved.kind==='value'){
-        if(el.tagName==='SELECT'){
-          // Some Bible/chapter selectors populate asynchronously.
-          if(saved.value!=='' && ![...el.options].some(o=>o.value===saved.value)) return;
-
-          if(el.value!==saved.value){
-            el.value=saved.value;
-            el.dispatchEvent(new Event('change',{bubbles:true}));
-          }
-        }else if(el.value!==saved.value){
-          el.value=saved.value;
-          el.dispatchEvent(new Event('input',{bubbles:true}));
-        }
-      }
-    });
-  }
-
-  function restore(){
-    const data=readDraft();
-    if(!data) return;
-
-    restoring=true;
-
-    // Repeat because Bible/commentary controls are populated after page load.
-    [0,180,500,1000,1800].forEach(delay=>{
-      setTimeout(()=>applyValues(data),delay);
-    });
-
-    setTimeout(()=>{
-      (data.details||[]).forEach((item,index)=>{
-        let el=null;
-        if(item.key && item.key.startsWith('id:')) el=document.getElementById(item.key.slice(3));
-        else el=document.querySelectorAll('details')[index];
-        if(el) el.open=!!item.open;
-      });
-
-      Object.entries(data.scrollers||{}).forEach(([id,pos])=>{
-        const el=document.getElementById(id);
-        if(el){
-          el.scrollTop=Number(pos.top)||0;
-          el.scrollLeft=Number(pos.left)||0;
-        }
-      });
-
-      window.scrollTo(Number(data.windowScrollX)||0,Number(data.windowScrollY)||0);
-      restoring=false;
-      setTimeout(collect,100);
-    },1950);
-  }
-
-  document.addEventListener('input',scheduleSave,true);
-  document.addEventListener('change',scheduleSave,true);
-  document.addEventListener('click',()=>setTimeout(scheduleSave,0),true);
-  window.addEventListener('pagehide',collect);
-  document.addEventListener('visibilitychange',()=>{
-    if(document.visibilityState==='hidden') collect();
-  });
-  window.addEventListener('scroll',scheduleSave,{passive:true});
-
-  if(document.readyState==='loading'){
-    document.addEventListener('DOMContentLoaded',restore,{once:true});
-  }else{
-    restore();
-  }
-
-  window.rnsClearCurrentLiveStudySession=function(){
-    try{ localStorage.removeItem(PAGE_KEY); }catch(e){}
-  };
-})();
-</script>
-
-
-<style id="gb-commentary-approved-theme-final-2026">
-/* FINAL Bible Study commentary theme — approved cream / burgundy / gold */
-#gbCommentaryHost,
-#gbCommentaryHost *,
-.commentary-layout,
-.commentary-layout *,
-.commentary-panel,
-.commentary-panel *,
-.commentary-results-panel,
-.commentary-results-panel *,
-#commentaryContent,
-#commentaryStatus,
-#commentaryHeading,
-#commentarySubheading{
-  box-sizing:border-box;
-}
-
-#gbCommentaryHost,
-.commentary-layout,
-.commentary-panel,
-.commentary-results-panel,
-#commentaryContent,
-#gbCommentaryHost .result,
-#gbCommentaryHost .commentary-results-panel,
-#gbCommentaryHost .commentary-panel{
-  background:#fffdf8 !important;
-  background-image:none !important;
-  color:#2e241d !important;
-  border-color:#e4cfa5 !important;
-}
-
-.commentary-panel,
-.commentary-results-panel,
-#gbCommentaryHost .commentary-panel,
-#gbCommentaryHost .commentary-results-panel{
-  border:1px solid #e4cfa5 !important;
-  border-radius:12px !important;
-  box-shadow:0 8px 22px rgba(84,45,22,.08) !important;
-}
-
-#commentaryHeading,
-#commentarySubheading,
-.commentary-panel h2,
-.commentary-panel h3,
-.commentary-results-panel h2,
-.commentary-results-panel h3,
-#gbCommentaryHost h2,
-#gbCommentaryHost h3,
-#gbCommentaryHost h4{
-  color:#7a0d12 !important;
-}
-
-#commentaryStatus,
-.commentary-panel label,
-.commentary-results-panel label,
-#gbCommentaryHost label,
-#gbCommentaryHost .small-note{
-  color:#6b574b !important;
-}
-
-#commentarySelect,
-#commentarySource,
-.commentary-panel select,
-.commentary-panel input,
-.commentary-results-panel select,
-.commentary-results-panel input,
-#gbCommentaryHost select,
-#gbCommentaryHost input{
-  background:#fffef9 !important;
-  color:#2e241d !important;
-  border:1px solid #d6b977 !important;
-  border-radius:8px !important;
-}
-
-#commentaryContent,
-#gbCommentaryHost .result,
-#gbCommentaryHost .commentary-text,
-#gbCommentaryHost .commentary-verse,
-#gbCommentaryHost .result-item,
-#gbCommentaryHost .verse-result{
-  background:#fffdf8 !important;
-  background-image:none !important;
-  color:#2e241d !important;
-  border-color:#e8d8b6 !important;
-}
-
-#commentaryContent strong,
-#commentaryContent b,
-#gbCommentaryHost strong,
-#gbCommentaryHost b{
-  color:#7a0d12 !important;
-}
-
-#commentaryContent a,
-#gbCommentaryHost a{
-  color:#8a5b08 !important;
-}
-
-.gb-commentary-track{
-  background:#fffaf0 !important;
-  border:1px solid #e4cfa5 !important;
-  box-shadow:none !important;
-}
-.gb-commentary-track button{
-  background:#fffdf8 !important;
-  color:#3a2b21 !important;
-  border-color:#e4cfa5 !important;
-}
-.gb-commentary-track button.active{
-  background:linear-gradient(180deg,#9a1b20,#720b10) !important;
-  color:#fff !important;
-  border-color:#720b10 !important;
-}
-.gb-commentary-arrow{
-  background:#fff3d8 !important;
-  color:#720b10 !important;
-  border-color:#b98a39 !important;
-}
-</style>
-
-</body></html>");w.document.close();w.focus();w.print();}
+  function asPrint(title,text){const w=window.open("","_blank");if(!w)return;w.document.write("<!doctype html><html><head><title>"+escapeHTML(title)+"</title><style>body{font-family:Arial,sans-serif;max-width:900px;margin:40px auto;padding:0 24px;line-height:1.6;white-space:pre-wrap}h1{font-size:24px}</style></head><body><h1>"+escapeHTML(title)+"</h1>"+escapeHTML(text)+"</body></html>");w.document.close();w.focus();w.print();}
   if(asEl("advCopyLeaderStudy"))asEl("advCopyLeaderStudy").addEventListener("click",()=>asCopy(asLeaderPackage(),"Leader version copied."));
   if(asEl("advPrintLeaderStudy"))asEl("advPrintLeaderStudy").addEventListener("click",()=>asPrint("Redemptive Names Software — Leader Bible Study",asLeaderPackage()));
   if(asEl("advCopyParticipantStudy"))asEl("advCopyParticipantStudy").addEventListener("click",()=>asCopy(asParticipantPackage(),"Participant version copied."));
@@ -3111,12 +2768,12 @@ body.gb-ready>header,body.gb-ready>.container{display:none!important}
 <header class="gb-topbar">
   <div class="gb-brand"><span class="gb-brand-mark">♛</span><span class="gb-brand-copy"><strong>Redemptive Names Software</strong><small>SEVEN NAMES ONE REDEEMER</small></span></div>
   <div class="gb-global-search"><input id="gbGlobalSearch" type="search" placeholder="Go to a Bible reference (example: John 3:16)"><button id="gbGlobalSearchButton" type="button">⌕</button></div>
-  <div class="gb-top-actions"><button id="gbPageRefresh" type="button">↻ <span class="gb-text">Refresh</span></button><a class="gb-main-link" href="personal-study.html" data-rns-main-back>⌂ <span class="gb-text">Main Page</span></a><button type="button" onclick="window.location.href='account.html'">● <span class="gb-text">Account</span></button></div>
+  <div class="gb-top-actions"><button id="gbPageRefresh" type="button">↻ <span class="gb-text">Refresh</span></button><a class="gb-main-link" href="personal-study.html">⌂ <span class="gb-text">Main Page</span></a><button type="button" onclick="window.location.href='account.html'">● <span class="gb-text">Account</span></button></div>
 </header>
 <nav class="gb-primary-nav" aria-label="Redemptive Names Software study navigation">
   <button class="gb-nav-arrow" id="gbNavPrev" type="button" aria-label="Previous navigation items">‹</button>
   <div class="gb-nav-track" id="gbNavTrack">
-    <a href="personal-study.html" data-rns-main-back>⌂ Main Study / Personal Study</a>
+    <a href="personal-study.html">⌂ Main Study / Personal Study</a>
     <a href="sermon.html">Sermon Builder</a>
     <a href="bible-study.html" class="active">Group Bible Study</a>
     <a href="library.html">Library</a>
@@ -3629,7 +3286,29 @@ function gbStudyTopicText(){
 function gbBestBooks(){
   const s=currentReader(),out=$('gbBooksList');if(!out)return;
   if(!s){
-    out.innerHTML='<div class="gb-book-card"><h4>Select a passage</h4><p>The strongest matching book and section will appear here when you choose a chapter or verse.</p></div>';
+    if(!gbTheologyBooks.length){
+      out.innerHTML='<div class="gb-book-card"><h4>Theology Library</h4><p>No theology resources are loaded yet.</p></div>';
+      return;
+    }
+    out.innerHTML=gbTheologyBooks.slice(0,3).map((b,bi)=>`
+      <article class="gb-book-card">
+        <h4>${escapeHTML(b.title||'Theology Book')}</h4>
+        <p>${escapeHTML(b.author||'')}</p>
+        <div class="gb-book-start"><strong>Available now</strong><br>Select a Bible passage to rank the best matching section.</div>
+        <button type="button" data-gb-library-book="${bi}">Open Book</button>
+      </article>`).join('');
+
+    qsa('[data-gb-library-book]',out).forEach(btn=>btn.addEventListener('click',e=>{
+      const bi=Number(e.currentTarget.dataset.gbLibraryBook), b=gbTheologyBooks[bi];
+      if(!b)return;
+      const chapters=(b.chapters||[]).map((c,ci)=>`
+        <section style="padding:10px 0;border-bottom:1px solid #ead9b7">
+          <h3 style="margin-bottom:7px">${escapeHTML(c.title||('Section '+(ci+1)))}</h3>
+          <div>${c.html||'<p>'+escapeHTML(c.text||'')+'</p>'}</div>
+        </section>`).join('');
+      openCustom('📚 '+(b.title||'Theology Book'),
+        `<p><strong>${escapeHTML(b.author||'')}</strong></p>${chapters||'<p>No sections are stored in this resource.</p>'}`);
+    }));
     return;
   }
 
@@ -3826,6 +3505,163 @@ saveGroup();
     }
   })));
   document.addEventListener('DOMContentLoaded',()=>{if(document.body)o.observe(document.body,{childList:true,subtree:true})},{once:true});
+})();
+</script>
+
+
+<style id="gb-commentary-approved-theme-final-2026">
+#gbCommentaryHost,
+.commentary-layout,
+.commentary-panel,
+.commentary-results-panel,
+#commentaryContent{
+  background:#fffdf8!important;
+  background-image:none!important;
+  color:#2e241d!important;
+  border-color:#e4cfa5!important;
+}
+.commentary-panel,.commentary-results-panel{
+  border:1px solid #e4cfa5!important;
+  border-radius:12px!important;
+  box-shadow:0 8px 22px rgba(84,45,22,.08)!important;
+}
+#commentaryHeading,#commentarySubheading,
+.commentary-panel h2,.commentary-panel h3,
+.commentary-results-panel h2,.commentary-results-panel h3,
+#gbCommentaryHost h2,#gbCommentaryHost h3,#gbCommentaryHost h4{
+  color:#7a0d12!important;
+}
+#commentaryStatus,.commentary-panel label,.commentary-results-panel label,
+#gbCommentaryHost label,#gbCommentaryHost .small-note{color:#6b574b!important}
+#commentarySelect,#commentarySource,
+.commentary-panel select,.commentary-panel input,
+.commentary-results-panel select,.commentary-results-panel input,
+#gbCommentaryHost select,#gbCommentaryHost input{
+  background:#fffef9!important;color:#2e241d!important;
+  border:1px solid #d6b977!important;border-radius:8px!important
+}
+#commentaryContent,#gbCommentaryHost .result,#gbCommentaryHost .commentary-text,
+#gbCommentaryHost .commentary-verse,#gbCommentaryHost .result-item,
+#gbCommentaryHost .verse-result{
+  background:#fffdf8!important;background-image:none!important;
+  color:#2e241d!important;border-color:#e8d8b6!important
+}
+#commentaryContent strong,#commentaryContent b,
+#gbCommentaryHost strong,#gbCommentaryHost b{color:#7a0d12!important}
+#commentaryContent a,#gbCommentaryHost a{color:#8a5b08!important}
+.gb-commentary-track{background:#fffaf0!important;border:1px solid #e4cfa5!important;box-shadow:none!important}
+.gb-commentary-track button{background:#fffdf8!important;color:#3a2b21!important;border-color:#e4cfa5!important}
+.gb-commentary-track button.active{background:linear-gradient(180deg,#9a1b20,#720b10)!important;color:#fff!important;border-color:#720b10!important}
+.gb-commentary-arrow{background:#fff3d8!important;color:#720b10!important;border-color:#b98a39!important}
+</style>
+
+
+<script id="rns-live-study-session-bible-study-2026">
+(function(){
+  'use strict';
+  const KEY='rns.liveDraft.v3.bible-study';
+  const NAME='RNSAPP:';
+  let sessionId='';
+
+  try{
+    if(window.name&&window.name.startsWith(NAME))sessionId=window.name.slice(NAME.length);
+    else{
+      sessionId=Date.now().toString(36)+'-'+Math.random().toString(36).slice(2);
+      window.name=NAME+sessionId;
+    }
+  }catch(e){sessionId='fallback-'+Date.now().toString(36)}
+
+  function navType(){
+    try{return performance.getEntriesByType('navigation')[0]?.type||''}catch(e){return''}
+  }
+  if(navType()==='reload'){try{localStorage.removeItem(KEY)}catch(e){}}
+
+  let restoring=false,timer=null;
+
+  function ckey(el,i){
+    if(el.id)return'id:'+el.id;
+    if(el.name)return'name:'+el.name+':'+i;
+    return'anon:'+el.tagName+':'+i;
+  }
+
+  function save(){
+    if(restoring)return;
+    const values={};
+    [...document.querySelectorAll('input,textarea,select,[contenteditable="true"]')].forEach((el,i)=>{
+      if(el.matches('input[type="password"],input[type="file"],input[type="button"],input[type="submit"],input[type="reset"]'))return;
+      const k=ckey(el,i);
+      if(el.matches('[contenteditable="true"]'))values[k]={kind:'html',value:el.innerHTML};
+      else if(el.type==='checkbox'||el.type==='radio')values[k]={kind:'checked',value:!!el.checked};
+      else values[k]={kind:'value',value:el.value};
+    });
+    try{localStorage.setItem(KEY,JSON.stringify({sessionId,values,scrollY:window.scrollY||0,savedAt:Date.now()}))}catch(e){}
+  }
+
+  function read(){
+    try{
+      const d=JSON.parse(localStorage.getItem(KEY)||'null');
+      return d&&d.sessionId===sessionId?d:null;
+    }catch(e){return null}
+  }
+
+  function apply(d){
+    if(!d?.values)return;
+    [...document.querySelectorAll('input,textarea,select,[contenteditable="true"]')].forEach((el,i)=>{
+      if(el.matches('input[type="password"],input[type="file"],input[type="button"],input[type="submit"],input[type="reset"]'))return;
+      const s=d.values[ckey(el,i)];if(!s)return;
+      if(s.kind==='html'&&el.matches('[contenteditable="true"]'))el.innerHTML=s.value;
+      else if(s.kind==='checked')el.checked=!!s.value;
+      else if(s.kind==='value'){
+        if(el.tagName==='SELECT'){
+          if(s.value!==''&&![...el.options].some(o=>o.value===s.value))return;
+          if(el.value!==s.value){el.value=s.value;el.dispatchEvent(new Event('change',{bubbles:true}))}
+        }else if(el.value!==s.value){
+          el.value=s.value;el.dispatchEvent(new Event('input',{bubbles:true}))
+        }
+      }
+    });
+  }
+
+  function restore(){
+    const d=read();if(!d)return;
+    restoring=true;
+    [0,250,700,1400,2200].forEach(ms=>setTimeout(()=>apply(d),ms));
+    setTimeout(()=>{
+      window.scrollTo(0,Number(d.scrollY)||0);
+      restoring=false;
+      setTimeout(save,100);
+    },2350);
+  }
+
+  function schedule(){if(restoring)return;clearTimeout(timer);timer=setTimeout(save,100)}
+  document.addEventListener('input',schedule,true);
+  document.addEventListener('change',schedule,true);
+  document.addEventListener('click',()=>setTimeout(schedule,0),true);
+  window.addEventListener('pagehide',save);
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')save()});
+
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',restore,{once:true});
+  else restore();
+})();
+</script>
+
+
+<script id="rns-bible-study-reader-recovery-2026">
+(function(){
+  async function recover(){
+    try{
+      const book=document.getElementById('readerBook');
+      if(book&&book.options&&book.options.length>1){
+        if(typeof gbBestBooks==='function')setTimeout(gbBestBooks,60);
+        return;
+      }
+      if(typeof loadReaderBible==='function')await loadReaderBible(false);
+      if(typeof gbBestBooks==='function')setTimeout(gbBestBooks,80);
+    }catch(e){console.error('Bible Study reader recovery error:',e)}
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(recover,350),{once:true});
+  else setTimeout(recover,350);
+  window.addEventListener('pageshow',()=>setTimeout(recover,250));
 })();
 </script>
 
