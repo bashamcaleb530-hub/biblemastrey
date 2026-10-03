@@ -2485,6 +2485,500 @@ body{overflow-x:hidden}
 }
 </style>
 
+
+<style id="sn-owner-expanded-scrollable-panels-2026">
+/* ============================================================
+   OWNER PERSONAL STUDY — EXPANDED, LOW-SCROLL, SCROLLABLE PANELS
+   Slight page scrolling is allowed, but content-heavy cards scroll
+   inside themselves so the whole page does not keep growing.
+   ============================================================ */
+
+@media (min-width:1180px){
+
+  /* Give the layout a little more breathing room. */
+  .bm-main{
+    padding-bottom:14px!important;
+  }
+
+  .sn-reading-grid{
+    gap:8px!important;
+  }
+
+  .sn-reader-card,
+  .sn-commentary-card,
+  .sn-books-card{
+    height:390px!important;
+  }
+
+  .sn-middle-grid{
+    gap:8px!important;
+    margin-top:8px!important;
+  }
+
+  .sn-middle-grid .sn-card{
+    height:145px!important;
+  }
+
+  .sn-bottom-grid{
+    gap:8px!important;
+    margin-top:8px!important;
+  }
+
+  .sn-bottom-grid .sn-card{
+    height:132px!important;
+  }
+
+  /* Every major content card gets its own internal scroll area. */
+  .sn-card{
+    min-height:0!important;
+  }
+
+  .sn-card-body{
+    min-height:0!important;
+  }
+
+  .sn-reader-card .sn-card-body,
+  .sn-commentary-card .sn-card-body,
+  .sn-books-card .sn-card-body{
+    height:calc(100% - 34px)!important;
+    overflow:hidden!important;
+  }
+
+  /* Bible Reader */
+  #snReaderHost,
+  #snChronologyHost{
+    min-height:0!important;
+    overflow:auto!important;
+    scrollbar-gutter:stable;
+    overscroll-behavior:contain;
+  }
+
+  #snReaderHost .reader-shell{
+    min-height:0!important;
+  }
+
+  #snReaderHost .reader-display{
+    height:100%!important;
+    min-height:0!important;
+    overflow:auto!important;
+    scrollbar-gutter:stable;
+    overscroll-behavior:contain;
+  }
+
+  /* Commentary */
+  .sn-commentary-output{
+    height:calc(100% - 46px)!important;
+    min-height:0!important;
+    overflow:auto!important;
+    scrollbar-gutter:stable;
+    overscroll-behavior:contain;
+    padding-right:6px!important;
+  }
+
+  /* Best Book */
+  .sn-books-list{
+    height:100%!important;
+    min-height:0!important;
+    overflow:auto!important;
+    scrollbar-gutter:stable;
+    overscroll-behavior:contain;
+    padding-right:4px!important;
+  }
+
+  /* Middle row cards: notes, current passage, word study. */
+  .sn-middle-grid .sn-card-body{
+    height:calc(100% - 34px)!important;
+    min-height:0!important;
+    overflow:auto!important;
+    scrollbar-gutter:stable;
+    overscroll-behavior:contain;
+  }
+
+  .sn-notes-textarea{
+    height:72px!important;
+    min-height:72px!important;
+    max-height:72px!important;
+    overflow:auto!important;
+    resize:none!important;
+  }
+
+  .sn-passage-flex{
+    min-height:0!important;
+  }
+
+  .sn-word-summary{
+    min-height:0!important;
+  }
+
+  /* Bottom cards scroll independently too. */
+  .sn-bottom-grid .sn-card-body{
+    height:calc(100% - 34px)!important;
+    min-height:0!important;
+    overflow:auto!important;
+    scrollbar-gutter:stable;
+    overscroll-behavior:contain;
+    padding-right:4px!important;
+  }
+
+  /* Cross References */
+  .sn-cross-preview{
+    height:auto!important;
+    max-height:62px!important;
+    overflow:auto!important;
+    scrollbar-gutter:stable;
+  }
+
+  .sn-cross-preview .sn-cross-row{
+    display:grid!important;
+  }
+
+  /* Quick Tools: keep all tools visible, but allow the box itself to scroll
+     if screen width/height makes that necessary. */
+  .sn-quick-grid{
+    display:grid!important;
+    grid-template-columns:repeat(5,minmax(0,1fr))!important;
+    grid-auto-rows:minmax(38px,auto)!important;
+    gap:3px!important;
+    height:auto!important;
+    min-height:0!important;
+    overflow:auto!important;
+    scrollbar-gutter:stable;
+    border:0!important;
+  }
+
+  .sn-quick-grid button{
+    min-height:38px!important;
+    height:auto!important;
+    padding:3px 3px!important;
+  }
+
+  /* Study resources gets its own scrolling panel instead of clipping. */
+  .sn-resource-list{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:4px!important;
+    height:auto!important;
+    min-height:0!important;
+    overflow:auto!important;
+    scrollbar-gutter:stable;
+  }
+
+  .sn-resource-list button{
+    min-height:26px!important;
+    height:auto!important;
+    white-space:normal!important;
+    line-height:1.15!important;
+  }
+
+  /* Related topics / dictionary */
+  .sn-topic-list{
+    height:auto!important;
+    max-height:66px!important;
+    overflow:auto!important;
+    scrollbar-gutter:stable;
+  }
+
+  .sn-topic-list button{
+    display:flex!important;
+  }
+
+  /* More resources can wrap if needed without forcing excessive width. */
+  .sn-more-resources{
+    min-height:30px!important;
+    height:auto!important;
+    flex-wrap:wrap!important;
+    row-gap:3px!important;
+    padding:2px 4px!important;
+  }
+
+  /* Cleaner subtle scrollbars that fit the theme. */
+  #snReaderHost::-webkit-scrollbar,
+  #snChronologyHost::-webkit-scrollbar,
+  #snReaderHost .reader-display::-webkit-scrollbar,
+  .sn-commentary-output::-webkit-scrollbar,
+  .sn-books-list::-webkit-scrollbar,
+  .sn-middle-grid .sn-card-body::-webkit-scrollbar,
+  .sn-bottom-grid .sn-card-body::-webkit-scrollbar,
+  .sn-cross-preview::-webkit-scrollbar,
+  .sn-quick-grid::-webkit-scrollbar,
+  .sn-resource-list::-webkit-scrollbar,
+  .sn-topic-list::-webkit-scrollbar,
+  .sn-notes-textarea::-webkit-scrollbar{
+    width:8px;
+    height:8px;
+  }
+
+  #snReaderHost::-webkit-scrollbar-thumb,
+  #snChronologyHost::-webkit-scrollbar-thumb,
+  #snReaderHost .reader-display::-webkit-scrollbar-thumb,
+  .sn-commentary-output::-webkit-scrollbar-thumb,
+  .sn-books-list::-webkit-scrollbar-thumb,
+  .sn-middle-grid .sn-card-body::-webkit-scrollbar-thumb,
+  .sn-bottom-grid .sn-card-body::-webkit-scrollbar-thumb,
+  .sn-cross-preview::-webkit-scrollbar-thumb,
+  .sn-quick-grid::-webkit-scrollbar-thumb,
+  .sn-resource-list::-webkit-scrollbar-thumb,
+  .sn-topic-list::-webkit-scrollbar-thumb,
+  .sn-notes-textarea::-webkit-scrollbar-thumb{
+    background:#d7b36c;
+    border-radius:8px;
+  }
+
+  #snReaderHost::-webkit-scrollbar-track,
+  #snChronologyHost::-webkit-scrollbar-track,
+  #snReaderHost .reader-display::-webkit-scrollbar-track,
+  .sn-commentary-output::-webkit-scrollbar-track,
+  .sn-books-list::-webkit-scrollbar-track,
+  .sn-middle-grid .sn-card-body::-webkit-scrollbar-track,
+  .sn-bottom-grid .sn-card-body::-webkit-scrollbar-track,
+  .sn-cross-preview::-webkit-scrollbar-track,
+  .sn-quick-grid::-webkit-scrollbar-track,
+  .sn-resource-list::-webkit-scrollbar-track,
+  .sn-topic-list::-webkit-scrollbar-track,
+  .sn-notes-textarea::-webkit-scrollbar-track{
+    background:#fff8e8;
+  }
+}
+
+/* Taller screens can breathe a bit more while still remaining low-scroll. */
+@media (min-width:1180px) and (min-height:850px){
+  .sn-reader-card,
+  .sn-commentary-card,
+  .sn-books-card{
+    height:420px!important;
+  }
+
+  .sn-middle-grid .sn-card{
+    height:150px!important;
+  }
+
+  .sn-bottom-grid .sn-card{
+    height:138px!important;
+  }
+}
+</style>
+
+
+<style id="sn-owner-public-layouts-2026">
+/* ============================================================
+   TWO FIXED PERSONAL STUDY LAYOUTS
+   OWNER: Bible Reader | Commentary | Best Book
+   PUBLIC: Bible Reader | Commentary | Personal Study Notes
+   Same Seven Names theme. No layout chooser.
+   ============================================================ */
+
+/* Default is owner-style structure until public rearrangement is applied. */
+body.sn-public-study .sn-reading-grid{
+  grid-template-columns:minmax(420px,1.12fr) minmax(500px,1.22fr) minmax(390px,.96fr)!important;
+}
+
+body.sn-public-study .sn-public-support-grid{
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(250px,1fr))!important;
+  gap:8px!important;
+  margin-top:8px!important;
+}
+
+body.sn-public-study .sn-public-support-grid > .sn-card{
+  height:150px!important;
+  min-height:0!important;
+}
+
+body.sn-public-study .sn-public-support-grid > .sn-card > .sn-card-body{
+  height:calc(100% - 34px)!important;
+  min-height:0!important;
+  overflow:auto!important;
+  scrollbar-gutter:stable;
+  overscroll-behavior:contain;
+  padding-right:4px!important;
+}
+
+/* Notes becomes a main permanent panel for regular users. */
+body.sn-public-study .sn-reading-grid > .sn-public-notes-main{
+  height:390px!important;
+}
+
+body.sn-public-study .sn-public-notes-main .sn-card-body{
+  height:calc(100% - 34px)!important;
+  overflow:auto!important;
+  scrollbar-gutter:stable;
+}
+
+body.sn-public-study .sn-public-notes-main .sn-notes-textarea{
+  height:270px!important;
+  min-height:270px!important;
+  max-height:none!important;
+  resize:none!important;
+  overflow:auto!important;
+  font-size:14px!important;
+  line-height:1.45!important;
+}
+
+body.sn-public-study .sn-public-notes-main .sn-notes-toolbar{
+  position:sticky;
+  bottom:0;
+  background:#fffef9;
+  padding-top:5px;
+  padding-bottom:2px;
+}
+
+/* Best Book is supporting context for regular users. */
+body.sn-public-study .sn-public-best-book-support .sn-books-list{
+  height:100%!important;
+  overflow:auto!important;
+  scrollbar-gutter:stable;
+}
+
+/* Cross references should show several items and scroll instead of clipping. */
+body.sn-public-study .sn-public-cross-support .sn-cross-preview{
+  max-height:none!important;
+  height:76px!important;
+  overflow:auto!important;
+  scrollbar-gutter:stable;
+}
+
+body.sn-public-study .sn-public-cross-support .sn-cross-row{
+  display:grid!important;
+}
+
+/* Bottom area for public users: tools/resources/topics only. */
+body.sn-public-study .sn-bottom-grid{
+  grid-template-columns:minmax(520px,1.45fr) minmax(330px,.85fr) minmax(320px,.8fr)!important;
+  gap:8px!important;
+  margin-top:8px!important;
+}
+
+body.sn-public-study .sn-bottom-grid > .sn-card{
+  height:132px!important;
+}
+
+body.sn-public-study .sn-bottom-grid > .sn-card > .sn-card-body{
+  height:calc(100% - 34px)!important;
+  overflow:auto!important;
+  scrollbar-gutter:stable;
+  overscroll-behavior:contain;
+}
+
+/* Public quick tools stay visible in a 2-row grid and still open popups. */
+body.sn-public-study .sn-quick-grid{
+  display:grid!important;
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  grid-auto-rows:minmax(38px,auto)!important;
+  gap:3px!important;
+  overflow:auto!important;
+  height:auto!important;
+  border:0!important;
+}
+
+body.sn-public-study .sn-resource-list{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:4px!important;
+  overflow:auto!important;
+  height:auto!important;
+}
+
+body.sn-public-study .sn-topic-list{
+  height:auto!important;
+  max-height:76px!important;
+  overflow:auto!important;
+}
+
+/* Owner layout remains the user's approved structure. */
+body.sn-owner-study .sn-reading-grid{
+  grid-template-columns:minmax(390px,.94fr) minmax(500px,1.30fr) minmax(360px,.92fr)!important;
+}
+
+body.sn-owner-study .sn-middle-grid{
+  display:grid!important;
+  grid-template-columns:minmax(380px,1.05fr) minmax(360px,.96fr) minmax(340px,.90fr)!important;
+  gap:8px!important;
+  margin-top:8px!important;
+}
+
+body.sn-owner-study .sn-bottom-grid{
+  display:grid!important;
+  grid-template-columns:minmax(260px,.92fr) minmax(420px,1.34fr) minmax(250px,.78fr) minmax(260px,.84fr)!important;
+  gap:8px!important;
+  margin-top:8px!important;
+}
+
+/* All major boxes get themed internal scrollbars in BOTH layouts. */
+body.sn-owner-study .sn-card-body,
+body.sn-public-study .sn-card-body,
+body.sn-owner-study .reader-display,
+body.sn-public-study .reader-display,
+body.sn-owner-study .sn-commentary-output,
+body.sn-public-study .sn-commentary-output,
+body.sn-owner-study .sn-books-list,
+body.sn-public-study .sn-books-list{
+  overscroll-behavior:contain;
+}
+
+body.sn-owner-study .sn-card-body::-webkit-scrollbar,
+body.sn-public-study .sn-card-body::-webkit-scrollbar,
+body.sn-owner-study .reader-display::-webkit-scrollbar,
+body.sn-public-study .reader-display::-webkit-scrollbar,
+body.sn-owner-study .sn-commentary-output::-webkit-scrollbar,
+body.sn-public-study .sn-commentary-output::-webkit-scrollbar,
+body.sn-owner-study .sn-books-list::-webkit-scrollbar,
+body.sn-public-study .sn-books-list::-webkit-scrollbar{
+  width:8px;
+  height:8px;
+}
+
+body.sn-owner-study .sn-card-body::-webkit-scrollbar-thumb,
+body.sn-public-study .sn-card-body::-webkit-scrollbar-thumb,
+body.sn-owner-study .reader-display::-webkit-scrollbar-thumb,
+body.sn-public-study .reader-display::-webkit-scrollbar-thumb,
+body.sn-owner-study .sn-commentary-output::-webkit-scrollbar-thumb,
+body.sn-public-study .sn-commentary-output::-webkit-scrollbar-thumb,
+body.sn-owner-study .sn-books-list::-webkit-scrollbar-thumb,
+body.sn-public-study .sn-books-list::-webkit-scrollbar-thumb{
+  background:#d7b36c;
+  border-radius:8px;
+}
+
+body.sn-owner-study .sn-card-body::-webkit-scrollbar-track,
+body.sn-public-study .sn-card-body::-webkit-scrollbar-track,
+body.sn-owner-study .reader-display::-webkit-scrollbar-track,
+body.sn-public-study .reader-display::-webkit-scrollbar-track,
+body.sn-owner-study .sn-commentary-output::-webkit-scrollbar-track,
+body.sn-public-study .sn-commentary-output::-webkit-scrollbar-track,
+body.sn-owner-study .sn-books-list::-webkit-scrollbar-track,
+body.sn-public-study .sn-books-list::-webkit-scrollbar-track{
+  background:#fff8e8;
+}
+
+/* Responsive fallback: do not force 4 columns on narrower screens. */
+@media (max-width:1350px){
+  body.sn-public-study .sn-public-support-grid{
+    grid-template-columns:repeat(2,minmax(280px,1fr))!important;
+  }
+  body.sn-public-study .sn-bottom-grid{
+    grid-template-columns:1fr 1fr!important;
+  }
+}
+
+@media (max-width:900px){
+  body.sn-public-study .sn-reading-grid,
+  body.sn-owner-study .sn-reading-grid,
+  body.sn-public-study .sn-public-support-grid,
+  body.sn-public-study .sn-bottom-grid,
+  body.sn-owner-study .sn-middle-grid,
+  body.sn-owner-study .sn-bottom-grid{
+    grid-template-columns:1fr!important;
+  }
+
+  body.sn-public-study .sn-reading-grid > .sn-card,
+  body.sn-public-study .sn-public-support-grid > .sn-card,
+  body.sn-owner-study .sn-reading-grid > .sn-card{
+    height:auto!important;
+    min-height:360px!important;
+  }
+}
+</style>
+
 </head>
 <body class="bm-layout-dashboard" data-default-view="personal-study">
 
@@ -12847,5 +13341,179 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
 })();
 
 </script>
+
+<script id="sn-audience-layout-manager-2026">
+(function(){
+  'use strict';
+
+  const ADMIN_EMAIL='bashamcaleb530@gmail.com';
+  const AUTH_KEY='sb-pjkkxvntssvukulxipfr-auth-token';
+
+  function byId(id){ return document.getElementById(id); }
+
+  function cardContaining(id){
+    const el=byId(id);
+    return el ? el.closest('.sn-card') : null;
+  }
+
+  function sessionEmail(){
+    try{
+      const raw=localStorage.getItem(AUTH_KEY) || sessionStorage.getItem(AUTH_KEY);
+      if(!raw) return '';
+      const parsed=JSON.parse(raw);
+      return String(
+        parsed?.user?.email ||
+        parsed?.currentSession?.user?.email ||
+        parsed?.session?.user?.email ||
+        ''
+      ).toLowerCase();
+    }catch(e){
+      return '';
+    }
+  }
+
+  let captured=false;
+  let readingGrid=null;
+  let middleGrid=null;
+  let bottomGrid=null;
+
+  const originals=new Map();
+
+  function remember(node){
+    if(!node || originals.has(node)) return;
+    originals.set(node,{
+      parent:node.parentNode,
+      next:node.nextSibling
+    });
+  }
+
+  function capture(){
+    if(captured) return true;
+
+    readingGrid=document.querySelector('.sn-reading-grid');
+    middleGrid=document.querySelector('.sn-middle-grid');
+    bottomGrid=document.querySelector('.sn-bottom-grid');
+
+    const nodes=[
+      cardContaining('snReaderHeading'),
+      cardContaining('snCommentaryHeading'),
+      cardContaining('snBooksHeading'),
+      cardContaining('snStudyNotes'),
+      cardContaining('snCurrentRef'),
+      cardContaining('snWordLemma'),
+      cardContaining('snCrossPreview'),
+      cardContaining('snBooksList')
+    ];
+
+    if(!readingGrid || !middleGrid || !bottomGrid || nodes.some(x=>!x)){
+      return false;
+    }
+
+    document.querySelectorAll('.sn-reading-grid > .sn-card, .sn-middle-grid > .sn-card, .sn-bottom-grid > .sn-card')
+      .forEach(remember);
+
+    captured=true;
+    return true;
+  }
+
+  function restoreOriginalStructure(){
+    if(!captured) return;
+
+    document.querySelectorAll('.sn-public-support-grid').forEach(x=>x.remove());
+
+    for(const [node,place] of originals.entries()){
+      if(!place.parent) continue;
+      if(place.next && place.next.parentNode===place.parent){
+        place.parent.insertBefore(node,place.next);
+      }else{
+        place.parent.appendChild(node);
+      }
+      node.classList.remove(
+        'sn-public-notes-main',
+        'sn-public-best-book-support',
+        'sn-public-cross-support'
+      );
+    }
+  }
+
+  function applyOwner(){
+    if(!capture()) return;
+    restoreOriginalStructure();
+
+    document.body.classList.remove('sn-public-study');
+    document.body.classList.add('sn-owner-study');
+  }
+
+  function applyPublic(){
+    if(!capture()) return;
+    restoreOriginalStructure();
+
+    document.body.classList.remove('sn-owner-study');
+    document.body.classList.add('sn-public-study');
+
+    const reader=cardContaining('snReaderHeading');
+    const commentary=cardContaining('snCommentaryHeading');
+    const books=cardContaining('snBooksHeading');
+    const notes=cardContaining('snStudyNotes');
+    const passage=cardContaining('snCurrentRef');
+    const word=cardContaining('snWordLemma');
+    const cross=cardContaining('snCrossPreview');
+
+    if(!reader || !commentary || !books || !notes || !passage || !word || !cross) return;
+
+    /* Main three things ordinary users need directly in front of them. */
+    readingGrid.append(reader,commentary,notes);
+    notes.classList.add('sn-public-notes-main');
+
+    /* Supporting study row. */
+    const support=document.createElement('div');
+    support.className='sn-public-support-grid';
+    readingGrid.insertAdjacentElement('afterend',support);
+
+    support.append(passage,cross,word,books);
+    books.classList.add('sn-public-best-book-support');
+    cross.classList.add('sn-public-cross-support');
+
+    /* Hide the now-empty middle row. */
+    if(middleGrid.children.length===0){
+      middleGrid.style.display='none';
+    }
+
+    /* Cross References moved up, leaving the bottom row for tools/resources/topics. */
+    bottomGrid.style.display='grid';
+  }
+
+  function applyAudience(){
+    const isOwner=sessionEmail()===ADMIN_EMAIL;
+    if(isOwner) applyOwner();
+    else applyPublic();
+  }
+
+  function start(){
+    let tries=0;
+    const timer=setInterval(function(){
+      tries++;
+      if(capture()){
+        clearInterval(timer);
+        applyAudience();
+
+        window.addEventListener('focus',applyAudience);
+        window.addEventListener('storage',function(e){
+          if(e.key===AUTH_KEY) applyAudience();
+        });
+      }else if(tries>80){
+        clearInterval(timer);
+      }
+    },50);
+  }
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',start,{once:true});
+  }else{
+    start();
+  }
+})();
+</script>
+
 </body>
 </html>
