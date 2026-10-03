@@ -11095,9 +11095,42 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
   if(readerBookSelect) new MutationObserver(()=>syncLocationControls()).observe(readerBookSelect,{childList:true,subtree:true});
   if(readerChapterSelect) new MutationObserver(()=>syncLocationControls()).observe(readerChapterSelect,{childList:true,subtree:true});
   if(readerVerseSelect) new MutationObserver(()=>syncLocationControls()).observe(readerVerseSelect,{childList:true,subtree:true});
-  snBook?.addEventListener('change',()=>{readerBookSelect.value=snBook.value;readerBookSelect.dispatchEvent(new Event('change',{bubbles:true}));setTimeout(()=>{syncLocationControls();refreshAll();},150)});
-  snChapter?.addEventListener('change',()=>{readerChapterSelect.value=snChapter.value;readerChapterSelect.dispatchEvent(new Event('change',{bubbles:true}));setTimeout(()=>{syncLocationControls();refreshAll();},150)});
-  snVerse?.addEventListener('change',()=>{readerVerseSelect.value=snVerse.value;readerVerseSelect.dispatchEvent(new Event('change',{bubbles:true}));setTimeout(()=>{syncLocationControls();refreshAll();},80)});
+  snBook?.addEventListener('change',()=>{
+    if(!readerBookSelect)return;
+    readerBookSelect.value=snBook.value;
+    if(snBook.value===''){
+      readerBookIndex=-1;
+      readerChapterIndex=-1;
+      populateReaderChapters();
+    }else{
+      readerBookIndex=Number(snBook.value);
+      populateReaderChapters();
+    }
+    readerBookSelect.dispatchEvent(new Event('change',{bubbles:true}));
+    setTimeout(()=>{syncLocationControls();refreshAll();},40);
+  });
+
+  snChapter?.addEventListener('change',()=>{
+    if(!readerChapterSelect)return;
+    readerChapterSelect.value=snChapter.value;
+    if(snChapter.value===''){
+      readerChapterIndex=-1;
+      populateReaderVerses();
+      updateReaderNavButtons();
+    }else{
+      readerChapterIndex=Number(snChapter.value);
+      renderReaderChapter();
+    }
+    readerChapterSelect.dispatchEvent(new Event('change',{bubbles:true}));
+    setTimeout(()=>{syncLocationControls();refreshAll();},40);
+  });
+
+  snVerse?.addEventListener('change',()=>{
+    if(!readerVerseSelect)return;
+    readerVerseSelect.value=snVerse.value;
+    readerVerseSelect.dispatchEvent(new Event('change',{bubbles:true}));
+    setTimeout(()=>{syncLocationControls();refreshAll();},20);
+  });
   $('snPrevChapter')?.addEventListener('click',()=>{readerPrev?.click();setTimeout(()=>{syncLocationControls();refreshAll();},160)});
   $('snNextChapter')?.addEventListener('click',()=>{readerNext?.click();setTimeout(()=>{syncLocationControls();refreshAll();},160)});
 
@@ -11123,12 +11156,63 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
   }
   function currentReaderState(){
     try{
-      if(!readerBible || readerBookIndex < 0 || readerChapterIndex < 0) return null;
-      const book = readerBible.books[readerBookIndex]; const chapter = book.chapters[readerChapterIndex];
-      const verses = chapter.verses || []; const vi = Math.min(selectedReaderVerseIndex(),Math.max(0,verses.length-1)); const verse = verses[vi];
-      const bookName = getBookName(book); const ch = chapterNumber(chapter,readerChapterIndex); const vn = verseNumber(verse,vi);
-      return {book,chapter,verse,vi,bookName,chapterNumber:ch,verseNumber:vn,reference:`${bookName} ${ch}:${vn}`,text:getReaderVerseText(verse,readerBookIndex,readerTranslationSelect?.value||'KJV')};
-    }catch(e){ return null; }
+      if(!readerBible || !Array.isArray(readerBible.books)) return null;
+
+      // The approved visible selectors are authoritative.
+      const bookValue =
+        (snBook && snBook.value !== '') ? snBook.value :
+        (readerBookSelect && readerBookSelect.value !== '') ? readerBookSelect.value :
+        '';
+
+      const chapterValue =
+        (snChapter && snChapter.value !== '') ? snChapter.value :
+        (readerChapterSelect && readerChapterSelect.value !== '') ? readerChapterSelect.value :
+        '';
+
+      if(bookValue === '' || chapterValue === '') return null;
+
+      const bi=Number(bookValue);
+      const ci=Number(chapterValue);
+
+      if(!Number.isInteger(bi) || !Number.isInteger(ci) || bi < 0 || ci < 0) return null;
+      if(!readerBible.books[bi]) return null;
+
+      const book=readerBible.books[bi];
+      const chapters=Array.isArray(book.chapters)?book.chapters:[];
+      const chapter=chapters[ci];
+      if(!chapter) return null;
+
+      // Repair the original reader state whenever it has fallen out of sync.
+      readerBookIndex=bi;
+      readerChapterIndex=ci;
+      if(readerBookSelect && readerBookSelect.value!==String(bi))readerBookSelect.value=String(bi);
+      if(readerChapterSelect && readerChapterSelect.value!==String(ci))readerChapterSelect.value=String(ci);
+
+      const verses=Array.isArray(chapter.verses)?chapter.verses:[];
+      if(!verses.length)return null;
+
+      let vi=selectedReaderVerseIndex();
+      if(snVerse && snVerse.value!=='')vi=Number(snVerse.value)||0;
+      vi=Math.max(0,Math.min(vi,verses.length-1));
+
+      const verse=verses[vi];
+      const bookName=getBookName(book);
+      const ch=chapterNumber(chapter,ci);
+      const vn=verseNumber(verse,vi);
+
+      return {
+        book,chapter,verse,vi,
+        bookIndex:bi,chapterIndex:ci,
+        bookName,
+        chapterNumber:ch,
+        verseNumber:vn,
+        reference:`${bookName} ${ch}:${vn}`,
+        text:getReaderVerseText(verse,bi,readerTranslationSelect?.value||'KJV')
+      };
+    }catch(e){
+      console.warn('Personal Study reader-state sync error:',e);
+      return null;
+    }
   }
   function ensureVerseSelected(){ if(readerVerseSelect && readerVerseSelect.value==='') readerVerseSelect.value='0'; }
   function moveVerse(delta){
@@ -11167,11 +11251,20 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
   function writeJsonStore(key,value){try{localStorage.setItem(key,JSON.stringify(value));return true}catch(e){return false}}
   function verseStateForIndex(index){
     try{
-      if(!readerBible||readerBookIndex<0||readerChapterIndex<0)return null;
-      const book=readerBible.books[readerBookIndex],chapter=book.chapters[readerChapterIndex],verses=chapter.verses||[];
-      const vi=Math.max(0,Math.min(Number(index)||0,verses.length-1)),verse=verses[vi];
-      const bookName=getBookName(book),ch=chapterNumber(chapter,readerChapterIndex),vn=verseNumber(verse,vi);
-      return {vi,bookName,chapterNumber:ch,verseNumber:vn,reference:`${bookName} ${ch}:${vn}`,text:getReaderVerseText(verse,readerBookIndex,readerTranslationSelect?.value||'KJV')};
+      const base=currentReaderState();
+      if(!base)return null;
+      const verses=Array.isArray(base.chapter.verses)?base.chapter.verses:[];
+      const vi=Math.max(0,Math.min(Number(index)||0,verses.length-1));
+      const verse=verses[vi];
+      const vn=verseNumber(verse,vi);
+      return {
+        vi,
+        bookName:base.bookName,
+        chapterNumber:base.chapterNumber,
+        verseNumber:vn,
+        reference:`${base.bookName} ${base.chapterNumber}:${vn}`,
+        text:getReaderVerseText(verse,base.bookIndex,readerTranslationSelect?.value||'KJV')
+      };
     }catch(e){return null}
   }
   function selectedVerseState(){
@@ -11273,9 +11366,13 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
     location.href=url;
   });
 
-  readerBookSelect?.addEventListener('change',()=>setTimeout(refreshAll,180));
-  readerChapterSelect?.addEventListener('change',()=>setTimeout(refreshAll,180));
-  readerVerseSelect?.addEventListener('change',()=>setTimeout(refreshAll,20));
+  readerBookSelect?.addEventListener('change',()=>setTimeout(()=>{syncLocationControls();refreshAll();},60));
+  readerChapterSelect?.addEventListener('change',()=>setTimeout(()=>{syncLocationControls();refreshAll();},60));
+  readerVerseSelect?.addEventListener('change',()=>setTimeout(()=>{syncLocationControls();refreshAll();},20));
+  if(readerDisplay){
+    new MutationObserver(()=>setTimeout(()=>{syncLocationControls();refreshAll();},20))
+      .observe(readerDisplay,{childList:true,subtree:true});
+  }
 
   /* ---------- Commentary companion ---------- */
   const commentaryChoices = [
@@ -11401,8 +11498,8 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
     try{
       if(typeof loadBibleTranslation!=='function') throw new Error('Bible engine unavailable');
       const plus=await loadBibleTranslation('KJVPLUS'); if(token!==wordToken)return;
-      const books=getBibleBooks(plus), book=books[readerBookIndex], chapter=getBibleChapters(book)[readerChapterIndex], verse=getBibleVerses(chapter)[state.vi];
-      const raw=String(verse?.text||verse?.content||verse?.verse||''); const prefix=readerBookIndex<39?'H':'G'; const m=raw.match(/<S>(\d+)<\/S>/i)||raw.match(/\b([HG]\d+)\b/i); const key=m?(m[1].match(/^[HG]/i)?m[1].toUpperCase():prefix+m[1]):'';
+      const books=getBibleBooks(plus), book=books[state.bookIndex], chapter=getBibleChapters(book)[state.chapterIndex], verse=getBibleVerses(chapter)[state.vi];
+      const raw=String(verse?.text||verse?.content||verse?.verse||''); const prefix=state.bookIndex<39?'H':'G'; const m=raw.match(/<S>(\d+)<\/S>/i)||raw.match(/\b([HG]\d+)\b/i); const key=m?(m[1].match(/^[HG]/i)?m[1].toUpperCase():prefix+m[1]):'';
       const entry=key&&typeof findStrongEntry==='function'?findStrongEntry(key):null;
       if(!entry){$('snWordLemma').textContent='—';$('snWordTranslit').textContent='No Strong’s tag found';$('snWordDetails').innerHTML='Open <strong>Original Language</strong> for deeper word study.';return;}
       const d=entry.data||{};$('snWordLemma').textContent=d.lemma||key;$('snWordTranslit').textContent=d.transliteration||entry.language||'';$('snWordDetails').innerHTML=`<strong>Strong’s:</strong> ${esc(entry.number)}<br><strong>Language:</strong> ${esc(entry.language||'')}<br><strong>Meaning:</strong> ${esc(d.definition||'Open the full guide for details.')}`;
