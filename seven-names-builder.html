@@ -66,8 +66,6 @@ html,body{margin:0;min-height:100%;background:#f8f0de;color:var(--ink);font-fami
   const frame=document.getElementById("snrBuilderFrame");
   const sermonBtn=document.getElementById("snrSermonButton");
   const bibleBtn=document.getElementById("snrBibleStudyButton");
-  let activeBlobUrl=null;
-
   function decodeBase64(data){
     const binary=atob(data);
     const bytes=new Uint8Array(binary.length);
@@ -79,13 +77,21 @@ html,body{margin:0;min-height:100%;background:#f8f0de;color:var(--ink);font-fami
     return location.hash==="#bible-study" ? "bible-study" : "sermon";
   }
 
+  function withSiteBase(html){
+    const pageBase=new URL("./",window.location.href).href;
+    const baseTag='<base href="'+pageBase+'">';
+    if(/<base\b/i.test(html)){
+      return html.replace(/<base\b[^>]*>/i,baseTag);
+    }
+    return html.replace(/<head([^>]*)>/i,'<head$1>'+baseTag);
+  }
+
   function load(which){
     sermonBtn.classList.toggle("active",which==="sermon");
     bibleBtn.classList.toggle("active",which==="bible-study");
-    if(activeBlobUrl) URL.revokeObjectURL(activeBlobUrl);
     const html=decodeBase64(which==="bible-study" ? bibleData : sermonData);
-    activeBlobUrl=URL.createObjectURL(new Blob([html],{type:"text/html"}));
-    frame.src=activeBlobUrl;
+    frame.removeAttribute("src");
+    frame.srcdoc=withSiteBase(html);
   }
 
   function switchTo(which){
