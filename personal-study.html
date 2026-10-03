@@ -3171,44 +3171,148 @@ body{overflow-x:hidden}
      LOAD ANY BIBLE TRANSLATION
   ========================================= */
 
+  let bibleEngineReloadPromise = null;
+
+  function bibleEngineReady() {
+    return (
+      typeof getKJV === "function" &&
+      typeof getWEB === "function" &&
+      typeof getASV === "function"
+    );
+  }
+
+  async function ensureBibleEngine() {
+
+    if (bibleEngineReady()) {
+      return true;
+    }
+
+    if (bibleEngineReloadPromise) {
+      return bibleEngineReloadPromise;
+    }
+
+    bibleEngineReloadPromise =
+      new Promise(function(resolve, reject) {
+
+        const script =
+          document.createElement("script");
+
+        script.src =
+          "bible.js?reload=" +
+          Date.now();
+
+        script.async = false;
+
+        script.onload =
+          function() {
+
+            if (bibleEngineReady()) {
+              resolve(true);
+            }
+            else {
+              reject(
+                new Error(
+                  "bible.js loaded but the Bible translation engine was not available."
+                )
+              );
+            }
+
+          };
+
+        script.onerror =
+          function() {
+            reject(
+              new Error(
+                "Unable to reload bible.js."
+              )
+            );
+          };
+
+        document.head.appendChild(
+          script
+        );
+
+      });
+
+    return bibleEngineReloadPromise;
+  }
+
+
   async function loadBibleTranslation(
     translation
   ) {
 
-    if (translation === "KJV1611") {
+    await ensureBibleEngine();
+
+    if (
+      translation === "KJV1611" &&
+      typeof getKJV1611 === "function"
+    ) {
       return await getKJV1611();
     }
 
-    if (translation === "KJVPLUS") {
+    if (
+      translation === "KJVPLUS" &&
+      typeof getKJVPLUS === "function"
+    ) {
       return await getKJVPLUS();
     }
 
-    if (translation === "YLT") {
+    if (
+      translation === "YLT" &&
+      typeof getYLT === "function"
+    ) {
       return await getYLT();
     }
 
-    if (translation === "WEB") {
+    if (
+      translation === "WEB" &&
+      typeof getWEB === "function"
+    ) {
       return await getWEB();
     }
 
-    if (translation === "ASV") {
+    if (
+      translation === "ASV" &&
+      typeof getASV === "function"
+    ) {
       return await getASV();
     }
 
-    if (translation === "GENEVA1599") {
+    if (
+      translation === "GENEVA1599" &&
+      typeof getGENEVA1599 === "function"
+    ) {
       return await getGENEVA1599();
     }
 
-    if (translation === "DRA") {
+    if (
+      translation === "DRA" &&
+      typeof getDRA === "function"
+    ) {
       return await getDRA();
     }
 
-    if (translation === "BSB") {
+    if (
+      translation === "BSB" &&
+      typeof getBSB === "function"
+    ) {
       return await getBSB();
     }
 
-    if (translation === "MSB") {
+    if (
+      translation === "MSB" &&
+      typeof getMSB === "function"
+    ) {
       return await getMSB();
+    }
+
+    if (
+      typeof getKJV !== "function"
+    ) {
+      throw new Error(
+        "KJV Bible loader is unavailable."
+      );
     }
 
     return await getKJV();
@@ -3276,7 +3380,7 @@ body{overflow-x:hidden}
       );
 
       readerDisplay.innerHTML =
-        "<div class='error-message'>Unable to load this Bible translation right now.</div>";
+        "<div class='error-message'>Unable to load this Bible translation right now. Refresh once; if it continues, bible.js is not loading on the deployed site.</div>";
     }
   }
 
@@ -3779,6 +3883,23 @@ body{overflow-x:hidden}
 
 
   loadIndependentBible();
+
+  window.addEventListener(
+    "load",
+    function() {
+      if (
+        !readerBible ||
+        !Array.isArray(readerBible.books)
+      ) {
+        setTimeout(
+          function() {
+            loadIndependentBible();
+          },
+          250
+        );
+      }
+    }
+  );
 
 
   /* =========================================
