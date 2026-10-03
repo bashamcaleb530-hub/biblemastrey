@@ -2131,7 +2131,6 @@ body{overflow-x:hidden}
 
 </style>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body class="bm-layout-dashboard" data-default-view="personal-study">
 
@@ -11273,12 +11272,14 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
   $('snPrimaryNavPrev')?.addEventListener('click',()=>$('snPrimaryNavTrack')?.scrollBy({left:-300,behavior:'smooth'}));
   $('snPrimaryNavNext')?.addEventListener('click',()=>$('snPrimaryNavTrack')?.scrollBy({left:300,behavior:'smooth'}));
 
-  // Owner-only navigation: regular users keep the public builders.
-  // The owner sees one Seven Names One Redeemer combined builder instead.
-  (async function snApplyOwnerBuilderNavigation(){
+  // Owner-only navigation without loading another SDK.
+  // Read the existing Supabase auth session already stored by BibleMastery.
+  (function snApplyOwnerBuilderNavigation(){
     const publicSermon=$('snPublicSermonBuilder');
     const publicBibleStudy=$('snPublicBibleStudyBuilder');
     const ownerBuilder=$('snOwnerSevenNamesBuilder');
+    const ADMIN_EMAIL='bashamcaleb530@gmail.com';
+    const AUTH_KEY='sb-pjkkxvntssvukulxipfr-auth-token';
 
     function applyOwnerNav(isOwner){
       if(publicSermon) publicSermon.style.display=isOwner?'none':'';
@@ -11286,25 +11287,31 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
       if(ownerBuilder) ownerBuilder.style.display=isOwner?'':'none';
     }
 
-    applyOwnerNav(false);
-
-    try{
-      if(!window.supabase || typeof window.supabase.createClient!=='function') return;
-      const client=window.supabase.createClient(
-        'https://pjkkxvntssvukulxipfr.supabase.co',
-        'sb_publishable_1kehaIywv1Wb9Iwj2OPGdg_aFosOSwK'
-      );
-      const result=await client.auth.getSession();
-      const email=result?.data?.session?.user?.email||'';
-      applyOwnerNav(email.toLowerCase()==='bashamcaleb530@gmail.com');
-
-      client.auth.onAuthStateChange(function(_event,session){
-        const currentEmail=session?.user?.email||'';
-        applyOwnerNav(currentEmail.toLowerCase()==='bashamcaleb530@gmail.com');
-      });
-    }catch(err){
-      console.warn('Owner navigation check unavailable:',err);
+    function sessionEmail(){
+      try{
+        const raw=localStorage.getItem(AUTH_KEY) || sessionStorage.getItem(AUTH_KEY);
+        if(!raw) return '';
+        const parsed=JSON.parse(raw);
+        return String(
+          parsed?.user?.email ||
+          parsed?.currentSession?.user?.email ||
+          parsed?.session?.user?.email ||
+          ''
+        ).toLowerCase();
+      }catch(e){
+        return '';
+      }
     }
+
+    applyOwnerNav(sessionEmail()===ADMIN_EMAIL);
+
+    // Refresh the nav when returning to this tab after account/login changes.
+    window.addEventListener('focus',function(){
+      applyOwnerNav(sessionEmail()===ADMIN_EMAIL);
+    });
+    window.addEventListener('storage',function(event){
+      if(event.key===AUTH_KEY) applyOwnerNav(sessionEmail()===ADMIN_EMAIL);
+    });
   })();
 
   /* ---------- Hidden working vault ---------- */
