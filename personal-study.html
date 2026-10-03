@@ -1920,6 +1920,182 @@ button,a,input,select,textarea{min-height:38px}
 }
 </style>
 
+<style id="sn-approved-layout-2026">
+/* ============================================================
+   SEVEN NAMES ONE REDEEMER — APPROVED PERSONAL STUDY LAYOUT
+   Target: spacious, low-scroll dashboard with modal study tools
+   ============================================================ */
+:root{
+  --sn-maroon:#7a0d12;
+  --sn-maroon-dark:#56070b;
+  --sn-maroon-deep:#3f0508;
+  --sn-gold:#c68a00;
+  --sn-gold-dark:#976500;
+  --sn-gold-soft:#f7dfa0;
+  --sn-cream:#fff9ec;
+  --sn-card:#fffef9;
+  --sn-card-2:#fffaf0;
+  --sn-text:#24160f;
+  --sn-muted:#6b574b;
+  --sn-line:#e5c98d;
+  --sn-line-soft:#efe0bd;
+  --sn-shadow:0 3px 12px rgba(89,46,12,.10);
+}
+html,body{background:linear-gradient(180deg,#fff9eb 0%,#fffef8 56%,#fff7e2 100%)!important;color:var(--sn-text)!important}
+body{overflow-x:hidden}
+
+/* Keep the real Seven Names bright theme, but remove the old sidebar dashboard. */
+.bm-shell{display:block!important;min-height:auto!important}
+.bm-sidebar,.bm-viewbar,.bm-dashboard-grid,.bm-extras{display:none!important}
+.bm-main{max-width:none!important;width:100%!important;margin:0!important;padding:8px 14px 12px!important}
+
+/* Sunrise header becomes the same full-width identity as the approved mockup. */
+.bm-topbar{
+  min-height:84px!important;height:84px!important;padding:0 18px!important;
+  background:
+    radial-gradient(circle at 72% 6%,rgba(255,251,204,.98) 0 6%,rgba(255,229,148,.82) 7%,rgba(255,224,137,0) 25%),
+    linear-gradient(180deg,#fff7dc 0%,#f1ce86 52%,#cc8740 100%)!important;
+  border-bottom:2px solid var(--sn-gold)!important;
+  box-shadow:0 4px 16px rgba(82,41,12,.20)!important;
+  color:var(--sn-maroon)!important;
+}
+.bm-topbar::before{opacity:.32!important}
+.bm-topbar::after{display:none!important}
+.bm-brand{min-width:540px!important;gap:12px!important;color:var(--sn-maroon)!important}
+.bm-brand-mark{font-size:44px!important;color:var(--sn-gold-dark)!important;line-height:1!important}
+.bm-brand-copy{display:flex!important;flex-direction:column!important;justify-content:center!important}
+.bm-brand-copy strong{font-family:Georgia,'Times New Roman',serif!important;font-size:36px!important;line-height:.98!important;letter-spacing:.2px!important;color:var(--sn-maroon)!important;font-weight:700!important}
+.bm-brand-copy small{font-family:Georgia,'Times New Roman',serif!important;font-size:11px!important;letter-spacing:2.7px!important;color:#603218!important;margin-top:7px!important;font-weight:700!important}
+.bm-global-search-wrap{max-width:360px!important;border-color:#b77a1c!important;box-shadow:0 1px 3px rgba(93,47,7,.13)!important;background:#fffdf6!important}
+.bm-global-search-wrap input{background:#fffdf8!important;color:#3a2519!important}
+.bm-global-search-wrap button{color:var(--sn-maroon)!important;background:#fffdf8!important}
+.bm-top-actions{gap:16px!important}.bm-icon-button,.bm-profile-button{color:var(--sn-maroon)!important}.bm-profile-button{background:#fff8e8!important;border:1px solid #d8b66e!important}
+.bm-main-page-link{display:none!important}
+
+/* Main nav under the sunrise header. */
+.sn-primary-nav{height:38px;display:flex;align-items:stretch;gap:0;margin:-8px -14px 8px;padding:0 22px;background:rgba(255,248,228,.98);border-bottom:1px solid var(--sn-line);box-shadow:0 1px 5px rgba(98,54,14,.08)}
+.sn-primary-nav a,.sn-primary-nav button{min-height:38px!important;border:0;border-right:1px solid #ead7ad;background:transparent;color:#4a2c1c;padding:0 24px;font-size:14px;cursor:pointer;text-decoration:none;display:flex;align-items:center;justify-content:center}
+.sn-primary-nav a.active,.sn-primary-nav button.active{background:linear-gradient(180deg,#94151b,#760b10);color:#fff;font-weight:800}
+.sn-primary-nav a:hover,.sn-primary-nav button:hover{background:#fff0c8}
+
+/* Control strip: location, translations, quick header actions. */
+.sn-control-strip{display:grid;grid-template-columns:320px minmax(520px,1fr) 460px;gap:8px;align-items:stretch;margin-bottom:8px}
+.sn-location-controls,.sn-translation-strip,.sn-header-actions{background:rgba(255,254,248,.94);border:1px solid var(--sn-line-soft);border-radius:8px;box-shadow:0 1px 4px rgba(80,45,15,.04);min-width:0}
+.sn-location-controls{display:grid;grid-template-columns:1.25fr .8fr 42px 42px;gap:6px;padding:7px}
+.sn-location-controls select,.sn-location-controls button{height:38px!important;min-height:38px!important;border:1px solid #dbc89f!important;border-radius:5px!important;background:#fffdf7!important;color:#2c1d15!important;padding:0 10px!important}
+.sn-location-controls button{font-size:22px!important;color:var(--sn-maroon)!important;padding:0!important}
+.sn-translation-strip{display:flex;overflow-x:auto;padding:7px}
+.sn-translation-strip button{flex:1 0 58px;min-height:38px!important;height:38px!important;border:1px solid #eadcc0;border-left:0;background:#fffdf8;color:#2f261f;font-weight:700;cursor:pointer}
+.sn-translation-strip button:first-child{border-left:1px solid #eadcc0;border-radius:5px 0 0 5px}.sn-translation-strip button:last-child{border-radius:0 5px 5px 0}
+.sn-translation-strip button.active{background:linear-gradient(180deg,#98171c,#790c11);color:#fff;border-color:#790c11}
+.sn-header-actions{display:grid;grid-template-columns:repeat(6,1fr);overflow:hidden}
+.sn-header-actions button{min-height:52px!important;border:0;border-right:1px solid #ebdcc0;background:#fffdf8;color:#2d2018;cursor:pointer;font-size:11px;padding:4px 3px}
+.sn-header-actions button:last-child{border-right:0}.sn-header-actions button:hover{background:#fff2cd}.sn-header-actions .sn-hi-icon{display:block;font-size:20px;color:var(--sn-maroon);line-height:1.1;margin-bottom:3px}
+
+/* Reusable card styling. */
+.sn-card{background:rgba(255,254,249,.98);border:1px solid var(--sn-line);border-radius:8px;box-shadow:var(--sn-shadow);overflow:hidden;min-width:0;color:var(--sn-text)}
+.sn-card-head{height:36px;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 13px;background:linear-gradient(180deg,#fffdf7,#fff8e8);border-bottom:1px solid #ead9b7;color:var(--sn-maroon);font-family:Georgia,'Times New Roman',serif;font-weight:700;font-size:17px}
+.sn-card-head .sn-head-icon{margin-right:7px}.sn-card-head button{border:0;background:transparent;color:#9b6708;font-size:15px;cursor:pointer;min-height:auto!important}
+.sn-card-body{padding:8px 10px;min-width:0}
+
+/* Core three-column reading row: readable, not cramped. */
+.sn-reading-grid{display:grid;grid-template-columns:minmax(350px,.92fr) minmax(520px,1.42fr) minmax(390px,1.02fr);gap:8px;align-items:stretch}
+.sn-reader-card,.sn-commentary-card,.sn-books-card{height:438px}
+.sn-reader-card .sn-card-body,.sn-commentary-card .sn-card-body,.sn-books-card .sn-card-body{height:calc(100% - 36px);overflow:hidden}
+
+/* Reader */
+.sn-reader-mode{display:grid;grid-template-columns:1fr 1fr;margin-bottom:7px;border:1px solid #ead8b4;border-radius:5px;overflow:hidden}
+.sn-reader-mode button{min-height:33px!important;height:33px!important;border:0;background:#fffdf8;color:#413024;font-weight:700;cursor:pointer}
+.sn-reader-mode button.active{background:linear-gradient(180deg,#98171c,#790c11);color:#fff}
+#snReaderHost{height:calc(100% - 41px);overflow:hidden}
+#snReaderHost #bibleReaderSection{height:100%;padding:0!important;background:transparent!important;border:0!important;box-shadow:none!important;margin:0!important}
+#snReaderHost #bibleReaderSection>h3,#snReaderHost #bibleReaderSection>p,#snReaderHost .reader-controls{display:none!important}
+#snReaderHost .reader-shell{display:block!important;height:100%!important;margin:0!important;background:transparent!important;border:0!important;padding:0!important}
+#snReaderHost .reader-display{height:100%!important;min-height:0!important;max-height:none!important;overflow:auto!important;background:#fffef9!important;color:#211a16!important;border:0!important;border-radius:0!important;padding:0 4px 8px 2px!important}
+#snReaderHost .reader-title{display:none!important}
+#snReaderHost .reader-verse{font-family:Georgia,'Times New Roman',serif!important;font-size:16px!important;line-height:1.43!important;color:#1f2331!important;padding:8px 9px 8px 13px!important;border-bottom:0!important;border-radius:5px!important;display:block!important}
+#snReaderHost .reader-verse:hover{background:#fff4d4!important}
+#snReaderHost .reader-verse.active-reader-verse{background:linear-gradient(90deg,#fff0bd,#ffe9a2)!important;color:#241b16!important;box-shadow:inset 4px 0 0 var(--sn-maroon)!important}
+#snReaderHost .reader-verse-number{color:var(--sn-maroon)!important;min-width:26px;display:inline-block}
+#snChronologyHost{height:calc(100% - 41px);overflow:auto}
+#snChronologyHost .deep-study-panel{display:block!important;background:transparent!important;border:0!important;padding:0!important}
+#snChronologyHost .deep-study-card{background:transparent!important;border:0!important;padding:0!important;box-shadow:none!important}
+#snChronologyHost .deep-study-card>h3,#snChronologyHost .deep-study-card>p,#snChronologyHost .gospel-source-note{display:none!important}
+#snChronologyHost .gospel-event-controls{display:grid!important;grid-template-columns:1fr!important;gap:5px!important;margin:0 0 6px!important}
+#snChronologyHost .gospel-event-controls>div:nth-child(2){display:none!important}
+#snChronologyHost .gospel-chronology-layout{grid-template-columns:130px minmax(0,1fr)!important;gap:6px!important;margin:0!important}
+#snChronologyHost .gospel-event-sidebar,#snChronologyHost .gospel-reading-pane{background:#fffef9!important;border:1px solid #eadcc2!important;border-radius:5px!important;padding:5px!important}
+#snChronologyHost .gospel-event-list{max-height:330px!important}.sn-hidden{display:none!important}
+
+/* Commentary */
+.sn-commentary-tabs{display:flex;gap:0;overflow-x:auto;border:1px solid #eadcc2;border-radius:5px;margin-bottom:8px}
+.sn-commentary-tabs button{flex:1 0 104px;min-height:33px!important;height:33px!important;border:0;border-right:1px solid #eadcc2;background:#fffdf9;color:#31251d;font-size:11px;cursor:pointer;white-space:nowrap}
+.sn-commentary-tabs button.active{background:linear-gradient(180deg,#98171c,#790c11);color:#fff;font-weight:800}
+.sn-commentary-output{height:350px;overflow:auto;padding:2px 4px}
+.sn-commentary-reference{font-family:Georgia,'Times New Roman',serif;color:var(--sn-maroon);font-weight:700;font-size:25px;margin:2px 0 2px}
+.sn-commentary-verse{font-family:Georgia,'Times New Roman',serif;font-size:17px;font-style:italic;color:#263047;margin:0 0 10px}
+.sn-commentary-entry{padding:9px 4px 12px;border-bottom:1px solid #eadfc9}.sn-commentary-entry:last-child{border-bottom:0}
+.sn-commentary-entry h4{font-family:Georgia,'Times New Roman',serif;color:#182347;font-size:16px;margin:0 0 4px}.sn-commentary-entry p{font-family:Georgia,'Times New Roman',serif;line-height:1.38;margin:0;color:#253147;font-size:14px}
+.sn-commentary-loading{color:var(--sn-muted);padding:16px;text-align:center}
+
+/* Books */
+.sn-books-list{height:100%;overflow:auto;padding:1px 2px}
+.sn-book-card{display:grid;grid-template-columns:92px minmax(0,1fr) auto;gap:10px;padding:10px 3px;border-bottom:1px solid #eadfc9;align-items:start}.sn-book-card:last-child{border-bottom:0}
+.sn-book-cover{height:108px;border-radius:4px;background:linear-gradient(145deg,#3c2a1a,#8d5f2a);color:#f9df9b;display:grid;place-items:center;text-align:center;padding:7px;font-family:Georgia,serif;font-weight:700;box-shadow:0 2px 5px rgba(0,0,0,.18);font-size:11px}
+.sn-book-info strong{display:block;color:#142249;font-family:Georgia,serif;font-size:14px;margin-bottom:2px}.sn-book-info .sn-author{font-size:12px;color:#47536b;margin-bottom:10px}.sn-book-info .sn-section{font-size:13px;color:#26314c;margin-bottom:6px}.sn-book-info p{font-family:Georgia,serif;font-size:13px;line-height:1.35;color:#2f3546;margin:0}
+.sn-open-section{border:1px solid #ddb96e;background:#fffaf0;color:#813515;border-radius:5px;padding:8px 11px;cursor:pointer;font-weight:700;white-space:nowrap;min-height:auto!important}.sn-open-section:hover{background:#fff0c6}
+.sn-book-empty{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:#715641;padding:22px}.sn-book-empty .sn-empty-icon{font-size:42px;color:var(--sn-gold);margin-bottom:8px}.sn-book-empty strong{color:var(--sn-maroon);font-size:17px}
+
+/* Middle row. */
+.sn-middle-grid{display:grid;grid-template-columns:minmax(420px,1.16fr) minmax(360px,.95fr) minmax(360px,.9fr);gap:8px;margin-top:8px}
+.sn-middle-grid .sn-card{height:156px}
+.sn-middle-grid .sn-card-body{height:calc(100% - 36px);overflow:hidden}
+.sn-notes-textarea{width:100%;height:78px!important;min-height:78px!important;resize:none!important;border:1px solid #e2d3b5!important;background:#fff!important;color:#31251e!important;border-radius:4px!important;padding:9px!important;font-size:13px!important}
+.sn-notes-toolbar{display:flex;align-items:center;gap:7px;margin-top:4px}.sn-notes-toolbar button{min-height:28px!important;height:28px;border:0;background:transparent;color:#171717;font-weight:800;cursor:pointer}.sn-save-note{margin-left:auto!important;background:var(--sn-maroon)!important;color:#fff!important;border-radius:5px!important;padding:0 20px!important}
+.sn-passage-flex{height:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}.sn-passage-ref{font-family:Georgia,serif;font-size:23px;font-weight:700;color:#151827}.sn-passage-text{font-family:Georgia,serif;font-style:italic;font-size:14px;line-height:1.3;color:#27324a;max-width:330px}.sn-passage-nav{display:flex;gap:5px}.sn-passage-nav button{width:34px;height:34px;min-height:34px!important;border:1px solid #e1c994;background:#fffaf0;border-radius:5px;color:#9b5d09;font-size:20px;cursor:pointer}
+.sn-passage-actions{display:flex;gap:7px;margin-top:8px;flex-wrap:wrap}.sn-passage-actions button{min-height:31px!important;height:31px;border:1px solid #e1c994;background:#fffaf0;color:#6f3513;border-radius:5px;padding:0 12px;cursor:pointer;font-size:11px}.sn-passage-actions .primary{background:#cc8b10;color:#fff;border-color:#b77704;font-weight:800}
+.sn-word-tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-bottom:6px}.sn-word-tabs button{min-height:29px!important;height:29px;border:0;background:#f5f2ec;color:#273042;font-size:10px;cursor:pointer}.sn-word-tabs button.active{background:linear-gradient(180deg,#98171c,#790c11);color:#fff;font-weight:800;border-radius:4px}
+.sn-word-summary{display:grid;grid-template-columns:125px 1fr;gap:8px;align-items:start}.sn-word-lemma{font-family:Georgia,serif;font-size:24px;font-weight:700;text-align:center;color:#111827}.sn-word-translit{font-family:Georgia,serif;font-style:italic;text-align:center;color:#3d4657;font-size:13px}.sn-word-details{font-size:11px;color:#273149;line-height:1.25}.sn-word-details strong{color:#17213c}.sn-word-open{width:100%;height:26px!important;min-height:26px!important;margin-top:5px;border:1px solid #e2c886;background:#fff7df;color:#8b3e14;border-radius:4px;cursor:pointer;font-size:10px}
+
+/* Bottom row. */
+.sn-bottom-grid{display:grid;grid-template-columns:minmax(300px,.9fr) minmax(450px,1.3fr) minmax(270px,.7fr) minmax(300px,.85fr);gap:8px;margin-top:8px}
+.sn-bottom-grid .sn-card{height:155px}.sn-bottom-grid .sn-card-body{height:calc(100% - 36px);overflow:hidden}
+.sn-cross-preview{font-size:11px;line-height:1.28;height:91px;overflow:hidden}.sn-cross-row{display:grid;grid-template-columns:112px 1fr;gap:7px;padding:2px 0;border-bottom:1px solid #f0e4cd}.sn-cross-row strong{color:#af1015}.sn-cross-row span{color:#30384c}.sn-view-all{width:100%;height:25px!important;min-height:25px!important;border:1px solid #e1ca99;background:#fff9ea;color:#a23b17;border-radius:4px;cursor:pointer;font-size:10px;margin-top:4px}
+.sn-quick-grid{display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(2,1fr);height:100%;gap:0;border:1px solid #efe1c7;border-radius:4px;overflow:hidden}.sn-quick-grid button{min-height:0!important;border:0;border-right:1px solid #efe1c7;border-bottom:1px solid #efe1c7;background:#fffdf8;color:#33261f;cursor:pointer;font-size:9px;padding:4px 2px}.sn-quick-grid button:hover{background:#fff1ca}.sn-quick-grid .sn-qicon{display:block;font-size:18px;color:var(--sn-maroon);margin-bottom:3px;line-height:1}.sn-resource-list{display:grid;gap:4px;height:100%}.sn-resource-list button{min-height:25px!important;height:25px;border:1px solid #e7d3a9;background:#fffdf8;color:#343043;border-radius:4px;cursor:pointer;font-size:10px;text-align:left;padding:0 10px}.sn-resource-list button:hover{background:#fff2d1}.sn-resource-list .sn-r-icon{color:var(--sn-maroon);font-size:14px;margin-right:8px}.sn-topic-list{font-size:11px;height:90px;overflow:hidden}.sn-topic-list button{display:flex;width:100%;min-height:17px!important;height:17px;border:0;background:transparent;color:#34384a;cursor:pointer;text-align:left;padding:0 3px;align-items:center}.sn-topic-list button:hover{color:var(--sn-maroon)}.sn-topic-list button::before{content:'✥';color:var(--sn-maroon);margin-right:7px}.sn-related-open{width:100%;height:25px!important;min-height:25px!important;border:1px solid #e1ca99;background:#fff9ea;color:#a23b17;border-radius:4px;cursor:pointer;font-size:10px;margin-top:4px}
+
+.sn-more-resources{height:34px;margin:7px 0 0;display:flex;align-items:center;justify-content:center;gap:24px;color:#9d3a14;font-size:10px}.sn-more-resources strong{font-family:Georgia,serif;color:var(--sn-maroon);font-size:12px}.sn-more-resources button{min-height:24px!important;height:24px;border:0;background:transparent;color:#a23b17;cursor:pointer;font-size:10px}
+
+/* Popup / modal: large enough to read, never replaces the page. */
+.sn-modal{position:fixed;inset:0;z-index:5000;background:rgba(38,28,20,.64);display:flex;align-items:center;justify-content:center;padding:28px}.sn-modal[hidden]{display:none!important}
+.sn-modal-dialog{width:min(1040px,94vw);height:min(720px,86vh);background:linear-gradient(180deg,#fffef9,#fff9eb);border:2px solid #d9a43c;border-radius:12px;box-shadow:0 24px 80px rgba(0,0,0,.35);overflow:hidden;display:flex;flex-direction:column}
+.sn-modal-head{min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:11px 18px;border-bottom:1px solid #e7d1a3;background:linear-gradient(180deg,#fffdf7,#fff4d7)}
+.sn-modal-title-wrap{display:flex;align-items:center;gap:12px;min-width:0}.sn-modal-icon{font-size:31px;color:var(--sn-maroon)}.sn-modal-title{font-family:Georgia,serif;color:var(--sn-maroon);font-size:28px;font-weight:700;line-height:1.05}.sn-modal-subtitle{font-family:Georgia,serif;color:#514037;font-size:12px;margin-top:2px}.sn-modal-close{width:40px;height:40px;min-height:40px!important;border:0;background:transparent;color:var(--sn-maroon);font-size:28px;cursor:pointer;border-radius:50%}.sn-modal-close:hover{background:#f9e7bd}
+.sn-modal-body{flex:1;overflow:auto;padding:14px 18px;color:#2b211b}.sn-modal-body .workspace-section,.sn-modal-body .tool-box,.sn-modal-body .deep-study-panel,.sn-modal-body .deep-study-card,.sn-modal-body #masteryNotebook,.sn-modal-body .master-tool-suite{display:block!important;background:transparent!important;color:#2c211b!important;border:0!important;box-shadow:none!important;margin:0!important;padding:0!important}.sn-modal-body h2,.sn-modal-body h3,.sn-modal-body h4{color:var(--sn-maroon)!important}.sn-modal-body p,.sn-modal-body label,.sn-modal-body .small-note{color:#58493e!important}.sn-modal-body input,.sn-modal-body select,.sn-modal-body textarea{background:#fff!important;color:#2b211b!important;border-color:#dbc499!important}.sn-modal-body .result-item,.sn-modal-body .deep-study-output,.sn-modal-body .master-tool-output{background:#fffdf8!important;color:#2b211b!important;border-color:#eadabe!important}.sn-modal-body .search-button,.sn-modal-body .reader-nav-button,.sn-modal-body .commentary-button{background:var(--sn-maroon)!important;color:#fff!important;border-color:var(--sn-maroon-dark)!important}
+.sn-modal-body .bible-map-layout{grid-template-columns:220px minmax(0,1fr)!important}.sn-modal-body #bibleInteractiveMap{height:500px!important;min-height:500px!important}
+.sn-modal-body .deep-study-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.sn-modal-body .bm-theology-layout{grid-template-columns:260px minmax(0,1fr)!important}
+.sn-modal-custom-tabs{display:flex;gap:4px;margin-bottom:10px}.sn-modal-custom-tabs button{min-height:34px!important;border:1px solid #dfc28b;background:#fff8e7;color:#5a321f;border-radius:5px;padding:0 14px;cursor:pointer}.sn-modal-custom-tabs button.active{background:var(--sn-maroon);color:#fff}
+
+/* Small utilities */
+.sn-status{color:#725b4a;font-size:12px}.sn-error{color:#a30c14;font-size:12px}.sn-muted{color:var(--sn-muted)}
+
+/* Desktop scaling: preserve readability before collapsing. */
+@media(max-width:1380px){
+  .bm-brand{min-width:420px!important}.bm-brand-copy strong{font-size:30px!important}
+  .sn-control-strip{grid-template-columns:280px minmax(440px,1fr) 390px}
+  .sn-reading-grid{grid-template-columns:minmax(320px,.88fr) minmax(460px,1.36fr) minmax(340px,.95fr)}
+  .sn-book-card{grid-template-columns:72px minmax(0,1fr)}.sn-book-cover{height:90px}.sn-book-card .sn-open-section{grid-column:2;justify-self:start}
+  .sn-bottom-grid{grid-template-columns:minmax(270px,.85fr) minmax(400px,1.25fr) minmax(245px,.7fr) minmax(270px,.82fr)}
+}
+@media(max-width:1120px){
+  .bm-brand{min-width:310px!important}.bm-brand-copy strong{font-size:25px!important}.bm-brand-copy small{letter-spacing:1.6px!important}.bm-global-search-wrap{max-width:280px!important}
+  .sn-control-strip{grid-template-columns:1fr}.sn-header-actions{min-height:54px}.sn-reading-grid,.sn-middle-grid,.sn-bottom-grid{grid-template-columns:1fr 1fr}.sn-books-card{grid-column:1/-1;height:330px}.sn-reader-card,.sn-commentary-card{height:420px}.sn-bottom-grid .sn-card{height:165px}.sn-more-resources{flex-wrap:wrap;height:auto}
+}
+@media(max-width:760px){
+  .bm-topbar{height:70px!important;min-height:70px!important;padding:0 9px!important}.bm-brand{min-width:0!important}.bm-brand-copy strong{font-size:20px!important}.bm-brand-copy small{display:none!important}.bm-global-search-wrap{display:none!important}.bm-top-actions{margin-left:auto}.sn-primary-nav{overflow-x:auto;padding:0}.sn-primary-nav a,.sn-primary-nav button{padding:0 15px;white-space:nowrap}
+  .bm-main{padding:6px!important}.sn-reading-grid,.sn-middle-grid,.sn-bottom-grid{display:block}.sn-card{margin-bottom:7px}.sn-reader-card,.sn-commentary-card,.sn-books-card{height:390px}.sn-middle-grid .sn-card,.sn-bottom-grid .sn-card{height:170px}.sn-quick-grid{grid-template-columns:repeat(2,1fr);grid-template-rows:auto;height:auto}.sn-quick-grid button{min-height:54px!important}.sn-modal{padding:8px}.sn-modal-dialog{width:100%;height:94vh}.sn-modal-title{font-size:21px}.sn-modal-body .deep-study-grid,.sn-modal-body .bm-theology-layout,.sn-modal-body .bible-map-layout{grid-template-columns:1fr!important}
+}
+
+</style>
 </head>
 <body class="bm-layout-dashboard" data-default-view="personal-study">
 
@@ -10639,348 +10815,499 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
   const originalDisplayGuard=()=>{ if(body.classList.contains('bm-layout-dashboard')){ const g=$('deepStudyGospelsPanel'),m=$('deepStudyMapsPanel'); if(g)g.style.display='block'; if(m)m.style.display='block'; }};
   document.querySelectorAll('.deep-study-tab').forEach(t=>t.addEventListener('click',()=>setTimeout(originalDisplayGuard,0))); originalDisplayGuard();
 })();
-</script><style id="bm-personal-study-reading-layout-v2">
-/* ============================================================
-   PERSONAL STUDY — SPACIOUS READING-FIRST LAYOUT
-   Seven Names One Redeemer bright theme
-   ============================================================ */
-body.bm-layout-dashboard .bm-sidebar{display:none!important}
-body.bm-layout-dashboard .bm-shell{grid-template-columns:1fr!important}
-body.bm-layout-dashboard .bm-main{width:100%;max-width:none!important;padding:12px 16px 22px!important}
-body.bm-layout-dashboard .bm-viewbar{max-width:1900px;margin:0 auto 10px!important}
-body.bm-layout-dashboard .bm-layout-switch{display:none!important}
-body.bm-layout-dashboard .bm-dashboard-grid{display:none!important}
-
-.bm-reading-dashboard{max-width:1900px;margin:0 auto}
-.bm-reading-grid{display:grid;grid-template-columns:minmax(370px,.95fr) minmax(380px,1fr) minmax(390px,1.05fr);gap:14px;align-items:stretch}
-.bm-reading-card{background:var(--bm-panel,#fffef9);border:1px solid var(--bm-line,#e3c68b);border-radius:10px;box-shadow:0 5px 16px rgba(91,50,18,.08);overflow:hidden;min-width:0;min-height:650px}
-.bm-reading-card-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 14px;background:linear-gradient(180deg,#fff8e4,#f8e3b7);border-bottom:1px solid #dfbf77;color:var(--bm-maroon,#7a0d12)}
-.bm-reading-card-head strong{font-family:Georgia,serif;font-size:19px;color:var(--bm-maroon,#7a0d12)}
-.bm-reading-card-head span{font-size:11px;color:#735d4f}
-.bm-reading-card-body{padding:10px;min-height:600px;background:#fffef9}
-
-/* Bible reader gets real reading room. */
-.bm-reading-card .bm-reader-card{border:0!important;box-shadow:none!important;border-radius:0!important;background:transparent!important}
-.bm-reading-card .bm-reader-card #bibleReaderSection{padding:0!important;background:transparent!important}
-.bm-reading-card .bm-reader-card #bibleReaderSection>h3,.bm-reading-card .bm-reader-card #bibleReaderSection>p{display:none!important}
-.bm-reading-card .bm-reader-card .reader-controls{display:grid!important;grid-template-columns:1.2fr .85fr .65fr!important;gap:8px!important;padding:0 0 9px!important}
-.bm-reading-card .bm-reader-card .reader-control:nth-of-type(4){display:block!important;grid-column:1/-1}
-.bm-reading-card .bm-reader-card .reader-nav{display:flex!important}
-.bm-reading-card .bm-reader-card .reader-display{min-height:510px!important;max-height:585px!important;padding:11px!important;border:1px solid #e3d3b2!important;border-radius:7px!important;background:#fffef9!important;font-size:16px!important;line-height:1.7!important}
-.bm-reading-card .bm-reader-card .reader-verse{padding:9px 7px!important;line-height:1.66!important}
-
-/* Regular / Chronological Gospel switch in the Bible Reader. */
-.bm-reader-mode-switch{display:flex;gap:5px;padding:4px;margin-bottom:9px;background:#fff7df;border:1px solid #e0c687;border-radius:8px}
-.bm-reader-mode-switch button{flex:1;border:1px solid transparent;background:transparent;color:#5c3827;border-radius:6px;padding:9px 10px;cursor:pointer;font-weight:800}
-.bm-reader-mode-switch button.active{background:linear-gradient(180deg,#9f171e,#7a0d12);color:#fff;border-color:#65090d;box-shadow:inset 0 -2px 0 #eabf54}
-.bm-reader-mode-note{font-size:11px;color:#735d4f;margin:-2px 0 8px;padding:0 2px}
-.bm-reader-chronology-host{display:none}
-.bm-reader-chronology-host.active{display:block}
-.bm-reader-chronology-host #deepStudyGospelsPanel{display:block!important;background:#fffef9!important;border:0!important;padding:0!important}
-.bm-reader-chronology-host .deep-study-card{padding:0!important;background:transparent!important;border:0!important}
-.bm-reader-chronology-host .deep-study-card>h3{font-size:18px!important;color:#7a0d12!important;margin:5px 0 6px!important}
-.bm-reader-chronology-host .deep-study-card>p,.bm-reader-chronology-host .gospel-source-note{display:none!important}
-.bm-reader-chronology-host .gospel-event-controls{grid-template-columns:1fr 120px!important;gap:8px!important;margin:4px 0 8px!important}
-.bm-reader-chronology-host .gospel-chronology-layout{grid-template-columns:1fr!important;gap:8px!important;margin-top:8px!important}
-.bm-reader-chronology-host .gospel-event-list{max-height:135px!important;overflow:auto!important;display:grid!important;grid-template-columns:1fr 1fr!important;gap:3px!important}
-.bm-reader-chronology-host .gospel-event-button{font-size:11px!important;padding:6px!important;border-radius:5px!important}
-.bm-reader-chronology-host .gospel-reading-pane{max-height:410px!important;overflow:auto!important;padding:8px!important;background:#fff!important;border:1px solid #e5d1aa!important;border-radius:7px!important}
-.bm-reader-chronology-host .gospel-reading-actions{display:grid!important;grid-template-columns:1fr 1fr!important;gap:5px!important}
-.bm-reader-chronology-host .gospel-reading-actions button{font-size:10px!important;padding:6px 7px!important}
-
-/* Commentary stays readable and scrolls inside its own column. */
-#bmCommentaryReadingCard #deepStudyCommentariesPanel{display:block!important;padding:0!important;background:transparent!important;border:0!important}
-#bmCommentaryReadingCard .deep-study-card{padding:0!important;border:0!important;background:transparent!important}
-#bmCommentaryReadingCard .bm-deep-panel-head{display:block!important}
-#bmCommentaryReadingCard .bm-deep-panel-head>div:first-child p{display:none!important}
-#bmCommentaryReadingCard .bm-inline-controls{display:grid!important;grid-template-columns:1fr auto!important;gap:7px!important;margin-bottom:8px}
-#bmCommentaryReadingCard .bm-commentary-preview{min-height:505px!important;max-height:555px!important;overflow:auto!important;padding:12px!important;background:#fff!important;border:1px solid #e5d4b3!important;border-radius:7px!important;color:#302218!important;font-size:15px!important;line-height:1.62!important}
-#bmCommentaryReadingCard .result-item{background:#fffdf7!important;color:#302218!important;border-color:#eadabb!important}
-
-/* Theology Books: recommendations at top, book reader beneath. */
-#bmBooksReadingCard #deepStudyBooksPanel{display:block!important;padding:0!important;background:transparent!important;border:0!important}
-#bmBooksReadingCard .bm-theology-layout{display:block!important;padding:0!important}
-#bmBooksReadingCard .bm-theology-library,#bmBooksReadingCard .bm-theology-reader{background:transparent!important;border:0!important;padding:0!important}
-#bmBooksReadingCard .bm-theology-library{border-bottom:1px solid #ead9b6!important;padding-bottom:8px!important;margin-bottom:8px!important}
-#bmBooksReadingCard .bm-theology-library-head p{display:none!important}
-#bmBooksReadingCard .bm-theology-book-list{max-height:120px!important;display:grid!important;grid-template-columns:1fr 1fr!important;gap:6px!important;margin-top:7px!important}
-#bmBooksReadingCard .bm-theology-book-item{padding:8px!important;background:#fffdf7!important;border-color:#e3c995!important}
-#bmBooksReadingCard .bm-theology-reader-head{align-items:center!important}
-#bmBooksReadingCard .bm-theology-reader-head .bm-inline-controls{display:flex!important}
-#bmBooksReadingCard .bm-theology-chapters{max-height:76px;overflow:auto;padding:6px 0!important}
-#bmBooksReadingCard .bm-book-reader-output{min-height:315px!important;max-height:375px!important;overflow:auto!important;padding:11px!important;background:#fff!important;border:1px solid #e5d4b3!important;border-radius:7px!important;color:#302218!important;line-height:1.62!important}
-.bm-book-recommendations{margin:0 0 9px;padding:9px;background:#fff7df;border:1px solid #e2c279;border-radius:7px}
-.bm-book-recommendations-title{font-weight:900;color:#7a0d12;margin-bottom:5px}
-.bm-book-recommendation{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid #ecdcb9}
-.bm-book-recommendation:last-child{border-bottom:0}
-.bm-book-recommendation button{border:1px solid #cfa04a;background:#fffef9;color:#7a0d12;border-radius:6px;padding:6px 8px;cursor:pointer;font-weight:800;white-space:nowrap}
-
-/* Compact tool launchers: visible, but tools themselves open in a modal. */
-.bm-tool-launchers{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
-.bm-launcher-group{background:#fffef9;border:1px solid #e1c78e;border-radius:10px;padding:10px 12px;box-shadow:0 3px 11px rgba(91,50,18,.06)}
-.bm-launcher-head{display:flex;align-items:baseline;gap:8px;margin-bottom:8px}
-.bm-launcher-head strong{font-family:Georgia,serif;color:#7a0d12;font-size:17px}
-.bm-launcher-head span{font-size:11px;color:#725f52}
-.bm-launcher-buttons{display:grid;grid-template-columns:repeat(6,minmax(100px,1fr));gap:7px}
-.bm-launch-tool{min-height:58px;border:1px solid #ead5ab;background:#fff9e9;color:#6e1115;border-radius:8px;padding:7px 6px;cursor:pointer;font-weight:800;line-height:1.18}
-.bm-launch-tool .bm-tool-icon{display:block;font-size:19px;color:#a66f00;margin-bottom:3px}
-.bm-launch-tool:hover{background:#fff0c8;border-color:#ca991e;transform:translateY(-1px)}
-
-/* Keep AI available, but compact and out of the primary reading row. */
-.bm-reading-support{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;margin-bottom:12px}
-.bm-reading-support .bm-ai-area{padding:0!important}
-.bm-reading-support #topicBox{padding:10px 12px!important;border:1px solid #e1c78e!important;border-radius:10px!important;background:#fffef9!important}
-.bm-reading-support #topicBox h2{font-size:16px!important;color:#7a0d12!important;margin:0 0 6px!important;text-align:left!important}
-.bm-reading-support #personalAiQuestion{height:42px!important;min-height:42px!important}
-.bm-reading-support #personalAiAnswer{max-height:95px!important}
-
-/* Popup tools */
-.bm-study-modal{position:fixed;inset:0;z-index:5000;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(54,16,9,.52);backdrop-filter:blur(2px)}
-.bm-study-modal.open{display:flex}
-.bm-study-modal-card{width:min(1080px,96vw);max-height:90vh;display:flex;flex-direction:column;background:#fffdf7;border:2px solid #c78c17;border-radius:14px;box-shadow:0 24px 80px rgba(54,22,8,.36);overflow:hidden}
-.bm-study-modal-head{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:12px 16px;background:linear-gradient(180deg,#fff0bf,#f5d087);border-bottom:1px solid #c99525}
-.bm-study-modal-head strong{font-family:Georgia,serif;font-size:22px;color:#7a0d12}
-.bm-study-modal-close{width:38px;height:38px;border:1px solid #9f171e;background:#7a0d12;color:#fff;border-radius:50%;cursor:pointer;font-size:22px;line-height:1}
-.bm-study-modal-body{padding:15px;overflow:auto;background:#fffdf7;color:#2d2019}
-.bm-study-modal-body>.deep-study-panel,.bm-study-modal-body>.workspace-section,.bm-study-modal-body>.tool-box,.bm-study-modal-body>section{display:block!important;margin:0!important;border:0!important;box-shadow:none!important;background:transparent!important;color:#2d2019!important}
-.bm-study-modal-body .deep-study-card,.bm-study-modal-body .tool-box{background:#fffef9!important;color:#2d2019!important;border:1px solid #e4c993!important;border-radius:9px!important}
-.bm-study-modal-body h2,.bm-study-modal-body h3{color:#7a0d12!important}
-.bm-study-modal-body p,.bm-study-modal-body label,.bm-study-modal-body .small-note{color:#604e43!important}
-.bm-study-modal-body .deep-study-output,.bm-study-modal-body .results-box{max-height:52vh!important;overflow:auto!important;background:#fff!important;color:#2d2019!important}
-.bm-study-modal-body .result-item{background:#fffdf7!important;color:#2d2019!important;border-color:#ead9b7!important}
-.bm-modal-two-tools{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-body.bm-modal-open{overflow:hidden}
-
-@media(max-width:1400px){
-  .bm-reading-grid{grid-template-columns:minmax(340px,1fr) minmax(350px,1fr);}
-  #bmBooksReadingCard{grid-column:1/-1;min-height:520px}
-  #bmBooksReadingCard .bm-theology-layout{display:grid!important;grid-template-columns:minmax(280px,.7fr) minmax(0,1.3fr)!important;gap:10px!important}
-  #bmBooksReadingCard .bm-theology-library{border-bottom:0!important;border-right:1px solid #ead9b6!important;padding-right:10px!important;margin:0!important}
-}
-@media(max-width:980px){
-  .bm-reading-grid{grid-template-columns:1fr}
-  .bm-reading-card{min-height:auto}
-  .bm-tool-launchers{grid-template-columns:1fr}
-  .bm-launcher-buttons{grid-template-columns:repeat(3,1fr)}
-  #bmBooksReadingCard .bm-theology-layout{display:block!important}
-  #bmBooksReadingCard .bm-theology-library{border-right:0!important;border-bottom:1px solid #ead9b6!important;padding-right:0!important;padding-bottom:8px!important;margin-bottom:8px!important}
-}
-@media(max-width:620px){
-  body.bm-layout-dashboard .bm-main{padding:7px!important}
-  .bm-launcher-buttons{grid-template-columns:repeat(2,1fr)}
-  .bm-reading-card .bm-reader-card .reader-controls{grid-template-columns:1fr 1fr!important}
-  .bm-reading-card .bm-reader-card .reader-control:first-child{grid-column:1/-1}
-  .bm-modal-two-tools{grid-template-columns:1fr}
-  .bm-study-modal{padding:7px}
-  .bm-study-modal-card{max-height:96vh}
-}
-</style>
-<script id="bm-personal-study-reading-layout-v2-script">
+</script><script id="sn-approved-layout-behavior-2026">
 (function(){
   'use strict';
-  const $=id=>document.getElementById(id);
-  const body=document.body;
-  if(!body) return;
-  body.classList.remove('bm-layout-classic');
-  body.classList.add('bm-layout-dashboard');
-  try{localStorage.setItem('bibleMasteryPersonalStudyLayout','dashboard')}catch(e){}
+  const $ = id => document.getElementById(id);
+  const qs = (sel, root=document) => root.querySelector(sel);
+  const qsa = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-  const oldGrid=document.querySelector('.bm-dashboard-grid');
-  const main=$('bmDashboardTop');
-  const readerCard=$('bmReaderCard');
-  const deepCard=$('bmDeepCard');
-  const gospelCard=$('bmGospelCard');
-  const mapCard=$('bmMapCard');
-  const commentaryPanel=$('deepStudyCommentariesPanel');
-  const booksPanel=$('deepStudyBooksPanel');
-  const gospelPanel=$('deepStudyGospelsPanel');
-  const aiArea=$('bmAiArea');
-  if(!main || !readerCard || !commentaryPanel || !booksPanel) return;
+  function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
 
-  /* Build the new reading-first dashboard. */
-  const dashboard=document.createElement('div');
-  dashboard.className='bm-reading-dashboard';
-  dashboard.id='bmReadingDashboard';
+  /* ---------- Brand / permanent navigation ---------- */
+  const brandStrong = qs('.bm-brand-copy strong');
+  const brandSmall = qs('.bm-brand-copy small');
+  if(brandStrong) brandStrong.textContent = 'Seven Names One Redeemer';
+  if(brandSmall) brandSmall.textContent = 'KNOW HIM • WALK WITH HIM • MAKE HIM KNOWN';
 
-  const readingGrid=document.createElement('div');
-  readingGrid.className='bm-reading-grid';
+  const main = $('bmDashboardTop') || qs('.bm-main');
+  if(!main) return;
 
-  function readingShell(id,title,subtitle){
-    const card=document.createElement('section');
-    card.className='bm-reading-card'; card.id=id;
-    const head=document.createElement('div'); head.className='bm-reading-card-head';
-    head.innerHTML='<strong>'+title+'</strong><span>'+subtitle+'</span>';
-    const content=document.createElement('div'); content.className='bm-reading-card-body';
-    card.append(head,content); return {card,content};
+  const primaryNav = document.createElement('nav');
+  primaryNav.className = 'sn-primary-nav';
+  primaryNav.innerHTML = `
+    <a class="active" href="#" data-sn-nojump>Bible Study</a>
+    <a href="sermon-builder.html">Sermon Builder</a>
+    <a href="library.html">Library</a>
+    <button type="button" data-sn-tool="advanced">Tools⌄</button>`;
+  main.prepend(primaryNav);
+
+  /* ---------- Hidden working vault ---------- */
+  const vault = document.createElement('div');
+  vault.id = 'snWorkingVault';
+  vault.hidden = true;
+  document.body.appendChild(vault);
+
+  // Move the original secondary areas to a hidden but live DOM container.
+  [
+    'bmDeepCard','bmGospelCard','bmMapCard','bmExtras','bmAiArea'
+  ].forEach(id=>{ const el=$(id); if(el) vault.appendChild(el); });
+
+  /* ---------- Build approved dashboard ---------- */
+  const dashboard = document.createElement('div');
+  dashboard.id = 'snApprovedDashboard';
+  dashboard.innerHTML = `
+    <div class="sn-control-strip">
+      <div class="sn-location-controls">
+        <select id="snBookSelect" aria-label="Bible book"></select>
+        <select id="snChapterSelect" aria-label="Bible chapter"></select>
+        <button id="snPrevChapter" type="button" title="Previous chapter">‹</button>
+        <button id="snNextChapter" type="button" title="Next chapter">›</button>
+      </div>
+      <div class="sn-translation-strip" id="snTranslationStrip"></div>
+      <div class="sn-header-actions">
+        <button type="button" data-sn-tool="search"><span class="sn-hi-icon">⌕</span>Search</button>
+        <button type="button" data-sn-tool="crossrefs"><span class="sn-hi-icon">⛓</span>Cross-Refs</button>
+        <button type="button" data-sn-tool="compare"><span class="sn-hi-icon">▣</span>Parallel</button>
+        <button type="button" data-sn-focus-notes><span class="sn-hi-icon">▤</span>Notes</button>
+        <button type="button" data-sn-tool="ai"><span class="sn-hi-icon">⚡</span>AI Study</button>
+        <button type="button" data-sn-tool="advanced"><span class="sn-hi-icon">•••</span>More</button>
+      </div>
+    </div>
+
+    <div class="sn-reading-grid">
+      <section class="sn-card sn-reader-card">
+        <div class="sn-card-head"><div><span class="sn-head-icon">📖</span><span id="snReaderHeading">Bible Reader</span></div><button type="button" data-sn-tool="reader-options">⌄</button></div>
+        <div class="sn-card-body">
+          <div class="sn-reader-mode">
+            <button type="button" class="active" id="snRegularMode">Regular Bible</button>
+            <button type="button" id="snChronologyMode">Chronological Gospels</button>
+          </div>
+          <div id="snReaderHost"></div>
+          <div id="snChronologyHost" class="sn-hidden"></div>
+        </div>
+      </section>
+
+      <section class="sn-card sn-commentary-card">
+        <div class="sn-card-head"><div><span class="sn-head-icon">✥</span><span id="snCommentaryHeading">Commentary</span></div><button type="button" data-sn-tool="commentaries">⌄</button></div>
+        <div class="sn-card-body">
+          <div class="sn-commentary-tabs" id="snCommentaryTabs"></div>
+          <div class="sn-commentary-output" id="snCommentaryOutput"><div class="sn-commentary-loading">Choose a Bible passage to load commentary.</div></div>
+        </div>
+      </section>
+
+      <section class="sn-card sn-books-card">
+        <div class="sn-card-head"><div><span class="sn-head-icon">▦</span><span id="snBooksHeading">Books Ready to Read</span></div><button type="button" data-sn-tool="books">⌄</button></div>
+        <div class="sn-card-body"><div class="sn-books-list" id="snBooksList"></div></div>
+      </section>
+    </div>
+
+    <div class="sn-middle-grid">
+      <section class="sn-card">
+        <div class="sn-card-head"><div>✎ &nbsp;Personal Study Notes</div><button type="button" data-sn-tool="notes">⌄</button></div>
+        <div class="sn-card-body">
+          <textarea id="snStudyNotes" class="sn-notes-textarea" placeholder="Write your study notes here..."></textarea>
+          <div class="sn-notes-toolbar"><button type="button"><b>B</b></button><button type="button"><i>I</i></button><button type="button"><u>U</u></button><button type="button">☷</button><button type="button">☰</button><button type="button">🔗</button><button type="button">▧</button><button class="sn-save-note" id="snSaveNote" type="button">Save Note</button></div>
+        </div>
+      </section>
+
+      <section class="sn-card">
+        <div class="sn-card-head"><div>📖 &nbsp;Current Passage</div><button type="button" data-sn-tool="passage">⌄</button></div>
+        <div class="sn-card-body">
+          <div class="sn-passage-flex"><div><div class="sn-passage-ref" id="snCurrentRef">Choose a verse</div><div class="sn-passage-text" id="snCurrentText">Select a verse in the Bible Reader.</div></div><div class="sn-passage-nav"><button id="snPrevVerse" type="button">‹</button><button id="snNextVerse" type="button">›</button></div></div>
+          <div class="sn-passage-actions"><button id="snAddToNotes" type="button">✎ Add to Notes</button><button id="snCopyVerse" type="button">▣ Copy</button><button id="snShareVerse" type="button">↗ Share</button><button class="primary" type="button" data-sn-tool="advanced">◉ Deep Study</button></div>
+        </div>
+      </section>
+
+      <section class="sn-card">
+        <div class="sn-card-head"><div>▦ &nbsp;Word Study Snapshot</div><button type="button" data-sn-tool="original">⌄</button></div>
+        <div class="sn-card-body">
+          <div class="sn-word-tabs"><button class="active" type="button">Hebrew/Greek</button><button type="button">Lexicon</button><button type="button">Morphology</button><button type="button">Syntax</button></div>
+          <div class="sn-word-summary"><div><div class="sn-word-lemma" id="snWordLemma">—</div><div class="sn-word-translit" id="snWordTranslit">Select a verse</div></div><div class="sn-word-details" id="snWordDetails">The first tagged original-language word will appear here when available.</div></div>
+          <button class="sn-word-open" type="button" data-sn-tool="original">View Full Exegetical Guide</button>
+        </div>
+      </section>
+    </div>
+
+    <div class="sn-bottom-grid">
+      <section class="sn-card">
+        <div class="sn-card-head"><div>⛓ &nbsp;Cross-References</div><button type="button" data-sn-tool="crossrefs">⌄</button></div>
+        <div class="sn-card-body"><div class="sn-cross-preview" id="snCrossPreview"><div class="sn-muted">Choose a verse to see related passages.</div></div><button class="sn-view-all" type="button" data-sn-tool="crossrefs">View All Cross-References</button></div>
+      </section>
+
+      <section class="sn-card">
+        <div class="sn-card-head"><div>Quick Tools <span style="font-size:10px;font-family:Arial;font-weight:400">(opens popup)</span></div><button type="button">⌄</button></div>
+        <div class="sn-card-body"><div class="sn-quick-grid">
+          <button type="button" data-sn-tool="dictionary"><span class="sn-qicon">▤</span>Dictionary<br>/ Lexicon</button>
+          <button type="button" data-sn-tool="concordance"><span class="sn-qicon">⌕</span>Concordance</button>
+          <button type="button" data-sn-tool="crossrefs"><span class="sn-qicon">⛓</span>Cross-References</button>
+          <button type="button" data-sn-tool="maps"><span class="sn-qicon">◫</span>Maps & Timeline</button>
+          <button type="button" data-sn-tool="original"><span class="sn-qicon">α</span>Original Language</button>
+          <button type="button" data-sn-tool="culture"><span class="sn-qicon">▥</span>Cultural Context</button>
+          <button type="button" data-sn-tool="measures"><span class="sn-qicon">⚖</span>Weights & Measures</button>
+          <button type="button" data-sn-tool="quotations"><span class="sn-qicon">♫</span>OT/NT Quotations</button>
+          <button type="button" data-sn-tool="ai-search"><span class="sn-qicon">⌕</span>AI Smart Search</button>
+          <button type="button" data-sn-focus-notes><span class="sn-qicon">▤</span>Personal Notes</button>
+        </div></div>
+      </section>
+
+      <section class="sn-card">
+        <div class="sn-card-head"><div>▦ &nbsp;Study Resources</div><button type="button">⌄</button></div>
+        <div class="sn-card-body"><div class="sn-resource-list">
+          <button type="button" data-sn-tool="books"><span class="sn-r-icon">▦</span>2 Best Theology Books</button>
+          <button type="button" data-sn-tool="dictionary"><span class="sn-r-icon">▤</span>Dictionary / Lexicon</button>
+          <button type="button" data-sn-tool="entities"><span class="sn-r-icon">⌾</span>People, Places & Events</button>
+          <button type="button" data-sn-tool="names"><span class="sn-r-icon">♛</span>All Names of God</button>
+        </div></div>
+      </section>
+
+      <section class="sn-card">
+        <div class="sn-card-head"><div>▦ &nbsp;Related Topics / Dictionary</div><button type="button" data-sn-tool="topics">⌄</button></div>
+        <div class="sn-card-body"><div class="sn-topic-list" id="snTopicList"></div><button class="sn-related-open" type="button" data-sn-tool="topics">View Full Dictionary / Topics</button></div>
+      </section>
+    </div>
+
+    <div class="sn-more-resources"><strong>More Resources:</strong><button type="button" data-sn-tool="maps">▦ Interactive Maps</button><button type="button" data-sn-tool="timeline">♜ Timeline</button><button type="button" data-sn-tool="culture">✥ Cultural Context</button><button type="button" data-sn-tool="terrain">▦ 3D Terrain</button><button type="button" data-sn-tool="advanced">▧ Illustrations</button><button type="button" data-sn-tool="advanced">▣ Media Library</button></div>
+  `;
+
+  // Insert after permanent nav.
+  primaryNav.insertAdjacentElement('afterend', dashboard);
+
+  /* ---------- Reuse the real Bible Reader ---------- */
+  const readerSection = $('bibleReaderSection');
+  const originalReaderHost = $('bmReaderHost');
+  if(readerSection) $('snReaderHost').appendChild(readerSection);
+
+  const readerTranslationSelect = $('readerTranslationSelect');
+  const readerBookSelect = $('readerBookSelect');
+  const readerChapterSelect = $('readerChapterSelect');
+  const readerVerseSelect = $('readerVerseSelect');
+  const readerPrev = $('readerPreviousButton');
+  const readerNext = $('readerNextButton');
+  const readerDisplay = $('readerDisplay');
+
+  const snBook = $('snBookSelect'), snChapter = $('snChapterSelect'), snTranslations = $('snTranslationStrip');
+
+  function syncSelectOptions(source, target){
+    if(!source || !target) return;
+    const old = target.value;
+    target.innerHTML = Array.from(source.options).map(o=>`<option value="${esc(o.value)}">${esc(o.textContent)}</option>`).join('');
+    target.value = source.value || old;
   }
+  function syncLocationControls(){
+    syncSelectOptions(readerBookSelect, snBook); syncSelectOptions(readerChapterSelect, snChapter);
+    if(snBook && readerBookSelect) snBook.value = readerBookSelect.value;
+    if(snChapter && readerChapterSelect) snChapter.value = readerChapterSelect.value;
+    const name = readerBookSelect?.selectedOptions?.[0]?.textContent || 'Bible Reader';
+    const chapter = readerChapterSelect?.selectedOptions?.[0]?.textContent || '';
+    const trans = readerTranslationSelect?.value || '';
+    $('snReaderHeading').textContent = name + (chapter ? ' ' + chapter : '') + (trans ? ' ('+trans+')' : '');
+  }
+  function renderTranslationButtons(){
+    if(!readerTranslationSelect || !snTranslations) return;
+    snTranslations.innerHTML = Array.from(readerTranslationSelect.options).map(o=>`<button type="button" data-trans="${esc(o.value)}" class="${o.value===readerTranslationSelect.value?'active':''}">${esc(o.value.replace('GENEVA1599','Geneva').replace('KJV1611','KJV 1611').replace('KJVPLUS','KJV+'))}</button>`).join('');
+    qsa('[data-trans]',snTranslations).forEach(b=>b.addEventListener('click',()=>{
+      readerTranslationSelect.value=b.dataset.trans; readerTranslationSelect.dispatchEvent(new Event('change',{bubbles:true}));
+      qsa('[data-trans]',snTranslations).forEach(x=>x.classList.toggle('active',x.dataset.trans===b.dataset.trans));
+      setTimeout(()=>{syncLocationControls(); refreshAll();},350);
+    }));
+  }
+  renderTranslationButtons();
+  setTimeout(syncLocationControls,300);
+  if(readerBookSelect) new MutationObserver(()=>syncLocationControls()).observe(readerBookSelect,{childList:true,subtree:true});
+  if(readerChapterSelect) new MutationObserver(()=>syncLocationControls()).observe(readerChapterSelect,{childList:true,subtree:true});
+  snBook?.addEventListener('change',()=>{readerBookSelect.value=snBook.value;readerBookSelect.dispatchEvent(new Event('change',{bubbles:true}));setTimeout(()=>{syncLocationControls();refreshAll();},150)});
+  snChapter?.addEventListener('change',()=>{readerChapterSelect.value=snChapter.value;readerChapterSelect.dispatchEvent(new Event('change',{bubbles:true}));setTimeout(()=>{syncLocationControls();refreshAll();},150)});
+  $('snPrevChapter')?.addEventListener('click',()=>{readerPrev?.click();setTimeout(()=>{syncLocationControls();refreshAll();},160)});
+  $('snNextChapter')?.addEventListener('click',()=>{readerNext?.click();setTimeout(()=>{syncLocationControls();refreshAll();},160)});
 
-  const readerShell=readingShell('bmBibleReadingCard','📖 Bible Reader','Regular Bible or Chronological Gospels');
-  const commentaryShell=readingShell('bmCommentaryReadingCard','📚 Commentary','Follows the passage you are reading');
-  const booksShell=readingShell('bmBooksReadingCard','📕 Books Ready to Read','Best matching theology sections + full reader');
-  readerShell.content.appendChild(readerCard);
-  commentaryShell.content.appendChild(commentaryPanel);
-  booksShell.content.appendChild(booksPanel);
-  readingGrid.append(readerShell.card,commentaryShell.card,booksShell.card);
-  dashboard.appendChild(readingGrid);
+  /* ---------- Reader mode switch ---------- */
+  const gospelPanel = $('deepStudyGospelsPanel');
+  function showRegular(){
+    $('snRegularMode').classList.add('active');$('snChronologyMode').classList.remove('active');
+    $('snReaderHost').classList.remove('sn-hidden');$('snChronologyHost').classList.add('sn-hidden');
+    if(gospelPanel && gospelPanel.parentElement===$('snChronologyHost')) vault.appendChild(gospelPanel);
+  }
+  function showChronology(){
+    $('snChronologyMode').classList.add('active');$('snRegularMode').classList.remove('active');
+    $('snReaderHost').classList.add('sn-hidden');$('snChronologyHost').classList.remove('sn-hidden');
+    if(gospelPanel){ $('snChronologyHost').appendChild(gospelPanel); gospelPanel.style.display='block'; }
+    setTimeout(()=>{ qsa('.gospel-event-button',gospelPanel||document)[0]?.click(); },80);
+  }
+  $('snRegularMode')?.addEventListener('click',showRegular); $('snChronologyMode')?.addEventListener('click',showChronology);
 
-  /* Tool launchers stay visible; the actual tools open only when requested. */
-  const launchers=document.createElement('div'); launchers.className='bm-tool-launchers';
-  const quick=document.createElement('section'); quick.className='bm-launcher-group';
-  quick.innerHTML='<div class="bm-launcher-head"><strong>Quick Tools</strong><span>Open, use, then close.</span></div><div class="bm-launcher-buttons" id="bmQuickPopupButtons"></div>';
-  const resources=document.createElement('section'); resources.className='bm-launcher-group';
-  resources.innerHTML='<div class="bm-launcher-head"><strong>Study Resources</strong><span>Keep the main reading screen uncluttered.</span></div><div class="bm-launcher-buttons" id="bmResourcePopupButtons"></div>';
-  launchers.append(quick,resources); dashboard.appendChild(launchers);
+  /* ---------- Current reader helpers ---------- */
+  function selectedReaderVerseIndex(){
+    if(!readerVerseSelect) return 0;
+    return readerVerseSelect.value === '' ? 0 : Number(readerVerseSelect.value)||0;
+  }
+  function currentReaderState(){
+    try{
+      if(!readerBible || readerBookIndex < 0 || readerChapterIndex < 0) return null;
+      const book = readerBible.books[readerBookIndex]; const chapter = book.chapters[readerChapterIndex];
+      const verses = chapter.verses || []; const vi = Math.min(selectedReaderVerseIndex(),Math.max(0,verses.length-1)); const verse = verses[vi];
+      const bookName = getBookName(book); const ch = chapterNumber(chapter,readerChapterIndex); const vn = verseNumber(verse,vi);
+      return {book,chapter,verse,vi,bookName,chapterNumber:ch,verseNumber:vn,reference:`${bookName} ${ch}:${vn}`,text:getReaderVerseText(verse,readerBookIndex,readerTranslationSelect?.value||'KJV')};
+    }catch(e){ return null; }
+  }
+  function ensureVerseSelected(){ if(readerVerseSelect && readerVerseSelect.value==='') readerVerseSelect.value='0'; }
+  function moveVerse(delta){
+    if(!readerVerseSelect) return; const max=Math.max(0,readerVerseSelect.options.length-2); let i=selectedReaderVerseIndex()+delta;
+    if(i<0){readerPrev?.click();setTimeout(()=>{if(readerVerseSelect.options.length>1){readerVerseSelect.value=String(readerVerseSelect.options.length-2);readerVerseSelect.dispatchEvent(new Event('change',{bubbles:true}));refreshAll();}},180);return;}
+    if(i>max){readerNext?.click();setTimeout(()=>{if(readerVerseSelect.options.length>1){readerVerseSelect.value='0';readerVerseSelect.dispatchEvent(new Event('change',{bubbles:true}));refreshAll();}},180);return;}
+    readerVerseSelect.value=String(i);readerVerseSelect.dispatchEvent(new Event('change',{bubbles:true}));refreshAll();
+  }
+  $('snPrevVerse')?.addEventListener('click',()=>moveVerse(-1));$('snNextVerse')?.addEventListener('click',()=>moveVerse(1));
 
-  const support=document.createElement('div'); support.className='bm-reading-support';
-  if(aiArea) support.appendChild(aiArea);
-  dashboard.appendChild(support);
+  /* Clicking a verse in the reader should select it for all companion panels. */
+  readerDisplay?.addEventListener('click',e=>{
+    const verseEl=e.target.closest('[data-reader-verse]'); if(!verseEl)return;
+    const idx=verseEl.dataset.readerVerse; if(readerVerseSelect){readerVerseSelect.value=idx;readerVerseSelect.dispatchEvent(new Event('change',{bubbles:true}));}
+    setTimeout(refreshAll,20);
+  });
+  readerBookSelect?.addEventListener('change',()=>setTimeout(refreshAll,180));
+  readerChapterSelect?.addEventListener('change',()=>setTimeout(refreshAll,180));
+  readerVerseSelect?.addEventListener('change',()=>setTimeout(refreshAll,20));
 
-  if(oldGrid) oldGrid.parentNode.insertBefore(dashboard,oldGrid);
-  else main.appendChild(dashboard);
-  if(deepCard) deepCard.style.display='none';
-  if(gospelCard) gospelCard.style.display='none';
-  if(mapCard) mapCard.style.display='none';
-  const oldQuick=document.querySelector('.bm-quick-tools'); if(oldQuick) oldQuick.style.display='none';
-
-  /* Reader mode: regular Bible vs. Gospel chronology. */
-  const bibleSection=$('bibleReaderSection');
-  const readerShellNode=bibleSection?.querySelector('.reader-shell');
-  if(bibleSection && readerShellNode){
-    const switcher=document.createElement('div'); switcher.className='bm-reader-mode-switch';
-    switcher.innerHTML='<button type="button" class="active" data-reader-mode="regular">Regular Bible</button><button type="button" data-reader-mode="gospels">Chronological Gospels</button>';
-    const note=document.createElement('div'); note.className='bm-reader-mode-note'; note.textContent='Choose normal book/chapter reading or follow the life of Jesus in chronological event order.';
-    const chronologyHost=document.createElement('div'); chronologyHost.className='bm-reader-chronology-host'; chronologyHost.id='bmReaderChronologyHost';
-    bibleSection.insertBefore(switcher,readerShellNode); bibleSection.insertBefore(note,readerShellNode); bibleSection.appendChild(chronologyHost);
-    let gospelHome=null;
-    if(gospelPanel){gospelHome=document.createComment('gospel-panel-home'); gospelPanel.parentNode.insertBefore(gospelHome,gospelPanel);}
-    function setReaderMode(mode){
-      switcher.querySelectorAll('button').forEach(b=>b.classList.toggle('active',b.dataset.readerMode===mode));
-      if(mode==='gospels'){
-        readerShellNode.style.display='none'; chronologyHost.classList.add('active');
-        if(gospelPanel) chronologyHost.appendChild(gospelPanel);
-        try{ if(typeof openGospelChronologyEvent==='function') openGospelChronologyEvent(typeof gospelChronologyIndex!=='undefined'?gospelChronologyIndex:0); }catch(e){}
-        setTimeout(()=>{ try{ if(typeof bibleLeafletMap!=='undefined'&&bibleLeafletMap) bibleLeafletMap.invalidateSize(); }catch(e){} },80);
-      }else{
-        readerShellNode.style.display='grid'; chronologyHost.classList.remove('active');
-        if(gospelPanel && gospelHome && gospelHome.parentNode) gospelHome.parentNode.insertBefore(gospelPanel,gospelHome.nextSibling);
-      }
-      try{localStorage.setItem('bibleMasteryReaderMode',mode)}catch(e){}
+  /* ---------- Commentary companion ---------- */
+  const commentaryChoices = [
+    ['matthew-henry-complete','Matthew Henry'],['john-gill','John Gill'],['keil-delitzsch','Keil & Delitzsch'],['jfb','Jamieson-Fausset-Brown'],['john-calvin','John Calvin']
+  ];
+  let primaryCommentary = commentaryChoices[0][0];
+  $('snCommentaryTabs').innerHTML = commentaryChoices.map(([k,n],i)=>`<button type="button" data-cmt="${k}" class="${i===0?'active':''}">${esc(n)}</button>`).join('');
+  qsa('[data-cmt]',$('snCommentaryTabs')).forEach(b=>b.addEventListener('click',()=>{primaryCommentary=b.dataset.cmt;qsa('[data-cmt]',$('snCommentaryTabs')).forEach(x=>x.classList.toggle('active',x===b));refreshCommentary();}));
+  let commentaryToken=0;
+  async function refreshCommentary(){
+    const state=currentReaderState(); const out=$('snCommentaryOutput'); if(!out)return;
+    if(!state){out.innerHTML='<div class="sn-commentary-loading">Choose a book and chapter.</div>';return;}
+    const token=++commentaryToken; $('snCommentaryHeading').textContent='Commentary on '+state.reference;
+    out.innerHTML=`<div class="sn-commentary-reference">${esc(state.reference)}</div><div class="sn-commentary-verse">“${esc(state.text)}”</div><div class="sn-commentary-loading">Loading commentary…</div>`;
+    try{
+      if(typeof masterFetchCommentary!=='function') throw new Error('Commentary engine unavailable');
+      const second = primaryCommentary==='john-gill'?'matthew-henry-complete':'john-gill';
+      const results = await Promise.all([masterFetchCommentary(state.reference,primaryCommentary),masterFetchCommentary(state.reference,second)]);
+      if(token!==commentaryToken)return;
+      out.innerHTML=`<div class="sn-commentary-reference">${esc(state.reference)}</div><div class="sn-commentary-verse">“${esc(state.text)}”</div>`+results.map(r=>`<div class="sn-commentary-entry"><h4>📖 ${esc(r.name)}</h4><p>${esc(r.text)}</p></div>`).join('');
+    }catch(err){
+      if(token!==commentaryToken)return;
+      out.innerHTML=`<div class="sn-commentary-reference">${esc(state.reference)}</div><div class="sn-commentary-verse">“${esc(state.text)}”</div><div class="sn-error">Commentary could not load right now.</div>`;
     }
-    switcher.addEventListener('click',e=>{const b=e.target.closest('[data-reader-mode]');if(b)setReaderMode(b.dataset.readerMode)});
-    let savedMode='regular'; try{savedMode=localStorage.getItem('bibleMasteryReaderMode')||'regular'}catch(e){}
-    setReaderMode(savedMode==='gospels'?'gospels':'regular');
   }
 
-  /* Popup system: move existing live tools into a modal, then restore them. */
-  const modal=document.createElement('div'); modal.className='bm-study-modal'; modal.id='bmStudyPopup';
-  modal.innerHTML='<div class="bm-study-modal-card" role="dialog" aria-modal="true" aria-labelledby="bmStudyPopupTitle"><div class="bm-study-modal-head"><strong id="bmStudyPopupTitle">Study Tool</strong><button class="bm-study-modal-close" id="bmStudyPopupClose" type="button" aria-label="Close">×</button></div><div class="bm-study-modal-body" id="bmStudyPopupBody"></div></div>';
-  document.body.appendChild(modal);
-  const modalBody=$('bmStudyPopupBody'), modalTitle=$('bmStudyPopupTitle');
-  let moved=[];
-  function restoreMoved(){
-    moved.slice().reverse().forEach(item=>{if(item.placeholder.parentNode)item.placeholder.parentNode.insertBefore(item.node,item.placeholder.nextSibling);item.placeholder.remove();});
-    moved=[];
+  /* ---------- Theology books: rank the best specific sections ---------- */
+  function plainText(html){const d=document.createElement('div');d.innerHTML=String(html||'');return (d.textContent||'').replace(/\s+/g,' ').trim();}
+  const stopWords=new Set('the and that with from this into unto upon have has had were was are for but not you your his her our out all any who which what when where shall will would should could may might can did does of to in on at by as a an or be been being'.split(' '));
+  function keywords(s){const counts={};String(s||'').toLowerCase().replace(/[^a-z0-9\s]/g,' ').split(/\s+/).forEach(w=>{if(w.length<4||stopWords.has(w))return;counts[w]=(counts[w]||0)+1});return Object.keys(counts).sort((a,b)=>counts[b]-counts[a]).slice(0,12);}
+  function theologyBooks(){return Array.isArray(window.BIBLEMASTERY_THEOLOGY_BOOKS)?window.BIBLEMASTERY_THEOLOGY_BOOKS:[];}
+  function rankBookSections(state){
+    const ks=keywords((state?.reference||'')+' '+(state?.text||'')); const found=[];
+    theologyBooks().forEach((b,bi)=>{
+      const chapters=Array.isArray(b.chapters)?b.chapters:[];
+      chapters.forEach((c,ci)=>{const text=plainText((c.title||'')+' '+(c.text||'')+' '+(c.html||''));let score=0;ks.forEach(k=>{if(text.toLowerCase().includes(k))score+=2;if(String(c.title||'').toLowerCase().includes(k))score+=4});if(state?.bookName&&text.toLowerCase().includes(state.bookName.toLowerCase()))score+=3;found.push({b,c,bi,ci,score,text});});
+    });
+    return found.sort((a,b)=>b.score-a.score).slice(0,2);
   }
-  function openNodes(title,nodes,wrapperClass){
-    restoreMoved(); modalBody.innerHTML=''; modalTitle.textContent=title;
-    const wrap=document.createElement('div'); if(wrapperClass)wrap.className=wrapperClass; modalBody.appendChild(wrap);
-    (nodes||[]).filter(Boolean).forEach(node=>{const ph=document.createComment('bm-popup-home');node.parentNode.insertBefore(ph,node);moved.push({node,placeholder:ph});wrap.appendChild(node);node.style.display='block';});
-    modal.classList.add('open'); body.classList.add('bm-modal-open');
-    setTimeout(()=>{try{if(title.toLowerCase().includes('map')&&typeof initBibleInteractiveMap==='function'){initBibleInteractiveMap();if(typeof bibleLeafletMap!=='undefined'&&bibleLeafletMap)bibleLeafletMap.invalidateSize();}}catch(e){}},100);
+  function renderBooks(){
+    const state=currentReaderState(), list=$('snBooksList'); if(!list)return;
+    $('snBooksHeading').textContent='Books Ready to Read'+(state?' for '+state.reference:'');
+    const matches=rankBookSections(state);
+    if(!matches.length){list.innerHTML='<div class="sn-book-empty"><div class="sn-empty-icon">📚</div><strong>Books Ready to Read</strong><span>Your best two theology-book sections will appear here as soon as the BibleMastery theology library is loaded.</span></div>';return;}
+    list.innerHTML=matches.map((m,i)=>`<div class="sn-book-card"><div class="sn-book-cover">${esc(m.b.shortTitle||m.b.title||'THEOLOGY')}</div><div class="sn-book-info"><strong>${esc(m.b.title||'Untitled Book')}</strong><div class="sn-author">${esc(m.b.author||'')}</div><div class="sn-section">${esc(m.c.title||('Chapter '+(m.ci+1)))}</div><p>${esc(m.text.slice(0,210))}${m.text.length>210?'…':''}</p></div><button class="sn-open-section" type="button" data-open-book="${m.bi}" data-open-chapter="${m.ci}">Open Section</button></div>`).join('');
+    qsa('[data-open-book]',list).forEach(b=>b.addEventListener('click',()=>openBookSection(Number(b.dataset.openBook),Number(b.dataset.openChapter))));
   }
-  function closeModal(){modal.classList.remove('open');body.classList.remove('bm-modal-open');restoreMoved();modalBody.innerHTML='';}
-  $('bmStudyPopupClose').addEventListener('click',closeModal);
-  modal.addEventListener('click',e=>{if(e.target===modal)closeModal()});
-  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&modal.classList.contains('open'))closeModal()});
-
-  function toolBoxByText(text){return Array.from(document.querySelectorAll('#studyToolsSection .tool-box')).find(x=>(x.querySelector('h3')?.textContent||'').toLowerCase().includes(text.toLowerCase()));}
-  const dictionaryBox=toolBoxByText('Bible Dictionaries');
-  const englishDictionaryBox=toolBoxByText('English Dictionary');
-  const notebook=$('masteryNotebook');
-  const masterSuite=$('masterToolSuite');
-
-  const tools={
-    dictionary:{title:'📘 Dictionaries',nodes:[dictionaryBox,englishDictionaryBox],wrap:'bm-modal-two-tools'},
-    concordance:{title:'🔎 Concordance',nodes:[$('deepStudyConcordancePanel')]},
-    crossrefs:{title:'🔗 Cross-References',nodes:[$('deepStudyReferencesPanel')]},
-    original:{title:'🔤 Original Language & Word Study',nodes:[$('deepStudyLanguagePanel')]},
-    maps:{title:'🗺 Interactive Bible Maps',nodes:[$('deepStudyMapsPanel')]},
-    timeline:{title:'🕰 Timeline & Translation Comparison',nodes:[$('deepStudyContextPanel')]},
-    people:{title:'👥 People, Places & Family Links',nodes:[$('deepStudyEntitiesPanel')]},
-    topics:{title:'📑 Topical Research',nodes:[$('deepStudyTopicsPanel')]},
-    saved:{title:'💾 My Saved Study',nodes:[$('deepStudySavedPanel')]},
-    notebook:{title:'📝 Deep Study Notebook',nodes:[notebook]},
-    master:{title:'🧰 Advanced Research Tools',nodes:[masterSuite]},
-    ai:{title:'✨ BibleMastery AI',nodes:[$('topicBox')]}
-  };
-  function openTool(name){const t=tools[name];if(t)openNodes(t.title,t.nodes,t.wrap)}
-
-  function addLaunchButton(host,name,icon,label){
-    const b=document.createElement('button'); b.type='button'; b.className='bm-launch-tool'; b.dataset.popupTool=name; b.innerHTML='<span class="bm-tool-icon">'+icon+'</span>'+label; host.appendChild(b);
+  function openBookSection(bi,ci){
+    const b=theologyBooks()[bi], c=b?.chapters?.[ci]; if(!b||!c)return;
+    openCustomModal('📚',b.title||'Theology Book',(b.author||'')+(c.title?' • '+c.title:''),`<article style="font-family:Georgia,serif;font-size:17px;line-height:1.7;max-width:820px;margin:auto"><h2>${esc(c.title||'')}</h2>${c.html||('<p>'+esc(c.text||'')+'</p>')}</article>`);
   }
-  const q=$('bmQuickPopupButtons'),r=$('bmResourcePopupButtons');
-  addLaunchButton(q,'dictionary','📘','Dictionary');
-  addLaunchButton(q,'concordance','⌕','Concordance');
-  addLaunchButton(q,'crossrefs','🔗','Cross-References');
-  addLaunchButton(q,'original','α','Original Language');
-  addLaunchButton(q,'maps','🗺','Maps');
-  addLaunchButton(q,'timeline','🕰','Timeline / Compare');
-  addLaunchButton(r,'people','👥','People & Places');
-  addLaunchButton(r,'topics','▦','Topics');
-  addLaunchButton(r,'notebook','📝','Notebook');
-  addLaunchButton(r,'saved','💾','Saved Studies');
-  addLaunchButton(r,'master','🧰','Advanced Research');
-  addLaunchButton(r,'ai','✨','AI Study');
-  dashboard.addEventListener('click',e=>{const b=e.target.closest('[data-popup-tool]');if(b)openTool(b.dataset.popupTool)});
 
-  /* Reader-driven commentary: automatically refresh commentary for the selected Bible passage. */
-  let commentaryTimer=0, commentaryBusy=false;
-  async function refreshReaderCommentary(){
-    clearTimeout(commentaryTimer);
-    commentaryTimer=setTimeout(async()=>{
+  /* ---------- Notes ---------- */
+  function noteKey(){return 'biblemastery.personal.note.'+(currentReaderState()?.reference||'general').replace(/\s+/g,'_');}
+  function loadNote(){try{$('snStudyNotes').value=localStorage.getItem(noteKey())||''}catch(e){}}
+  $('snSaveNote')?.addEventListener('click',()=>{try{localStorage.setItem(noteKey(),$('snStudyNotes').value);$('snSaveNote').textContent='Saved ✓';setTimeout(()=>$('snSaveNote').textContent='Save Note',900)}catch(e){}});
+  $('snAddToNotes')?.addEventListener('click',()=>{const s=currentReaderState();if(!s)return;$('snStudyNotes').value+=($('snStudyNotes').value?'\n\n':'')+s.reference+' — '+s.text;$('snStudyNotes').focus();});
+  qsa('[data-sn-focus-notes]').forEach(b=>b.addEventListener('click',()=>{$('snStudyNotes')?.focus();$('snStudyNotes')?.scrollIntoView({behavior:'smooth',block:'center'})}));
+
+  /* ---------- Current passage / copy / share ---------- */
+  function refreshCurrentPassage(){
+    const s=currentReaderState(); if(!s){$('snCurrentRef').textContent='Choose a verse';$('snCurrentText').textContent='Select a verse in the Bible Reader.';return;}
+    $('snCurrentRef').textContent=s.reference; $('snCurrentText').textContent='“'+s.text+'”';
+  }
+  $('snCopyVerse')?.addEventListener('click',async()=>{const s=currentReaderState();if(!s)return;try{await navigator.clipboard.writeText(s.reference+' — '+s.text)}catch(e){}});
+  $('snShareVerse')?.addEventListener('click',async()=>{const s=currentReaderState();if(!s)return;const text=s.reference+' — '+s.text;if(navigator.share){try{await navigator.share({title:s.reference,text})}catch(e){}}else{try{await navigator.clipboard.writeText(text)}catch(e){}}});
+
+  /* ---------- Word snapshot ---------- */
+  let wordToken=0;
+  async function refreshWordSnapshot(){
+    const state=currentReaderState(); if(!state)return; const token=++wordToken;
+    $('snWordLemma').textContent='…';$('snWordTranslit').textContent='Loading word data';$('snWordDetails').textContent='';
+    try{
+      if(typeof loadBibleTranslation!=='function') throw new Error('Bible engine unavailable');
+      const plus=await loadBibleTranslation('KJVPLUS'); if(token!==wordToken)return;
+      const books=getBibleBooks(plus), book=books[readerBookIndex], chapter=getBibleChapters(book)[readerChapterIndex], verse=getBibleVerses(chapter)[state.vi];
+      const raw=String(verse?.text||verse?.content||verse?.verse||''); const prefix=readerBookIndex<39?'H':'G'; const m=raw.match(/<S>(\d+)<\/S>/i)||raw.match(/\b([HG]\d+)\b/i); const key=m?(m[1].match(/^[HG]/i)?m[1].toUpperCase():prefix+m[1]):'';
+      const entry=key&&typeof findStrongEntry==='function'?findStrongEntry(key):null;
+      if(!entry){$('snWordLemma').textContent='—';$('snWordTranslit').textContent='No Strong’s tag found';$('snWordDetails').innerHTML='Open <strong>Original Language</strong> for deeper word study.';return;}
+      const d=entry.data||{};$('snWordLemma').textContent=d.lemma||key;$('snWordTranslit').textContent=d.transliteration||entry.language||'';$('snWordDetails').innerHTML=`<strong>Strong’s:</strong> ${esc(entry.number)}<br><strong>Language:</strong> ${esc(entry.language||'')}<br><strong>Meaning:</strong> ${esc(d.definition||'Open the full guide for details.')}`;
+    }catch(e){$('snWordLemma').textContent='—';$('snWordTranslit').textContent='Word study available in popup';$('snWordDetails').textContent='Open the full exegetical guide.';}
+  }
+
+  /* ---------- Cross-reference preview ---------- */
+  let crossTimer=null;
+  function refreshCrossPreview(){
+    const s=currentReaderState(), preview=$('snCrossPreview'); if(!s||!preview)return;
+    clearTimeout(crossTimer);preview.innerHTML='<div class="sn-muted">Finding related verses…</div>';
+    crossTimer=setTimeout(async()=>{
       try{
-        if(commentaryBusy || typeof loadSelectedCommentary!=='function' || typeof currentVerses==='undefined' || !readerBible || readerBookIndex<0 || readerChapterIndex<0)return;
-        commentaryBusy=true;
-        const book=readerBible.books[readerBookIndex], chapter=book.chapters[readerChapterIndex], verses=chapter.verses||[];
-        const selectedIndex=readerVerseSelect && readerVerseSelect.value!==''?Number(readerVerseSelect.value):-1;
-        const source=selectedIndex>=0&&verses[selectedIndex]?[verses[selectedIndex]]:verses;
-        const temp=source.map((v,i)=>({book:getBookName(book),bookId:normalizeBookId(getBookName(book),book),chapter:chapterNumber(chapter,readerChapterIndex),verse:v.number||v.verseNumber||i+1,text:getReaderVerseText?getReaderVerseText(v,readerBookIndex,readerTranslationSelect.value):(v.text||'')}));
-        if(!temp.length)return;
-        const old=currentVerses; currentVerses=temp;
-        if(deepSel&&mainSel) mainSel.value=deepSel.value;
-        await loadSelectedCommentary();
-        currentVerses=old;
-      }catch(e){console.error('Reader commentary refresh:',e)}finally{commentaryBusy=false}
-    },180);
+        const input=$('deepReferenceInput'), btn=$('deepReferenceButton'), out=$('deepReferenceOutput'); if(!input||!btn||!out)throw new Error();
+        input.value=s.reference; btn.click(); await sleep(260);
+        const items=qsa('.result-item',out).slice(0,5);
+        preview.innerHTML=items.length?items.map(item=>{const ref=qs('.result-reference',item)?.textContent?.trim()||'Related verse';const txt=item.textContent.replace(ref,'').trim().slice(0,82);return `<div class="sn-cross-row"><strong>${esc(ref)}</strong><span>${esc(txt)}</span></div>`}).join(''):'<div class="sn-muted">Open Cross-References to search the whole Bible.</div>';
+      }catch(e){preview.innerHTML='<div class="sn-muted">Open Cross-References to search related passages.</div>';}
+    },420);
   }
-  ['readerBookSelect','readerChapterSelect','readerVerseSelect','readerTranslationSelect'].forEach(id=>$(id)?.addEventListener('change',refreshReaderCommentary));
-  $('deepCommentarySelect')?.addEventListener('change',refreshReaderCommentary);
-  const readerObserver=$('readerDisplay')?new MutationObserver(()=>{refreshReaderCommentary();refreshBookRecommendations()}):null;
-  if(readerObserver)readerObserver.observe($('readerDisplay'),{childList:true,subtree:true});
 
-  /* Best matching book sections from connected theology books. */
-  const rec=document.createElement('div'); rec.className='bm-book-recommendations'; rec.id='bmBookRecommendations';
-  const theologyLayout=booksPanel.querySelector('.bm-theology-layout'); if(theologyLayout)booksShell.content.insertBefore(rec,booksPanel);
-  function passageText(){
-    try{if(!readerBible||readerBookIndex<0||readerChapterIndex<0)return'';const c=readerBible.books[readerBookIndex].chapters[readerChapterIndex],vs=c.verses||[];if(readerVerseSelect?.value!==''){const v=vs[Number(readerVerseSelect.value)];return String(v?.text||'')}return vs.slice(0,12).map(v=>v.text||'').join(' ')}catch(e){return''}
+  /* ---------- Related topics ---------- */
+  function refreshTopics(){
+    const s=currentReaderState(), list=$('snTopicList'); if(!list)return; const ks=keywords(s?.text||'').slice(0,6); const defaults=['Creation','God — Attributes','Heaven and Earth','Beginning','Order and Purpose','Eternal God']; const topics=ks.length?ks.map(k=>k.charAt(0).toUpperCase()+k.slice(1)):defaults;
+    list.innerHTML=topics.slice(0,6).map(t=>`<button type="button" data-topic="${esc(t)}">${esc(t)}</button>`).join('');
+    qsa('[data-topic]',list).forEach(b=>b.addEventListener('click',()=>openTopicsWith(b.dataset.topic)));
   }
-  function keywords(text){const stop=new Set(['the','and','that','with','from','this','there','were','shall','have','unto','into','your','their','them','they','which','what','when','where','will','would','for','but','not','you','his','her','our','are','was','has','had','been','being','of','to','in','on','at','by','as','a','an','or']);return String(text||'').toLowerCase().replace(/[^a-z0-9\s]/g,' ').split(/\s+/).filter(w=>w.length>3&&!stop.has(w)).slice(0,30)}
-  function refreshBookRecommendations(){
-    if(!rec)return; const books=Array.isArray(window.BIBLEMASTERY_THEOLOGY_BOOKS)?window.BIBLEMASTERY_THEOLOGY_BOOKS:(typeof builtInBooks!=='undefined'?builtInBooks:[]);
-    if(!books.length){rec.innerHTML='<div class="bm-book-recommendations-title">Best Matching Books</div><div class="small-note">Your theology shelf is ready. Matching sections will appear here as books are added.</div>';return;}
-    const keys=keywords(passageText()); const scores=[];
-    books.forEach((b,bi)=>(b.chapters||[]).forEach((c,ci)=>{const hay=((b.title||'')+' '+(c.title||'')+' '+(c.text||'')+' '+(c.html||'')).toLowerCase();let s=0;keys.forEach(k=>{if(hay.includes(k))s++});if(s)scores.push({s,bi,ci,b,c})}));
-    scores.sort((a,b)=>b.s-a.s); const top=scores.slice(0,2);
-    rec.innerHTML='<div class="bm-book-recommendations-title">Best Matching Books / Sections</div>'+(top.length?top.map(x=>'<div class="bm-book-recommendation"><div><strong>'+esc(x.b.title||'Book')+'</strong><div class="small-note">'+esc(x.c.title||('Chapter '+(x.ci+1)))+'</div></div><button type="button" data-rec-book="'+x.bi+'" data-rec-chapter="'+x.ci+'">Open Section</button></div>').join(''):'<div class="small-note">No strong section match yet. Use the book shelf below to read any connected book.</div>');
-  }
-  rec.addEventListener('click',e=>{const b=e.target.closest('[data-rec-book]');if(!b)return;try{bookIndex=Number(b.dataset.recBook);chapterIndex=Number(b.dataset.recChapter);renderBooks($('theologyBookSearch')?.value||'');renderBookReader();}catch(err){console.error(err)}});
-  refreshBookRecommendations();
-  setTimeout(()=>{refreshReaderCommentary();refreshBookRecommendations()},900);
 
-  /* Sidebar shortcuts now open popups instead of forcing page scrolling. */
-  document.querySelectorAll('.bm-sidebar-nav [data-deep-shortcut]').forEach(b=>b.addEventListener('click',e=>{const map={concordance:'concordance',references:'crossrefs',language:'original',entities:'people',topics:'topics',maps:'maps',saved:'saved'};const name=map[b.dataset.deepShortcut];if(name){e.preventDefault();e.stopImmediatePropagation();openTool(name)}},true));
+  /* ---------- Modal system ---------- */
+  const modal=document.createElement('div'); modal.className='sn-modal'; modal.id='snModal'; modal.hidden=true;
+  modal.innerHTML=`<div class="sn-modal-dialog" role="dialog" aria-modal="true"><div class="sn-modal-head"><div class="sn-modal-title-wrap"><div class="sn-modal-icon" id="snModalIcon">▤</div><div><div class="sn-modal-title" id="snModalTitle">Study Tool</div><div class="sn-modal-subtitle" id="snModalSubtitle"></div></div></div><button class="sn-modal-close" id="snModalClose" type="button" aria-label="Close">×</button></div><div class="sn-modal-body" id="snModalBody"></div></div>`;
+  document.body.appendChild(modal);
+  let movedNodes=[];
+  function restoreMoved(){movedNodes.forEach(n=>{if(n&&vault) vault.appendChild(n);});movedNodes=[];}
+  function closeModal(){restoreMoved();modal.hidden=true;document.body.style.overflow='';setTimeout(()=>{if(window.bibleLeafletMap?.invalidateSize)window.bibleLeafletMap.invalidateSize();},50)}
+  $('snModalClose').addEventListener('click',closeModal);modal.addEventListener('click',e=>{if(e.target===modal)closeModal()});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!modal.hidden)closeModal()});
+  function modalBase(icon,title,subtitle){restoreMoved();$('snModalIcon').textContent=icon;$('snModalTitle').textContent=title;$('snModalSubtitle').textContent=subtitle||'';$('snModalBody').innerHTML='';modal.hidden=false;document.body.style.overflow='hidden';}
+  function moveToModal(node,icon,title,subtitle){if(!node)return;modalBase(icon,title,subtitle);$('snModalBody').appendChild(node);movedNodes.push(node);node.style.display='block';setTimeout(()=>{if(window.bibleLeafletMap?.invalidateSize)window.bibleLeafletMap.invalidateSize();},180)}
+  function openCustomModal(icon,title,subtitle,html){modalBase(icon,title,subtitle);$('snModalBody').innerHTML=html;}
+
+  function toolBoxByHeading(pattern){return qsa('#studyToolsSection .tool-box',vault).find(box=>pattern.test(qs('h3',box)?.textContent||''));}
+  function openDictionary(){
+    const dict=toolBoxByHeading(/Bible Dictionaries/i), eng=toolBoxByHeading(/English Dictionary/i), word=toolBoxByHeading(/Hebrew.*Greek/i);
+    modalBase('📖','Dictionary / Lexicon','Search Bible dictionaries, English definitions, Strong’s, BDB, and Thayer’s.');
+    [dict,eng,word].filter(Boolean).forEach(n=>{$('snModalBody').appendChild(n);movedNodes.push(n)});
+  }
+  function openTopicsWith(topic){
+    const panel=$('deepStudyTopicsPanel'); if(!panel)return; moveToModal(panel,'▦','Related Topics / Topical Research','Search Scripture and topic connections without leaving the study screen.');
+    if(topic){const inp=$('deepTopicInput');if(inp)inp.value=topic;setTimeout(()=>$('deepTopicButton')?.click(),50)}
+  }
+  function openMapsTimeline(which='map'){
+    const map=$('deepStudyMapsPanel'), context=$('deepStudyContextPanel'); modalBase('🗺','Maps & Timeline','Explore biblical geography, chronology, and translation context.');
+    const tabs=document.createElement('div');tabs.className='sn-modal-custom-tabs';tabs.innerHTML='<button class="active" data-mode="map">Interactive Map</button><button data-mode="timeline">Timeline & Text</button>';$('snModalBody').appendChild(tabs);
+    const host=document.createElement('div');$('snModalBody').appendChild(host);
+    function show(mode){qsa('button',tabs).forEach(b=>b.classList.toggle('active',b.dataset.mode===mode));if(map&&map.parentElement===host)vault.appendChild(map);if(context&&context.parentElement===host)vault.appendChild(context);const n=mode==='timeline'?context:map;if(n){host.appendChild(n);n.style.display='block';movedNodes=[n];}setTimeout(()=>window.bibleLeafletMap?.invalidateSize?.(),180)}
+    qsa('button',tabs).forEach(b=>b.addEventListener('click',()=>show(b.dataset.mode)));show(which==='timeline'?'timeline':'map');
+  }
+
+  const culturalEntries=[
+    ['Shepherding','Shepherds led, protected, fed, and counted sheep. Biblical shepherd language often communicates guidance, provision, protection, and covenant care.'],
+    ['Threshing Floor','Threshing floors were open, elevated places where grain was separated from chaff. Scripture uses threshing imagery for harvest, judgment, and purification.'],
+    ['Vineyard','Vineyards required planting, pruning, walls, watchtowers, and patient cultivation. They frequently picture fruitfulness, stewardship, blessing, and judgment.'],
+    ['Synagogue','Synagogues functioned as local places for Scripture reading, teaching, prayer, and community life, especially in the New Testament period.'],
+    ['Temple','The Jerusalem temple was central to sacrifice, priestly service, pilgrimage feasts, worship, and covenant symbolism.'],
+    ['Roman Roads','Roman roads helped movement across the empire and contributed to the rapid travel of early Christian missionaries.'],
+    ['Household','Ancient households could include extended family, servants, dependents, and business relationships; household language can be broader than the modern nuclear family.'],
+    ['Marketplace','The agora or marketplace was a center of trade, public discussion, civic life, and daily social contact.']
+  ];
+  function openCulture(){openCustomModal('▥','Cultural Context','Look up customs, places, social practices, and background concepts.',`<div class="search-row"><input class="search-input" id="snCultureSearch" placeholder="Search: shepherd, temple, vineyard…"><button class="search-button" id="snCultureButton">Search</button></div><div id="snCultureResults" style="margin-top:12px"></div>`);const render=()=>{const q=$('snCultureSearch').value.trim().toLowerCase();const rows=culturalEntries.filter(x=>!q||x.join(' ').toLowerCase().includes(q));$('snCultureResults').innerHTML=rows.map(x=>`<div class="result-item"><div class="result-reference">${esc(x[0])}</div><div>${esc(x[1])}</div></div>`).join('')||'<div class="sn-muted">No matching cultural concept.</div>'};$('snCultureButton').onclick=render;$('snCultureSearch').onkeydown=e=>{if(e.key==='Enter')render()};render();}
+
+  const measureData={
+    cubit:{label:'Cubit',unit:'meters',factor:.4572,note:'Approximate common cubit; ancient standards varied.'},
+    span:{label:'Span',unit:'meters',factor:.2286,note:'About half a cubit.'},
+    handbreadth:{label:'Handbreadth',unit:'meters',factor:.0762,note:'Approximate.'},
+    reed:{label:'Reed',unit:'meters',factor:2.7432,note:'Using 6 common cubits; some biblical reeds use a different cubit standard.'},
+    ephah:{label:'Ephah',unit:'liters',factor:22,note:'Approximate dry volume; scholarly estimates vary.'},
+    omer:{label:'Omer',unit:'liters',factor:2.2,note:'One tenth of an ephah.'},
+    seah:{label:'Seah',unit:'liters',factor:7.3,note:'Approximate.'},
+    homer:{label:'Homer',unit:'liters',factor:220,note:'Approximate; ten ephahs.'},
+    bath:{label:'Bath',unit:'liters',factor:22,note:'Approximate liquid measure.'},
+    hin:{label:'Hin',unit:'liters',factor:3.7,note:'Approximate.'},
+    shekel:{label:'Shekel',unit:'grams',factor:11.4,note:'Approximate weight; standards varied by period.'},
+    mina:{label:'Mina',unit:'grams',factor:570,note:'Approximate.'},
+    talent:{label:'Talent',unit:'kilograms',factor:34.2,note:'Approximate; large weight unit.'},
+    denarius:{label:'Denarius',unit:'day wages',factor:1,note:'Often used as roughly a day’s wage in New Testament illustrations; not a modern fixed-dollar conversion.'}
+  };
+  function openMeasures(){openCustomModal('⚖','Weights & Measures Converter','Convert common biblical units into understandable modern approximations.',`<div style="display:grid;grid-template-columns:160px 1fr 180px;gap:8px;align-items:end"><div><label>Amount</label><input id="snMeasureAmount" type="number" value="1" step="any"></div><div><label>Biblical unit</label><select id="snMeasureUnit">${Object.entries(measureData).map(([k,v])=>`<option value="${k}">${v.label}</option>`).join('')}</select></div><button class="search-button" id="snMeasureConvert">Convert</button></div><div id="snMeasureResult" class="result-item" style="margin-top:14px"></div>`);const convert=()=>{const n=Number($('snMeasureAmount').value)||0,v=measureData[$('snMeasureUnit').value];$('snMeasureResult').innerHTML=`<div class="result-reference">${n} ${esc(v.label)}</div><div>≈ <strong>${(n*v.factor).toLocaleString(undefined,{maximumFractionDigits:3})} ${esc(v.unit)}</strong></div><div class="small-note" style="margin-top:7px">${esc(v.note)}</div>`};$('snMeasureConvert').onclick=convert;$('snMeasureUnit').onchange=convert;convert();}
+
+  const quotationData=[
+    ['Matthew 1:23','Isaiah 7:14','Direct quotation / fulfillment formula'],['Matthew 2:6','Micah 5:2','Quotation concerning Bethlehem'],['Matthew 3:3','Isaiah 40:3','John the Baptist / voice in wilderness'],['Matthew 4:4','Deuteronomy 8:3','Jesus in the temptation'],['Matthew 4:6','Psalm 91:11-12','Quoted by the tempter'],['Matthew 4:7','Deuteronomy 6:16','Jesus in the temptation'],['Matthew 4:10','Deuteronomy 6:13','Jesus in the temptation'],['Luke 4:18-19','Isaiah 61:1-2','Jesus reads Isaiah in Nazareth'],['John 12:38','Isaiah 53:1','John explains unbelief'],['Acts 2:17-21','Joel 2:28-32','Peter at Pentecost'],['Romans 1:17','Habakkuk 2:4','The just shall live by faith'],['Hebrews 10:5-7','Psalm 40:6-8','Applied to Christ']
+  ];
+  function openQuotations(){const state=currentReaderState();openCustomModal('♫','OT / NT Quotation Mapper','Track New Testament quotations and strong Old Testament connections.',`<div class="search-row"><input id="snQuoteSearch" class="search-input" placeholder="Search reference, e.g. Matthew 4 or Isaiah 53" value="${esc(state?.reference||'')}"><button id="snQuoteButton" class="search-button">Find Connections</button></div><div id="snQuoteResults" style="margin-top:12px"></div>`);const render=()=>{const q=$('snQuoteSearch').value.toLowerCase().replace(/\s+/g,' ');const rows=quotationData.filter(x=>!q||x.join(' ').toLowerCase().includes(q.split(':')[0]));$('snQuoteResults').innerHTML=rows.map(x=>`<div class="result-item"><div class="result-reference">${esc(x[0])} ⇄ ${esc(x[1])}</div><div>${esc(x[2])}</div></div>`).join('')||'<div class="sn-muted">No match in the starter quotation map. The full quotation/allusion dataset can plug into this same popup.</div>'};$('snQuoteButton').onclick=render;render();}
+
+  function openNames(){
+    const names=[['Jehovah-Tsidkenu','The LORD Our Righteousness','Jeremiah 23:6'],['Jehovah-Shalom','The LORD Is Peace','Judges 6:24'],['Jehovah-Ra’ah / Rohi','The LORD My Shepherd','Psalm 23:1'],['Jehovah-Rapha','The LORD Who Heals','Exodus 15:26'],['Jehovah-Jireh','The LORD Will Provide','Genesis 22:14'],['Jehovah-Shammah','The LORD Is There','Ezekiel 48:35'],['Jehovah-Nissi','The LORD My Banner','Exodus 17:15']];
+    openCustomModal('♛','All Names of God','Seven Redemptive Names plus a place to expand the full names reference.',`<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px">${names.map(n=>`<div class="result-item"><div class="result-reference">${esc(n[0])}</div><strong>${esc(n[1])}</strong><div class="small-note">${esc(n[2])}</div></div>`).join('')}</div>`);
+  }
+
+  function openAISearch(){
+    modalBase('⌕','AI Smart Search','Search Scripture and your BibleMastery research workspace. AI analysis only runs when you explicitly ask.');
+    const suite=$('masterToolSuite'); const input=$('masterSearchInput'), btn=$('masterSearchButton'), output=$('masterSearchOutput');
+    if(suite && input && btn && output){const wrap=document.createElement('div');wrap.innerHTML='<p>Natural-language library search</p>';$('snModalBody').appendChild(wrap);$('snModalBody').appendChild(input.parentElement);$('snModalBody').appendChild(btn);$('snModalBody').appendChild(output);movedNodes.push(input.parentElement,btn,output);}
+    else $('snModalBody').innerHTML='<div class="sn-muted">The advanced search engine is not available in this build.</div>';
+  }
+
+  function openBooksPopup(){
+    const books=theologyBooks(); if(!books.length){openCustomModal('📚','Theology Library','Read full theology books and jump directly to the best-matching sections.','<div class="sn-book-empty" style="height:420px"><div class="sn-empty-icon">📚</div><strong>The theology shelf is ready.</strong><span>Add the theology books and their chapters to BIBLEMASTERY_THEOLOGY_BOOKS and this popup will display the full library.</span></div>');return;}
+    openCustomModal('📚','Theology Library','Full books remain available here while the main screen shows the two best matching sections.',`<div id="snFullBookLibrary"></div>`);$('snFullBookLibrary').innerHTML=books.map((b,bi)=>`<div class="result-item"><div class="result-reference">${esc(b.title||'Untitled')}</div><div>${esc(b.author||'')}</div><div style="margin-top:7px">${(b.chapters||[]).map((c,ci)=>`<button class="sn-open-section" style="margin:3px" data-modal-book="${bi}" data-modal-chapter="${ci}">${esc(c.title||('Chapter '+(ci+1)))}</button>`).join('')}</div></div>`).join('');qsa('[data-modal-book]',$('snFullBookLibrary')).forEach(x=>x.addEventListener('click',()=>openBookSection(Number(x.dataset.modalBook),Number(x.dataset.modalChapter))));
+  }
+
+  function openSearch(){
+    const q=$('bmGlobalSearch')?.value||'';openCustomModal('⌕','Bible Search','Search references or words across Scripture.',`<div class="search-row"><input id="snModalSearchInput" class="search-input" value="${esc(q)}" placeholder="John 3:16 or salvation"><button id="snModalSearchButton" class="search-button">Search</button></div><div id="snModalSearchResult" style="margin-top:12px"></div>`);$('snModalSearchButton').onclick=()=>{const value=$('snModalSearchInput').value.trim();if(!value)return;const looksRef=/^[1-3]?\s*[A-Za-z]+(?:\s+[A-Za-z]+)*\s+\d+(?::\d+)?/.test(value);if(looksRef&&typeof window.openDeepReferenceInReader==='function'){window.openDeepReferenceInReader(value);closeModal();setTimeout(refreshAll,250)}else{closeModal();setTimeout(()=>{const inp=$('deepConcordanceInput');if(inp)inp.value=value;openTool('concordance');setTimeout(()=>$('deepConcordanceButton')?.click(),60)},80)}};
+  }
+
+  function openTool(name){
+    const state=currentReaderState();
+    const map={
+      concordance:()=>moveToModal($('deepStudyConcordancePanel'),'⌕','Concordance','Search every occurrence of a word, phrase, or Strong’s number.'),
+      crossrefs:()=>{const p=$('deepStudyReferencesPanel');moveToModal(p,'⛓','Cross-References','Find related passages across the entire Bible.');if(state){$('deepReferenceInput').value=state.reference;setTimeout(()=>$('deepReferenceButton')?.click(),50)}},
+      compare:()=>{const p=$('deepStudyContextPanel');moveToModal(p,'▣','Text Comparison & Timeline','Compare translations or inspect the biblical timeline.');if(state){const r=$('deepStudyReference');if(r)r.value=state.reference}},
+      original:()=>{const p=$('deepStudyLanguagePanel');moveToModal(p,'α','Original Language / Exegetical Guide','Strong’s, lexicons, morphology, occurrences, and word-study tools.');if(state){const i=$('deepLanguageInput');if(i&&!i.value)i.value='';}},
+      entities:()=>moveToModal($('deepStudyEntitiesPanel'),'⌾','People, Places & Events','Explore people, places, occurrences, and study links.'),
+      topics:()=>openTopicsWith(''),
+      maps:()=>openMapsTimeline('map'),
+      timeline:()=>openMapsTimeline('timeline'),
+      dictionary:openDictionary,
+      culture:openCulture,
+      measures:openMeasures,
+      quotations:openQuotations,
+      names:openNames,
+      books:openBooksPopup,
+      ai:()=>moveToModal($('topicBox'),'⚡','BibleMastery AI — Personal Study','Ask for explanation, passage connections, or help going deeper.'),
+      'ai-search':openAISearch,
+      advanced:()=>moveToModal($('masterToolSuite'),'🧰','Advanced Study Tools','Passage guides, advanced search, book background, commentary comparison, and source tools.'),
+      notes:()=>{$('snStudyNotes').focus();},
+      passage:()=>{const s=currentReaderState();openCustomModal('📖','Current Passage',s?.reference||'',`<article style="font-family:Georgia,serif;font-size:21px;line-height:1.7;max-width:820px;margin:auto">${esc(s?.text||'Choose a verse.')}</article>`)},
+      commentaries:()=>{const p=$('deepStudyCommentariesPanel');moveToModal(p,'📖','Commentaries','Open the full commentary controls and reading pane.');if(state){$('deepStudyReference').value=state.reference;$('deepCommentaryLoadButton')?.click()}},
+      'reader-options':()=>openCustomModal('📖','Bible Reader Options','Choose how you want to read.',`<div class="result-item"><div class="result-reference">Regular Bible</div><div>Read the Bible in normal book and chapter order.</div></div><div class="result-item"><div class="result-reference">Chronological Gospels</div><div>Follow the life and ministry of Jesus through Matthew, Mark, Luke, and John in chronological event order.</div></div>`),
+      search:openSearch,
+      terrain:()=>openCustomModal('▦','3D Terrain','Terrain integration','<div class="result-item"><div class="result-reference">3D Terrain</div><div>The popup framework is ready for the 3D terrain engine. Interactive Maps remain available now.</div></div>')
+    };
+    (map[name]||map.advanced)();
+  }
+  qsa('[data-sn-tool]').forEach(b=>b.addEventListener('click',e=>{e.preventDefault();openTool(b.dataset.snTool)}));
+  qsa('[data-sn-nojump]').forEach(a=>a.addEventListener('click',e=>e.preventDefault()));
+
+  /* ---------- Refresh all companions ---------- */
+  let refreshTimer=null;
+  function refreshAll(){
+    clearTimeout(refreshTimer); refreshTimer=setTimeout(()=>{
+      ensureVerseSelected(); syncLocationControls(); refreshCurrentPassage(); loadNote(); refreshCommentary(); renderBooks(); refreshWordSnapshot(); refreshCrossPreview(); refreshTopics();
+    },60);
+  }
+  // Watch reader content because Bible loading is async.
+  if(readerDisplay)new MutationObserver(()=>{syncLocationControls();refreshAll()}).observe(readerDisplay,{childList:true,subtree:true});
+  setTimeout(refreshAll,650);
+
+  // Make the built-in global search open our modal for non-destructive searching.
+  $('bmGlobalSearchButton')?.addEventListener('click',e=>{e.stopImmediatePropagation();openSearch()},true);
+
 })();
-</script>
 
+</script>
 </body>
 </html>
