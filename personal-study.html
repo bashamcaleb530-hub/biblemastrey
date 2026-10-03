@@ -3498,6 +3498,207 @@ body{overflow-x:hidden}
 }
 </style>
 
+
+<style id="rns-regular-user-phone-layout-2026">
+/* ============================================================
+   REGULAR USER PHONE LAYOUT
+   Applies ONLY to non-owner users on phones.
+   Owner phone layout and all desktop layouts remain unchanged.
+   ============================================================ */
+@media (max-width:760px){
+
+  body.sn-regular-phone .sn-reading-grid{
+    display:block!important;
+  }
+
+  /* Regular-user priority: Bible -> Commentary -> Notes. */
+  body.sn-regular-phone .sn-reading-grid .sn-reader-card{
+    height:374px!important;
+  }
+
+  body.sn-regular-phone .sn-reading-grid .sn-commentary-card{
+    height:248px!important;
+  }
+
+  body.sn-regular-phone .sn-reading-grid .sn-regular-notes-card{
+    height:184px!important;
+    margin-bottom:8px!important;
+  }
+
+  body.sn-regular-phone .sn-reading-grid .sn-regular-notes-card .sn-card-body{
+    height:calc(100% - 42px)!important;
+    min-height:0!important;
+    overflow:auto!important;
+    overscroll-behavior:contain!important;
+    -webkit-overflow-scrolling:touch!important;
+  }
+
+  body.sn-regular-phone .sn-reading-grid .sn-regular-notes-card .sn-notes-textarea{
+    height:86px!important;
+    min-height:86px!important;
+    max-height:86px!important;
+  }
+
+  /* Second section: Current Passage + Word Study, then Best Book full width. */
+  body.sn-regular-phone .sn-middle-grid{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+    gap:8px!important;
+    margin-top:0!important;
+  }
+
+  body.sn-regular-phone .sn-middle-grid .sn-regular-passage-card,
+  body.sn-regular-phone .sn-middle-grid .sn-regular-word-card{
+    height:158px!important;
+    min-width:0!important;
+    grid-column:auto!important;
+  }
+
+  body.sn-regular-phone .sn-middle-grid .sn-books-card{
+    grid-column:1 / -1!important;
+    height:194px!important;
+    margin-bottom:0!important;
+  }
+
+  body.sn-regular-phone .sn-middle-grid .sn-books-card .sn-card-body{
+    height:calc(100% - 42px)!important;
+    min-height:0!important;
+    overflow:auto!important;
+    overscroll-behavior:contain!important;
+    -webkit-overflow-scrolling:touch!important;
+  }
+
+  body.sn-regular-phone .sn-middle-grid .sn-regular-passage-card .sn-card-body,
+  body.sn-regular-phone .sn-middle-grid .sn-regular-word-card .sn-card-body{
+    height:calc(100% - 42px)!important;
+    min-height:0!important;
+    overflow:auto!important;
+    overscroll-behavior:contain!important;
+    -webkit-overflow-scrolling:touch!important;
+  }
+
+  /* Bottom section: cross-refs + resources, topics + quick tools. */
+  body.sn-regular-phone .sn-bottom-grid{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+    gap:8px!important;
+    margin-top:8px!important;
+  }
+
+  body.sn-regular-phone .sn-bottom-grid > .sn-regular-cross-card{
+    grid-column:auto!important;
+    height:158px!important;
+    order:1!important;
+  }
+
+  body.sn-regular-phone .sn-bottom-grid > .sn-regular-resources-card{
+    grid-column:auto!important;
+    height:158px!important;
+    order:2!important;
+  }
+
+  body.sn-regular-phone .sn-bottom-grid > .sn-regular-related-card{
+    grid-column:1 / -1!important;
+    height:148px!important;
+    order:3!important;
+  }
+
+  body.sn-regular-phone .sn-bottom-grid > .sn-regular-quick-card{
+    grid-column:1 / -1!important;
+    height:112px!important;
+    order:4!important;
+  }
+
+  body.sn-regular-phone .sn-bottom-grid > .sn-regular-cross-card .sn-card-body,
+  body.sn-regular-phone .sn-bottom-grid > .sn-regular-resources-card .sn-card-body,
+  body.sn-regular-phone .sn-bottom-grid > .sn-regular-related-card .sn-card-body{
+    height:calc(100% - 42px)!important;
+    min-height:0!important;
+    overflow:auto!important;
+    overscroll-behavior:contain!important;
+    -webkit-overflow-scrolling:touch!important;
+  }
+
+  body.sn-regular-phone .sn-bottom-grid > .sn-regular-quick-card .sn-card-body{
+    height:calc(100% - 42px)!important;
+    min-height:0!important;
+    overflow:hidden!important;
+  }
+
+  /* Undo owner-phone nth-child assumptions after regular-user reordering. */
+  body.sn-regular-phone .sn-bottom-grid > .sn-card:nth-child(2),
+  body.sn-regular-phone .sn-bottom-grid > .sn-card:nth-child(3),
+  body.sn-regular-phone .sn-bottom-grid > .sn-card:nth-child(4){
+    grid-column:auto!important;
+    order:initial!important;
+  }
+
+  body.sn-regular-phone .sn-bottom-grid > .sn-regular-related-card{
+    grid-column:1 / -1!important;
+    order:3!important;
+  }
+
+  body.sn-regular-phone .sn-bottom-grid > .sn-regular-quick-card{
+    grid-column:1 / -1!important;
+    order:4!important;
+  }
+
+  /* Keep Quick Tools as one roomy horizontal row. */
+  body.sn-regular-phone .sn-regular-quick-card .sn-quick-grid{
+    display:flex!important;
+    gap:6px!important;
+    height:100%!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    overscroll-behavior-x:contain!important;
+    scrollbar-width:none!important;
+    border:0!important;
+  }
+
+  body.sn-regular-phone .sn-regular-quick-card .sn-quick-grid::-webkit-scrollbar{
+    display:none!important;
+  }
+
+  body.sn-regular-phone .sn-regular-quick-card .sn-quick-grid button{
+    flex:0 0 74px!important;
+    min-width:74px!important;
+    width:74px!important;
+    min-height:60px!important;
+    height:60px!important;
+    border:1px solid #ead9b8!important;
+    border-radius:7px!important;
+    font-size:8px!important;
+    line-height:1.08!important;
+    padding:3px!important;
+  }
+
+  /* Make the app identity very clear to regular users. */
+  body.sn-regular-phone .bm-brand-copy strong{
+    font-size:20px!important;
+  }
+
+  body.sn-regular-phone .bm-brand-copy small{
+    font-size:7px!important;
+  }
+}
+
+@media (max-width:390px){
+  body.sn-regular-phone .sn-middle-grid,
+  body.sn-regular-phone .sn-bottom-grid{
+    gap:6px!important;
+  }
+
+  body.sn-regular-phone .sn-reading-grid .sn-regular-notes-card{
+    height:178px!important;
+  }
+
+  body.sn-regular-phone .sn-middle-grid .sn-regular-passage-card,
+  body.sn-regular-phone .sn-middle-grid .sn-regular-word-card{
+    height:154px!important;
+  }
+}
+</style>
+
 </head>
 <body class="bm-layout-dashboard" data-default-view="personal-study">
 
@@ -13890,6 +14091,137 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
     }
   })));
   document.addEventListener('DOMContentLoaded',()=>{if(document.body)o.observe(document.body,{childList:true,subtree:true})},{once:true});
+})();
+</script>
+
+
+<script id="rns-regular-user-phone-layout-js-2026">
+(function(){
+  'use strict';
+
+  const ADMIN_EMAIL='bashamcaleb530@gmail.com';
+  const AUTH_KEY='sb-pjkkxvntssvukulxipfr-auth-token';
+
+  let captured=false;
+  let reading=null, middle=null, bottom=null;
+  let reader=null, commentary=null, books=null;
+  let notes=null, passage=null, word=null;
+  let cross=null, quick=null, resources=null, related=null;
+
+  function sessionEmail(){
+    try{
+      const raw=localStorage.getItem(AUTH_KEY) || sessionStorage.getItem(AUTH_KEY);
+      if(!raw) return '';
+      const parsed=JSON.parse(raw);
+      return String(
+        parsed?.user?.email ||
+        parsed?.currentSession?.user?.email ||
+        parsed?.session?.user?.email ||
+        ''
+      ).toLowerCase();
+    }catch(e){
+      return '';
+    }
+  }
+
+  function captureCards(){
+    reading=document.querySelector('.sn-reading-grid');
+    middle=document.querySelector('.sn-middle-grid');
+    bottom=document.querySelector('.sn-bottom-grid');
+    if(!reading || !middle || !bottom) return false;
+
+    reader=reading.querySelector('.sn-reader-card');
+    commentary=reading.querySelector('.sn-commentary-card');
+    books=reading.querySelector('.sn-books-card');
+
+    const middleCards=Array.from(middle.children).filter(el=>el.classList?.contains('sn-card'));
+    notes=middleCards[0] || null;
+    passage=middleCards[1] || null;
+    word=middleCards[2] || null;
+
+    const bottomCards=Array.from(bottom.children).filter(el=>el.classList?.contains('sn-card'));
+    cross=bottomCards[0] || null;
+    quick=bottomCards[1] || null;
+    resources=bottomCards[2] || null;
+    related=bottomCards[3] || null;
+
+    if(!reader || !commentary || !books || !notes || !passage || !word ||
+       !cross || !quick || !resources || !related) return false;
+
+    notes.classList.add('sn-regular-notes-card');
+    passage.classList.add('sn-regular-passage-card');
+    word.classList.add('sn-regular-word-card');
+    cross.classList.add('sn-regular-cross-card');
+    quick.classList.add('sn-regular-quick-card');
+    resources.classList.add('sn-regular-resources-card');
+    related.classList.add('sn-regular-related-card');
+
+    captured=true;
+    return true;
+  }
+
+  function restoreOwnerOrder(){
+    if(!captured && !captureCards()) return;
+
+    reading.append(reader, commentary, books);
+    middle.append(notes, passage, word);
+    bottom.append(cross, quick, resources, related);
+    document.body.classList.remove('sn-regular-phone');
+  }
+
+  function applyRegularPhoneOrder(){
+    if(!captured && !captureCards()) return;
+
+    reading.append(reader, commentary, notes);
+    middle.append(passage, word, books);
+    bottom.append(cross, resources, related, quick);
+
+    document.body.classList.add('sn-regular-phone');
+
+    // Keep the software name clearly visible for regular users.
+    const brandStrong=document.querySelector('.bm-brand-copy strong');
+    const brandSmall=document.querySelector('.bm-brand-copy small');
+    if(brandStrong) brandStrong.textContent='Redemptive Names Software';
+    if(brandSmall) brandSmall.textContent='SEVEN NAMES ONE REDEEMER';
+  }
+
+  function apply(){
+    const isPhone=window.matchMedia('(max-width:760px)').matches;
+    const isOwner=sessionEmail()===ADMIN_EMAIL;
+
+    if(isPhone && !isOwner){
+      applyRegularPhoneOrder();
+    }else{
+      restoreOwnerOrder();
+    }
+  }
+
+  function waitForDashboard(){
+    if(captureCards()){
+      apply();
+      return;
+    }
+    const observer=new MutationObserver(function(){
+      if(captureCards()){
+        observer.disconnect();
+        apply();
+      }
+    });
+    observer.observe(document.documentElement,{childList:true,subtree:true});
+    setTimeout(()=>observer.disconnect(),12000);
+  }
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',waitForDashboard,{once:true});
+  }else{
+    waitForDashboard();
+  }
+
+  window.addEventListener('resize',apply);
+  window.addEventListener('focus',apply);
+  window.addEventListener('storage',function(e){
+    if(e.key===AUTH_KEY) apply();
+  });
 })();
 </script>
 
