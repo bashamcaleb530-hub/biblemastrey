@@ -3435,6 +3435,23 @@ body>header,body>.container{display:none!important}
 })();
 </script>
 
+
+<script id="rns-sermon-theology-refresh-2026">
+(function(){
+  function refresh(){
+    try{
+      if(typeof window.refreshCompanions === 'function') window.refreshCompanions();
+    }catch(e){}
+    try{
+      const reader=document.getElementById('readerDisplay');
+      if(reader) reader.dispatchEvent(new Event('change',{bubbles:true}));
+    }catch(e){}
+  }
+  window.addEventListener('rns-theology-library-ready',()=>setTimeout(refresh,50));
+  window.addEventListener('pageshow',()=>setTimeout(refresh,120));
+})();
+</script>
+
 </body></html>");w.document.close();w.focus();w.print();
   });
 
@@ -3819,6 +3836,344 @@ body>header,body>.container{display:none!important}
   if(advEl("advDeleteWorkspaceProfile"))advEl("advDeleteWorkspaceProfile").addEventListener("click",function(){const p=advSelectedWorkspace();if(!p)return;advWrite("workspaceProfiles",advRead("workspaceProfiles",[]).filter(function(x){return x.id!==p.id;}));advRefreshWorkspaceProfiles();advEl("advWorkspaceProfileOutput").textContent="Workspace deleted.";});
   advInitPrioritySelects();
 
+</script>
+
+
+<script id="rns-theology-library-sermon-2026">
+(function(){
+  const builtInBooks=[
+    {
+      title:"The Believer's Authority",
+      author:"Andrew Wommack",
+      resourceType:"Official free ministry resource",
+      officialUrl:"https://www.awmi.net/authority/",
+      chapters:[
+        {
+          title:"Book Information",
+          html:`
+            <div class="bm-official-book-card">
+              <div class="bm-official-book-badge">OFFICIAL AWMI RESOURCE</div>
+              <h3>The Believer's Authority</h3>
+              <p><strong>Author:</strong> Andrew Wommack</p>
+              <p>This teaching focuses on the authority believers have in Christ, resisting the devil, spiritual warfare, faith, and using the authority Jesus has delegated to believers.</p>
+              <p class="small-note">BibleMastery does not host the copyrighted book text. Andrew Wommack Ministries currently offers an official free PDF/resource through its own site.</p>
+              <div class="bm-official-book-actions">
+                <a class="search-button bm-book-link" href="https://www.awmi.net/authority/" target="_blank" rel="noopener">Read / Get Free PDF from AWMI ↗</a>
+                <a class="reader-nav-button bm-book-link" href="https://www.awmi.net/browse-teaching/believers-authority/" target="_blank" rel="noopener">Open Believer's Authority Teaching ↗</a>
+              </div>
+              <hr>
+              <h4>Study focus in BibleMastery</h4>
+              <ul>
+                <li>Authority delegated to believers through Jesus Christ</li>
+                <li>Identity and position in Christ</li>
+                <li>Resisting Satan rather than passively accepting defeat</li>
+                <li>The relationship between faith, God's Word, and spiritual authority</li>
+                <li>Applying biblical authority to everyday Christian life</li>
+              </ul>
+            </div>`
+        }
+      ]
+    },
+    {
+      title:"Christ the Healer",
+      author:"F. F. Bosworth",
+      resourceType:"Public-domain 1924 edition",
+      officialUrl:"https://openlibrary.org/works/OL31252713W/Christ_the_healer",
+      chapters:[
+        {
+          title:"Read 1924 Edition",
+          html:`
+            <div class="bm-public-domain-book">
+              <div class="bm-public-domain-badge">PUBLIC DOMAIN • ORIGINAL 1924 EDITION</div>
+              <h3>Christ the Healer</h3>
+              <p><strong>Author:</strong> F. F. Bosworth</p>
+              <p>This is the original 1924 edition of <em>Christ the Healer: Sermons on Divine Healing</em>. BibleMastery intentionally uses the 1924 public-domain edition and does not reproduce later copyrighted forewords, revisions, or added chapters.</p>
+              <div class="bm-book-source-actions">
+                <a class="search-button bm-book-link" href="https://archive.org/details/christhealerserm0000fred" target="_blank" rel="noopener">Open Full 1924 Scan ↗</a>
+                <a class="reader-nav-button bm-book-link" href="https://openlibrary.org/works/OL31252713W/Christ_the_healer" target="_blank" rel="noopener">Open Library Record ↗</a>
+              </div>
+              <iframe class="bm-book-scan-frame" src="https://archive.org/embed/christhealerserm0000fred" title="Christ the Healer, F. F. Bosworth, original 1924 edition" loading="lazy" allowfullscreen></iframe>
+              <p class="small-note">The scanned pages are served by Internet Archive. An internet connection is required for this embedded scan.</p>
+            </div>`
+        },
+        {
+          title:"Study Guide",
+          html:`
+            <div class="bm-public-domain-book">
+              <div class="bm-public-domain-badge">BIBLEMASTERY STUDY GUIDE</div>
+              <h3>Christ the Healer — Study Focus</h3>
+              <p>Bosworth's central emphasis is that believers should hear what Scripture says about Christ's healing ministry, redemption, faith, God's compassion, and receiving the promises of God.</p>
+              <div class="bm-book-study-grid">
+                <div class="bm-book-study-box"><h4>Healing & Redemption</h4><p>Study how Bosworth connects bodily healing with Christ's redemptive work and covenant promises.</p></div>
+                <div class="bm-book-study-box"><h4>Faith Comes by Hearing</h4><p>Notice the repeated emphasis on hearing God's Word until faith becomes settled in the heart.</p></div>
+                <div class="bm-book-study-box"><h4>The Lord's Compassion</h4><p>Trace passages where Jesus' compassion is connected with His willingness to heal the sick.</p></div>
+                <div class="bm-book-study-box"><h4>Receiving from Christ</h4><p>Compare Bosworth's teaching on appropriation, prayer, confession, and receiving with the Bible passages he cites.</p></div>
+              </div>
+              <h4>Key questions while reading</h4>
+              <ul>
+                <li>What Scriptures does Bosworth use to argue that healing is connected to redemption?</li>
+                <li>How does he distinguish God's willingness to heal from a person's process of receiving?</li>
+                <li>How does the compassion of Jesus shape his doctrine of healing?</li>
+                <li>Which claims are direct biblical statements, and which are Bosworth's interpretation of them?</li>
+                <li>How do these teachings connect with Jehovah-Rapha in the Seven Redemptive Names framework?</li>
+              </ul>
+            </div>`
+        },
+        {
+          title:"1924 Contents",
+          html:`
+            <div class="bm-public-domain-book">
+              <div class="bm-public-domain-badge">ORIGINAL EDITION CONTENTS</div>
+              <h3>Sections in the 1924 edition</h3>
+              <p>The original 1924 table of contents includes the following major sections:</p>
+              <ul>
+                <li>Sermon I</li>
+                <li>Is Healing for All?</li>
+                <li>The Lord's Compassion</li>
+                <li>How to Appropriate the Redemptive and Covenant Blessing of Bodily Healing</li>
+                <li>Paul's Thorn</li>
+                <li>Thirty-one Questions</li>
+                <li>Testimonies</li>
+              </ul>
+              <p class="small-note">Later editions expanded the book. BibleMastery keeps this entry tied to the 1924 edition so later copyrighted additions are not treated as public-domain text.</p>
+            </div>`
+        }
+      ]
+    },
+    {
+      title:"Ever-Increasing Faith",
+      author:"Smith Wigglesworth",
+      resourceType:"Public-domain 1924 edition",
+      officialUrl:"https://www.loc.gov/item/24022022/",
+      chapters:[
+        {
+          title:"Read 1924 Edition",
+          html:`
+            <div class="bm-public-domain-book">
+              <div class="bm-public-domain-badge">PUBLIC DOMAIN • 1924 EDITION</div>
+              <h3>Ever-Increasing Faith</h3>
+              <p><strong>Author:</strong> Smith Wigglesworth</p>
+              <p>The Library of Congress identifies this 1924 edition as public domain with no known restrictions and no copyright renewal found. BibleMastery links the original digitized edition rather than a later revised printing.</p>
+              <div class="bm-book-source-actions">
+                <a class="search-button bm-book-link" href="https://www.loc.gov/item/24022022/" target="_blank" rel="noopener">Library of Congress Edition ↗</a>
+                <a class="reader-nav-button bm-book-link" href="https://archive.org/details/everincreasingfa00wigg_0" target="_blank" rel="noopener">Open Full Scan ↗</a>
+              </div>
+              <iframe class="bm-book-scan-frame" src="https://archive.org/embed/everincreasingfa00wigg_0" title="Ever-Increasing Faith by Smith Wigglesworth, 1924 edition" loading="lazy" allowfullscreen></iframe>
+              <p class="small-note">The scan is served by Internet Archive and needs internet access unless we later package a local offline copy.</p>
+            </div>`
+        },
+        {
+          title:"Study Guide",
+          html:`
+            <div class="bm-public-domain-book">
+              <div class="bm-public-domain-badge">BIBLEMASTERY STUDY GUIDE</div>
+              <h3>Ever-Increasing Faith — Study Focus</h3>
+              <div class="bm-book-study-grid">
+                <div class="bm-book-study-box"><h4>Faith in God</h4><p>Trace how Wigglesworth connects believing God's Word with action, perseverance, and receiving from God.</p></div>
+                <div class="bm-book-study-box"><h4>Healing</h4><p>Compare his healing teaching with the Gospel accounts and the redemptive name Jehovah-Rapha.</p></div>
+                <div class="bm-book-study-box"><h4>Name of Jesus</h4><p>Study his emphasis on Christ's authority and the believer's use of Jesus' name.</p></div>
+                <div class="bm-book-study-box"><h4>Holy Spirit & Gifts</h4><p>Follow the chapters on Spirit baptism, spiritual gifts, healing, miracles, prophecy, discernment, and tongues.</p></div>
+              </div>
+              <h4>1924 chapter sequence</h4>
+              <ol>
+                <li>Have Faith in God</li><li>Deliverance to the Captives</li><li>The Power of the Name</li><li>Wilt Thou Be Made Whole?</li><li>I Am the Lord That Healeth Thee</li><li>Himself Took Our Infirmities</li><li>Our Risen Christ</li><li>Righteousness</li><li>The Words of This Life</li><li>Life in the Spirit</li><li>Full of the Spirit</li><li>Baptism of the Spirit</li><li>Concerning Spiritual Gifts</li><li>The Word of Knowledge and of Faith</li><li>The Gift of Healings and Miracles</li><li>The Gift of Prophecy</li><li>The Discerning of Spirits</li><li>The Gift of Tongues</li>
+              </ol>
+            </div>`
+        }
+      ]
+    },
+    {
+      title:"Faith That Prevails",
+      author:"Smith Wigglesworth",
+      resourceType:"Publisher resource / copyright-cautious entry",
+      officialUrl:"https://gospelpublishinghouse.com/shop/product/faith-that-prevails",
+      chapters:[
+        {
+          title:"Book Information",
+          html:`
+            <div class="bm-official-book-card">
+              <div class="bm-official-book-badge">OFFICIAL PUBLISHER RESOURCE</div>
+              <h3>Faith That Prevails</h3>
+              <p><strong>Author:</strong> Smith Wigglesworth</p>
+              <p>This classic focuses on faith, spiritual power, Pentecost, receiving power from the Holy Spirit, keeping spiritual vision, and living in God's present blessing.</p>
+              <p class="small-note">BibleMastery is not copying the full book text here. The Gospel Publishing House archive catalogs a 1938 copyrighted edition, and the publisher still sells the work today. This entry therefore links to the publisher while giving you a BibleMastery study guide.</p>
+              <div class="bm-official-book-actions">
+                <a class="search-button bm-book-link" href="https://gospelpublishinghouse.com/shop/product/faith-that-prevails" target="_blank" rel="noopener">Open Gospel Publishing House ↗</a>
+              </div>
+            </div>`
+        },
+        {
+          title:"Study Guide",
+          html:`
+            <div class="bm-public-domain-book">
+              <div class="bm-public-domain-badge">BIBLEMASTERY STUDY GUIDE</div>
+              <h3>Faith That Prevails — Study Focus</h3>
+              <p>The commonly published contents center on seven themes. Use these as a Bible study outline while keeping the copyrighted text on the publisher's site.</p>
+              <div class="bm-book-study-grid">
+                <div class="bm-book-study-box"><h4>God-Given Faith</h4><p>Compare Wigglesworth's faith emphasis with Hebrews 11 and Jesus' teaching on believing God.</p></div>
+                <div class="bm-book-study-box"><h4>Like Precious Faith</h4><p>Study the shared faith believers receive and how it grows through God's Word.</p></div>
+                <div class="bm-book-study-box"><h4>Spiritual Power</h4><p>Trace New Testament teaching on power, witness, holiness, and dependence on the Holy Spirit.</p></div>
+                <div class="bm-book-study-box"><h4>Pentecost & Power</h4><p>Compare Acts 1–2 with the book's emphasis on receiving power and Spirit-filled ministry.</p></div>
+              </div>
+              <h4>Chapter themes</h4>
+              <ol><li>God-Given Faith</li><li>Like Precious Faith</li><li>Spiritual Power</li><li>Paul's Pentecost</li><li>Ye Shall Receive Power</li><li>Keeping the Vision</li><li>Present-Time Blessings</li></ol>
+            </div>`
+        }
+      ]
+    },
+    {
+      title:"The Wonderful Name of Jesus",
+      author:"E. W. Kenyon",
+      resourceType:"Public-domain original 1927 edition",
+      officialUrl:"https://books.google.com/books/about/The_Wonderful_Name_of_Jesus.html?id=a5RpEQAAQBAJ",
+      topics:["authority in Christ","name of Jesus","faith","prayer","healing","spiritual warfare","redemption"],
+      chapters:[
+        {
+          title:"Book Information",
+          html:`
+            <div class="bm-public-domain-book">
+              <div class="bm-public-domain-badge">PUBLIC DOMAIN • ORIGINAL 1927 EDITION</div>
+              <h3>The Wonderful Name of Jesus</h3>
+              <p><strong>Author:</strong> E. W. Kenyon</p>
+              <p>This classic centers on the believer's authority in the name of Jesus, prayer, faith, healing, spiritual conflict, and the believer's position in Christ. BibleMastery will use only the original 1927 text when we add the complete book to the Library.</p>
+              <div class="bm-book-source-actions">
+                <a class="search-button bm-book-link" href="https://books.google.com/books/about/The_Wonderful_Name_of_Jesus.html?id=a5RpEQAAQBAJ" target="_blank" rel="noopener">Book Record ↗</a>
+              </div>
+            </div>`
+        },
+        {
+          title:"Study Guide",
+          html:`
+            <div class="bm-public-domain-book">
+              <div class="bm-public-domain-badge">BIBLEMASTERY STUDY GUIDE</div>
+              <h3>The Wonderful Name of Jesus — Study Focus</h3>
+              <div class="bm-book-study-grid">
+                <div class="bm-book-study-box"><h4>The Name of Jesus</h4><p>Trace the authority Jesus gives believers to act and pray in His name.</p></div>
+                <div class="bm-book-study-box"><h4>Authority</h4><p>Compare Kenyon's teaching with the Gospels, Acts, and the Epistles.</p></div>
+                <div class="bm-book-study-box"><h4>Faith & Prayer</h4><p>Study the relationship between faith, asking, speaking, and receiving.</p></div>
+                <div class="bm-book-study-box"><h4>Victory in Christ</h4><p>Follow themes of redemption, spiritual conflict, and the believer's position in Christ.</p></div>
+              </div>
+            </div>`
+        }
+      ]
+    },
+    {
+      title:"The Gospel of Healing",
+      author:"A. B. Simpson",
+      resourceType:"Public-domain original edition",
+      officialUrl:"https://cdn.cmalliance.org/wordpress/cmalliance/the-gospel-of-healing.pdf",
+      topics:["divine healing","redemption","faith","atonement","resurrection life","Jehovah-Rapha"],
+      chapters:[
+        {
+          title:"Read Public-Domain Edition",
+          html:`
+            <div class="bm-public-domain-book">
+              <div class="bm-public-domain-badge">PUBLIC DOMAIN • ORIGINAL HEALING CLASSIC</div>
+              <h3>The Gospel of Healing</h3>
+              <p><strong>Author:</strong> A. B. Simpson</p>
+              <p>Simpson presents a biblical case for divine healing, Christ's redemptive work, resurrection life, faith, and practical receiving of healing.</p>
+              <div class="bm-book-source-actions">
+                <a class="search-button bm-book-link" href="https://cdn.cmalliance.org/wordpress/cmalliance/the-gospel-of-healing.pdf" target="_blank" rel="noopener">Read Full Public-Domain PDF ↗</a>
+              </div>
+              <iframe class="bm-book-scan-frame" src="https://cdn.cmalliance.org/wordpress/cmalliance/the-gospel-of-healing.pdf" title="The Gospel of Healing by A. B. Simpson" loading="lazy"></iframe>
+            </div>`
+        },
+        {
+          title:"Study Guide",
+          html:`
+            <div class="bm-public-domain-book">
+              <div class="bm-public-domain-badge">BIBLEMASTERY STUDY GUIDE</div>
+              <h3>The Gospel of Healing — Study Focus</h3>
+              <ul>
+                <li>The scriptural foundation for divine healing</li>
+                <li>Healing and Christ's redemptive work</li>
+                <li>Resurrection life and the believer's body</li>
+                <li>Faith, practical directions, and common objections</li>
+                <li>Connections to Jehovah-Rapha and the healing ministry of Jesus</li>
+              </ul>
+            </div>`
+        }
+      ]
+    },
+    {
+      title:"Divine Healing",
+      author:"Andrew Murray",
+      resourceType:"Public-domain 1900 edition",
+      officialUrl:"https://books.google.com/books/about/Divine_Healing.html?id=reLE0QEACAAJ",
+      topics:["divine healing","faith","prayer","Holy Spirit","redemption","body","James 5"],
+      chapters:[
+        {
+          title:"Book Information",
+          html:`
+            <div class="bm-public-domain-book">
+              <div class="bm-public-domain-badge">PUBLIC DOMAIN • 1900 EDITION</div>
+              <h3>Divine Healing</h3>
+              <p><strong>Author:</strong> Andrew Murray</p>
+              <p>Murray develops a Scripture-centered teaching on healing, faith, prayer, the body as the temple of the Holy Spirit, the name of Jesus, and the relationship between healing and redemption.</p>
+              <div class="bm-book-source-actions">
+                <a class="search-button bm-book-link" href="https://books.google.com/books/about/Divine_Healing.html?id=reLE0QEACAAJ" target="_blank" rel="noopener">1900 Edition Record ↗</a>
+              </div>
+            </div>`
+        },
+        {
+          title:"Study Guide",
+          html:`
+            <div class="bm-public-domain-book">
+              <div class="bm-public-domain-badge">BIBLEMASTERY STUDY GUIDE</div>
+              <h3>Divine Healing — Study Focus</h3>
+              <div class="bm-book-study-grid">
+                <div class="bm-book-study-box"><h4>Forgiveness & Healing</h4><p>Compare Murray's treatment of pardon and healing with the Gospels and James 5.</p></div>
+                <div class="bm-book-study-box"><h4>Faith</h4><p>Study his teaching on the prayer of faith, unbelief, and perseverance.</p></div>
+                <div class="bm-book-study-box"><h4>The Body</h4><p>Trace his use of the body as the temple of the Holy Spirit and the Lord's claim upon it.</p></div>
+                <div class="bm-book-study-box"><h4>Jesus the Healer</h4><p>Compare the book with Christ's healing ministry and redemption passages.</p></div>
+              </div>
+            </div>`
+        }
+      ]
+    },
+    {
+      title:"The Ministry of Healing",
+      author:"A. J. Gordon",
+      resourceType:"Public-domain 1882 edition",
+      officialUrl:"https://books.google.com/books/about/The_Ministry_of_Healing.html?id=PQEDAAAAQAAJ",
+      topics:["divine healing","miracles","Scripture","missions","healing testimony","church history"],
+      chapters:[
+        {
+          title:"Read / Book Record",
+          html:`
+            <div class="bm-public-domain-book">
+              <div class="bm-public-domain-badge">PUBLIC DOMAIN • 1882 EDITION</div>
+              <h3>The Ministry of Healing</h3>
+              <p><strong>Author:</strong> A. J. Gordon</p>
+              <p>This early healing classic surveys biblical evidence, historical testimony, missions, healing experience, and arguments for the continuing ministry of divine healing.</p>
+              <div class="bm-book-source-actions">
+                <a class="search-button bm-book-link" href="https://books.google.com/books/about/The_Ministry_of_Healing.html?id=PQEDAAAAQAAJ" target="_blank" rel="noopener">Open Full-View Book Record ↗</a>
+              </div>
+            </div>`
+        },
+        {
+          title:"Study Guide",
+          html:`
+            <div class="bm-public-domain-book">
+              <div class="bm-public-domain-badge">BIBLEMASTERY STUDY GUIDE</div>
+              <h3>The Ministry of Healing — Study Focus</h3>
+              <ul>
+                <li>Biblical testimony for healing</li>
+                <li>Healing in church history and missions</li>
+                <li>Reason, testimony, and experience</li>
+                <li>Comparing historical healing claims with Scripture</li>
+                <li>How healing ministry relates to evangelism and compassion</li>
+              </ul>
+            </div>`
+        }
+      ]
+    }
+  ];
+  if(!Array.isArray(window.BIBLEMASTERY_THEOLOGY_BOOKS) || !window.BIBLEMASTERY_THEOLOGY_BOOKS.length){
+    window.BIBLEMASTERY_THEOLOGY_BOOKS = builtInBooks;
+  }
+  window.dispatchEvent(new CustomEvent('rns-theology-library-ready'));
+})();
 </script>
 
 <script id="sermon-builder-seven-names-approved-layout-js">
