@@ -4,23 +4,23 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>BibleMastery Library - Advanced</title>
+  <title>Redemptive Names Library — Seven Names One Redeemer</title>
 
   <style>
     * { box-sizing: border-box; }
 
     :root {
-      --bg-deep: #080f1d;
-      --bg-mid: #0d1628;
-      --panel: #121e33;
-      --panel-2: #101b2e;
-      --panel-3: #16243c;
-      --gold: #d8b96a;
-      --gold-light: #e7ca7d;
-      --text: #f5f1e8;
-      --muted: #b8bfcb;
-      --line: rgba(216,185,106,.28);
-      --soft-line: rgba(255,255,255,.09);
+      --bg-deep: #fff9ec;
+      --bg-mid: #fff7e2;
+      --panel: #fffef9;
+      --panel-2: #fffaf0;
+      --panel-3: #fff3d5;
+      --gold: #976500;
+      --gold-light: #7a0d12;
+      --text: #24160f;
+      --muted: #6b574b;
+      --line: #e5c98d;
+      --soft-line: #efe0bd;
       --good: #4e8c6d;
       --danger: #9b4b55;
     }
@@ -30,14 +30,14 @@
       min-height: 100vh;
       font-family: Arial, sans-serif;
       background:
-        radial-gradient(circle at top, #17233b 0%, #0d1628 45%, #080f1d 100%);
+        radial-gradient(circle at top, #fffdf7 0%, #fff7e2 45%, #fff9ec 100%);
       color: var(--text);
     }
 
     header {
-      background: linear-gradient(135deg, #111c32, #182742);
+      background: radial-gradient(circle at 72% 6%,rgba(255,251,204,.98) 0 6%,rgba(255,229,148,.82) 7%,rgba(255,224,137,0) 25%), linear-gradient(180deg,#fff7dc 0%,#f1ce86 52%,#cc8740 100%);
       border-bottom: 1px solid var(--gold);
-      box-shadow: 0 8px 25px rgba(0,0,0,.30);
+      box-shadow: 0 8px 25px rgba(89,46,12,.14);
       padding: 24px 20px;
       text-align: center;
     }
@@ -50,7 +50,7 @@
 
     header p {
       margin: 0;
-      color: #d6d9e0;
+      color: #603218;
     }
 
     .header-actions {
@@ -66,7 +66,7 @@
       display: inline-flex;
       padding: 10px 15px;
       color: var(--gold);
-      background: #101b2e;
+      background: #fffaf0;
       border: 1px solid var(--line);
       border-radius: 8px;
       text-decoration: none;
@@ -85,10 +85,10 @@
     .book-card,
     .reader-panel,
     .library-status {
-      background: rgba(18,30,51,.95);
+      background: #fffef9;
       border: 1px solid var(--line);
       border-radius: 15px;
-      box-shadow: 0 14px 35px rgba(0,0,0,.24);
+      box-shadow: 0 14px 35px rgba(89,46,12,.08);
     }
 
     .section,
@@ -113,7 +113,7 @@
 
     .search-card {
       background:
-        linear-gradient(135deg, rgba(18,30,51,.98), rgba(15,27,48,.98));
+        linear-gradient(135deg,#fffef9,#fff8e8);
     }
 
     .search-grid {
@@ -172,7 +172,7 @@
     }
 
     .secondary {
-      background: #25324a;
+      background: #fff3d5;
       color: var(--text);
     }
 
@@ -205,7 +205,7 @@
       border-left: 4px solid var(--gold);
       background: rgba(216,185,106,.08);
       border-radius: 6px;
-      color: #d6d9e0;
+      color: #603218;
     }
 
     .results-header {
@@ -235,7 +235,7 @@
 
     .result-author,
     .result-section {
-      color: #d7dbe2;
+      color: #6b574b;
       font-size: 14px;
       margin-bottom: 7px;
     }
@@ -246,13 +246,13 @@
       background: rgba(216,185,106,.08);
       border-left: 3px solid var(--gold);
       border-radius: 5px;
-      color: #d9dde5;
+      color: #563d2b;
       font-size: 14px;
     }
 
     .excerpt {
       line-height: 1.72;
-      color: #eeeae2;
+      color: #24160f;
       white-space: pre-wrap;
     }
 
@@ -271,8 +271,8 @@
       padding: 24px;
       text-align: center;
       color: var(--muted);
-      background: rgba(8,15,29,.42);
-      border: 1px dashed rgba(216,185,106,.28);
+      background: #fffaf0;
+      border: 1px dashed #e5c98d;
       border-radius: 10px;
     }
 
@@ -297,7 +297,7 @@
     .book-card:hover,
     .book-card.active {
       border-color: var(--gold);
-      background: rgba(22,36,60,.98);
+      background: #fff0ce;
     }
 
     .book-card h3 {
@@ -323,7 +323,7 @@
     }
 
     .reader-content {
-      background: rgba(8,15,29,.42);
+      background: #fffaf0;
       border: 1px solid rgba(216,185,106,.22);
       border-radius: 10px;
       padding: 18px;
@@ -333,7 +333,7 @@
 
     .reader-section {
       padding: 14px 0;
-      border-bottom: 1px solid rgba(255,255,255,.07);
+      border-bottom: 1px solid #efe0bd;
     }
 
     .reader-section:last-child {
@@ -346,7 +346,7 @@
 
     .reader-section-text {
       line-height: 1.78;
-      color: #eeeae2;
+      color: #24160f;
       white-space: pre-wrap;
     }
 
@@ -372,7 +372,7 @@
       border-radius: 999px;
       background: rgba(216,185,106,.10);
       border: 1px solid rgba(216,185,106,.24);
-      color: #e8e1cf;
+      color: #603218;
       font-size: 13px;
     }
 
@@ -397,16 +397,57 @@
         width: 100%;
       }
     }
+
+    /* Seven Names One Redeemer — approved bright reading theme. */
+    :root { color-scheme: light; --maroon:#7a0d12; --maroon-dark:#56070b; }
+    body { background:linear-gradient(180deg,#fff9eb 0%,#fffef8 56%,#fff7e2 100%); }
+    header { position:relative; overflow:hidden; isolation:isolate; padding:30px 20px 24px; border-bottom:2px solid #c68a00; }
+    header::before { content:""; position:absolute; inset:55% 0 0; background:#a86430; opacity:.15; clip-path:polygon(0 62%,14% 23%,28% 65%,43% 34%,59% 81%,74% 20%,90% 68%,100% 42%,100% 100%,0 100%); z-index:-1; }
+    header h1 { font-family:Georgia,"Times New Roman",serif; color:var(--maroon); font-size:clamp(28px,3.2vw,40px); }
+    header p { max-width:850px; margin:0 auto; line-height:1.6; }
+    .ministry-name { font-size:12px; font-weight:700; letter-spacing:2.4px; color:#603218; margin-bottom:10px; }
+    h2,h3,h4 { color:var(--maroon); }
+    label { color:#603218; }
+    .back-button,.header-link { color:var(--maroon); background:#fffaf0; border-color:#b58b42; min-height:44px; align-items:center; }
+    .back-button:hover,.header-link:hover { background:#fff0ce; border-color:var(--maroon); }
+    button { color:#fffaf0; background:var(--maroon); border-color:var(--maroon); min-height:44px; }
+    button:hover { background:var(--maroon-dark); border-color:var(--maroon-dark); }
+    button.secondary { color:var(--maroon); background:#fff3d5; border-color:#d4b26b; }
+    button.secondary:hover { background:#f7dfa0; }
+    button.success { background:#305c47; color:white; border-color:#305c47; }
+    button.danger { background:#6f2e35; color:white; border-color:#6f2e35; }
+    input,select,textarea { background:#fffdf7; border-color:#d4b26b; min-height:44px; }
+    input::placeholder,textarea::placeholder { color:#7c695a; opacity:1; }
+    a { color:var(--maroon); }
+    button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,.book-card:focus-visible { outline:3px solid #976500; outline-offset:3px; }
+    .book-card.active { border-color:var(--maroon); box-shadow:inset 4px 0 var(--maroon); }
+    .reader-content { background:#fffdf7; border-color:#e5c98d; scrollbar-color:#c3a576 #fff3d5; }
+    .reader-section-text { font-family:Georgia,"Times New Roman",serif; font-size:18px; line-height:1.85; overflow-wrap:anywhere; }
+    .reader-section h4 { font-family:Georgia,"Times New Roman",serif; font-size:22px; }
+    .reader-section-text p { color:#24160f; }
+    .reader-section-text .small-note { font-family:Arial,sans-serif; font-size:13px; line-height:1.5; color:#6b574b; white-space:normal; }
+    .status-pill { color:var(--maroon); background:#fff3d5; border-color:#d4b26b; }
+    .search-help,.match-reason { background:#fff5df; color:#563d2b; }
+    .container { width:100%; }
+    .library-layout > *, .reader-toolbar > *, .search-grid > * { min-width:0; }
+    @media(max-width:600px) {
+      header { padding:24px 14px 20px; }
+      .container { padding:0 12px 28px; margin-top:16px; }
+      .section,.search-card,.reader-panel,.library-status { padding:16px; }
+      .reader-content { padding:14px; max-height:70vh; }
+      .reader-section-text { font-size:17px; }
+    }
   </style>
 </head>
 
 <body>
 <header>
-  <h1>📚 BibleMastery Library</h1>
+  <div class="ministry-name">SEVEN NAMES ONE REDEEMER</div>
+  <h1>Redemptive Names Library</h1>
   <p>Read complete books in the Library, or search for the strongest book sections related to what you are studying.</p>
 
   <div class="header-actions">
-    <a href="index.html" class="back-button">← Back to BibleMastery Advanced</a>
+    <a href="personal-study.html" class="back-button">← Back to Personal Study</a>
   </div>
 </header>
 
@@ -415,8 +456,8 @@
   <div class="library-status">
     <div class="status-row">
       <div>
-        <h2 style="margin:0 0 6px;">BibleMastery Starter Library</h2>
-        <p style="margin:0;">The Advanced purchase can include 12 verified public-domain books. More library collections can be added later.</p>
+        <h2 style="margin:0 0 6px;">Your Theology Library</h2>
+        <p style="margin:0;">Explore your theology books, find a connected chapter, and continue reading at your own pace.</p>
       </div>
 
       <div class="status-pill">
@@ -427,7 +468,7 @@
   </div>
 
   <div class="search-card">
-    <h2 style="margin-top:0;">🔎 Search the BibleMastery Library</h2>
+    <h2 style="margin-top:0;">🔎 Search the Library</h2>
     <p>
       Search the books you own for the most relevant sections. A normal study search returns the three strongest book sections instead of loading entire books.
     </p>
