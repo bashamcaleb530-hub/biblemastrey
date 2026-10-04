@@ -4383,6 +4383,67 @@ body>header,body>.container{display:none!important}
     const s=currentState(); $('ssReaderLabel').textContent=s?s.reference:'Regular Bible'; $('ssCommentaryRef').textContent=s?s.reference:'follows Bible Reader'; renderBooks(s);
   }
 
+
+  const RNS_REAL_CHAPTER_CATALOG = {
+    "Ever-Increasing Faith": [
+      {title:"Have Faith in God",url:"https://smithwigglesworth.com/have-faith-in-god/",keywords:"faith believe believing prayer word god mountain receiving perseverance salvation"},
+      {title:"Deliverance to the Captives",url:"https://smithwigglesworth.com/deliverance-to-the-captives/",keywords:"deliverance captives freedom bondage healing salvation liberty"},
+      {title:"The Power of the Name",url:"https://smithwigglesworth.com/the-power-of-the-name/",keywords:"name jesus christ authority power prayer faith healing"},
+      {title:"Wilt Thou Be Made Whole?",url:"https://smithwigglesworth.com/wilt-thou-be-made-whole/",keywords:"healing whole sickness faith jesus compassion"},
+      {title:"I Am the Lord That Healeth Thee",url:"https://smithwigglesworth.com/i-am-the-lord-that-healeth-thee/",keywords:"healing healer lord rapha sickness covenant faith"},
+      {title:"Himself Took Our Infirmities",url:"https://smithwigglesworth.com/himself-took-our-infirmities/",keywords:"healing infirmities sickness redemption atonement christ faith"},
+      {title:"Our Risen Christ",url:"https://smithwigglesworth.com/our-risen-christ/",keywords:"resurrection christ risen life victory power"},
+      {title:"Righteousness",url:"https://smithwigglesworth.com/righteousness/",keywords:"righteousness righteous justification holiness christ identity"},
+      {title:"The Words of This Life",url:"https://smithwigglesworth.com/the-words-of-this-life/",keywords:"word scripture life truth faith word of god"},
+      {title:"Life in the Spirit",url:"https://smithwigglesworth.com/life-in-the-spirit/",keywords:"spirit holy spirit life walk power guidance"},
+      {title:"What It Means to Be Full of the Holy Ghost",url:"https://smithwigglesworth.com/what-it-means-to-be-full-of-the-holy-ghost/",keywords:"holy ghost spirit filled fullness power"},
+      {title:"The Bible Evidence of the Baptism of the Spirit",url:"https://smithwigglesworth.com/the-bible-evidence-of-the-baptism-of-the-spirit/",keywords:"baptism holy spirit holy ghost tongues evidence power"},
+      {title:"Concerning Spiritual Gifts",url:"https://smithwigglesworth.com/concerning-spiritual-gifts/",keywords:"spiritual gifts spirit gifts ministry church"},
+      {title:"The Word of Knowledge and Faith",url:"https://smithwigglesworth.com/the-word-of-knowledge-and-faith/",keywords:"word knowledge faith spiritual gifts revelation"},
+      {title:"Gifts of Healings, and Miracles",url:"https://smithwigglesworth.com/gifts-of-healings-and-miracles/",keywords:"healing healings miracles gifts spirit power"},
+      {title:"The Gift of Prophecy",url:"https://smithwigglesworth.com/the-gift-of-prophecy/",keywords:"prophecy prophetic gift spirit edification"},
+      {title:"The Discerning of Spirits",url:"https://smithwigglesworth.com/the-discerning-of-spirits/",keywords:"discernment spirits discerning spiritual gift"},
+      {title:"The Gift of Tongues",url:"https://smithwigglesworth.com/the-gift-of-tongues/",keywords:"tongues language spirit spiritual gift baptism"}
+    ]
+  };
+
+  function rnsActualChapterCatalog(bookTitle){
+    return RNS_REAL_CHAPTER_CATALOG[String(bookTitle||'')] || [];
+  }
+
+  function rnsRankActualChapters(bookTitle, contextText){
+    const chapters=rnsActualChapterCatalog(bookTitle);
+    if(!chapters.length)return [];
+    const ks=keywords(contextText);
+    return chapters.map((c,index)=>{
+      const hay=(c.title+' '+c.keywords).toLowerCase();
+      let score=0;
+      ks.forEach(k=>{
+        if(hay.includes(k))score+=c.title.toLowerCase().includes(k)?8:4;
+      });
+      return {...c,index,score};
+    }).sort((a,b)=>b.score-a.score);
+  }
+
+  function rnsOpenActualChapter(book,chapter){
+    if(!chapter?.url)return;
+    openCustom(
+      '📖 '+chapter.title,
+      (book?.title||'Theology Book')+(book?.author?' • '+book.author:''),
+      `<div style="max-width:900px;margin:auto">
+        <div style="padding:12px 14px;border:1px solid #d6b977;background:#fff7df;border-radius:10px;margin-bottom:14px">
+          <strong>Actual chapter:</strong> ${esc(chapter.title)}<br>
+          This opens the chapter itself, not the study guide.
+        </div>
+        <iframe src="${esc(chapter.url)}" title="${esc(chapter.title)}"
+          style="width:100%;height:68vh;border:1px solid #d6b977;border-radius:10px;background:white"></iframe>
+        <p style="margin-top:12px">
+          <a href="${esc(chapter.url)}" target="_blank" rel="noopener" class="search-button">Open Full Chapter in Browser ↗</a>
+        </p>
+      </div>`
+    );
+  }
+
   function plainText(html){const d=document.createElement('div');d.innerHTML=String(html||'');return (d.textContent||'').replace(/\s+/g,' ').trim();}
   const stopWords=new Set('the and that with from this into unto upon have has had were was are for but not you your his her our out all any who which what when where shall will would should could may might can did does of to in on at by as a an or be been being'.split(' '));
 
@@ -4483,9 +4544,31 @@ body>header,body>.container{display:none!important}
     const winners=[];
 
     theologyBooks().forEach((b,bi)=>{
+      const actual=rnsRankActualChapters(b.title,bibleContext);
+
+      if(actual.length){
+        winners.push({
+          b,bi,
+          actualChapter:actual[0],
+          score:actual[0].score+25,
+          restricted:false
+        });
+        return;
+      }
+
       let best=null;
 
       (b.chapters||[]).forEach((c,ci)=>{
+        const title=String(c.title||'').toLowerCase();
+
+        // Never treat a study guide, table of contents, or "read edition"
+        // wrapper as if it were an actual theology-book chapter.
+        if(title.includes('study guide') ||
+           title.includes('study focus') ||
+           title.startsWith('read ') ||
+           title.includes('edition contents') ||
+           title.includes('table of contents')) return;
+
         const paras=chapterParagraphs(c);
         const wholeChapter=plainText((c.title||'')+' '+(c.text||'')+' '+(c.html||''));
         let chapterScore=scoreTextAgainstContext(
@@ -4541,7 +4624,9 @@ body>header,body>.container{display:none!important}
 
     list.innerHTML=matches.map(m=>{
       const windowRows=connectedWindow(m);
-      const preview=windowRows.map(x=>x.text).join(' ').slice(0,520);
+      const preview=m.actualChapter
+        ? ('Actual chapter selected: '+m.actualChapter.title)
+        : windowRows.map(x=>x.text).join(' ').slice(0,520);
       const restricted=m.copyrightRestricted;
 
       return `<div class="ss-book-card">
@@ -4549,25 +4634,36 @@ body>header,body>.container{display:none!important}
         <div class="ss-book-info">
           <strong>${esc(m.b.title||'Untitled Book')}</strong>
           <div class="ss-book-author">${esc(m.b.author||'')}</div>
-          <div class="ss-book-section">${esc(m.c.title||('Chapter '+(m.ci+1)))}</div>
-          <p><strong>${restricted?'Copyright-safe connection':'Connected passage from this chapter'}:</strong>
-             ${esc(preview)}${preview.length>=520?'…':''}</p>
+          <div class="ss-book-section">${esc(m.actualChapter?.title || m.c?.title || ('Chapter '+((m.ci??0)+1)))}</div>
+          <p><strong>${m.actualChapter?'Actual chapter':'Connected passage from this chapter'}:</strong>
+             ${esc(preview)}${(!m.actualChapter&&preview.length>=520)?'…':''}</p>
         </div>
         <button class="ss-open-book"
           data-ss-book="${m.bi}"
-          data-ss-chapter="${m.ci}"
-          data-ss-passage="${m.pi}">
-          ${restricted?'Open Connected Section':'Read Connected Passage'}
+          data-ss-chapter="${m.ci??-1}"
+          data-ss-passage="${m.pi??-1}"
+          data-ss-actual="${m.actualChapter?m.actualChapter.index:''}">
+          ${m.actualChapter?'Read Actual Chapter':(restricted?'Open Connected Section':'Read Connected Passage')}
         </button>
       </div>`;
     }).join('');
 
     qsa('[data-ss-book]',list).forEach(btn=>{
-      btn.onclick=()=>openBookPassage(
-        Number(btn.dataset.ssBook),
-        Number(btn.dataset.ssChapter),
-        Number(btn.dataset.ssPassage)
-      );
+      btn.onclick=()=>{
+        const bi=Number(btn.dataset.ssBook);
+        const actual=btn.dataset.ssActual;
+        if(actual!==''){
+          const b=theologyBooks()[bi];
+          const ch=rnsActualChapterCatalog(b?.title)[Number(actual)];
+          rnsOpenActualChapter(b,ch);
+          return;
+        }
+        openBookPassage(
+          bi,
+          Number(btn.dataset.ssChapter),
+          Number(btn.dataset.ssPassage)
+        );
+      };
     });
   }
 
