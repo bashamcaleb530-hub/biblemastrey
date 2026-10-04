@@ -3741,6 +3741,13 @@ body{overflow-x:hidden}
 #rncDialog .rnc-source-classroom h4{color:#6f1117}
 </style>
 
+
+<style id="rnc-public-research-classroom-style">
+#rncDialog .rnc-public-research-classroom{border:2px solid #9f7a24;background:#fffdf6}
+#rncDialog .rnc-public-research-classroom h3{color:#6f1117;margin-bottom:.3rem}
+#rncDialog .rnc-public-research-classroom h4{color:#6f1117}
+</style>
+
 </head>
 <body class="bm-layout-dashboard" data-default-view="personal-study">
 
@@ -16000,6 +16007,252 @@ function rncCharisModuleHtml(m,l){
     +'</section>';
 }
 
+
+const RNC_PUBLIC_RESEARCH_MODULES=[
+{
+ id:'awmi-grace-faith-public',
+ teacher:'Andrew Wommack',
+ course:'Official public teaching — Grace and Faith',
+ match:['grace and faith','grace received','faith appropriates','finished work','receive by faith','performance and grace'],
+ refs:'Ephesians 2:8–9; Romans 5:1–2; Galatians 2:20–21',
+ heading:'Do not turn faith into a payment for grace',
+ paragraphs:[
+  'In Wommack’s public teaching on the balance of grace and faith, the controlling distinction is that grace describes what God has already provided while faith is the response that receives and walks in that provision. He repeatedly warns against tying God’s response to religious performance as though Bible reading, prayer, church attendance, or giving purchase what Christ supplied.',
+  'For this college, that makes a lesson stronger when it explicitly separates provision from response. Ask first what the passage says God has done or promised, and only then ask how faith responds. This prevents “faith” from becoming a disguised works system.',
+  'When you explain this to someone else, make the sequence clear: God acts in grace; the believer does not earn the gift; faith agrees with, receives, and acts on what God has provided.'
+ ],
+ teach:'Explain grace and faith without making either one passive. Show what God provides, what the believer receives, and how obedience grows from receiving rather than earning.'
+},
+{
+ id:'awmi-prayer-public',
+ teacher:'Andrew Wommack',
+ course:'Official public teaching — Prayer',
+ match:['prayer','pray','pleading','authority in prayer','new covenant prayer','persuade god'],
+ refs:'John 16:23–27; Hebrews 4:14–16; Matthew 10:8',
+ heading:'Prayer is not an attempt to persuade an unwilling God',
+ paragraphs:[
+  'Wommack’s public prayer teaching strongly contrasts New Covenant prayer with pleading designed to make God become willing. His emphasis is that Christ’s mediation and completed work change the believer’s approach to God.',
+  'A useful lesson should therefore distinguish fellowship, petition, intercession, thanksgiving, and exercising authority. Do not collapse every kind of prayer into one formula. Ask what kind of prayer the passage is actually describing.',
+  'The practical ministry point is confidence without presumption: pray from what Scripture reveals about God and Christ, not from fear that enough emotion or repetition will finally make God care.'
+ ],
+ teach:'Have the learner take one prayer passage and explain who is praying, what is being asked, what covenant setting is in view, and why the prayer can be offered confidently.'
+},
+{
+ id:'awmi-authority-public',
+ teacher:'Andrew Wommack',
+ course:'Official public teaching — Believer’s Authority',
+ match:['authority of the believer','spiritual authority','release god\'s power','authority','command healing','resist the devil'],
+ refs:'Luke 9:1–2; Luke 10:19; Acts 3:1–8',
+ heading:'Authority should produce responsible action, not passive wishing',
+ paragraphs:[
+  'Wommack’s public authority teaching emphasizes that believers should not always ask God to do what Scripture has already authorized them to do. He often uses healing ministry as a concrete example of acting in delegated authority.',
+  'For the college, authority lessons should define the source, scope, and purpose of authority. It comes from Christ, is exercised under His lordship, and is directed against spiritual opposition and works of bondage—not toward controlling other people.',
+  'The student should also learn the difference between a biblical command, a promise, a prayer, and a personal impression. Authority is strongest when it is anchored to what Scripture actually authorizes.'
+ ],
+ teach:'Explain delegated authority using a specific New Testament example, then state what the believer is authorized to do and what would be an abuse of that authority.'
+},
+{
+ id:'hagin-faith-public',
+ teacher:'Kenneth E. Hagin',
+ course:'Rhema public teaching — Bible Faith',
+ match:['faith','heart faith','faith comes by hearing','believe in the heart','confession','good fight of faith'],
+ refs:'Romans 10:17; Hebrews 11:1; Mark 11:22–24',
+ heading:'Faith is confidence in God’s Word that moves into speech and action',
+ paragraphs:[
+  'Rhema’s published material consistently presents faith as grounded in God’s Word rather than in feelings or visible circumstances. Hagin’s teaching stream repeatedly distinguishes mental agreement from heart faith and presses the student to act on what is believed.',
+  'For this college, a faith lesson should not stop with “believe harder.” It should identify the specific Word being believed, explain its context, describe what believing means, and show what an appropriate corresponding action looks like.',
+  'Confession should be taught as agreement with God’s Word, not as a magical use of phrases. The student must understand the truth before speaking it.'
+ ],
+ teach:'Take one promise or truth, explain it in context, state what it means to believe it, and give one concrete action that would agree with it.'
+},
+{
+ id:'hagin-prayer-public',
+ teacher:'Kenneth E. Hagin',
+ course:'Rhema public teaching — Prayer',
+ match:['prayer of faith','prayer','praying in the spirit','intercession','perseverance in prayer','led to pray'],
+ refs:'James 5:15; Ephesians 6:18; Romans 8:26–27',
+ heading:'Different kinds of prayer should not be treated as one formula',
+ paragraphs:[
+  'Hagin’s prayer teaching distinguishes forms of prayer and emphasizes being led by the Holy Spirit, praying in faith, and persevering when the Spirit gives a burden to pray. Rhema’s public material also treats the prayer of faith as confidence in what is not yet seen.',
+  'That distinction can make your prayer course more precise. A prayer of faith, intercession, worship, thanksgiving, and Spirit-led prayer do not have identical purposes or methods.',
+  'When teaching prayer, first identify the kind of prayer represented in the passage. Then explain the biblical basis, the believer’s posture, and how to know when perseverance is appropriate rather than assuming every request must be repeated in the same way.'
+ ],
+ teach:'Have the learner classify three biblical prayers by purpose and explain why the same method should not automatically be used for all three.'
+},
+{
+ id:'hagin-healing-public',
+ teacher:'Kenneth E. Hagin',
+ course:'Rhema public teaching — Healing',
+ match:['healing','prayer of faith','divine healing','receive healing','rapha'],
+ refs:'James 5:14–15; Mark 11:24; Proverbs 4:20–22',
+ heading:'Healing faith looks to the Word before it looks to the senses',
+ paragraphs:[
+  'Rhema’s healing material emphasizes the prayer of faith and learning to evaluate healing through the lens of Scripture rather than making physical sensation the only judge of whether faith is present.',
+  'A strong lesson should therefore teach the learner how to locate the scriptural basis for healing, distinguish faith from denial, and keep compassion central. A person should never be shamed for symptoms, treatment, questions, or a slow recovery.',
+  'The ministry goal is to help someone receive the Word with understanding and confidence while continuing to act wisely and compassionately.'
+ ],
+ teach:'Explain what the prayer of faith is, what it is not, and how you would minister to someone without blaming them for their condition.'
+},
+{
+ id:'hagin-spirit-public',
+ teacher:'Kenneth E. Hagin',
+ course:'Rhema public teaching — Holy Spirit and His Gifts',
+ match:['holy spirit','gifts of the spirit','tongues','prophecy','word of knowledge','word of wisdom','discerning of spirits'],
+ refs:'1 Corinthians 12:7–11; 1 Corinthians 14:1–5',
+ heading:'Spiritual gifts are given for ministry and must remain governed by Scripture and love',
+ paragraphs:[
+  'Hagin’s study-course tradition treats the gifts of the Spirit as subjects to be defined carefully from Scripture rather than as vague supernatural experiences. This includes revelation gifts, power gifts, and vocal gifts.',
+  'That structure is useful for your college because it teaches vocabulary, biblical examples, purpose, and boundaries. Students should learn what a gift is supposed to accomplish before trying to identify an experience.',
+  'Any lesson on gifts should also be connected to 1 Corinthians 13–14 so that love, edification, order, and intelligibility remain central.'
+ ],
+ teach:'Define one gift, show a biblical example, explain its purpose, and describe one safeguard that keeps its use loving and orderly.'
+},
+{
+ id:'kcm-covenant-public',
+ teacher:'Kenneth Copeland',
+ course:'KCM public teaching — Covenant, Faith, and Authority',
+ match:['covenant','covenant authority','authority','promise','faith in the word','healing belongs','agreement'],
+ refs:'Hebrews 8:6; 2 Corinthians 1:20; Luke 10:19',
+ heading:'Covenant language connects promise, identity, authority, and responsibility',
+ paragraphs:[
+  'KCM’s public teaching frequently organizes faith around covenant: what God has promised, what belongs to the believer in Christ, and how faith responds to that covenant reality.',
+  'This gives your college a useful framework for lessons on promises, healing, provision, and authority. Instead of isolating a verse, trace the promise through the covenant setting and ask who the promise is addressed to, what Christ accomplished, and what response the passage calls for.',
+  'Covenant authority should never be presented as personal domination. The proper focus is confidence in God’s Word and responsible action under Christ’s lordship.'
+ ],
+ teach:'Trace one promise from covenant setting to New Testament application, then explain the believer’s response without turning the promise into entitlement or control over others.'
+},
+{
+ id:'kcm-healing-public',
+ teacher:'Kenneth Copeland',
+ course:'KCM public teaching — Healing and Faith',
+ match:['healing','healer','healing belongs','release faith for healing','rapha','divine health'],
+ refs:'Isaiah 53:4–5; 1 Peter 2:24; Mark 11:22–24',
+ heading:'Healing teaching joins covenant confidence with active faith',
+ paragraphs:[
+  'KCM’s public healing teaching repeatedly connects healing with covenant, the Word, and faith. The student is encouraged to treat God’s Word as the governing promise rather than waiting for circumstances to create faith.',
+  'For your college, use this stream to deepen how faith responds after the scriptural basis is established: prayer, agreement, confession of the Word, thanksgiving, and corresponding action.',
+  'Keep pastoral care alongside doctrine. Confidence in healing should never become permission to accuse a suffering person of spiritual failure.'
+ ],
+ teach:'Explain healing from the covenant and redemption texts first, then describe how faith responds in prayer, speech, and action.'
+},
+{
+ id:'osborn-evangelism-public',
+ teacher:'T. L. Osborn, Daisy Osborn, and LaDonna Osborn',
+ course:'Osborn Ministries public teaching — Evangelism and Discipleship',
+ match:['evangelism','great commission','soul winning','discipleship','new convert','reach people','missions','gospel laborer'],
+ refs:'Mark 16:15–20; Matthew 28:18–20; John 20:21',
+ heading:'The Gospel is meant to be announced, demonstrated, and followed by discipleship',
+ paragraphs:[
+  'Osborn Ministries publicly summarizes its historic emphasis as evangelization of the world, proclamation of Christ, and equipping believers to make disciples. Their training materials repeatedly place ordinary believers—not only platform ministers—inside the Great Commission.',
+  'This can strengthen your evangelism course by giving it a full process: announce Christ clearly, expect the Gospel to address real human need, invite response, then help the new believer move into Scripture, Christian community, and a new way of life.',
+  'The Osborn model also treats discipleship as a bridge after conversion. Winning someone to Christ is not the finish line; someone must help the new believer understand foundational truths and begin living them.'
+ ],
+ teach:'Practice a complete ministry pathway: explain the Gospel, invite a response, identify the person’s next biblical step, and outline how you would disciple them during the first weeks.'
+},
+{
+ id:'osborn-miracles-public',
+ teacher:'T. L. Osborn and Daisy Osborn',
+ course:'Osborn Ministries public teaching — Miracles and Power Evangelism',
+ match:['miracles','power evangelism','signs and wonders','healing evangelism','mass evangelism','demonstrate the gospel'],
+ refs:'Mark 16:15–20; Acts 8:5–8; Hebrews 2:3–4',
+ heading:'Miracles serve the proclamation of Christ rather than replacing it',
+ paragraphs:[
+  'The Osborn ministry’s public history consistently joins proclamation of Christ with prayer for miracles as a witness that Jesus is alive. The miracle is not treated as a substitute for the Gospel but as a confirming sign alongside the message.',
+  'For your college, power evangelism should therefore keep Jesus and redemption at the center. Teach what the Gospel is, explain why signs serve the message, and train the student to minister compassionately without exaggerating results or making unverifiable claims.',
+  'A mature evangelist should be able to preach Christ clearly even when no dramatic manifestation occurs, while remaining open to pray boldly for healing and deliverance.'
+ ],
+ teach:'Build a short evangelistic message that centers on Jesus, then show where and how prayer for healing or miracles would support rather than replace the message.'
+},
+{
+ id:'roberts-healing-public',
+ teacher:'Oral Roberts / Richard Roberts ministry stream',
+ course:'Official public teaching — Whole-Person Healing',
+ match:['whole person','healing','body mind spirit','miracle','healing prayer','greater works'],
+ refs:'3 John 2; James 5:14–16; John 14:12',
+ heading:'Healing ministry addresses hurting people as whole persons',
+ paragraphs:[
+  'Richard Roberts Ministries publicly describes its mission in terms of the saving, healing, and delivering power of Jesus and whole-person healing—body, mind, and spirit. That emphasis can improve your ministry lessons by keeping the person, not merely the condition, at the center.',
+  'Their public healing material stresses faith in God’s power and willingness, prayer in Jesus’ name, and thanksgiving after prayer. The broader ministry stream also emphasizes training believers to minister the love and healing power of God to others.',
+  'For this college, combine bold prayer with compassion, listening, practical care, and integrity. Never make a person feel like a failed project if a result is not immediate.'
+ ],
+ teach:'Practice ministering to a hurting person in a way that includes listening, Scripture, prayer, practical care, and a clear explanation of what you believe God is like.'
+},
+{
+ id:'roberts-seedfaith-public',
+ teacher:'Oral Roberts / Richard Roberts ministry stream',
+ course:'Official public teaching — Seed-Faith',
+ match:['seed faith','seed-faith','giving','generosity','expectancy','sowing and reaping','provision'],
+ refs:'Genesis 8:22; Luke 6:38; 2 Corinthians 9:6–11',
+ heading:'Seed-faith should be taught as generous trust, not as buying a miracle',
+ paragraphs:[
+  'The Roberts ministry describes seed-faith as giving something to God in faith and expectancy, with the broader idea that life involves sowing and reaping. Their public examples include acts of kindness and practical giving, not only money.',
+  'For your college, this subject needs explicit safeguards. Giving must never be presented as purchasing healing, prophecy, favor, or a guaranteed financial return. New Testament generosity is voluntary, Godward, loving, and concerned with meeting needs.',
+  'The strongest version of this lesson will connect generosity, stewardship, expectancy, and compassion while keeping grace free from commercial exchange.'
+ ],
+ teach:'Explain biblical sowing and reaping in a way that encourages generosity but rejects the idea that money can purchase God’s power, healing, or favor.'
+},
+{
+ id:'josephz-prophecy-public',
+ teacher:'Joseph Z',
+ course:'Z Ministries public teaching — Prophecy and Discernment',
+ match:['prophecy','prophetic','discernment','hearing god','dreams','visions','false prophet','interpretation','application'],
+ refs:'1 Corinthians 14:1–5; 1 Thessalonians 5:19–21; 1 John 4:1',
+ heading:'Prophecy requires revelation, interpretation, application, and testing',
+ paragraphs:[
+  'Joseph Z’s public teaching emphasizes developing prophetic discernment while distinguishing genuine prophecy from error and counterfeit voices. His materials repeatedly stress interpretation and application rather than treating an impression as self-explanatory.',
+  'This gives your prophecy course a stronger process: receive or notice an impression, test it against Scripture, interpret it carefully, consider timing and application, and remain accountable. A claimed revelation should never outrank Scripture.',
+  'The student should also learn the difference between a spiritual gift, a mature prophetic ministry, and personal guidance. Avoid controlling language such as using “God told me” to pressure another person into a decision.'
+ ],
+ teach:'Take a hypothetical prophetic impression and walk through testing, interpretation, application, timing, accountability, and how you would communicate it without manipulation.'
+},
+{
+ id:'josephz-prayer-public',
+ teacher:'Joseph Z',
+ course:'Z Ministries public teaching — Prayer and Intercession',
+ match:['intercession','pray in the spirit','prophetic prayer','prayer burden','discern the times'],
+ refs:'1 Timothy 2:1; Ephesians 6:18; Romans 8:26–27',
+ heading:'Prayer and discernment should work together under Scripture',
+ paragraphs:[
+  'Joseph Z’s public broadcasts connect prayer, intercession, sensitivity to the Holy Spirit, and discernment. That material can help the college teach prophetic prayer as disciplined fellowship with God rather than spontaneous impressions without biblical grounding.',
+  'For the student, the key is to pray the Word, remain sensitive to the Holy Spirit, and distinguish an inward prompting from a scriptural command. Impressions should be held humbly and tested rather than announced as infallible.',
+  'This is especially important in ministry to other people: prayer can be bold without becoming controlling.'
+ ],
+ teach:'Explain how you would handle a strong inward burden to pray: what you would do, how you would test it, and what you would avoid claiming to others.'
+}
+];
+
+function rncPublicScore(mod,c,l){
+  const title=(l.title||'').toLowerCase();
+  const refs=(l.refs||'').toLowerCase();
+  const core=((l.teaching||[]).join(' ')+' '+(l.case||'')+' '+(l.task||'')).toLowerCase();
+  let score=0, direct=false;
+  for(const raw of mod.match){
+    const term=raw.toLowerCase();
+    if(title.includes(term)){score+=9;direct=true;}
+    if(refs.includes(term)){score+=6;direct=true;}
+    if(core.includes(term))score+=2;
+  }
+  return direct?score:0;
+}
+function rncPublicMatches(c,l){
+  return RNC_PUBLIC_RESEARCH_MODULES
+    .map(m=>[m,rncPublicScore(m,c,l)])
+    .filter(x=>x[1]>=6)
+    .sort((a,b)=>b[1]-a[1])
+    .slice(0,3)
+    .map(x=>x[0]);
+}
+function rncPublicModuleHtml(m,l){
+  return '<section class="rnc-reading-guide rnc-teacher-class rnc-public-research-classroom">'
+    +'<h3>'+esc(m.teacher)+' — '+esc(m.course)+'</h3>'
+    +'<h4>'+esc(m.heading)+'</h4>'
+    +m.paragraphs.map(p=>'<p>'+esc(p)+'</p>').join('')
+    +'<div class="rnc-callout"><strong>Key passages:</strong> '+esc(m.refs)+'</div>'
+    +'<p><strong>Learn to Explain and Teach It:</strong> First explain this truth clearly in your own words: what it means, why it matters, which Scriptures support it, and how you would answer a common misunderstanding. Then practice teaching or ministering it to another person. '+esc(m.teach)+'</p>'
+    +'<p class="rnc-muted"><strong>Research basis:</strong> Original synthesis from the teacher/ministry’s publicly available official teaching material. Scripture remains the final authority.</p>'
+    +'</section>';
+}
+
 function rncTeacherScore(stream,c,l,themes){let score=0;const srcs=c.sources||[];for(const id of stream.sources)if(srcs.includes(id))score+=5;for(const th of themes)if(stream.topics[th])score+=3;if((c.title+' '+l.title).toLowerCase().includes('prophe')&&stream===RNC_TEACHER_STREAMS.joseph)score+=12;if((c.title+' '+l.title).toLowerCase().includes('heal')&&['osborn','hagin','wommack','copeland','roberts','wigglesworth','lake'].some(k=>RNC_TEACHER_STREAMS[k]===stream))score+=4;if((c.title+' '+l.title).toLowerCase().includes('faith')&&['hagin','copeland','wommack'].some(k=>RNC_TEACHER_STREAMS[k]===stream))score+=5;if((c.title+' '+l.title).toLowerCase().match(/evangel|gospel|outreach/)&&stream===RNC_TEACHER_STREAMS.osborn)score+=10;return score;}
 function rncRelevantTeachers(c,l){const themes=rncThemes(c,l);return Object.values(RNC_TEACHER_STREAMS).map(s=>[s,rncTeacherScore(s,c,l,themes)]).filter(x=>x[1]>0).sort((a,b)=>b[1]-a[1]).slice(0,5).map(x=>x[0]);}
 function rncTeacherLesson(stream,c,l,themes){
@@ -16026,16 +16279,25 @@ function rncTeacherLesson(stream,c,l,themes){
 }
 function teacherLessonSynthesis(c,l){
   const sourceMatches=rncCharisMatches(c,l);
+  const publicMatches=rncPublicMatches(c,l);
   if(sourceMatches.length){
     const sourceCards=sourceMatches.map(m=>rncCharisModuleHtml(m,l)).join('');
+    const researchCards=publicMatches.length
+      ? '<div class="rnc-callout"><strong>Additional official-teaching research:</strong> These public-source modules deepen the lesson where they genuinely match. Your uploaded notes remain the primary classroom source.</div>'+publicMatches.map(m=>rncPublicModuleHtml(m,l)).join('')
+      : '';
     return '<div class="rnc-callout"><strong>Source-matched classroom:</strong> The material below was selected because your uploaded course notes directly match this lesson title or its main passages. Unrelated teacher material is intentionally left out.</div>'
-      +sourceCards
+      +sourceCards+researchCards
       +'<div class="rnc-callout"><strong>Seven Names One Redeemer synthesis:</strong> Start with '+esc(l.refs)+'. Learn the source material, test each emphasis by the passage itself, and then write the doctrine in your own words. The present lesson claim is: '+esc(l.teaching[0]||'')+'</div>';
   }
+  if(publicMatches.length){
+    return '<div class="rnc-callout"><strong>Official-teaching research classroom:</strong> Your uploaded notes did not directly cover this lesson, so the college is using topic-matched material synthesized from the teachers’ own public teaching resources. Unrelated teacher material is left out.</div>'
+      +publicMatches.map(m=>rncPublicModuleHtml(m,l)).join('')
+      +'<div class="rnc-callout"><strong>Seven Names One Redeemer synthesis:</strong> Start with '+esc(l.refs)+'. Compare every teacher emphasis with the passage itself, then state the doctrine in your own words before applying it.</div>';
+  }
   const themes=rncThemes(c,l), teachers=rncRelevantTeachers(c,l);
-  if(!teachers.length)return '<p class="rnc-muted">Your uploaded notes do not directly cover this lesson. Build the lesson from Scripture first; other teacher streams are shown only when their recurring material actually fits.</p>';
-  const cards=teachers.slice(0,3).map(t=>rncTeacherLesson(t,c,l,themes)).join('');
-  return '<div class="rnc-callout"><strong>Teacher-study fallback:</strong> Your uploaded notes did not contain a direct lesson match, so these are carefully selected teaching-stream summaries. Scripture remains the controlling source.</div>'+cards;
+  if(!teachers.length)return '<p class="rnc-muted">No direct match was found in your uploaded notes or the official public-teaching research modules. Build this lesson from Scripture first rather than filling the space with unrelated teacher material.</p>';
+  const cards=teachers.slice(0,2).map(t=>rncTeacherLesson(t,c,l,themes)).join('');
+  return '<div class="rnc-callout"><strong>Teacher-study fallback:</strong> No direct source match was found. These are carefully selected teaching-stream summaries and should be treated as secondary to the lesson passages.</div>'+cards;
  }
 
  function fullLessonExplanation(c,l){
