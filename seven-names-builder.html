@@ -88,7 +88,9 @@ html,body{margin:0;min-height:100%;background:#f8f0de;color:var(--ink);font-fami
       <button id="snrBibleStudyButton" type="button">Bible Study Builder</button>
       <button id="snrBibleCourseButton" type="button">Bible Course Builder</button>
     </div>
-    <div class="snr-owner">Seven Names One Redeemer • Owner</div>
+    <div class="snr-owner">Seven Names One Redeemer • Owner
+      <button id="snrBibleCollegeButton" type="button" style="margin-left:10px;border:1px solid #c6a45c;background:#fffaf0;color:#790c11;border-radius:8px;padding:9px 12px;font-weight:700;cursor:pointer">📚 Bible College</button>
+    </div>
   </header>
   <div class="snr-frame-wrap">
     <iframe id="snrBuilderFrame" title="Seven Names One Redeemer private builder"></iframe>
@@ -401,6 +403,7 @@ body.rnc-ministry-workspace .sn-middle-grid{grid-template-columns:minmax(0,1.35f
  function topOfView(){body.scrollTop=0;body.querySelector('h2')?.focus();}
  function navigate(next){view=next;render();topOfView();}
  function open(next='home'){accountCheck();returnFocus=document.activeElement;if(!dialog.open){if(dialog.showModal)dialog.showModal();else dialog.setAttribute('open','');}navigate(next);}
+ window.RNS_OPEN_BIBLE_COLLEGE=function(){open('home');};
  function close(){if(exam&&view==='exam'){if(!window.confirm('Leave this unfinished test? Your study notes and completed attempts are saved; this attempt will be discarded.'))return;exam=null;}dialog.close?dialog.close():dialog.removeAttribute('open');returnFocus?.focus?.();}
 
  function home(){
@@ -1331,5 +1334,32 @@ function teacherLessonSynthesis(c,l){
 <style id="rnc-teacher-classroom-emphasis">
 .rnc-classroom-title{margin-top:18px!important;padding:12px 14px!important;border-left:6px solid #7a0d12!important;background:#fff4d8!important;color:#6b0c11!important;border-radius:8px!important}.rnc-teacher-class{margin:14px 0!important;padding:18px!important;border:2px solid #c9a75e!important;background:#fffdf7!important}.rnc-teacher-class h3{font-size:22px!important;color:#7a0d12!important;margin-top:0!important}.rnc-teacher-class h4{color:#5a321f!important;margin-bottom:6px!important}.rnc-teacher-point{padding:8px 0 2px!important;border-top:1px solid #ead9b4!important}.rnc-teacher-point:first-of-type{border-top:0!important}
 </style>
+
+<script id="snr-bible-college-permanent-launcher">
+(function(){
+  function wireCollegeButton(){
+    const btn=document.getElementById('snrBibleCollegeButton');
+    if(!btn || btn.dataset.wired==='1') return;
+    btn.dataset.wired='1';
+    btn.addEventListener('click', function(){
+      if(typeof window.RNS_OPEN_BIBLE_COLLEGE==='function'){
+        window.RNS_OPEN_BIBLE_COLLEGE();
+        return;
+      }
+      const dlg=document.querySelector('#rncDialog, dialog[id*="rnc"]');
+      if(dlg){
+        if(typeof dlg.showModal==='function' && !dlg.open) dlg.showModal();
+        else dlg.setAttribute('open','');
+      }else{
+        alert('Bible College is still loading. Please try again in a moment.');
+      }
+    });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', wireCollegeButton);
+  else wireCollegeButton();
+  setTimeout(wireCollegeButton, 500);
+})();
+</script>
+
 </body>
 </html>
