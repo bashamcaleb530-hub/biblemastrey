@@ -3810,6 +3810,11 @@ body{overflow-x:hidden}
 <option value="DRA">Douay-Rheims American Edition</option>
 <option value="BSB">Berean Standard Bible</option>
 <option value="MSB">Majority Standard Bible</option>
+<option value="BBE">Bible in Basic English</option>
+<option value="DBY">Darby Translation</option>
+<option value="WEBSTER">Noah Webster Bible</option>
+<option value="WMB">World Messianic Bible</option>
+<option value="RV">Revised Version</option>
 </select>
 </div>
 <div class="reader-control">
@@ -4417,6 +4422,11 @@ body{overflow-x:hidden}
 <option value="DRA">Douay-Rheims American Edition</option>
 <option value="BSB">Berean Standard Bible</option>
 <option value="MSB">Majority Standard Bible</option>
+<option value="BBE">Bible in Basic English</option>
+<option value="DBY">Darby Translation</option>
+<option value="WEBSTER">Noah Webster Bible</option>
+<option value="WMB">World Messianic Bible</option>
+<option value="RV">Revised Version</option>
 </select>
 </div>
 </div>
@@ -4908,6 +4918,41 @@ body{overflow-x:hidden}
       typeof getMSB === "function"
     ) {
       return await getMSB();
+    }
+
+    if (
+      translation === "BBE" &&
+      typeof getBBE === "function"
+    ) {
+      return await getBBE();
+    }
+
+    if (
+      translation === "DBY" &&
+      typeof getDBY === "function"
+    ) {
+      return await getDBY();
+    }
+
+    if (
+      translation === "WEBSTER" &&
+      typeof getWEBSTER === "function"
+    ) {
+      return await getWEBSTER();
+    }
+
+    if (
+      translation === "WMB" &&
+      typeof getWMB === "function"
+    ) {
+      return await getWMB();
+    }
+
+    if (
+      translation === "RV" &&
+      typeof getRV === "function"
+    ) {
+      return await getRV();
     }
 
     if (
@@ -14130,7 +14175,7 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
   }
 
   const stopWords=new Set(
-    'the and that with from this into unto upon have has had were was are for but not you your his her our out all any who which what when where shall will would should could may might can did does of to in on at by as a an or be been being'.split(' ')
+    'the and that with from this into unto upon have has had were was are for but not you your his her our out all any who which what when where shall will would should could may might can did does of to in on at by as a an or be been being god lord jesus christ bible scripture chapter verse'.split(' ')
   );
 
   function keywords(s){
@@ -14169,6 +14214,40 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
       $('personalAiQuestion')?.value||'',
       $('snStudyNotes')?.value||''
     ].join(' ');
+  }
+
+  function theologyThemeKeys(state){
+    const raw=[
+      state?.text||'',
+      currentChapterText(state),
+      personalStudyTopicText(),
+      state?.reference||''
+    ].join(' ');
+    const base=keywords(raw);
+    const aliases={
+      heal:['healing','healed','health','sickness','disease','infirmity','whole'],
+      healing:['heal','healed','health','sickness','disease','infirmity','whole'],
+      faith:['believe','believing','trust','receive','promise'],
+      righteous:['righteousness','justification','justify','identity'],
+      righteousness:['righteous','justification','justify','identity'],
+      pray:['prayer','asking','intercession','fellowship'],
+      prayer:['pray','asking','intercession','fellowship'],
+      spirit:['holy','gift','gifts','power','guidance','tongues','prophecy'],
+      peace:['fear','anxiety','rest','shalom'],
+      fear:['peace','courage','anxiety','trust'],
+      provide:['provision','provider','need','needs','giving','stewardship'],
+      provision:['provide','provider','need','needs','giving','stewardship'],
+      shepherd:['guidance','guide','care','protect','pastor'],
+      victory:['overcome','warfare','authority','banner','nissi'],
+      redemption:['cross','blood','atonement','salvation','redeem'],
+      grace:['law','covenant','gift','receive'],
+      prophecy:['prophetic','discernment','gifts','spirit'],
+      evangelism:['gospel','witness','mission','lost','salvation'],
+      discipleship:['disciple','teaching','growth','maturity']
+    };
+    const out=new Set(base);
+    base.forEach(k=>(aliases[k]||[]).forEach(x=>out.add(x)));
+    return Array.from(out).slice(0,42);
   }
 
   function isCopyrightRestrictedBook(b){
@@ -14673,6 +14752,8 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
     const verseKeys=keywords(`${state.reference} ${state.text}`);
     const chapterKeys=keywords(`${state.bookName} ${state.chapterNumber} ${chapterText}`);
     const topicKeys=keywords(topicText);
+    const themeKeys=theologyThemeKeys(state);
+    const strongKeys=Array.from(new Set([...verseKeys,...topicKeys,...themeKeys]));
 
     const perBook=[];
 
@@ -14680,23 +14761,30 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
       const actual=rankActualChapter(b,state);
 
       if(actual){
-        perBook.push({
-          b,bi,
-          actualChapter:actual,
-          score:actual.score+40,
-          restricted:false
-        });
+        // Actual-book chapter maps have curated topic keywords. Still require
+        // a meaningful score so an unrelated chapter is never shown merely
+        // because the book exists in the library.
+        const topicBlob=((b.topics||[]).join(' ')+' '+(actual.title||'')+' '+(actual.source?.chapters?.[actual.index]?.keywords||'')).toLowerCase();
+        const hits=strongKeys.filter(k=>topicBlob.includes(k)).length;
+        if(actual.score>=12 || hits>=1){
+          perBook.push({
+            b,bi,
+            actualChapter:actual,
+            score:actual.score+40+(hits*8),
+            relevanceHits:hits,
+            restricted:false
+          });
+        }
         return;
       }
 
       const chapters=Array.isArray(b.chapters)?b.chapters:[];
       let best=null;
+      const bookTopicBlob=((b.title||'')+' '+(b.author||'')+' '+((b.topics||[]).join(' '))).toLowerCase();
 
       chapters.forEach((c,ci)=>{
         const title=String(c.title||'').toLowerCase();
 
-        // Do not present a study guide/table of contents/scan wrapper as if it
-        // were an actual chapter from the book.
         if(
           title.includes('study guide') ||
           title.includes('study focus') ||
@@ -14709,6 +14797,10 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
 
         const passages=bookPassages(c);
         const wholeChapter=plainText((c.title||'')+' '+(c.text||'')+' '+(c.html||''));
+        const chapterBlob=(title+' '+wholeChapter.toLowerCase()+' '+bookTopicBlob);
+        const strongHits=strongKeys.filter(k=>chapterBlob.includes(k)).length;
+        const verseHits=verseKeys.filter(k=>chapterBlob.includes(k)).length;
+        const topicHits=topicKeys.filter(k=>chapterBlob.includes(k)).length;
 
         let score=scorePassage(
           wholeChapter,
@@ -14718,6 +14810,12 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
           topicKeys,
           state
         );
+
+        // Book-level subject tags are useful, but cannot create a match by
+        // themselves. They only strengthen an already connected chapter.
+        if(strongHits){
+          themeKeys.forEach(k=>{ if(bookTopicBlob.includes(k))score+=5; });
+        }
 
         let bestPi=0,bestParaScore=-1;
         passages.forEach((p,pi)=>{
@@ -14734,9 +14832,17 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
 
         score+=Math.max(0,bestParaScore);
 
+        // A theology recommendation must have a real verse/topic/theme hit.
+        // This prevents the previous "best of unrelated books" behavior.
+        if(strongHits===0 && score<30)return;
+        if(score<14)return;
+
         const candidate={
           b,c,bi,ci,pi:bestPi,score,
           passages,
+          relevanceHits:strongHits,
+          verseHits,
+          topicHits,
           restricted:isCopyrightRestrictedBook(b)
         };
 
@@ -14746,7 +14852,15 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
       if(best)perBook.push(best);
     });
 
-    return perBook.sort((a,b)=>b.score-a.score).slice(0,2);
+    const ranked=perBook.sort((a,b)=>b.score-a.score);
+    if(!ranked.length)return [];
+
+    // Only call something a "best" match when it is reasonably close to the
+    // strongest result. Weak second-place filler is intentionally omitted.
+    const top=ranked[0].score;
+    return ranked
+      .filter((m,i)=>i===0 || (m.score>=Math.max(16,top*0.55) && (m.relevanceHits||0)>0))
+      .slice(0,2);
   }
 
   function connectedWindow(match){
@@ -14772,7 +14886,7 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
         '<div class="sn-book-empty">'+
         '<div class="sn-empty-icon">📚</div>'+
         '<strong>Best Theology Books</strong>'+
-        '<span>Select a Bible verse. The software will use the verse, the whole Bible chapter, and your study topic to find the strongest connected theology chapter.</span>'+
+        '<span>Select a Bible verse or passage and, if you want, enter a study topic. Only theology chapters with a strong connection to that Scripture/topic will appear here; unrelated books are not used as filler.</span>'+
         '</div>';
       return;
     }
@@ -14789,7 +14903,7 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
                 <strong>Actual book chapter:</strong> ${esc(m.actualChapter.title)}
               </div>
               <div class="sn-section" style="margin-top:6px">
-                <strong>Matched from ${esc(state.reference)} + the whole Bible chapter + your study topic</strong>
+                <strong>Matched to ${esc(state.reference)} using the verse, its Bible context, and your study topic</strong>
               </div>
               <p>Read the complete chapter text from the original public-domain edition.</p>
             </div>
@@ -14816,7 +14930,7 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
               ${esc(m.c?.title||('Section '+((m.ci||0)+1)))}
             </div>
             <div class="sn-section" style="margin-top:6px">
-              <strong>Matched from ${esc(state.reference)} + the whole Bible chapter + your study topic</strong>
+              <strong>Matched to ${esc(state.reference)} using the verse, its Bible context, and your study topic</strong>
             </div>
             <p>${esc(preview)}${preview.length>=520?'…':''}</p>
           </div>
