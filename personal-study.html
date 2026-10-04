@@ -14088,6 +14088,221 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
     return score;
   }
 
+  /*
+    ACTUAL PUBLIC-DOMAIN CHAPTER READER
+
+    Ever-Increasing Faith is the 1924 public-domain edition already used by
+    the Redemptive Names Software theology library. We fetch the Internet
+    Archive plain-text/OCR edition and extract the complete matched chapter.
+    This means the Best Book card opens the chapter itself instead of the
+    BibleMastery/Redemptive Names study guide.
+  */
+  const actualBookSources={
+    "Ever-Increasing Faith":{
+      textUrls:[
+        "https://archive.org/stream/everincreasingfa00wigg_0/everincreasingfa00wigg_0_djvu.txt",
+        "https://archive.org/download/everincreasingfa00wigg_0/everincreasingfa00wigg_0_djvu.txt"
+      ],
+      scanUrl:"https://archive.org/details/everincreasingfa00wigg_0",
+      chapters:[
+        {title:"Have Faith in God",keywords:"faith believe believing prayer word god mountain receiving perseverance salvation"},
+        {title:"Deliverance to the Captives",keywords:"deliverance captives freedom bondage healing salvation liberty"},
+        {title:"The Power of the Name",keywords:"name jesus christ authority power prayer faith healing"},
+        {title:"Wilt Thou Be Made Whole?",keywords:"healing whole sickness faith jesus compassion"},
+        {title:"I Am the Lord That Healeth Thee",keywords:"healing healer lord rapha sickness covenant faith"},
+        {title:"Himself Took Our Infirmities",keywords:"healing infirmities sickness redemption atonement christ faith"},
+        {title:"Our Risen Christ",keywords:"resurrection christ risen life victory power"},
+        {title:"Righteousness",keywords:"righteousness righteous justification holiness christ identity"},
+        {title:"The Words of This Life",keywords:"word scripture life truth faith word of god"},
+        {title:"Life in the Spirit",keywords:"spirit holy spirit life walk power guidance"},
+        {title:"What It Means to Be Full of the Holy Ghost",keywords:"holy ghost spirit filled fullness power"},
+        {title:"The Bible Evidence of the Baptism of the Spirit",keywords:"baptism holy spirit holy ghost tongues evidence power"},
+        {title:"Concerning Spiritual Gifts",keywords:"spiritual gifts spirit gifts ministry church"},
+        {title:"The Word of Knowledge and Faith",keywords:"word knowledge faith spiritual gifts revelation"},
+        {title:"Gifts of Healings, and Miracles",keywords:"healing healings miracles gifts spirit power"},
+        {title:"The Gift of Prophecy",keywords:"prophecy prophetic gift spirit edification"},
+        {title:"The Discerning of Spirits",keywords:"discernment spirits discerning spiritual gift"},
+        {title:"The Gift of Tongues",keywords:"tongues language spirit spiritual gift baptism"}
+      ]
+    }
+  };
+
+  const actualBookTextCache={};
+
+  function actualSourceForBook(book){
+    return actualBookSources[String(book?.title||'')]||null;
+  }
+
+  function rankActualChapter(book,state){
+    const source=actualSourceForBook(book);
+    if(!source)return null;
+
+    const context=[
+      state?.reference||'',
+      state?.text||'',
+      currentChapterText(state),
+      personalStudyTopicText()
+    ].join(' ');
+
+    const ks=keywords(context);
+
+    const ranked=source.chapters.map((c,index)=>{
+      const title=String(c.title||'').toLowerCase();
+      const hay=(title+' '+String(c.keywords||'')).toLowerCase();
+      let score=0;
+
+      ks.forEach(k=>{
+        if(title.includes(k))score+=10;
+        else if(hay.includes(k))score+=5;
+      });
+
+      return {index,title:c.title,score,source};
+    }).sort((a,b)=>b.score-a.score);
+
+    return ranked[0]||null;
+  }
+
+  function chapterHeadingRegex(title){
+    const words=String(title||'')
+      .replace(/[’']/g,"'")
+      .match(/[A-Za-z0-9]+/g)||[];
+
+    if(!words.length)return null;
+
+    return new RegExp(
+      words.map(w=>w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('[\\s\\W_]+'),
+      'ig'
+    );
+  }
+
+  function headingOccurrences(raw,title){
+    const re=chapterHeadingRegex(title);
+    if(!re)return [];
+    const out=[];
+    let m;
+    while((m=re.exec(raw))!==null){
+      out.push({index:m.index,length:m[0].length});
+      if(re.lastIndex===m.index)re.lastIndex++;
+    }
+    return out;
+  }
+
+  function extractActualChapter(raw,source,chapterIndex){
+    const chapter=source?.chapters?.[chapterIndex];
+    if(!chapter)return '';
+
+    const starts=headingOccurrences(raw,chapter.title);
+    const nextTitle=source.chapters[chapterIndex+1]?.title||'';
+    const nextOccurrences=nextTitle?headingOccurrences(raw,nextTitle):[];
+
+    // The first title occurrence is often the table of contents. Prefer an
+    // occurrence that leaves enough text before the next real chapter.
+    for(const start of starts){
+      const after=start.index+start.length;
+      const next=nextOccurrences.find(x=>x.index>after+500);
+      const end=next?next.index:raw.length;
+      const length=end-start.index;
+
+      if(length>=1200 && length<=70000){
+        return raw.slice(start.index,end);
+      }
+    }
+
+    // Last-resort: use the last heading occurrence, which is normally the
+    // chapter heading rather than the table of contents entry.
+    const last=starts[starts.length-1];
+    if(!last)return '';
+
+    const next=nextOccurrences.find(x=>x.index>last.index+last.length);
+    return raw.slice(last.index,next?next.index:raw.length);
+  }
+
+  function cleanOcrChapter(raw){
+    return String(raw||'')
+      .replace(/\r/g,'')
+      .replace(/[ \t]+\n/g,'\n')
+      .replace(/\n{4,}/g,'\n\n\n')
+      .trim();
+  }
+
+  async function fetchActualBookText(book){
+    const source=actualSourceForBook(book);
+    if(!source)throw new Error('No full-text source is configured for this book.');
+
+    if(actualBookTextCache[book.title])return actualBookTextCache[book.title];
+
+    let lastError=null;
+
+    for(const url of source.textUrls){
+      try{
+        const response=await fetch(url,{cache:'force-cache'});
+        if(!response.ok)throw new Error('HTTP '+response.status);
+        const txt=await response.text();
+        if(txt.length<5000)throw new Error('The full book text was not returned.');
+        actualBookTextCache[book.title]=txt;
+        return txt;
+      }catch(err){
+        lastError=err;
+      }
+    }
+
+    throw lastError||new Error('The full book text could not be loaded.');
+  }
+
+  async function openActualBookChapter(book,actual,state){
+    if(!book||!actual)return;
+
+    openCustomModal(
+      '📖',
+      actual.title,
+      (book.author||'')+(state?.reference?' • connected to '+state.reference:''),
+      `<div style="max-width:900px;margin:auto">
+        <div class="status-message">Loading the complete chapter from the 1924 public-domain book…</div>
+      </div>`
+    );
+
+    try{
+      const raw=await fetchActualBookText(book);
+      const chapter=cleanOcrChapter(
+        extractActualChapter(raw,actual.source,actual.index)
+      );
+
+      if(chapter.length<600){
+        throw new Error('The chapter heading was found, but the complete chapter text could not be separated.');
+      }
+
+      $('snModalBody').innerHTML=`
+        <article style="max-width:860px;margin:auto;font-family:Georgia,serif;font-size:18px;line-height:1.78">
+          <div style="padding:12px 14px;border:1px solid #d6b977;background:#fff7df;border-radius:10px;margin-bottom:18px;font-family:Arial,sans-serif">
+            <strong>Actual full chapter from the original 1924 book</strong><br>
+            ${esc(book.title)} — ${esc(actual.title)}
+          </div>
+          <div style="white-space:pre-wrap">${esc(chapter)}</div>
+          <p style="margin-top:22px;font-family:Arial,sans-serif">
+            <a class="search-button" href="${esc(actual.source.scanUrl)}" target="_blank" rel="noopener">
+              Open Original Book Scan ↗
+            </a>
+          </p>
+        </article>`;
+    }catch(err){
+      $('snModalBody').innerHTML=`
+        <div style="max-width:760px;margin:auto">
+          <div class="error-message">
+            The complete chapter text could not be loaded from Internet Archive in this browser.
+          </div>
+          <p style="margin-top:14px">
+            <strong>${esc(actual.title)}</strong> is still the matched actual chapter.
+          </p>
+          <p>
+            <a class="search-button" href="${esc(actual.source.scanUrl)}" target="_blank" rel="noopener">
+              Read the Original 1924 Book Scan ↗
+            </a>
+          </p>
+        </div>`;
+      console.error('Actual theology chapter load failed:',err);
+    }
+  }
+
   function rankBookSections(state){
     if(!state)return [];
 
@@ -14101,10 +14316,36 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
     const perBook=[];
 
     theologyBooks().forEach((b,bi)=>{
+      const actual=rankActualChapter(b,state);
+
+      if(actual){
+        perBook.push({
+          b,bi,
+          actualChapter:actual,
+          score:actual.score+40,
+          restricted:false
+        });
+        return;
+      }
+
       const chapters=Array.isArray(b.chapters)?b.chapters:[];
       let best=null;
 
       chapters.forEach((c,ci)=>{
+        const title=String(c.title||'').toLowerCase();
+
+        // Do not present a study guide/table of contents/scan wrapper as if it
+        // were an actual chapter from the book.
+        if(
+          title.includes('study guide') ||
+          title.includes('study focus') ||
+          title.startsWith('read ') ||
+          title.includes('edition contents') ||
+          title.includes('table of contents')
+        ){
+          return;
+        }
+
         const passages=bookPassages(c);
         const wholeChapter=plainText((c.title||'')+' '+(c.text||'')+' '+(c.html||''));
 
@@ -14176,6 +14417,31 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
     }
 
     list.innerHTML=matches.map((m,index)=>{
+      if(m.actualChapter){
+        return `
+          <div class="sn-book-card">
+            <div class="sn-book-cover">${esc(m.b.shortTitle||m.b.title||'THEOLOGY')}</div>
+            <div class="sn-book-info">
+              <strong>${index===0?'Best Match: ':''}${esc(m.b.title||'Untitled Book')}</strong>
+              <div class="sn-author">${esc(m.b.author||'')}</div>
+              <div class="sn-section">
+                <strong>Actual book chapter:</strong> ${esc(m.actualChapter.title)}
+              </div>
+              <div class="sn-section" style="margin-top:6px">
+                <strong>Matched from ${esc(state.reference)} + the whole Bible chapter + your study topic</strong>
+              </div>
+              <p>Read the complete chapter text from the original public-domain edition.</p>
+            </div>
+            <div class="sn-book-actions">
+              <button class="sn-open-section" type="button"
+                data-open-actual-book="${m.bi}"
+                data-open-actual-chapter="${m.actualChapter.index}">
+                Read Full Actual Chapter
+              </button>
+            </div>
+          </div>`;
+      }
+
       const preview=connectedWindow(m).map(x=>x.text).join(' ').slice(0,520);
 
       return `
@@ -14185,8 +14451,8 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
             <strong>${index===0?'Best Match: ':''}${esc(m.b.title||'Untitled Book')}</strong>
             <div class="sn-author">${esc(m.b.author||'')}</div>
             <div class="sn-section">
-              <strong>${m.restricted?'Copyright-safe connection':'Connected theology chapter'}:</strong>
-              ${esc(m.c.title||('Chapter '+(m.ci+1)))}
+              <strong>${m.restricted?'Copyright-safe connection':'Connected theology section'}:</strong>
+              ${esc(m.c?.title||('Section '+((m.ci||0)+1)))}
             </div>
             <div class="sn-section" style="margin-top:6px">
               <strong>Matched from ${esc(state.reference)} + the whole Bible chapter + your study topic</strong>
@@ -14198,16 +14464,31 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
               data-open-book="${m.bi}"
               data-open-chapter="${m.ci}"
               data-open-passage="${m.pi}">
-              ${m.restricted?'Open Connected Section':'Read Connected Passage'}
+              ${m.restricted?'Open Connected Section':'Read Connected Section'}
             </button>
             ${m.restricted?'':`
               <button class="sn-open-section" type="button"
                 data-open-full-book="${m.bi}">
-                Read Full Book
+                Read Full Available Book
               </button>`}
           </div>
         </div>`;
     }).join('');
+
+    qsa('[data-open-actual-book]',list).forEach(btn=>btn.addEventListener('click',e=>{
+      const bi=Number(e.currentTarget.dataset.openActualBook);
+      const ai=Number(e.currentTarget.dataset.openActualChapter);
+      const b=theologyBooks()[bi];
+      const actual=rankActualChapter(b,state);
+
+      // Use the chapter that was rendered, not a newly ranked chapter.
+      if(actual?.source?.chapters?.[ai]){
+        actual.index=ai;
+        actual.title=actual.source.chapters[ai].title;
+      }
+
+      openActualBookChapter(b,actual,state);
+    }));
 
     qsa('[data-open-passage]',list).forEach(btn=>btn.addEventListener('click',e=>{
       openBookPassage(
@@ -14281,7 +14562,7 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
           </div>
           ${passageHtml}
           <button id="snReadFullTheologySection" class="sn-open-section" type="button" style="margin-top:16px">
-            Read Full Chapter / Section
+            Read Full Available Section
           </button>
         </article>`
       );
@@ -14309,6 +14590,37 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
 
     if(isCopyrightRestrictedBook(b)){
       openCopyrightSafeBook(b,b.chapters?.[0]);
+      return;
+    }
+
+    const source=actualSourceForBook(b);
+
+    if(source){
+      const rows=source.chapters.map((c,i)=>`
+        <button type="button" class="sn-open-section"
+          data-full-book-chapter="${i}"
+          style="display:block;width:100%;text-align:left;margin:7px 0">
+          ${esc(c.title)}
+        </button>`).join('');
+
+      openCustomModal(
+        '📚',
+        b.title||'Full Book',
+        b.author||'',
+        `<div style="max-width:760px;margin:auto">
+          <p>Choose an actual chapter from the original public-domain edition.</p>
+          ${rows}
+        </div>`
+      );
+
+      qsa('[data-full-book-chapter]',$('snModalBody')).forEach(btn=>btn.addEventListener('click',()=>{
+        const ai=Number(btn.dataset.fullBookChapter);
+        openActualBookChapter(
+          b,
+          {index:ai,title:source.chapters[ai].title,source},
+          currentReaderState()
+        );
+      }));
       return;
     }
 
@@ -14732,158 +15044,5 @@ window.addEventListener('pagehide',()=>{if(!locked)persist()});render();
   },true);
 })();
 </script>
-
-
-<script id="rns-real-chapter-catalog-ps">
-
-  const RNS_REAL_CHAPTER_CATALOG = {
-    "Ever-Increasing Faith": [
-      {title:'Have Faith in God',url:"https://ochorus.com/books/ever-increasing-faith/1/",keywords:'faith believe believing prayer word god mountain receiving perseverance salvation'},
-      {title:'Deliverance to the Captives',url:"https://ochorus.com/books/ever-increasing-faith/2/",keywords:'deliverance captives freedom bondage healing salvation liberty'},
-      {title:'The Power of the Name',url:"https://ochorus.com/books/ever-increasing-faith/3/",keywords:'name jesus christ authority power prayer faith healing'},
-      {title:'Wilt Thou Be Made Whole?',url:"https://ochorus.com/books/ever-increasing-faith/4/",keywords:'healing whole sickness faith jesus compassion'},
-      {title:'I Am the Lord That Healeth Thee',url:"https://ochorus.com/books/ever-increasing-faith/5/",keywords:'healing healer lord rapha sickness covenant faith'},
-      {title:'Himself Took Our Infirmities',url:"https://ochorus.com/books/ever-increasing-faith/6/",keywords:'healing infirmities sickness redemption atonement christ faith'},
-      {title:'Our Risen Christ',url:"https://ochorus.com/books/ever-increasing-faith/7/",keywords:'resurrection christ risen life victory power'},
-      {title:'Righteousness',url:"https://ochorus.com/books/ever-increasing-faith/8/",keywords:'righteousness righteous justification holiness christ identity'},
-      {title:'The Words of This Life',url:"https://ochorus.com/books/ever-increasing-faith/9/",keywords:'word scripture life truth faith word of god'},
-      {title:'Life in the Spirit',url:"https://ochorus.com/books/ever-increasing-faith/10/",keywords:'spirit holy spirit life walk power guidance'},
-      {title:'What It Means to Be Full of the Holy Ghost',url:"https://ochorus.com/books/ever-increasing-faith/11/",keywords:'holy ghost spirit filled fullness power'},
-      {title:'The Bible Evidence of the Baptism of the Spirit',url:"https://ochorus.com/books/ever-increasing-faith/12/",keywords:'baptism holy spirit holy ghost tongues evidence power'},
-      {title:'Concerning Spiritual Gifts',url:"https://ochorus.com/books/ever-increasing-faith/13/",keywords:'spiritual gifts spirit gifts ministry church'},
-      {title:'The Word of Knowledge and Faith',url:"https://ochorus.com/books/ever-increasing-faith/14/",keywords:'word knowledge faith spiritual gifts revelation'},
-      {title:'Gifts of Healings, and Miracles',url:"https://ochorus.com/books/ever-increasing-faith/15/",keywords:'healing healings miracles gifts spirit power'},
-      {title:'The Gift of Prophecy',url:"https://ochorus.com/books/ever-increasing-faith/16/",keywords:'prophecy prophetic gift spirit edification'},
-      {title:'The Discerning of Spirits',url:"https://ochorus.com/books/ever-increasing-faith/17/",keywords:'discernment spirits discerning spiritual gift'},
-      {title:'The Gift of Tongues',url:"https://ochorus.com/books/ever-increasing-faith/18/",keywords:'tongues language spirit spiritual gift baptism'}
-    ]
-  };
-
-  function rnsActualChapterCatalog(bookTitle){
-    return RNS_REAL_CHAPTER_CATALOG[String(bookTitle||'')] || [];
-  }
-
-  function rnsRankActualChapters(bookTitle, contextText){
-    const chapters=rnsActualChapterCatalog(bookTitle);
-    if(!chapters.length)return [];
-    const ks=keywords(contextText);
-    return chapters.map((c,index)=>{
-      const hay=(c.title+' '+c.keywords).toLowerCase();
-      let score=0;
-      ks.forEach(k=>{
-        if(hay.includes(k))score+=c.title.toLowerCase().includes(k)?8:4;
-      });
-      return {...c,index,score};
-    }).sort((a,b)=>b.score-a.score);
-  }
-
-  function rnsOpenActualChapter(book,chapter){
-    if(!chapter?.url)return;
-
-    // Open the actual public-domain chapter page directly.
-    // Do not iframe it: external sites can block embedded frames.
-    const opened=window.open(chapter.url,'_blank','noopener');
-
-    // If the browser blocks a new tab/window, navigate directly instead.
-    if(!opened){
-      window.location.href=chapter.url;
-    }
-  }
-
-</script>
-
-<script id="rns-real-theology-chapters-personal-study-2026">
-(function(){
-  if(typeof rankBookSections!=='function')return;
-
-  const oldRank=rankBookSections;
-  rankBookSections=function(state){
-    if(!state)return [];
-    const context=[
-      state.reference||'',
-      state.text||'',
-      currentChapterText(state)||'',
-      personalStudyTopicText()||''
-    ].join(' ');
-
-    const base=oldRank(state);
-    const actual=[];
-
-    theologyBooks().forEach((b,bi)=>{
-      const ranked=rnsRankActualChapters(b.title,context);
-      if(ranked.length){
-        actual.push({b,bi,actualChapter:ranked[0],score:ranked[0].score+25,restricted:false});
-      }
-    });
-
-    const titles=new Set(actual.map(x=>x.b.title));
-    return actual.concat(base.filter(x=>!titles.has(x.b.title)))
-      .sort((a,b)=>b.score-a.score)
-      .slice(0,2);
-  };
-
-  const oldRender=renderBooks;
-  renderBooks=function(){
-    const state=currentReaderState();
-    const list=$('snBooksList');
-    if(!state||!list){oldRender();return;}
-
-    $('snBooksHeading').textContent='Best Theology Books for '+state.reference;
-    const matches=rankBookSections(state);
-
-    if(!matches.length){oldRender();return;}
-
-    list.innerHTML=matches.map((m,index)=>{
-      if(m.actualChapter){
-        return `<div class="sn-book-card">
-          <div class="sn-book-cover">${esc(m.b.shortTitle||m.b.title||'THEOLOGY')}</div>
-          <div class="sn-book-info">
-            <strong>${index===0?'Best Match: ':''}${esc(m.b.title||'Untitled Book')}</strong>
-            <div class="sn-author">${esc(m.b.author||'')}</div>
-            <div class="sn-section"><strong>Actual theology-book chapter:</strong> ${esc(m.actualChapter.title)}</div>
-            <div class="sn-section" style="margin-top:6px"><strong>Matched from ${esc(state.reference)} + the whole Bible chapter + your study topic</strong></div>
-            <p>This opens the actual chapter from the book itself — not the study guide.</p>
-          </div>
-          <div class="sn-book-actions">
-            <button class="sn-open-section" type="button" data-rns-ps-actual="${m.bi}:${m.actualChapter.index}">Read Actual Chapter</button>
-          </div>
-        </div>`;
-      }
-
-      const preview=connectedWindow(m).map(x=>x.text).join(' ').slice(0,520);
-      return `<div class="sn-book-card">
-        <div class="sn-book-cover">${esc(m.b.shortTitle||m.b.title||'THEOLOGY')}</div>
-        <div class="sn-book-info">
-          <strong>${index===0?'Best Match: ':''}${esc(m.b.title||'Untitled Book')}</strong>
-          <div class="sn-author">${esc(m.b.author||'')}</div>
-          <div class="sn-section"><strong>${m.restricted?'Copyright-safe connection':'Connected theology chapter'}:</strong> ${esc(m.c.title||('Chapter '+(m.ci+1)))}</div>
-          <p>${esc(preview)}${preview.length>=520?'…':''}</p>
-        </div>
-        <div class="sn-book-actions">
-          <button class="sn-open-section" type="button" data-open-book="${m.bi}" data-open-chapter="${m.ci}" data-open-passage="${m.pi}">
-            ${m.restricted?'Open Connected Section':'Read Connected Passage'}
-          </button>
-        </div>
-      </div>`;
-    }).join('');
-
-    qsa('[data-rns-ps-actual]',list).forEach(btn=>btn.onclick=()=>{
-      const [bi,ai]=btn.dataset.rnsPsActual.split(':').map(Number);
-      const b=theologyBooks()[bi];
-      rnsOpenActualChapter(b,rnsActualChapterCatalog(b?.title)[ai]);
-    });
-
-    qsa('[data-open-passage]',list).forEach(btn=>btn.onclick=()=>{
-      openBookPassage(
-        Number(btn.dataset.openBook),
-        Number(btn.dataset.openChapter),
-        Number(btn.dataset.openPassage),
-        state
-      );
-    });
-  };
-})();
-</script>
-
 </body>
 </html>
