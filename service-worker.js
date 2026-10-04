@@ -1,9 +1,10 @@
-const CACHE_NAME = 'biblemastery-desktop-v6-offline-books';
+const CACHE_NAME = 'biblemastery-desktop-v7-public-branding';
 const OFFLINE_SHELL = 'biblemastery-offline-shell-v1';
 const CORE_ASSETS = [
   '/', '/index.html', '/personal-study.html', '/main.html', '/library.html',
-  '/account.html', '/manifest.json', '/icon-192.png', '/icon-512.png',
-  '/biblemastery-icon-192-v4.png', '/biblemastery-icon-512-v4.png', '/biblemastery-logo.png'
+  '/account.html', '/manifest.json',
+  '/redemptive-names-software-apple-touch-180.png',
+  '/redemptive-names-software-512.png'
 ];
 self.addEventListener('install', event => {
   event.waitUntil((async()=>{
@@ -18,7 +19,6 @@ self.addEventListener('activate',event=>{
   event.waitUntil((async()=>{
     const names=await caches.keys();
     await Promise.all(names.filter(name=>name.startsWith('biblemastery-desktop-')&&name!==CACHE_NAME).map(name=>caches.delete(name)));
-    // Keep saved Library pages and IndexedDB book files during app updates.
     await self.clients.claim();
   })());
 });
@@ -35,7 +35,6 @@ self.addEventListener('fetch',event=>{
         const response=await fetch(request,{cache:'reload'});
         if(response.ok){
           const cache=await caches.open(CACHE_NAME);
-          // These are static HTML files: query strings select a book/section in JS.
           if(CORE_ASSETS.includes(url.pathname))await cache.put(url.pathname,response.clone());
           return response;
         }
@@ -50,7 +49,6 @@ self.addEventListener('fetch',event=>{
       }
     })());return;
   }
-  // Never cache account/API responses or unrelated external websites.
   if(!/\.(?:css|js|png|jpg|jpeg|svg|webp|ico|woff2?|ttf)$/i.test(url.pathname)&&url.pathname!=='/manifest.json')return;
   event.respondWith((async()=>{
     const cache=await caches.open(CACHE_NAME);
