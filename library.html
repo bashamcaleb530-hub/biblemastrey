@@ -1,307 +1,1365 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>BibleMastery Library</title>
-<meta name="theme-color" content="#7a0d12" />
-<link rel="manifest" href="manifest.json" />
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
-<link rel="apple-touch-icon" href="icon-192.png" />
-<style>
-:root{--wine:#7a0d12;--wine2:#5f090d;--gold:#d5a73d;--cream:#f7f0e2;--paper:#fffdf8;--ink:#241b18;--muted:#6d6159;--line:#dfd1bc;--shadow:0 12px 30px rgba(64,31,20,.10)}
-*{box-sizing:border-box} body{margin:0;font-family:Georgia,'Times New Roman',serif;background:linear-gradient(180deg,#f9f3e8,#f4eadb);color:var(--ink)}
-a{color:inherit} button,input,select{font:inherit}
-.topbar{position:sticky;top:0;z-index:20;background:linear-gradient(90deg,var(--wine2),var(--wine));color:#fff;padding:12px 20px;display:flex;gap:16px;align-items:center;box-shadow:0 4px 16px rgba(63,0,0,.18)}
-.brand{display:flex;align-items:center;gap:12px;min-width:260px} .brand img{width:64px;height:64px;object-fit:contain;border-radius:12px;background:#fff8e9;padding:4px} .brand strong{font-size:24px} .brand small{display:block;color:#f5d991;margin-top:2px}
-.top-actions{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap} .btn{border:1px solid rgba(255,255,255,.35);background:#fff;color:var(--wine);padding:10px 14px;border-radius:10px;text-decoration:none;font-weight:700;cursor:pointer} .btn.alt{background:transparent;color:#fff}
-.page{max-width:1500px;margin:0 auto;padding:22px;display:grid;grid-template-columns:330px minmax(0,1fr);gap:20px}
-.panel{background:var(--paper);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}
-.shelf{position:sticky;top:100px;align-self:start;max-height:calc(100vh - 124px);overflow:auto;padding:16px} .shelf h1{margin:0 0 5px;font-size:26px;color:var(--wine)} .sub{color:var(--muted);font-size:14px;line-height:1.45}
-.search{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;margin:14px 0 10px}
-.filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px} .filter{border:1px solid var(--line);background:#f7efe2;padding:7px 10px;border-radius:999px;cursor:pointer;font-size:13px} .filter.active{background:var(--wine);color:#fff;border-color:var(--wine)}
-.book-list{display:grid;gap:9px} .book-card{width:100%;text-align:left;border:1px solid var(--line);background:#fff;padding:12px;border-radius:12px;cursor:pointer;transition:.15s} .book-card:hover,.book-card.active{border-color:var(--gold);box-shadow:0 5px 14px rgba(86,49,29,.11);transform:translateY(-1px)} .book-card strong{display:block;color:var(--wine);font-size:15px} .book-card span{font-size:13px;color:var(--muted)}
-.badge{display:inline-block;margin-top:7px;padding:4px 7px;border-radius:999px;font-size:11px;font-weight:700;background:#f5e2a8;color:#5b3d00} .badge.owned{background:#d8ead8;color:#1d5d2b} .badge.external{background:#ece7df;color:#5d534a}
-.reader{min-width:0;overflow:hidden} .reader-head{padding:20px 22px;border-bottom:1px solid var(--line);display:flex;gap:12px;align-items:flex-start;justify-content:space-between} .eyebrow{font-size:12px;font-weight:800;letter-spacing:.12em;color:#9a6c17} .reader h2{margin:3px 0;color:var(--wine);font-size:30px} .author{color:var(--muted)}
-.reader-body{padding:18px 22px} .intro{display:grid;grid-template-columns:1.3fr .7fr;gap:16px;margin-bottom:16px} .box{border:1px solid var(--line);border-radius:13px;background:#fff;padding:14px} .box h3{margin:0 0 8px;color:var(--wine)} .topics{display:flex;flex-wrap:wrap;gap:6px} .topic{padding:5px 8px;border-radius:999px;background:#f7efe2;border:1px solid #ead9bd;font-size:12px}
-.start-panel{border-left:5px solid var(--gold);background:#fff8e8;padding:14px 16px;border-radius:12px;margin:12px 0 16px} .start-panel h3{margin:0 0 6px;color:var(--wine)}
-.reader-frame{width:100%;height:72vh;min-height:620px;border:1px solid var(--line);border-radius:12px;background:#fff} .external-wrap{display:grid;place-items:center;min-height:430px;text-align:center;padding:30px;background:linear-gradient(180deg,#fffdf8,#f7efe2);border:1px solid var(--line);border-radius:12px} .external-wrap h3{color:var(--wine);font-size:28px;margin:0 0 10px}
-.section-list{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px} .section-btn{border:1px solid var(--line);background:#fff;padding:8px 10px;border-radius:9px;cursor:pointer} .section-btn:hover{border-color:var(--gold)}
-.empty{padding:80px 20px;text-align:center;color:var(--muted)}
-@media(max-width:900px){.page{grid-template-columns:1fr;padding:12px}.shelf{position:relative;top:auto;max-height:none}.intro{grid-template-columns:1fr}.topbar{align-items:flex-start;flex-wrap:wrap}.top-actions{margin-left:0}.reader-frame{height:65vh;min-height:480px}}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-.offline-controls{margin:16px 0;background:#fff8e8}.offline-actions{display:flex;flex-wrap:wrap;align-items:center;gap:9px;margin:10px 0}.offline-actions input{min-width:0;flex:1;padding:10px;border:1px solid var(--line);border-radius:8px}.offline-actions .btn{border-color:#caa467}.offline-text{white-space:pre-wrap;overflow-wrap:anywhere;font:18px/1.8 Georgia,serif;padding:22px;border:1px solid var(--line);border-radius:12px;background:#fffdf8;max-height:75vh;overflow:auto}.badge.offline{background:#f4e5bb;color:#602b11}button:disabled{opacity:.55;cursor:not-allowed}button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid #a97724;outline-offset:3px}[hidden]{display:none!important}
-</style>
+  <title>BibleMastery Library - Advanced</title>
+
+  <style>
+    * { box-sizing: border-box; }
+
+    :root {
+      --bg-deep: #080f1d;
+      --bg-mid: #0d1628;
+      --panel: #121e33;
+      --panel-2: #101b2e;
+      --panel-3: #16243c;
+      --gold: #d8b96a;
+      --gold-light: #e7ca7d;
+      --text: #f5f1e8;
+      --muted: #b8bfcb;
+      --line: rgba(216,185,106,.28);
+      --soft-line: rgba(255,255,255,.09);
+      --good: #4e8c6d;
+      --danger: #9b4b55;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background:
+        radial-gradient(circle at top, #17233b 0%, #0d1628 45%, #080f1d 100%);
+      color: var(--text);
+    }
+
+    header {
+      background: linear-gradient(135deg, #111c32, #182742);
+      border-bottom: 1px solid var(--gold);
+      box-shadow: 0 8px 25px rgba(0,0,0,.30);
+      padding: 24px 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0 0 7px;
+      color: var(--gold);
+      font-size: 32px;
+    }
+
+    header p {
+      margin: 0;
+      color: #d6d9e0;
+    }
+
+    .header-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .back-button,
+    .header-link {
+      display: inline-flex;
+      padding: 10px 15px;
+      color: var(--gold);
+      background: #101b2e;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .container {
+      max-width: 1500px;
+      margin: 24px auto;
+      padding: 0 18px 50px;
+    }
+
+    .section,
+    .search-card,
+    .result-card,
+    .book-card,
+    .reader-panel,
+    .library-status {
+      background: rgba(18,30,51,.95);
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      box-shadow: 0 14px 35px rgba(0,0,0,.24);
+    }
+
+    .section,
+    .search-card,
+    .reader-panel,
+    .library-status {
+      padding: 22px;
+      margin-bottom: 22px;
+    }
+
+    h2, h3, h4 {
+      color: var(--gold);
+    }
+
+    p, .muted, .small {
+      color: var(--muted);
+    }
+
+    .small {
+      font-size: 13px;
+    }
+
+    .search-card {
+      background:
+        linear-gradient(135deg, rgba(18,30,51,.98), rgba(15,27,48,.98));
+    }
+
+    .search-grid {
+      display: grid;
+      grid-template-columns: minmax(180px,.55fr) minmax(0,1.45fr) auto;
+      gap: 12px;
+      align-items: end;
+    }
+
+    label {
+      display: block;
+      margin: 0 0 6px;
+      color: var(--gold);
+      font-weight: bold;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 11px;
+      color: var(--text);
+      background: var(--panel-2);
+      border: 1px solid rgba(216,185,106,.32);
+      border-radius: 7px;
+      font-family: Arial, sans-serif;
+      font-size: 15px;
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--gold);
+      box-shadow: 0 0 0 2px rgba(216,185,106,.14);
+    }
+
+    button {
+      border: 1px solid var(--gold);
+      padding: 11px 17px;
+      border-radius: 7px;
+      cursor: pointer;
+      background: var(--gold);
+      color: var(--bg-mid);
+      font-weight: bold;
+    }
+
+    button:hover {
+      background: var(--gold-light);
+      border-color: var(--gold-light);
+    }
+
+    .secondary {
+      background: #25324a;
+      color: var(--text);
+    }
+
+    .success {
+      background: #305c47;
+      color: white;
+      border-color: var(--good);
+    }
+
+    .danger {
+      background: #6f2e35;
+      color: white;
+      border-color: var(--danger);
+    }
+
+    .quick-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .quick-actions button {
+      margin: 0;
+    }
+
+    .search-help {
+      margin-top: 12px;
+      padding: 12px;
+      border-left: 4px solid var(--gold);
+      background: rgba(216,185,106,.08);
+      border-radius: 6px;
+      color: #d6d9e0;
+    }
+
+    .results-header {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .result-card {
+      padding: 18px;
+      min-width: 0;
+      border-color: rgba(216,185,106,.24);
+    }
+
+    .result-card h3 {
+      margin: 0 0 5px;
+    }
+
+    .result-author,
+    .result-section {
+      color: #d7dbe2;
+      font-size: 14px;
+      margin-bottom: 7px;
+    }
+
+    .match-reason {
+      margin: 12px 0;
+      padding: 10px;
+      background: rgba(216,185,106,.08);
+      border-left: 3px solid var(--gold);
+      border-radius: 5px;
+      color: #d9dde5;
+      font-size: 14px;
+    }
+
+    .excerpt {
+      line-height: 1.72;
+      color: #eeeae2;
+      white-space: pre-wrap;
+    }
+
+    .result-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .result-actions button {
+      margin: 0;
+    }
+
+    .empty-state {
+      padding: 24px;
+      text-align: center;
+      color: var(--muted);
+      background: rgba(8,15,29,.42);
+      border: 1px dashed rgba(216,185,106,.28);
+      border-radius: 10px;
+    }
+
+    .library-layout {
+      display: grid;
+      grid-template-columns: minmax(280px,.65fr) minmax(0,1.35fr);
+      gap: 20px;
+      align-items: start;
+    }
+
+    .library-shelf {
+      display: grid;
+      gap: 14px;
+    }
+
+    .book-card {
+      padding: 16px;
+      cursor: pointer;
+      box-shadow: none;
+    }
+
+    .book-card:hover,
+    .book-card.active {
+      border-color: var(--gold);
+      background: rgba(22,36,60,.98);
+    }
+
+    .book-card h3 {
+      margin: 0 0 6px;
+    }
+
+    .book-meta {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .reader-panel {
+      margin: 0;
+      min-height: 560px;
+    }
+
+    .reader-toolbar {
+      display: grid;
+      grid-template-columns: minmax(0,1fr) minmax(180px,.4fr);
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .reader-content {
+      background: rgba(8,15,29,.42);
+      border: 1px solid rgba(216,185,106,.22);
+      border-radius: 10px;
+      padding: 18px;
+      max-height: 760px;
+      overflow-y: auto;
+    }
+
+    .reader-section {
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(255,255,255,.07);
+    }
+
+    .reader-section:last-child {
+      border-bottom: 0;
+    }
+
+    .reader-section h4 {
+      margin: 0 0 10px;
+    }
+
+    .reader-section-text {
+      line-height: 1.78;
+      color: #eeeae2;
+      white-space: pre-wrap;
+    }
+
+    .reader-reference {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .status-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(216,185,106,.10);
+      border: 1px solid rgba(216,185,106,.24);
+      color: #e8e1cf;
+      font-size: 13px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 1100px) {
+      .results-grid,
+      .library-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 800px) {
+      .search-grid,
+      .reader-toolbar {
+        grid-template-columns: 1fr;
+      }
+
+      .search-grid button {
+        width: 100%;
+      }
+    }
+  </style>
 </head>
-<body>
-<header class="topbar">
-  <div class="brand"><img src="biblemastery-logo.png" alt="BibleMastery logo"><div><strong>BibleMastery Library</strong><small>Seven Names One Redeemer</small></div></div>
-  <div class="top-actions">
-    <a class="btn" href="personal-study.html">← Personal Study</a>
 
+<body>
+<header>
+  <h1>📚 BibleMastery Library</h1>
+  <p>Read complete books in the Library, or search for the strongest book sections related to what you are studying.</p>
+
+  <div class="header-actions">
+    <a href="index.html" class="back-button">← Back to BibleMastery Advanced</a>
   </div>
 </header>
-<main class="page">
-  <aside class="panel shelf">
-    <h1>My Library</h1>
-    <div class="sub">Full books and owned ministry resources connected to BibleMastery study.</div>
-    <input id="search" class="search" type="search" placeholder="Search title, author, topic…">
-    <div class="filters">
-      <button class="filter active" data-filter="all">All</button>
-      <button class="filter" data-filter="owned">Owned</button>
-      <button class="filter" data-filter="included">Included</button>
-      <button class="filter" data-filter="external">Other resources</button>
-      <button class="filter" data-filter="offline">Offline</button>
-    </div>
-    <div id="bookList" class="book-list"></div>
-  </aside>
-  <section class="panel reader">
-    <div id="readerEmpty" class="empty"><h2>Choose a book</h2><p>Select a title from your Library to begin reading.</p></div>
-    <div id="readerView" hidden>
-      <div class="reader-head">
-        <div><div class="eyebrow" id="accessLabel">BIBLEMASTERY LIBRARY</div><h2 id="bookTitle"></h2><div class="author" id="bookAuthor"></div></div>
-        <a id="sourceLink" class="btn" target="_blank" rel="noopener">Open source ↗</a>
+
+<div class="container">
+
+  <div class="library-status">
+    <div class="status-row">
+      <div>
+        <h2 style="margin:0 0 6px;">BibleMastery Starter Library</h2>
+        <p style="margin:0;">The Advanced purchase can include 12 verified public-domain books. More library collections can be added later.</p>
       </div>
-      <div class="reader-body">
-        <div class="intro">
-          <div class="box"><h3>About this book</h3><p id="summary"></p><div class="topics" id="topics"></div></div>
-          <div class="box"><h3>Good places to start</h3><div id="sections" class="section-list"></div></div>
+
+      <div class="status-pill">
+        <span>📚</span>
+        <span id="libraryBookCount">0 books loaded</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="search-card">
+    <h2 style="margin-top:0;">🔎 Search the BibleMastery Library</h2>
+    <p>
+      Search the books you own for the most relevant sections. A normal study search returns the three strongest book sections instead of loading entire books.
+    </p>
+
+    <div class="search-grid">
+      <div>
+        <label for="librarySearchType">Search By</label>
+        <select id="librarySearchType">
+          <option value="smart">Smart Topic / Question</option>
+          <option value="topic">Topic</option>
+          <option value="scripture">Scripture Passage</option>
+          <option value="author">Author</option>
+          <option value="title">Book Title</option>
+          <option value="doctrine">Doctrine</option>
+          <option value="keyword">Keyword</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="librarySearchInput">What are you studying?</label>
+        <input
+          id="librarySearchInput"
+          type="text"
+          placeholder="Example: How do I build faith that can move mountains?"
+        >
+      </div>
+
+      <button id="librarySearchButton" type="button">Find Best 3 Sections</button>
+    </div>
+
+    <div class="quick-actions">
+      <button id="searchCurrentPassageButton" class="secondary" type="button">
+        📖 Search Library for Current Passage
+      </button>
+
+      <button id="clearLibrarySearchButton" class="secondary" type="button">
+        Clear Search
+      </button>
+    </div>
+
+    <div class="search-help">
+      <strong>How it works:</strong>
+      A broad search such as <em>faith</em> can return strong sections from several books.
+      A specific question such as <em>how do I build faith that can move mountains?</em>
+      is ranked more narrowly so the most relevant sections rise to the top.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="results-header">
+      <div>
+        <h2 style="margin:0 0 5px;">⭐ Best Library Results</h2>
+        <div id="librarySearchSummary" class="small">Search the library to see the best three matching sections.</div>
+      </div>
+
+      <button id="showMoreLibraryResultsButton" class="secondary hidden" type="button">
+        Show More Results
+      </button>
+    </div>
+
+    <div id="librarySearchResults" class="results-grid">
+      <div class="empty-state" style="grid-column:1 / -1;">
+        Your BibleMastery Library search results will appear here.
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2 style="margin-top:0;">📖 Full Library</h2>
+    <p>
+      Use this area when you want to read an entire book. Search results above only show relevant sections;
+      opening a book here gives you the complete book that is available in your library.
+    </p>
+
+    <div class="library-layout">
+      <div>
+        <div style="margin-bottom:14px;">
+          <label for="bookShelfFilter">Filter Books</label>
+          <input id="bookShelfFilter" type="text" placeholder="Filter by title or author">
         </div>
-        <div id="startPanel" class="start-panel" hidden><div class="eyebrow">RECOMMENDED STARTING POINT</div><h3 id="startTitle"></h3><p id="startNote"></p></div>
-        <section class="box offline-controls" aria-label="Offline reading">
-          <h3>Read without internet</h3>
-          <div class="offline-actions">
-            <button id="downloadOffline" class="btn" type="button">Download for Offline Reading</button>
-            <button id="importOffline" class="btn" type="button">Import TXT/PDF</button>
-            <button id="offlineRead" class="btn" type="button">Read saved copy</button>
-            <button id="removeOffline" class="btn" type="button">Remove download</button>
-            <input id="offlineFile" type="file" accept=".txt,.pdf,text/plain,application/pdf" hidden>
+
+        <div id="libraryShelf" class="library-shelf">
+          <div class="empty-state">
+            No books have been loaded into the BibleMastery Library yet.
           </div>
-          <p id="offlineStatus" role="status" aria-live="polite">Checking saved copies…</p>
-          <p class="sub">Downloads stay on this browser and device. Clearing site data can remove them. Import only a copy you are allowed to store; your imported file stays on this device. External websites still need internet.</p>
-        </section>
-        <div id="offlineTextTools" hidden>
-          <form id="offlineSearchForm" class="offline-actions"><input id="offlineSearch" type="search" aria-label="Search saved book text" placeholder="Search saved text…"><button class="btn" type="submit">Find next</button></form>
-          <div class="offline-actions"><button id="offlinePrevious" class="btn" type="button">Previous</button><span id="offlinePageLabel" role="status"></span><button id="offlineNext" class="btn" type="button">Next</button></div>
         </div>
-        <div id="readerContent"></div>
+      </div>
+
+      <div class="reader-panel">
+        <div id="readerEmptyState" class="empty-state">
+          Choose a book from the Library to read it here.
+        </div>
+
+        <div id="bookReader" class="hidden">
+          <h2 id="readerBookTitle" style="margin-top:0;"></h2>
+          <p id="readerBookAuthor" class="muted"></p>
+
+          <div class="reader-toolbar">
+            <div>
+              <label for="readerSectionSelect">Chapter / Section</label>
+              <select id="readerSectionSelect"></select>
+            </div>
+
+            <div>
+              <label for="readerBookSearch">Find in Book</label>
+              <input id="readerBookSearch" type="text" placeholder="Search this book">
+            </div>
+          </div>
+
+          <div id="readerContent" class="reader-content"></div>
+        </div>
       </div>
     </div>
-  </section>
-</main>
+  </div>
+
+</div>
+
+<!--
+  LIBRARY DATA
+  ------------
+  This page is ready for a separate library-data.js file.
+
+  Later we will add:
+    <script src="library-data.js"></script>
+
+  That file should define:
+    window.BIBLEMASTERY_LIBRARY_BOOKS = [ ... ]
+
+  Each book will contain metadata and sections.
+  This keeps the books separate from this page and prepares the Library
+  for a real backend/database later.
+-->
+<script src="library-data.js"></script>
 <script>
-const BOOKS = [{"title": "The Believer's Authority", "author": "Andrew Wommack", "access": "owned", "type": "Official AWMI resource", "mode": "external", "url": "https://www.awmi.net/authority/", "external": "https://www.awmi.net/authority/", "summary": "Authority in Christ, identity, resisting the devil, faith, prayer, and delegated spiritual authority.", "topics": ["authority", "identity in Christ", "spiritual warfare", "faith", "prayer"], "starts": ["Authority of the Believer", "Your Position in Christ", "Resisting the Devil", "Acting on Delegated Authority"]}, {"title": "Christ the Healer", "author": "F. F. Bosworth", "access": "included", "type": "Public-domain 1924 edition", "mode": "embed", "url": "https://archive.org/embed/christhealerserm0000fred", "external": "https://archive.org/details/christhealerserm0000fred", "summary": "Divine healing, redemption, covenant blessing, faith, compassion, and receiving God’s promises.", "topics": ["healing", "redemption", "covenant", "faith", "compassion"], "starts": ["Is Healing for All?", "How to Appropriate the Redemptive and Covenant Blessing of Bodily Healing", "The Lord’s Compassion"]}, {"title": "Ever-Increasing Faith", "author": "Smith Wigglesworth", "access": "included", "type": "Public-domain 1924 edition", "mode": "embed", "url": "https://archive.org/embed/everincreasingfa00wigg_0", "external": "https://archive.org/details/everincreasingfa00wigg_0", "summary": "Faith, healing, Holy Spirit power, spiritual gifts, boldness, prayer, and acting on God’s Word.", "topics": ["faith", "healing", "Holy Spirit", "spiritual gifts", "authority", "prayer"], "starts": ["Ever-Increasing Faith", "Faith Applied to Healing", "Life in the Holy Spirit", "Faith That Acts"]}, {"title": "Faith That Prevails", "author": "Smith Wigglesworth", "access": "external", "type": "Publisher resource", "mode": "external", "url": "https://gospelpublishinghouse.com/shop/product/faith-that-prevails", "external": "https://gospelpublishinghouse.com/shop/product/faith-that-prevails", "summary": "Prevailing faith, prayer, healing, and Spirit-empowered Christian life.", "topics": ["faith", "prayer", "healing", "Holy Spirit"], "starts": ["Faith That Prevails", "Prevailing Prayer", "Prevailing Faith for Healing"]}, {"title": "The Wonderful Name of Jesus", "author": "E. W. Kenyon", "access": "included", "type": "Original 1927 work", "mode": "external", "url": "https://guidances.nl/the-wonderful-name-of-jesus/", "external": "https://guidances.nl/the-wonderful-name-of-jesus/", "summary": "The Name of Jesus, authority in Christ, identity, prayer, faith, healing, and spiritual conflict.", "topics": ["name of Jesus", "authority", "identity in Christ", "prayer", "faith", "healing"], "starts": ["The Wonderful Name of Jesus", "Authority in the Name of Jesus", "Prayer in the Name of Jesus", "The Believer’s Place in Christ"]}, {"title": "The Gospel of Healing", "author": "A. B. Simpson", "access": "included", "type": "Public-domain 1915 edition", "mode": "embed", "url": "https://archive.org/embed/gospelofhealing00simp", "external": "https://archive.org/details/gospelofhealing00simp", "summary": "Divine healing, redemption, resurrection life, faith, Jehovah-Rapha, and receiving from Christ.", "topics": ["healing", "redemption", "faith", "atonement", "resurrection life", "Jehovah-Rapha"], "starts": ["The Gospel of Healing", "Healing and Redemption", "Christ Our Healer"]}, {"title": "Divine Healing", "author": "Andrew Murray", "access": "included", "type": "Public-domain work", "mode": "embed", "url": "https://archive.org/embed/DivineHealingByAndrewMurrayBroughtByPeter-johnParisisfounderOfThe", "external": "https://archive.org/details/DivineHealingByAndrewMurrayBroughtByPeter-johnParisisfounderOfThe", "summary": "Healing, prayer, faith, forgiveness, holiness, the body, and Jesus as Healer.", "topics": ["healing", "prayer", "faith", "forgiveness", "holiness", "redemption"], "starts": ["Jesus the Healer", "The Prayer of Faith", "Forgiveness and Healing", "The Body for the Lord"]}, {"title": "The Ministry of Healing", "author": "A. J. Gordon", "access": "included", "type": "Public-domain 1882 edition", "mode": "embed", "url": "https://archive.org/embed/ministryofhealin00gordiala", "external": "https://archive.org/details/ministryofhealin00gordiala", "summary": "Biblical healing, miracles, missions, historical testimony, evangelism, and compassion.", "topics": ["healing", "miracles", "missions", "evangelism", "church history", "compassion"], "starts": ["The Ministry of Healing", "Healing and the Gospel", "Healing in Christian Missions"]}, {"title": "The Names of God in Holy Scripture", "author": "Andrew Jukes", "access": "included", "type": "Public-domain 1888/1889 edition", "mode": "embed", "url": "https://archive.org/embed/namesgodinholys00jukegoog", "external": "https://archive.org/details/namesgodinholys00jukegoog", "summary": "A historical study of the revealed names and titles of God, useful as a foundation for studying Jehovah and the character and relationships revealed through His names.", "topics": ["names of God", "Jehovah", "covenant", "righteousness", "presence", "identity"], "starts": ["Lord, or Jehovah", "God Almighty, or El Shaddai", "Lord of Hosts, or Jehovah Sabaoth", "Father, Son, and Holy Ghost"]}, {"title": "The Shepherd Psalm", "author": "F. B. Meyer", "access": "included", "type": "Public-domain 1889 edition", "mode": "embed", "url": "https://archive.org/embed/shepherdpsalm00meye", "external": "https://archive.org/details/shepherdpsalm00meye", "summary": "A devotional exposition of Psalm 23 emphasizing the Lord as Shepherd, His provision, guidance, peace, protection, and abiding presence.", "topics": ["Jehovah-Ra'ah", "shepherd", "provision", "peace", "presence", "guidance", "protection"], "starts": ["The Lord Is My Shepherd", "He Maketh Me to Lie Down", "He Leadeth Me", "Thou Art With Me", "My Cup Runneth Over"]}, {"title": "The Master's Indwelling", "author": "Andrew Murray", "access": "included", "type": "Public-domain 1896 edition", "mode": "embed", "url": "https://archive.org/embed/mastersindwellin00murr", "external": "https://archive.org/details/mastersindwellin00murr", "summary": "Christ-centered teaching on the indwelling life, entrance into rest, Christ our life, triumph of faith, surrender, the Holy Spirit, and power in prayer.", "topics": ["identity in Christ", "rest", "faith", "prayer", "Holy Spirit", "standing in Christ", "victory"], "starts": ["Entrance Into Rest", "Christ Our Life", "The Complete Surrender", "Triumph of Faith", "The Source of Power in Prayer"]}, {"title": "Holy in Christ", "author": "Andrew Murray", "access": "included", "type": "Public-domain 1887/1896 edition", "mode": "embed", "url": "https://archive.org/embed/holyinchrist00murr", "external": "https://archive.org/details/holyinchrist00murr", "summary": "A study of holiness and righteousness as received and lived in union with Christ, emphasizing truth, faith, liberty, indwelling, redemption, and resting in Christ.", "topics": ["righteousness", "holiness", "truth", "identity in Christ", "faith", "rest", "redemption"], "starts": ["God's Provision for Holiness", "Holiness and Redemption", "Holiness and Indwelling", "Holiness and Truth", "Holiness and Faith", "Holiness and Liberty", "In Christ Our Sanctification"]}];
-const $ = id => document.getElementById(id);
-const params = new URLSearchParams(location.search);
-let activeFilter='all', currentTitle='';
+(function() {
+  "use strict";
 
-function accessLabel(b){
-  if(b.access==='owned') return 'OWNED • ' + b.type;
-  if(b.access==='included') return 'INCLUDED • ' + b.type;
-  return 'RESOURCE • ' + b.type;
-}
-function badge(b){
-  const cls=b.access==='owned'?'owned':(b.access==='included'?'':'external');
-  const text=b.access==='owned'?'Owned':(b.access==='included'?'Included':'Resource');
-  return `<span class="badge ${cls}">${text}</span>${offlineTitles.has(b.title)?'<span class="badge offline">Available offline</span>':''}`;
-}
-function renderList(){
-  const q=$('search').value.trim().toLowerCase();
-  const list=BOOKS.filter(b=>{
-    if(activeFilter==='offline'){if(!offlineTitles.has(b.title))return false;}
-    else if(activeFilter!=='all' && b.access!==activeFilter) return false;
-    const hay=[b.title,b.author,b.summary,...b.topics,...b.starts].join(' ').toLowerCase();
-    return !q || hay.includes(q);
-  });
-  $('bookList').innerHTML=list.map(b=>`<button class="book-card ${b.title===currentTitle?'active':''}" data-title="${escapeAttr(b.title)}"><strong>${escapeHtml(b.title)}</strong><span>${escapeHtml(b.author)}</span>${badge(b)}</button>`).join('') || '<div class="sub">No matching books.</div>';
-}
-function escapeHtml(s){return String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
-function escapeAttr(s){return escapeHtml(s).replace(/'/g,'&#39;');}
-function openBook(title, section='', note=''){
-  const b=BOOKS.find(x=>x.title===title); if(!b)return;
-  currentTitle=b.title; renderList();
-  $('readerEmpty').hidden=true; $('readerView').hidden=false;
-  $('accessLabel').textContent=accessLabel(b); $('bookTitle').textContent=b.title; $('bookAuthor').textContent=b.author;
-  $('summary').textContent=b.summary; $('sourceLink').href=b.external||b.url;
-  $('topics').innerHTML=b.topics.map(t=>`<span class="topic">${escapeHtml(t)}</span>`).join('');
-  $('sections').innerHTML=b.starts.map(s=>`<button class="section-btn" data-section="${escapeAttr(s)}">${escapeHtml(s)}</button>`).join('');
-  showStart(section,note);
-  const content=$('readerContent');
-  if(b.mode==='embed'){content.innerHTML=`<iframe class="reader-frame" src="${escapeAttr(b.url)}" title="${escapeAttr(b.title)}"></iframe>`;}
-  else{content.innerHTML=`<div class="external-wrap"><div><div class="eyebrow">OFFICIAL / EXTERNAL RESOURCE</div><h3>${escapeHtml(b.title)}</h3><p>${escapeHtml(b.summary)}</p><p><a class="btn" href="${escapeAttr(b.url)}" target="_blank" rel="noopener">Open to Read ↗</a></p></div></div>`;}
-  const newUrl=new URL(location.href);newUrl.searchParams.set('book',b.title);if(section)newUrl.searchParams.set('section',section);else newUrl.searchParams.delete('section');history.replaceState(null,'',newUrl);
-  refreshOfflineSelection(section);
-}
-function showStart(section,note=''){
-  if(!section){$('startPanel').hidden=true;return;}
-  $('startPanel').hidden=false;$('startTitle').textContent=section;$('startNote').textContent=note||'This is the section BibleMastery recommends as the best place to begin for the study that sent you here.';
-}
-$('bookList').addEventListener('click',e=>{const b=e.target.closest('[data-title]');if(b)openBook(b.dataset.title);});
-$('sections').addEventListener('click',e=>{const b=e.target.closest('[data-section]');if(b)openBook(currentTitle,b.dataset.section);});
-$('search').addEventListener('input',renderList);
-document.querySelectorAll('.filter').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('.filter').forEach(x=>x.classList.remove('active'));btn.classList.add('active');activeFilter=btn.dataset.filter;renderList();}));
-// Full book files stay on this device in IndexedDB; no imported file is uploaded.
-const offlineTitles=new Set();
-let offlineDB, bookOpenGeneration=0, activeBlobURL='', offlineRecord=null, offlinePage=0, offlineBusy=false;
-const PAGE_SIZE=9000;
-function db(){
- if(!offlineDB)offlineDB=new Promise((resolve,reject)=>{
-  const req=indexedDB.open('BibleMasteryOfflineBooks',1);
-  req.onupgradeneeded=()=>req.result.createObjectStore('books',{keyPath:'title'});
-  req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error);
- });
- return offlineDB;
-}
-async function bookStore(mode,operation){
- const database=await db();
- return new Promise((resolve,reject)=>{
-  const tx=database.transaction('books',mode);const request=operation(tx.objectStore('books'));let value;
-  request.onsuccess=()=>{value=request.result};
-  tx.oncomplete=()=>resolve(value);tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error||new Error('Storage operation cancelled.'));
- });
-}
-function offlineMessage(text){$('offlineStatus').textContent=text;}
-function selectedBook(){return BOOKS.find(b=>b.title===currentTitle);}
-function syncOfflineButtons(){
- const b=selectedBook(),saved=offlineTitles.has(currentTitle);
- $('downloadOffline').disabled=offlineBusy||!b||b.access!=='included'||b.mode!=='embed';
- $('importOffline').disabled=offlineBusy||!b||b.access==='external';
- $('removeOffline').disabled=offlineBusy||!saved;
- $('offlineRead').disabled=offlineBusy||!saved;
- $('downloadOffline').textContent=saved?'Download fresh copy':'Download for Offline Reading';
-}
-async function fetchChecked(url){
- const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),45000);
- try{const response=await fetch(url,{signal:controller.signal,credentials:'omit'});if(!response.ok)throw new Error('Source returned '+response.status);return response;}finally{clearTimeout(timer)}
-}
-async function saveLibraryShell(){
- if(!('caches' in window))throw new Error('Offline page storage is unavailable in this browser.');
- const url=new URL('library.html',location.href);
- const response=await fetch(url,{cache:'reload'});
- if(!response.ok||!(response.headers.get('content-type')||'').includes('text/html'))throw new Error('The Library page could not be saved.');
- const cache=await caches.open('biblemastery-offline-shell-v1');await cache.put(url.pathname,response);
-}
-async function persistBook(record){
- await bookStore('readwrite',store=>store.put(record));offlineTitles.add(record.title);renderList();
- let pageReady=true;
- try{await saveLibraryShell()}catch(e){pageReady=false}
- try{if(navigator.storage?.persist)await navigator.storage.persist()}catch(e){}
- return pageReady;
-}
-async function downloadOffline(){
- const b=selectedBook();if(!b||offlineBusy||b.access!=='included'||b.mode!=='embed')return;
- offlineBusy=true;syncOfflineButtons();offlineMessage('Downloading the full book text…');
- try{
-  const source=new URL(b.url);const id=source.hostname==='archive.org'?source.pathname.split('/')[2]:'';
-  if(!id)throw new Error('No supported download source for this book.');
-  const metadata=await (await fetchChecked('https://archive.org/metadata/'+encodeURIComponent(id))).json();
-  const restricted=metadata.metadata?.['access-restricted-item'];
-  if(metadata.is_dark||String(restricted).toLowerCase()==='true')throw new Error('This source does not offer an unrestricted download.');
-  const year=Number(String(metadata.metadata?.date||'').match(/\d{4}/)?.[0]);
-  if(!year||year>1930)throw new Error('An eligible early edition was not confirmed. Import a permitted copy instead.');
-  const file=(metadata.files||[]).find(f=>f.name?.endsWith('_djvu.txt')&&!f.private);
-  if(!file)throw new Error('This source has no downloadable plain-text edition.');
-  if(Number(file.size)>10000000)throw new Error('This text is too large for the built-in download.');
-  const url='https://archive.org/download/'+encodeURIComponent(id)+'/'+file.name.split('/').map(encodeURIComponent).join('/');
-  const text=await (await fetchChecked(url)).text();
-  if(text.length<500||text.length>10000000||/^\s*(<!doctype|<html)/i.test(text))throw new Error('The source did not return usable book text.');
-  const ready=await persistBook({title:b.title,kind:'text',text,source:url,savedAt:Date.now(),bytes:new Blob([text]).size});
-  if(currentTitle===b.title){await loadOfflineBook(b.title,$('startPanel').hidden?'':$('startTitle').textContent);offlineMessage(ready?'Saved on this device. Text comes from the scanned edition and may contain scanning errors.':'Book saved, but the offline Library page could not be saved. Reconnect and reopen Library before going offline.');}
- }catch(error){offlineMessage('Download failed: '+error.message+' You can use Import TXT/PDF with a copy you are allowed to store.');}
- finally{offlineBusy=false;syncOfflineButtons()}
-}
-async function importBook(file){
- const b=selectedBook();if(!file||!b||offlineBusy)return;
- offlineBusy=true;syncOfflineButtons();offlineMessage('Saving your book on this device…');
- try{
-  if(file.size>40*1024*1024)throw new Error('Choose a file smaller than 40 MB.');
-  const pdf=/\.pdf$/i.test(file.name),txt=/\.txt$/i.test(file.name);
-  if(!pdf&&!txt)throw new Error('Choose a TXT or PDF file.');
-  let record={title:b.title,kind:pdf?'pdf':'text',source:'Imported: '+file.name,savedAt:Date.now(),bytes:file.size};
-  if(pdf){if(!(await file.slice(0,1024).text()).includes('%PDF-'))throw new Error('This file is not a readable PDF.');record.blob=new Blob([file],{type:'application/pdf'});}
-  else{record.text=await file.text();if(!record.text.trim()||record.text.length>10000000)throw new Error('Choose a non-empty TXT file smaller than 10 MB.');}
-  const ready=await persistBook(record);
-  if(currentTitle===b.title){await loadOfflineBook(b.title);offlineMessage(ready?'Saved on this device for offline reading.':'Book saved. Reconnect and reopen Library to finish saving its offline page.');}
- }catch(error){offlineMessage('Could not save: '+error.message)}
- finally{offlineBusy=false;$('offlineFile').value='';syncOfflineButtons()}
-}
-function resetOfflineView(){
- if(activeBlobURL){URL.revokeObjectURL(activeBlobURL);activeBlobURL=''}
- offlineRecord=null;offlinePage=0;$('offlineTextTools').hidden=true;
-}
-function renderOfflineText(){
- if(!offlineRecord?.text)return;
- const text=offlineRecord.text,total=Math.ceil(text.length/PAGE_SIZE);
- offlinePage=Math.max(0,Math.min(offlinePage,total-1));
- const pre=document.createElement('div');pre.className='offline-text';pre.tabIndex=0;pre.textContent=text.slice(offlinePage*PAGE_SIZE,(offlinePage+1)*PAGE_SIZE);
- $('readerContent').replaceChildren(pre);$('offlinePageLabel').textContent='Part '+(offlinePage+1)+' of '+total;
- $('offlinePrevious').disabled=offlinePage===0;$('offlineNext').disabled=offlinePage===total-1;
- $('offlineTextTools').hidden=false;
-}
-function findOfflineText(query,from=0){
- if(!offlineRecord?.text||!query.trim())return false;
- const i=offlineRecord.text.toLowerCase().indexOf(query.trim().toLowerCase(),from);
- if(i<0)return false;
- offlinePage=Math.floor(i/PAGE_SIZE);renderOfflineText();return true;
-}
-async function loadOfflineBook(title,section='',generation=bookOpenGeneration){
- const record=await bookStore('readonly',store=>store.get(title));
- if(generation!==bookOpenGeneration||title!==currentTitle)return false;
- if(!record)return false;
- resetOfflineView();offlineRecord=record;
- if(record.kind==='pdf'){
-  activeBlobURL=URL.createObjectURL(record.blob);
-  const link=document.createElement('a');link.href=activeBlobURL;link.target='_blank';link.rel='noopener';link.className='btn';link.textContent='Open saved PDF in a new tab';
-  const frame=document.createElement('iframe');frame.className='reader-frame';frame.title=title+' — saved PDF';frame.src=activeBlobURL;
-  $('readerContent').replaceChildren(link,frame);
-  offlineMessage('Reading your saved PDF. Use its page/search controls to locate a section.');
- }else{
-  renderOfflineText();
-  if(section){const found=findOfflineText(section);offlineMessage(found?'Reading the saved text at the first match for this section.':'Saved text opened. The recommended heading was not found exactly; use Search saved text to locate it.');}
-  else offlineMessage('Reading the full saved text — available offline on this device.');
- }
- return true;
-}
-async function refreshOfflineSelection(section=''){
- const generation=++bookOpenGeneration;resetOfflineView();syncOfflineButtons();
- try{
-  const found=await loadOfflineBook(currentTitle,section,generation);
-  if(generation!==bookOpenGeneration)return;
-  if(!found){
-   offlineMessage(navigator.onLine?'Not saved offline. Download a supported book, or import a permitted TXT/PDF copy.':'This book is not saved on this device. Reconnect to download it.');
-   if(!navigator.onLine)$('readerContent').textContent='No saved copy available.';
+  /*
+    Expected future book structure:
+
+    {
+      id: "unique-book-id",
+      title: "Book Title",
+      author: "Author Name",
+      year: "1900",
+      category: "Theology",
+      access: "starter",
+      publicDomainVerified: true,
+      sourceNote: "Verification/source note",
+      topics: ["faith", "prayer"],
+      doctrines: ["faith"],
+      keywords: ["believe", "trust"],
+      scriptureRefs: ["Mark 11:22-24", "Romans 10:17"],
+      sections: [
+        {
+          id: "section-1",
+          title: "Chapter 1",
+          text: "Full section text...",
+          topics: ["faith"],
+          doctrines: ["faith"],
+          keywords: ["believe"],
+          scriptureRefs: ["Mark 11:22-24"]
+        }
+      ]
+    }
+  */
+
+  const librarySearchType = document.getElementById("librarySearchType");
+  const librarySearchInput = document.getElementById("librarySearchInput");
+  const librarySearchButton = document.getElementById("librarySearchButton");
+  const searchCurrentPassageButton = document.getElementById("searchCurrentPassageButton");
+  const clearLibrarySearchButton = document.getElementById("clearLibrarySearchButton");
+  const showMoreLibraryResultsButton = document.getElementById("showMoreLibraryResultsButton");
+
+  const librarySearchResults = document.getElementById("librarySearchResults");
+  const librarySearchSummary = document.getElementById("librarySearchSummary");
+  const libraryBookCount = document.getElementById("libraryBookCount");
+
+  const libraryShelf = document.getElementById("libraryShelf");
+  const bookShelfFilter = document.getElementById("bookShelfFilter");
+
+  const readerEmptyState = document.getElementById("readerEmptyState");
+  const bookReader = document.getElementById("bookReader");
+  const readerBookTitle = document.getElementById("readerBookTitle");
+  const readerBookAuthor = document.getElementById("readerBookAuthor");
+  const readerSectionSelect = document.getElementById("readerSectionSelect");
+  const readerBookSearch = document.getElementById("readerBookSearch");
+  const readerContent = document.getElementById("readerContent");
+
+  let libraryBooks = Array.isArray(window.BIBLEMASTERY_LIBRARY_BOOKS)
+    ? window.BIBLEMASTERY_LIBRARY_BOOKS
+    : [];
+
+  let currentBook = null;
+  let lastRankedResults = [];
+  let currentResultLimit = 3;
+
+  function escapeHTML(value) {
+    return String(value == null ? "" : value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
   }
- }catch(error){if(generation===bookOpenGeneration)offlineMessage('Offline storage is unavailable: '+error.message)}
-}
-$('downloadOffline').addEventListener('click',downloadOffline);
-$('importOffline').addEventListener('click',()=>{$('offlineFile').click()});
-$('offlineFile').addEventListener('change',e=>importBook(e.target.files[0]));
-$('offlineRead').addEventListener('click',()=>refreshOfflineSelection($('startPanel').hidden?'':$('startTitle').textContent));
-$('removeOffline').addEventListener('click',async()=>{
- const title=currentTitle;if(offlineBusy||!confirm('Remove the saved offline copy of '+title+' from this device?'))return;
- try{await bookStore('readwrite',store=>store.delete(title));offlineTitles.delete(title);if(currentTitle===title)openBook(title);else renderList();}catch(error){offlineMessage('Could not remove saved copy: '+error.message)}
-});
-$('offlinePrevious').addEventListener('click',()=>{offlinePage--;renderOfflineText()});
-$('offlineNext').addEventListener('click',()=>{offlinePage++;renderOfflineText()});
-let lastSearch='',lastSearchPosition=-1;
-$('offlineSearchForm').addEventListener('submit',e=>{
- e.preventDefault();const query=$('offlineSearch').value.trim();if(!query||!offlineRecord?.text)return;
- const text=offlineRecord.text.toLowerCase();let i=text.indexOf(query.toLowerCase(),query===lastSearch?lastSearchPosition+1:0);
- if(i<0&&query===lastSearch)i=text.indexOf(query.toLowerCase());
- lastSearch=query;lastSearchPosition=i;
- if(i<0){offlineMessage('No matching text found. Try a shorter phrase.');return;}
- offlinePage=Math.floor(i/PAGE_SIZE);renderOfflineText();offlineMessage('Match found in part '+(offlinePage+1)+'. Choose Find next for another occurrence.');
-});
-bookStore('readonly',store=>store.getAllKeys()).then(keys=>{keys.forEach(k=>offlineTitles.add(k));renderList();syncOfflineButtons()}).catch(()=>offlineMessage('Offline storage is unavailable. Check browser storage settings.'));
-window.addEventListener('online',()=>syncOfflineButtons());
-window.addEventListener('offline',()=>{if(!offlineRecord)refreshOfflineSelection()});
 
-if('serviceWorker' in navigator && location.protocol!=='file:'){
- navigator.serviceWorker.register('/service-worker.js').catch(()=>offlineMessage('The offline app could not start. Check that service-worker.js was updated, then reload.'));
-}
-renderList();
-const qBook=params.get('book'),qSection=params.get('section'),qNote=params.get('note');
-if(qBook && BOOKS.some(b=>b.title===qBook)) openBook(qBook,qSection||'',qNote||'');
-else openBook('Christ the Healer');
+  function normalizeText(value) {
+    return String(value || "")
+      .toLowerCase()
+      .replace(/[^\p{L}\p{N}\s:.-]/gu, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function uniqueWords(text) {
+    const stopWords = new Set([
+      "a","an","and","are","as","at","be","been","but","by","can","do","does",
+      "for","from","how","i","in","into","is","it","me","my","of","on","or",
+      "that","the","their","them","this","to","was","what","when","where","which",
+      "who","why","will","with","you","your"
+    ]);
+
+    return Array.from(new Set(
+      normalizeText(text)
+        .split(" ")
+        .filter(function(word) {
+          return word.length > 1 && !stopWords.has(word);
+        })
+    ));
+  }
+
+  function phraseParts(text) {
+    const normalized = normalizeText(text);
+    if (!normalized) return [];
+
+    const parts = [];
+    const words = normalized.split(" ");
+
+    if (words.length >= 2) {
+      for (let i = 0; i < words.length - 1; i++) {
+        parts.push(words[i] + " " + words[i + 1]);
+      }
+    }
+
+    if (words.length >= 3) {
+      for (let i = 0; i < words.length - 2; i++) {
+        parts.push(words[i] + " " + words[i + 1] + " " + words[i + 2]);
+      }
+    }
+
+    return parts;
+  }
+
+  function arrayText(value) {
+    return Array.isArray(value) ? value.join(" ") : "";
+  }
+
+  function sectionSearchText(book, section) {
+    return normalizeText([
+      book.title,
+      book.author,
+      book.category,
+      arrayText(book.topics),
+      arrayText(book.doctrines),
+      arrayText(book.keywords),
+      arrayText(book.scriptureRefs),
+      section.title,
+      section.text,
+      arrayText(section.topics),
+      arrayText(section.doctrines),
+      arrayText(section.keywords),
+      arrayText(section.scriptureRefs)
+    ].join(" "));
+  }
+
+  function exactFieldText(book, section, type) {
+    if (type === "author") {
+      return normalizeText(book.author);
+    }
+
+    if (type === "title") {
+      return normalizeText(book.title);
+    }
+
+    if (type === "topic") {
+      return normalizeText(
+        arrayText(book.topics) + " " + arrayText(section.topics)
+      );
+    }
+
+    if (type === "doctrine") {
+      return normalizeText(
+        arrayText(book.doctrines) + " " + arrayText(section.doctrines)
+      );
+    }
+
+    if (type === "scripture") {
+      return normalizeText(
+        arrayText(book.scriptureRefs) + " " + arrayText(section.scriptureRefs)
+      );
+    }
+
+    return sectionSearchText(book, section);
+  }
+
+  function scoreSection(book, section, query, type) {
+    const normalizedQuery = normalizeText(query);
+    if (!normalizedQuery) return 0;
+
+    const words = uniqueWords(normalizedQuery);
+    const phrases = phraseParts(normalizedQuery);
+    const fullText = sectionSearchText(book, section);
+    const targetText = exactFieldText(book, section, type);
+
+    let score = 0;
+
+    if (targetText.includes(normalizedQuery)) {
+      score += type === "smart" ? 24 : 42;
+    }
+
+    if (fullText.includes(normalizedQuery)) {
+      score += 18;
+    }
+
+    words.forEach(function(word) {
+      if (targetText.includes(word)) score += 8;
+      if (fullText.includes(word)) score += 3;
+
+      const sectionTitle = normalizeText(section.title);
+      const bookTitle = normalizeText(book.title);
+      const author = normalizeText(book.author);
+
+      if (sectionTitle.includes(word)) score += 5;
+      if (bookTitle.includes(word)) score += 4;
+      if (author.includes(word)) score += 2;
+    });
+
+    phrases.forEach(function(phrase) {
+      if (targetText.includes(phrase)) score += 10;
+      else if (fullText.includes(phrase)) score += 5;
+    });
+
+    const topicText = normalizeText(
+      arrayText(book.topics) + " " + arrayText(section.topics)
+    );
+
+    const doctrineText = normalizeText(
+      arrayText(book.doctrines) + " " + arrayText(section.doctrines)
+    );
+
+    const scriptureText = normalizeText(
+      arrayText(book.scriptureRefs) + " " + arrayText(section.scriptureRefs)
+    );
+
+    if (type === "smart") {
+      words.forEach(function(word) {
+        if (topicText.includes(word)) score += 7;
+        if (doctrineText.includes(word)) score += 7;
+        if (scriptureText.includes(word)) score += 5;
+      });
+    }
+
+    return score;
+  }
+
+  function buildRankedResults(query, type) {
+    const results = [];
+
+    libraryBooks.forEach(function(book) {
+      const sections = Array.isArray(book.sections) ? book.sections : [];
+
+      sections.forEach(function(section, sectionIndex) {
+        const score = scoreSection(book, section, query, type);
+
+        if (score > 0) {
+          results.push({
+            book: book,
+            section: section,
+            sectionIndex: sectionIndex,
+            score: score
+          });
+        }
+      });
+    });
+
+    results.sort(function(a, b) {
+      if (b.score !== a.score) return b.score - a.score;
+
+      const titleCompare = String(a.book.title || "")
+        .localeCompare(String(b.book.title || ""));
+
+      if (titleCompare !== 0) return titleCompare;
+
+      return a.sectionIndex - b.sectionIndex;
+    });
+
+    return diversifyTopResults(results);
+  }
+
+  function diversifyTopResults(results) {
+    if (results.length <= 3) return results;
+
+    const chosen = [];
+    const usedBooks = new Set();
+
+    for (const item of results) {
+      if (!usedBooks.has(item.book.id)) {
+        chosen.push(item);
+        usedBooks.add(item.book.id);
+      }
+
+      if (chosen.length >= 3) break;
+    }
+
+    if (chosen.length < 3) {
+      for (const item of results) {
+        if (!chosen.includes(item)) {
+          chosen.push(item);
+        }
+
+        if (chosen.length >= 3) break;
+      }
+    }
+
+    const chosenSet = new Set(chosen);
+
+    return chosen.concat(
+      results.filter(function(item) {
+        return !chosenSet.has(item);
+      })
+    );
+  }
+
+  function buildMatchReason(result, query, type) {
+    const reasons = [];
+
+    if (type === "scripture") {
+      reasons.push("This section is connected to the Scripture passage you searched.");
+    }
+    else if (type === "author") {
+      reasons.push("This result matches the author you searched for.");
+    }
+    else if (type === "title") {
+      reasons.push("This result comes from the book title you searched for.");
+    }
+    else if (type === "doctrine") {
+      reasons.push("This section is strongly connected to the doctrine you searched.");
+    }
+    else if (type === "topic") {
+      reasons.push("This section is strongly connected to the topic you searched.");
+    }
+    else if (type === "keyword") {
+      reasons.push("This section contains strong keyword matches.");
+    }
+    else {
+      reasons.push("BibleMastery ranked this as one of the strongest matches for your study question.");
+    }
+
+    const refs = []
+      .concat(result.section.scriptureRefs || [])
+      .concat(result.book.scriptureRefs || []);
+
+    if (refs.length) {
+      reasons.push("Related Scripture: " + refs.slice(0, 3).join(", ") + ".");
+    }
+
+    return reasons.join(" ");
+  }
+
+  function makeExcerpt(text, query) {
+    const clean = String(text || "").trim();
+
+    if (!clean) {
+      return "No section text has been loaded yet.";
+    }
+
+    const maxLength = 900;
+
+    if (clean.length <= maxLength) {
+      return clean;
+    }
+
+    const words = uniqueWords(query);
+    const lower = clean.toLowerCase();
+
+    let bestIndex = -1;
+
+    for (const word of words) {
+      const index = lower.indexOf(word.toLowerCase());
+
+      if (index !== -1) {
+        bestIndex = index;
+        break;
+      }
+    }
+
+    if (bestIndex === -1) {
+      return clean.slice(0, maxLength).trim() + "…";
+    }
+
+    const start = Math.max(0, bestIndex - 260);
+    const end = Math.min(clean.length, start + maxLength);
+
+    let excerpt = clean.slice(start, end).trim();
+
+    if (start > 0) excerpt = "…" + excerpt;
+    if (end < clean.length) excerpt += "…";
+
+    return excerpt;
+  }
+
+  function renderSearchResults(limit) {
+    const query = librarySearchInput.value.trim();
+    const type = librarySearchType.value;
+
+    if (!query) {
+      librarySearchSummary.textContent =
+        "Enter a topic, Scripture passage, author, book title, doctrine, keyword, or study question.";
+
+      librarySearchResults.innerHTML = `
+        <div class="empty-state" style="grid-column:1 / -1;">
+          Enter something to search for.
+        </div>
+      `;
+
+      showMoreLibraryResultsButton.classList.add("hidden");
+      return;
+    }
+
+    if (!libraryBooks.length) {
+      librarySearchSummary.textContent =
+        "The Library search system is ready. Books will appear here after the 12 Starter Library books are loaded.";
+
+      librarySearchResults.innerHTML = `
+        <div class="empty-state" style="grid-column:1 / -1;">
+          No BibleMastery Library books have been loaded yet.
+          The search engine and full-book reader are ready for the verified public-domain books.
+        </div>
+      `;
+
+      showMoreLibraryResultsButton.classList.add("hidden");
+      return;
+    }
+
+    lastRankedResults = buildRankedResults(query, type);
+
+    if (!lastRankedResults.length) {
+      librarySearchSummary.textContent =
+        `No strong library matches were found for “${query}”.`;
+
+      librarySearchResults.innerHTML = `
+        <div class="empty-state" style="grid-column:1 / -1;">
+          No matching book sections were found. Try a broader topic, a related word, or a Scripture passage.
+        </div>
+      `;
+
+      showMoreLibraryResultsButton.classList.add("hidden");
+      return;
+    }
+
+    const resultsToShow = lastRankedResults.slice(0, limit);
+
+    librarySearchSummary.textContent =
+      `Showing ${Math.min(limit, lastRankedResults.length)} of ${lastRankedResults.length} ranked section matches for “${query}”.`;
+
+    librarySearchResults.innerHTML = resultsToShow.map(function(result, displayIndex) {
+      const book = result.book;
+      const section = result.section;
+      const excerpt = makeExcerpt(section.text, query);
+      const reason = buildMatchReason(result, query, type);
+
+      return `
+        <article class="result-card">
+          <div class="small" style="margin-bottom:7px;">Result ${displayIndex + 1}</div>
+
+          <h3>${escapeHTML(book.title || "Untitled Book")}</h3>
+
+          <div class="result-author">
+            ${escapeHTML(book.author || "Unknown Author")}
+          </div>
+
+          <div class="result-section">
+            ${escapeHTML(section.title || "Section")}
+          </div>
+
+          <div class="match-reason">
+            ${escapeHTML(reason)}
+          </div>
+
+          <div class="excerpt">
+            ${escapeHTML(excerpt)}
+          </div>
+
+          <div class="result-actions">
+            <button
+              type="button"
+              data-open-book="${escapeHTML(book.id)}"
+              data-open-section="${result.sectionIndex}"
+            >
+              📖 Open in Library
+            </button>
+          </div>
+        </article>
+      `;
+    }).join("");
+
+    const remaining = lastRankedResults.length - limit;
+
+    if (remaining > 0) {
+      showMoreLibraryResultsButton.textContent =
+        `Show More Results (${remaining})`;
+
+      showMoreLibraryResultsButton.classList.remove("hidden");
+    } else {
+      showMoreLibraryResultsButton.classList.add("hidden");
+    }
+
+    attachResultButtons();
+  }
+
+  function attachResultButtons() {
+    document
+      .querySelectorAll("[data-open-book]")
+      .forEach(function(button) {
+        button.addEventListener("click", function() {
+          const bookId = button.getAttribute("data-open-book");
+          const sectionIndex = Number(button.getAttribute("data-open-section"));
+
+          openBook(bookId, sectionIndex);
+
+          document
+            .querySelector(".library-layout")
+            .scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+      });
+  }
+
+  function runLibrarySearch() {
+    currentResultLimit = 3;
+    renderSearchResults(currentResultLimit);
+  }
+
+  function getCurrentPassageFromBibleMastery() {
+    /*
+      This is intentionally flexible so the Library can be reused
+      by Personal Study, Group Bible Study, Sermon Builder, and the
+      Advanced Study Center later.
+
+      A study page can provide:
+        window.BIBLEMASTERY_CURRENT_PASSAGE = "Mark 11:22-24"
+
+      Or it can save:
+        localStorage.setItem("biblemastery_current_passage", "Mark 11:22-24")
+    */
+
+    if (
+      typeof window.BIBLEMASTERY_CURRENT_PASSAGE === "string" &&
+      window.BIBLEMASTERY_CURRENT_PASSAGE.trim()
+    ) {
+      return window.BIBLEMASTERY_CURRENT_PASSAGE.trim();
+    }
+
+    const stored = localStorage.getItem("biblemastery_current_passage");
+
+    if (stored && stored.trim()) {
+      return stored.trim();
+    }
+
+    return "";
+  }
+
+  function searchCurrentPassage() {
+    const passage = getCurrentPassageFromBibleMastery();
+
+    if (!passage) {
+      librarySearchSummary.textContent =
+        "No current Scripture passage is available yet. Open a passage in a connected BibleMastery study area, or type the passage here.";
+
+      librarySearchType.value = "scripture";
+      librarySearchInput.focus();
+      return;
+    }
+
+    librarySearchType.value = "scripture";
+    librarySearchInput.value = passage;
+    runLibrarySearch();
+  }
+
+  function clearSearch() {
+    librarySearchInput.value = "";
+    librarySearchType.value = "smart";
+    lastRankedResults = [];
+    currentResultLimit = 3;
+
+    librarySearchSummary.textContent =
+      "Search the library to see the best three matching sections.";
+
+    librarySearchResults.innerHTML = `
+      <div class="empty-state" style="grid-column:1 / -1;">
+        Your BibleMastery Library search results will appear here.
+      </div>
+    `;
+
+    showMoreLibraryResultsButton.classList.add("hidden");
+  }
+
+  function renderLibraryShelf() {
+    const filter = normalizeText(bookShelfFilter.value);
+
+    const visibleBooks = libraryBooks.filter(function(book) {
+      if (!filter) return true;
+
+      return normalizeText(
+        [book.title, book.author, book.category].join(" ")
+      ).includes(filter);
+    });
+
+    if (!visibleBooks.length) {
+      libraryShelf.innerHTML = `
+        <div class="empty-state">
+          ${libraryBooks.length
+            ? "No books match this filter."
+            : "No books have been loaded into the BibleMastery Library yet."}
+        </div>
+      `;
+
+      return;
+    }
+
+    libraryShelf.innerHTML = visibleBooks.map(function(book) {
+      const sectionCount = Array.isArray(book.sections)
+        ? book.sections.length
+        : 0;
+
+      return `
+        <article
+          class="book-card ${currentBook && currentBook.id === book.id ? "active" : ""}"
+          data-shelf-book="${escapeHTML(book.id)}"
+        >
+          <h3>${escapeHTML(book.title || "Untitled Book")}</h3>
+
+          <div class="book-meta">
+            <div>${escapeHTML(book.author || "Unknown Author")}</div>
+            <div>${escapeHTML(book.category || "Library Book")}</div>
+            <div>${sectionCount} section${sectionCount === 1 ? "" : "s"}</div>
+          </div>
+        </article>
+      `;
+    }).join("");
+
+    document
+      .querySelectorAll("[data-shelf-book]")
+      .forEach(function(card) {
+        card.addEventListener("click", function() {
+          openBook(card.getAttribute("data-shelf-book"), 0);
+        });
+      });
+  }
+
+  function openBook(bookId, sectionIndex) {
+    const book = libraryBooks.find(function(item) {
+      return String(item.id) === String(bookId);
+    });
+
+    if (!book) return;
+
+    currentBook = book;
+
+    readerEmptyState.classList.add("hidden");
+    bookReader.classList.remove("hidden");
+
+    readerBookTitle.textContent = book.title || "Untitled Book";
+    readerBookAuthor.textContent =
+      [book.author, book.year].filter(Boolean).join(" • ");
+
+    const sections = Array.isArray(book.sections)
+      ? book.sections
+      : [];
+
+    readerSectionSelect.innerHTML = sections.map(function(section, index) {
+      return `
+        <option value="${index}">
+          ${escapeHTML(section.title || ("Section " + (index + 1)))}
+        </option>
+      `;
+    }).join("");
+
+    if (sections.length) {
+      const safeIndex =
+        Number.isInteger(sectionIndex) &&
+        sectionIndex >= 0 &&
+        sectionIndex < sections.length
+          ? sectionIndex
+          : 0;
+
+      readerSectionSelect.value = String(safeIndex);
+    }
+
+    readerBookSearch.value = "";
+
+    renderReaderContent();
+    renderLibraryShelf();
+  }
+
+  function renderReaderContent() {
+    if (!currentBook) return;
+
+    const sections = Array.isArray(currentBook.sections)
+      ? currentBook.sections
+      : [];
+
+    if (!sections.length) {
+      readerContent.innerHTML = `
+        <div class="empty-state">
+          This book does not have readable sections loaded yet.
+        </div>
+      `;
+
+      return;
+    }
+
+    const selectedIndex = Number(readerSectionSelect.value || 0);
+    const search = normalizeText(readerBookSearch.value);
+
+    let sectionsToRender;
+
+    if (search) {
+      sectionsToRender = sections
+        .map(function(section, index) {
+          return { section: section, index: index };
+        })
+        .filter(function(item) {
+          return normalizeText(
+            (item.section.title || "") + " " + (item.section.text || "")
+          ).includes(search);
+        });
+    } else {
+      const section = sections[selectedIndex] || sections[0];
+
+      sectionsToRender = [{
+        section: section,
+        index: sections.indexOf(section)
+      }];
+    }
+
+    if (!sectionsToRender.length) {
+      readerContent.innerHTML = `
+        <div class="empty-state">
+          No sections in this book match your search.
+        </div>
+      `;
+
+      return;
+    }
+
+    readerContent.innerHTML = sectionsToRender.map(function(item) {
+      const section = item.section;
+      const refs = Array.isArray(section.scriptureRefs)
+        ? section.scriptureRefs.join(", ")
+        : "";
+
+      return `
+        <article class="reader-section">
+          <h4>${escapeHTML(section.title || ("Section " + (item.index + 1)))}</h4>
+
+          ${refs ? `
+            <div class="reader-reference">
+              Scripture references: ${escapeHTML(refs)}
+            </div>
+          ` : ""}
+
+          <div class="reader-section-text">
+            ${escapeHTML(section.text || "No text loaded for this section.")}
+          </div>
+        </article>
+      `;
+    }).join("");
+  }
+
+  function updateBookCount() {
+    const count = libraryBooks.length;
+
+    libraryBookCount.textContent =
+      `${count} book${count === 1 ? "" : "s"} loaded`;
+  }
+
+  /*
+    Future backend connection:
+    --------------------------
+    When the BibleMastery Library backend is ready, replace or extend this
+    function so the signed-in user's owned books are loaded from the backend.
+
+    The page itself does not need to change.
+  */
+  async function loadLibraryBooks() {
+    if (Array.isArray(window.BIBLEMASTERY_LIBRARY_BOOKS)) {
+      libraryBooks = window.BIBLEMASTERY_LIBRARY_BOOKS;
+    }
+
+    updateBookCount();
+    renderLibraryShelf();
+  }
+
+  librarySearchButton.addEventListener("click", runLibrarySearch);
+
+  librarySearchInput.addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+      runLibrarySearch();
+    }
+  });
+
+  searchCurrentPassageButton.addEventListener("click", searchCurrentPassage);
+  clearLibrarySearchButton.addEventListener("click", clearSearch);
+
+  showMoreLibraryResultsButton.addEventListener("click", function() {
+    currentResultLimit += 6;
+    renderSearchResults(currentResultLimit);
+  });
+
+  bookShelfFilter.addEventListener("input", renderLibraryShelf);
+
+  readerSectionSelect.addEventListener("change", function() {
+    readerBookSearch.value = "";
+    renderReaderContent();
+  });
+
+  readerBookSearch.addEventListener("input", renderReaderContent);
+
+  loadLibraryBooks();
+
+})();
 </script>
-</body></html>
+
+</body>
+</html>
